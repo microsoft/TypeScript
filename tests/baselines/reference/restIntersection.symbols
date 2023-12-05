@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restIntersection.ts ===
+//// [tests/cases/compiler/restIntersection.ts] ////
+
+=== restIntersection.ts ===
 var intersection: { x: number, y: number } & { w: string, z: string };
 >intersection : Symbol(intersection, Decl(restIntersection.ts, 0, 3))
 >x : Symbol(x, Decl(restIntersection.ts, 0, 19))

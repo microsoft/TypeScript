@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInFunctionCall.ts ===
+//// [tests/cases/compiler/thisInFunctionCall.ts] ////
+
+=== thisInFunctionCall.ts ===
 class Test {
 >Test : Test
 
@@ -84,7 +86,7 @@ class Test {
 
     /** @this {Test} */
     function (d) {
->function (d) {      console.log(d === this.data.length)    } : (this: Test, d: number) => void
+>function (d) {      console.log(d === this.data.length)    } : (d: number) => void
 >d : number
 
       console.log(d === this.data.length)
@@ -117,7 +119,7 @@ class Test {
 
     /** @this {Test} */
     function (d) {
->function (d) {      return d === this.data.length    } : (this: Test, d: number) => boolean
+>function (d) {      return d === this.data.length    } : (d: number) => boolean
 >d : number
 
       return d === this.data.length

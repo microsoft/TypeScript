@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/ClassDeclaration25.ts] ////
+
 //// [ClassDeclaration25.ts]
 interface IList<T> {
     data(): T;

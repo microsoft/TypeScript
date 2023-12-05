@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionTypeArgumentArrayAssignment.ts] ////
+
 //// [functionTypeArgumentArrayAssignment.ts]
 module test {
     interface Array<T> {

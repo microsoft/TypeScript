@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesWithModuleES6.ts] ////
+
 //// [objectLiteralShorthandPropertiesWithModuleES6.ts]
 module m {
     export var x;

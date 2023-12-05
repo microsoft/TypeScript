@@ -22,7 +22,7 @@ import {MyClass} from './file1';
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.MyClass = void 0;
     var MyClass = /** @class */ (function () {
         function MyClass() {
@@ -34,6 +34,6 @@ define(["require", "exports"], function (require, exports) {
 //// [file2.js]
 define(["require", "exports", "react", "./file1"], function (require, exports, React, file1_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     React.createElement(file1_1.MyClass, null);
 });

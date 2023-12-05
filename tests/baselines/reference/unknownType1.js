@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/unknown/unknownType1.ts] ////
+
 //// [unknownType1.ts]
 // In an intersection everything absorbs unknown
 

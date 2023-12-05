@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/mappedTypeGenericInstantiationPreservesInlineForm.ts] ////
+
+=== mappedTypeGenericInstantiationPreservesInlineForm.ts ===
+// repro from #53109
+
+export const test1 = <T = Record<string, never>>(schema: {
+>test1 : Symbol(test1, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 2, 12))
+>T : Symbol(T, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 2, 22))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>schema : Symbol(schema, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 2, 49))
+
+    [K in keyof Required<T>]: T[K];
+>K : Symbol(K, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 3, 5))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 2, 22))
+>T : Symbol(T, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 2, 22))
+>K : Symbol(K, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 3, 5))
+
+}) => {}
+
+export function test2<T = Record<string, never>>(schema: {
+>test2 : Symbol(test2, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 4, 8))
+>T : Symbol(T, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 6, 22))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>schema : Symbol(schema, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 6, 49))
+
+    [K in keyof Required<T>]: T[K];
+>K : Symbol(K, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 7, 5))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 6, 22))
+>T : Symbol(T, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 6, 22))
+>K : Symbol(K, Decl(mappedTypeGenericInstantiationPreservesInlineForm.ts, 7, 5))
+
+}) {};
+

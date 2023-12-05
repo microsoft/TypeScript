@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts] ////
+
 //// [assignmentCompatWithNumericIndexer2.ts]
 // Derived type indexer must be subtype of base type indexer
 

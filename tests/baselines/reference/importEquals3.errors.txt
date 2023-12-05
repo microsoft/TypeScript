@@ -1,36 +1,36 @@
-tests/cases/conformance/externalModules/typeOnly/b.ts(2,12): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
-tests/cases/conformance/externalModules/typeOnly/b.ts(3,13): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
-tests/cases/conformance/externalModules/typeOnly/c.ts(2,12): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
-tests/cases/conformance/externalModules/typeOnly/c.ts(3,13): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
+b.ts(2,12): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
+b.ts(3,13): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
+c.ts(2,12): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
+c.ts(3,13): error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
 
 
-==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
+==== a.ts (0 errors) ====
     export class A {}
     
-==== tests/cases/conformance/externalModules/typeOnly/b.ts (2 errors) ====
+==== b.ts (2 errors) ====
     import type * as a from './a';
     import A = a.A; // Error
                ~~~
 !!! error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
-!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/b.ts:1:18: 'a' was imported here.
+!!! related TS1376 b.ts:1:18: 'a' was imported here.
     import aa = a;  // Error
                 ~
 !!! error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
-!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/b.ts:1:18: 'a' was imported here.
+!!! related TS1376 b.ts:1:18: 'a' was imported here.
     
     const x = 0;
     export { a, A, x };
     
-==== tests/cases/conformance/externalModules/typeOnly/c.ts (2 errors) ====
+==== c.ts (2 errors) ====
     import * as b from './b';
     import A = b.a.A; // Error
                ~~~~~
 !!! error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
-!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/b.ts:1:18: 'a' was imported here.
+!!! related TS1376 b.ts:1:18: 'a' was imported here.
     import AA = b.A; // Error
                 ~~~
 !!! error TS1380: An import alias cannot reference a declaration that was imported using 'import type'.
-!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/b.ts:1:18: 'a' was imported here.
+!!! related TS1376 b.ts:1:18: 'a' was imported here.
     
     import x = b.x;
     console.log(x);

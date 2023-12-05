@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_contextualTyping3.ts] ////
+
+=== typeSatisfaction_contextualTyping3.ts ===
+// see https://github.com/microsoft/TypeScript/issues/53920#issuecomment-1516616255
+
+const obj = {
+>obj : Symbol(obj, Decl(typeSatisfaction_contextualTyping3.ts, 2, 5))
+
+   foo: (param = "default") => param,
+>foo : Symbol(foo, Decl(typeSatisfaction_contextualTyping3.ts, 2, 13))
+>param : Symbol(param, Decl(typeSatisfaction_contextualTyping3.ts, 3, 9))
+>param : Symbol(param, Decl(typeSatisfaction_contextualTyping3.ts, 3, 9))
+
+} satisfies {
+   [key: string]: (...params: any) => any;
+>key : Symbol(key, Decl(typeSatisfaction_contextualTyping3.ts, 5, 4))
+>params : Symbol(params, Decl(typeSatisfaction_contextualTyping3.ts, 5, 19))
+
+};
+
+const obj2 = {
+>obj2 : Symbol(obj2, Decl(typeSatisfaction_contextualTyping3.ts, 8, 5))
+
+   foo: (param = "default") => param,
+>foo : Symbol(foo, Decl(typeSatisfaction_contextualTyping3.ts, 8, 14))
+>param : Symbol(param, Decl(typeSatisfaction_contextualTyping3.ts, 9, 9))
+>param : Symbol(param, Decl(typeSatisfaction_contextualTyping3.ts, 9, 9))
+
+} satisfies {
+   [key: string]: Function;
+>key : Symbol(key, Decl(typeSatisfaction_contextualTyping3.ts, 11, 4))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+};
+
+type StringOrNumberFunc = (x: string | number) => any;
+>StringOrNumberFunc : Symbol(StringOrNumberFunc, Decl(typeSatisfaction_contextualTyping3.ts, 12, 2))
+>x : Symbol(x, Decl(typeSatisfaction_contextualTyping3.ts, 14, 27))
+
+const fn = ((x = "ok") => null) satisfies StringOrNumberFunc;
+>fn : Symbol(fn, Decl(typeSatisfaction_contextualTyping3.ts, 16, 5))
+>x : Symbol(x, Decl(typeSatisfaction_contextualTyping3.ts, 16, 13))
+>StringOrNumberFunc : Symbol(StringOrNumberFunc, Decl(typeSatisfaction_contextualTyping3.ts, 12, 2))
+
+fn();
+>fn : Symbol(fn, Decl(typeSatisfaction_contextualTyping3.ts, 16, 5))
+
+fn(32);
+>fn : Symbol(fn, Decl(typeSatisfaction_contextualTyping3.ts, 16, 5))
+
+

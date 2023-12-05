@@ -1,7 +1,7 @@
-tests/cases/compiler/mergedDeclarations2.ts(9,20): error TS2304: Cannot find name 'b'.
+mergedDeclarations2.ts(9,20): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/compiler/mergedDeclarations2.ts (1 errors) ====
+==== mergedDeclarations2.ts (1 errors) ====
     enum Foo {
         b
     }

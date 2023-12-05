@@ -1,0 +1,285 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
+// module m {
+//     export class C1 {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}public|] pub1;
+//         [|{| kind: "none" |}public|] pub2;
+//         private priv1;
+//         private priv2;
+//         protected prot1;
+//         protected prot2;
+// 
+//         [|{| kind: "none" |}public|] public;
+//         private private;
+//         protected protected;
+// 
+//         [|{| kind: "none" |}public|] constructor([|{| kind: "none" |}public|] a, private b, protected c, [|{| kind: "none" |}public|] d, private e, protected f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+//         }
+// 
+//         [|{| kind: "none" |}public|] get x() { return 10; }
+//         [|{| kind: "none" |}public|] set x(value) { }
+// 
+//         [|{| kind: "none" |}public|] static statPub;
+//         private static statPriv;
+//         protected static statProt;
+//     }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
+// module m {
+//     export class C1 {
+//         [|{| kind: "none" |}public|] pub1;
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}public|] pub2;
+//         private priv1;
+//         private priv2;
+//         protected prot1;
+//         protected prot2;
+// 
+//         [|{| kind: "none" |}public|] public;
+//         private private;
+//         protected protected;
+// 
+//         [|{| kind: "none" |}public|] constructor([|{| kind: "none" |}public|] a, private b, protected c, [|{| kind: "none" |}public|] d, private e, protected f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+//         }
+// 
+//         [|{| kind: "none" |}public|] get x() { return 10; }
+//         [|{| kind: "none" |}public|] set x(value) { }
+// 
+//         [|{| kind: "none" |}public|] static statPub;
+//         private static statPriv;
+//         protected static statProt;
+//     }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
+// module m {
+//     export class C1 {
+//         [|{| kind: "none" |}public|] pub1;
+//         [|{| kind: "none" |}public|] pub2;
+//         private priv1;
+//         private priv2;
+//         protected prot1;
+//         protected prot2;
+// 
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}public|] public;
+//         private private;
+//         protected protected;
+// 
+//         [|{| kind: "none" |}public|] constructor([|{| kind: "none" |}public|] a, private b, protected c, [|{| kind: "none" |}public|] d, private e, protected f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+//         }
+// 
+//         [|{| kind: "none" |}public|] get x() { return 10; }
+//         [|{| kind: "none" |}public|] set x(value) { }
+// 
+//         [|{| kind: "none" |}public|] static statPub;
+//         private static statPriv;
+//         protected static statProt;
+//     }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
+// module m {
+//     export class C1 {
+//         [|{| kind: "none" |}public|] pub1;
+//         [|{| kind: "none" |}public|] pub2;
+//         private priv1;
+//         private priv2;
+//         protected prot1;
+//         protected prot2;
+// 
+//         [|{| kind: "none" |}public|] public;
+//         private private;
+//         protected protected;
+// 
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}public|] constructor([|{| kind: "none" |}public|] a, private b, protected c, [|{| kind: "none" |}public|] d, private e, protected f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+//         }
+// 
+//         [|{| kind: "none" |}public|] get x() { return 10; }
+//         [|{| kind: "none" |}public|] set x(value) { }
+// 
+//         [|{| kind: "none" |}public|] static statPub;
+//         private static statPriv;
+//         protected static statProt;
+//     }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
+// module m {
+//     export class C1 {
+//         [|{| kind: "none" |}public|] pub1;
+//         [|{| kind: "none" |}public|] pub2;
+//         private priv1;
+//         private priv2;
+//         protected prot1;
+//         protected prot2;
+// 
+//         [|{| kind: "none" |}public|] public;
+//         private private;
+//         protected protected;
+// 
+//         [|{| kind: "none" |}public|] constructor(/*HIGHLIGHTS*/[|{| kind: "none" |}public|] a, private b, protected c, [|{| kind: "none" |}public|] d, private e, protected f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+//         }
+// 
+//         [|{| kind: "none" |}public|] get x() { return 10; }
+//         [|{| kind: "none" |}public|] set x(value) { }
+// 
+//         [|{| kind: "none" |}public|] static statPub;
+//         private static statPriv;
+//         protected static statProt;
+//     }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
+// module m {
+//     export class C1 {
+//         [|{| kind: "none" |}public|] pub1;
+//         [|{| kind: "none" |}public|] pub2;
+//         private priv1;
+//         private priv2;
+//         protected prot1;
+//         protected prot2;
+// 
+//         [|{| kind: "none" |}public|] public;
+//         private private;
+//         protected protected;
+// 
+//         [|{| kind: "none" |}public|] constructor([|{| kind: "none" |}public|] a, private b, protected c, /*HIGHLIGHTS*/[|{| kind: "none" |}public|] d, private e, protected f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+//         }
+// 
+//         [|{| kind: "none" |}public|] get x() { return 10; }
+//         [|{| kind: "none" |}public|] set x(value) { }
+// 
+//         [|{| kind: "none" |}public|] static statPub;
+//         private static statPriv;
+//         protected static statProt;
+//     }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
+// module m {
+//     export class C1 {
+//         [|{| kind: "none" |}public|] pub1;
+//         [|{| kind: "none" |}public|] pub2;
+//         private priv1;
+//         private priv2;
+//         protected prot1;
+//         protected prot2;
+// 
+//         [|{| kind: "none" |}public|] public;
+//         private private;
+//         protected protected;
+// 
+//         [|{| kind: "none" |}public|] constructor([|{| kind: "none" |}public|] a, private b, protected c, [|{| kind: "none" |}public|] d, private e, protected f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+//         }
+// 
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}public|] get x() { return 10; }
+//         [|{| kind: "none" |}public|] set x(value) { }
+// 
+//         [|{| kind: "none" |}public|] static statPub;
+//         private static statPriv;
+//         protected static statProt;
+//     }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
+// module m {
+//     export class C1 {
+//         [|{| kind: "none" |}public|] pub1;
+//         [|{| kind: "none" |}public|] pub2;
+//         private priv1;
+//         private priv2;
+//         protected prot1;
+//         protected prot2;
+// 
+//         [|{| kind: "none" |}public|] public;
+//         private private;
+//         protected protected;
+// 
+//         [|{| kind: "none" |}public|] constructor([|{| kind: "none" |}public|] a, private b, protected c, [|{| kind: "none" |}public|] d, private e, protected f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+//         }
+// 
+//         [|{| kind: "none" |}public|] get x() { return 10; }
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}public|] set x(value) { }
+// 
+//         [|{| kind: "none" |}public|] static statPub;
+//         private static statPriv;
+//         protected static statProt;
+//     }
+// --- (line: 27) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
+// module m {
+//     export class C1 {
+//         [|{| kind: "none" |}public|] pub1;
+//         [|{| kind: "none" |}public|] pub2;
+//         private priv1;
+//         private priv2;
+//         protected prot1;
+//         protected prot2;
+// 
+//         [|{| kind: "none" |}public|] public;
+//         private private;
+//         protected protected;
+// 
+//         [|{| kind: "none" |}public|] constructor([|{| kind: "none" |}public|] a, private b, protected c, [|{| kind: "none" |}public|] d, private e, protected f) {
+//             this.public = 10;
+//             this.private = 10;
+//             this.protected = 10;
+//         }
+// 
+//         [|{| kind: "none" |}public|] get x() { return 10; }
+//         [|{| kind: "none" |}public|] set x(value) { }
+// 
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}public|] static statPub;
+//         private static statPriv;
+//         protected static statProt;
+//     }
+// --- (line: 27) skipped ---

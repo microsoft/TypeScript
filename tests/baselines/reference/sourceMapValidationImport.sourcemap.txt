@@ -5,11 +5,11 @@ sourceRoot:
 sources: sourceMapValidationImport.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationImport.js
+emittedFile:sourceMapValidationImport.js
 sourceFile:sourceMapValidationImport.ts
 -------------------------------------------------------------------
 >>>"use strict";
->>>exports.__esModule = true;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>exports.b = exports.m = void 0;
 >>>var m;
 1 >
@@ -93,7 +93,7 @@ sourceFile:sourceMapValidationImport.ts
 2 >    ^^^
 3 >       ^^^^
 4 >           ^
-5 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >            ^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    c
 3 >        {
@@ -104,38 +104,32 @@ sourceFile:sourceMapValidationImport.ts
 3 >Emitted(11, 12) Source(3, 6) + SourceIndex(0)
 4 >Emitted(11, 13) Source(3, 6) + SourceIndex(0)
 ---
->>>})(m = exports.m || (exports.m = {}));
+>>>})(m || (exports.m = m = {}));
 1->
 2 >^
 3 > ^^
 4 >   ^
-5 >    ^^^
-6 >       ^^^^^^^^^
-7 >                ^^^^^
-8 >                     ^^^^^^^^^
-9 >                              ^^^^^^^^
+5 >    ^^^^^^^^^^^^^^^^^
+6 >                     ^
+7 >                      ^^^^^^^^
 1->
   >
 2 >}
 3 > 
 4 >   m
 5 >    
-6 >       m
-7 >                
-8 >                     m
-9 >                               {
-  >                                  export class c {
-  >                                  }
-  >                              }
+6 >                     m
+7 >                       {
+  >                          export class c {
+  >                          }
+  >                      }
 1->Emitted(12, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(12, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(12, 4) Source(1, 15) + SourceIndex(0)
 4 >Emitted(12, 5) Source(1, 16) + SourceIndex(0)
-5 >Emitted(12, 8) Source(1, 15) + SourceIndex(0)
-6 >Emitted(12, 17) Source(1, 16) + SourceIndex(0)
-7 >Emitted(12, 22) Source(1, 15) + SourceIndex(0)
-8 >Emitted(12, 31) Source(1, 16) + SourceIndex(0)
-9 >Emitted(12, 39) Source(4, 2) + SourceIndex(0)
+5 >Emitted(12, 22) Source(1, 15) + SourceIndex(0)
+6 >Emitted(12, 23) Source(1, 16) + SourceIndex(0)
+7 >Emitted(12, 31) Source(4, 2) + SourceIndex(0)
 ---
 >>>var a = m.c;
 1 >

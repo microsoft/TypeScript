@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionWithDefaultParameterWithNoStatements13.ts ===
+//// [tests/cases/compiler/functionWithDefaultParameterWithNoStatements13.ts] ////
+
+=== functionWithDefaultParameterWithNoStatements13.ts ===
 var v: any[];
 >v : Symbol(v, Decl(functionWithDefaultParameterWithNoStatements13.ts, 0, 3))
 

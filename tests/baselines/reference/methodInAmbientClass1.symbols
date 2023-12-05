@@ -1,4 +1,6 @@
-=== tests/cases/compiler/methodInAmbientClass1.ts ===
+//// [tests/cases/compiler/methodInAmbientClass1.ts] ////
+
+=== methodInAmbientClass1.ts ===
     declare class Foo {
 >Foo : Symbol(Foo, Decl(methodInAmbientClass1.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeLookupInIIFE.ts] ////
+
+=== a.js ===
 // #22973
 var ns = (function() {})();
 >ns : Symbol(ns, Decl(a.js, 1, 3))

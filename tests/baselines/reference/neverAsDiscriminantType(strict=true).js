@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/neverAsDiscriminantType.ts] ////
+
 //// [neverAsDiscriminantType.ts]
 type Foo1 = { kind: 'a', a: number } | { kind: 'b' } | { kind: never };
 
@@ -103,7 +105,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.adaptSession = exports.GatewayOpcode = void 0;
 function f1(foo) {
     if (foo.kind === 'a') {
@@ -128,7 +130,7 @@ var GatewayOpcode;
     GatewayOpcode[GatewayOpcode["INVALID_SESSION"] = 9] = "INVALID_SESSION";
     GatewayOpcode[GatewayOpcode["HELLO"] = 10] = "HELLO";
     GatewayOpcode[GatewayOpcode["HEARTBEAT_ACK"] = 11] = "HEARTBEAT_ACK";
-})(GatewayOpcode = exports.GatewayOpcode || (exports.GatewayOpcode = {}));
+})(GatewayOpcode || (exports.GatewayOpcode = GatewayOpcode = {}));
 function assertMessage(event) { }
 function adaptSession(input) {
     return __awaiter(this, void 0, void 0, function () {

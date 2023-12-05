@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingFunctionImplementation.ts] ////
+
 //// [missingFunctionImplementation.ts]
 export class C1 {
   m(): void;
@@ -81,7 +83,7 @@ namespace N12 {
 
 //// [missingFunctionImplementation.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C2 = exports.C1 = void 0;
 var C1 = /** @class */ (function () {
     function C1() {

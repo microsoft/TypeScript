@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveBaseConstructorCreation3.ts ===
+//// [tests/cases/compiler/recursiveBaseConstructorCreation3.ts] ////
+
+=== recursiveBaseConstructorCreation3.ts ===
 declare class base<T> {
 >base : Symbol(base, Decl(recursiveBaseConstructorCreation3.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveBaseConstructorCreation3.ts, 0, 19))

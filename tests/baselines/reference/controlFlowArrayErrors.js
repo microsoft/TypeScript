@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowArrayErrors.ts] ////
+
 //// [controlFlowArrayErrors.ts]
 declare function cond(): boolean;
 

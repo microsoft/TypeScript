@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/templateLiteralTypes3.ts] ////
+
 //// [templateLiteralTypes3.ts]
 // Inference from template literal type to template literal type
 
@@ -190,6 +192,18 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
     spread(u1, u2);
 }
 
+// Repro from #52685
+
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+
+// Repro from #56582
+
+function a<T extends {id: string}>() {
+    let x: keyof T & string | `-${keyof T & string}`;
+    x = "id";
+    x = "-id";
+}
+
 
 //// [templateLiteralTypes3.js]
 "use strict";
@@ -285,6 +299,12 @@ function ft1(t, u, u1, u2) {
     spread("1.".concat(u, ".3"), "1.".concat(u, ".4"));
     spread(u1, u2);
 }
+// Repro from #56582
+function a() {
+    var x;
+    x = "id";
+    x = "-id";
+}
 
 
 //// [templateLiteralTypes3.d.ts]
@@ -356,3 +376,7 @@ type DotString = `${string}.${string}.${string}`;
 declare function noSpread<P extends DotString>(args: P[]): P;
 declare function spread<P extends DotString>(...args: P[]): P;
 declare function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>): void;
+type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+declare function a<T extends {
+    id: string;
+}>(): void;

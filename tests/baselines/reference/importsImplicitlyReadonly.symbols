@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/b.ts ===
+//// [tests/cases/conformance/externalModules/importsImplicitlyReadonly.ts] ////
+
+=== b.ts ===
 import { x, y } from "./a";
 >x : Symbol(x, Decl(b.ts, 0, 8))
 >y : Symbol(y, Decl(b.ts, 0, 11))
@@ -49,7 +51,7 @@ a3.y = 1;
 >a3 : Symbol(a3, Decl(b.ts, 3, 5))
 >y : Symbol(a1.y, Decl(a.ts, 2, 8))
 
-=== tests/cases/conformance/externalModules/a.ts ===
+=== a.ts ===
 export var x = 1;
 >x : Symbol(x, Decl(a.ts, 0, 10))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/enumTag.ts] ////
+
+=== a.js ===
 /** @enum {string} */
 const Target = {
 >Target : Symbol(Target, Decl(a.js, 1, 5), Decl(a.js, 0, 4))

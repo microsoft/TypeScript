@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedPrivateMembers.ts ===
+//// [tests/cases/compiler/unusedPrivateMembers.ts] ////
+
+=== unusedPrivateMembers.ts ===
 class Test1 {
 >Test1 : Test1
 
@@ -149,12 +151,6 @@ class Test6 {
 >x.a : number
 >x : Test6
 >a : number
-
-        x.b++;
->x.b++ : number
->x.b : number
->x : Test6
->b : number
     }
 }
 

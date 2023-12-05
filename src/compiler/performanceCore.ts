@@ -1,7 +1,5 @@
 import {
     isNodeLikeSystem,
-    Version,
-    VersionRange,
 } from "./_namespaces/ts";
 
 // The following definitions provide the minimum compatible support for the Web Performance User Timings API
@@ -43,7 +41,7 @@ export interface PerformanceObserverEntryList {
 /** @internal */
 export interface PerformanceObserver {
     disconnect(): void;
-    observe(options: { entryTypes: readonly ("mark" | "measure")[] }): void;
+    observe(options: { entryTypes: readonly ("mark" | "measure")[]; }): void;
 }
 
 /** @internal */
@@ -52,7 +50,6 @@ export type PerformanceObserverConstructor = new (callback: (list: PerformanceOb
 export type PerformanceEntryList = PerformanceEntry[];
 
 // Browser globals for the Web Performance User Timings API
-declare const process: any;
 declare const performance: Performance | undefined;
 declare const PerformanceObserver: PerformanceObserverConstructor | undefined;
 
@@ -69,16 +66,18 @@ function hasRequiredAPI(performance: Performance | undefined, PerformanceObserve
 }
 
 function tryGetWebPerformanceHooks(): PerformanceHooks | undefined {
-    if (typeof performance === "object" &&
+    if (
+        typeof performance === "object" &&
         typeof PerformanceObserver === "function" &&
-        hasRequiredAPI(performance, PerformanceObserver)) {
+        hasRequiredAPI(performance, PerformanceObserver)
+    ) {
         return {
             // For now we always write native performance events when running in the browser. We may
             // make this conditional in the future if we find that native web performance hooks
             // in the browser also slow down compilation.
             shouldWriteNativeEvents: true,
             performance,
-            PerformanceObserver
+            PerformanceObserver,
         };
     }
 }
@@ -86,40 +85,13 @@ function tryGetWebPerformanceHooks(): PerformanceHooks | undefined {
 function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
     if (isNodeLikeSystem()) {
         try {
-            let performance: Performance;
-            const { performance: nodePerformance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
-            if (hasRequiredAPI(nodePerformance as unknown as Performance, PerformanceObserver)) {
-                performance = nodePerformance as unknown as Performance;
-                // There is a bug in Node's performance.measure prior to 12.16.3/13.13.0 that does not
-                // match the Web Performance API specification. Node's implementation did not allow
-                // optional `start` and `end` arguments for `performance.measure`.
-                // See https://github.com/nodejs/node/pull/32651 for more information.
-                const version = new Version(process.versions.node);
-                const range = new VersionRange("<12.16.3 || 13 <13.13");
-                if (range.test(version)) {
-                    performance = {
-                        get timeOrigin() { return nodePerformance.timeOrigin; },
-                        now() { return nodePerformance.now(); },
-                        mark(name) { return nodePerformance.mark(name); },
-                        measure(name, start = "nodeStart", end?) {
-                            if (end === undefined) {
-                                end = "__performance.measure-fix__";
-                                nodePerformance.mark(end);
-                            }
-                            nodePerformance.measure(name, start, end);
-                            if (end === "__performance.measure-fix__") {
-                                nodePerformance.clearMarks("__performance.measure-fix__");
-                            }
-                        },
-                        clearMarks(name) { return nodePerformance.clearMarks(name); },
-                        clearMeasures(name) { return (nodePerformance as unknown as Performance).clearMeasures(name); },
-                    };
-                }
+            const { performance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
+            if (hasRequiredAPI(performance, PerformanceObserver)) {
                 return {
                     // By default, only write native events when generating a cpu profile or using the v8 profiler.
                     shouldWriteNativeEvents: false,
                     performance,
-                    PerformanceObserver
+                    PerformanceObserver,
                 };
             }
         }
@@ -144,7 +116,6 @@ export function tryGetNativePerformanceHooks() {
  *
  * @internal
  */
-export const timestamp =
-    nativePerformance ? () => nativePerformance.now() :
+export const timestamp = nativePerformance ? () => nativePerformance.now() :
     Date.now ? Date.now :
     () => +(new Date());

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.ts] ////
+
+=== genericTypeReferenceWithoutTypeArgument.ts ===
 // it is an error to use a generic type without type arguments
 // all of these are errors 
 
@@ -85,11 +87,9 @@ function i<T extends M.E>(x: T) { }
 var j = <C>null;
 >j : any
 ><C>null : any
->null : null
 
 var k = <M.E>null;
 >k : any
 ><M.E>null : any
 >M : any
->null : null
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfPrimitiveSubtype.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfPrimitiveSubtype.ts] ////
+
+=== typeGuardOfFormTypeOfPrimitiveSubtype.ts ===
 let a: {};
 >a : Symbol(a, Decl(typeGuardOfFormTypeOfPrimitiveSubtype.ts, 0, 3))
 

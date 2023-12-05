@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/localTypeParameterInferencePriority.ts] ////
+
 //// [localTypeParameterInferencePriority.ts]
 export type UnrollOnHover<O extends object> = O extends object ?
     { [K in keyof O]: O[K]; } :
@@ -37,7 +39,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Table = /** @class */ (function () {
     function Table() {
     }

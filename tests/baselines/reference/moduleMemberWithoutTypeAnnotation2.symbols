@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts ===
+//// [tests/cases/compiler/moduleMemberWithoutTypeAnnotation2.ts] ////
+
+=== moduleMemberWithoutTypeAnnotation2.ts ===
 module TypeScript {
 >TypeScript : Symbol(TypeScript, Decl(moduleMemberWithoutTypeAnnotation2.ts, 0, 0))
 

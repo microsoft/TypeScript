@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts ===
+//// [tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts] ////
+
+=== overloadResolutionOverNonCTObjectLit.ts ===
 module Bugs {
 >Bugs : typeof Bugs
 
@@ -59,7 +61,6 @@ module Bugs {
 >bracket : number
 >3 : 3
 >state : null
->null : null
 >length : number
 >10 : 10
                 }

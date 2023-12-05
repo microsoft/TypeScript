@@ -24,10 +24,12 @@ import {
     findIndex,
     firstDefined,
     firstOrUndefined,
+    firstOrUndefinedIterator,
     FunctionExpression,
     getCheckFlags,
     getClassLikeDeclarationOfSymbol,
     getEmitScriptTarget,
+    getEscapedTextOfJsxAttributeName,
     getFirstConstructorWithBody,
     getNodeId,
     getObjectFlags,
@@ -136,7 +138,7 @@ const errorCodes = [
     Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2.code,
     Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more.code,
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
-    Diagnostics.Cannot_find_name_0.code
+    Diagnostics.Cannot_find_name_0.code,
 ];
 
 enum InfoKind {
@@ -214,10 +216,12 @@ registerCodeFix({
                 const supers = isTypeLiteralNode(declaration) ? undefined : getAllSupers(declaration, checker);
                 for (const info of infos) {
                     // If some superclass added this property, don't add it again.
-                    if (supers?.some(superClassOrInterface => {
-                        const superInfos = typeDeclToMembers.get(superClassOrInterface);
-                        return !!superInfos && superInfos.some(({ token }) => token.text === info.token.text);
-                    })) continue;
+                    if (
+                        supers?.some(superClassOrInterface => {
+                            const superInfos = typeDeclToMembers.get(superClassOrInterface);
+                            return !!superInfos && superInfos.some(({ token }) => token.text === info.token.text);
+                        })
+                    ) continue;
 
                     const { parentDeclaration, declSourceFile, modifierFlags, token, call, isJSFile } = info;
                     // Always prefer to add a method declaration if possible.
@@ -308,7 +312,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
         const param = signature.parameters[argIndex].valueDeclaration;
         if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
 
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getParameterType(signature, argIndex), /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
         return { kind: InfoKind.ObjectLiteral, token: param.name, properties, parentDeclaration: parent };
     }
@@ -316,7 +320,8 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     if (!isMemberName(token)) return undefined;
 
     if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
-        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
+        const targetType = checker.getContextualType(token) || checker.getTypeAtLocation(token);
+        const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), targetType, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ false));
         if (!length(properties)) return undefined;
 
         return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
@@ -330,7 +335,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     }
 
     if (isIdentifier(token)) {
-        const type = checker.getContextualType(token);
+        const type = checker.getContextualType(token)?.getNonNullableType();
         if (type && getObjectFlags(type) & ObjectFlags.Anonymous) {
             const signature = firstOrUndefined(checker.getSignaturesOfType(type, SignatureKind.Call));
             if (signature === undefined) return undefined;
@@ -423,9 +428,10 @@ function addMissingMemberInJs(changeTracker: textChanges.ChangeTracker, sourceFi
         const property = factory.createPropertyDeclaration(
             /*modifiers*/ undefined,
             tokenName,
-            /*questionToken*/ undefined,
+            /*questionOrExclamationToken*/ undefined,
             /*type*/ undefined,
-            /*initializer*/ undefined);
+            /*initializer*/ undefined,
+        );
 
         const lastProp = getNodeToInsertPropertyAfter(classDeclaration);
         if (lastProp) {
@@ -487,7 +493,7 @@ function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, source
     const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
 
     const property = isClassLike(node)
-        ? factory.createPropertyDeclaration(modifiers, tokenName, /*questionToken*/ undefined, typeNode, /*initializer*/ undefined)
+        ? factory.createPropertyDeclaration(modifiers, tokenName, /*questionOrExclamationToken*/ undefined, typeNode, /*initializer*/ undefined)
         : factory.createPropertySignature(/*modifiers*/ undefined, tokenName, /*questionToken*/ undefined, typeNode);
 
     const lastProp = getNodeToInsertPropertyAfter(node);
@@ -518,11 +524,13 @@ function createAddIndexSignatureAction(context: CodeFixContext, sourceFile: Sour
         "x",
         /*questionToken*/ undefined,
         stringTypeNode,
-        /*initializer*/ undefined);
+        /*initializer*/ undefined,
+    );
     const indexSignature = factory.createIndexSignature(
         /*modifiers*/ undefined,
         [indexingParameter],
-        typeNode);
+        typeNode,
+    );
 
     const changes = textChanges.ChangeTracker.with(context, t => t.insertMemberAtStart(sourceFile, node, indexSignature));
     // No fixId here because code-fix-all currently only works on adding individual named properties.
@@ -532,11 +540,6 @@ function createAddIndexSignatureAction(context: CodeFixContext, sourceFile: Sour
 function getActionsForMissingMethodDeclaration(context: CodeFixContext, info: TypeLikeDeclarationInfo): CodeFixAction[] | undefined {
     const { parentDeclaration, declSourceFile, modifierFlags, token, call } = info;
     if (call === undefined) {
-        return undefined;
-    }
-
-    // Private methods are not implemented yet.
-    if (isPrivateIdentifier(token)) {
         return undefined;
     }
 
@@ -553,7 +556,7 @@ function addMethodDeclaration(
     context: CodeFixContextBase,
     changes: textChanges.ChangeTracker,
     callExpression: CallExpression,
-    name: Identifier,
+    name: Identifier | PrivateIdentifier,
     modifierFlags: ModifierFlags,
     parentDeclaration: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode,
     sourceFile: SourceFile,
@@ -583,15 +586,20 @@ function addEnumMemberDeclaration(changes: textChanges.ChangeTracker, checker: T
     });
 
     const enumMember = factory.createEnumMember(token, hasStringInitializer ? factory.createStringLiteral(token.text) : undefined);
-    changes.replaceNode(parentDeclaration.getSourceFile(), parentDeclaration, factory.updateEnumDeclaration(
+    changes.replaceNode(
+        parentDeclaration.getSourceFile(),
         parentDeclaration,
-        parentDeclaration.modifiers,
-        parentDeclaration.name,
-        concatenate(parentDeclaration.members, singleElementArray(enumMember))
-    ), {
-        leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-        trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
-    });
+        factory.updateEnumDeclaration(
+            parentDeclaration,
+            parentDeclaration.modifiers,
+            parentDeclaration.name,
+            concatenate(parentDeclaration.members, singleElementArray(enumMember)),
+        ),
+        {
+            leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
+        },
+    );
 }
 
 function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo | SignatureInfo) {
@@ -642,7 +650,7 @@ function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context:
     const options = {
         leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
         trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
-        indentation: info.indentation
+        indentation: info.indentation,
     };
     changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
     importAdder.writeFixes(changes);
@@ -665,7 +673,7 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
         return factory.createFalse();
     }
     if (type.flags & TypeFlags.EnumLike) {
-        const enumMember = type.symbol.exports ? firstOrUndefined(arrayFrom(type.symbol.exports.values())) : type.symbol;
+        const enumMember = type.symbol.exports ? firstOrUndefinedIterator(type.symbol.exports.values()) : type.symbol;
         const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
         return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
     }
@@ -693,7 +701,7 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
     }
     if (isObjectLiteralType(type)) {
         const props = map(checker.getPropertiesOfType(type), prop => {
-            const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration), enclosingDeclaration) : createUndefined();
+            const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop), enclosingDeclaration);
             return factory.createPropertyAssignment(prop.name, initializer);
         });
         return factory.createObjectLiteralExpression(props, /*multiLine*/ true);
@@ -705,8 +713,7 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
         const signature = checker.getSignaturesOfType(type, SignatureKind.Call);
         if (signature === undefined) return createUndefined();
 
-        const func = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, signature[0],
-            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ enclosingDeclaration, importAdder) as FunctionExpression | undefined;
+        const func = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, signature[0], createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ enclosingDeclaration, importAdder) as FunctionExpression | undefined;
         return func ?? createUndefined();
     }
     if (getObjectFlags(type) & ObjectFlags.Class) {
@@ -740,7 +747,7 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
     const seenNames = new Set<__String>();
     for (const sourceProp of source.attributes.properties) {
         if (isJsxAttribute(sourceProp)) {
-            seenNames.add(sourceProp.name.escapedText);
+            seenNames.add(getEscapedTextOfJsxAttributeName(sourceProp.name));
         }
         if (isJsxSpreadAttribute(sourceProp)) {
             const type = checker.getTypeAtLocation(sourceProp.expression);
@@ -749,8 +756,7 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
             }
         }
     }
-    return filter(targetProps, targetProp =>
-        isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
+    return filter(targetProps, targetProp => isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
 }
 
 function tryGetContainingMethodDeclaration(node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, callExpression: CallExpression) {
@@ -766,7 +772,8 @@ function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quot
         const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.WriteComputedProps);
         if (prop && isComputedPropertyName(prop)) return prop;
     }
-    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single);
+    // We're using these nodes as property names in an object literal; no need to quote names when not needed.
+    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single, /*stringNamed*/ false, /*isMethod*/ false);
 }
 
 function findScope(node: Node) {

@@ -1,18 +1,18 @@
-tests/cases/conformance/decorators/class/decoratorChecksFunctionBodies.ts(8,14): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+decoratorChecksFunctionBodies.ts(8,14): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
-==== tests/cases/conformance/decorators/class/decoratorChecksFunctionBodies.ts (1 errors) ====
+==== decoratorChecksFunctionBodies.ts (1 errors) ====
     // from #2971
     function func(s: string): void {
     }
     
     class A {
-        @((x, p) => {
+        @((x, p, d) => {
             var a = 3;
             func(a);
                  ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-            return x; 
+            return d;
         })
         m() {
     

@@ -1,7 +1,7 @@
-tests/cases/compiler/assignToModule.ts(2,1): error TS2708: Cannot use namespace 'A' as a value.
+assignToModule.ts(2,1): error TS2708: Cannot use namespace 'A' as a value.
 
 
-==== tests/cases/compiler/assignToModule.ts (1 errors) ====
+==== assignToModule.ts (1 errors) ====
     module A {}
     A = undefined; // invalid LHS
     ~

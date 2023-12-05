@@ -1,7 +1,7 @@
-tests/cases/compiler/misspelledNewMetaProperty.ts(1,20): error TS17012: 'targ' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
+misspelledNewMetaProperty.ts(1,20): error TS17012: 'targ' is not a valid meta-property for keyword 'new'. Did you mean 'target'?
 
 
-==== tests/cases/compiler/misspelledNewMetaProperty.ts (1 errors) ====
+==== misspelledNewMetaProperty.ts (1 errors) ====
     function foo(){new.targ}
                        ~~~~
 !!! error TS17012: 'targ' is not a valid meta-property for keyword 'new'. Did you mean 'target'?

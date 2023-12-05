@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5ExportDefaultExpression.ts] ////
+
 //// [es5ExportDefaultExpression.ts]
 export default (1 + 2);
 

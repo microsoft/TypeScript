@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAccessProperty.ts] ////
+
 //// [nonPrimitiveAccessProperty.ts]
 var a: object;
 a.toString();

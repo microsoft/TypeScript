@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleAugmentationGlobal8_1.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal8_1.ts] ////
+
+=== moduleAugmentationGlobal8_1.ts ===
 namespace A {
 >A : Symbol(A, Decl(moduleAugmentationGlobal8_1.ts, 0, 0))
 

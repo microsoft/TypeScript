@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionRestParameterFunctionExpressions.ts] ////
+
 //// [collisionRestParameterFunctionExpressions.ts]
 function foo() {
     function f1(_i: number, ...restParameters) { //_i is error

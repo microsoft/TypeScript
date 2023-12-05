@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/genericRestParameters3.ts] ////
+
 //// [genericRestParameters3.ts]
 declare let f1: (x: string, ...args: [string] | [number, boolean]) => void;
 declare let f2: (x: string, y: string) => void;

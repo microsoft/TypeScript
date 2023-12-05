@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts] ////
+
 //// [parserUsingConstructorAsIdentifier.ts]
         function define(constructor, instanceMembers, staticMembers) {
             constructor = constructor || function () { };

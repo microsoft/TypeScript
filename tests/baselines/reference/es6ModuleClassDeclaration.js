@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleClassDeclaration.ts] ////
+
 //// [es6ModuleClassDeclaration.ts]
 export class c {
     constructor() {

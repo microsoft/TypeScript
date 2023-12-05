@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/signatureInstantiationWithRecursiveConstraints.ts] ////
+
 //// [signatureInstantiationWithRecursiveConstraints.ts]
 // Repro from #17148
 

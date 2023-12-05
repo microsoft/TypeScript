@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationOperator2.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationOperator2.ts] ////
+
+=== emitCompoundExponentiationOperator2.ts ===
 var comp: number;
 >comp : Symbol(comp, Decl(emitCompoundExponentiationOperator2.ts, 0, 3))
 

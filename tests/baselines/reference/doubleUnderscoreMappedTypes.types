@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doubleUnderscoreMappedTypes.ts ===
+//// [tests/cases/compiler/doubleUnderscoreMappedTypes.ts] ////
+
+=== doubleUnderscoreMappedTypes.ts ===
 interface Properties {
     property1: string;
 >property1 : string

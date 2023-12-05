@@ -1,7 +1,9 @@
+//// [tests/cases/conformance/importAssertion/importAssertion4.ts] ////
+
 //// [importAssertion4.ts]
 import * as f from "./first" assert
 
 
 //// [importAssertion4.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

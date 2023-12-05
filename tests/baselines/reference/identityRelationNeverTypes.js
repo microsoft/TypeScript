@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/identityRelationNeverTypes.ts] ////
+
 //// [identityRelationNeverTypes.ts]
 // Repro from #47996
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedTemplateStringsWithWhitespaceEscapesES6.ts ===
+//// [tests/cases/compiler/taggedTemplateStringsWithWhitespaceEscapesES6.ts] ////
+
+=== taggedTemplateStringsWithWhitespaceEscapesES6.ts ===
 function f(...args: any[]) {
 >f : (...args: any[]) => void
 >args : any[]

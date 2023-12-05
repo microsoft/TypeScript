@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts] ////
+
 //// [superCallFromClassThatDerivesFromGenericTypeButWithNoTypeArguments1.ts]
 class A<T1, T2> {
     constructor(private map: (value: T1) => T2) {

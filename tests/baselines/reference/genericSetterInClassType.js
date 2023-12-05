@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/classTypes/genericSetterInClassType.ts] ////
+
 //// [genericSetterInClassType.ts]
 module Generic {
     class C<T> {

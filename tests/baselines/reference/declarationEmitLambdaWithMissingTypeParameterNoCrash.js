@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLambdaWithMissingTypeParameterNoCrash.ts] ////
+
 //// [declarationEmitLambdaWithMissingTypeParameterNoCrash.ts]
 export interface Foo {
     preFetch: <T1 extends T2> (c: T1) => void; // Type T2 is not defined
@@ -7,4 +9,4 @@ export interface Foo {
 
 //// [declarationEmitLambdaWithMissingTypeParameterNoCrash.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

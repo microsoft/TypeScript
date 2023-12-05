@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2018/es2018IntlAPIs.ts] ////
+
 //// [es2018IntlAPIs.ts]
 // Sample from
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/supportedLocalesOf

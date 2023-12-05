@@ -5,4 +5,4 @@
 //// declare var [|someVar|]: string;
 //// someVa/*reference*/r
 
-verify.allRangesAppearInImplementationList("reference");
+verify.baselineGoToImplementation("reference");

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es5/asyncAwaitNestedClasses_es5.ts] ////
+
 //// [asyncAwaitNestedClasses_es5.ts]
 // https://github.com/Microsoft/TypeScript/issues/20744
 class A {

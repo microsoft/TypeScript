@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/constants.ts ===
+//// [tests/cases/conformance/externalModules/typeAndNamespaceExportMerge.ts] ////
+
+=== constants.ts ===
 // @strict
 
 export const COFFEE = 0;
@@ -8,7 +10,7 @@ export const TEA = 1;
 >TEA : Symbol(TEA, Decl(constants.ts, 3, 12))
 
 
-=== tests/cases/conformance/externalModules/drink.ts ===
+=== drink.ts ===
 export type Drink = 0 | 1;
 >Drink : Symbol(Drink, Decl(drink.ts, 0, 0), Decl(drink.ts, 1, 6))
 
@@ -16,7 +18,7 @@ export * as Drink from "./constants";
 >Drink : Symbol(Drink, Decl(drink.ts, 0, 0), Decl(drink.ts, 1, 6))
 
 
-=== tests/cases/conformance/externalModules/index.ts ===
+=== index.ts ===
 import { Drink } from "./drink";
 >Drink : Symbol(Drink, Decl(index.ts, 0, 8))
 

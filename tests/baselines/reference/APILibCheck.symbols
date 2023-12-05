@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.ts ===
+//// [tests/cases/compiler/APILibCheck.ts] ////
+
+=== index.ts ===
 import ts = require("typescript");
 >ts : Symbol(ts, Decl(index.ts, 0, 0))
 

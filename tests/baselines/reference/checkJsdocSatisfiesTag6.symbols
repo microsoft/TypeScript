@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag6.ts] ////
+
+=== /a.js ===
+/**
+ * @typedef {Object} Point2d
+ * @property {number} x
+ * @property {number} y
+ */
+
+// Undesirable behavior today with type annotation
+const a = /** @satisfies {Partial<Point2d>} */ ({ x: 10 });
+>a : Symbol(a, Decl(a.js, 7, 5))
+>x : Symbol(x, Decl(a.js, 7, 49))
+
+// Should OK
+console.log(a.x.toFixed());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a.x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.x : Symbol(x, Decl(a.js, 7, 49))
+>a : Symbol(a, Decl(a.js, 7, 5))
+>x : Symbol(x, Decl(a.js, 7, 49))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+
+// Should error
+let p = a.y;
+>p : Symbol(p, Decl(a.js, 13, 3))
+>a : Symbol(a, Decl(a.js, 7, 5))
+

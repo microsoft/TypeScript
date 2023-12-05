@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/intersectionTypeInference.ts] ////
+
 //// [intersectionTypeInference.ts]
 function extend<T, U>(obj1: T, obj2: U): T & U {
     var result: T & U;

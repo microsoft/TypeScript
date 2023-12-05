@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/localClassesInLoop.ts] ////
+
 //// [localClassesInLoop.ts]
 declare function use(a: any);
 

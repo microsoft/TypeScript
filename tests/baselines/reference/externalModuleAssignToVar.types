@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externalModuleAssignToVar_core.ts ===
+//// [tests/cases/compiler/externalModuleAssignToVar.ts] ////
+
+=== externalModuleAssignToVar_core.ts ===
 ///<reference path='externalModuleAssignToVar_core_require.ts'/>
 import ext = require('externalModuleAssignToVar_core_require');
 >ext : typeof ext
@@ -38,7 +40,7 @@ y3 = ext3; // ok
 >y3 : new () => ext3
 >ext3 : typeof ext3
 
-=== tests/cases/compiler/externalModuleAssignToVar_ext.ts ===
+=== externalModuleAssignToVar_ext.ts ===
 class D { foo: string; }
 >D : D
 >foo : string
@@ -46,12 +48,12 @@ class D { foo: string; }
 export = D;
 >D : D
 
-=== tests/cases/compiler/externalModuleAssignToVar_core_require.ts ===
+=== externalModuleAssignToVar_core_require.ts ===
 export class C { bar: string; }
 >C : C
 >bar : string
 
-=== tests/cases/compiler/externalModuleAssignToVar_core_require2.ts ===
+=== externalModuleAssignToVar_core_require2.ts ===
 class C { baz: string; }
 >C : C
 >baz : string

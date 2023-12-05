@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts ===
+//// [tests/cases/compiler/noImplicitAnyDestructuringInPrivateMethod.ts] ////
+
+=== noImplicitAnyDestructuringInPrivateMethod.ts ===
 type Arg = {
 >Arg : Symbol(Arg, Decl(noImplicitAnyDestructuringInPrivateMethod.ts, 0, 0))
 

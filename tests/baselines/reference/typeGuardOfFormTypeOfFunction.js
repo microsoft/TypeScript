@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfFunction.ts] ////
+
 //// [typeGuardOfFormTypeOfFunction.ts]
 function f1(x: any) {
     if (typeof x === "function") {

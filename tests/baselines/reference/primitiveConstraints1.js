@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/primitiveConstraints1.ts] ////
+
 //// [primitiveConstraints1.ts]
 function foo1<T extends U, U>(t: T, u: U) { }
 foo1<string, number>('hm', 1); // no error

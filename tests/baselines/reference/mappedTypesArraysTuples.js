@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypesArraysTuples.ts] ////
+
 //// [mappedTypesArraysTuples.ts]
 type Box<T> = { value: T };
 type Boxified<T> = { [P in keyof T]: Box<T[P]> };

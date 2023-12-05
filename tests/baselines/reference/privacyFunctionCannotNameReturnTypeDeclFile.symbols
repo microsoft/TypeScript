@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts ===
+//// [tests/cases/compiler/privacyFunctionCannotNameReturnTypeDeclFile.ts] ////
+
+=== privacyFunctionReturnTypeDeclFile_consumer.ts ===
 import exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 >exporter : Symbol(exporter, Decl(privacyFunctionReturnTypeDeclFile_consumer.ts, 0, 0))
 
@@ -279,7 +281,7 @@ function privateFunctionWithPrivateModuleReturnTypes1() {
 >createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionReturnTypeDeclFile_exporter.ts, 11, 1))
 }
 
-=== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts ===
+=== privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
 >"GlobalWidgets" : Symbol("GlobalWidgets", Decl(privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts, 0, 0))
 
@@ -308,7 +310,7 @@ declare module "GlobalWidgets" {
     }
 }
 
-=== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets.ts ===
+=== privacyFunctionReturnTypeDeclFile_Widgets.ts ===
 export class Widget1 {
 >Widget1 : Symbol(Widget1, Decl(privacyFunctionReturnTypeDeclFile_Widgets.ts, 0, 0))
 
@@ -339,7 +341,7 @@ export module SpecializedWidget {
     }
 }
 
-=== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_exporter.ts ===
+=== privacyFunctionReturnTypeDeclFile_exporter.ts ===
 ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
 import Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
 >Widgets : Symbol(Widgets, Decl(privacyFunctionReturnTypeDeclFile_exporter.ts, 0, 0))

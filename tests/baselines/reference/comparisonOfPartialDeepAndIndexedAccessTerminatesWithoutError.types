@@ -1,4 +1,6 @@
-=== tests/cases/compiler/comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts ===
+//// [tests/cases/compiler/comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts] ////
+
+=== comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts ===
 type PartialDeep<T> = {[K in keyof T]?: PartialDeep<T[K]>};
 >PartialDeep : PartialDeep<T>
 
@@ -17,7 +19,6 @@ const x: Collection<{x: number}> = (null as any as Collection<{x: number, y: num
 >(null as any as Collection<{x: number, y: number}>) : Collection<{ x: number; y: number; }>
 >null as any as Collection<{x: number, y: number}> : Collection<{ x: number; y: number; }>
 >null as any : any
->null : null
 >x : number
 >y : number
 

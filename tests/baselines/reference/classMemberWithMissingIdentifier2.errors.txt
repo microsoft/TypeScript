@@ -1,13 +1,13 @@
-tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,11): error TS1146: Declaration expected.
-tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,12): error TS1005: ';' expected.
-tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,18): error TS1005: ',' expected.
-tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,19): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,26): error TS1005: ';' expected.
-tests/cases/compiler/classMemberWithMissingIdentifier2.ts(2,27): error TS2304: Cannot find name 'VariableDeclaration'.
-tests/cases/compiler/classMemberWithMissingIdentifier2.ts(3,1): error TS1128: Declaration or statement expected.
+classMemberWithMissingIdentifier2.ts(2,11): error TS1146: Declaration expected.
+classMemberWithMissingIdentifier2.ts(2,12): error TS1005: ';' expected.
+classMemberWithMissingIdentifier2.ts(2,18): error TS1005: ',' expected.
+classMemberWithMissingIdentifier2.ts(2,19): error TS2693: 'string' only refers to a type, but is being used as a value here.
+classMemberWithMissingIdentifier2.ts(2,26): error TS1005: ';' expected.
+classMemberWithMissingIdentifier2.ts(2,27): error TS2304: Cannot find name 'VariableDeclaration'.
+classMemberWithMissingIdentifier2.ts(3,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/classMemberWithMissingIdentifier2.ts (7 errors) ====
+==== classMemberWithMissingIdentifier2.ts (7 errors) ====
     class C { 
         public {[name:string]:VariableDeclaration};
               

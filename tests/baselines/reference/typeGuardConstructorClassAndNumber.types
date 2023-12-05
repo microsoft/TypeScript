@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardConstructorClassAndNumber.ts ===
+//// [tests/cases/compiler/typeGuardConstructorClassAndNumber.ts] ////
+
+=== typeGuardConstructorClassAndNumber.ts ===
 // Typical case
 class C1 {
 >C1 : C1
@@ -334,14 +336,12 @@ function foo(instance: Function | object) {
 >instance.prototype : any
 >instance : Function
 >prototype : any
->null : null
 >instance.prototype.constructor == null : boolean
 >instance.prototype.constructor : any
 >instance.prototype : any
 >instance : Function
 >prototype : any
 >constructor : any
->null : null
 
             return instance.length;
 >instance.length : number

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -16,7 +17,8 @@ declare const console: { log(msg: any): void; };
 
 //// [/src/app/file3.ts]
 export const z = 30;
-import { x } from "file1";function forappfile3Rest() {
+import { x } from "file1";
+function forappfile3Rest() {
 const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 }
 
@@ -28,20 +30,26 @@ appfile4Spread(10, ...appfile4_ar);
 
 //// [/src/app/tsconfig.json]
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "strict": false,
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "target": "es5",
+    "module": "amd",
+    "composite": true,
+    "strict": false,
     "downlevelIteration": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "outFile": "module.js"
-    },
-    "exclude": ["module.d.ts"],
-    "references": [
-        { "path": "../lib", "prepend": true }
-    ]
+    "sourceMap": true,
+    "declarationMap": true,
+    "outFile": "module.js"
+  },
+  "exclude": [
+    "module.d.ts"
+  ],
+  "references": [
+    {
+      "path": "../lib",
+      "prepend": true
+    }
+  ]
 }
 
 //// [/src/lib/file0.ts]
@@ -63,35 +71,36 @@ const globalConst = 10;
 
 //// [/src/lib/tsconfig.json]
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "strict": false,
+  "compilerOptions": {
+    "target": "es5",
+    "module": "amd",
+    "composite": true,
+    "sourceMap": true,
+    "declarationMap": true,
+    "strict": false,
     "downlevelIteration": true,
-        "outFile": "module.js"
-    },
-    "exclude": ["module.d.ts"]
-
+    "outFile": "module.js"
+  },
+  "exclude": [
+    "module.d.ts"
+  ]
 }
 
 
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:00:12 AM[0m] Projects in this build: 
+[[90m12:00:22 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:13 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.tsbuildinfo' does not exist
+[[90m12:00:23 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/lib/module.tsbuildinfo' does not exist
 
-[[90m12:00:14 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:00:24 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:23 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
+[[90m12:00:33 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
 
-[[90m12:00:24 AM[0m] Building project '/src/app/tsconfig.json'...
+[[90m12:00:34 AM[0m] Building project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -136,7 +145,7 @@ sourceFile:../lib/file0.ts
 4 >              ^^^^^^
 5 >                    ^^^^^
 6 >                         ^
-7 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >
 3 >        const 
@@ -323,7 +332,7 @@ sourceFile:file4.ts
 4 >              ^^^^^
 5 >                   ^^^^^
 6 >                        ^
-7 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >
 3 >        const 
@@ -473,7 +482,7 @@ appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IAEpB,SAAS,eAAe;QACxB,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACJD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -529,7 +538,7 @@ sourceFile:../lib/file0.ts
 4 >          ^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^->
+7 >                ^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    myGlob
@@ -558,7 +567,7 @@ sourceFile:../lib/file0.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(39, 5) Source(2, 25) + SourceIndex(0)
@@ -596,7 +605,7 @@ sourceFile:../lib/file0.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(43, 1) Source(2, 43) + SourceIndex(0)
@@ -613,7 +622,7 @@ sourceFile:../lib/file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -675,7 +684,7 @@ sourceFile:../lib/file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^->
 1 >export const 
 2 >    
 3 >            x
@@ -693,7 +702,7 @@ sourceFile:../lib/file1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    function 
 3 >             forlibfile1Rest
@@ -829,7 +838,7 @@ sourceFile:../lib/global.ts
 4 >               ^^^
 5 >                  ^^
 6 >                    ^
-7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    globalConst
@@ -858,7 +867,7 @@ sourceFile:file3.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^->
 1->export const 
 2 >    
 3 >            z
@@ -876,14 +885,15 @@ sourceFile:file3.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >import { x } from "file1";
+  >
 2 >    function 
 3 >             forappfile3Rest
-1->Emitted(67, 5) Source(2, 27) + SourceIndex(4)
-2 >Emitted(67, 14) Source(2, 36) + SourceIndex(4)
-3 >Emitted(67, 29) Source(2, 51) + SourceIndex(4)
+1->Emitted(67, 5) Source(3, 1) + SourceIndex(4)
+2 >Emitted(67, 14) Source(3, 10) + SourceIndex(4)
+3 >Emitted(67, 29) Source(3, 25) + SourceIndex(4)
 ---
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
@@ -937,31 +947,31 @@ sourceFile:file3.ts
 23>                                                                       { b, ...rest }
 24>                                                                             = { a: 10, b: 30, yy: 30 }
 25>                                                                             ;
-1->Emitted(68, 9) Source(3, 1) + SourceIndex(4)
-2 >Emitted(68, 13) Source(3, 7) + SourceIndex(4)
-3 >Emitted(68, 18) Source(3, 24) + SourceIndex(4)
-4 >Emitted(68, 20) Source(3, 26) + SourceIndex(4)
-5 >Emitted(68, 21) Source(3, 27) + SourceIndex(4)
-6 >Emitted(68, 23) Source(3, 29) + SourceIndex(4)
-7 >Emitted(68, 25) Source(3, 31) + SourceIndex(4)
-8 >Emitted(68, 27) Source(3, 33) + SourceIndex(4)
-9 >Emitted(68, 28) Source(3, 34) + SourceIndex(4)
-10>Emitted(68, 30) Source(3, 36) + SourceIndex(4)
-11>Emitted(68, 32) Source(3, 38) + SourceIndex(4)
-12>Emitted(68, 34) Source(3, 40) + SourceIndex(4)
-13>Emitted(68, 36) Source(3, 42) + SourceIndex(4)
-14>Emitted(68, 38) Source(3, 44) + SourceIndex(4)
-15>Emitted(68, 40) Source(3, 46) + SourceIndex(4)
-16>Emitted(68, 42) Source(3, 48) + SourceIndex(4)
-17>Emitted(68, 44) Source(3, 9) + SourceIndex(4)
-18>Emitted(68, 45) Source(3, 10) + SourceIndex(4)
-19>Emitted(68, 52) Source(3, 10) + SourceIndex(4)
-20>Emitted(68, 54) Source(3, 15) + SourceIndex(4)
-21>Emitted(68, 58) Source(3, 19) + SourceIndex(4)
-22>Emitted(68, 72) Source(3, 7) + SourceIndex(4)
-23>Emitted(68, 77) Source(3, 21) + SourceIndex(4)
-24>Emitted(68, 78) Source(3, 48) + SourceIndex(4)
-25>Emitted(68, 79) Source(3, 49) + SourceIndex(4)
+1->Emitted(68, 9) Source(4, 1) + SourceIndex(4)
+2 >Emitted(68, 13) Source(4, 7) + SourceIndex(4)
+3 >Emitted(68, 18) Source(4, 24) + SourceIndex(4)
+4 >Emitted(68, 20) Source(4, 26) + SourceIndex(4)
+5 >Emitted(68, 21) Source(4, 27) + SourceIndex(4)
+6 >Emitted(68, 23) Source(4, 29) + SourceIndex(4)
+7 >Emitted(68, 25) Source(4, 31) + SourceIndex(4)
+8 >Emitted(68, 27) Source(4, 33) + SourceIndex(4)
+9 >Emitted(68, 28) Source(4, 34) + SourceIndex(4)
+10>Emitted(68, 30) Source(4, 36) + SourceIndex(4)
+11>Emitted(68, 32) Source(4, 38) + SourceIndex(4)
+12>Emitted(68, 34) Source(4, 40) + SourceIndex(4)
+13>Emitted(68, 36) Source(4, 42) + SourceIndex(4)
+14>Emitted(68, 38) Source(4, 44) + SourceIndex(4)
+15>Emitted(68, 40) Source(4, 46) + SourceIndex(4)
+16>Emitted(68, 42) Source(4, 48) + SourceIndex(4)
+17>Emitted(68, 44) Source(4, 9) + SourceIndex(4)
+18>Emitted(68, 45) Source(4, 10) + SourceIndex(4)
+19>Emitted(68, 52) Source(4, 10) + SourceIndex(4)
+20>Emitted(68, 54) Source(4, 15) + SourceIndex(4)
+21>Emitted(68, 58) Source(4, 19) + SourceIndex(4)
+22>Emitted(68, 72) Source(4, 7) + SourceIndex(4)
+23>Emitted(68, 77) Source(4, 21) + SourceIndex(4)
+24>Emitted(68, 78) Source(4, 48) + SourceIndex(4)
+25>Emitted(68, 79) Source(4, 49) + SourceIndex(4)
 ---
 >>>    }
 1 >^^^^
@@ -969,8 +979,8 @@ sourceFile:file3.ts
 1 >
   >
 2 >    }
-1 >Emitted(69, 5) Source(4, 1) + SourceIndex(4)
-2 >Emitted(69, 6) Source(4, 2) + SourceIndex(4)
+1 >Emitted(69, 5) Source(5, 1) + SourceIndex(4)
+2 >Emitted(69, 6) Source(5, 2) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -984,7 +994,7 @@ sourceFile:file4.ts
 4 >         ^^^
 5 >            ^^
 6 >              ^
-7 >               ^^^^^^^^^^^^^->
+7 >               ^^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    myVar
@@ -1013,7 +1023,7 @@ sourceFile:file4.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(73, 5) Source(2, 25) + SourceIndex(5)
@@ -1051,7 +1061,7 @@ sourceFile:file4.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(77, 1) Source(2, 43) + SourceIndex(5)
@@ -1068,7 +1078,7 @@ sourceFile:file4.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -1118,13 +1128,13 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":2228,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1398,"end":2228,"kind":"text"}]},{"pos":2228,"end":2825,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"25532738663-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}","hash":"51079295629-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n    function forappfile3Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\nvar myVar = 30;\r\nfunction appfile4Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar appfile4_ar = [20, 30];\r\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":265,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":265,"kind":"text"}]},{"pos":265,"end":441,"kind":"text"}],"mapHash":"-58032587340-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC;AACjB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC\"}","hash":"39753545022-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","-291826420-export const z = 30;\r\nimport { x } from \"file1\";function forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-3487084949-const myVar = 30;\nfunction appfile4Spread(...b: number[]) { }\nconst appfile4_ar = [20, 30];\nappfile4Spread(10, ...appfile4_ar);"],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"40772662743-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1361,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1362,"end":2167,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1362,"end":2167,"kind":"text"}]},{"pos":2167,"end":2746,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"40592392858-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IAEpB,SAAS,eAAe;QACxB,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACJD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}","hash":"86928161834-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n    function forappfile3Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\nvar myVar = 30;\nfunction appfile4Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar appfile4_ar = [20, 30];\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":255,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":255,"kind":"text"}]},{"pos":255,"end":425,"kind":"text"}],"mapHash":"-58032587340-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC;AACjB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC\"}","hash":"41750814766-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-9404472663-export const z = 30;\nimport { x } from \"file1\";\nfunction forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-3487084949-const myVar = 30;\nfunction appfile4Spread(...b: number[]) { }\nconst appfile4_ar = [20, 30];\nappfile4Spread(10, ...appfile4_ar);"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"41122638023-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-emitHelpers: (0-504):: typescript:read
+emitHelpers: (0-489):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -1142,7 +1152,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-894):: typescript:spreadArray
+emitHelpers: (490-870):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -1153,7 +1163,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (896-1396):: typescript:rest
+emitHelpers: (871-1361):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -1166,9 +1176,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1398-2228):: ../lib/module.js texts:: 1
+prepend: (1362-2167):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1398-2228)
+text: (1362-2167)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -1196,7 +1206,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (2228-2825)
+text: (2167-2746)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1220,9 +1230,9 @@ appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-265):: ../lib/module.d.ts texts:: 1
+prepend: (0-255):: ../lib/module.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-265)
+text: (0-255)
 declare const myGlob = 20;
 declare function libfile0Spread(...b: number[]): void;
 declare const libfile0_ar: number[];
@@ -1235,7 +1245,7 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (265-441)
+text: (255-425)
 declare module "file3" {
     export const z = 30;
 }
@@ -1257,43 +1267,43 @@ declare const appfile4_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 504,
+          "end": 489,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 506,
-          "end": 894,
+          "pos": 490,
+          "end": 870,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 896,
-          "end": 1396,
+          "pos": 871,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1398,
-          "end": 2228,
+          "pos": 1362,
+          "end": 2167,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
-              "pos": 1398,
-              "end": 2228,
+              "pos": 1362,
+              "end": 2167,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2228,
-          "end": 2825,
+          "pos": 2167,
+          "end": 2746,
           "kind": "text"
         }
       ],
-      "hash": "51079295629-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n    function forappfile3Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\nvar myVar = 30;\r\nfunction appfile4Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar appfile4_ar = [20, 30];\r\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\r\n//# sourceMappingURL=module.js.map",
-      "mapHash": "25532738663-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}",
+      "hash": "86928161834-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n    function forappfile3Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\nvar myVar = 30;\nfunction appfile4Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar appfile4_ar = [20, 30];\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\n//# sourceMappingURL=module.js.map",
+      "mapHash": "40592392858-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IAEpB,SAAS,eAAe;QACxB,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACJD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}",
       "sources": {
         "helpers": [
           "typescript:rest",
@@ -1306,24 +1316,24 @@ declare const appfile4_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 265,
+          "end": 255,
           "kind": "prepend",
           "data": "../lib/module.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 265,
+              "end": 255,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 265,
-          "end": 441,
+          "pos": 255,
+          "end": 425,
           "kind": "text"
         }
       ],
-      "hash": "39753545022-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "41750814766-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "-58032587340-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC;AACjB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC\"}"
     }
   },
@@ -1336,10 +1346,20 @@ declare const appfile4_ar: number[];
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../lib/module.d.ts": "25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
-      "./file3.ts": "-291826420-export const z = 30;\r\nimport { x } from \"file1\";function forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
+      "../lib/module.d.ts": "19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
+      "./file3.ts": "-9404472663-export const z = 30;\nimport { x } from \"file1\";\nfunction forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
       "./file4.ts": "-3487084949-const myVar = 30;\nfunction appfile4Spread(...b: number[]) { }\nconst appfile4_ar = [20, 30];\nappfile4Spread(10, ...appfile4_ar);"
     },
+    "root": [
+      [
+        3,
+        "./file3.ts"
+      ],
+      [
+        4,
+        "./file4.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -1350,11 +1370,11 @@ declare const appfile4_ar: number[];
       "strict": false,
       "target": 1
     },
-    "outSignature": "40772662743-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n",
+    "outSignature": "41122638023-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 7917
+  "size": 7690
 }
 
 //// [/src/lib/module.d.ts]
@@ -1391,7 +1411,7 @@ sourceFile:file0.ts
 4 >              ^^^^^^
 5 >                    ^^^^^
 6 >                         ^
-7 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >
 3 >        const 
@@ -1662,7 +1682,7 @@ sourceFile:file0.ts
 4 >          ^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^->
+7 >                ^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    myGlob
@@ -1691,7 +1711,7 @@ sourceFile:file0.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(39, 5) Source(2, 25) + SourceIndex(0)
@@ -1729,7 +1749,7 @@ sourceFile:file0.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(43, 1) Source(2, 43) + SourceIndex(0)
@@ -1746,7 +1766,7 @@ sourceFile:file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -1808,7 +1828,7 @@ sourceFile:file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^->
 1 >export const 
 2 >    
 3 >            x
@@ -1826,7 +1846,7 @@ sourceFile:file1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    function 
 3 >             forlibfile1Rest
@@ -1979,13 +1999,13 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":2228,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray","typescript:rest"]},"mapHash":"8627584870-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}","hash":"23752253622-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":265,"kind":"text"}],"mapHash":"-34036075879-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"13747623731-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4690807917-const myGlob = 20;\nfunction libfile0Spread(...b: number[]) { }\nconst libfile0_ar = [20, 30];\nlibfile0Spread(10, ...libfile0_ar);","186113334-export const x = 10;function forlibfile1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1361,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1362,"end":2167,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray","typescript:rest"]},"mapHash":"8627584870-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}","hash":"57418107229-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":255,"kind":"text"}],"mapHash":"-34036075879-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"17976393265-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4690807917-const myGlob = 20;\nfunction libfile0Spread(...b: number[]) { }\nconst libfile0_ar = [20, 30];\nlibfile0Spread(10, ...libfile0_ar);","186113334-export const x = 10;function forlibfile1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/lib/module.js
 ----------------------------------------------------------------------
-emitHelpers: (0-504):: typescript:read
+emitHelpers: (0-489):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -2003,7 +2023,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-894):: typescript:spreadArray
+emitHelpers: (490-870):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -2014,7 +2034,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (896-1396):: typescript:rest
+emitHelpers: (871-1361):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -2027,7 +2047,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-text: (1398-2228)
+text: (1362-2167)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -2058,7 +2078,7 @@ var globalConst = 10;
 ======================================================================
 File:: /src/lib/module.d.ts
 ----------------------------------------------------------------------
-text: (0-265)
+text: (0-255)
 declare const myGlob = 20;
 declare function libfile0Spread(...b: number[]): void;
 declare const libfile0_ar: number[];
@@ -2086,29 +2106,29 @@ declare const globalConst = 10;
       "sections": [
         {
           "pos": 0,
-          "end": 504,
+          "end": 489,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 506,
-          "end": 894,
+          "pos": 490,
+          "end": 870,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 896,
-          "end": 1396,
+          "pos": 871,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1398,
-          "end": 2228,
+          "pos": 1362,
+          "end": 2167,
           "kind": "text"
         }
       ],
-      "hash": "23752253622-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map",
+      "hash": "57418107229-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map",
       "mapHash": "8627584870-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}",
       "sources": {
         "helpers": [
@@ -2122,11 +2142,11 @@ declare const globalConst = 10;
       "sections": [
         {
           "pos": 0,
-          "end": 265,
+          "end": 255,
           "kind": "text"
         }
       ],
-      "hash": "13747623731-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "17976393265-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "-34036075879-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}"
     }
   },
@@ -2145,6 +2165,20 @@ declare const globalConst = 10;
       "./file2.ts": "-13729954175-export const y = 20;",
       "./global.ts": "1028229885-const globalConst = 10;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./file0.ts",
+          "./file1.ts",
+          "./file2.ts",
+          "./global.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -2155,11 +2189,11 @@ declare const globalConst = 10;
       "strict": false,
       "target": 1
     },
-    "outSignature": "25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "outSignature": "19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 5792
+  "size": 5645
 }
 
 
@@ -2175,17 +2209,17 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:00:38 AM[0m] Projects in this build: 
+[[90m12:00:48 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:39 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
+[[90m12:00:49 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
 
-[[90m12:00:40 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:00:50 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:48 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:00:58 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:00:49 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:00:59 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -2274,7 +2308,7 @@ appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IAEpB,SAAS,eAAe;QACxB,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACJD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -2330,7 +2364,7 @@ sourceFile:../lib/file0.ts
 4 >          ^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^->
+7 >                ^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    myGlob
@@ -2359,7 +2393,7 @@ sourceFile:../lib/file0.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(39, 5) Source(2, 25) + SourceIndex(0)
@@ -2397,7 +2431,7 @@ sourceFile:../lib/file0.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(43, 1) Source(2, 43) + SourceIndex(0)
@@ -2414,7 +2448,7 @@ sourceFile:../lib/file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -2476,7 +2510,7 @@ sourceFile:../lib/file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^->
 1 >export const 
 2 >    
 3 >            x
@@ -2494,7 +2528,7 @@ sourceFile:../lib/file1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    function 
 3 >             forlibfile1Rest
@@ -2583,7 +2617,7 @@ sourceFile:../lib/file1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >    }
@@ -2657,7 +2691,7 @@ sourceFile:../lib/global.ts
 4 >               ^^^
 5 >                  ^^
 6 >                    ^
-7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    globalConst
@@ -2686,7 +2720,7 @@ sourceFile:file3.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^->
 1->export const 
 2 >    
 3 >            z
@@ -2704,14 +2738,15 @@ sourceFile:file3.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >import { x } from "file1";
+  >
 2 >    function 
 3 >             forappfile3Rest
-1->Emitted(68, 5) Source(2, 27) + SourceIndex(4)
-2 >Emitted(68, 14) Source(2, 36) + SourceIndex(4)
-3 >Emitted(68, 29) Source(2, 51) + SourceIndex(4)
+1->Emitted(68, 5) Source(3, 1) + SourceIndex(4)
+2 >Emitted(68, 14) Source(3, 10) + SourceIndex(4)
+3 >Emitted(68, 29) Source(3, 25) + SourceIndex(4)
 ---
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
@@ -2765,31 +2800,31 @@ sourceFile:file3.ts
 23>                                                                       { b, ...rest }
 24>                                                                             = { a: 10, b: 30, yy: 30 }
 25>                                                                             ;
-1->Emitted(69, 9) Source(3, 1) + SourceIndex(4)
-2 >Emitted(69, 13) Source(3, 7) + SourceIndex(4)
-3 >Emitted(69, 18) Source(3, 24) + SourceIndex(4)
-4 >Emitted(69, 20) Source(3, 26) + SourceIndex(4)
-5 >Emitted(69, 21) Source(3, 27) + SourceIndex(4)
-6 >Emitted(69, 23) Source(3, 29) + SourceIndex(4)
-7 >Emitted(69, 25) Source(3, 31) + SourceIndex(4)
-8 >Emitted(69, 27) Source(3, 33) + SourceIndex(4)
-9 >Emitted(69, 28) Source(3, 34) + SourceIndex(4)
-10>Emitted(69, 30) Source(3, 36) + SourceIndex(4)
-11>Emitted(69, 32) Source(3, 38) + SourceIndex(4)
-12>Emitted(69, 34) Source(3, 40) + SourceIndex(4)
-13>Emitted(69, 36) Source(3, 42) + SourceIndex(4)
-14>Emitted(69, 38) Source(3, 44) + SourceIndex(4)
-15>Emitted(69, 40) Source(3, 46) + SourceIndex(4)
-16>Emitted(69, 42) Source(3, 48) + SourceIndex(4)
-17>Emitted(69, 44) Source(3, 9) + SourceIndex(4)
-18>Emitted(69, 45) Source(3, 10) + SourceIndex(4)
-19>Emitted(69, 52) Source(3, 10) + SourceIndex(4)
-20>Emitted(69, 54) Source(3, 15) + SourceIndex(4)
-21>Emitted(69, 58) Source(3, 19) + SourceIndex(4)
-22>Emitted(69, 72) Source(3, 7) + SourceIndex(4)
-23>Emitted(69, 77) Source(3, 21) + SourceIndex(4)
-24>Emitted(69, 78) Source(3, 48) + SourceIndex(4)
-25>Emitted(69, 79) Source(3, 49) + SourceIndex(4)
+1->Emitted(69, 9) Source(4, 1) + SourceIndex(4)
+2 >Emitted(69, 13) Source(4, 7) + SourceIndex(4)
+3 >Emitted(69, 18) Source(4, 24) + SourceIndex(4)
+4 >Emitted(69, 20) Source(4, 26) + SourceIndex(4)
+5 >Emitted(69, 21) Source(4, 27) + SourceIndex(4)
+6 >Emitted(69, 23) Source(4, 29) + SourceIndex(4)
+7 >Emitted(69, 25) Source(4, 31) + SourceIndex(4)
+8 >Emitted(69, 27) Source(4, 33) + SourceIndex(4)
+9 >Emitted(69, 28) Source(4, 34) + SourceIndex(4)
+10>Emitted(69, 30) Source(4, 36) + SourceIndex(4)
+11>Emitted(69, 32) Source(4, 38) + SourceIndex(4)
+12>Emitted(69, 34) Source(4, 40) + SourceIndex(4)
+13>Emitted(69, 36) Source(4, 42) + SourceIndex(4)
+14>Emitted(69, 38) Source(4, 44) + SourceIndex(4)
+15>Emitted(69, 40) Source(4, 46) + SourceIndex(4)
+16>Emitted(69, 42) Source(4, 48) + SourceIndex(4)
+17>Emitted(69, 44) Source(4, 9) + SourceIndex(4)
+18>Emitted(69, 45) Source(4, 10) + SourceIndex(4)
+19>Emitted(69, 52) Source(4, 10) + SourceIndex(4)
+20>Emitted(69, 54) Source(4, 15) + SourceIndex(4)
+21>Emitted(69, 58) Source(4, 19) + SourceIndex(4)
+22>Emitted(69, 72) Source(4, 7) + SourceIndex(4)
+23>Emitted(69, 77) Source(4, 21) + SourceIndex(4)
+24>Emitted(69, 78) Source(4, 48) + SourceIndex(4)
+25>Emitted(69, 79) Source(4, 49) + SourceIndex(4)
 ---
 >>>    }
 1 >^^^^
@@ -2797,8 +2832,8 @@ sourceFile:file3.ts
 1 >
   >
 2 >    }
-1 >Emitted(70, 5) Source(4, 1) + SourceIndex(4)
-2 >Emitted(70, 6) Source(4, 2) + SourceIndex(4)
+1 >Emitted(70, 5) Source(5, 1) + SourceIndex(4)
+2 >Emitted(70, 6) Source(5, 2) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -2812,7 +2847,7 @@ sourceFile:file4.ts
 4 >         ^^^
 5 >            ^^
 6 >              ^
-7 >               ^^^^^^^^^^^^^->
+7 >               ^^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    myVar
@@ -2841,7 +2876,7 @@ sourceFile:file4.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(74, 5) Source(2, 25) + SourceIndex(5)
@@ -2879,7 +2914,7 @@ sourceFile:file4.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(78, 1) Source(2, 43) + SourceIndex(5)
@@ -2896,7 +2931,7 @@ sourceFile:file4.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -2946,13 +2981,13 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":2257,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1398,"end":2257,"kind":"text"}]},{"pos":2257,"end":2854,"kind":"text"}],"mapHash":"18634709081-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}","hash":"-22304593138-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n    function forappfile3Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\nvar myVar = 30;\r\nfunction appfile4Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar appfile4_ar = [20, 30];\r\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\r\n//# sourceMappingURL=module.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":265,"kind":"text"}]},{"pos":265,"end":441,"kind":"text"}],"mapHash":"-58032587340-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC;AACjB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC\"}","hash":"39753545022-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","-291826420-export const z = 30;\r\nimport { x } from \"file1\";function forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-3487084949-const myVar = 30;\nfunction appfile4Spread(...b: number[]) { }\nconst appfile4_ar = [20, 30];\nappfile4Spread(10, ...appfile4_ar);"],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"40772662743-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1361,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1362,"end":2195,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1362,"end":2195,"kind":"text"}]},{"pos":2195,"end":2774,"kind":"text"}],"mapHash":"49180617932-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IAEpB,SAAS,eAAe;QACxB,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACJD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}","hash":"8867186558-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n    function forappfile3Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\nvar myVar = 30;\nfunction appfile4Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar appfile4_ar = [20, 30];\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\n//# sourceMappingURL=module.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":255,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":255,"kind":"text"}]},{"pos":255,"end":425,"kind":"text"}],"mapHash":"-58032587340-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC;AACjB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC\"}","hash":"41750814766-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-9404472663-export const z = 30;\nimport { x } from \"file1\";\nfunction forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-3487084949-const myVar = 30;\nfunction appfile4Spread(...b: number[]) { }\nconst appfile4_ar = [20, 30];\nappfile4Spread(10, ...appfile4_ar);"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"41122638023-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-emitHelpers: (0-504):: typescript:read
+emitHelpers: (0-489):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -2970,7 +3005,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-894):: typescript:spreadArray
+emitHelpers: (490-870):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -2981,7 +3016,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (896-1396):: typescript:rest
+emitHelpers: (871-1361):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -2994,9 +3029,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1398-2257):: ../lib/module.js texts:: 1
+prepend: (1362-2195):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1398-2257)
+text: (1362-2195)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -3025,7 +3060,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (2257-2854)
+text: (2195-2774)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3049,9 +3084,9 @@ appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-265):: ../lib/module.d.ts texts:: 1
+prepend: (0-255):: ../lib/module.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-265)
+text: (0-255)
 declare const myGlob = 20;
 declare function libfile0Spread(...b: number[]): void;
 declare const libfile0_ar: number[];
@@ -3064,7 +3099,7 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (265-441)
+text: (255-425)
 declare module "file3" {
     export const z = 30;
 }
@@ -3086,43 +3121,43 @@ declare const appfile4_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 504,
+          "end": 489,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 506,
-          "end": 894,
+          "pos": 490,
+          "end": 870,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 896,
-          "end": 1396,
+          "pos": 871,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1398,
-          "end": 2257,
+          "pos": 1362,
+          "end": 2195,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
-              "pos": 1398,
-              "end": 2257,
+              "pos": 1362,
+              "end": 2195,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2257,
-          "end": 2854,
+          "pos": 2195,
+          "end": 2774,
           "kind": "text"
         }
       ],
-      "hash": "-22304593138-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n    function forappfile3Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\nvar myVar = 30;\r\nfunction appfile4Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar appfile4_ar = [20, 30];\r\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\r\n//# sourceMappingURL=module.js.map",
-      "mapHash": "18634709081-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}",
+      "hash": "8867186558-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n    function forappfile3Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\nvar myVar = 30;\nfunction appfile4Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar appfile4_ar = [20, 30];\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\n//# sourceMappingURL=module.js.map",
+      "mapHash": "49180617932-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IAEpB,SAAS,eAAe;QACxB,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACJD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}",
       "sources": {
         "helpers": [
           "typescript:rest",
@@ -3135,24 +3170,24 @@ declare const appfile4_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 265,
+          "end": 255,
           "kind": "prepend",
           "data": "../lib/module.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 265,
+              "end": 255,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 265,
-          "end": 441,
+          "pos": 255,
+          "end": 425,
           "kind": "text"
         }
       ],
-      "hash": "39753545022-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "41750814766-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "-58032587340-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC;AACjB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC\"}"
     }
   },
@@ -3165,10 +3200,20 @@ declare const appfile4_ar: number[];
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../lib/module.d.ts": "25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
-      "./file3.ts": "-291826420-export const z = 30;\r\nimport { x } from \"file1\";function forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
+      "../lib/module.d.ts": "19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
+      "./file3.ts": "-9404472663-export const z = 30;\nimport { x } from \"file1\";\nfunction forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
       "./file4.ts": "-3487084949-const myVar = 30;\nfunction appfile4Spread(...b: number[]) { }\nconst appfile4_ar = [20, 30];\nappfile4Spread(10, ...appfile4_ar);"
     },
+    "root": [
+      [
+        3,
+        "./file3.ts"
+      ],
+      [
+        4,
+        "./file4.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -3179,11 +3224,11 @@ declare const appfile4_ar: number[];
       "strict": false,
       "target": 1
     },
-    "outSignature": "40772662743-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n",
+    "outSignature": "41122638023-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 7989
+  "size": 7758
 }
 
 //// [/src/lib/module.d.ts.map] file written with same contents
@@ -3310,7 +3355,7 @@ sourceFile:file0.ts
 4 >          ^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^->
+7 >                ^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    myGlob
@@ -3339,7 +3384,7 @@ sourceFile:file0.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(39, 5) Source(2, 25) + SourceIndex(0)
@@ -3377,7 +3422,7 @@ sourceFile:file0.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(43, 1) Source(2, 43) + SourceIndex(0)
@@ -3394,7 +3439,7 @@ sourceFile:file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -3456,7 +3501,7 @@ sourceFile:file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^->
 1 >export const 
 2 >    
 3 >            x
@@ -3474,7 +3519,7 @@ sourceFile:file1.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    function 
 3 >             forlibfile1Rest
@@ -3563,7 +3608,7 @@ sourceFile:file1.ts
 >>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >    }
@@ -3654,13 +3699,13 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":2257,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray","typescript:rest"]},"mapHash":"13391497112-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}","hash":"26811980439-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":265,"kind":"text"}],"mapHash":"-34036075879-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"13747623731-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4690807917-const myGlob = 20;\nfunction libfile0Spread(...b: number[]) { }\nconst libfile0_ar = [20, 30];\nlibfile0Spread(10, ...libfile0_ar);","12502459933-export const x = 10;function forlibfile1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1361,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1362,"end":2195,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray","typescript:rest"]},"mapHash":"13391497112-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}","hash":"56659072305-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":255,"kind":"text"}],"mapHash":"-34036075879-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"17976393265-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4690807917-const myGlob = 20;\nfunction libfile0Spread(...b: number[]) { }\nconst libfile0_ar = [20, 30];\nlibfile0Spread(10, ...libfile0_ar);","12502459933-export const x = 10;function forlibfile1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/lib/module.js
 ----------------------------------------------------------------------
-emitHelpers: (0-504):: typescript:read
+emitHelpers: (0-489):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -3678,7 +3723,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-894):: typescript:spreadArray
+emitHelpers: (490-870):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -3689,7 +3734,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (896-1396):: typescript:rest
+emitHelpers: (871-1361):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -3702,7 +3747,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-text: (1398-2257)
+text: (1362-2195)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -3734,7 +3779,7 @@ var globalConst = 10;
 ======================================================================
 File:: /src/lib/module.d.ts
 ----------------------------------------------------------------------
-text: (0-265)
+text: (0-255)
 declare const myGlob = 20;
 declare function libfile0Spread(...b: number[]): void;
 declare const libfile0_ar: number[];
@@ -3762,29 +3807,29 @@ declare const globalConst = 10;
       "sections": [
         {
           "pos": 0,
-          "end": 504,
+          "end": 489,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 506,
-          "end": 894,
+          "pos": 490,
+          "end": 870,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 896,
-          "end": 1396,
+          "pos": 871,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1398,
-          "end": 2257,
+          "pos": 1362,
+          "end": 2195,
           "kind": "text"
         }
       ],
-      "hash": "26811980439-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map",
+      "hash": "56659072305-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map",
       "mapHash": "13391497112-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICFH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}",
       "sources": {
         "helpers": [
@@ -3798,11 +3843,11 @@ declare const globalConst = 10;
       "sections": [
         {
           "pos": 0,
-          "end": 265,
+          "end": 255,
           "kind": "text"
         }
       ],
-      "hash": "13747623731-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "17976393265-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "-34036075879-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}"
     }
   },
@@ -3821,6 +3866,20 @@ declare const globalConst = 10;
       "./file2.ts": "-13729954175-export const y = 20;",
       "./global.ts": "1028229885-const globalConst = 10;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./file0.ts",
+          "./file1.ts",
+          "./file2.ts",
+          "./global.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -3831,11 +3890,11 @@ declare const globalConst = 10;
       "strict": false,
       "target": 1
     },
-    "outSignature": "25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "outSignature": "19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 5881
+  "size": 5732
 }
 
 
@@ -3849,17 +3908,17 @@ export const x = 10;function forlibfile1Rest() { }console.log(x);
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:01:00 AM[0m] Projects in this build: 
+[[90m12:01:10 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:01:01 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
+[[90m12:01:11 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
 
-[[90m12:01:02 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:01:12 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:01:10 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:01:20 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:01:11 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:01:21 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -3946,7 +4005,7 @@ appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICApD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICApD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IAEpB,SAAS,eAAe;QACxB,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACJD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -4002,7 +4061,7 @@ sourceFile:../lib/file0.ts
 4 >          ^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^->
+7 >                ^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    myGlob
@@ -4031,7 +4090,7 @@ sourceFile:../lib/file0.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(39, 5) Source(2, 25) + SourceIndex(0)
@@ -4069,7 +4128,7 @@ sourceFile:../lib/file0.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(43, 1) Source(2, 43) + SourceIndex(0)
@@ -4086,7 +4145,7 @@ sourceFile:../lib/file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -4148,7 +4207,7 @@ sourceFile:../lib/file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^^^->
 1 >export const 
 2 >    
 3 >            x
@@ -4246,7 +4305,7 @@ sourceFile:../lib/global.ts
 4 >               ^^^
 5 >                  ^^
 6 >                    ^
-7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    globalConst
@@ -4275,7 +4334,7 @@ sourceFile:file3.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^->
 1->export const 
 2 >    
 3 >            z
@@ -4293,14 +4352,15 @@ sourceFile:file3.ts
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^^^^^^^^^
-4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >import { x } from "file1";
+  >
 2 >    function 
 3 >             forappfile3Rest
-1->Emitted(66, 5) Source(2, 27) + SourceIndex(4)
-2 >Emitted(66, 14) Source(2, 36) + SourceIndex(4)
-3 >Emitted(66, 29) Source(2, 51) + SourceIndex(4)
+1->Emitted(66, 5) Source(3, 1) + SourceIndex(4)
+2 >Emitted(66, 14) Source(3, 10) + SourceIndex(4)
+3 >Emitted(66, 29) Source(3, 25) + SourceIndex(4)
 ---
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
@@ -4354,31 +4414,31 @@ sourceFile:file3.ts
 23>                                                                       { b, ...rest }
 24>                                                                             = { a: 10, b: 30, yy: 30 }
 25>                                                                             ;
-1->Emitted(67, 9) Source(3, 1) + SourceIndex(4)
-2 >Emitted(67, 13) Source(3, 7) + SourceIndex(4)
-3 >Emitted(67, 18) Source(3, 24) + SourceIndex(4)
-4 >Emitted(67, 20) Source(3, 26) + SourceIndex(4)
-5 >Emitted(67, 21) Source(3, 27) + SourceIndex(4)
-6 >Emitted(67, 23) Source(3, 29) + SourceIndex(4)
-7 >Emitted(67, 25) Source(3, 31) + SourceIndex(4)
-8 >Emitted(67, 27) Source(3, 33) + SourceIndex(4)
-9 >Emitted(67, 28) Source(3, 34) + SourceIndex(4)
-10>Emitted(67, 30) Source(3, 36) + SourceIndex(4)
-11>Emitted(67, 32) Source(3, 38) + SourceIndex(4)
-12>Emitted(67, 34) Source(3, 40) + SourceIndex(4)
-13>Emitted(67, 36) Source(3, 42) + SourceIndex(4)
-14>Emitted(67, 38) Source(3, 44) + SourceIndex(4)
-15>Emitted(67, 40) Source(3, 46) + SourceIndex(4)
-16>Emitted(67, 42) Source(3, 48) + SourceIndex(4)
-17>Emitted(67, 44) Source(3, 9) + SourceIndex(4)
-18>Emitted(67, 45) Source(3, 10) + SourceIndex(4)
-19>Emitted(67, 52) Source(3, 10) + SourceIndex(4)
-20>Emitted(67, 54) Source(3, 15) + SourceIndex(4)
-21>Emitted(67, 58) Source(3, 19) + SourceIndex(4)
-22>Emitted(67, 72) Source(3, 7) + SourceIndex(4)
-23>Emitted(67, 77) Source(3, 21) + SourceIndex(4)
-24>Emitted(67, 78) Source(3, 48) + SourceIndex(4)
-25>Emitted(67, 79) Source(3, 49) + SourceIndex(4)
+1->Emitted(67, 9) Source(4, 1) + SourceIndex(4)
+2 >Emitted(67, 13) Source(4, 7) + SourceIndex(4)
+3 >Emitted(67, 18) Source(4, 24) + SourceIndex(4)
+4 >Emitted(67, 20) Source(4, 26) + SourceIndex(4)
+5 >Emitted(67, 21) Source(4, 27) + SourceIndex(4)
+6 >Emitted(67, 23) Source(4, 29) + SourceIndex(4)
+7 >Emitted(67, 25) Source(4, 31) + SourceIndex(4)
+8 >Emitted(67, 27) Source(4, 33) + SourceIndex(4)
+9 >Emitted(67, 28) Source(4, 34) + SourceIndex(4)
+10>Emitted(67, 30) Source(4, 36) + SourceIndex(4)
+11>Emitted(67, 32) Source(4, 38) + SourceIndex(4)
+12>Emitted(67, 34) Source(4, 40) + SourceIndex(4)
+13>Emitted(67, 36) Source(4, 42) + SourceIndex(4)
+14>Emitted(67, 38) Source(4, 44) + SourceIndex(4)
+15>Emitted(67, 40) Source(4, 46) + SourceIndex(4)
+16>Emitted(67, 42) Source(4, 48) + SourceIndex(4)
+17>Emitted(67, 44) Source(4, 9) + SourceIndex(4)
+18>Emitted(67, 45) Source(4, 10) + SourceIndex(4)
+19>Emitted(67, 52) Source(4, 10) + SourceIndex(4)
+20>Emitted(67, 54) Source(4, 15) + SourceIndex(4)
+21>Emitted(67, 58) Source(4, 19) + SourceIndex(4)
+22>Emitted(67, 72) Source(4, 7) + SourceIndex(4)
+23>Emitted(67, 77) Source(4, 21) + SourceIndex(4)
+24>Emitted(67, 78) Source(4, 48) + SourceIndex(4)
+25>Emitted(67, 79) Source(4, 49) + SourceIndex(4)
 ---
 >>>    }
 1 >^^^^
@@ -4386,8 +4446,8 @@ sourceFile:file3.ts
 1 >
   >
 2 >    }
-1 >Emitted(68, 5) Source(4, 1) + SourceIndex(4)
-2 >Emitted(68, 6) Source(4, 2) + SourceIndex(4)
+1 >Emitted(68, 5) Source(5, 1) + SourceIndex(4)
+2 >Emitted(68, 6) Source(5, 2) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -4401,7 +4461,7 @@ sourceFile:file4.ts
 4 >         ^^^
 5 >            ^^
 6 >              ^
-7 >               ^^^^^^^^^^^^^->
+7 >               ^^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    myVar
@@ -4430,7 +4490,7 @@ sourceFile:file4.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(72, 5) Source(2, 25) + SourceIndex(5)
@@ -4468,7 +4528,7 @@ sourceFile:file4.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(76, 1) Source(2, 43) + SourceIndex(5)
@@ -4485,7 +4545,7 @@ sourceFile:file4.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -4535,13 +4595,13 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":2172,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1398,"end":2172,"kind":"text"}]},{"pos":2172,"end":2769,"kind":"text"}],"mapHash":"10800515764-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICApD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}","hash":"-17799548340-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() { }\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n    function forappfile3Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\nvar myVar = 30;\r\nfunction appfile4Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar appfile4_ar = [20, 30];\r\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\r\n//# sourceMappingURL=module.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":265,"kind":"text"}]},{"pos":265,"end":441,"kind":"text"}],"mapHash":"-58032587340-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC;AACjB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC\"}","hash":"39753545022-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","-291826420-export const z = 30;\r\nimport { x } from \"file1\";function forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-3487084949-const myVar = 30;\nfunction appfile4Spread(...b: number[]) { }\nconst appfile4_ar = [20, 30];\nappfile4Spread(10, ...appfile4_ar);"],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"40772662743-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1361,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1362,"end":2112,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1362,"end":2112,"kind":"text"}]},{"pos":2112,"end":2691,"kind":"text"}],"mapHash":"35465374343-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICApD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IAEpB,SAAS,eAAe;QACxB,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACJD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}","hash":"119511022230-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() { }\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n    function forappfile3Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\nvar myVar = 30;\nfunction appfile4Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar appfile4_ar = [20, 30];\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\n//# sourceMappingURL=module.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":255,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":255,"kind":"text"}]},{"pos":255,"end":425,"kind":"text"}],"mapHash":"-58032587340-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC;AACjB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC\"}","hash":"41750814766-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../lib/module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-9404472663-export const z = 30;\nimport { x } from \"file1\";\nfunction forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-3487084949-const myVar = 30;\nfunction appfile4Spread(...b: number[]) { }\nconst appfile4_ar = [20, 30];\nappfile4Spread(10, ...appfile4_ar);"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"41122638023-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-emitHelpers: (0-504):: typescript:read
+emitHelpers: (0-489):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -4559,7 +4619,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-894):: typescript:spreadArray
+emitHelpers: (490-870):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -4570,7 +4630,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (896-1396):: typescript:rest
+emitHelpers: (871-1361):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -4583,9 +4643,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1398-2172):: ../lib/module.js texts:: 1
+prepend: (1362-2112):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1398-2172)
+text: (1362-2112)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -4612,7 +4672,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (2172-2769)
+text: (2112-2691)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4636,9 +4696,9 @@ appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 ======================================================================
 File:: /src/app/module.d.ts
 ----------------------------------------------------------------------
-prepend: (0-265):: ../lib/module.d.ts texts:: 1
+prepend: (0-255):: ../lib/module.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (0-265)
+text: (0-255)
 declare const myGlob = 20;
 declare function libfile0Spread(...b: number[]): void;
 declare const libfile0_ar: number[];
@@ -4651,7 +4711,7 @@ declare module "file2" {
 declare const globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (265-441)
+text: (255-425)
 declare module "file3" {
     export const z = 30;
 }
@@ -4673,43 +4733,43 @@ declare const appfile4_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 504,
+          "end": 489,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 506,
-          "end": 894,
+          "pos": 490,
+          "end": 870,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 896,
-          "end": 1396,
+          "pos": 871,
+          "end": 1361,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1398,
-          "end": 2172,
+          "pos": 1362,
+          "end": 2112,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
-              "pos": 1398,
-              "end": 2172,
+              "pos": 1362,
+              "end": 2112,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2172,
-          "end": 2769,
+          "pos": 2112,
+          "end": 2691,
           "kind": "text"
         }
       ],
-      "hash": "-17799548340-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar __rest = (this && this.__rest) || function (s, e) {\r\n    var t = {};\r\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\r\n        t[p] = s[p];\r\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\r\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\r\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\r\n                t[p[i]] = s[p[i]];\r\n        }\r\n    return t;\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() { }\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.z = void 0;\r\n    exports.z = 30;\r\n    function forappfile3Rest() {\r\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\r\n    }\r\n});\r\nvar myVar = 30;\r\nfunction appfile4Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar appfile4_ar = [20, 30];\r\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\r\n//# sourceMappingURL=module.js.map",
-      "mapHash": "10800515764-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICApD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}",
+      "hash": "119511022230-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() { }\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n    function forappfile3Rest() {\n        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n    }\n});\nvar myVar = 30;\nfunction appfile4Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar appfile4_ar = [20, 30];\nappfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));\n//# sourceMappingURL=module.js.map",
+      "mapHash": "35465374343-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICApD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IAEpB,SAAS,eAAe;QACxB,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACJD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE\"}",
       "sources": {
         "helpers": [
           "typescript:rest",
@@ -4722,24 +4782,24 @@ declare const appfile4_ar: number[];
       "sections": [
         {
           "pos": 0,
-          "end": 265,
+          "end": 255,
           "kind": "prepend",
           "data": "../lib/module.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 265,
+              "end": 255,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 265,
-          "end": 441,
+          "pos": 255,
+          "end": 425,
           "kind": "text"
         }
       ],
-      "hash": "39753545022-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "41750814766-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "-58032587340-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC;AACjB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC\"}"
     }
   },
@@ -4752,10 +4812,20 @@ declare const appfile4_ar: number[];
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../lib/module.d.ts": "25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
-      "./file3.ts": "-291826420-export const z = 30;\r\nimport { x } from \"file1\";function forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
+      "../lib/module.d.ts": "19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
+      "./file3.ts": "-9404472663-export const z = 30;\nimport { x } from \"file1\";\nfunction forappfile3Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
       "./file4.ts": "-3487084949-const myVar = 30;\nfunction appfile4Spread(...b: number[]) { }\nconst appfile4_ar = [20, 30];\nappfile4Spread(10, ...appfile4_ar);"
     },
+    "root": [
+      [
+        3,
+        "./file3.ts"
+      ],
+      [
+        4,
+        "./file4.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -4766,11 +4836,11 @@ declare const appfile4_ar: number[];
       "strict": false,
       "target": 1
     },
-    "outSignature": "40772662743-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\ndeclare module \"file3\" {\r\n    export const z = 30;\r\n}\r\ndeclare const myVar = 30;\r\ndeclare function appfile4Spread(...b: number[]): void;\r\ndeclare const appfile4_ar: number[];\r\n",
+    "outSignature": "41122638023-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\ndeclare function appfile4Spread(...b: number[]): void;\ndeclare const appfile4_ar: number[];\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 7769
+  "size": 7544
 }
 
 //// [/src/lib/module.d.ts.map] file written with same contents
@@ -4873,7 +4943,7 @@ sourceFile:file0.ts
 4 >          ^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^->
+7 >                ^^^^^^^^^^^->
 1 >
 2 >const 
 3 >    myGlob
@@ -4902,7 +4972,7 @@ sourceFile:file0.ts
 >>>    var b = [];
 1 >^^^^
 2 >    ^^^^^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
 1 >Emitted(28, 5) Source(2, 25) + SourceIndex(0)
@@ -4940,7 +5010,7 @@ sourceFile:file0.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
 1 >Emitted(32, 1) Source(2, 43) + SourceIndex(0)
@@ -4957,7 +5027,7 @@ sourceFile:file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -5019,7 +5089,7 @@ sourceFile:file1.ts
 4 >             ^^^
 5 >                ^^
 6 >                  ^
-7 >                   ^^^^^^^^^^^^^^^^->
+7 >                   ^^^^^^^^^^^^^^^->
 1 >export const 
 2 >    
 3 >            x
@@ -5134,13 +5204,13 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1670,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]},"mapHash":"34350533098-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICApD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}","hash":"-9077950738-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() { }\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":265,"kind":"text"}],"mapHash":"-34036075879-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"13747623731-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4690807917-const myGlob = 20;\nfunction libfile0Spread(...b: number[]) { }\nconst libfile0_ar = [20, 30];\nlibfile0Spread(10, ...libfile0_ar);","-2014796510-export const x = 10;function forlibfile1Rest() { }console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1621,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]},"mapHash":"34350533098-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICApD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}","hash":"112987183825-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() { }\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":255,"kind":"text"}],"mapHash":"-34036075879-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}","hash":"17976393265-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","./file0.ts","./file1.ts","./file2.ts","./global.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","4690807917-const myGlob = 20;\nfunction libfile0Spread(...b: number[]) { }\nconst libfile0_ar = [20, 30];\nlibfile0Spread(10, ...libfile0_ar);","-2014796510-export const x = 10;function forlibfile1Rest() { }console.log(x);","-13729954175-export const y = 20;","1028229885-const globalConst = 10;"],"root":[[2,5]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/lib/module.js
 ----------------------------------------------------------------------
-emitHelpers: (0-504):: typescript:read
+emitHelpers: (0-489):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -5158,7 +5228,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-894):: typescript:spreadArray
+emitHelpers: (490-870):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -5169,7 +5239,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-text: (896-1670)
+text: (871-1621)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -5199,7 +5269,7 @@ var globalConst = 10;
 ======================================================================
 File:: /src/lib/module.d.ts
 ----------------------------------------------------------------------
-text: (0-265)
+text: (0-255)
 declare const myGlob = 20;
 declare function libfile0Spread(...b: number[]): void;
 declare const libfile0_ar: number[];
@@ -5227,23 +5297,23 @@ declare const globalConst = 10;
       "sections": [
         {
           "pos": 0,
-          "end": 504,
+          "end": 489,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 506,
-          "end": 894,
+          "pos": 490,
+          "end": 870,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 896,
-          "end": 1670,
+          "pos": 871,
+          "end": 1621,
           "kind": "text"
         }
       ],
-      "hash": "-9077950738-var __read = (this && this.__read) || function (o, n) {\r\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\r\n    if (!m) return o;\r\n    var i = m.call(o), r, ar = [], e;\r\n    try {\r\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\r\n    }\r\n    catch (error) { e = { error: error }; }\r\n    finally {\r\n        try {\r\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\r\n        }\r\n        finally { if (e) throw e.error; }\r\n    }\r\n    return ar;\r\n};\r\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\r\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\r\n        if (ar || !(i in from)) {\r\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\r\n            ar[i] = from[i];\r\n        }\r\n    }\r\n    return to.concat(ar || Array.prototype.slice.call(from));\r\n};\r\nvar myGlob = 20;\r\nfunction libfile0Spread() {\r\n    var b = [];\r\n    for (var _i = 0; _i < arguments.length; _i++) {\r\n        b[_i] = arguments[_i];\r\n    }\r\n}\r\nvar libfile0_ar = [20, 30];\r\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\r\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n    function forlibfile1Rest() { }\r\n    console.log(exports.x);\r\n});\r\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.y = void 0;\r\n    exports.y = 20;\r\n});\r\nvar globalConst = 10;\r\n//# sourceMappingURL=module.js.map",
+      "hash": "112987183825-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar myGlob = 20;\nfunction libfile0Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar libfile0_ar = [20, 30];\nlibfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));\ndefine(\"file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n    function forlibfile1Rest() { }\n    console.log(exports.x);\n});\ndefine(\"file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\n//# sourceMappingURL=module.js.map",
       "mapHash": "34350533098-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICApD,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC\"}",
       "sources": {
         "helpers": [
@@ -5256,11 +5326,11 @@ declare const globalConst = 10;
       "sections": [
         {
           "pos": 0,
-          "end": 265,
+          "end": 255,
           "kind": "text"
         }
       ],
-      "hash": "13747623731-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n//# sourceMappingURL=module.d.ts.map",
+      "hash": "17976393265-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n//# sourceMappingURL=module.d.ts.map",
       "mapHash": "-34036075879-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"file0.ts\",\"file1.ts\",\"file2.ts\",\"global.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;AAClB,iBAAS,cAAc,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AAC3C,QAAA,MAAM,WAAW,UAAW,CAAC;;ICF7B,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC\"}"
     }
   },
@@ -5279,6 +5349,20 @@ declare const globalConst = 10;
       "./file2.ts": "-13729954175-export const y = 20;",
       "./global.ts": "1028229885-const globalConst = 10;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./file0.ts",
+          "./file1.ts",
+          "./file2.ts",
+          "./global.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "declarationMap": true,
@@ -5289,10 +5373,10 @@ declare const globalConst = 10;
       "strict": false,
       "target": 1
     },
-    "outSignature": "25704616268-declare const myGlob = 20;\r\ndeclare function libfile0Spread(...b: number[]): void;\r\ndeclare const libfile0_ar: number[];\r\ndeclare module \"file1\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"file2\" {\r\n    export const y = 20;\r\n}\r\ndeclare const globalConst = 10;\r\n",
+    "outSignature": "19175502154-declare const myGlob = 20;\ndeclare function libfile0Spread(...b: number[]): void;\ndeclare const libfile0_ar: number[];\ndeclare module \"file1\" {\n    export const x = 10;\n}\ndeclare module \"file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 4985
+  "size": 4863
 }
 

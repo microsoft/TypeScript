@@ -1,0 +1,180 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionMethodOverloads.ts ===
+// class MethodOverload {
+//     <|static [|method|]();|>
+//     static method(foo: string);
+//     static method(foo?: any) { }
+//     public method(): any;
+//     public method(foo: string);
+//     public method(foo?: any) { return "foo" }
+// }
+// // static method
+// MethodOverload./*GOTO DEF*/method();
+// MethodOverload.method("123");
+// // instance method
+// var methodOverload = new MethodOverload();
+// methodOverload.method();
+// methodOverload.method("456");
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "method",
+    "containerName": "MethodOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionMethodOverloads.ts ===
+// class MethodOverload {
+//     static method();
+//     <|static [|method|](foo: string);|>
+//     static method(foo?: any) { }
+//     public method(): any;
+//     public method(foo: string);
+//     public method(foo?: any) { return "foo" }
+// }
+// // static method
+// MethodOverload.method();
+// MethodOverload./*GOTO DEF*/method("123");
+// // instance method
+// var methodOverload = new MethodOverload();
+// methodOverload.method();
+// methodOverload.method("456");
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "method",
+    "containerName": "MethodOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionMethodOverloads.ts ===
+// class MethodOverload {
+//     static method();
+//     static method(foo: string);
+//     static method(foo?: any) { }
+//     <|public [|method|](): any;|>
+//     public method(foo: string);
+//     public method(foo?: any) { return "foo" }
+// }
+// // static method
+// MethodOverload.method();
+// MethodOverload.method("123");
+// // instance method
+// var methodOverload = new MethodOverload();
+// methodOverload./*GOTO DEF*/method();
+// methodOverload.method("456");
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "method",
+    "containerName": "MethodOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionMethodOverloads.ts ===
+// class MethodOverload {
+//     static method();
+//     static method(foo: string);
+//     static method(foo?: any) { }
+//     public method(): any;
+//     <|public [|method|](foo: string);|>
+//     public method(foo?: any) { return "foo" }
+// }
+// // static method
+// MethodOverload.method();
+// MethodOverload.method("123");
+// // instance method
+// var methodOverload = new MethodOverload();
+// methodOverload.method();
+// methodOverload./*GOTO DEF*/method("456");
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "method",
+    "containerName": "MethodOverload",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionMethodOverloads.ts ===
+// class MethodOverload {
+//     static /*GOTO DEF*/method();
+//     static method(foo: string);
+//     <|static [|method|](foo?: any) { }|>
+//     public method(): any;
+//     public method(foo: string);
+//     public method(foo?: any) { return "foo" }
+// --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "method",
+    "containerName": "MethodOverload",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionMethodOverloads.ts ===
+// class MethodOverload {
+//     static method();
+//     static method(foo: string);
+//     static method(foo?: any) { }
+//     public /*GOTO DEF*/method(): any;
+//     public method(foo: string);
+//     <|public [|method|](foo?: any) { return "foo" }|>
+// }
+// // static method
+// MethodOverload.method();
+// --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "method",
+    "containerName": "MethodOverload",
+    "isLocal": false,
+    "isAmbient": false
+   }
+  ]

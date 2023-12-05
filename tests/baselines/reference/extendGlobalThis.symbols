@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extension.d.ts ===
+//// [tests/cases/compiler/extendGlobalThis.ts] ////
+
+=== extension.d.ts ===
 declare global {
 >global : Symbol(global, Decl(extension.d.ts, 0, 0))
 
@@ -12,7 +14,7 @@ declare global {
 
 export {}
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import "./extention";
 
 globalThis.tests = "a-b";

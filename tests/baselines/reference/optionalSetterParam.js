@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalSetterParam.ts] ////
+
 //// [optionalSetterParam.ts]
 class foo {
 

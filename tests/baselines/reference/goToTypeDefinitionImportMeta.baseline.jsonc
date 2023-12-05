@@ -1,0 +1,22 @@
+// === goToType ===
+// === /tests/cases/fourslash/bar.d.ts ===
+// <|interface [|ImportMeta|] {
+// }|>
+
+// === /tests/cases/fourslash/foo.ts ===
+// /// <reference no-default-lib="true"/>
+// /// <reference path='./bar.d.ts' />
+// import.me/*GOTO TYPE*/ta;
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "ImportMeta",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

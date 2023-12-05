@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferSecondaryParameter.ts ===
+//// [tests/cases/compiler/inferSecondaryParameter.ts] ////
+
+=== inferSecondaryParameter.ts ===
 // type inference on 'bug' should give 'any'
 
 interface Ib { m(test: string, fn: Function); }

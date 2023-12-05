@@ -1,4 +1,6 @@
-=== tests/cases/compiler/passport.d.ts ===
+//// [tests/cases/compiler/mergedDeclarations7.ts] ////
+
+=== passport.d.ts ===
 declare module 'passport' {
 >'passport' : typeof import("passport")
 
@@ -22,7 +24,7 @@ declare module 'passport' {
 >passport : passport.PassportStatic
 }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import * as passport from "passport";
 >passport : passport.PassportStatic
 

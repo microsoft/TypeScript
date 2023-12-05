@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypingRestParameters.ts] ////
+
 //// [contextuallyTypingRestParameters.ts]
 var x: (...y: string[]) => void = function (.../*3*/y) { 
     var t = y; 

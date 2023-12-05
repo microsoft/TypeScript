@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts ===
+//// [tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts] ////
+
+=== optionalParameterInDestructuringWithInitializer.ts ===
 // https://github.com/Microsoft/TypeScript/issues/17080
 
 declare function f(a:number,b:number): void;
@@ -223,7 +225,6 @@ performFoo();
 function performFoo2({ bar = null }: Foo = {}) {
 >performFoo2 : ({ bar }?: Foo) => void
 >bar : number
->null : null
 >{} : {}
 
   useBar2(bar);

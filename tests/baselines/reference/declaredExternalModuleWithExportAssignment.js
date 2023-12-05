@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declaredExternalModuleWithExportAssignment.ts] ////
+
 //// [declaredExternalModuleWithExportAssignment.ts]
 declare module 'connect' {
     interface connectModule {

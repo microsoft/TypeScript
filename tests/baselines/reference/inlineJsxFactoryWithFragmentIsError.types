@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+//// [tests/cases/conformance/jsx/inline/inlineJsxFactoryWithFragmentIsError.tsx] ////
+
+=== renderer.d.ts ===
 declare global {
 >global : any
 
@@ -15,7 +17,7 @@ export function dom(): void;
 export function createElement(): void;
 >createElement : () => void
 
-=== tests/cases/conformance/jsx/inline/reacty.tsx ===
+=== reacty.tsx ===
 /** @jsx React.createElement */
 import * as React from "./renderer";
 >React : typeof React
@@ -26,7 +28,7 @@ import * as React from "./renderer";
 >h : any
 >h : any
 
-=== tests/cases/conformance/jsx/inline/index.tsx ===
+=== index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer";
 >dom : () => void

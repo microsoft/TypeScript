@@ -1,4 +1,6 @@
-=== tests/cases/compiler/raiseErrorOnParameterProperty.ts ===
+//// [tests/cases/compiler/raiseErrorOnParameterProperty.ts] ////
+
+=== raiseErrorOnParameterProperty.ts ===
 class C1 {
 >C1 : Symbol(C1, Decl(raiseErrorOnParameterProperty.ts, 0, 0))
 

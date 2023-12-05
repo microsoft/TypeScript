@@ -19,17 +19,17 @@ ns3;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 0;
 exports.b = 0;
-exports["default"] = 0;
+exports.default = 0;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
-a_1["default"];
+a_1.default;
 var a_2 = require("./a");
-a_2["default"];
+a_2.default;
 var ns3 = require("./a");
 ns3;

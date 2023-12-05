@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor2.ts] ////
+
 //// [autoAccessor2.ts]
 class C1 {
     accessor #a: any;
@@ -39,7 +41,7 @@ class C1 {
         __classPrivateFieldSet(this, _C1_instances, 4, "a", _C1_b_set);
     }
 }
-_a = C1, _C1_instances = new WeakSet(), _C1_a_accessor_storage = new WeakMap(), _C1_b_accessor_storage = new WeakMap(), _C1_a_get = function _C1_a_get() { return __classPrivateFieldGet(this, _C1_a_accessor_storage, "f"); }, _C1_a_set = function _C1_a_set(value) { __classPrivateFieldSet(this, _C1_a_accessor_storage, value, "f"); }, _C1_b_get = function _C1_b_get() { return __classPrivateFieldGet(this, _C1_b_accessor_storage, "f"); }, _C1_b_set = function _C1_b_set(value) { __classPrivateFieldSet(this, _C1_b_accessor_storage, value, "f"); }, _C1_c_get = function _C1_c_get() { return __classPrivateFieldGet(this, _a, "f", _C1_c_accessor_storage); }, _C1_c_set = function _C1_c_set(value) { __classPrivateFieldSet(this, _a, value, "f", _C1_c_accessor_storage); }, _C1_d_get = function _C1_d_get() { return __classPrivateFieldGet(this, _a, "f", _C1_d_accessor_storage); }, _C1_d_set = function _C1_d_set(value) { __classPrivateFieldSet(this, _a, value, "f", _C1_d_accessor_storage); };
+_a = C1, _C1_instances = new WeakSet(), _C1_a_accessor_storage = new WeakMap(), _C1_b_accessor_storage = new WeakMap(), _C1_a_get = function _C1_a_get() { return __classPrivateFieldGet(this, _C1_a_accessor_storage, "f"); }, _C1_a_set = function _C1_a_set(value) { __classPrivateFieldSet(this, _C1_a_accessor_storage, value, "f"); }, _C1_b_get = function _C1_b_get() { return __classPrivateFieldGet(this, _C1_b_accessor_storage, "f"); }, _C1_b_set = function _C1_b_set(value) { __classPrivateFieldSet(this, _C1_b_accessor_storage, value, "f"); }, _C1_c_get = function _C1_c_get() { return __classPrivateFieldGet(_a, _a, "f", _C1_c_accessor_storage); }, _C1_c_set = function _C1_c_set(value) { __classPrivateFieldSet(_a, _a, value, "f", _C1_c_accessor_storage); }, _C1_d_get = function _C1_d_get() { return __classPrivateFieldGet(_a, _a, "f", _C1_d_accessor_storage); }, _C1_d_set = function _C1_d_set(value) { __classPrivateFieldSet(_a, _a, value, "f", _C1_d_accessor_storage); };
 _C1_c_accessor_storage = { value: void 0 };
 _C1_d_accessor_storage = { value: 2 };
 (() => {

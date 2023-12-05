@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -27,7 +28,15 @@ import { a } from "./a";export const c = a;
 import { b } from "./b";export const d = b;
 
 //// [/src/project1/src/tsconfig.json]
-{"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true,
+    "outFile": "../outFile.js",
+    "module": "amd",
+    "emitDeclarationOnly": true
+  }
+}
 
 //// [/src/project2/src/e.ts]
 export const e = 10;
@@ -39,7 +48,20 @@ import { a } from "a"; export const f = a;
 import { b } from "b"; export const g = b;
 
 //// [/src/project2/src/tsconfig.json]
-{"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true,
+    "outFile": "../outFile.js",
+    "module": "amd",
+    "emitDeclarationOnly": true
+  },
+  "references": [
+    {
+      "path": "../../project1/src"
+    }
+  ]
+}
 
 
 
@@ -57,17 +79,33 @@ Output::
 
 [[90m12:00:28 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -80,8 +118,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -111,13 +160,13 @@ declare module "d" {
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"emitDeclarationOnly":true,"module":2,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":192,"kind":"text"}],"hash":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-18487752940-export const a = 10;const aLocal = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true,"module":2,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/project1/outFile.d.ts
 ----------------------------------------------------------------------
-text: (0-204)
+text: (0-192)
 declare module "a" {
     export const a = 10;
 }
@@ -147,11 +196,11 @@ declare module "d" {
       "sections": [
         {
           "pos": 0,
-          "end": 204,
+          "end": 192,
           "kind": "text"
         }
       ],
-      "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+      "hash": "-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"
     }
   },
   "program": {
@@ -169,6 +218,20 @@ declare module "d" {
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./src/a.ts",
+          "./src/b.ts",
+          "./src/c.ts",
+          "./src/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "emitDeclarationOnly": true,
@@ -177,7 +240,7 @@ declare module "d" {
     }
   },
   "version": "FakeTSVersion",
-  "size": 1327
+  "size": 1318
 }
 
 
@@ -198,17 +261,32 @@ Output::
 
 [[90m12:00:32 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -245,17 +323,33 @@ Output::
 
 [[90m12:00:43 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -268,8 +362,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -285,7 +390,7 @@ No shapes updated in the builder::
 
 //// [/src/project1/outFile.d.ts] file written with same contents
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"emitDeclarationOnly":true,"module":2,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"dts":{"sections":[{"pos":0,"end":192,"kind":"text"}],"hash":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":true,"module":2,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt] file written with same contents
 //// [/src/project1/outFile.tsbuildinfo.readable.baseline.txt]
@@ -302,11 +407,11 @@ No shapes updated in the builder::
       "sections": [
         {
           "pos": 0,
-          "end": 204,
+          "end": 192,
           "kind": "text"
         }
       ],
-      "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+      "hash": "-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"
     }
   },
   "program": {
@@ -324,6 +429,20 @@ No shapes updated in the builder::
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./src/a.ts",
+          "./src/b.ts",
+          "./src/c.ts",
+          "./src/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "emitDeclarationOnly": true,
@@ -332,7 +451,7 @@ No shapes updated in the builder::
     }
   },
   "version": "FakeTSVersion",
-  "size": 1341
+  "size": 1332
 }
 
 
@@ -355,17 +474,33 @@ Output::
 
 [[90m12:00:53 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -378,8 +513,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -396,7 +542,7 @@ No shapes updated in the builder::
 //// [/src/project1/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
     exports.a = 10;
     var aLocal = 10;
@@ -404,36 +550,36 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = void 0;
     exports.b = 10;
     var bLocal = 10;
 });
 define("c", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
     exports.c = a_1.a;
 });
 define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
     exports.d = b_1.b;
 });
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"js":{"sections":[{"pos":0,"end":764,"kind":"text"}],"hash":"15340862075-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"emitDeclarationOnly":false,"module":2,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"js":{"sections":[{"pos":0,"end":881,"kind":"text"}],"hash":"8033983700-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.a = void 0;\n    exports.a = 10;\n    var aLocal = 10;\n    var aa = 10;\n});\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.b = void 0;\n    exports.b = 10;\n    var bLocal = 10;\n});\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.c = void 0;\n    exports.c = a_1.a;\n});\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.d = void 0;\n    exports.d = b_1.b;\n});\n"},"dts":{"sections":[{"pos":0,"end":192,"kind":"text"}],"hash":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","-6189287562-export const b = 10;const bLocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":false,"module":2,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/project1/outFile.js
 ----------------------------------------------------------------------
-text: (0-764)
+text: (0-881)
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
     exports.a = 10;
     var aLocal = 10;
@@ -441,20 +587,20 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = void 0;
     exports.b = 10;
     var bLocal = 10;
 });
 define("c", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
     exports.c = a_1.a;
 });
 define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
     exports.d = b_1.b;
 });
@@ -463,7 +609,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 ======================================================================
 File:: /src/project1/outFile.d.ts
 ----------------------------------------------------------------------
-text: (0-204)
+text: (0-192)
 declare module "a" {
     export const a = 10;
 }
@@ -493,21 +639,21 @@ declare module "d" {
       "sections": [
         {
           "pos": 0,
-          "end": 764,
+          "end": 881,
           "kind": "text"
         }
       ],
-      "hash": "15340862075-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"
+      "hash": "8033983700-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.a = void 0;\n    exports.a = 10;\n    var aLocal = 10;\n    var aa = 10;\n});\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.b = void 0;\n    exports.b = 10;\n    var bLocal = 10;\n});\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.c = void 0;\n    exports.c = a_1.a;\n});\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.d = void 0;\n    exports.d = b_1.b;\n});\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 204,
+          "end": 192,
           "kind": "text"
         }
       ],
-      "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+      "hash": "-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"
     }
   },
   "program": {
@@ -525,6 +671,20 @@ declare module "d" {
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./src/a.ts",
+          "./src/b.ts",
+          "./src/c.ts",
+          "./src/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "emitDeclarationOnly": false,
@@ -533,7 +693,7 @@ declare module "d" {
     }
   },
   "version": "FakeTSVersion",
-  "size": 2272
+  "size": 2360
 }
 
 
@@ -554,17 +714,32 @@ Output::
 
 [[90m12:00:57 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -596,17 +771,32 @@ Output::
 
 [[90m12:01:01 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -643,17 +833,33 @@ Output::
 
 [[90m12:01:13 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -666,8 +872,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -685,7 +902,7 @@ No shapes updated in the builder::
 //// [/src/project1/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
     exports.a = 10;
     var aLocal = 10;
@@ -693,7 +910,7 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = void 0;
     exports.b = 10;
     var bLocal = 10;
@@ -701,29 +918,29 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 define("c", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
     exports.c = a_1.a;
 });
 define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
     exports.d = b_1.b;
 });
 
 
 //// [/src/project1/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"js":{"sections":[{"pos":0,"end":786,"kind":"text"}],"hash":"18304376609-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n    var blocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":204,"kind":"text"}],"hash":"-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","2355059555-export const b = 10;const bLocal = 10;const blocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"options":{"declaration":true,"emitDeclarationOnly":false,"module":2,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src","sourceFiles":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"js":{"sections":[{"pos":0,"end":902,"kind":"text"}],"hash":"11057592749-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.a = void 0;\n    exports.a = 10;\n    var aLocal = 10;\n    var aa = 10;\n});\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.b = void 0;\n    exports.b = 10;\n    var bLocal = 10;\n    var blocal = 10;\n});\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.c = void 0;\n    exports.c = a_1.a;\n});\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.d = void 0;\n    exports.d = b_1.b;\n});\n"},"dts":{"sections":[{"pos":0,"end":192,"kind":"text"}],"hash":"-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"}},"program":{"fileNames":["../../lib/lib.d.ts","./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-16597586570-export const a = 10;const aLocal = 10;const aa = 10;","2355059555-export const b = 10;const bLocal = 10;const blocal = 10;","3248317647-import { a } from \"./a\";export const c = a;","-19615769517-import { b } from \"./b\";export const d = b;"],"root":[[2,5]],"options":{"declaration":true,"emitDeclarationOnly":false,"module":2,"outFile":"./outFile.js"}},"version":"FakeTSVersion"}
 
 //// [/src/project1/outFile.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/project1/outFile.js
 ----------------------------------------------------------------------
-text: (0-786)
+text: (0-902)
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
     exports.a = 10;
     var aLocal = 10;
@@ -731,7 +948,7 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = void 0;
     exports.b = 10;
     var bLocal = 10;
@@ -739,13 +956,13 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 define("c", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
     exports.c = a_1.a;
 });
 define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
     exports.d = b_1.b;
 });
@@ -754,7 +971,7 @@ define("d", ["require", "exports", "b"], function (require, exports, b_1) {
 ======================================================================
 File:: /src/project1/outFile.d.ts
 ----------------------------------------------------------------------
-text: (0-204)
+text: (0-192)
 declare module "a" {
     export const a = 10;
 }
@@ -784,21 +1001,21 @@ declare module "d" {
       "sections": [
         {
           "pos": 0,
-          "end": 786,
+          "end": 902,
           "kind": "text"
         }
       ],
-      "hash": "18304376609-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n    var blocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"
+      "hash": "11057592749-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.a = void 0;\n    exports.a = 10;\n    var aLocal = 10;\n    var aa = 10;\n});\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.b = void 0;\n    exports.b = 10;\n    var bLocal = 10;\n    var blocal = 10;\n});\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.c = void 0;\n    exports.c = a_1.a;\n});\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.d = void 0;\n    exports.d = b_1.b;\n});\n"
     },
     "dts": {
       "sections": [
         {
           "pos": 0,
-          "end": 204,
+          "end": 192,
           "kind": "text"
         }
       ],
-      "hash": "-10569306755-declare module \"a\" {\r\n    export const a = 10;\r\n}\r\ndeclare module \"b\" {\r\n    export const b = 10;\r\n}\r\ndeclare module \"c\" {\r\n    export const c = 10;\r\n}\r\ndeclare module \"d\" {\r\n    export const d = 10;\r\n}\r\n"
+      "hash": "-25657667359-declare module \"a\" {\n    export const a = 10;\n}\ndeclare module \"b\" {\n    export const b = 10;\n}\ndeclare module \"c\" {\n    export const c = 10;\n}\ndeclare module \"d\" {\n    export const d = 10;\n}\n"
     }
   },
   "program": {
@@ -816,6 +1033,20 @@ declare module "d" {
       "./src/c.ts": "3248317647-import { a } from \"./a\";export const c = a;",
       "./src/d.ts": "-19615769517-import { b } from \"./b\";export const d = b;"
     },
+    "root": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "./src/a.ts",
+          "./src/b.ts",
+          "./src/c.ts",
+          "./src/d.ts"
+        ]
+      ]
+    ],
     "options": {
       "declaration": true,
       "emitDeclarationOnly": false,
@@ -824,6 +1055,6 @@ declare module "d" {
     }
   },
   "version": "FakeTSVersion",
-  "size": 2313
+  "size": 2400
 }
 

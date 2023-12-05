@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo_2.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignmentCircularModules.ts] ////
+
+=== foo_2.ts ===
 import foo0 = require("./foo_0");
 >foo0 : typeof foo0
 
@@ -14,7 +16,7 @@ module Foo {
 export = Foo;
 >Foo : typeof Foo
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 import foo1 = require('./foo_1');
 >foo1 : typeof foo1
 
@@ -30,7 +32,7 @@ module Foo {
 export = Foo;
 >Foo : typeof Foo
 
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+=== foo_1.ts ===
 import foo2 = require("./foo_2");
 >foo2 : typeof foo2
 

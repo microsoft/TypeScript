@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameMethodCallExpression.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodCallExpression.ts] ////
+
+=== privateNameMethodCallExpression.ts ===
 class AA {
 >AA : Symbol(AA, Decl(privateNameMethodCallExpression.ts, 0, 0))
 

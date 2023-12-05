@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts] ////
+
 //// [invalidTypeOfTarget.ts]
 var x1: typeof {};
 var x2: typeof (): void;

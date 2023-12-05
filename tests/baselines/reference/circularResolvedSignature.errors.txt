@@ -1,7 +1,7 @@
-tests/cases/compiler/circularResolvedSignature.ts(11,9): error TS2322: Type 'string' is not assignable to type 'number'.
+circularResolvedSignature.ts(11,9): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/circularResolvedSignature.ts (1 errors) ====
+==== circularResolvedSignature.ts (1 errors) ====
     declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
     
     type Data = Readonly<{
@@ -15,7 +15,7 @@ tests/cases/compiler/circularResolvedSignature.ts(11,9): error TS2322: Type 'str
             value: "string", // this should be a number
             ~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/compiler/circularResolvedSignature.ts:4:5: The expected type comes from property 'value' which is declared here on type 'Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>'
+!!! related TS6500 circularResolvedSignature.ts:4:5: The expected type comes from property 'value' which is declared here on type 'Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>'
             foo: (arg) => setState(arg),
             bar: (arg) => setState(arg),
         }));

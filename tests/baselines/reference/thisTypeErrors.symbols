@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeErrors.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeErrors.ts] ////
+
+=== thisTypeErrors.ts ===
 var x1: this;
 >x1 : Symbol(x1, Decl(thisTypeErrors.ts, 0, 3))
 

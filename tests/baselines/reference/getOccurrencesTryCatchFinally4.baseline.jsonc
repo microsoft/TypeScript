@@ -1,0 +1,126 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// [|{| kind: "none" |}try|]/*HIGHLIGHTS*/ {
+//     try {
+//     }
+//     catch (x) {
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
+//     finally {
+//     }
+// }
+// [|{| kind: "none" |}catch|] (e) {
+// }
+// [|{| kind: "none" |}finally|] {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// try {
+//     [|{| kind: "none" |}try|]/*HIGHLIGHTS*/ {
+//     }
+//     [|{| kind: "none" |}catch|] (x) {
+//     }
+// 
+//     try {
+// --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// try {
+//     [|{| kind: "none" |}try|] {
+//     }
+//     [|{| kind: "none" |}catch|]/*HIGHLIGHTS*/ (x) {
+//     }
+// 
+//     try {
+// --- (line: 8) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// --- (line: 3) skipped ---
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}try|]/*HIGHLIGHTS*/ {
+//     }
+//     [|{| kind: "none" |}finally|] {
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// --- (line: 3) skipped ---
+//     catch (x) {
+//     }
+// 
+//     [|{| kind: "none" |}try|] {
+//     }
+//     [|{| kind: "none" |}finally|]/*HIGHLIGHTS*/ {
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// --- (line: 5) skipped ---
+// 
+//     try {
+//     }
+//     finally {/*HIGHLIGHTS*/
+//     }
+// }
+// catch (e) {
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// [|{| kind: "none" |}try|] {
+//     try {
+//     }
+//     catch (x) {
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
+//     finally {
+//     }
+// }
+// [|{| kind: "none" |}catch|]/*HIGHLIGHTS*/ (e) {
+// }
+// [|{| kind: "none" |}finally|] {
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesTryCatchFinally4.ts ===
+// [|{| kind: "none" |}try|] {
+//     try {
+//     }
+//     catch (x) {
+// --- (line: 5) skipped ---
+
+// --- (line: 8) skipped ---
+//     finally {
+//     }
+// }
+// [|{| kind: "none" |}catch|] (e) {
+// }
+// [|{| kind: "none" |}finally|]/*HIGHLIGHTS*/ {
+// }

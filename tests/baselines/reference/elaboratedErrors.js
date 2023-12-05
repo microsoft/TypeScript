@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/elaboratedErrors.ts] ////
+
 //// [elaboratedErrors.ts]
 interface FileSystem {
   read: number;

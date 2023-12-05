@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts ===
+//// [tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts] ////
+
+=== objectLiteralFunctionArgContextualTyping2.ts ===
 interface I2 {
 >I2 : Symbol(I2, Decl(objectLiteralFunctionArgContextualTyping2.ts, 0, 0))
 

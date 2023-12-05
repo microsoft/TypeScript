@@ -1,4 +1,6 @@
-=== tests/cases/compiler/derivedClassConstructorWithExplicitReturns01.ts ===
+//// [tests/cases/compiler/derivedClassConstructorWithExplicitReturns01.ts] ////
+
+=== derivedClassConstructorWithExplicitReturns01.ts ===
 class C {
 >C : Symbol(C, Decl(derivedClassConstructorWithExplicitReturns01.ts, 0, 0))
 

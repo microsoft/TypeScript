@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mapOnTupleTypes01.ts] ////
+
 //// [mapOnTupleTypes01.ts]
 export let mapOnLooseArrayLiteral = [1, 2, 3, 4].map(n => n * n);
 
@@ -43,7 +45,7 @@ export let h = numNumNumNumNum.map(n => n * n);
 
 //// [mapOnTupleTypes01.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.h = exports.g = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = exports.mapOnLooseArrayLiteral = void 0;
 exports.mapOnLooseArrayLiteral = [1, 2, 3, 4].map(function (n) { return n * n; });
 // Length 1

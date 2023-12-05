@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts ===
+//// [tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts] ////
+
+=== instancePropertiesInheritedIntoClassType.ts ===
 module NonGeneric {
 >NonGeneric : typeof NonGeneric
 
@@ -87,7 +89,6 @@ module Generic {
 >y : U
 
             return null;
->null : null
         }
         set y(v: U) { }
 >y : U

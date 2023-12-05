@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowForOfStatement.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowForOfStatement.ts] ////
+
+=== controlFlowForOfStatement.ts ===
 let obj: number[];
 >obj : Symbol(obj, Decl(controlFlowForOfStatement.ts, 0, 3))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexIntoArraySubclass.ts ===
+//// [tests/cases/compiler/indexIntoArraySubclass.ts] ////
+
+=== indexIntoArraySubclass.ts ===
 interface Foo2<T> extends Array<T> { }
 >Foo2 : Symbol(Foo2, Decl(indexIntoArraySubclass.ts, 0, 0))
 >T : Symbol(T, Decl(indexIntoArraySubclass.ts, 0, 15))

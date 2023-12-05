@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileTypeAnnotationStringLiteral.ts ===
+//// [tests/cases/compiler/declFileTypeAnnotationStringLiteral.ts] ////
+
+=== declFileTypeAnnotationStringLiteral.ts ===
 function foo(a: "hello"): number;
 >foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
 >a : "hello"

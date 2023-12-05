@@ -1,4 +1,6 @@
-=== tests/cases/compiler/visibilityOfCrossModuleTypeUsage_fs.ts ===
+//// [tests/cases/compiler/visibilityOfCrossModuleTypeUsage.ts] ////
+
+=== visibilityOfCrossModuleTypeUsage_fs.ts ===
 import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
 >commands : typeof commands
 
@@ -10,16 +12,16 @@ function run(configuration: commands.IConfiguration) {
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 >absoluteWorkspacePath : string
 >configuration.workspace.toAbsolutePath(configuration.server) : string
->configuration.workspace.toAbsolutePath : (server: import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
->configuration.workspace : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IWorkspace
+>configuration.workspace.toAbsolutePath : (server: import("visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
+>configuration.workspace : import("visibilityOfCrossModuleTypeUsage_server").IWorkspace
 >configuration : commands.IConfiguration
->workspace : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IWorkspace
->toAbsolutePath : (server: import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
->configuration.server : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer
+>workspace : import("visibilityOfCrossModuleTypeUsage_server").IWorkspace
+>toAbsolutePath : (server: import("visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
+>configuration.server : import("visibilityOfCrossModuleTypeUsage_server").IServer
 >configuration : commands.IConfiguration
->server : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer
+>server : import("visibilityOfCrossModuleTypeUsage_server").IServer
 }
-=== tests/cases/compiler/visibilityOfCrossModuleTypeUsage_commands.ts ===
+=== visibilityOfCrossModuleTypeUsage_commands.ts ===
 //visibilityOfCrossModuleTypeUsage
 
 import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
@@ -38,7 +40,7 @@ export interface IConfiguration {
 >server : any
 }
 
-=== tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server.ts ===
+=== visibilityOfCrossModuleTypeUsage_server.ts ===
 export interface IServer {
 }
 

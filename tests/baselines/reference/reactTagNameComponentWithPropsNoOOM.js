@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactTagNameComponentWithPropsNoOOM.tsx] ////
+
 //// [reactTagNameComponentWithPropsNoOOM.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -25,7 +27,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var classes = "";
 var rest = {};

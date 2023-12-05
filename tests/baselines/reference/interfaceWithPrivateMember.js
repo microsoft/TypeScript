@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/namedTypes/interfaceWithPrivateMember.ts] ////
+
 //// [interfaceWithPrivateMember.ts]
 // interfaces do not permit private members, these are errors
 

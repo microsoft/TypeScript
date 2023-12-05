@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/underscoreEscapedNameInEnum.ts] ////
+
 //// [underscoreEscapedNameInEnum.ts]
 enum E {
     "__foo" = 1,

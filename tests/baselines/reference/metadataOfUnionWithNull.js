@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataOfUnionWithNull.ts] ////
+
 //// [metadataOfUnionWithNull.ts]
 function PropDeco(target: Object, propKey: string | symbol) { }
 
@@ -64,50 +66,50 @@ var B = /** @class */ (function () {
     __decorate([
         PropDeco,
         __metadata("design:type", String)
-    ], B.prototype, "x");
+    ], B.prototype, "x", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", Boolean)
-    ], B.prototype, "y");
+    ], B.prototype, "y", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", String)
-    ], B.prototype, "z");
+    ], B.prototype, "z", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", void 0)
-    ], B.prototype, "a");
+    ], B.prototype, "a", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", void 0)
-    ], B.prototype, "b");
+    ], B.prototype, "b", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", void 0)
-    ], B.prototype, "c");
+    ], B.prototype, "c", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", void 0)
-    ], B.prototype, "d");
+    ], B.prototype, "d", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
-    ], B.prototype, "e");
+    ], B.prototype, "e", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", Object)
-    ], B.prototype, "f");
+    ], B.prototype, "f", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", A)
-    ], B.prototype, "g");
+    ], B.prototype, "g", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", B)
-    ], B.prototype, "h");
+    ], B.prototype, "h", void 0);
     __decorate([
         PropDeco,
         __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
-    ], B.prototype, "j");
+    ], B.prototype, "j", void 0);
     return B;
 }());

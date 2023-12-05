@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendedUnicodePlaneIdentifiersJSDoc.ts] ////
+
 //// [file.js]
 /**
  * Adds

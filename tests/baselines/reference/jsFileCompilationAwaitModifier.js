@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationAwaitModifier.ts] ////
+
 //// [a.js]
 class Foo {
     async a() {

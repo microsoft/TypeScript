@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment1ES5.ts] ////
+
 //// [destructuringObjectBindingPatternAndAssignment1ES5.ts]
 // In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
 // An expression of type S is considered assignable to an assignment target V if one of the following is true
@@ -64,7 +66,7 @@ var a2 = {}.a2;
 // V is an object assignment pattern and, for each assignment property P in V,
 //      S has an apparent property with the property name specified in
 //          P of a type that is assignable to the target given in P, or
-var b1 = { b1: 1 }.b1;
+var b1 = { b1: 1, }.b1;
 var _a = { b2: { b21: "world" } }.b2, _b = _a === void 0 ? { b21: "string" } : _a, b21 = _b.b21;
 var b3 = { 1: "string" }[1];
 var _c = { b4: 100000 }.b4, b4 = _c === void 0 ? 1 : _c;

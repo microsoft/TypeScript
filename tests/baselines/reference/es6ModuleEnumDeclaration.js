@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleEnumDeclaration.ts] ////
+
 //// [es6ModuleEnumDeclaration.ts]
 export enum e1 {
     a,

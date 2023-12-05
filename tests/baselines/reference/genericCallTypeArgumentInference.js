@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallTypeArgumentInference.ts] ////
+
 //// [genericCallTypeArgumentInference.ts]
 // Basic type inference with generic calls, no errors expected
 

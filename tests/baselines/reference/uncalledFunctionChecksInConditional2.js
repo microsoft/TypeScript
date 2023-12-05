@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
+
 //// [uncalledFunctionChecksInConditional2.ts]
 {
   const perf = window.performance
@@ -19,6 +21,17 @@
     perf &&
     perf.mark &&
     perf.measure || !!true
+  ) {
+    perf.mark("");
+  }
+
+  // With ??
+  if (
+    (
+      perf &&
+      perf.mark &&
+      perf.measure
+    ) ?? !!true
   ) {
     perf.mark("");
   }
@@ -48,8 +61,21 @@ declare let inBrowser: boolean;
   }
 };
 
+let _isMobile: boolean;
+function isMobile() {
+  if (_isMobile === undefined) {
+    const isMobileMatch =
+      typeof window !== 'undefined' &&
+      window.matchMedia && // no error
+      window.matchMedia('(max-device-width: 680px)');
+    _isMobile = isMobileMatch && isMobileMatch.matches;
+  }
+  return _isMobile;
+}
+
 
 //// [uncalledFunctionChecksInConditional2.js]
+var _a;
 {
     var perf = window.performance;
     // Simplified
@@ -65,6 +91,12 @@ declare let inBrowser: boolean;
     if (perf &&
         perf.mark &&
         perf.measure || !!true) {
+        perf.mark("");
+    }
+    // With ??
+    if ((_a = (perf &&
+        perf.mark &&
+        perf.measure)) !== null && _a !== void 0 ? _a : !!true) {
         perf.mark("");
     }
 }
@@ -89,3 +121,13 @@ declare let inBrowser: boolean;
     }
 }
 ;
+var _isMobile;
+function isMobile() {
+    if (_isMobile === undefined) {
+        var isMobileMatch = typeof window !== 'undefined' &&
+            window.matchMedia && // no error
+            window.matchMedia('(max-device-width: 680px)');
+        _isMobile = isMobileMatch && isMobileMatch.matches;
+    }
+    return _isMobile;
+}

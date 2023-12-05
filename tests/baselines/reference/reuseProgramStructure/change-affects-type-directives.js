@@ -1,50 +1,57 @@
 Program Reused:: Not
 File: c.ts
 
-import x from 'b'
+
 var z = 1;
-resolvedModules: 
-b: {"resolvedFileName":"b.ts","extension":".ts","isExternalLibraryImport":false}
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
 /// <reference path='c.ts'/>
 
 var y = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a.ts
+
 /// <reference path='b.ts'/>
-                /// <reference path='c.ts'/>
-                
-
-var x = 100
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
+/// <reference path='non-existing-file.ts'/>
+/// <reference types="typerefs" />
 
 
-MissingPaths:: ["lib.d.ts"]
+var x = 1
+resolvedTypeReferenceDirectiveNames:
+typerefs: {
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs/package.json",
+    "node_modules/@types/typerefs/index.d.ts",
+    "node_modules/typerefs/package.json",
+    "node_modules/typerefs.d.ts",
+    "node_modules/typerefs/index.d.ts",
+    "node_modules/@types/typerefs/package.json",
+    "node_modules/@types/typerefs.d.ts",
+    "node_modules/@types/typerefs/index.d.ts"
+  ]
+}
 
-c.ts(2,15): error TS2306: File 'b.ts' is not a module.
+
+MissingPaths:: [
+  "non-existing-file.ts",
+  "lib.d.ts"
+]
+
+a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
+a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs'.
 
 
 
 Program Reused:: SafeModules
 File: c.ts
 
-import x from 'b'
+
 var z = 1;
-resolvedModules: 
-b: {"resolvedFileName":"b.ts","extension":".ts","isExternalLibraryImport":false}
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
 /// <reference path='c.ts'/>
 
 var y = 2
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a.ts
 
@@ -52,16 +59,28 @@ File: a.ts
 /// <reference path='non-existing-file.ts'/>
 /// <reference types="typerefs1" />
 
-var x = 100
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: 
-typerefs1: undefined
+var x = 1
+resolvedTypeReferenceDirectiveNames:
+typerefs1: {
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs1/package.json",
+    "node_modules/@types/typerefs1/index.d.ts",
+    "node_modules/typerefs1/package.json",
+    "node_modules/typerefs1.d.ts",
+    "node_modules/typerefs1/index.d.ts",
+    "node_modules/@types/typerefs1/package.json",
+    "node_modules/@types/typerefs1.d.ts",
+    "node_modules/@types/typerefs1/index.d.ts"
+  ]
+}
 
 
-MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
+MissingPaths:: [
+  "non-existing-file.ts",
+  "lib.d.ts"
+]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
 a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs1'.
-c.ts(2,15): error TS2306: File 'b.ts' is not a module.
 
 

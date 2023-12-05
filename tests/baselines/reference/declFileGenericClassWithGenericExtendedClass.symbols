@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileGenericClassWithGenericExtendedClass.ts ===
+//// [tests/cases/compiler/declFileGenericClassWithGenericExtendedClass.ts] ////
+
+=== declFileGenericClassWithGenericExtendedClass.ts ===
 interface IFoo {
 >IFoo : Symbol(IFoo, Decl(declFileGenericClassWithGenericExtendedClass.ts, 0, 0))
 

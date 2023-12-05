@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts ===
+//// [tests/cases/compiler/noImplicitAnyParametersInBareFunctions.ts] ////
+
+=== noImplicitAnyParametersInBareFunctions.ts ===
 // No implicit-'any' errors.
 function f1(): void { }
 >f1 : Symbol(f1, Decl(noImplicitAnyParametersInBareFunctions.ts, 0, 0))

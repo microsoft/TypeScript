@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/subtypingTransitivity.ts] ////
+
 //// [subtypingTransitivity.ts]
 class B {
     x: Object;

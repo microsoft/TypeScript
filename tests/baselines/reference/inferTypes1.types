@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/conditional/inferTypes1.ts ===
+//// [tests/cases/conformance/types/conditional/inferTypes1.ts] ////
+
+=== inferTypes1.ts ===
 type Unpacked<T> =
 >Unpacked : Unpacked<T>
 
@@ -325,8 +327,6 @@ type Jsonified<T> =
 >Jsonified : Jsonified<T>
 
     T extends string | number | boolean | null ? T
->null : null
-
     : T extends undefined | Function ? never // undefined and functions are removed
     : T extends { toJSON(): infer R } ? R // toJSON is called if it exists (e.g. Date)
 >toJSON : () => infer R

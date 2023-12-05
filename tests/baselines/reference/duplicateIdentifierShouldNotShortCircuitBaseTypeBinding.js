@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateIdentifierShouldNotShortCircuitBaseTypeBinding.ts] ////
+
 //// [duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts]
 
 

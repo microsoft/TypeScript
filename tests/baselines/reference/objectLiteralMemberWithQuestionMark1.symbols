@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralMemberWithQuestionMark1.ts ===
+//// [tests/cases/compiler/objectLiteralMemberWithQuestionMark1.ts] ////
+
+=== objectLiteralMemberWithQuestionMark1.ts ===
 var v = { foo?() { } }
 >v : Symbol(v, Decl(objectLiteralMemberWithQuestionMark1.ts, 0, 3))
 >foo : Symbol(foo, Decl(objectLiteralMemberWithQuestionMark1.ts, 0, 9))

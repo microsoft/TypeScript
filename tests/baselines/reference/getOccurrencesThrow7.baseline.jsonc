@@ -1,0 +1,112 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow7.ts ===
+// try {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 10;
+// 
+//     try {
+//         throw 10;
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] 10;
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] 10;
+//     }
+// }
+// finally {
+//     [|{| kind: "none" |}throw|] 10;
+// }
+// 
+// [|{| kind: "none" |}throw|] 10;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow7.ts ===
+// try {
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     try {
+//         throw 10;
+//     }
+//     catch (x) {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 10;
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] 10;
+//     }
+// }
+// finally {
+//     [|{| kind: "none" |}throw|] 10;
+// }
+// 
+// [|{| kind: "none" |}throw|] 10;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow7.ts ===
+// try {
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     try {
+//         throw 10;
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] 10;
+//     }
+//     finally {
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 10;
+//     }
+// }
+// finally {
+//     [|{| kind: "none" |}throw|] 10;
+// }
+// 
+// [|{| kind: "none" |}throw|] 10;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow7.ts ===
+// try {
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     try {
+//         throw 10;
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] 10;
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] 10;
+//     }
+// }
+// finally {
+//     /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 10;
+// }
+// 
+// [|{| kind: "none" |}throw|] 10;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThrow7.ts ===
+// try {
+//     [|{| kind: "none" |}throw|] 10;
+// 
+//     try {
+//         throw 10;
+//     }
+//     catch (x) {
+//         [|{| kind: "none" |}throw|] 10;
+//     }
+//     finally {
+//         [|{| kind: "none" |}throw|] 10;
+//     }
+// }
+// finally {
+//     [|{| kind: "none" |}throw|] 10;
+// }
+// 
+// /*HIGHLIGHTS*/[|{| kind: "none" |}throw|] 10;

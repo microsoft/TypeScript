@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/heterogeneousArrayLiterals.ts] ////
+
 //// [heterogeneousArrayLiterals.ts]
 // type of an array is the best common type of its elements (plus its contextual type if it exists)
 

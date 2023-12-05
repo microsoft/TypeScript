@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/seeTag4.ts] ////
+
 //// [seeTag4.js]
 /**
  * @typedef {any} A

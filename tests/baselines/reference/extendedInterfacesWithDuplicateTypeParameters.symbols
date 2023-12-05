@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts ===
+//// [tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts] ////
+
+=== extendedInterfacesWithDuplicateTypeParameters.ts ===
 interface InterfaceWithMultipleTypars<A, A> { // should error
 >InterfaceWithMultipleTypars : Symbol(InterfaceWithMultipleTypars, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 0, 0))
 >A : Symbol(A, Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 0, 38), Decl(extendedInterfacesWithDuplicateTypeParameters.ts, 0, 40))

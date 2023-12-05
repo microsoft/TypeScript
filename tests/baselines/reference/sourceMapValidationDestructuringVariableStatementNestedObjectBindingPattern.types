@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts] ////
+
+=== sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts ===
 declare var console: {
 >console : { log(msg: string): void; }
 

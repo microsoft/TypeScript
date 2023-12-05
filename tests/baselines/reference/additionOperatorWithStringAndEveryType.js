@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithStringAndEveryType.ts] ////
+
 //// [additionOperatorWithStringAndEveryType.ts]
 enum E { a, b, c }
 

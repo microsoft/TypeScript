@@ -1,4 +1,6 @@
-=== tests/cases/compiler/taggedTemplateStringWithSymbolExpression01.ts ===
+//// [tests/cases/compiler/taggedTemplateStringWithSymbolExpression01.ts] ////
+
+=== taggedTemplateStringWithSymbolExpression01.ts ===
 // taggedTemplateStringWithSymbolExpression01.ts
 
 declare function foo(template: any, val: symbol): number;

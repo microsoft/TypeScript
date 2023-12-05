@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticGetterAndSetter.ts ===
+//// [tests/cases/compiler/staticGetterAndSetter.ts] ////
+
+=== staticGetterAndSetter.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(staticGetterAndSetter.ts, 0, 0))
 

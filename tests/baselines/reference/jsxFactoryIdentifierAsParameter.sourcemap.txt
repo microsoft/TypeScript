@@ -5,7 +5,7 @@ sourceRoot:
 sources: test.tsx
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/test.js
+emittedFile:test.js
 sourceFile:test.tsx
 -------------------------------------------------------------------
 >>>"use strict";

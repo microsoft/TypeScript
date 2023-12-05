@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts ===
+//// [tests/cases/compiler/inferringReturnTypeFromConstructSignatureGeneric.ts] ////
+
+=== inferringReturnTypeFromConstructSignatureGeneric.ts ===
 class GenericObject<T extends {} = {}> {
 >GenericObject : GenericObject<T>
 
@@ -87,4 +89,14 @@ g3.give('1');
 >g3 : GenericNumberOrString<string | number>
 >give : (value: string | number) => string | number
 >'1' : "1"
+
+// repro from #35636
+class C<T> {}
+>C : C<T>
+
+const g4 = g(C);
+>g4 : C<unknown>
+>g(C) : C<unknown>
+>g : <T>(type: new () => T) => T
+>C : typeof C
 

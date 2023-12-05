@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyCheckWithSpread.ts ===
+//// [tests/cases/compiler/excessPropertyCheckWithSpread.ts] ////
+
+=== excessPropertyCheckWithSpread.ts ===
 declare function f({ a: number }): void
 >f : Symbol(f, Decl(excessPropertyCheckWithSpread.ts, 0, 0))
 >a : Symbol(a)

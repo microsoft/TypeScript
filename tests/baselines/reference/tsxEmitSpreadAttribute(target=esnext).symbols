@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/test.tsx ===
+//// [tests/cases/conformance/jsx/tsxEmitSpreadAttribute.ts] ////
+
+=== test.tsx ===
 declare const React: any;
 >React : Symbol(React, Decl(test.tsx, 0, 13))
 
@@ -72,5 +74,71 @@ export function T6(a: any, b: any, c: any, d: any) {
 >b : Symbol(b, Decl(test.tsx, 22, 26))
 >c : Symbol(c, Decl(test.tsx, 22, 34))
 >d : Symbol(d, Decl(test.tsx, 22, 42))
+}
+
+export function T7(a: any, b: any, c: any, d: any) {
+>T7 : Symbol(T7, Decl(test.tsx, 24, 1))
+>a : Symbol(a, Decl(test.tsx, 26, 19))
+>b : Symbol(b, Decl(test.tsx, 26, 26))
+>c : Symbol(c, Decl(test.tsx, 26, 34))
+>d : Symbol(d, Decl(test.tsx, 26, 42))
+
+    return <div className={"T7"} { ...{ __proto__: null, dir: 'rtl' } }>T7</div>;
+>className : Symbol(className, Decl(test.tsx, 27, 15))
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 27, 39))
+>dir : Symbol(dir, Decl(test.tsx, 27, 56))
+}
+
+export function T8(a: any, b: any, c: any, d: any) {
+>T8 : Symbol(T8, Decl(test.tsx, 28, 1))
+>a : Symbol(a, Decl(test.tsx, 30, 19))
+>b : Symbol(b, Decl(test.tsx, 30, 26))
+>c : Symbol(c, Decl(test.tsx, 30, 34))
+>d : Symbol(d, Decl(test.tsx, 30, 42))
+
+    return <div className={"T8"} { ...{ "__proto__": null } }>T8</div>;
+>className : Symbol(className, Decl(test.tsx, 31, 15))
+>"__proto__" : Symbol("__proto__", Decl(test.tsx, 31, 39))
+}
+
+declare const __proto__: string;
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 34, 13))
+
+export function T9(a: any, b: any, c: any, d: any) {
+>T9 : Symbol(T9, Decl(test.tsx, 34, 32))
+>a : Symbol(a, Decl(test.tsx, 36, 19))
+>b : Symbol(b, Decl(test.tsx, 36, 26))
+>c : Symbol(c, Decl(test.tsx, 36, 34))
+>d : Symbol(d, Decl(test.tsx, 36, 42))
+
+    return <div className={"T9"} { ...{ [__proto__]: null } }>T9</div>;
+>className : Symbol(className, Decl(test.tsx, 37, 15))
+>[__proto__] : Symbol([__proto__], Decl(test.tsx, 37, 39))
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 34, 13))
+}
+
+export function T10(a: any, b: any, c: any, d: any) {
+>T10 : Symbol(T10, Decl(test.tsx, 38, 1))
+>a : Symbol(a, Decl(test.tsx, 40, 20))
+>b : Symbol(b, Decl(test.tsx, 40, 27))
+>c : Symbol(c, Decl(test.tsx, 40, 35))
+>d : Symbol(d, Decl(test.tsx, 40, 43))
+
+    return <div className={"T10"} { ...{ ["__proto__"]: null } }>T10</div>;
+>className : Symbol(className, Decl(test.tsx, 41, 15))
+>["__proto__"] : Symbol(["__proto__"], Decl(test.tsx, 41, 40))
+>"__proto__" : Symbol(["__proto__"], Decl(test.tsx, 41, 40))
+}
+
+export function T11(a: any, b: any, c: any, d: any) {
+>T11 : Symbol(T11, Decl(test.tsx, 42, 1))
+>a : Symbol(a, Decl(test.tsx, 44, 20))
+>b : Symbol(b, Decl(test.tsx, 44, 27))
+>c : Symbol(c, Decl(test.tsx, 44, 35))
+>d : Symbol(d, Decl(test.tsx, 44, 43))
+
+    return <div className={"T11"} { ...{ __proto__ } }>T11</div>;
+>className : Symbol(className, Decl(test.tsx, 45, 15))
+>__proto__ : Symbol(__proto__, Decl(test.tsx, 45, 40))
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDeclarationsInAmbientNamespaces2.ts ===
+//// [tests/cases/compiler/exportDeclarationsInAmbientNamespaces2.ts] ////
+
+=== exportDeclarationsInAmbientNamespaces2.ts ===
 declare module "mod" {
 >"mod" : typeof import("mod")
 

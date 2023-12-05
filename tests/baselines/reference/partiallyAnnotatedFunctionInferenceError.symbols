@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/contextualTypes/partiallyAnnotatedFunction/partiallyAnnotatedFunctionInferenceError.ts ===
+//// [tests/cases/conformance/types/contextualTypes/partiallyAnnotatedFunction/partiallyAnnotatedFunctionInferenceError.ts] ////
+
+=== partiallyAnnotatedFunctionInferenceError.ts ===
 class C {
 >C : Symbol(C, Decl(partiallyAnnotatedFunctionInferenceError.ts, 0, 0))
 

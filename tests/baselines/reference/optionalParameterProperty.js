@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalParameterProperty.ts] ////
+
 //// [optionalParameterProperty.ts]
 class C {
     p: number;

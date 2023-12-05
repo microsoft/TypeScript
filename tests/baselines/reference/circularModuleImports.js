@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/circularModuleImports.ts] ////
+
 //// [circularModuleImports.ts]
 module M
  

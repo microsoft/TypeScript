@@ -1,7 +1,7 @@
-tests/cases/compiler/constWithNonNull.ts(4,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constWithNonNull.ts(4,1): error TS2588: Cannot assign to 'x' because it is a constant.
 
 
-==== tests/cases/compiler/constWithNonNull.ts (1 errors) ====
+==== constWithNonNull.ts (1 errors) ====
     // Fixes #21848
     
     declare const x: number | undefined;

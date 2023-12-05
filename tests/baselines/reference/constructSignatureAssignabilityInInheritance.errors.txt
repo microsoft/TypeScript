@@ -1,13 +1,13 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts(61,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
+constructSignatureAssignabilityInInheritance.ts(61,15): error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
   The types returned by 'new a(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts(67,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+constructSignatureAssignabilityInInheritance.ts(67,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
   The types returned by 'new a2(...)' are incompatible between these types.
     Type 'string' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts (2 errors) ====
+==== constructSignatureAssignabilityInInheritance.ts (2 errors) ====
     // Checking basic subtype relations with construct signatures
     
     module ConstructSignature {

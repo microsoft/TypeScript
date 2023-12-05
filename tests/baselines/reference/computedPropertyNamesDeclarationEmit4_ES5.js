@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNamesDeclarationEmit4_ES5.ts] ////
+
 //// [computedPropertyNamesDeclarationEmit4_ES5.ts]
 var v: {
     ["" + ""](): void;

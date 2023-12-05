@@ -1,7 +1,7 @@
-tests/cases/compiler/noCrashOnMixin.ts(21,9): error TS2674: Constructor of class 'Abstract' is protected and only accessible within the class declaration.
+noCrashOnMixin.ts(21,9): error TS2674: Constructor of class 'Abstract' is protected and only accessible within the class declaration.
 
 
-==== tests/cases/compiler/noCrashOnMixin.ts (1 errors) ====
+==== noCrashOnMixin.ts (1 errors) ====
     class Abstract {
         protected constructor() {
         }

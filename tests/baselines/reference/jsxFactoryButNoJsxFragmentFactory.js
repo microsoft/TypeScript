@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFactoryButNoJsxFragmentFactory.tsx] ////
+
 //// [jsxFactoryButNoJsxFragmentFactory.tsx]
 declare var h: any;
 

@@ -1,6 +1,23 @@
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
 import * as fakes from "../../_namespaces/fakes";
+import * as ts from "../../_namespaces/ts";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
+import * as vfs from "../../_namespaces/vfs";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    createSolutionBuilderHostForBaseline,
+} from "../helpers/solutionBuilder";
+import {
+    noChangeOnlyRuns,
+    testTscCompileLike,
+    TestTscEdit,
+    TscCompileSystem,
+    verifyTsc,
+    verifyTscCompileLike,
+} from "../helpers/tsc";
 import {
     addRest,
     addShebang,
@@ -10,27 +27,118 @@ import {
     addTripleSlashRef,
     appendText,
     changeStubToRest,
-    createSolutionBuilderHostForBaseline,
     enableStrict,
-    loadProjectFromDisk,
-    noChangeOnlyRuns,
+    loadProjectFromFiles,
     prependText,
     removeRest,
     replaceText,
-    testTscCompileLike,
-    TestTscEdit,
-    TscCompileSystem,
-    verifyTsc,
-    verifyTscCompileLike,
-    verifyTscWithEdits,
-    VerifyTscWithEditsInput,
-} from "../tsc/helpers";
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: outFile::", () => {
     let outFileFs: vfs.FileSystem;
     let outFileWithBuildFs: vfs.FileSystem;
     before(() => {
-        outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
+        outFileFs = loadProjectFromFiles({
+            "/src/first/first_PART1.ts": dedent`
+                interface TheFirst {
+                    none: any;
+                }
+
+                const s = "Hello, world";
+
+                interface NoJsForHereEither {
+                    none: any;
+                }
+
+                console.log(s);
+            `,
+            "/src/first/first_part2.ts": dedent`
+                console.log(f());
+            `,
+            "/src/first/first_part3.ts": dedent`
+                function f() {
+                    return "JS does hoists";
+                }
+            `,
+            "/src/first/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    target: "es5",
+                    composite: true,
+                    removeComments: true,
+                    strict: false,
+                    sourceMap: true,
+                    declarationMap: true,
+                    outFile: "./bin/first-output.js",
+                    skipDefaultLibCheck: true,
+                },
+                files: [
+                    "first_PART1.ts",
+                    "first_part2.ts",
+                    "first_part3.ts",
+                ],
+                references: [],
+            }),
+            "/src/second/second_part1.ts": dedent`
+                namespace N {
+                    // Comment text
+                }
+
+                namespace N {
+                    function f() {
+                        console.log('testing');
+                    }
+
+                    f();
+                }
+            `,
+            "/src/second/second_part2.ts": dedent`
+                class C {
+                    doSomething() {
+                        console.log("something got done");
+                    }
+                }
+            `,
+            "/src/second/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    ignoreDeprecations: "5.0",
+                    target: "es5",
+                    composite: true,
+                    removeComments: true,
+                    strict: false,
+                    sourceMap: true,
+                    declarationMap: true,
+                    declaration: true,
+                    outFile: "../2/second-output.js",
+                    skipDefaultLibCheck: true,
+                },
+                references: [],
+            }),
+            "/src/third/third_part1.ts": dedent`
+                var c = new C();
+                c.doSomething();
+            `,
+            "/src/third/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    ignoreDeprecations: "5.0",
+                    target: "es5",
+                    composite: true,
+                    removeComments: true,
+                    strict: false,
+                    sourceMap: true,
+                    declarationMap: true,
+                    declaration: true,
+                    outFile: "./thirdjs/output/third-output.js",
+                    skipDefaultLibCheck: true,
+                },
+                files: [
+                    "third_part1.ts",
+                ],
+                references: [
+                    { path: "../first", prepend: true },
+                    { path: "../second", prepend: true },
+                ],
+            }),
+        });
     });
     after(() => {
         outFileFs = undefined!;
@@ -56,26 +164,26 @@ describe("unittests:: tsbuild:: outFile::", () => {
         baselineOnly,
         additionalCommandLineArgs,
     }: VerifyOutFileScenarioInput) {
-        const edits: TestTscEdit[] = [];
+        let edits: TestTscEdit[] | undefined;
         if (!ignoreDtsChanged) {
-            edits.push({
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => replaceText(fs, "/src/first/first_PART1.ts", "Hello", "Hola"),
+            (edits ??= []).push({
+                caption: "incremental-declaration-changes",
+                edit: fs => replaceText(fs, "/src/first/first_PART1.ts", "Hello", "Hola"),
             });
         }
         if (!ignoreDtsUnchanged) {
-            edits.push({
-                subScenario: "incremental-declaration-doesnt-change",
-                modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+            (edits ??= []).push({
+                caption: "incremental-declaration-doesnt-change",
+                edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
             });
         }
         if (modifyAgainFs) {
-            edits.push({
-                subScenario: "incremental-headers-change-without-dts-changes",
-                modifyFs: modifyAgainFs
+            (edits ??= []).push({
+                caption: "incremental-headers-change-without-dts-changes",
+                edit: modifyAgainFs,
             });
         }
-        const input: VerifyTscWithEditsInput = {
+        verifyTsc({
             subScenario,
             fs: () => outFileFs,
             scenario: "outfile-concat",
@@ -84,10 +192,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
             modifyFs,
             baselineReadFileCalls: !baselineOnly,
             edits,
-        };
-        return edits.length ?
-            verifyTscWithEdits(input) :
-            verifyTsc(input);
+        });
     }
 
     // Verify initial + incremental edits
@@ -98,7 +203,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
     verifyOutFileScenario({
         subScenario: "explainFiles",
         additionalCommandLineArgs: ["--explainFiles"],
-        baselineOnly: true
+        baselineOnly: true,
     });
 
     // Verify baseline with build info + dts unChanged
@@ -106,7 +211,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
         subScenario: "when final project is not composite but uses project references",
         modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
         ignoreDtsChanged: true,
-        baselineOnly: true
+        baselineOnly: true,
     });
 
     // Verify baseline with build info
@@ -115,17 +220,23 @@ describe("unittests:: tsbuild:: outFile::", () => {
         modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"incremental": true,`),
         ignoreDtsChanged: true,
         ignoreDtsUnchanged: true,
-        baselineOnly: true
+        baselineOnly: true,
     });
 
     // Verify baseline with build info
     verifyOutFileScenario({
         subScenario: "when final project specifies tsBuildInfoFile",
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"composite": true,
-        "tsBuildInfoFile": "./thirdjs/output/third.tsbuildinfo",`),
+        modifyFs: fs =>
+            replaceText(
+                fs,
+                "/src/third/tsconfig.json",
+                `"composite": true,`,
+                `"composite": true,
+        "tsBuildInfoFile": "./thirdjs/output/third.tsbuildinfo",`,
+            ),
         ignoreDtsChanged: true,
         ignoreDtsUnchanged: true,
-        baselineOnly: true
+        baselineOnly: true,
     });
 
     function getOutFileFsAfterBuild() {
@@ -139,12 +250,12 @@ describe("unittests:: tsbuild:: outFile::", () => {
         return outFileWithBuildFs = fs;
     }
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "outFile",
         subScenario: "clean projects",
         fs: getOutFileFsAfterBuild,
         commandLineArgs: ["--b", "/src/third", "--clean"],
-        edits: noChangeOnlyRuns
+        edits: noChangeOnlyRuns,
     });
 
     verifyTsc({
@@ -173,10 +284,10 @@ describe("unittests:: tsbuild:: outFile::", () => {
             const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
             const builder = ts.createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
             sys.exit(builder.build());
-        }
+        },
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "outFile",
         subScenario: "rebuilds completely when command line incremental flag changes between non dts changes",
         fs: () => outFileFs,
@@ -186,32 +297,32 @@ describe("unittests:: tsbuild:: outFile::", () => {
         commandLineArgs: ["--b", "/src/third", "--i", "--verbose"],
         edits: [
             {
-                subScenario: "Make non incremental build with change in file that doesnt affect dts",
-                modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                caption: "Make non incremental build with change in file that doesnt affect dts",
+                edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose"],
             },
             {
-                subScenario: "Make incremental build with change in file that doesnt affect dts",
-                modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                caption: "Make incremental build with change in file that doesnt affect dts",
+                edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose", "--incremental"],
-            }
-        ]
+            },
+        ],
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "outFile",
         subScenario: "when input file text does not change but its modified time changes",
         fs: () => outFileFs,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         edits: [
             {
-                subScenario: "upstream project changes without changing file text",
-                modifyFs: fs => {
+                caption: "upstream project changes without changing file text",
+                edit: fs => {
                     const time = new Date(fs.time());
                     fs.utimesSync("/src/first/first_PART1.ts", time, time);
                 },
             },
-        ]
+        ],
     });
 
     verifyTscCompileLike(testTscCompileLike, {
@@ -223,7 +334,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
             const buildHost = createSolutionBuilderHostForBaseline(sys);
             const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
             sys.exit(builder.build("/src/second/tsconfig.json"));
-        }
+        },
     });
 
     verifyTscCompileLike(testTscCompileLike, {
@@ -235,7 +346,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
             const buildHost = createSolutionBuilderHostForBaseline(sys);
             const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
             sys.exit(builder.clean("/src/second/tsconfig.json"));
-        }
+        },
     });
 
     describe("Prepend output with .tsbuildinfo", () => {
@@ -249,7 +360,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                     enableStrict(fs, "/src/second/tsconfig.json");
                     enableStrict(fs, "/src/third/tsconfig.json");
                 },
-                modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue"`)
+                modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue"`),
             });
 
             // Verify ignore dtsChanged
@@ -258,7 +369,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 modifyFs: fs => enableStrict(fs, "/src/second/tsconfig.json"),
                 modifyAgainFs: fs => addTestPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
 
             // Verify initial + incremental edits - sourcemap verification
@@ -274,7 +385,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                     addTestPrologue(fs, "/src/third/third_part1.ts", `"myPrologue";`);
                     addTestPrologue(fs, "/src/third/third_part1.ts", `"myPrologue3";`);
                 },
-                modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue5"`)
+                modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue5"`),
             });
 
             // Verify ignore dtsChanged
@@ -288,7 +399,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 },
                 modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue5"`),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
         });
 
@@ -311,7 +422,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 subScenario: "shebang in only one dependency project",
                 modifyFs: fs => addShebang(fs, "second", "second_part1"),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
         });
 
@@ -325,7 +436,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                     addRest(fs, "second", "second_part1");
                     addRest(fs, "third", "third_part1");
                 },
-                modifyAgainFs: fs => removeRest(fs, "first", "first_PART1")
+                modifyAgainFs: fs => removeRest(fs, "first", "first_PART1"),
             });
 
             // Verify ignore dtsChanged
@@ -337,7 +448,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 },
                 modifyAgainFs: fs => changeStubToRest(fs, "first", "first_PART1"),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
 
             // Verify ignore dtsChanged
@@ -353,7 +464,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 },
                 modifyAgainFs: fs => removeRest(fs, "first", "first_PART1"),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
 
             // Verify ignore dtsChanged
@@ -366,7 +477,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 },
                 modifyAgainFs: fs => removeRest(fs, "first", "first_PART1"),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
         });
 
@@ -380,7 +491,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                     addTripleSlashRef(fs, "first", "first_part2");
                     addTripleSlashRef(fs, "second", "second_part1");
                     addTripleSlashRef(fs, "third", "third_part1");
-                }
+                },
             });
 
             // Verify ignore dtsChanged
@@ -388,7 +499,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 subScenario: "triple slash refs in one project",
                 modifyFs: fs => addTripleSlashRef(fs, "second", "second_part1"),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
         });
 
@@ -404,8 +515,13 @@ describe("unittests:: tsbuild:: outFile::", () => {
             }
 
             function stripInternalOfThird(fs: vfs.FileSystem) {
-                replaceText(fs, "/src/third/tsconfig.json", `"declaration": true,`, `"declaration": true,
-    "stripInternal": true,`);
+                replaceText(
+                    fs,
+                    "/src/third/tsconfig.json",
+                    `"declaration": true,`,
+                    `"declaration": true,
+    "stripInternal": true,`,
+                );
             }
 
             function stripInternalScenario(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
@@ -415,7 +531,10 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 }
                 stripInternalOfThird(fs);
                 replaceText(fs, "/src/first/first_PART1.ts", "interface", `${internal} interface`);
-                appendText(fs, "/src/second/second_part1.ts", `
+                appendText(
+                    fs,
+                    "/src/second/second_part1.ts",
+                    `
 class normalC {
     ${internal} constructor() { }
     ${internal} prop: string;
@@ -440,7 +559,8 @@ ${internal} namespace internalOther.something { export class someClass {} }
 ${internal} import internalImport = internalNamespace.someClass;
 ${internal} type internalType = internalC;
 ${internal} const internalConst = 10;
-${internal} enum internalEnum { a, b, c }`);
+${internal} enum internalEnum { a, b, c }`,
+                );
             }
 
             // Verify initial + incremental edits
@@ -456,7 +576,7 @@ ${internal} enum internalEnum { a, b, c }`);
                 modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true),
                 modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
 
             // Verify ignore dtsChanged
@@ -465,7 +585,7 @@ ${internal} enum internalEnum { a, b, c }`);
                 modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
                 modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/**@internal*/ interface`, "interface"),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
 
             // Verify ignore dtsChanged
@@ -473,14 +593,25 @@ ${internal} enum internalEnum { a, b, c }`);
                 subScenario: "stripInternal jsdoc style with comments emit enabled",
                 modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
 
             describe("with three levels of project dependency", () => {
                 function makeOneTwoThreeDependOrder(fs: vfs.FileSystem) {
-                    replaceText(fs, "/src/second/tsconfig.json", "[", `[
-    { "path": "../first", "prepend": true }`);
-                    replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true },`, "");
+                    replaceText(
+                        fs,
+                        "/src/second/tsconfig.json",
+                        "[",
+                        `[
+    { "path": "../first", "prepend": true }\n  `,
+                    );
+                    fs.writeFileSync(
+                        "/src/third/tsconfig.json",
+                        jsonToReadableText({
+                            ...JSON.parse(fs.readFileSync("/src/third/tsconfig.json", "utf-8")!),
+                            references: [{ path: "../second", prepend: true }],
+                        }),
+                    );
                 }
 
                 function stripInternalWithDependentOrder(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
@@ -501,7 +632,7 @@ ${internal} enum internalEnum { a, b, c }`);
                     modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true),
                     modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
                     ignoreDtsChanged: true,
-                    baselineOnly: true
+                    baselineOnly: true,
                 });
 
                 // Verify ignore dtsChanged
@@ -510,7 +641,7 @@ ${internal} enum internalEnum { a, b, c }`);
                     modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
                     modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/**@internal*/ interface`, "interface"),
                     ignoreDtsChanged: true,
-                    baselineOnly: true
+                    baselineOnly: true,
                 });
 
                 // Verify ignore dtsChanged
@@ -518,7 +649,7 @@ ${internal} enum internalEnum { a, b, c }`);
                     subScenario: "stripInternal jsdoc style with comments emit enabled when one-two-three are prepended in order",
                     modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
                     ignoreDtsChanged: true,
-                    baselineOnly: true
+                    baselineOnly: true,
                 });
             });
 
@@ -527,7 +658,10 @@ ${internal} enum internalEnum { a, b, c }`);
                 subScenario: "stripInternal baseline when internal is inside another internal",
                 modifyFs: fs => {
                     stripInternalOfThird(fs);
-                    prependText(fs, "/src/first/first_PART1.ts", `namespace ts {
+                    prependText(
+                        fs,
+                        "/src/first/first_PART1.ts",
+                        `namespace ts {
     /* @internal */
     /**
      * Subset of properties from SourceFile that are used in multiple utility functions
@@ -554,11 +688,12 @@ ${internal} enum internalEnum { a, b, c }`);
     export interface SourceFile {
         someProp: string;
     }
-}`);
+}`,
+                    );
                 },
                 ignoreDtsChanged: true,
                 ignoreDtsUnchanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
 
             // only baseline
@@ -566,7 +701,10 @@ ${internal} enum internalEnum { a, b, c }`);
                 subScenario: "stripInternal when few members of enum are internal",
                 modifyFs: fs => {
                     stripInternalOfThird(fs);
-                    prependText(fs, "/src/first/first_PART1.ts", `enum TokenFlags {
+                    prependText(
+                        fs,
+                        "/src/first/first_PART1.ts",
+                        `enum TokenFlags {
     None = 0,
     /* @internal */
     PrecedingLineBreak = 1 << 0,
@@ -588,11 +726,12 @@ ${internal} enum internalEnum { a, b, c }`);
     /* @internal */
     NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
 }
-`);
+`,
+                    );
                 },
                 ignoreDtsChanged: true,
                 ignoreDtsUnchanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
 
             verifyOutFileScenario({
@@ -603,30 +742,37 @@ ${internal} enum internalEnum { a, b, c }`);
                 modifyFs: fs => {
                     fs.writeFileSync("/src/first/first_PART1.ts", "/* @internal */ const A = 1;");
                     fs.writeFileSync("/src/third/third_part1.ts", "const B = 2;");
-                    fs.writeFileSync("/src/first/tsconfig.json", JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                            declaration: true,
-                            declarationMap: true,
-                            skipDefaultLibCheck: true,
-                            sourceMap: true,
-                            outFile: "./bin/first-output.js"
-                        },
-                        files: ["/src/first/first_PART1.ts"]
-                    }));
-                    fs.writeFileSync("/src/third/tsconfig.json", JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                            declaration: true,
-                            declarationMap: false,
-                            stripInternal: true,
-                            sourceMap: true,
-                            outFile: "./thirdjs/output/third-output.js",
-                        },
-                        references: [{ path: "../first", prepend: true }],
-                        files: ["/src/third/third_part1.ts"]
-                    }));
-                }
+                    fs.writeFileSync(
+                        "/src/first/tsconfig.json",
+                        jsonToReadableText({
+                            compilerOptions: {
+                                composite: true,
+                                declaration: true,
+                                declarationMap: true,
+                                skipDefaultLibCheck: true,
+                                sourceMap: true,
+                                outFile: "./bin/first-output.js",
+                            },
+                            files: ["/src/first/first_PART1.ts"],
+                        }),
+                    );
+                    fs.writeFileSync(
+                        "/src/third/tsconfig.json",
+                        jsonToReadableText({
+                            compilerOptions: {
+                                ignoreDeprecations: "5.0",
+                                composite: true,
+                                declaration: true,
+                                declarationMap: false,
+                                stripInternal: true,
+                                sourceMap: true,
+                                outFile: "./thirdjs/output/third-output.js",
+                            },
+                            references: [{ path: "../first", prepend: true }],
+                            files: ["/src/third/third_part1.ts"],
+                        }),
+                    );
+                },
             });
         });
 
@@ -640,7 +786,7 @@ ${internal} enum internalEnum { a, b, c }`);
                 subScenario: "when source files are empty in the own file",
                 modifyFs: makeThirdEmptySourceFile,
                 ignoreDtsChanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
 
             // only baseline
@@ -654,7 +800,7 @@ ${internal} enum internalEnum { a, b, c }`);
                 },
                 ignoreDtsChanged: true,
                 ignoreDtsUnchanged: true,
-                baselineOnly: true
+                baselineOnly: true,
             });
         });
     });
@@ -666,8 +812,8 @@ ${internal} enum internalEnum { a, b, c }`);
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         modifyFs: fs => {
             // No prepend
-            replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
-            replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../second", "prepend": true }`, `{ "path": "../second" }`);
+            replaceText(fs, "/src/third/tsconfig.json", `"prepend": true`, "");
+            replaceText(fs, "/src/third/tsconfig.json", `"prepend": true`, "");
 
             // Non Modules
             replaceText(fs, "/src/first/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);

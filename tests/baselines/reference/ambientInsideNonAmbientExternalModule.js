@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/ambient/ambientInsideNonAmbientExternalModule.ts] ////
+
 //// [ambientInsideNonAmbientExternalModule.ts]
 export declare var x;
 export declare function f();
@@ -8,5 +10,5 @@ export declare module M { }
 //// [ambientInsideNonAmbientExternalModule.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

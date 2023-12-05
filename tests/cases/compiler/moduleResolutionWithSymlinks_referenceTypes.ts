@@ -18,7 +18,7 @@ declare class MyClass { private x: number; }
 /// <reference types="library-a" />
 /// <reference types="library-b" />
 
-// @filename: tsconfig.json
+// @filename: /tsconfig.json
 {
     "compilerOptions": {
         // If this is its default of node_modules/@types,

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedGetterInClass.ts] ////
+
 //// [unusedGetterInClass.ts]
 class Employee {
     private _fullName: string;

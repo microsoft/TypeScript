@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexSignatureTypeCheck2.ts ===
+//// [tests/cases/compiler/indexSignatureTypeCheck2.ts] ////
+
+=== indexSignatureTypeCheck2.ts ===
 class IPropertySet {
 >IPropertySet : IPropertySet
 
@@ -8,7 +10,6 @@ class IPropertySet {
 
 var ps: IPropertySet = null;
 >ps : IPropertySet
->null : null
 
 var index: any = "hello";
 >index : any

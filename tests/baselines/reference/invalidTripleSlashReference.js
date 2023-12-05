@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidTripleSlashReference.ts] ////
+
 //// [invalidTripleSlashReference.ts]
 /// <reference path='filedoesnotexist.ts'/>
 /// <reference path='otherdoesnotexist.d.ts'/>

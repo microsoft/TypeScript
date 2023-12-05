@@ -1,10 +1,10 @@
-tests/cases/compiler/noImplicitAnyMissingGetAccessor.ts(3,25): error TS7032: Property 'message' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-tests/cases/compiler/noImplicitAnyMissingGetAccessor.ts(3,33): error TS7006: Parameter 'str' implicitly has an 'any' type.
-tests/cases/compiler/noImplicitAnyMissingGetAccessor.ts(8,16): error TS7032: Property 'message' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-tests/cases/compiler/noImplicitAnyMissingGetAccessor.ts(8,24): error TS7006: Parameter 'str' implicitly has an 'any' type.
+noImplicitAnyMissingGetAccessor.ts(3,25): error TS7032: Property 'message' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+noImplicitAnyMissingGetAccessor.ts(3,33): error TS7006: Parameter 'str' implicitly has an 'any' type.
+noImplicitAnyMissingGetAccessor.ts(8,16): error TS7032: Property 'message' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
+noImplicitAnyMissingGetAccessor.ts(8,24): error TS7006: Parameter 'str' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/noImplicitAnyMissingGetAccessor.ts (4 errors) ====
+==== noImplicitAnyMissingGetAccessor.ts (4 errors) ====
     abstract class Parent
     {
         public abstract set message(str);

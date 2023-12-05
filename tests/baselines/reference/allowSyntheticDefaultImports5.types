@@ -1,4 +1,6 @@
-=== tests/cases/compiler/b.d.ts ===
+//// [tests/cases/compiler/allowSyntheticDefaultImports5.ts] ////
+
+=== b.d.ts ===
 declare class Foo {
 >Foo : Foo
 
@@ -8,7 +10,7 @@ declare class Foo {
 export = Foo;
 >Foo : Foo
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import Foo from "./b";
 >Foo : typeof Foo
 

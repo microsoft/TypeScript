@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericConstraint3.ts ===
+//// [tests/cases/compiler/genericConstraint3.ts] ////
+
+=== genericConstraint3.ts ===
 interface C<P> { x: P; }
 >C : Symbol(C, Decl(genericConstraint3.ts, 0, 0))
 >P : Symbol(P, Decl(genericConstraint3.ts, 0, 12))

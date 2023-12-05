@@ -1,0 +1,227 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "/*RENAME*/[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "/*RENAME*/[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "/*RENAME*/[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("/*RENAME*/[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "/*RENAME*/[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("/*RENAME*/[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "/*RENAME*/[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("/*RENAME*/[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "/*RENAME*/[|aRENAME|]") {}
+//         if ("[|aRENAME|]" != this.p) {}
+//     }
+// }
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringLiteralTypes2.ts ===
+// type Foo = "[|aRENAME|]" | "b";
+// 
+// class C {
+//     p: Foo = "[|aRENAME|]";
+//     m() {
+//         if (this.p === "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" === this.p) {}
+// 
+//         if (this.p !== "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" !== this.p) {}
+// 
+//         if (this.p == "[|aRENAME|]") {}
+//         if ("[|aRENAME|]" == this.p) {}
+// 
+//         if (this.p != "[|aRENAME|]") {}
+//         if ("/*RENAME*/[|aRENAME|]" != this.p) {}
+//     }
+// }

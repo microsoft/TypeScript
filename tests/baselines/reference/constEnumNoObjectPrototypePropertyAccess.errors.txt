@@ -1,0 +1,36 @@
+constEnumNoObjectPrototypePropertyAccess.ts(5,19): error TS2339: Property 'constructor' does not exist on type 'typeof Bebra'.
+constEnumNoObjectPrototypePropertyAccess.ts(6,19): error TS2339: Property 'hasOwnProperty' does not exist on type 'typeof Bebra'.
+constEnumNoObjectPrototypePropertyAccess.ts(7,19): error TS2339: Property 'isPrototypeOf' does not exist on type 'typeof Bebra'.
+constEnumNoObjectPrototypePropertyAccess.ts(8,19): error TS2339: Property 'propertyIsEnumerable' does not exist on type 'typeof Bebra'.
+constEnumNoObjectPrototypePropertyAccess.ts(9,19): error TS2339: Property 'toLocaleString' does not exist on type 'typeof Bebra'.
+constEnumNoObjectPrototypePropertyAccess.ts(10,19): error TS2339: Property 'toString' does not exist on type 'typeof Bebra'.
+constEnumNoObjectPrototypePropertyAccess.ts(11,19): error TS2339: Property 'valueOf' does not exist on type 'typeof Bebra'.
+
+
+==== constEnumNoObjectPrototypePropertyAccess.ts (7 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55421
+    
+    const enum Bebra {}
+    
+    console.log(Bebra.constructor)
+                      ~~~~~~~~~~~
+!!! error TS2339: Property 'constructor' does not exist on type 'typeof Bebra'.
+    console.log(Bebra.hasOwnProperty)
+                      ~~~~~~~~~~~~~~
+!!! error TS2339: Property 'hasOwnProperty' does not exist on type 'typeof Bebra'.
+    console.log(Bebra.isPrototypeOf)
+                      ~~~~~~~~~~~~~
+!!! error TS2339: Property 'isPrototypeOf' does not exist on type 'typeof Bebra'.
+    console.log(Bebra.propertyIsEnumerable)
+                      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'propertyIsEnumerable' does not exist on type 'typeof Bebra'.
+    console.log(Bebra.toLocaleString)
+                      ~~~~~~~~~~~~~~
+!!! error TS2339: Property 'toLocaleString' does not exist on type 'typeof Bebra'.
+    console.log(Bebra.toString)
+                      ~~~~~~~~
+!!! error TS2339: Property 'toString' does not exist on type 'typeof Bebra'.
+    console.log(Bebra.valueOf)
+                      ~~~~~~~
+!!! error TS2339: Property 'valueOf' does not exist on type 'typeof Bebra'.
+    

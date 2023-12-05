@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticPrototypeProperty.ts] ////
+
 //// [staticPrototypeProperty.ts]
 class C {
    static prototype() { }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts] ////
+
+=== arithmeticOperatorWithUndefinedValueAndInvalidOperands.ts ===
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
 

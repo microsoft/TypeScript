@@ -1,6 +1,15 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "exclude": [
+    "temp"
+  ]
+}
 
 //// [/user/username/projects/myproject/projects/project1/class1.ts]
 class class1 {}
@@ -9,7 +18,17 @@ class class1 {}
 declare class class1 {}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../project1"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/projects/project2/class2.ts]
 class class2 {}
@@ -52,57 +71,13 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
 
-
-Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/projects/project1/class1.ts
-/user/username/projects/myproject/projects/project2/class2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/projects/project1/class1.ts
-/user/username/projects/myproject/projects/project2/class2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/projects/project1/class1.ts (used version)
-/user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts during emit)
-
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/projects/project2/class2.js]
 var class2 = /** @class */ (function () {
@@ -118,7 +93,7 @@ declare class class2 {
 
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"777933178-class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"777933178-class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -158,6 +133,12 @@ declare class class2 {
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        3,
+        "./class2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "module": 0
@@ -170,9 +151,64 @@ declare class class2 {
     "latestChangedDtsFile": "./class2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 841
+  "size": 852
 }
 
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/class1.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project1: *new*
+  {}
+/user/username/projects/myproject/projects/project2: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/projects/project2/class2.ts"
+]
+Program options: {
+  "module": 0,
+  "composite": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class1.ts
+/user/username/projects/myproject/projects/project2/class2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class1.ts
+/user/username/projects/myproject/projects/project2/class2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/projects/project1/class1.ts (used version)
+/user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
 
 Change:: Add class3 to project1
 
@@ -185,6 +221,16 @@ Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 Loading config file: /user/username/projects/myproject/projects/project1/tsconfig.json
 [[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
@@ -198,59 +244,9 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 
 
 
-Program root files: ["/user/username/projects/myproject/projects/project2/class2.ts"]
-Program options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/projects/project1/class1.ts
-/user/username/projects/myproject/projects/project1/class3.ts
-/user/username/projects/myproject/projects/project2/class2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/projects/project1/class1.ts
-/user/username/projects/myproject/projects/project1/class3.ts
-/user/username/projects/myproject/projects/project2/class2.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/projects/project1/class3.ts (computed .d.ts)
-/user/username/projects/myproject/projects/project1/class1.ts (computed .d.ts)
-/user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.ts","../project1/class3.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"777933178-class class1 {}","signature":"-2723220098-declare class class1 {\n}\n","affectsGlobalScope":true},{"version":"778005052-class class3 {}","signature":"-2644949312-declare class class3 {\n}\n","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.ts","../project1/class3.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"777933178-class class1 {}","signature":"-2723220098-declare class class1 {\n}\n","affectsGlobalScope":true},{"version":"778005052-class class3 {}","signature":"-2644949312-declare class class3 {\n}\n","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -302,6 +298,12 @@ exitCode:: ExitStatus.undefined
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        4,
+        "./class2.ts"
+      ]
+    ],
     "options": {
       "composite": true,
       "module": 0
@@ -315,9 +317,69 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./class2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1041
+  "size": 1052
 }
 
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class1.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.ts: *new*
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project1:
+  {}
+/user/username/projects/myproject/projects/project2:
+  {}
+
+
+Program root files: [
+  "/user/username/projects/myproject/projects/project2/class2.ts"
+]
+Program options: {
+  "module": 0,
+  "composite": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class1.ts
+/user/username/projects/myproject/projects/project1/class3.ts
+/user/username/projects/myproject/projects/project2/class2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class1.ts
+/user/username/projects/myproject/projects/project1/class3.ts
+/user/username/projects/myproject/projects/project2/class2.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/projects/project1/class3.ts (computed .d.ts)
+/user/username/projects/myproject/projects/project1/class1.ts (computed .d.ts)
+/user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
 
 Change:: Add excluded file to project1
 
@@ -335,36 +397,8 @@ Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detec
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Add output of class3
 
@@ -379,33 +413,5 @@ Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detec
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
-PolledWatches::
-/user/username/projects/myproject/projects/project2/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/projects/project1:
-  {}
-/user/username/projects/myproject/projects/project2:
-  {}
 
 exitCode:: ExitStatus.undefined
-

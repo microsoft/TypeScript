@@ -1,9 +1,9 @@
-tests/cases/compiler/classExtendsInterfaceInModule.ts(5,18): error TS2689: Cannot extend an interface 'M.I1'. Did you mean 'implements'?
-tests/cases/compiler/classExtendsInterfaceInModule.ts(6,21): error TS2689: Cannot extend an interface 'M.I2'. Did you mean 'implements'?
-tests/cases/compiler/classExtendsInterfaceInModule.ts(14,17): error TS2689: Cannot extend an interface 'Mod.Nested.I'. Did you mean 'implements'?
+classExtendsInterfaceInModule.ts(5,18): error TS2689: Cannot extend an interface 'M.I1'. Did you mean 'implements'?
+classExtendsInterfaceInModule.ts(6,21): error TS2689: Cannot extend an interface 'M.I2'. Did you mean 'implements'?
+classExtendsInterfaceInModule.ts(14,17): error TS2689: Cannot extend an interface 'Mod.Nested.I'. Did you mean 'implements'?
 
 
-==== tests/cases/compiler/classExtendsInterfaceInModule.ts (3 errors) ====
+==== classExtendsInterfaceInModule.ts (3 errors) ====
     module M {
       export interface I1 {}
       export interface I2<T> {}

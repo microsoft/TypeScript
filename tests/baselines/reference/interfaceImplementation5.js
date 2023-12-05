@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceImplementation5.ts] ////
+
 //// [interfaceImplementation5.ts]
 interface I1 {
     getset1:number;

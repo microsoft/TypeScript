@@ -1,0 +1,20 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionOverriddenMember1.ts ===
+// class Foo {
+// 	<|[|p|] = '';|>
+// }
+// class Bar extends Foo {
+// 	/*GOTO DEF*/override p = '';
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "p",
+    "containerName": "Foo",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

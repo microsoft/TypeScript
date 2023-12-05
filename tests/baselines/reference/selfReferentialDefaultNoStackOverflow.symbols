@@ -1,4 +1,6 @@
-=== tests/cases/compiler/QSpinner.js ===
+//// [tests/cases/compiler/selfReferentialDefaultNoStackOverflow.ts] ////
+
+=== QSpinner.js ===
 import DefaultSpinner from './QSpinner'
 >DefaultSpinner : Symbol(DefaultSpinner, Decl(QSpinner.js, 0, 6))
 

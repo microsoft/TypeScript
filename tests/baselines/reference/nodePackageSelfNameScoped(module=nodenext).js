@@ -55,7 +55,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
-const self = __importStar(require("@scope/package"));
+var self = __importStar(require("@scope/package"));
 self;
 
 

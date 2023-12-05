@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/PropertyAssignments/parserFunctionPropertyAssignment2.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/PropertyAssignments/parserFunctionPropertyAssignment2.ts] ////
+
+=== parserFunctionPropertyAssignment2.ts ===
 var v = { 0() { } };
 >v : Symbol(v, Decl(parserFunctionPropertyAssignment2.ts, 0, 3))
 >0 : Symbol(0, Decl(parserFunctionPropertyAssignment2.ts, 0, 9))

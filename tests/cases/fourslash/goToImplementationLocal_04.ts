@@ -7,4 +7,4 @@
 //// hello();
 ////
 
-verify.allRangesAppearInImplementationList("local_var");
+verify.baselineGoToImplementation("local_var");

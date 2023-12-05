@@ -1,13 +1,12 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
-// export class Test{
-// 
-//     constructor(){
+// --- (line: 3) skipped ---
 // 
 //     }
 // 
-//     /*FIND ALL REFS*/public [|start|](){
+//     /*FIND ALL REFS*/<|public [|{| isWriteAccess: true, isDefinition: true |}start|](){
 //         return this;
-//     }
+//     }|>
 // 
 //     public stop(){
 //         return this;
@@ -21,110 +20,92 @@
 // second.[|start|]();
 // second.stop();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition-import.ts",
-      "kind": "method",
-      "name": "(method) Test.start(): this",
-      "textSpan": {
-        "start": 58,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "start",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "this",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 51,
-        "length": 42
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 58,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition-import.ts",
-        "contextSpan": {
-          "start": 51,
-          "length": 42
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 100,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
+  // --- (line: 3) skipped ---
+  // 
+  //     }
+  // 
+  //     /*FIND ALL REFS*/<|public [|start|](){
+  //         return this;
+  //     }|>
+  // 
+  //     public stop(){
+  //         return this;
+  //     }
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Test.start(): this",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "start",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
-// export class Test{
-// 
-//     constructor(){
+// --- (line: 3) skipped ---
 // 
 //     }
 // 
-//     public /*FIND ALL REFS*/[|start|](){
+//     <|public /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}start|](){
 //         return this;
-//     }
+//     }|>
 // 
 //     public stop(){
 //         return this;
@@ -138,110 +119,92 @@
 // second.[|start|]();
 // second.stop();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition-import.ts",
-      "kind": "method",
-      "name": "(method) Test.start(): this",
-      "textSpan": {
-        "start": 58,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "start",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "this",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 51,
-        "length": 42
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 58,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition-import.ts",
-        "contextSpan": {
-          "start": 51,
-          "length": 42
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 100,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
+  // --- (line: 3) skipped ---
+  // 
+  //     }
+  // 
+  //     <|public /*FIND ALL REFS*/[|start|](){
+  //         return this;
+  //     }|>
+  // 
+  //     public stop(){
+  //         return this;
+  //     }
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Test.start(): this",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "start",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
-// export class Test{
-// 
-//     constructor(){
+// --- (line: 3) skipped ---
 // 
 //     }
 // 
-//     public [|start|](){
+//     <|public [|{| isWriteAccess: true |}start|](){
 //         return this;
-//     }
+//     }|>
 // 
 //     public stop(){
 //         return this;
@@ -255,94 +218,77 @@
 // second./*FIND ALL REFS*/[|start|]();
 // second.stop();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition-import.ts",
-      "kind": "method",
-      "name": "(method) Test.start(): this",
-      "textSpan": {
-        "start": 58,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Test",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "start",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "this",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 51,
-        "length": 42
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 58,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition-import.ts",
-        "contextSpan": {
-          "start": 51,
-          "length": 42
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 100,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsOnDefinition.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
+  // --- (line: 3) skipped ---
+  // 
+  //     }
+  // 
+  //     <|public [|start|](){
+  //         return this;
+  //     }|>
+  // 
+  //     public stop(){
+  //         return this;
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Test.start(): this",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "start",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

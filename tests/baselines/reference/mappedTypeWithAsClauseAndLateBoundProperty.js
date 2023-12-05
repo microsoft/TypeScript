@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty.ts] ////
+
 //// [mappedTypeWithAsClauseAndLateBoundProperty.ts]
 declare let tgt2: number[];
 declare let src2: { [K in keyof number[] as Exclude<K, "length">]: (number[])[K] };

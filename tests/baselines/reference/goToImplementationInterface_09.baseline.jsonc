@@ -1,0 +1,25 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/ref.ts ===
+// import { Interface } from "./def";
+// const c: I/*GOTO IMPL*/nterface = [|{ P: 2 }|];
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]

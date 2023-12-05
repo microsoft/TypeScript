@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload1.tsx] ////
+
 //// [file.tsx]
 import React = require('react')
 
@@ -45,7 +47,7 @@ const e2 = <TestingOptional y1 y3 extra-prop/>
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     // OK
     var c1 = <OneThing yxx='ok'/>;
     var c2 = <OneThing yy={100} yy1="hello"/>;

@@ -1,20 +1,20 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts(30,1): error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
+assignmentCompatWithCallSignatures6.ts(30,1): error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
   Type 'void' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts(39,1): error TS2322: Type '<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base' is not assignable to type '<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base'.
+assignmentCompatWithCallSignatures6.ts(39,1): error TS2322: Type '<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base' is not assignable to type '<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base'.
   Types of parameters 'y' and 'y' are incompatible.
     Type '{ foo: U; bar: U; }' is not assignable to type '{ foo: T; bar: T; }'.
       Types of property 'foo' are incompatible.
         Type 'U' is not assignable to type 'T'.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts(42,1): error TS2322: Type '<T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type '<T>(x: { a: T; b: T; }) => T[]'.
+assignmentCompatWithCallSignatures6.ts(42,1): error TS2322: Type '<T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type '<T>(x: { a: T; b: T; }) => T[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '{ a: T; b: T; }' is not assignable to type '{ a: Base; b: Base; }'.
       Types of property 'a' are incompatible.
         Type 'T' is not assignable to type 'Base'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts (3 errors) ====
+==== assignmentCompatWithCallSignatures6.ts (3 errors) ====
     // checking assignment compatibility relations for function types. All valid
     
     class Base { foo: string; }
@@ -65,7 +65,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:       Types of property 'foo' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'T'.
 !!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts:37:14: This type parameter might need an `extends T` constraint.
+!!! related TS2208 assignmentCompatWithCallSignatures6.ts:37:14: This type parameter might need an `extends T` constraint.
     var b16: <T>(x: { a: T; b: T }) => T[]; 
     x.a16 = b16;
     b16 = x.a16;
@@ -75,4 +75,4 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: Base; b: Base; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
 !!! error TS2322:         Type 'T' is not assignable to type 'Base'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures6.ts:40:11: This type parameter might need an `extends Base` constraint.
+!!! related TS2208 assignmentCompatWithCallSignatures6.ts:40:11: This type parameter might need an `extends Base` constraint.

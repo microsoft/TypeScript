@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedBindingUsedBeforeDef.ts] ////
+
 //// [blockScopedBindingUsedBeforeDef.ts]
 // 1:
 for (let {[a]: a} of [{ }]) continue;

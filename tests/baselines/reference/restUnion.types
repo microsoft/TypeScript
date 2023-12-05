@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restUnion.ts ===
+//// [tests/cases/compiler/restUnion.ts] ////
+
+=== restUnion.ts ===
 var union: { a: number, c: boolean } | { a: string, b: string };
 >union : { a: number; c: boolean; } | { a: string; b: string; }
 >a : number
@@ -33,7 +35,6 @@ var {n, ...rest2 } = undefinedUnion;
 var nullUnion: { n: number } | null;
 >nullUnion : { n: number; }
 >n : number
->null : null
 
 var rest3: {};
 >rest3 : {}

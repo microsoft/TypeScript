@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts] ////
+
 //// [ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts]
 module A {
 

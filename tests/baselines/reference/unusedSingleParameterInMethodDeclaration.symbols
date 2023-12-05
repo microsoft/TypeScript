@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts ===
+//// [tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts] ////
+
+=== unusedSingleParameterInMethodDeclaration.ts ===
 class Dummy {
 >Dummy : Symbol(Dummy, Decl(unusedSingleParameterInMethodDeclaration.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/isLiteral2.ts ===
+//// [tests/cases/compiler/isLiteral2.ts] ////
+
+=== isLiteral2.ts ===
 var x: number = 02343
 >x : Symbol(x, Decl(isLiteral2.ts, 0, 3))
 

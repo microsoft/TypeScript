@@ -1,7 +1,7 @@
-tests/cases/compiler/spyComparisonChecking.ts(20,32): error TS2339: Property 'returnValue' does not exist on type 'Function'.
+spyComparisonChecking.ts(20,32): error TS2339: Property 'returnValue' does not exist on type 'Function'.
 
 
-==== tests/cases/compiler/spyComparisonChecking.ts (1 errors) ====
+==== spyComparisonChecking.ts (1 errors) ====
     interface Spy {
         (...params: any[]): any;
     

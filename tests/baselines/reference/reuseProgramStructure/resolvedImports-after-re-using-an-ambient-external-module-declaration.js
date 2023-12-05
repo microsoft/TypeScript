@@ -3,12 +3,20 @@ File: /a.ts
 
 
 import * as a from "a";
-resolvedModules: 
-a: {"resolvedFileName":"/a.ts","extension":".ts","isExternalLibraryImport":false}
-resolvedTypeReferenceDirectiveNames: undefined
+resolvedModules:
+a: {
+  "resolvedModule": {
+    "resolvedFileName": "/a.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
+}
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
@@ -18,12 +26,20 @@ File: /a.ts
 
 
 import * as aa from "a";
-resolvedModules: 
-a: {"resolvedFileName":"/a.ts","extension":".ts","isExternalLibraryImport":false}
-resolvedTypeReferenceDirectiveNames: undefined
+resolvedModules:
+a: {
+  "resolvedModule": {
+    "resolvedFileName": "/a.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
+}
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 

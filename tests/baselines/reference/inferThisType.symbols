@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/inferThisType.ts ===
+//// [tests/cases/conformance/types/thisType/inferThisType.ts] ////
+
+=== inferThisType.ts ===
 declare function f<T>(g: (this: T) => void): T
 >f : Symbol(f, Decl(inferThisType.ts, 0, 0))
 >T : Symbol(T, Decl(inferThisType.ts, 0, 19))

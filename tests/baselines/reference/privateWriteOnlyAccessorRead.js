@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateWriteOnlyAccessorRead.ts] ////
+
 //// [privateWriteOnlyAccessorRead.ts]
 class Test {
   set #value(v: { foo: { bar: number } }) {}
@@ -72,9 +74,7 @@ class Test {
         (_a = this, { o: ({ set value(_e) { __classPrivateFieldSet(_a, _Test_instances, _e, "a", _Test_value_set); } }).value } = { o: { foo } }); //ok
         (_b = this, ({ set value(_e) { __classPrivateFieldSet(_b, _Test_instances, _e, "a", _Test_value_set); } }).value = __rest({ foo }, [])); //ok
         ({ foo: __classPrivateFieldGet(this, _Test_instances, "a").foo } = { foo }); //error
-        ({
-            foo: Object.assign({}, __classPrivateFieldGet(this, _Test_instances, "a").foo),
-        } = { foo }); //error
+        (__classPrivateFieldGet(this, _Test_instances, "a").foo = __rest({ foo }.foo, [])); //error
         let r = { o: __classPrivateFieldGet(this, _Test_instances, "a") }; //error
         _c = this, _d = this, [({ set value(_e) { __classPrivateFieldSet(_c, _Test_instances, _e, "a", _Test_valueOne_set); } }).value, ...({ set value(_e) { __classPrivateFieldSet(_d, _Test_instances, _e, "a", _Test_valueRest_set); } }).value] = [1, 2, 3];
         let arr = [

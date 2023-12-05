@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsDottedModuleName.ts ===
+//// [tests/cases/compiler/commentsDottedModuleName.ts] ////
+
+=== commentsDottedModuleName.ts ===
 /** this is multi declare module*/
 export module outerModule.InnerModule {
 >outerModule : Symbol(outerModule, Decl(commentsDottedModuleName.ts, 0, 0))

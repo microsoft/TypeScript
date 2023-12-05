@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/Symbols/symbolType4.ts(2,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/es6/Symbols/symbolType4.ts(3,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+symbolType4.ts(2,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+symbolType4.ts(3,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolType4.ts (2 errors) ====
+==== symbolType4.ts (2 errors) ====
     var s = Symbol.for("postfix");
     s++;
     ~

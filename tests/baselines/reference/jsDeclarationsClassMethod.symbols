@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassMethod.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassMethod.ts] ////
+
+=== jsDeclarationsClassMethod.js ===
 function C1() {
 >C1 : Symbol(C1, Decl(jsDeclarationsClassMethod.js, 0, 0), Decl(jsDeclarationsClassMethod.js, 20, 1))
 

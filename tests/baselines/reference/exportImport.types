@@ -1,4 +1,6 @@
-=== tests/cases/compiler/consumer.ts ===
+//// [tests/cases/compiler/exportImport.ts] ////
+
+=== consumer.ts ===
 import e = require('./exporter');
 >e : typeof e
 
@@ -12,7 +14,7 @@ export function w(): e.w { // Should be OK
 >e : typeof e
 >w : typeof e.w
 }
-=== tests/cases/compiler/w1.ts ===
+=== w1.ts ===
 export = Widget1
 >Widget1 : Widget1
 
@@ -21,7 +23,7 @@ class Widget1 { name = 'one'; }
 >name : string
 >'one' : "one"
 
-=== tests/cases/compiler/exporter.ts ===
+=== exporter.ts ===
 export import w = require('./w1');
 >w : typeof w
 

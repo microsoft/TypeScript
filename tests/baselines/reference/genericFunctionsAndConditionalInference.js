@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericFunctionsAndConditionalInference.ts] ////
+
 //// [genericFunctionsAndConditionalInference.ts]
 type Boxified<T> = { [P in keyof T]: { value: T[P]} };
 

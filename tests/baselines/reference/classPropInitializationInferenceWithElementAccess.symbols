@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classPropInitializationInferenceWithElementAccess.ts ===
+//// [tests/cases/compiler/classPropInitializationInferenceWithElementAccess.ts] ////
+
+=== classPropInitializationInferenceWithElementAccess.ts ===
 // repro #49339
 export class Cls {
 >Cls : Symbol(Cls, Decl(classPropInitializationInferenceWithElementAccess.ts, 0, 0))

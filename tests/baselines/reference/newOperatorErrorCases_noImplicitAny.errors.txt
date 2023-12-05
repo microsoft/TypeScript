@@ -1,9 +1,9 @@
-tests/cases/conformance/expressions/newOperator/newOperatorErrorCases_noImplicitAny.ts(2,1): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
-tests/cases/conformance/expressions/newOperator/newOperatorErrorCases_noImplicitAny.ts(5,1): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
-tests/cases/conformance/expressions/newOperator/newOperatorErrorCases_noImplicitAny.ts(8,1): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+newOperatorErrorCases_noImplicitAny.ts(2,1): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+newOperatorErrorCases_noImplicitAny.ts(5,1): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+newOperatorErrorCases_noImplicitAny.ts(8,1): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
-==== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases_noImplicitAny.ts (3 errors) ====
+==== newOperatorErrorCases_noImplicitAny.ts (3 errors) ====
     function fnNumber(this: void): number { return 90; }
     new fnNumber(); // Error
     ~~~~~~~~~~~~~~

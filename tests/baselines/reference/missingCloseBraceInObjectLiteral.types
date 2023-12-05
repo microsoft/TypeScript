@@ -1,4 +1,6 @@
-=== tests/cases/compiler/missingCloseBraceInObjectLiteral.ts ===
+//// [tests/cases/compiler/missingCloseBraceInObjectLiteral.ts] ////
+
+=== missingCloseBraceInObjectLiteral.ts ===
 var foo = {
 >foo : { a: string; b: string; c: string; }
 >{    a: 'a',    b: 'b',    c: 'c' : { a: string; b: string; c: string; }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/switchFallThroughs.ts ===
+//// [tests/cases/compiler/switchFallThroughs.ts] ////
+
+=== switchFallThroughs.ts ===
 function R1(index: number) {
 >R1 : (index: number) => string
 >index : number

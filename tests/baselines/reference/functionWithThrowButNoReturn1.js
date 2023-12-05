@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionWithThrowButNoReturn1.ts] ////
+
 //// [functionWithThrowButNoReturn1.ts]
 function fn(): number {
   throw new Error('NYI');

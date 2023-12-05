@@ -1,4 +1,10 @@
 import {
+    createRunner,
+    globalTimeout,
+    RunnerBase,
+    runUnitTests,
+} from "../_namespaces/Harness";
+import {
     ErrorInfo,
     ParallelClientMessage,
     ParallelHostMessage,
@@ -9,12 +15,6 @@ import {
     TestInfo,
     UnitTestTask,
 } from "../_namespaces/Harness.Parallel";
-import {
-    createRunner,
-    globalTimeout,
-    RunnerBase,
-    runUnitTests,
-} from "../_namespaces/Harness";
 
 export function start() {
     function hookUncaughtExceptions() {
@@ -56,14 +56,14 @@ export function start() {
      */
     function Timeout<T extends typeof Mocha.Runnable>(base: T) {
         return class extends (base as typeof Mocha.Runnable) {
-            resetTimeout() {
+            override resetTimeout() {
                 this.clearTimeout();
                 if (this.timeout() > 0) {
                     sendMessage({ type: "timeout", payload: { duration: this.timeout() || 1e9 } });
                     this.timer = true;
                 }
             }
-            clearTimeout() {
+            override clearTimeout() {
                 if (this.timer) {
                     sendMessage({ type: "timeout", payload: { duration: "reset" } });
                     this.timer = false;
@@ -77,7 +77,7 @@ export function start() {
      */
     function Clone<T extends typeof Mocha.Suite | typeof Mocha.Test>(base: T) {
         return class extends (base as new (...args: any[]) => { clone(): any; }) {
-            clone() {
+            override clone() {
                 const cloned = super.clone();
                 Object.setPrototypeOf(cloned, this.constructor.prototype);
                 return cloned;
@@ -89,7 +89,7 @@ export function start() {
      * A `Mocha.Suite` subclass to support parallel test execution in a worker.
      */
     class Suite extends mixin(Mocha.Suite, Clone) {
-        _createHook(title: string, fn?: Mocha.Func | Mocha.AsyncFunc) {
+        override _createHook(title: string, fn?: Mocha.Func | Mocha.AsyncFunc) {
             const hook = super._createHook(title, fn);
             Object.setPrototypeOf(hook, Hook.prototype);
             return hook;
@@ -252,10 +252,14 @@ export function start() {
      */
     function validateHostMessage(message: ParallelHostMessage) {
         switch (message.type) {
-            case "test": return validateTest(message.payload);
-            case "batch": return validateBatch(message.payload);
-            case "close": return true;
-            default: return false;
+            case "test":
+                return validateTest(message.payload);
+            case "batch":
+                return validateBatch(message.payload);
+            case "close":
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -280,9 +284,12 @@ export function start() {
         }
 
         switch (message.type) {
-            case "test": return processTest(message.payload, /*last*/ true);
-            case "batch": return processBatch(message.payload);
-            case "close": return process.exit(0);
+            case "test":
+                return processTest(message.payload, /*last*/ true);
+            case "batch":
+                return processBatch(message.payload);
+            case "close":
+                return process.exit(0);
         }
     }
 

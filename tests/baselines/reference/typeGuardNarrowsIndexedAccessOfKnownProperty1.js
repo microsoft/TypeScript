@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty1.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty1.ts]
 interface Square {
     ["dash-ok"]: "square";
@@ -82,7 +84,7 @@ export function g(pair: [number, string?]): string {
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.g = void 0;
 function area(s) {
     switch (s['dash-ok']) {

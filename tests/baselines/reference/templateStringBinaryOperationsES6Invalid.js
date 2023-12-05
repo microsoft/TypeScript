@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/templateStringBinaryOperationsES6Invalid.ts] ////
+
 //// [templateStringBinaryOperationsES6Invalid.ts]
 var a = 1 - `${ 3 }`;
 var b = 1 - `2${ 3 }`;

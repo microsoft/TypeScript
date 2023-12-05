@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/commonJsImportBindingElementNarrowType.ts] ////
+
 === /bar.js ===
 const { a } = require("./foo");
 >a : Symbol(a, Decl(bar.js, 0, 7))

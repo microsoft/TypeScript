@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.ts ===
+//// [tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.ts] ////
+
+=== mappedTypeWithAsClauseAndLateBoundProperty2.ts ===
 export const thing = (null as any as { [K in keyof number[] as Exclude<K, "length">]: (number[])[K] });
 >thing : Symbol(thing, Decl(mappedTypeWithAsClauseAndLateBoundProperty2.ts, 0, 12))
 >K : Symbol(K, Decl(mappedTypeWithAsClauseAndLateBoundProperty2.ts, 0, 40))

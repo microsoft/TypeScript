@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts ===
+//// [tests/cases/conformance/expressions/propertyAccess/propertyAccessNumericLiterals.ts] ////
+
+=== propertyAccessNumericLiterals.ts ===
 0xffffffff.toString();
 >0xffffffff.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
@@ -21,5 +23,33 @@
 
 000.toString();
 >000.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+08.8e5.toString();
+>08.8e5.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+0_8.8e5.toString();
+>0_8.8e5.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+8.8e5.toString();
+>8.8e5.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+088e4.toString();
+>088e4.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+88_e4.toString();
+>88_e4.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+88e4.toString();
+>88e4.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+8_8e4.toString();
+>8_8e4.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 

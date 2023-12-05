@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts ===
+//// [tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts] ////
+
+=== constructorWithIncompleteTypeAnnotation.ts ===
 declare module "fs" {
 >"fs" : Symbol("fs", Decl(constructorWithIncompleteTypeAnnotation.ts, 0, 0))
 

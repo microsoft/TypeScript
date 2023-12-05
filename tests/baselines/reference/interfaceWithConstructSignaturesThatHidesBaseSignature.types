@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithConstructSignaturesThatHidesBaseSignature.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithConstructSignaturesThatHidesBaseSignature.ts] ////
+
+=== interfaceWithConstructSignaturesThatHidesBaseSignature.ts ===
 interface Foo {
     new (): { a: number };
 >a : number

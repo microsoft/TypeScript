@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inOperator.ts ===
+//// [tests/cases/compiler/inOperator.ts] ////
+
+=== inOperator.ts ===
 var a=[];
 >a : any[]
 >[] : undefined[]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/staticMemberExportAccess.ts] ////
+
 //// [staticMemberExportAccess.ts]
 class Sammy {
    foo() { return "hi"; }

@@ -1,3 +1,34 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts ===
+// import a1 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
+//        ^^
+// | ----------------------------------------------------------------------
+// | import a1 = require("./quickInfoDisplayPartsExternalModuleAlias_file0")
+// | ----------------------------------------------------------------------
+//                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | module a1
+// | ----------------------------------------------------------------------
+// new a1.m1.c();
+//     ^^
+// | ----------------------------------------------------------------------
+// | import a1 = require("./quickInfoDisplayPartsExternalModuleAlias_file0")
+// | ----------------------------------------------------------------------
+// export import a2 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
+//               ^^
+// | ----------------------------------------------------------------------
+// | import a2 = require("./quickInfoDisplayPartsExternalModuleAlias_file0")
+// | ----------------------------------------------------------------------
+//                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | module a1
+// | ----------------------------------------------------------------------
+// new a2.m1.c();
+//     ^^
+// | ----------------------------------------------------------------------
+// | import a2 = require("./quickInfoDisplayPartsExternalModuleAlias_file0")
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +36,7 @@
       "position": 7,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "",
       "textSpan": {
@@ -63,7 +94,7 @@
       "position": 20,
       "name": "mod1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "module",
       "kindModifiers": "",
       "textSpan": {
@@ -93,7 +124,7 @@
       "position": 77,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "",
       "textSpan": {
@@ -151,7 +182,7 @@
       "position": 102,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {
@@ -209,7 +240,7 @@
       "position": 115,
       "name": "mod2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "module",
       "kindModifiers": "",
       "textSpan": {
@@ -239,7 +270,7 @@
       "position": 172,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {

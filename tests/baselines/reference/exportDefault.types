@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/exportDefault.ts] ////
+
 === /a.ts ===
 export class A {}
 >A : A

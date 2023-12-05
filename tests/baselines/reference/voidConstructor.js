@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidConstructor.ts] ////
+
 //// [voidConstructor.ts]
 var foo:{ new ( ): void; }
 

@@ -1,9 +1,11 @@
-=== tests/cases/conformance/jsdoc/mod1.js ===
+//// [tests/cases/conformance/jsdoc/typedefCrossModule5.ts] ////
+
+=== mod1.js ===
 /** @typedef {number} Foo */
 class Bar {}
 >Bar : Bar
 
-=== tests/cases/conformance/jsdoc/mod2.js ===
+=== mod2.js ===
 class Foo { } // should error
 >Foo : Foo
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/vardecl.ts ===
+//// [tests/cases/compiler/vardecl.ts] ////
+
+=== vardecl.ts ===
 var simpleVar;
 >simpleVar : Symbol(simpleVar, Decl(vardecl.ts, 0, 3))
 

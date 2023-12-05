@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorsNotAllowedInES3.ts ===
+//// [tests/cases/compiler/accessorsNotAllowedInES3.ts] ////
+
+=== accessorsNotAllowedInES3.ts ===
 class C {
 >C : Symbol(C, Decl(accessorsNotAllowedInES3.ts, 0, 0))
 

@@ -1,0 +1,87 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait.ts ===
+// /*HIGHLIGHTS*/[|{| kind: "none" |}async|] function f() {
+//  [|{| kind: "none" |}await|] 100;
+//  [|{| kind: "none" |}await|] [|{| kind: "none" |}await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return [|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait.ts ===
+// [|{| kind: "none" |}async|] function f() {
+//  /*HIGHLIGHTS*/[|{| kind: "none" |}await|] 100;
+//  [|{| kind: "none" |}await|] [|{| kind: "none" |}await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return [|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait.ts ===
+// [|{| kind: "none" |}async|] function f() {
+//  [|{| kind: "none" |}await|] 100;
+//  /*HIGHLIGHTS*/[|{| kind: "none" |}await|] [|{| kind: "none" |}await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return [|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait.ts ===
+// [|{| kind: "none" |}async|] function f() {
+//  [|{| kind: "none" |}await|] 100;
+//  [|{| kind: "none" |}await|] /*HIGHLIGHTS*/[|{| kind: "none" |}await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return [|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }
+// --- (line: 13) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesAsyncAwait.ts ===
+// [|{| kind: "none" |}async|] function f() {
+//  [|{| kind: "none" |}await|] 100;
+//  [|{| kind: "none" |}await|] [|{| kind: "none" |}await|] 200;
+// class Foo {
+//     async memberFunction() {
+//         await 1;
+//     }
+// }
+//  return /*HIGHLIGHTS*/[|{| kind: "none" |}await|] async function () {
+//    await 300;
+//  }
+// }
+// --- (line: 13) skipped ---

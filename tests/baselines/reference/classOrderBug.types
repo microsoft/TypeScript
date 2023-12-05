@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classOrderBug.ts ===
+//// [tests/cases/compiler/classOrderBug.ts] ////
+
+=== classOrderBug.ts ===
 class bar {
 >bar : bar
 

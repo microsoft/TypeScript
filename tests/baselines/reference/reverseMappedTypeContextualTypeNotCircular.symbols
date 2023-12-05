@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts ===
+//// [tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts] ////
+
+=== reverseMappedTypeContextualTypeNotCircular.ts ===
 type Selector<S, R> = (state: S) => R;
 >Selector : Symbol(Selector, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 0))
 >S : Symbol(S, Decl(reverseMappedTypeContextualTypeNotCircular.ts, 0, 14))

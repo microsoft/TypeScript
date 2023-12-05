@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/superPropertyInConstructorBeforeSuperCall.ts] ////
+
 //// [superPropertyInConstructorBeforeSuperCall.ts]
 class B {
     constructor(x?: string) {}

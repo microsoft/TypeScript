@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx] ////
+
+=== checkJsxChildrenCanBeTupleType.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from 'react'

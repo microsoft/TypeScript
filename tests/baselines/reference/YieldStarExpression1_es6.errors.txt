@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/yieldExpressions/YieldStarExpression1_es6.ts(1,1): error TS2304: Cannot find name 'yield'.
-tests/cases/conformance/es6/yieldExpressions/YieldStarExpression1_es6.ts(1,9): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+YieldStarExpression1_es6.ts(1,1): error TS2304: Cannot find name 'yield'.
+YieldStarExpression1_es6.ts(1,9): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/es6/yieldExpressions/YieldStarExpression1_es6.ts (2 errors) ====
+==== YieldStarExpression1_es6.ts (2 errors) ====
     yield * [];
     ~~~~~
 !!! error TS2304: Cannot find name 'yield'.

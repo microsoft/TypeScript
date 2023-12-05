@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesFunction.ts] ////
+
 //// [augmentedTypesFunction.ts]
 // function then var
 function y1() { } // error

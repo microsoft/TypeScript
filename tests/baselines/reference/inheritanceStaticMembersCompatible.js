@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceStaticMembersCompatible.ts] ////
+
 //// [inheritanceStaticMembersCompatible.ts]
 class a {
     static x: a;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern3.ts ===
+//// [tests/cases/conformance/es6/destructuring/restElementWithAssignmentPattern3.ts] ////
+
+=== restElementWithAssignmentPattern3.ts ===
 var a: string, b: number;
 >a : Symbol(a, Decl(restElementWithAssignmentPattern3.ts, 0, 3))
 >b : Symbol(b, Decl(restElementWithAssignmentPattern3.ts, 0, 14))

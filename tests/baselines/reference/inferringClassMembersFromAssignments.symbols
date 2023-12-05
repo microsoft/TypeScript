@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments.ts] ////
+
+=== a.js ===
 class C {
 >C : Symbol(C, Decl(a.js, 0, 0))
 
@@ -257,7 +259,7 @@ class C {
     }
 }
 
-=== tests/cases/conformance/salsa/b.ts ===
+=== b.ts ===
 var c = new C();
 >c : Symbol(c, Decl(b.ts, 0, 3))
 >C : Symbol(C, Decl(a.js, 0, 0))

@@ -1,13 +1,13 @@
-tests/cases/compiler/conditionalExpressionNewLine8.ts(1,9): error TS2304: Cannot find name 'a'.
-tests/cases/compiler/conditionalExpressionNewLine8.ts(2,5): error TS2304: Cannot find name 'b'.
-tests/cases/compiler/conditionalExpressionNewLine8.ts(2,9): error TS2304: Cannot find name 'd'.
-tests/cases/compiler/conditionalExpressionNewLine8.ts(2,13): error TS2304: Cannot find name 'e'.
-tests/cases/compiler/conditionalExpressionNewLine8.ts(3,5): error TS2304: Cannot find name 'c'.
-tests/cases/compiler/conditionalExpressionNewLine8.ts(3,9): error TS2304: Cannot find name 'f'.
-tests/cases/compiler/conditionalExpressionNewLine8.ts(3,13): error TS2304: Cannot find name 'g'.
+conditionalExpressionNewLine8.ts(1,9): error TS2304: Cannot find name 'a'.
+conditionalExpressionNewLine8.ts(2,5): error TS2304: Cannot find name 'b'.
+conditionalExpressionNewLine8.ts(2,9): error TS2304: Cannot find name 'd'.
+conditionalExpressionNewLine8.ts(2,13): error TS2304: Cannot find name 'e'.
+conditionalExpressionNewLine8.ts(3,5): error TS2304: Cannot find name 'c'.
+conditionalExpressionNewLine8.ts(3,9): error TS2304: Cannot find name 'f'.
+conditionalExpressionNewLine8.ts(3,13): error TS2304: Cannot find name 'g'.
 
 
-==== tests/cases/compiler/conditionalExpressionNewLine8.ts (7 errors) ====
+==== conditionalExpressionNewLine8.ts (7 errors) ====
     var v = a 
             ~
 !!! error TS2304: Cannot find name 'a'.

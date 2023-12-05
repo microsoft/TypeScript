@@ -1,0 +1,99 @@
+//// [tests/cases/conformance/decorators/legacyDecorators-contextualTypes.ts] ////
+
+=== legacyDecorators-contextualTypes.ts ===
+@((t) => { })
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(legacyDecorators-contextualTypes.ts, 0, 0))
+
+    constructor(@((t, k, i) => {}) p: any) {}
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 2, 19))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 2, 21))
+>i : Symbol(i, Decl(legacyDecorators-contextualTypes.ts, 2, 24))
+>p : Symbol(p, Decl(legacyDecorators-contextualTypes.ts, 2, 16))
+
+    @((t, k, d) => { })
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 4, 7))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 4, 9))
+>d : Symbol(d, Decl(legacyDecorators-contextualTypes.ts, 4, 12))
+
+    static f() {}
+>f : Symbol(C.f, Decl(legacyDecorators-contextualTypes.ts, 2, 45))
+
+    @((t, k, d) => { })
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 7, 7))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 7, 9))
+>d : Symbol(d, Decl(legacyDecorators-contextualTypes.ts, 7, 12))
+
+    static get x() { return 1; }
+>x : Symbol(C.x, Decl(legacyDecorators-contextualTypes.ts, 5, 17), Decl(legacyDecorators-contextualTypes.ts, 8, 32))
+
+    static set x(value) { }
+>x : Symbol(C.x, Decl(legacyDecorators-contextualTypes.ts, 5, 17), Decl(legacyDecorators-contextualTypes.ts, 8, 32))
+>value : Symbol(value, Decl(legacyDecorators-contextualTypes.ts, 9, 17))
+
+    @((t, k, d) => { })
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 11, 7))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 11, 9))
+>d : Symbol(d, Decl(legacyDecorators-contextualTypes.ts, 11, 12))
+
+    static accessor y = 1;
+>y : Symbol(C.y, Decl(legacyDecorators-contextualTypes.ts, 9, 27))
+
+    @((t, k) => { })
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 14, 7))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 14, 9))
+
+    static z = 1;
+>z : Symbol(C.z, Decl(legacyDecorators-contextualTypes.ts, 12, 26))
+
+    @((t, k, d) => { })
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 17, 7))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 17, 9))
+>d : Symbol(d, Decl(legacyDecorators-contextualTypes.ts, 17, 12))
+
+    g() {}
+>g : Symbol(C.g, Decl(legacyDecorators-contextualTypes.ts, 15, 17))
+
+    @((t, k, d) => { })
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 20, 7))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 20, 9))
+>d : Symbol(d, Decl(legacyDecorators-contextualTypes.ts, 20, 12))
+
+    get a() { return 1; }
+>a : Symbol(C.a, Decl(legacyDecorators-contextualTypes.ts, 18, 10), Decl(legacyDecorators-contextualTypes.ts, 21, 25))
+
+    set a(value) { }
+>a : Symbol(C.a, Decl(legacyDecorators-contextualTypes.ts, 18, 10), Decl(legacyDecorators-contextualTypes.ts, 21, 25))
+>value : Symbol(value, Decl(legacyDecorators-contextualTypes.ts, 22, 10))
+
+    @((t, k, d) => { })
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 24, 7))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 24, 9))
+>d : Symbol(d, Decl(legacyDecorators-contextualTypes.ts, 24, 12))
+
+    accessor b = 1;
+>b : Symbol(C.b, Decl(legacyDecorators-contextualTypes.ts, 22, 20))
+
+    @((t, k) => { })
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 27, 7))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 27, 9))
+
+    c = 1;
+>c : Symbol(C.c, Decl(legacyDecorators-contextualTypes.ts, 25, 19))
+
+    static h(@((t, k, i) => {}) p: any) {}
+>h : Symbol(C.h, Decl(legacyDecorators-contextualTypes.ts, 28, 10))
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 30, 16))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 30, 18))
+>i : Symbol(i, Decl(legacyDecorators-contextualTypes.ts, 30, 21))
+>p : Symbol(p, Decl(legacyDecorators-contextualTypes.ts, 30, 13))
+
+    h(@((t, k, i) => {}) p: any) {}
+>h : Symbol(C.h, Decl(legacyDecorators-contextualTypes.ts, 30, 42))
+>t : Symbol(t, Decl(legacyDecorators-contextualTypes.ts, 31, 9))
+>k : Symbol(k, Decl(legacyDecorators-contextualTypes.ts, 31, 11))
+>i : Symbol(i, Decl(legacyDecorators-contextualTypes.ts, 31, 14))
+>p : Symbol(p, Decl(legacyDecorators-contextualTypes.ts, 31, 6))
+}

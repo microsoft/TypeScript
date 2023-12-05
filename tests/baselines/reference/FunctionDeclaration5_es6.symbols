@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts ===
+//// [tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration5_es6.ts] ////
+
+=== FunctionDeclaration5_es6.ts ===
 function*foo(yield) {
 >foo : Symbol(foo, Decl(FunctionDeclaration5_es6.ts, 0, 0))
 >yield : Symbol(yield, Decl(FunctionDeclaration5_es6.ts, 0, 13))

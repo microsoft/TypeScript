@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts] ////
+
 //// [objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts]
 // Types with infinitely expanding recursive types are type checked nominally
 

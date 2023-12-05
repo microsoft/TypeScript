@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticMethodReferencingTypeArgument1.ts ===
+//// [tests/cases/compiler/staticMethodReferencingTypeArgument1.ts] ////
+
+=== staticMethodReferencingTypeArgument1.ts ===
 module Editor {
 >Editor : Symbol(Editor, Decl(staticMethodReferencingTypeArgument1.ts, 0, 0))
 

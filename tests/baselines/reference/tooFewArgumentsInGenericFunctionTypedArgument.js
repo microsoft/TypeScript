@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tooFewArgumentsInGenericFunctionTypedArgument.ts] ////
+
 //// [tooFewArgumentsInGenericFunctionTypedArgument.ts]
 interface Collection<T, U> {
     length: number;

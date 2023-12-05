@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/shorthand-property-es6-amd.ts] ////
+
 //// [test.ts]
 import {foo} from './foo';
 const baz = 42;

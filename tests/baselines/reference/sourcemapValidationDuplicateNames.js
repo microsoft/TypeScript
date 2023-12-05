@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourcemapValidationDuplicateNames.ts] ////
+
 //// [sourcemapValidationDuplicateNames.ts]
 module m1 {
     var x = 10;

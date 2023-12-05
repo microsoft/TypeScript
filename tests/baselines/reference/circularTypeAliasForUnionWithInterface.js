@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeAliases/circularTypeAliasForUnionWithInterface.ts] ////
+
 //// [circularTypeAliasForUnionWithInterface.ts]
 var v0: T0;
 type T0 = string | I0;

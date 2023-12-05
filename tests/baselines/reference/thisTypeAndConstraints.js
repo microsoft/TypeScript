@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeAndConstraints.ts] ////
+
 //// [thisTypeAndConstraints.ts]
 class A {
     self() {

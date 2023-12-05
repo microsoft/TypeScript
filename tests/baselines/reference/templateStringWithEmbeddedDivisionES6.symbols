@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/templates/templateStringWithEmbeddedDivisionES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringWithEmbeddedDivisionES6.ts] ////
+
+=== templateStringWithEmbeddedDivisionES6.ts ===
 var x = `abc${ 1 / 1 }def`;
 >x : Symbol(x, Decl(templateStringWithEmbeddedDivisionES6.ts, 0, 3))
 

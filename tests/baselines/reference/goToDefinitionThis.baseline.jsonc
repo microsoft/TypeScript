@@ -1,0 +1,72 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionThis.ts ===
+// function f(<|[|this|]: number|>) {
+//     return /*GOTO DEF*/this;
+// }
+// class C {
+//     constructor() { return this; }
+//     get self(this: number) { return this; }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "this",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionThis.ts ===
+// function f(this: number) {
+//     return this;
+// }
+// <|class [|C|] {
+//     constructor() { return /*GOTO DEF*/this; }
+//     get self(this: number) { return this; }
+// }|>
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "C",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionThis.ts ===
+// function f(this: number) {
+//     return this;
+// }
+// class C {
+//     constructor() { return this; }
+//     get self(<|[|this|]: number|>) { return /*GOTO DEF*/this; }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "parameter",
+    "name": "this",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

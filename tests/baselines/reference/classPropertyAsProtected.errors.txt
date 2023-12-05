@@ -1,35 +1,23 @@
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(3,19): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(4,19): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(8,26): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(9,26): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(15,3): error TS2445: Property 'x' is protected and only accessible within class 'C' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(16,3): error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(17,3): error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(18,3): error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(20,3): error TS2445: Property 'a' is protected and only accessible within class 'C' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(21,3): error TS2445: Property 'b' is protected and only accessible within class 'C' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(22,3): error TS2445: Property 'b' is protected and only accessible within class 'C' and its subclasses.
-tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts(23,3): error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(15,3): error TS2445: Property 'x' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(16,3): error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(17,3): error TS2445: Property 'y' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(18,3): error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(20,3): error TS2445: Property 'a' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(21,3): error TS2445: Property 'b' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(22,3): error TS2445: Property 'b' is protected and only accessible within class 'C' and its subclasses.
+classPropertyAsProtected.ts(23,3): error TS2445: Property 'foo' is protected and only accessible within class 'C' and its subclasses.
 
 
-==== tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts (12 errors) ====
+==== classPropertyAsProtected.ts (8 errors) ====
     class C {
         protected x: string;
         protected get y() { return null; }
-                      ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         protected set y(x) { }
-                      ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         protected foo() { }
     
         protected static a: string;
         protected static get b() { return null; }
-                             ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         protected static set b(x) { }
-                             ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         protected static foo() { }
     }
     

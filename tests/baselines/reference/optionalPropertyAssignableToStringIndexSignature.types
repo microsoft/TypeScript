@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/optionalPropertyAssignableToStringIndexSignature.ts] ////
+
+=== optionalPropertyAssignableToStringIndexSignature.ts ===
 declare let optionalProperties: { k1?: string };
 >optionalProperties : { k1?: string | undefined; }
 >k1 : string | undefined

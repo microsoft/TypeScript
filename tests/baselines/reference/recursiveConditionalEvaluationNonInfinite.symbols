@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveConditionalEvaluationNonInfinite.ts ===
+//// [tests/cases/compiler/recursiveConditionalEvaluationNonInfinite.ts] ////
+
+=== recursiveConditionalEvaluationNonInfinite.ts ===
 type Test<T> = [T] extends [any[]] ? { array: Test<T[0]> } : { notArray: T };
 >Test : Symbol(Test, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveConditionalEvaluationNonInfinite.ts, 0, 10))

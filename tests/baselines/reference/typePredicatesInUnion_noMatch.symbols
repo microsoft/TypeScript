@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicatesInUnion_noMatch.ts ===
+//// [tests/cases/compiler/typePredicatesInUnion_noMatch.ts] ////
+
+=== typePredicatesInUnion_noMatch.ts ===
 interface A {
 >A : Symbol(A, Decl(typePredicatesInUnion_noMatch.ts, 0, 0))
 

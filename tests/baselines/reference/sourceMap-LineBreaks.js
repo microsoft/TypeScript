@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMap-LineBreaks.ts] ////
+
 //// [sourceMap-LineBreaks.ts]
 var endsWithlineSeparator = 10;  var endsWithParagraphSeparator = 10;  var endsWithNextLine = 1;var endsWithLineFeed = 1;
 var endsWithCarriageReturnLineFeed = 1;

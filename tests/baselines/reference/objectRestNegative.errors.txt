@@ -1,14 +1,14 @@
-tests/cases/conformance/types/rest/objectRestNegative.ts(2,10): error TS2462: A rest element must be last in a destructuring pattern.
-tests/cases/conformance/types/rest/objectRestNegative.ts(6,10): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: string; }'.
+objectRestNegative.ts(2,10): error TS2462: A rest element must be last in a destructuring pattern.
+objectRestNegative.ts(6,10): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: string; }'.
   Types of property 'a' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/rest/objectRestNegative.ts(9,31): error TS2462: A rest element must be last in a destructuring pattern.
-tests/cases/conformance/types/rest/objectRestNegative.ts(11,30): error TS7008: Member 'x' implicitly has an 'any' type.
-tests/cases/conformance/types/rest/objectRestNegative.ts(11,33): error TS7008: Member 'y' implicitly has an 'any' type.
-tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: The target of an object rest assignment must be a variable or a property access.
+objectRestNegative.ts(9,31): error TS2462: A rest element must be last in a destructuring pattern.
+objectRestNegative.ts(11,30): error TS7008: Member 'x' implicitly has an 'any' type.
+objectRestNegative.ts(11,33): error TS7008: Member 'y' implicitly has an 'any' type.
+objectRestNegative.ts(17,9): error TS2701: The target of an object rest assignment must be a variable or a property access.
 
 
-==== tests/cases/conformance/types/rest/objectRestNegative.ts (6 errors) ====
+==== objectRestNegative.ts (6 errors) ====
     let o = { a: 1, b: 'no' };
     var { ...mustBeLast, a } = o;
              ~~~~~~~~~~

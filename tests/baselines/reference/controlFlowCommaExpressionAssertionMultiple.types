@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowCommaExpressionAssertionMultiple.ts ===
+//// [tests/cases/compiler/controlFlowCommaExpressionAssertionMultiple.ts] ////
+
+=== controlFlowCommaExpressionAssertionMultiple.ts ===
 function Narrow<T>(value: any): asserts value is T {}
 >Narrow : <T>(value: any) => asserts value is T
 >value : any

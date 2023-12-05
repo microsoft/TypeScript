@@ -1,7 +1,11 @@
-tests/cases/compiler/optionsOutAndNoModuleGen.ts(1,1): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+  Use 'outFile' instead.
+optionsOutAndNoModuleGen.ts(1,1): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
 
 
-==== tests/cases/compiler/optionsOutAndNoModuleGen.ts (1 errors) ====
+!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+!!! error TS5101:   Use 'outFile' instead.
+==== optionsOutAndNoModuleGen.ts (1 errors) ====
     export var x = 10;
     ~~~~~~~~~~~~~~~~~~
 !!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.

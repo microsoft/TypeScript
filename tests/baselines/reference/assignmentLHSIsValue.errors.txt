@@ -1,45 +1,45 @@
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(6,21): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7,13): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(8,21): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(11,18): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(13,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(19,1): error TS2629: Cannot assign to 'C' because it is a class.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(22,1): error TS2628: Cannot assign to 'E' because it is an enum.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(24,1): error TS2630: Cannot assign to 'foo' because it is a function.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(27,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(28,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(29,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(30,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(31,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(32,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(35,9): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(38,2): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(38,6): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(42,36): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(44,19): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(46,27): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(50,20): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(51,11): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(51,13): error TS1005: ';' expected.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(54,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(57,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(58,2): error TS2631: Cannot assign to 'M' because it is a namespace.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(59,2): error TS2629: Cannot assign to 'C' because it is a class.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(60,2): error TS2628: Cannot assign to 'E' because it is an enum.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(61,2): error TS2630: Cannot assign to 'foo' because it is a function.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(62,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(63,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(64,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(65,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(66,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(67,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(68,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(69,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(70,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(6,21): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(7,13): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(8,21): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(11,18): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(13,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+assignmentLHSIsValue.ts(19,1): error TS2629: Cannot assign to 'C' because it is a class.
+assignmentLHSIsValue.ts(22,1): error TS2628: Cannot assign to 'E' because it is an enum.
+assignmentLHSIsValue.ts(24,1): error TS2630: Cannot assign to 'foo' because it is a function.
+assignmentLHSIsValue.ts(27,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(28,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(29,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(30,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(31,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(32,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(35,9): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
+assignmentLHSIsValue.ts(38,2): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(38,6): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(42,36): error TS1034: 'super' must be followed by an argument list or member access.
+assignmentLHSIsValue.ts(44,19): error TS1034: 'super' must be followed by an argument list or member access.
+assignmentLHSIsValue.ts(46,27): error TS1034: 'super' must be followed by an argument list or member access.
+assignmentLHSIsValue.ts(50,20): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
+assignmentLHSIsValue.ts(51,11): error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
+assignmentLHSIsValue.ts(51,13): error TS1005: ';' expected.
+assignmentLHSIsValue.ts(54,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(57,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(58,2): error TS2631: Cannot assign to 'M' because it is a namespace.
+assignmentLHSIsValue.ts(59,2): error TS2629: Cannot assign to 'C' because it is a class.
+assignmentLHSIsValue.ts(60,2): error TS2628: Cannot assign to 'E' because it is an enum.
+assignmentLHSIsValue.ts(61,2): error TS2630: Cannot assign to 'foo' because it is a function.
+assignmentLHSIsValue.ts(62,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(63,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(64,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(65,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(66,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(67,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(68,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(69,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+assignmentLHSIsValue.ts(70,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts (39 errors) ====
+==== assignmentLHSIsValue.ts (39 errors) ====
     // expected error for all the LHS of assignments
     var value: any;
     
@@ -106,7 +106,7 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7
     // object literals
     { a: 0} = value;
             ~
-!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
     
     // array literals
     ['', ''] = value;
@@ -133,10 +133,10 @@ tests/cases/conformance/expressions/assignmentOperator/assignmentLHSIsValue.ts(7
     // function expression
     function bar() { } = value;
                        ~
-!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
     () => { } = value;
               ~
-!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
+!!! error TS2809: Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the whole assignment in parentheses.
                 ~~~~~
 !!! error TS1005: ';' expected.
     

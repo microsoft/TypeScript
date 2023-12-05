@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/classPropertyAsProtected.ts] ////
+
 //// [classPropertyAsProtected.ts]
 class C {
     protected x: string;

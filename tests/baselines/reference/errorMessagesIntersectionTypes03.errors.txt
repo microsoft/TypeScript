@@ -1,16 +1,16 @@
-tests/cases/compiler/errorMessagesIntersectionTypes03.ts(17,5): error TS2322: Type 'A & B' is not assignable to type 'T'.
+errorMessagesIntersectionTypes03.ts(17,5): error TS2322: Type 'A & B' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'A & B'.
-tests/cases/compiler/errorMessagesIntersectionTypes03.ts(18,5): error TS2322: Type 'A & B' is not assignable to type 'U'.
+errorMessagesIntersectionTypes03.ts(18,5): error TS2322: Type 'A & B' is not assignable to type 'U'.
   'A & B' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'A'.
-tests/cases/compiler/errorMessagesIntersectionTypes03.ts(19,5): error TS2322: Type 'A & B' is not assignable to type 'V'.
+errorMessagesIntersectionTypes03.ts(19,5): error TS2322: Type 'A & B' is not assignable to type 'V'.
   'A & B' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'A'.
-tests/cases/compiler/errorMessagesIntersectionTypes03.ts(22,5): error TS2322: Type 'T & B' is not assignable to type 'U'.
+errorMessagesIntersectionTypes03.ts(22,5): error TS2322: Type 'T & B' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T & B'.
-tests/cases/compiler/errorMessagesIntersectionTypes03.ts(23,5): error TS2322: Type 'T & B' is not assignable to type 'V'.
+errorMessagesIntersectionTypes03.ts(23,5): error TS2322: Type 'T & B' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'T & B'.
 
 
-==== tests/cases/compiler/errorMessagesIntersectionTypes03.ts (5 errors) ====
+==== errorMessagesIntersectionTypes03.ts (5 errors) ====
     interface A {
         a;
     }

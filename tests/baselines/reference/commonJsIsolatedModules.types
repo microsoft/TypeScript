@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/commonJsIsolatedModules.ts] ////
+
+=== index.js ===
 module.exports = {}
 >module.exports = {} : typeof module.exports
 >module.exports : typeof module.exports

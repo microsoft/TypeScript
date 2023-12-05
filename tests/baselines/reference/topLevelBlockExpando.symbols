@@ -1,4 +1,6 @@
-=== tests/cases/compiler/check.ts ===
+//// [tests/cases/compiler/topLevelBlockExpando.ts] ////
+
+=== check.ts ===
 // https://github.com/microsoft/TypeScript/issues/31972
 
 
@@ -40,7 +42,7 @@ interface Person {
 >dice : Symbol(dice, Decl(check.ts, 11, 7))
 }
 
-=== tests/cases/compiler/check.js ===
+=== check.js ===
 // Creates a type { first:string, last: string }
 /**
  * @typedef {Object} Human - creates a new type named 'SpecialType'

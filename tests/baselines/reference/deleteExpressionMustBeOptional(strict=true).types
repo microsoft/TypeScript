@@ -1,4 +1,6 @@
-=== tests/cases/compiler/deleteExpressionMustBeOptional.ts ===
+//// [tests/cases/compiler/deleteExpressionMustBeOptional.ts] ////
+
+=== deleteExpressionMustBeOptional.ts ===
 interface Foo {
     a: number
 >a : number
@@ -8,18 +10,15 @@ interface Foo {
 
     c: number | null
 >c : number | null
->null : null
 
     d?: number
 >d : number | undefined
 
     e: number | undefined | null
 >e : number | null | undefined
->null : null
 
     f?: number | undefined | null
 >f : number | null | undefined
->null : null
 
     g: unknown
 >g : unknown

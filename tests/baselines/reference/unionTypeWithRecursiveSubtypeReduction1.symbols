@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction1.ts ===
+//// [tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction1.ts] ////
+
+=== unionTypeWithRecursiveSubtypeReduction1.ts ===
 class Module {
 >Module : Symbol(Module, Decl(unionTypeWithRecursiveSubtypeReduction1.ts, 0, 0))
 

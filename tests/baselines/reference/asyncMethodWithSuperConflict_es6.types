@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es2017/asyncMethodWithSuperConflict_es6.ts ===
+//// [tests/cases/conformance/async/es2017/asyncMethodWithSuperConflict_es6.ts] ////
+
+=== asyncMethodWithSuperConflict_es6.ts ===
 class A {
 >A : A
 
@@ -20,11 +22,9 @@ class B extends A {
 
         const _super = null;
 >_super : any
->null : null
 
         const _superIndex = null;
 >_superIndex : any
->null : null
 
         // call with property access
         super.x();
@@ -68,11 +68,9 @@ class B extends A {
 
         const _super = null;
 >_super : any
->null : null
 
         const _superIndex = null;
 >_superIndex : any
->null : null
 
         const f = () => {};
 >f : () => void

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/firstMatchRegExpMatchArray.ts] ////
+
 //// [firstMatchRegExpMatchArray.ts]
 const match = ''.match(/ /)
 

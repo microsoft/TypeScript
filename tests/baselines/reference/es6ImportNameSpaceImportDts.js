@@ -10,7 +10,7 @@ import * as nameSpaceBinding2 from "./server"; // unreferenced
 
 //// [server.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 var c = /** @class */ (function () {
     function c() {
@@ -21,7 +21,7 @@ exports.c = c;
 ;
 //// [client.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 var nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.c();

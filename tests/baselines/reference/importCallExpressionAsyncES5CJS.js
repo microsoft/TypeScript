@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/dynamicImport/importCallExpressionAsyncES5CJS.ts] ////
+
 //// [test.ts]
 export async function fn() {
     const req = await import('./test') // ONE

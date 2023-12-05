@@ -1,18 +1,15 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
 // module FindRef4 {
 // 	module MixedStaticsClassTest {
 // 		export class Foo {
-// 			/*FIND ALL REFS*/[|bar|]: Foo;
+// 			/*FIND ALL REFS*/<|[|{| isDefinition: true |}bar|]: Foo;|>
 // 			static bar: Foo;
 // 
 // 			public foo(): void {
-// 			}
-// 			public static foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	function test() {
+// --- (line: 8) skipped ---
+
+// --- (line: 14) skipped ---
 // 		// instance function
 // 		var x = new MixedStaticsClassTest.Foo();
 // 		x.foo();
@@ -20,123 +17,94 @@
 // 
 // 		// static function
 // 		MixedStaticsClassTest.Foo.foo();
-// 		MixedStaticsClassTest.Foo.bar;
-// 	}
-// }
+// --- (line: 22) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "property",
-      "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
-      "textSpan": {
-        "start": 74,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "bar",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 74,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 74,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 74,
-          "length": 9
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 278,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // module FindRef4 {
+  // 	module MixedStaticsClassTest {
+  // 		export class Foo {
+  // 			/*FIND ALL REFS*/<|[|bar|]: Foo;|>
+  // 			static bar: Foo;
+  // 
+  // 			public foo(): void {
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "bar",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
 // module FindRef4 {
 // 	module MixedStaticsClassTest {
 // 		export class Foo {
 // 			bar: Foo;
-// 			/*FIND ALL REFS*/static [|bar|]: Foo;
+// 			/*FIND ALL REFS*/<|static [|{| isDefinition: true |}bar|]: Foo;|>
 // 
 // 			public foo(): void {
 // 			}
-// 			public static foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		// instance function
-// 		var x = new MixedStaticsClassTest.Foo();
-// 		x.foo();
-// 		x.bar;
+// --- (line: 9) skipped ---
+
+// --- (line: 18) skipped ---
 // 
 // 		// static function
 // 		MixedStaticsClassTest.Foo.foo();
@@ -144,119 +112,93 @@
 // 	}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "property",
-      "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
-      "textSpan": {
-        "start": 94,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "bar",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 87,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 87,
-          "length": 16
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 368,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // module FindRef4 {
+  // 	module MixedStaticsClassTest {
+  // 		export class Foo {
+  // 			bar: Foo;
+  // 			/*FIND ALL REFS*/<|static [|bar|]: Foo;|>
+  // 
+  // 			public foo(): void {
+  // 			}
+  // --- (line: 9) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "bar",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
 // module FindRef4 {
 // 	module MixedStaticsClassTest {
 // 		export class Foo {
 // 			bar: Foo;
-// 			static /*FIND ALL REFS*/[|bar|]: Foo;
+// 			<|static /*FIND ALL REFS*/[|{| isDefinition: true |}bar|]: Foo;|>
 // 
 // 			public foo(): void {
 // 			}
-// 			public static foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		// instance function
-// 		var x = new MixedStaticsClassTest.Foo();
-// 		x.foo();
-// 		x.bar;
+// --- (line: 9) skipped ---
+
+// --- (line: 18) skipped ---
 // 
 // 		// static function
 // 		MixedStaticsClassTest.Foo.foo();
@@ -264,109 +206,88 @@
 // 	}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "property",
-      "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
-      "textSpan": {
-        "start": 94,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "bar",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 87,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 87,
-          "length": 16
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 368,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // module FindRef4 {
+  // 	module MixedStaticsClassTest {
+  // 		export class Foo {
+  // 			bar: Foo;
+  // 			<|static /*FIND ALL REFS*/[|bar|]: Foo;|>
+  // 
+  // 			public foo(): void {
+  // 			}
+  // --- (line: 9) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "bar",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
-// 		export class Foo {
+// --- (line: 3) skipped ---
 // 			bar: Foo;
 // 			static bar: Foo;
 // 
-// 			/*FIND ALL REFS*/public [|foo|](): void {
-// 			}
+// 			/*FIND ALL REFS*/<|public [|{| isWriteAccess: true, isDefinition: true |}foo|](): void {
+// 			}|>
 // 			public static foo(): void {
 // 			}
 // 		}
@@ -379,122 +300,99 @@
 // 		x.bar;
 // 
 // 		// static function
-// 		MixedStaticsClassTest.Foo.foo();
-// 		MixedStaticsClassTest.Foo.bar;
-// 	}
-// }
+// --- (line: 21) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "method",
-      "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
-      "textSpan": {
-        "start": 115,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 108,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 115,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 108,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // --- (line: 3) skipped ---
+  // 			bar: Foo;
+  // 			static bar: Foo;
+  // 
+  // 			/*FIND ALL REFS*/<|public [|foo|](): void {
+  // 			}|>
+  // 			public static foo(): void {
+  // 			}
+  // 		}
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
-// 		export class Foo {
+// --- (line: 3) skipped ---
 // 			bar: Foo;
 // 			static bar: Foo;
 // 
-// 			public /*FIND ALL REFS*/[|foo|](): void {
-// 			}
+// 			<|public /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|](): void {
+// 			}|>
 // 			public static foo(): void {
 // 			}
 // 		}
@@ -507,131 +405,105 @@
 // 		x.bar;
 // 
 // 		// static function
-// 		MixedStaticsClassTest.Foo.foo();
-// 		MixedStaticsClassTest.Foo.bar;
-// 	}
-// }
+// --- (line: 21) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "method",
-      "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
-      "textSpan": {
-        "start": 115,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 108,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 115,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 108,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // --- (line: 3) skipped ---
+  // 			bar: Foo;
+  // 			static bar: Foo;
+  // 
+  // 			<|public /*FIND ALL REFS*/[|foo|](): void {
+  // 			}|>
+  // 			public static foo(): void {
+  // 			}
+  // 		}
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
-// 		export class Foo {
-// 			bar: Foo;
-// 			static bar: Foo;
+// --- (line: 5) skipped ---
 // 
 // 			public foo(): void {
 // 			}
-// 			/*FIND ALL REFS*/public static [|foo|](): void {
-// 			}
+// 			/*FIND ALL REFS*/<|public static [|{| isWriteAccess: true, isDefinition: true |}foo|](): void {
+// 			}|>
 // 		}
 // 	}
 // 
-// 	function test() {
-// 		// instance function
-// 		var x = new MixedStaticsClassTest.Foo();
-// 		x.foo();
+// --- (line: 14) skipped ---
+
+// --- (line: 17) skipped ---
 // 		x.bar;
 // 
 // 		// static function
@@ -640,126 +512,103 @@
 // 	}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "method",
-      "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
-      "textSpan": {
-        "start": 151,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 137,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 151,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 137,
-          "length": 32
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 333,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // --- (line: 5) skipped ---
+  // 
+  // 			public foo(): void {
+  // 			}
+  // 			/*FIND ALL REFS*/<|public static [|foo|](): void {
+  // 			}|>
+  // 		}
+  // 	}
+  // 
+  // --- (line: 14) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
-// 		export class Foo {
-// 			bar: Foo;
-// 			static bar: Foo;
+// --- (line: 5) skipped ---
 // 
 // 			public foo(): void {
 // 			}
-// 			public static /*FIND ALL REFS*/[|foo|](): void {
-// 			}
+// 			<|public static /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}foo|](): void {
+// 			}|>
 // 		}
 // 	}
 // 
-// 	function test() {
-// 		// instance function
-// 		var x = new MixedStaticsClassTest.Foo();
-// 		x.foo();
+// --- (line: 14) skipped ---
+
+// --- (line: 17) skipped ---
 // 		x.bar;
 // 
 // 		// static function
@@ -768,117 +617,97 @@
 // 	}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "method",
-      "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
-      "textSpan": {
-        "start": 151,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 137,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 151,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 137,
-          "length": 32
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 333,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // --- (line: 5) skipped ---
+  // 
+  // 			public foo(): void {
+  // 			}
+  // 			<|public static /*FIND ALL REFS*/[|foo|](): void {
+  // 			}|>
+  // 		}
+  // 	}
+  // 
+  // --- (line: 14) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
-// 		export class Foo {
+// --- (line: 3) skipped ---
 // 			bar: Foo;
 // 			static bar: Foo;
 // 
-// 			public [|foo|](): void {
-// 			}
+// 			<|public [|{| isWriteAccess: true |}foo|](): void {
+// 			}|>
 // 			public static foo(): void {
 // 			}
 // 		}
@@ -891,126 +720,112 @@
 // 		x.bar;
 // 
 // 		// static function
-// 		MixedStaticsClassTest.Foo.foo();
-// 		MixedStaticsClassTest.Foo.bar;
-// 	}
-// }
+// --- (line: 21) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "method",
-      "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
-      "textSpan": {
-        "start": 115,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 108,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 115,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 108,
-          "length": 25
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 267,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // --- (line: 3) skipped ---
+  // 			bar: Foo;
+  // 			static bar: Foo;
+  // 
+  // 			<|public [|foo|](): void {
+  // 			}|>
+  // 			public static foo(): void {
+  // 			}
+  // 		}
+  // 	}
+  // 
+  // 	function test() {
+  // 		// instance function
+  // 		var x = new MixedStaticsClassTest.Foo();
+  // 		x./*FIND ALL REFS*/foo();
+  // 		x.bar;
+  // 
+  // 		// static function
+  // --- (line: 21) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
 // module FindRef4 {
 // 	module MixedStaticsClassTest {
 // 		export class Foo {
-// 			[|bar|]: Foo;
+// 			<|[|bar|]: Foo;|>
 // 			static bar: Foo;
 // 
 // 			public foo(): void {
-// 			}
-// 			public static foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	function test() {
+// --- (line: 8) skipped ---
+
+// --- (line: 14) skipped ---
 // 		// instance function
 // 		var x = new MixedStaticsClassTest.Foo();
 // 		x.foo();
@@ -1018,120 +833,105 @@
 // 
 // 		// static function
 // 		MixedStaticsClassTest.Foo.foo();
-// 		MixedStaticsClassTest.Foo.bar;
-// 	}
-// }
+// --- (line: 22) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "property",
-      "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
-      "textSpan": {
-        "start": 74,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "bar",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 74,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 74,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 74,
-          "length": 9
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 278,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // module FindRef4 {
+  // 	module MixedStaticsClassTest {
+  // 		export class Foo {
+  // 			<|[|bar|]: Foo;|>
+  // 			static bar: Foo;
+  // 
+  // 			public foo(): void {
+  // --- (line: 8) skipped ---
+
+  // --- (line: 14) skipped ---
+  // 		// instance function
+  // 		var x = new MixedStaticsClassTest.Foo();
+  // 		x.foo();
+  // 		x./*FIND ALL REFS*/bar;
+  // 
+  // 		// static function
+  // 		MixedStaticsClassTest.Foo.foo();
+  // --- (line: 22) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "bar",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
-// 		export class Foo {
-// 			bar: Foo;
-// 			static bar: Foo;
+// --- (line: 5) skipped ---
 // 
 // 			public foo(): void {
 // 			}
-// 			public static [|foo|](): void {
-// 			}
+// 			<|public static [|{| isWriteAccess: true |}foo|](): void {
+// 			}|>
 // 		}
 // 	}
 // 
-// 	function test() {
-// 		// instance function
-// 		var x = new MixedStaticsClassTest.Foo();
-// 		x.foo();
+// --- (line: 14) skipped ---
+
+// --- (line: 17) skipped ---
 // 		x.bar;
 // 
 // 		// static function
@@ -1140,125 +940,111 @@
 // 	}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "method",
-      "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
-      "textSpan": {
-        "start": 151,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "foo",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 137,
-        "length": 32
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 151,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 137,
-          "length": 32
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 333,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // --- (line: 5) skipped ---
+  // 
+  // 			public foo(): void {
+  // 			}
+  // 			<|public static [|foo|](): void {
+  // 			}|>
+  // 		}
+  // 	}
+  // 
+  // --- (line: 14) skipped ---
 
+  // --- (line: 17) skipped ---
+  // 		x.bar;
+  // 
+  // 		// static function
+  // 		MixedStaticsClassTest.Foo./*FIND ALL REFS*/foo();
+  // 		MixedStaticsClassTest.Foo.bar;
+  // 	}
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) MixedStaticsClassTest.Foo.foo(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "foo",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
 // module FindRef4 {
 // 	module MixedStaticsClassTest {
 // 		export class Foo {
 // 			bar: Foo;
-// 			static [|bar|]: Foo;
+// 			<|static [|bar|]: Foo;|>
 // 
 // 			public foo(): void {
 // 			}
-// 			public static foo(): void {
-// 			}
-// 		}
-// 	}
-// 
-// 	function test() {
-// 		// instance function
-// 		var x = new MixedStaticsClassTest.Foo();
-// 		x.foo();
-// 		x.bar;
+// --- (line: 9) skipped ---
+
+// --- (line: 18) skipped ---
 // 
 // 		// static function
 // 		MixedStaticsClassTest.Foo.foo();
@@ -1266,94 +1052,82 @@
 // 	}
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-      "kind": "property",
-      "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
-      "textSpan": {
-        "start": 94,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "MixedStaticsClassTest",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "bar",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 87,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 94,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "contextSpan": {
-          "start": 87,
-          "length": 16
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 368,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
+  // module FindRef4 {
+  // 	module MixedStaticsClassTest {
+  // 		export class Foo {
+  // 			bar: Foo;
+  // 			<|static [|bar|]: Foo;|>
+  // 
+  // 			public foo(): void {
+  // 			}
+  // --- (line: 9) skipped ---
+
+  // --- (line: 18) skipped ---
+  // 
+  // 		// static function
+  // 		MixedStaticsClassTest.Foo.foo();
+  // 		MixedStaticsClassTest.Foo./*FIND ALL REFS*/bar;
+  // 	}
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) MixedStaticsClassTest.Foo.bar: Foo",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "MixedStaticsClassTest",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "bar",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

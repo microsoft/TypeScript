@@ -1,10 +1,12 @@
-=== tests/cases/conformance/salsa/bug24754.js ===
+//// [tests/cases/conformance/salsa/moduleExportAlias5.ts] ////
+
+=== bug24754.js ===
 // #24754
 const webpack = function (){
 >webpack : Symbol(webpack, Decl(bug24754.js, 1, 5), Decl(bug24754.js, 4, 23))
 }
 exports = module.exports = webpack;
->exports : Symbol("tests/cases/conformance/salsa/bug24754", Decl(bug24754.js, 0, 0))
+>exports : Symbol("bug24754", Decl(bug24754.js, 0, 0))
 >module.exports : Symbol(module.exports, Decl(bug24754.js, 0, 0))
 >module : Symbol(export=, Decl(bug24754.js, 3, 9))
 >exports : Symbol(export=, Decl(bug24754.js, 3, 9))

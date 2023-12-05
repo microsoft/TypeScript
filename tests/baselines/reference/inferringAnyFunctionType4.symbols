@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferringAnyFunctionType4.ts ===
+//// [tests/cases/compiler/inferringAnyFunctionType4.ts] ////
+
+=== inferringAnyFunctionType4.ts ===
 function f<T extends (p1: number) => number>(p: T): T {
 >f : Symbol(f, Decl(inferringAnyFunctionType4.ts, 0, 0))
 >T : Symbol(T, Decl(inferringAnyFunctionType4.ts, 0, 11))

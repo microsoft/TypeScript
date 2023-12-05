@@ -3,7 +3,7 @@ CompilerOptions::
 {}
 WatchOptions::
 {
- "excludeDirectories": []
+  "excludeDirectories": []
 }
 FileNames::
 0.ts

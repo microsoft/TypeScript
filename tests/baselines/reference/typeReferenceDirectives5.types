@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeReferenceDirectives5.ts] ////
+
 === /app.ts ===
 /// <reference types="lib"/>
 import {$} from "./ref";

@@ -29,16 +29,16 @@ import { bar as bar9 } from "http://server/bar";
 
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 function foo() { }
 exports.foo = foo;
 //// [bar.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

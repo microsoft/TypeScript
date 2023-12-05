@@ -20,10 +20,10 @@ type PublicKeys2<T>        = T extends `_${string}` ? never : T;
 
 //// [internal.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [api.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.dropPrivateProps2 = exports.dropPrivateProps1 = void 0;
 var internal_1 = require("./internal");
 var dropPrivateProps1 = function (obj) { return (0, internal_1.excludePrivateKeys1)(obj); };
@@ -32,7 +32,7 @@ var dropPrivateProps2 = function (obj) { return (0, internal_1.excludePrivateKey
 exports.dropPrivateProps2 = dropPrivateProps2;
 //// [test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var api_1 = require("./api");
 var a = (0, api_1.dropPrivateProps1)({ foo: 42, _bar: 'secret' }); // type is {foo: number}
 //a._bar                                                // error: _bar does not exist           <===== as expected

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/instanceofTypeAliasToGenericClass.ts] ////
+
 //// [instanceofTypeAliasToGenericClass.ts]
 declare class TableClass<S = any> {
     _field: S;
@@ -19,7 +21,7 @@ o instanceof TableClass;
 
 //// [instanceofTypeAliasToGenericClass.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function fn(o) {
     return o instanceof TableClass;
 }

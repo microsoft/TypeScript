@@ -42,7 +42,7 @@ const a: DisjointDiscriminants = {
     p4: "hello"
 };
 
-// This has no excess error because variant one and three are both applicable.
+// This has excess error because variant two is not applicable.
 const b: DisjointDiscriminants = {
     p1: 'left',
     p2: true,
@@ -56,4 +56,84 @@ const c: DisjointDiscriminants = {
     p2: false,
     p3: 42,
     p4: "hello"
+};
+
+// Repro from #51873
+
+interface Common {
+    type: "A" | "B" | "C" | "D";
+    n: number;
+}
+interface A {
+    type: "A";
+    a?: number;
+}
+interface B {
+    type: "B";
+    b?: number;
+}
+
+type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);
+
+// Should reject { b } because reduced to Common | (Common & A)
+const c1: CommonWithOverlappingOptionals = {
+    type: "A",
+    n: 1,
+    a: 1,
+    b: 1  // excess property
+}
+
+type CommonWithDisjointOverlappingOptionals = Common | A | B;
+
+// Should still reject { b } because reduced to Common | A, even though these are now disjoint
+const c2: CommonWithDisjointOverlappingOptionals = {
+    type: "A",
+    n: 1,
+    a: 1,
+    b: 1  // excess property
+}
+
+// Repro from https://github.com/microsoft/TypeScript/pull/51884#issuecomment-1472736068
+
+export type BaseAttribute<T> = {
+    type?: string | undefined;
+    required?: boolean | undefined;
+    defaultsTo?: T | undefined;
+};
+
+export type Attribute =
+    | string
+    | StringAttribute
+    | NumberAttribute
+    | OneToOneAttribute
+
+export type Attribute2 =
+    | string
+    | StringAttribute
+    | NumberAttribute
+
+export type StringAttribute = BaseAttribute<string> & {
+    type: 'string';
+};
+
+export type NumberAttribute = BaseAttribute<number> & {
+    type: 'number';
+    autoIncrement?: boolean | undefined;
+};
+
+export type OneToOneAttribute = BaseAttribute<any> & {
+    model: string;
+};
+
+// both should error due to excess properties
+const attributes: Attribute = {
+    type: 'string',
+    autoIncrement: true,
+    required: true,
+};
+
+const attributes2: Attribute2 = {
+    type: 'string',
+    autoIncrement: true,
+    required: true,
 };

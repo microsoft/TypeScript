@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts] ////
+
 //// [bestCommonTypeOfTuple2.ts]
 interface base { }
 interface base1 { i }

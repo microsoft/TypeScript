@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts] ////
+
+=== destructuringArrayBindingPatternAndAssignment3.ts ===
 const [a, b = a] = [1]; // ok
 >a : Symbol(a, Decl(destructuringArrayBindingPatternAndAssignment3.ts, 0, 7))
 >b : Symbol(b, Decl(destructuringArrayBindingPatternAndAssignment3.ts, 0, 9))

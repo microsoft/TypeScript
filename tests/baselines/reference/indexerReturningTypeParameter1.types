@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexerReturningTypeParameter1.ts ===
+//// [tests/cases/compiler/indexerReturningTypeParameter1.ts] ////
+
+=== indexerReturningTypeParameter1.ts ===
 interface f {
     groupBy<T>(): { [key: string]: T[]; };
 >groupBy : <T>() => { [key: string]: T[]; }
@@ -22,7 +24,6 @@ class c {
 >key : string
 
         return null;
->null : null
     }
 }
 var a2: c;

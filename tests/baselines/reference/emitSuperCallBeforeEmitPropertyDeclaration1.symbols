@@ -1,4 +1,6 @@
-=== tests/cases/compiler/emitSuperCallBeforeEmitPropertyDeclaration1.ts ===
+//// [tests/cases/compiler/emitSuperCallBeforeEmitPropertyDeclaration1.ts] ////
+
+=== emitSuperCallBeforeEmitPropertyDeclaration1.ts ===
 class A {
 >A : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclaration1.ts, 0, 0))
 

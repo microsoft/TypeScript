@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertyAccessExpressionInnerComments.ts ===
+//// [tests/cases/compiler/propertyAccessExpressionInnerComments.ts] ////
+
+=== propertyAccessExpressionInnerComments.ts ===
 /*1*/Array/*2*/./*3*/toString/*4*/
 >Array/*2*/./*3*/toString : () => string
 >Array : ArrayConstructor

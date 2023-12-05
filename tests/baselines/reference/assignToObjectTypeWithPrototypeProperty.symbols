@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignToObjectTypeWithPrototypeProperty.ts ===
+//// [tests/cases/compiler/assignToObjectTypeWithPrototypeProperty.ts] ////
+
+=== assignToObjectTypeWithPrototypeProperty.ts ===
 class XEvent {}
 >XEvent : Symbol(XEvent, Decl(assignToObjectTypeWithPrototypeProperty.ts, 0, 0))
 

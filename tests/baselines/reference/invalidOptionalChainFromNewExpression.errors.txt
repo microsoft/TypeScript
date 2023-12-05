@@ -1,7 +1,7 @@
-tests/cases/compiler/invalidOptionalChainFromNewExpression.ts(5,6): error TS1209: Invalid optional chain from new expression. Did you mean to call 'A()'?
+invalidOptionalChainFromNewExpression.ts(5,6): error TS1209: Invalid optional chain from new expression. Did you mean to call 'A()'?
 
 
-==== tests/cases/compiler/invalidOptionalChainFromNewExpression.ts (1 errors) ====
+==== invalidOptionalChainFromNewExpression.ts (1 errors) ====
     class A {
         b() {}
     }

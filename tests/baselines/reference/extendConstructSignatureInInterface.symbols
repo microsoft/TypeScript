@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendConstructSignatureInInterface.ts ===
+//// [tests/cases/compiler/extendConstructSignatureInInterface.ts] ////
+
+=== extendConstructSignatureInInterface.ts ===
 interface C {
 >C : Symbol(C, Decl(extendConstructSignatureInInterface.ts, 0, 0))
 

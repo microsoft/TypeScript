@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unexpectedStatementBlockTerminator.ts] ////
+
 //// [unexpectedStatementBlockTerminator.ts]
 class Foo {}
 

@@ -1,15 +1,15 @@
-tests/cases/compiler/augmentedTypesModules.ts(5,8): error TS2300: Duplicate identifier 'm1a'.
-tests/cases/compiler/augmentedTypesModules.ts(6,5): error TS2300: Duplicate identifier 'm1a'.
-tests/cases/compiler/augmentedTypesModules.ts(8,8): error TS2300: Duplicate identifier 'm1b'.
-tests/cases/compiler/augmentedTypesModules.ts(9,5): error TS2300: Duplicate identifier 'm1b'.
-tests/cases/compiler/augmentedTypesModules.ts(16,8): error TS2300: Duplicate identifier 'm1d'.
-tests/cases/compiler/augmentedTypesModules.ts(19,5): error TS2300: Duplicate identifier 'm1d'.
-tests/cases/compiler/augmentedTypesModules.ts(25,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
-tests/cases/compiler/augmentedTypesModules.ts(28,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
-tests/cases/compiler/augmentedTypesModules.ts(51,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+augmentedTypesModules.ts(5,8): error TS2300: Duplicate identifier 'm1a'.
+augmentedTypesModules.ts(6,5): error TS2300: Duplicate identifier 'm1a'.
+augmentedTypesModules.ts(8,8): error TS2300: Duplicate identifier 'm1b'.
+augmentedTypesModules.ts(9,5): error TS2300: Duplicate identifier 'm1b'.
+augmentedTypesModules.ts(16,8): error TS2300: Duplicate identifier 'm1d'.
+augmentedTypesModules.ts(19,5): error TS2300: Duplicate identifier 'm1d'.
+augmentedTypesModules.ts(25,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+augmentedTypesModules.ts(28,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+augmentedTypesModules.ts(51,8): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 
 
-==== tests/cases/compiler/augmentedTypesModules.ts (9 errors) ====
+==== augmentedTypesModules.ts (9 errors) ====
     // module then var
     module m1 { }
     var m1 = 1; // Should be allowed

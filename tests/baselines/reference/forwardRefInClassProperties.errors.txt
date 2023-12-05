@@ -1,21 +1,21 @@
-tests/cases/compiler/forwardRefInClassProperties.ts(3,15): error TS2729: Property '_a' is used before its initialization.
-tests/cases/compiler/forwardRefInClassProperties.ts(6,22): error TS2729: Property '_A' is used before its initialization.
-tests/cases/compiler/forwardRefInClassProperties.ts(11,17): error TS2448: Block-scoped variable 'b' used before its declaration.
+forwardRefInClassProperties.ts(3,15): error TS2729: Property '_a' is used before its initialization.
+forwardRefInClassProperties.ts(6,22): error TS2729: Property '_A' is used before its initialization.
+forwardRefInClassProperties.ts(11,17): error TS2448: Block-scoped variable 'b' used before its declaration.
 
 
-==== tests/cases/compiler/forwardRefInClassProperties.ts (3 errors) ====
+==== forwardRefInClassProperties.ts (3 errors) ====
     class Test
     {
         _b = this._a; // undefined, no error/warning
                   ~~
 !!! error TS2729: Property '_a' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/forwardRefInClassProperties.ts:4:5: '_a' is declared here.
+!!! related TS2728 forwardRefInClassProperties.ts:4:5: '_a' is declared here.
         _a = 3;
     
         static _B = Test._A; // undefined, no error/warning
                          ~~
 !!! error TS2729: Property '_A' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/forwardRefInClassProperties.ts:7:12: '_A' is declared here.
+!!! related TS2728 forwardRefInClassProperties.ts:7:12: '_A' is declared here.
         static _A = 3;
     
         method()
@@ -23,7 +23,7 @@ tests/cases/compiler/forwardRefInClassProperties.ts(11,17): error TS2448: Block-
             let a = b; // Property 'b' is used before its initialization.
                     ~
 !!! error TS2448: Block-scoped variable 'b' used before its declaration.
-!!! related TS2728 tests/cases/compiler/forwardRefInClassProperties.ts:12:13: 'b' is declared here.
+!!! related TS2728 forwardRefInClassProperties.ts:12:13: 'b' is declared here.
             let b = 3;
         }
     }

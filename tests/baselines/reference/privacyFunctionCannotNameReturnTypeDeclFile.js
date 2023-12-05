@@ -164,7 +164,7 @@ function privateFunctionWithPrivateModuleReturnTypes1() {
 //// [privacyFunctionReturnTypeDeclFile_GlobalWidgets.js]
 //// [privacyFunctionReturnTypeDeclFile_Widgets.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpecializedWidget = exports.createWidget1 = exports.Widget1 = void 0;
 var Widget1 = /** @class */ (function () {
     function Widget1() {
@@ -190,10 +190,10 @@ var SpecializedWidget;
         return new Widget2();
     }
     SpecializedWidget.createWidget2 = createWidget2;
-})(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
+})(SpecializedWidget || (exports.SpecializedWidget = SpecializedWidget = {}));
 //// [privacyFunctionReturnTypeDeclFile_exporter.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.createExportedWidget4 = exports.createExportedWidget3 = exports.createExportedWidget2 = exports.createExportedWidget1 = void 0;
 ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
@@ -216,7 +216,7 @@ function createExportedWidget4() {
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyFunctionReturnTypeDeclFile_consumer.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicFunctionWithPrivateModuleReturnTypes1 = exports.publicFunctionWithPrivateModuleReturnTypes = exports.publicClassWithPrivateModuleReturnTypes = exports.publicFunctionWithPrivateParmeterTypes1 = exports.publicFunctionWithPrivateParmeterTypes = exports.publicClassWithWithPrivateParmeterTypes = void 0;
 var exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
@@ -361,7 +361,7 @@ declare module "GlobalWidgets" {
         name: string;
     }
     function createWidget3(): Widget3;
-    module SpecializedGlobalWidget {
+    namespace SpecializedGlobalWidget {
         class Widget4 {
             name: string;
         }
@@ -373,7 +373,7 @@ export declare class Widget1 {
     name: string;
 }
 export declare function createWidget1(): Widget1;
-export declare module SpecializedWidget {
+export declare namespace SpecializedWidget {
     class Widget2 {
         name: string;
     }

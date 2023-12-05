@@ -1,8 +1,8 @@
-tests/cases/compiler/scopeCheckInsideStaticMethod1.ts(6,7): error TS2304: Cannot find name 'v'.
-tests/cases/compiler/scopeCheckInsideStaticMethod1.ts(8,12): error TS2339: Property 'p' does not exist on type 'typeof C'.
+scopeCheckInsideStaticMethod1.ts(6,7): error TS2304: Cannot find name 'v'.
+scopeCheckInsideStaticMethod1.ts(8,12): error TS2339: Property 'p' does not exist on type 'typeof C'.
 
 
-==== tests/cases/compiler/scopeCheckInsideStaticMethod1.ts (2 errors) ====
+==== scopeCheckInsideStaticMethod1.ts (2 errors) ====
     class C {
        private v;
        public p;

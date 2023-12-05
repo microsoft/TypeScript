@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts] ////
+
+=== circularTypeofWithVarOrFunc.ts ===
 type typeAlias1 = typeof varOfAliasedType1;
 >typeAlias1 : any
 >varOfAliasedType1 : any
@@ -15,7 +17,6 @@ type typeAlias2 = typeof varOfAliasedType2;
 
 function func(): typeAlias3 { return null; }
 >func : () => any
->null : null
 
 var varOfAliasedType3 = func();
 >varOfAliasedType3 : any

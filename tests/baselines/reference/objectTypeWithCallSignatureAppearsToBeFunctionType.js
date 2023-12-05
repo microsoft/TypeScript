@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithCallSignatureAppearsToBeFunctionType.ts] ////
+
 //// [objectTypeWithCallSignatureAppearsToBeFunctionType.ts]
 // objects with call signatures should be permitted where function types are expected
 // no errors expected below

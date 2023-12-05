@@ -1,4 +1,6 @@
-=== tests/cases/compiler/multiExtendsSplitInterfaces1.ts ===
+//// [tests/cases/compiler/multiExtendsSplitInterfaces1.ts] ////
+
+=== multiExtendsSplitInterfaces1.ts ===
 self.cancelAnimationFrame(0);
 >self.cancelAnimationFrame(0) : void
 >self.cancelAnimationFrame : ((handle: number) => void) & ((handle: number) => void)

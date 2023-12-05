@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeAccessibility.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeAccessibility.ts] ////
+
+=== thisTypeAccessibility.ts ===
 class MyClass {
 >MyClass : Symbol(MyClass, Decl(thisTypeAccessibility.ts, 0, 0), Decl(thisTypeAccessibility.ts, 7, 1))
 

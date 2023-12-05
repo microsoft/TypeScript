@@ -1,4 +1,6 @@
-=== tests/cases/compiler/controlFlowNullTypeAndLiteral.ts ===
+//// [tests/cases/compiler/controlFlowNullTypeAndLiteral.ts] ////
+
+=== controlFlowNullTypeAndLiteral.ts ===
 // Repros from #23771
 
 const myNull: null = null;

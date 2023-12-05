@@ -1,0 +1,195 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
+// --- (line: 3) skipped ---
+// 
+//     }
+// 
+//     <|public /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}start|](){
+//         return this;
+//     }|>
+// 
+//     public stop(){
+//         return this;
+//     }
+// }
+
+// === /tests/cases/fourslash/findAllRefsOnDefinition.ts ===
+// import Second = require("./findAllRefsOnDefinition-import");
+// 
+// var second = new Second.Test()
+// second.[|start|]();
+// second.stop();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
+  // --- (line: 3) skipped ---
+  // 
+  //     }
+  // 
+  //     <|public /*FIND ALL REFS*/[|start|](){
+  //         return this;
+  //     }|>
+  // 
+  //     public stop(){
+  //         return this;
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Test.start(): this",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "start",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
+// --- (line: 3) skipped ---
+// 
+//     }
+// 
+//     <|public /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}start|](){
+//         return this;
+//     }|>
+// 
+//     public stop(){
+//         return this;
+//     }
+// }
+
+// === /tests/cases/fourslash/findAllRefsOnDefinition.ts ===
+// import Second = require("./findAllRefsOnDefinition-import");
+// 
+// var second = new Second.Test()
+// second.[|start|]();
+// second.stop();
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsOnDefinition-import.ts ===
+  // --- (line: 3) skipped ---
+  // 
+  //     }
+  // 
+  //     <|public /*FIND ALL REFS*/[|start|](){
+  //         return this;
+  //     }|>
+  // 
+  //     public stop(){
+  //         return this;
+  //     }
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) Test.start(): this",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Test",
+      "kind": "className"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "start",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

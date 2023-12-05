@@ -1,12 +1,12 @@
-tests/cases/compiler/functionOverloads37.ts(4,9): error TS2554: Expected 1 arguments, but got 0.
+functionOverloads37.ts(4,9): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/compiler/functionOverloads37.ts (1 errors) ====
+==== functionOverloads37.ts (1 errors) ====
     function foo(bar:{a:number;}[]):string;
     function foo(bar:{a:boolean;}[]):number;
     function foo(bar:{a:any;}[]):any{ return bar }
     var x = foo();
-            ~~~~~
+            ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/functionOverloads37.ts:1:14: An argument for 'bar' was not provided.
+!!! related TS6210 functionOverloads37.ts:1:14: An argument for 'bar' was not provided.
     

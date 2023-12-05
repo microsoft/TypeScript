@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitAnyForIn.ts] ////
+
 //// [noImplicitAnyForIn.ts]
 var x: {}[] = [[1, 2, 3], ["hello"]];
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/doubleMixinConditionalTypeBaseClassWorks.ts ===
+//// [tests/cases/compiler/doubleMixinConditionalTypeBaseClassWorks.ts] ////
+
+=== doubleMixinConditionalTypeBaseClassWorks.ts ===
 type Constructor = new (...args: any[]) => {};
 >Constructor : new (...args: any[]) => {}
 >args : any[]

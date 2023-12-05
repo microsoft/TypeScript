@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/yieldInForInInDownlevelGenerator.ts] ////
+
 //// [yieldInForInInDownlevelGenerator.ts]
 // https://github.com/microsoft/TypeScript/issues/49808
 function* gen() {

@@ -15,7 +15,7 @@ export * as aliased from "./data1";
 
 //// [register.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = void 0;
 var r = [];
 function register(data) {
@@ -38,13 +38,13 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.aliased = void 0;
 __exportStar(require("./register"), exports);
 __exportStar(require("./data1"), exports);
 exports.aliased = require("./data1");
 //// [data1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var _1 = require("./");
 (0, _1.register)("ok");

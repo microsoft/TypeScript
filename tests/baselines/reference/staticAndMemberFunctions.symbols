@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticAndMemberFunctions.ts ===
+//// [tests/cases/compiler/staticAndMemberFunctions.ts] ////
+
+=== staticAndMemberFunctions.ts ===
 class T {
 >T : Symbol(T, Decl(staticAndMemberFunctions.ts, 0, 0))
 

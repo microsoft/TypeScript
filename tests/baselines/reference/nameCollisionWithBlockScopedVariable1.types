@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nameCollisionWithBlockScopedVariable1.ts ===
+//// [tests/cases/compiler/nameCollisionWithBlockScopedVariable1.ts] ////
+
+=== nameCollisionWithBlockScopedVariable1.ts ===
 module M {
 >M : typeof M
 

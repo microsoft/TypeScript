@@ -1,7 +1,7 @@
-tests/cases/compiler/scopingInCatchBlocks.ts(9,9): error TS2304: Cannot find name 'ex1'.
+scopingInCatchBlocks.ts(9,9): error TS2304: Cannot find name 'ex1'.
 
 
-==== tests/cases/compiler/scopingInCatchBlocks.ts (1 errors) ====
+==== scopingInCatchBlocks.ts (1 errors) ====
     try { } catch(ex1) { 
     	throw ex1;
     }

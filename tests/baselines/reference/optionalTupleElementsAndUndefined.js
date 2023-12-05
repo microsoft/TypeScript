@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalTupleElementsAndUndefined.ts] ////
+
 //// [optionalTupleElementsAndUndefined.ts]
 // Repro from #50753
 

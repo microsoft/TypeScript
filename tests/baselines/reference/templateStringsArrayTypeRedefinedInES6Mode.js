@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/templateStringsArrayTypeRedefinedInES6Mode.ts] ////
+
 //// [templateStringsArrayTypeRedefinedInES6Mode.ts]
 class TemplateStringsArray {
 }

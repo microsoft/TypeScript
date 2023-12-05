@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of10.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of10.ts] ////
+
+=== for-of10.ts ===
 var v: string;
 >v : Symbol(v, Decl(for-of10.ts, 0, 3))
 

@@ -1,3 +1,27 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoLink3.ts ===
+// class Foo<T> {
+//     /**
+//      * {@link Foo}
+//      * {@link Foo<T>}
+//      * {@link Foo<Array<X>>}
+//      * {@link Foo<>}
+//      * {@link Foo>}
+//      * {@link Foo<}
+//      */
+//     bar(){}
+//     ^^^
+// | ----------------------------------------------------------------------
+// | (method) Foo<T>.bar(): void
+// | {@link Foo}
+// | {@link Foo<T>}
+// | {@link Foo<Array<X>>}
+// | {@link Foo<>}
+// | {@link Foo>}
+// | {@link Foo<}
+// | ----------------------------------------------------------------------
+// }
+
 [
   {
     "marker": {
@@ -5,7 +29,7 @@
       "position": 169,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "",
       "textSpan": {

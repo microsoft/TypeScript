@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration1ES5iterable.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration1ES5iterable.ts] ////
+
+=== destructuringVariableDeclaration1ES5iterable.ts ===
 // The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.
 var {a1, a2}: { a1: number, a2: string } = { a1: 10, a2: "world" }
@@ -170,7 +172,6 @@ var {g: {g1 = [undefined, null]}}: { g: { g1: any[] } } = { g: { g1: [1, 2] } };
 >g1 : any[]
 >[undefined, null] : null[]
 >undefined : undefined
->null : null
 >g : { g1: any[]; }
 >g1 : any[]
 >{ g: { g1: [1, 2] } } : { g: { g1: number[]; }; }
@@ -186,7 +187,6 @@ var {h: {h1 = [undefined, null]}}: { h: { h1: number[] } } = { h: { h1: [1, 2] }
 >h1 : number[]
 >[undefined, null] : null[]
 >undefined : undefined
->null : null
 >h : { h1: number[]; }
 >h1 : number[]
 >{ h: { h1: [1, 2] } } : { h: { h1: number[]; }; }

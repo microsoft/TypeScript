@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyModule.ts ===
+//// [tests/cases/compiler/noImplicitAnyModule.ts] ////
+
+=== noImplicitAnyModule.ts ===
 declare module Module {
 >Module : typeof Module
 

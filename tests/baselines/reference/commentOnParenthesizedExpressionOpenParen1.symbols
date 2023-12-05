@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentOnParenthesizedExpressionOpenParen1.ts ===
+//// [tests/cases/compiler/commentOnParenthesizedExpressionOpenParen1.ts] ////
+
+=== commentOnParenthesizedExpressionOpenParen1.ts ===
 var j;
 >j : Symbol(j, Decl(commentOnParenthesizedExpressionOpenParen1.ts, 0, 3))
 

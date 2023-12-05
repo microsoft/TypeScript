@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayAssignmentTest4.ts ===
+//// [tests/cases/compiler/arrayAssignmentTest4.ts] ////
+
+=== arrayAssignmentTest4.ts ===
 class C3 {
 >C3 : C3
 
@@ -38,7 +40,6 @@ arr_any = function () { return null;} // should be an error - is
 >arr_any = function () { return null;} : () => any
 >arr_any : any[]
 >function () { return null;} : () => any
->null : null
 
 arr_any = c3; // should be an error - is
 >arr_any = c3 : C3

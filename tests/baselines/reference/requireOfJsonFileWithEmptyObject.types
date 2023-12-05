@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/requireOfJsonFileWithEmptyObject.ts] ////
+
+=== file1.ts ===
 import b1 = require('./b.json');
 >b1 : {}
 
@@ -18,7 +20,7 @@ if (x) {
 >b2 : {}
 }
 
-=== tests/cases/compiler/b.json ===
+=== b.json ===
 {
 >{} : {}
 }

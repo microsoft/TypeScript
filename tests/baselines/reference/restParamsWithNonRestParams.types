@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParamsWithNonRestParams.ts ===
+//// [tests/cases/compiler/restParamsWithNonRestParams.ts] ////
+
+=== restParamsWithNonRestParams.ts ===
 function foo(...b:number[]){}
 >foo : (...b: number[]) => void
 >b : number[]

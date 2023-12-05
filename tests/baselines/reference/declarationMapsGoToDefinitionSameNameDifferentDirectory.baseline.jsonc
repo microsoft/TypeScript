@@ -1,0 +1,59 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/server/BaseClass/Source.ts ===
+// class [|Control|]{
+//     constructor(){
+//         return;
+//     }
+// --- (line: 5) skipped ---
+
+// === /tests/cases/fourslash/server/buttonClass/Source.ts ===
+// // I cannot F12 navigate to Control
+// //                   vvvvvvv
+// class Button extends /*GOTO DEF*/[|Control|] {
+//     public myFunction() {
+//         // I cannot F12 navigate to myVar
+//         //              vvvvv
+// --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/server/BaseClass/Source.ts ===
+// class Control{
+//     constructor(){
+//         return;
+//     }
+//     /** this is a super var */
+//     public [|myVar|]: boolean | 'yeah' = true;
+// }
+
+// === /tests/cases/fourslash/server/buttonClass/Source.ts ===
+// --- (line: 3) skipped ---
+//     public myFunction() {
+//         // I cannot F12 navigate to myVar
+//         //              vvvvv
+//         if (typeof this./*GOTO DEF*/[|myVar|] === 'boolean') {
+//             this.myVar;
+//         } else {
+//             this.myVar.toLocaleUpperCase();
+// --- (line: 11) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

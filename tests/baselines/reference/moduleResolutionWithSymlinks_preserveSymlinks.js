@@ -23,7 +23,7 @@ x = new C2();
 "use strict";
 // We shouldn't resolve symlinks for references either. See the trace.
 /// <reference types="linked" />
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var linked_1 = require("linked");
 var linked2_1 = require("linked2");
 var x = new linked_1.C();

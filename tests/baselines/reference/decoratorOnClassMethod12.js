@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts] ////
+
 //// [decoratorOnClassMethod12.ts]
 module M {
     class S {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionUnused.ts] ////
+
+=== privateNameInInExpressionUnused.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(privateNameInInExpressionUnused.ts, 0, 0))
 

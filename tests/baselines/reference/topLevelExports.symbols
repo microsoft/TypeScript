@@ -1,4 +1,6 @@
-=== tests/cases/compiler/topLevelExports.ts ===
+//// [tests/cases/compiler/topLevelExports.ts] ////
+
+=== topLevelExports.ts ===
 export var foo = 3;
 >foo : Symbol(foo, Decl(topLevelExports.ts, 0, 10))
 

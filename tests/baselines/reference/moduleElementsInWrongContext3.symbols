@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleElementsInWrongContext3.ts ===
+//// [tests/cases/compiler/moduleElementsInWrongContext3.ts] ////
+
+=== moduleElementsInWrongContext3.ts ===
 module P {
 >P : Symbol(P, Decl(moduleElementsInWrongContext3.ts, 0, 0))
     {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassesErr.ts] ////
+
 //// [index.js]
 // Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
 // but we should be able to synthesize declarations from the symbols regardless

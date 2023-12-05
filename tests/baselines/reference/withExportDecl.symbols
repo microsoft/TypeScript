@@ -1,4 +1,6 @@
-=== tests/cases/compiler/withExportDecl.ts ===
+//// [tests/cases/compiler/withExportDecl.ts] ////
+
+=== withExportDecl.ts ===
 var simpleVar;
 >simpleVar : Symbol(simpleVar, Decl(withExportDecl.ts, 0, 3))
 

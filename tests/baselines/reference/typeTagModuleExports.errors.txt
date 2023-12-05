@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/bug27327.js(2,1): error TS2322: Type 'number' is not assignable to type 'string'.
+bug27327.js(2,1): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsdoc/bug27327.js (1 errors) ====
+==== bug27327.js (1 errors) ====
     /** @type {string} */
     module.exports = 0;
     ~~~~~~~~~~~~~~

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts] ////
+
 //// [genericMergedDeclarationUsingTypeParameter.ts]
 function foo<T extends U, U>(y: T, z: U) { return y; }
 module foo {

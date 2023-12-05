@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionArgumentsClassMethod.ts] ////
+
 //// [collisionArgumentsClassMethod.ts]
 class c1 {
     public foo(i: number, ...arguments) { //arguments is error

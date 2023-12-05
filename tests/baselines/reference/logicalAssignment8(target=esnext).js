@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts] ////
+
 //// [logicalAssignment8.ts]
 declare const bar: { value?: number[] } | undefined
 

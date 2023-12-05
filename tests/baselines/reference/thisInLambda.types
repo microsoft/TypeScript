@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInLambda.ts ===
+//// [tests/cases/compiler/thisInLambda.ts] ////
+
+=== thisInLambda.ts ===
 class Foo {
 >Foo : Foo
 

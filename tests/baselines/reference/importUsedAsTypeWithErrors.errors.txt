@@ -1,12 +1,12 @@
-tests/cases/compiler/main.ts(1,17): error TS1340: Module './test' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./test')'?
+main.ts(1,17): error TS1340: Module './test' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./test')'?
 
 
-==== tests/cases/compiler/test.ts (0 errors) ====
+==== test.ts (0 errors) ====
     export interface T {
         value: string
     }
     
-==== tests/cases/compiler/main.ts (1 errors) ====
+==== main.ts (1 errors) ====
     export const a: import("./test") = null;
                     ~~~~~~~~~~~~~~~~
 !!! error TS1340: Module './test' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./test')'?

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPattern.ts ===
+//// [tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPattern.ts] ////
+
+=== sourceMapValidationDestructuringParameterObjectBindingPattern.ts ===
 interface Robot {
     name: string;
 >name : string

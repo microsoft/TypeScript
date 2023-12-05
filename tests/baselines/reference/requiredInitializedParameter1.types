@@ -1,4 +1,6 @@
-=== tests/cases/compiler/requiredInitializedParameter1.ts ===
+//// [tests/cases/compiler/requiredInitializedParameter1.ts] ////
+
+=== requiredInitializedParameter1.ts ===
 function f1(a, b = 0, c) { }
 >f1 : (a: any, b: number, c: any) => void
 >a : any

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/umd6.ts] ////
+
+=== a.ts ===
 /// <reference path="foo.d.ts" />
 let y: number = Foo.fn();
 >y : number
@@ -7,7 +9,7 @@ let y: number = Foo.fn();
 >Foo : typeof Foo
 >fn : () => number
 
-=== tests/cases/conformance/externalModules/foo.d.ts ===
+=== foo.d.ts ===
 declare namespace Thing {
 >Thing : typeof Thing
 

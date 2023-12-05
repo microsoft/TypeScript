@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reachabilityChecks1.ts ===
+//// [tests/cases/compiler/reachabilityChecks1.ts] ////
+
+=== reachabilityChecks1.ts ===
 while (true);
 var x = 1;
 >x : Symbol(x, Decl(reachabilityChecks1.ts, 1, 3))

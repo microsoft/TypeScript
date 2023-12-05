@@ -1,4 +1,6 @@
-=== tests/cases/compiler/systemModuleConstEnumsSeparateCompilation.ts ===
+//// [tests/cases/compiler/systemModuleConstEnumsSeparateCompilation.ts] ////
+
+=== systemModuleConstEnumsSeparateCompilation.ts ===
 declare function use(a: any);
 >use : Symbol(use, Decl(systemModuleConstEnumsSeparateCompilation.ts, 0, 0))
 >a : Symbol(a, Decl(systemModuleConstEnumsSeparateCompilation.ts, 0, 21))

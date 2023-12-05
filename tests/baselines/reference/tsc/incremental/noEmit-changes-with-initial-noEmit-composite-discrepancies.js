@@ -1,6 +1,4 @@
 2:: Fix error and no emit
-Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
-Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
 Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files
 Incremental will store the past latestChangedDtsFile and emitSignatures
 TsBuild info text without affectedFilesPendingEmit:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt::
@@ -32,6 +30,22 @@ CleanBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -107,6 +121,22 @@ IncrementalBuild:
         "affectsGlobalScope": true
       }
     },
+    "root": [
+      [
+        [
+          2,
+          7
+        ],
+        [
+          "./src/class.ts",
+          "./src/indirectclass.ts",
+          "./src/directuse.ts",
+          "./src/indirectuse.ts",
+          "./src/nochangefile.ts",
+          "./src/nochangefilewithemitspecificerror.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true
     },
@@ -146,35 +176,18 @@ IncrementalBuild:
     "emitSignatures": [
       [
         "./src/class.ts",
-        "-3790894605-export declare class classC {\r\n    prop1: number;\r\n}\r\n"
+        "-12157283604-export declare class classC {\n    prop1: number;\n}\n"
       ],
       [
         "./src/directuse.ts",
-        "-4882119183-export {};\r\n"
+        "-3531856636-export {};\n"
       ],
       [
         "./src/indirectuse.ts",
-        "-4882119183-export {};\r\n"
+        "-3531856636-export {};\n"
       ]
     ],
     "latestChangedDtsFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
-}
-Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
-Incremental: {
-  "./src/directuse.ts": [
-    "./src/indirectclass.ts"
-  ],
-  "./src/indirectclass.ts": [
-    "./src/class.ts"
-  ],
-  "./src/indirectuse.ts": [
-    "./src/indirectclass.ts"
-  ]
-}
-Clean: {
-  "./src/indirectclass.ts": [
-    "./src/class.ts"
-  ]
 }

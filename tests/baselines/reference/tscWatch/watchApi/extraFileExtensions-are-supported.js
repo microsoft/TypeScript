@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {}
@@ -31,8 +32,42 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.vue"]
-Program options: {"allowNonTsExtensions":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/main.js]
+var x = 10;
+
+
+//// [/user/username/projects/myproject/other.vue.js]
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/main.ts: *new*
+  {}
+/user/username/projects/myproject/other.vue: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.vue"
+]
+Program options: {
+  "allowNonTsExtensions": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -49,33 +84,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main.ts (used version)
 /user/username/projects/myproject/other.vue (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/main.ts:
-  {}
-/user/username/projects/myproject/other.vue:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js]
-var x = 10;
-
-
-//// [/user/username/projects/myproject/other.vue.js]
-
-
 
 Change:: Write a file
 
@@ -84,6 +93,13 @@ Input::
 
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
@@ -92,8 +108,42 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.vue","/user/username/projects/myproject/other2.vue"]
-Program options: {"allowNonTsExtensions":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/other2.vue.js]
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/main.ts:
+  {}
+/user/username/projects/myproject/other.vue:
+  {}
+/user/username/projects/myproject/other2.vue: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
+
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.vue",
+  "/user/username/projects/myproject/other2.vue"
+]
+Program options: {
+  "allowNonTsExtensions": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -107,28 +157,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/other2.vue (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/main.ts:
-  {}
-/user/username/projects/myproject/other.vue:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/other2.vue:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/other2.vue.js]
-
-

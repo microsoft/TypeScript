@@ -1,4 +1,6 @@
-=== tests/cases/compiler/regexMatchAll-esnext.ts ===
+//// [tests/cases/compiler/regexMatchAll-esnext.ts] ////
+
+=== regexMatchAll-esnext.ts ===
 const matches = /\w/g[Symbol.matchAll]("matchAll");
 >matches : IterableIterator<RegExpMatchArray>
 >/\w/g[Symbol.matchAll]("matchAll") : IterableIterator<RegExpMatchArray>

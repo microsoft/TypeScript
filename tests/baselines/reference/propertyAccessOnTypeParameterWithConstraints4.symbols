@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts ===
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts] ////
+
+=== propertyAccessOnTypeParameterWithConstraints4.ts ===
 class C<T extends Date> {
 >C : Symbol(C, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 0, 0))
 >T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints4.ts, 0, 8))

@@ -4,7 +4,7 @@ const enum ChangedPart {
     none = 0,
     references = 1 << 0,
     importsAndExports = 1 << 1,
-    program = 1 << 2
+    program = 1 << 2,
 }
 
 export const newLine = "\r\n";
@@ -31,11 +31,7 @@ export interface TestCompilerHost extends ts.CompilerHost {
 export class SourceText implements ts.IScriptSnapshot {
     private fullText: string | undefined;
 
-    constructor(private references: string,
-        private importsAndExports: string,
-        private program: string,
-        private changedPart = ChangedPart.none,
-        private version = 0) {
+    constructor(private references: string, private importsAndExports: string, private program: string, private changedPart = ChangedPart.none, private version = 0) {
     }
 
     static New(references: string, importsAndExports: string, program: string): SourceText {
@@ -172,37 +168,6 @@ export function updateProgramText(files: readonly NamedSourceText[], fileName: s
     file.text = file.text.updateProgram(newProgramText);
 }
 
-export function checkResolvedTypeDirective(actual: ts.ResolvedTypeReferenceDirective, expected: ts.ResolvedTypeReferenceDirective) {
-    assert.equal(actual.resolvedFileName, expected.resolvedFileName, `'resolvedFileName': expected '${actual.resolvedFileName}' to be equal to '${expected.resolvedFileName}'`);
-    assert.equal(actual.primary, expected.primary, `'primary': expected '${actual.primary}' to be equal to '${expected.primary}'`);
-    return true;
-}
-
-export function createResolvedModule(resolvedFileName: string, isExternalLibraryImport = false): ts.ResolvedModuleFull {
-    return { resolvedFileName, extension: ts.extensionFromPath(resolvedFileName), isExternalLibraryImport };
-}
-
-export function checkResolvedModule(actual: ts.ResolvedModuleFull | undefined, expected: ts.ResolvedModuleFull | undefined): boolean {
-    if (!expected) {
-        if (actual) {
-            assert.fail(actual, expected, "expected resolved module to be undefined");
-            return false;
-        }
-        return true;
-    }
-    else if (!actual) {
-        assert.fail(actual, expected, "expected resolved module to be defined");
-        return false;
-    }
-
-    assert.isTrue(actual.resolvedFileName === expected.resolvedFileName, `'resolvedFileName': expected '${actual.resolvedFileName}' to be equal to '${expected.resolvedFileName}'`);
-    assert.isTrue(actual.extension === expected.extension, `'ext': expected '${actual.extension}' to be equal to '${expected.extension}'`);
-    assert.isTrue(actual.isExternalLibraryImport === expected.isExternalLibraryImport, `'isExternalLibraryImport': expected '${actual.isExternalLibraryImport}' to be equal to '${expected.isExternalLibraryImport}'`);
-    return true;
-}
-
-export function checkResolvedModuleWithFailedLookupLocations(actual: ts.ResolvedModuleWithFailedLookupLocations, expectedResolvedModule: ts.ResolvedModuleFull, expectedFailedLookupLocations: string[]): void {
-    assert.isTrue(actual.resolvedModule !== undefined, "module should be resolved");
-    checkResolvedModule(actual.resolvedModule, expectedResolvedModule);
-    assert.deepEqual(actual.failedLookupLocations, expectedFailedLookupLocations, `Failed lookup locations should match - expected has ${expectedFailedLookupLocations.length}, actual has ${actual.failedLookupLocations.length}`);
+export function jsonToReadableText(json: any) {
+    return JSON.stringify(json, undefined, 2);
 }

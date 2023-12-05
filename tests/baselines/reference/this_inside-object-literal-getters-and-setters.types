@@ -1,4 +1,6 @@
-=== tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts ===
+//// [tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts] ////
+
+=== this_inside-object-literal-getters-and-setters.ts ===
 module ObjectLiteral {
 >ObjectLiteral : typeof ObjectLiteral
 

@@ -1,8 +1,10 @@
-=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5.ts] ////
+
+=== es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0.ts, 0, 10))
 
-=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts ===
+=== es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts ===
 import defaultBinding, * as nameSpaceBinding  from "./es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0";
 >defaultBinding : Symbol(defaultBinding, Decl(es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts, 0, 6))
 >nameSpaceBinding : Symbol(nameSpaceBinding, Decl(es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_1.ts, 0, 22))

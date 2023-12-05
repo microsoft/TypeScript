@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/2dArrays.ts] ////
+
 //// [2dArrays.ts]
 class Cell {
 }

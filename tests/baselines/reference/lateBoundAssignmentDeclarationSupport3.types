@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/usage.js ===
+//// [tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3.ts] ////
+
+=== usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport3.js");
 >x : typeof x
 >require("./lateBoundAssignmentDeclarationSupport3.js") : typeof x
@@ -19,7 +21,7 @@ const z = x[x.S];
 >x : typeof x
 >S : unique symbol
 
-=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport3.js ===
+=== lateBoundAssignmentDeclarationSupport3.js ===
 // currently unsupported
 const _sym = Symbol();
 >_sym : unique symbol

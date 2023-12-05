@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of40.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of40.ts] ////
+
+=== for-of40.ts ===
 var map = new Map([["", true]]);
 >map : Map<string, boolean>
 >new Map([["", true]]) : Map<string, boolean>

@@ -1,3 +1,21 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoInheritedLinkTag.ts ===
+// export class C {
+//      /**
+//       * @deprecated Use {@link PerspectiveCamera#setFocalLength .setFocalLength()} and {@link PerspectiveCamera#filmGauge .filmGauge} instead.
+//       */
+//     m() { }
+// }
+// export class D extends C {
+//     m() { } // crashes here
+// }
+// new C().m // and here (with a different thing trying to access undefined)
+//         ^
+// | ----------------------------------------------------------------------
+// | (method) C.m(): void
+// | @deprecated Use {@link PerspectiveCamera#setFocalLength .setFocalLength()} and {@link PerspectiveCamera#filmGauge .filmGauge} instead.
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +23,7 @@
       "position": 258,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "deprecated",
       "textSpan": {

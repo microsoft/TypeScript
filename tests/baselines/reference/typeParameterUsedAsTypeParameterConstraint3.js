@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/typeParameterUsedAsTypeParameterConstraint3.ts] ////
+
 //// [typeParameterUsedAsTypeParameterConstraint3.ts]
 // Type parameters are in scope in their own and other type parameter lists
 // Object types

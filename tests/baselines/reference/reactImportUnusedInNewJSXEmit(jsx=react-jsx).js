@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactImportUnusedInNewJSXEmit.tsx] ////
+
 //// [index.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -13,7 +15,7 @@ export function Foo() {
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
 function Bar() {

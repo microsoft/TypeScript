@@ -1,9 +1,9 @@
-tests/cases/conformance/jsdoc/0.js(27,5): error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
-tests/cases/conformance/jsdoc/0.js(32,5): error TS4122: This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class 'A'.
-tests/cases/conformance/jsdoc/0.js(40,5): error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
+0.js(27,5): error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
+0.js(32,5): error TS4122: This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class 'A'.
+0.js(40,5): error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
 
 
-==== tests/cases/conformance/jsdoc/0.js (3 errors) ====
+==== 0.js (3 errors) ====
     class A {
     
         /**

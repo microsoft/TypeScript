@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteral.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/functionLiteral.ts] ////
+
+=== functionLiteral.ts ===
 // basic valid forms of function literals
 
 var x = () => 1;

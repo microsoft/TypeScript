@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionPropertyOfProtectedAndIntersectionProperty.ts ===
+//// [tests/cases/compiler/unionPropertyOfProtectedAndIntersectionProperty.ts] ////
+
+=== unionPropertyOfProtectedAndIntersectionProperty.ts ===
 class Foo {
 >Foo : Foo
 

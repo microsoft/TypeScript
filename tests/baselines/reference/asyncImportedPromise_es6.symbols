@@ -1,11 +1,13 @@
-=== tests/cases/conformance/async/es6/task.ts ===
+//// [tests/cases/conformance/async/es6/asyncImportedPromise_es6.ts] ////
+
+=== task.ts ===
 export class Task<T> extends Promise<T> { }
 >Task : Symbol(Task, Decl(task.ts, 0, 0))
 >T : Symbol(T, Decl(task.ts, 0, 18))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(task.ts, 0, 18))
 
-=== tests/cases/conformance/async/es6/test.ts ===
+=== test.ts ===
 import { Task } from "./task";
 >Task : Symbol(Task, Decl(test.ts, 0, 8))
 

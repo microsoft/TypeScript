@@ -1,4 +1,6 @@
-=== tests/cases/compiler/test.ts ===
+//// [tests/cases/compiler/declarationEmitInlinedDistributiveConditional.ts] ////
+
+=== test.ts ===
 import {dropPrivateProps1, dropPrivateProps2} from './api';
 >dropPrivateProps1 : Symbol(dropPrivateProps1, Decl(test.ts, 0, 8))
 >dropPrivateProps2 : Symbol(dropPrivateProps2, Decl(test.ts, 0, 26))
@@ -18,7 +20,7 @@ const b = dropPrivateProps2({foo: 42, _bar: 'secret'}); // type is {foo: number,
 
 //b._bar                                                // no error, type of b._bar is string   <===== NOT expected
 
-=== tests/cases/compiler/api.ts ===
+=== api.ts ===
 import {excludePrivateKeys1, excludePrivateKeys2} from './internal';
 >excludePrivateKeys1 : Symbol(excludePrivateKeys1, Decl(api.ts, 0, 8))
 >excludePrivateKeys2 : Symbol(excludePrivateKeys2, Decl(api.ts, 0, 28))
@@ -39,7 +41,7 @@ export const dropPrivateProps2 = <Obj>(obj: Obj) => excludePrivateKeys2(obj);
 >excludePrivateKeys2 : Symbol(excludePrivateKeys2, Decl(api.ts, 0, 28))
 >obj : Symbol(obj, Decl(api.ts, 2, 39))
 
-=== tests/cases/compiler/internal.ts ===
+=== internal.ts ===
 export declare function excludePrivateKeys1<Obj>(obj: Obj): {[K in PublicKeys1<keyof Obj>]: Obj[K]};
 >excludePrivateKeys1 : Symbol(excludePrivateKeys1, Decl(internal.ts, 0, 0))
 >Obj : Symbol(Obj, Decl(internal.ts, 0, 44))

@@ -1,0 +1,48 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationNamespace_06.ts ===
+// <|namespace [|{| defId: 0 |}F/*GOTO IMPL*/oo|] {
+//     declare function hello(): void;
+// }|>
+// 
+// 
+// let x: typeof Foo = [|{| defId: 1 |}{ hello() {} }|];
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "moduleName"
+     }
+    ],
+    "kind": "module"
+   },
+   {
+    "defId": 1,
+    "kind": "interface",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "object literal",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]

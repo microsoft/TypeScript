@@ -1,3 +1,19 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoInheritDoc6.js ===
+// class B extends UNRESOLVED_VALUE_DEFINITELY_DOES_NOT_EXIST {
+//     /**
+//      * @inheritdoc
+//      */
+//     static value() {
+//            ^^^^^
+// | ----------------------------------------------------------------------
+// | (method) B.value(): any
+// | @inheritdoc 
+// | ----------------------------------------------------------------------
+//         return undefined;
+//     }
+// }
+
 [
   {
     "marker": {
@@ -5,7 +21,7 @@
       "position": 107,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {

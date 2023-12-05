@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTyping.ts] ////
+
 //// [contextualTyping.ts]
 // DEFAULT INTERFACES
 interface IFoo {

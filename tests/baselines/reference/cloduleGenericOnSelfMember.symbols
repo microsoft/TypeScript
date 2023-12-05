@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cloduleGenericOnSelfMember.ts ===
+//// [tests/cases/compiler/cloduleGenericOnSelfMember.ts] ////
+
+=== cloduleGenericOnSelfMember.ts ===
 class ServiceBase<T> {
 >ServiceBase : Symbol(ServiceBase, Decl(cloduleGenericOnSelfMember.ts, 0, 0))
 >T : Symbol(T, Decl(cloduleGenericOnSelfMember.ts, 0, 18))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileTypeAnnotationBuiltInType.ts] ////
+
 //// [declFileTypeAnnotationBuiltInType.ts]
 // string
 function foo(): string {

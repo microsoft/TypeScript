@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertiesAndIndexersForNumericNames.ts ===
+//// [tests/cases/compiler/propertiesAndIndexersForNumericNames.ts] ////
+
+=== propertiesAndIndexersForNumericNames.ts ===
 class C {
 >C : C
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumAssignmentCompat.ts ===
+//// [tests/cases/compiler/enumAssignmentCompat.ts] ////
+
+=== enumAssignmentCompat.ts ===
 module W {
 >W : typeof W
 

@@ -71,7 +71,7 @@ export function transformNodeModule(context: TransformationContext) {
         return cjsOnEmitNode(hint, node, emitCallback);
     }
 
-    function getModuleTransformForFile(file: SourceFile): (typeof esmTransform) {
+    function getModuleTransformForFile(file: SourceFile): typeof esmTransform {
         return file.impliedNodeFormat === ModuleKind.ESNext ? esmTransform : cjsTransform;
     }
 

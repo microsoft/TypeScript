@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionDeclarationWithResolutionOfTypeOfSameName01.ts ===
+//// [tests/cases/compiler/functionDeclarationWithResolutionOfTypeOfSameName01.ts] ////
+
+=== functionDeclarationWithResolutionOfTypeOfSameName01.ts ===
 interface f {
 }
 

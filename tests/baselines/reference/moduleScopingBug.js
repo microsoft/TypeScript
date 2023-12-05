@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleScopingBug.ts] ////
+
 //// [moduleScopingBug.ts]
 module M
 

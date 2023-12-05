@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/comparable/optionalProperties02.ts ===
+//// [tests/cases/conformance/types/typeRelationships/comparable/optionalProperties02.ts] ////
+
+=== optionalProperties02.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(optionalProperties02.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsDeclarationsInJs.ts] ////
+
 //// [uniqueSymbolsDeclarationsInJs.js]
 // classes
 class C {

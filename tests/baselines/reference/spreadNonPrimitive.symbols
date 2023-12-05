@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/spreadNonPrimitive.ts ===
+//// [tests/cases/conformance/types/spread/spreadNonPrimitive.ts] ////
+
+=== spreadNonPrimitive.ts ===
 declare let o: object;
 >o : Symbol(o, Decl(spreadNonPrimitive.ts, 0, 11))
 

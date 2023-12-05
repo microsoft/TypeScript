@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts] ////
+
 //// [strictPropertyInitialization.ts]
 // Properties with non-undefined types require initialization
 

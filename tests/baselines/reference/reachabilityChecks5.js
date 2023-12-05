@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reachabilityChecks5.ts] ////
+
 //// [reachabilityChecks5.ts]
 function f0(x): number {
     while (true);

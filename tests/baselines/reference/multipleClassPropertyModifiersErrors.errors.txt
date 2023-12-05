@@ -1,7 +1,7 @@
-tests/cases/compiler/multipleClassPropertyModifiersErrors.ts(4,9): error TS1434: Unexpected keyword or identifier.
+multipleClassPropertyModifiersErrors.ts(4,9): error TS1434: Unexpected keyword or identifier.
 
 
-==== tests/cases/compiler/multipleClassPropertyModifiersErrors.ts (1 errors) ====
+==== multipleClassPropertyModifiersErrors.ts (1 errors) ====
     class C {
     	public public p1;
     	private private p2;

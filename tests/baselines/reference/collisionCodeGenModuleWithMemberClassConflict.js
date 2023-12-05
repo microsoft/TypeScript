@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionCodeGenModuleWithMemberClassConflict.ts] ////
+
 //// [collisionCodeGenModuleWithMemberClassConflict.ts]
 module m1 {
     export class m1 {

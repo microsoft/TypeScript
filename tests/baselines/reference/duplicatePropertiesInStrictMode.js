@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicatePropertiesInStrictMode.ts] ////
+
 //// [duplicatePropertiesInStrictMode.ts]
 "use strict";
 var x = {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/constructor/0.ts ===
+//// [tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor2.ts] ////
+
+=== 0.ts ===
 export class base { }
 >base : Symbol(base, Decl(0.ts, 0, 0))
 
@@ -9,7 +11,7 @@ export function foo(target: Object, propertyKey: string | symbol, parameterIndex
 >propertyKey : Symbol(propertyKey, Decl(0.ts, 1, 35))
 >parameterIndex : Symbol(parameterIndex, Decl(0.ts, 1, 65))
 
-=== tests/cases/conformance/decorators/class/constructor/2.ts ===
+=== 2.ts ===
 import {base} from "./0.ts"
 >base : Symbol(base, Decl(2.ts, 0, 8))
 
@@ -25,5 +27,6 @@ export class C  extends base{
 >prop : Symbol(prop, Decl(2.ts, 3, 16))
 
         super();
+>super : Symbol(base, Decl(0.ts, 0, 0))
     }
 }

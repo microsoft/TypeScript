@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop1_ES6.ts] ////
+
 //// [capturedLetConstInLoop1_ES6.ts]
 //==== let
 for (let x in {}) {

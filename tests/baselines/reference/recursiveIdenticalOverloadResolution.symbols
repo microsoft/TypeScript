@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveIdenticalOverloadResolution.ts ===
+//// [tests/cases/compiler/recursiveIdenticalOverloadResolution.ts] ////
+
+=== recursiveIdenticalOverloadResolution.ts ===
 module M {
 >M : Symbol(M, Decl(recursiveIdenticalOverloadResolution.ts, 0, 0))
 

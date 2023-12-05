@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lambdaPropSelf.ts ===
+//// [tests/cases/compiler/lambdaPropSelf.ts] ////
+
+=== lambdaPropSelf.ts ===
 declare var ko: any;
 >ko : Symbol(ko, Decl(lambdaPropSelf.ts, 0, 11))
 

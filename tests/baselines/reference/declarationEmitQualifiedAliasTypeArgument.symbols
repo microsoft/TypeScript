@@ -1,4 +1,6 @@
-=== tests/cases/compiler/bbb.d.ts ===
+//// [tests/cases/compiler/declarationEmitQualifiedAliasTypeArgument.ts] ////
+
+=== bbb.d.ts ===
 export interface INode<T> {
 >INode : Symbol(INode, Decl(bbb.d.ts, 0, 0))
 >T : Symbol(T, Decl(bbb.d.ts, 0, 23))
@@ -14,7 +16,7 @@ export function create<T>(): () => INode<T>;
 >INode : Symbol(INode, Decl(bbb.d.ts, 0, 0))
 >T : Symbol(T, Decl(bbb.d.ts, 4, 23))
 
-=== tests/cases/compiler/lib.d.ts ===
+=== lib.d.ts ===
 export type G<T extends string> = { [P in T]: string };
 >G : Symbol(G, Decl(lib.d.ts, --, --))
 >T : Symbol(T, Decl(lib.d.ts, --, --))
@@ -42,7 +44,7 @@ export type Q = G<E.A>;
 >E : Symbol(E, Decl(lib.d.ts, --, --))
 >A : Symbol(E.A, Decl(lib.d.ts, --, --))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { T, Q } from "./lib";
 >T : Symbol(T, Decl(index.ts, 0, 8))
 >Q : Symbol(Q, Decl(index.ts, 0, 11))

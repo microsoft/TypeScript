@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts] ////
+
 //// [enumIsNotASubtypeOfAnythingButNumber.ts]
 // enums are only subtypes of number, any and no other types
 

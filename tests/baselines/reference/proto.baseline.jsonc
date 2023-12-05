@@ -1,0 +1,21 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/proto.ts ===
+// module M {
+//     export interface __proto__ {}
+// }
+// <|var [|__proto__|]: M.__proto__;|>
+// __proto__/*GOTO DEF POS*/
+// var fun: (__proto__: any) => boolean;
+
+  // === Details ===
+  [
+   {
+    "kind": "var",
+    "name": "__proto__",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

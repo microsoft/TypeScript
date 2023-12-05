@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithModuleChildren.ts ===
+//// [tests/cases/compiler/collisionCodeGenModuleWithModuleChildren.ts] ////
+
+=== collisionCodeGenModuleWithModuleChildren.ts ===
 module M {
 >M : Symbol(M, Decl(collisionCodeGenModuleWithModuleChildren.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleChildren.ts, 6, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 15, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 24, 1), Decl(collisionCodeGenModuleWithModuleChildren.ts, 33, 1))
 

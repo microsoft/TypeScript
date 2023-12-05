@@ -1,0 +1,242 @@
+// === Inlay Hints ===
+    foo(...x, 3);
+        ^
+{
+  "text": "",
+  "position": 113,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 13,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(...x, 3);
+              ^
+{
+  "text": "",
+  "position": 119,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "c",
+      "span": {
+        "start": 37,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(...x, 1, 2, 3);
+              ^
+{
+  "text": "",
+  "position": 165,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 13,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(...x, 1, 2, 3);
+                 ^
+{
+  "text": "",
+  "position": 168,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "b",
+      "span": {
+        "start": 25,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(...x, 1, 2, 3);
+                    ^
+{
+  "text": "",
+  "position": 171,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "c",
+      "span": {
+        "start": 37,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(1, ...x);
+        ^
+{
+  "text": "",
+  "position": 226,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 13,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(1, ...x);
+           ^
+{
+  "text": "",
+  "position": 229,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "b",
+      "span": {
+        "start": 25,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(...x, 3);
+        ^
+{
+  "text": "",
+  "position": 287,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 13,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(...x, 3);
+              ^
+{
+  "text": "",
+  "position": 293,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "b",
+      "span": {
+        "start": 25,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(...x, 3);
+        ^
+{
+  "text": "",
+  "position": 347,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 13,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+    foo(...x, 3);
+              ^
+{
+  "text": "",
+  "position": 353,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "c",
+      "span": {
+        "start": 37,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveRestParameters2.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}

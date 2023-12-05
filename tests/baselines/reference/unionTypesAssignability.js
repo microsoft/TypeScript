@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts] ////
+
 //// [unionTypesAssignability.ts]
 var unionNumberString: number | string;
 class C { }

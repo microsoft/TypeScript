@@ -1,22 +1,22 @@
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(4,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(5,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(14,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(15,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(20,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(22,5): error TS2393: Duplicate function implementation.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(23,5): error TS2393: Duplicate function implementation.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(26,5): error TS2300: Duplicate identifier 'baz'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(30,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(31,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(35,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(36,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(38,5): error TS2300: Duplicate identifier 'bar'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(39,5): error TS2300: Duplicate identifier 'bar'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(44,5): error TS1117: An object literal cannot have multiple properties with the same name.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(46,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicatePropertyNames.ts(4,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(5,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(14,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(15,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(20,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(22,5): error TS2393: Duplicate function implementation.
+duplicatePropertyNames.ts(23,5): error TS2393: Duplicate function implementation.
+duplicatePropertyNames.ts(26,5): error TS2300: Duplicate identifier 'baz'.
+duplicatePropertyNames.ts(30,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(31,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(35,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(36,5): error TS2300: Duplicate identifier 'foo'.
+duplicatePropertyNames.ts(38,5): error TS2300: Duplicate identifier 'bar'.
+duplicatePropertyNames.ts(39,5): error TS2300: Duplicate identifier 'bar'.
+duplicatePropertyNames.ts(44,5): error TS1117: An object literal cannot have multiple properties with the same name.
+duplicatePropertyNames.ts(46,5): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
-==== tests/cases/conformance/types/members/duplicatePropertyNames.ts (16 errors) ====
+==== duplicatePropertyNames.ts (16 errors) ====
     // duplicate property names are an error in all types
     
     interface Number {

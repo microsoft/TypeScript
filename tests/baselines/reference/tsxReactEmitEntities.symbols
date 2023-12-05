@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/tsxReactEmitEntities.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
@@ -16,42 +18,42 @@ declare var React: any;
 >React : Symbol(React, Decl(file.tsx, 6, 11))
 
 <div>Dot goes here: &middot; &notAnEntity; </div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 <div>Be careful of &quot;-ed strings!</div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 <div>&#0123;&#123;braces&#x7d;&#x7D;</div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 // Escapes do nothing
 <div>\n</div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 // Also works in string literal attributes
 <div attr="&#0123;&hellip;&#x7D;\"></div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >attr : Symbol(attr, Decl(file.tsx, 15, 4))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 // Does not happen for a string literal that happens to be inside an attribute (and escapes then work)
 <div attr={"&#0123;&hellip;&#x7D;\""}></div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >attr : Symbol(attr, Decl(file.tsx, 17, 4))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 // Preserves single quotes
 <div attr='"'></div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 >attr : Symbol(attr, Decl(file.tsx, 19, 4))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 
 // https://github.com/microsoft/TypeScript/issues/35732
 <div>&#x1F408;&#x1F415;&#128007;&#128017;</div>;
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
+>div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
 

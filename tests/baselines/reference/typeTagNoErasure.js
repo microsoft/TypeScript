@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typeTagNoErasure.ts] ////
+
 //// [typeTagNoErasure.js]
 /** @template T @typedef {<T1 extends T>(data: T1) => T1} Test */
 

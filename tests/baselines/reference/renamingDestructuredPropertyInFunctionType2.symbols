@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.d.ts ===
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType2.ts] ////
+
+=== a.d.ts ===
 type O = { a: string; b: number; c: number; };
 >O : Symbol(O, Decl(a.d.ts, 0, 0))
 >a : Symbol(a, Decl(a.d.ts, 0, 10))

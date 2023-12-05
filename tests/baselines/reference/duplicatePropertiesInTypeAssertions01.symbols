@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeAssertions/duplicatePropertiesInTypeAssertions01.ts ===
+//// [tests/cases/conformance/expressions/typeAssertions/duplicatePropertiesInTypeAssertions01.ts] ////
+
+=== duplicatePropertiesInTypeAssertions01.ts ===
 let x = <{a: number; a: number}>{};
 >x : Symbol(x, Decl(duplicatePropertiesInTypeAssertions01.ts, 0, 3))
 >a : Symbol(a, Decl(duplicatePropertiesInTypeAssertions01.ts, 0, 10), Decl(duplicatePropertiesInTypeAssertions01.ts, 0, 20))

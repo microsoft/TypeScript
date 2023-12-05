@@ -1,9 +1,7 @@
-tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts(6,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts(6,9): error TS2611: 'x' is defined as a property in class 'a', but is overridden here in 'b' as an accessor.
-tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts(9,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+inheritanceMemberAccessorOverridingProperty.ts(6,9): error TS2611: 'x' is defined as a property in class 'a', but is overridden here in 'b' as an accessor.
 
 
-==== tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts (3 errors) ====
+==== inheritanceMemberAccessorOverridingProperty.ts (1 errors) ====
     class a {
         x: string;
     }
@@ -11,14 +9,10 @@ tests/cases/compiler/inheritanceMemberAccessorOverridingProperty.ts(9,9): error 
     class b extends a {
         get x() {
             ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-            ~
 !!! error TS2611: 'x' is defined as a property in class 'a', but is overridden here in 'b' as an accessor.
             return "20";
         }
         set x(aValue: string) {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         }
     }

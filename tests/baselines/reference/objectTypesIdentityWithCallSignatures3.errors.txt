@@ -1,8 +1,8 @@
-tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures3.ts(21,25): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures3.ts(22,25): error TS2304: Cannot find name 'b'.
+objectTypesIdentityWithCallSignatures3.ts(21,25): error TS2304: Cannot find name 'b'.
+objectTypesIdentityWithCallSignatures3.ts(22,25): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures3.ts (2 errors) ====
+==== objectTypesIdentityWithCallSignatures3.ts (2 errors) ====
     // object types are identical structurally
     
     interface I {

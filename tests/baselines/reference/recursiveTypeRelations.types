@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveTypeRelations.ts ===
+//// [tests/cases/compiler/recursiveTypeRelations.ts] ////
+
+=== recursiveTypeRelations.ts ===
 // Repro from #14896
 
 type Attributes<Keys extends keyof any> = {
@@ -46,10 +48,8 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
     if (arg == null) {
 >arg == null : boolean
 >arg : ClassNameArg<S>
->null : null
 
       return null;
->null : null
     }
     if (typeof arg == "string") {
 >typeof arg == "string" : boolean

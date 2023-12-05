@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newAbstractInstance.ts ===
+//// [tests/cases/compiler/newAbstractInstance.ts] ////
+
+=== newAbstractInstance.ts ===
 abstract class B { }
 >B : Symbol(B, Decl(newAbstractInstance.ts, 0, 0))
 

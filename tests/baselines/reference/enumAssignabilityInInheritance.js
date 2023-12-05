@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts] ////
+
 //// [enumAssignabilityInInheritance.ts]
 // enum is only a subtype of number, no types are subtypes of enum, all of these except the first are errors
 

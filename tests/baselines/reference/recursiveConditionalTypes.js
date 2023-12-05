@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveConditionalTypes.ts] ////
+
 //// [recursiveConditionalTypes.ts]
 // Awaiting promises
 
@@ -92,7 +94,7 @@ declare function foo<T>(x: Box1<Box1<T>>): T;
 
 declare let z: Box2<Box2<string>>;
 
-foo(z);  // unknown, but ideally would be string (requires unique recursion ID for each type reference)
+foo(z);  // string
 
 // Intersect tuple element types
 
@@ -192,7 +194,7 @@ unbox(b3); // InfBox<string>
 unbox({ value: { value: { value: { value: { value: { value: 5 } } } } } }); // number
 unbox(b4); // { value: { value: typeof b4 }}
 unbox({ value: { value: { get value() { return this; } } } }); // { readonly value: ... }
-foo(z); // unknown, but ideally would be string (requires unique recursion ID for each type reference)
+foo(z); // string
 function f20(x, y) {
     x = y;
     y = x;

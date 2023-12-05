@@ -35,7 +35,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = __importStar(require("./foo"));
 function invoke(f) { f(); }
 invoke(foo);

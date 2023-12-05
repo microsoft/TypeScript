@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/literalTypeNameAssertionNotTriggered.ts] ////
+
 === /b.ts ===
 import a = require('./a');
 >a : typeof a

@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo2 = void 0;
 var m4 = require("m4"); // Emit used
 function foo2() {

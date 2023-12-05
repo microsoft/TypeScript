@@ -1,4 +1,6 @@
-=== tests/cases/compiler/dottedSymbolResolution1.ts ===
+//// [tests/cases/compiler/dottedSymbolResolution1.ts] ////
+
+=== dottedSymbolResolution1.ts ===
 interface JQuery {
 >JQuery : Symbol(JQuery, Decl(dottedSymbolResolution1.ts, 0, 0))
 

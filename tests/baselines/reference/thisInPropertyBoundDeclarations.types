@@ -1,4 +1,6 @@
-=== tests/cases/compiler/thisInPropertyBoundDeclarations.ts ===
+//// [tests/cases/compiler/thisInPropertyBoundDeclarations.ts] ////
+
+=== thisInPropertyBoundDeclarations.ts ===
 class Bug {
 >Bug : Bug
 

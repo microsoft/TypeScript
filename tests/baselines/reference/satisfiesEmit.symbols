@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/satisfiesEmit.ts] ////
+
+=== satisfiesEmit.ts ===
+// This import should not be elided in the emitted JS
+import a = require("foo");
+>a : Symbol(a, Decl(satisfiesEmit.ts, 0, 0))
+
+const p = a satisfies bleh;
+>p : Symbol(p, Decl(satisfiesEmit.ts, 2, 5))
+>a : Symbol(a, Decl(satisfiesEmit.ts, 0, 0))
+>bleh : Symbol(bleh)
+

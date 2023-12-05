@@ -1,5 +1,6 @@
 import {
     canHaveExportModifier,
+    canHaveLocals,
     Declaration,
     Diagnostics,
     ExportDeclaration,
@@ -8,7 +9,7 @@ import {
     findAncestor,
     findLast,
     firstOrUndefined,
-    getResolvedModule,
+    getIsolatedModules,
     getTokenAtPosition,
     Identifier,
     isExportDeclaration,
@@ -89,7 +90,7 @@ registerCodeFix({
                 }
             });
         }));
-    }
+    },
 });
 
 interface ModuleExports {
@@ -118,14 +119,14 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier.text : undefined;
         if (moduleSpecifier === undefined) return undefined;
 
-        const resolvedModule = getResolvedModule(sourceFile, moduleSpecifier, /*mode*/ undefined);
+        const resolvedModule = program.getResolvedModule(sourceFile, moduleSpecifier, /*mode*/ undefined)?.resolvedModule;
         if (resolvedModule === undefined) return undefined;
 
         const moduleSourceFile = program.getSourceFile(resolvedModule.resolvedFileName);
         if (moduleSourceFile === undefined || isSourceFileFromLibrary(program, moduleSourceFile)) return undefined;
 
         const moduleSymbol = moduleSourceFile.symbol;
-        const locals = moduleSymbol.valueDeclaration?.locals;
+        const locals = tryCast(moduleSymbol.valueDeclaration, canHaveLocals)?.locals;
         if (locals === undefined) return undefined;
 
         const localSymbol = locals.get(token.escapedText);
@@ -165,24 +166,31 @@ function doChanges(changes: textChanges.ChangeTracker, program: Program, sourceF
 }
 
 function tryGetExportDeclaration(sourceFile: SourceFile, isTypeOnly: boolean) {
-    const predicate = (node: Node): node is ExportDeclaration =>
-        isExportDeclaration(node) && (isTypeOnly && node.isTypeOnly || !node.isTypeOnly);
+    const predicate = (node: Node): node is ExportDeclaration => isExportDeclaration(node) && (isTypeOnly && node.isTypeOnly || !node.isTypeOnly);
     return findLast(sourceFile.statements, predicate);
 }
 
 function updateExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, node: ExportDeclaration, names: ExportName[]) {
     const namedExports = node.exportClause && isNamedExports(node.exportClause) ? node.exportClause.elements : factory.createNodeArray([]);
-    const allowTypeModifier = !node.isTypeOnly && !!(program.getCompilerOptions().isolatedModules || find(namedExports, e => e.isTypeOnly));
-    changes.replaceNode(sourceFile, node,
-        factory.updateExportDeclaration(node, node.modifiers, node.isTypeOnly,
+    const allowTypeModifier = !node.isTypeOnly && !!(getIsolatedModules(program.getCompilerOptions()) || find(namedExports, e => e.isTypeOnly));
+    changes.replaceNode(
+        sourceFile,
+        node,
+        factory.updateExportDeclaration(
+            node,
+            node.modifiers,
+            node.isTypeOnly,
             factory.createNamedExports(
-                factory.createNodeArray([...namedExports, ...createExportSpecifiers(names, allowTypeModifier)], /*hasTrailingComma*/ namedExports.hasTrailingComma)), node.moduleSpecifier, node.assertClause));
+                factory.createNodeArray([...namedExports, ...createExportSpecifiers(names, allowTypeModifier)], /*hasTrailingComma*/ namedExports.hasTrailingComma),
+            ),
+            node.moduleSpecifier,
+            node.attributes,
+        ),
+    );
 }
 
 function createExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, names: ExportName[]) {
-    changes.insertNodeAtEndOfScope(sourceFile, sourceFile,
-        factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false,
-            factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ !!program.getCompilerOptions().isolatedModules)), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));
+    changes.insertNodeAtEndOfScope(sourceFile, sourceFile, factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ getIsolatedModules(program.getCompilerOptions()))), /*moduleSpecifier*/ undefined, /*attributes*/ undefined));
 }
 
 function createExportSpecifiers(names: ExportName[], allowTypeModifier: boolean) {

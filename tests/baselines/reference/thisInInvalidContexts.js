@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/thisKeyword/thisInInvalidContexts.ts] ////
+
 //// [thisInInvalidContexts.ts]
 class BaseErrClass {
     constructor(t: any) { }
@@ -68,7 +70,7 @@ var ClassWithNoInitializer = /** @class */ (function (_super) {
     __extends(ClassWithNoInitializer, _super);
     //'this' in optional super call
     function ClassWithNoInitializer() {
-        var _this = _super.call(this, _this) || this;
+        var _this = _super.call(this, _this) || this; // Error
         return _this;
     }
     return ClassWithNoInitializer;
@@ -77,7 +79,7 @@ var ClassWithInitializer = /** @class */ (function (_super) {
     __extends(ClassWithInitializer, _super);
     //'this' in required super call
     function ClassWithInitializer() {
-        var _this = _super.call(this, _this) || this;
+        var _this = _super.call(this, _this) || this; // Error
         _this.t = 4;
         return _this;
     }

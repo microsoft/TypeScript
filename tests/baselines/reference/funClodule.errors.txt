@@ -1,8 +1,8 @@
-tests/cases/compiler/funClodule.ts(15,10): error TS2814: Function with bodies can only merge with classes that are ambient.
-tests/cases/compiler/funClodule.ts(19,7): error TS2813: Class declaration cannot implement overload list for 'foo3'.
+funClodule.ts(15,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+funClodule.ts(19,7): error TS2813: Class declaration cannot implement overload list for 'foo3'.
 
 
-==== tests/cases/compiler/funClodule.ts (2 errors) ====
+==== funClodule.ts (2 errors) ====
     declare function foo();
     declare module foo {
         export function x(): any;
@@ -20,11 +20,11 @@ tests/cases/compiler/funClodule.ts(19,7): error TS2813: Class declaration cannot
     function foo3() { }
              ~~~~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
-!!! related TS6506 tests/cases/compiler/funClodule.ts:19:7: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 funClodule.ts:19:7: Consider adding a 'declare' modifier to this class.
     module foo3 {
          export function x(): any { }
     }
     class foo3 { } // Should error
           ~~~~
 !!! error TS2813: Class declaration cannot implement overload list for 'foo3'.
-!!! related TS6506 tests/cases/compiler/funClodule.ts:19:7: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 funClodule.ts:19:7: Consider adding a 'declare' modifier to this class.

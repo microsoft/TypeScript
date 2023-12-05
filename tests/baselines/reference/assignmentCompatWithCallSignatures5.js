@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts] ////
+
 //// [assignmentCompatWithCallSignatures5.ts]
 // checking assignment compat for function types. No errors in this file
 

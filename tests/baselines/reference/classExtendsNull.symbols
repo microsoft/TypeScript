@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsNull.ts ===
+//// [tests/cases/compiler/classExtendsNull.ts] ////
+
+=== classExtendsNull.ts ===
 class C extends null {
 >C : Symbol(C, Decl(classExtendsNull.ts, 0, 0))
 

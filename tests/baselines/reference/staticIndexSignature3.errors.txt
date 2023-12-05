@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts(12,5): error TS2413: 'number' index type '1' is not assignable to 'string' index type 'boolean'.
+staticIndexSignature3.ts(12,5): error TS2413: 'number' index type '1' is not assignable to 'string' index type 'boolean'.
 
 
-==== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature3.ts (1 errors) ====
+==== staticIndexSignature3.ts (1 errors) ====
     class B {
         static readonly [s: string]: number;
         static readonly [s: number]: 42 | 233

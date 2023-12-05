@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bigIntWithTargetES3.ts] ////
+
 //// [bigIntWithTargetES3.ts]
 const normalNumber = 123; // should not error
 let bigintType: bigint; // should not error

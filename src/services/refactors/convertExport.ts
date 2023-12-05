@@ -33,6 +33,7 @@ import {
     isStringLiteral,
     makeImport,
     ModifierFlags,
+    ModuleBlock,
     NamespaceDeclaration,
     Node,
     NodeFlags,
@@ -60,19 +61,19 @@ const refactorName = "Convert export";
 
 const defaultToNamedAction = {
     name: "Convert default export to named export",
-    description: Diagnostics.Convert_default_export_to_named_export.message,
-    kind: "refactor.rewrite.export.named"
+    description: getLocaleSpecificMessage(Diagnostics.Convert_default_export_to_named_export),
+    kind: "refactor.rewrite.export.named",
 };
 const namedToDefaultAction = {
     name: "Convert named export to default export",
-    description: Diagnostics.Convert_named_export_to_default_export.message,
-    kind: "refactor.rewrite.export.default"
+    description: getLocaleSpecificMessage(Diagnostics.Convert_named_export_to_default_export),
+    kind: "refactor.rewrite.export.default",
 };
 
 registerRefactor(refactorName, {
     kinds: [
         defaultToNamedAction.kind,
-        namedToDefaultAction.kind
+        namedToDefaultAction.kind,
     ],
     getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndDefaultExports(context): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
@@ -85,10 +86,14 @@ registerRefactor(refactorName, {
 
         if (context.preferences.provideRefactorNotApplicableReason) {
             return [
-                { name: refactorName, description: Diagnostics.Convert_default_export_to_named_export.message, actions: [
-                    { ...defaultToNamedAction, notApplicableReason: info.error },
-                    { ...namedToDefaultAction, notApplicableReason: info.error },
-                ]}
+                {
+                    name: refactorName,
+                    description: getLocaleSpecificMessage(Diagnostics.Convert_default_export_to_named_export),
+                    actions: [
+                        { ...defaultToNamedAction, notApplicableReason: info.error },
+                        { ...namedToDefaultAction, notApplicableReason: info.error },
+                    ],
+                },
             ];
         }
 
@@ -122,7 +127,7 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
     }
 
     const checker = program.getTypeChecker();
-    const exportingModuleSymbol = getExportingModuleSymbol(exportNode, checker);
+    const exportingModuleSymbol = getExportingModuleSymbol(exportNode.parent, checker);
     const flags = getSyntacticModifierFlags(exportNode) || ((isExportAssignment(exportNode) && !exportNode.isExportEquals) ? ModifierFlags.ExportDefault : ModifierFlags.None);
 
     const wasDefault = !!(flags & ModifierFlags.Default);
@@ -133,7 +138,7 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
 
     const noSymbolError = (id: Node) =>
         (isIdentifier(id) && checker.getSymbolAtLocation(id)) ? undefined
-        : { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_named_export) };
+            : { error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_named_export) };
 
     switch (exportNode.kind) {
         case SyntaxKind.FunctionDeclaration:
@@ -258,7 +263,7 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
                 // `import foo, * as a from "./a";` --> `import * as a from ".a/"; import { foo } from "./a";`
                 changes.deleteRange(importingSourceFile, { pos: ref.getStart(importingSourceFile), end: namedBindings.getStart(importingSourceFile) });
                 const quotePreference = isStringLiteral(clause.parent.moduleSpecifier) ? quotePreferenceFromString(clause.parent.moduleSpecifier, importingSourceFile) : QuotePreference.Double;
-                const newImport = makeImport(/*default*/ undefined, [makeImportSpecifier(exportName, ref.text)], clause.parent.moduleSpecifier, quotePreference);
+                const newImport = makeImport(/*defaultImport*/ undefined, [makeImportSpecifier(exportName, ref.text)], clause.parent.moduleSpecifier, quotePreference);
                 changes.insertNodeAfter(importingSourceFile, clause.parent, newImport);
             }
             else {
@@ -270,7 +275,7 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
         }
         case SyntaxKind.ImportType:
             const importTypeNode = parent as ImportTypeNode;
-            changes.replaceNode(importingSourceFile, parent, factory.createImportTypeNode(importTypeNode.argument, importTypeNode.assertions, factory.createIdentifier(exportName), importTypeNode.typeArguments, importTypeNode.isTypeOf));
+            changes.replaceNode(importingSourceFile, parent, factory.createImportTypeNode(importTypeNode.argument, importTypeNode.attributes, factory.createIdentifier(exportName), importTypeNode.typeArguments, importTypeNode.isTypeOf));
             break;
         default:
             Debug.failBadSyntaxKind(parent);
@@ -308,7 +313,6 @@ function changeNamedToDefaultImport(importingSourceFile: SourceFile, ref: Identi
         default:
             Debug.assertNever(parent, `Unexpected parent kind ${(parent as Node).kind}`);
     }
-
 }
 
 function makeImportSpecifier(propertyName: string, name: string): ImportSpecifier {
@@ -319,8 +323,7 @@ function makeExportSpecifier(propertyName: string, name: string): ExportSpecifie
     return factory.createExportSpecifier(/*isTypeOnly*/ false, propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
 }
 
-function getExportingModuleSymbol(node: Node, checker: TypeChecker) {
-    const parent = node.parent;
+function getExportingModuleSymbol(parent: SourceFile | ModuleBlock, checker: TypeChecker) {
     if (isSourceFile(parent)) {
         return parent.symbol;
     }

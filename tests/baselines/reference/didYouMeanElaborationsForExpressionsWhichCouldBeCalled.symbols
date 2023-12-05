@@ -1,4 +1,6 @@
-=== tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts ===
+//// [tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts] ////
+
+=== didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts ===
 class Bar {
 >Bar : Symbol(Bar, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 0, 0))
 

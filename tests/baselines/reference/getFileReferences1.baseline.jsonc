@@ -1,60 +1,12 @@
+// === getFileReferences ===
+// fileName: /project/a.ts
+
 // === /project/b.ts ===
-// import "[|./a|]";
+// <|import "[|./a|]";|>
 
 // === /project/c.ts ===
-// import {} from "[|./a|]";
+// <|import {} from "[|./a|]";|>
 
 // === /project/d.ts ===
-// import { a } from "[|/project/a|]";
-// type T = typeof import("[|./a|]").a;
-
-[
-  {
-    "textSpan": {
-      "start": 8,
-      "length": 3
-    },
-    "fileName": "/project/b.ts",
-    "contextSpan": {
-      "start": 0,
-      "length": 13
-    },
-    "isWriteAccess": false
-  },
-  {
-    "textSpan": {
-      "start": 16,
-      "length": 3
-    },
-    "fileName": "/project/c.ts",
-    "contextSpan": {
-      "start": 0,
-      "length": 21
-    },
-    "isWriteAccess": false
-  },
-  {
-    "textSpan": {
-      "start": 19,
-      "length": 10
-    },
-    "fileName": "/project/d.ts",
-    "contextSpan": {
-      "start": 0,
-      "length": 31
-    },
-    "isWriteAccess": false
-  },
-  {
-    "textSpan": {
-      "start": 56,
-      "length": 3
-    },
-    "fileName": "/project/d.ts",
-    "contextSpan": {
-      "start": 32,
-      "length": 32
-    },
-    "isWriteAccess": false
-  }
-]
+// <|import { a } from "[|/project/a|]";|>
+// <|type T = typeof import("[|./a|]").a;|>

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeMembers.ts] ////
+
 //// [unionTypeMembers.ts]
 interface I1<T> {
     commonMethodType(a: string): string;

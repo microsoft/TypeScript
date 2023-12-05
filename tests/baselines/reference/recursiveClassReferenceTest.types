@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveClassReferenceTest.ts ===
+//// [tests/cases/compiler/recursiveClassReferenceTest.ts] ////
+
+=== recursiveClassReferenceTest.ts ===
 // Scenario 1: Test reqursive function call with "this" parameter
 // Scenario 2: Test recursive function call with cast and "this" parameter
 
@@ -100,7 +102,6 @@ module Sample.Thing.Widgets {
 			
 		private domNode:any = null;
 >domNode : any
->null : null
 
 		constructor(private codeThing: Sample.Thing.ICodeThing) {
 >codeThing : ICodeThing
@@ -138,7 +139,6 @@ interface IMode { getInitialState(): IState;}
 class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
 >AbstractMode : AbstractMode
 >getInitialState : () => IState
->null : null
 
 interface IState {}
 

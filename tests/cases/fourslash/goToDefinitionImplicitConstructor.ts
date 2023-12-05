@@ -4,4 +4,4 @@
 ////}
 ////var implicitConstructor = new /*constructorReference*/ImplicitConstructor();
 
-verify.goToDefinitionForMarkers("constructor");
+verify.baselineGetDefinitionAtPosition("constructorReference");

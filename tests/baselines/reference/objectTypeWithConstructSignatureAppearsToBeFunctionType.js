@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts] ////
+
 //// [objectTypeWithConstructSignatureAppearsToBeFunctionType.ts]
 // no errors expected below 
 

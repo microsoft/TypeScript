@@ -1,4 +1,6 @@
-=== tests/cases/compiler/wrapClass.ts ===
+//// [tests/cases/compiler/anonClassDeclarationEmitIsAnon.ts] ////
+
+=== wrapClass.ts ===
 export function wrapClass(param: any) {
 >wrapClass : (param: any) => typeof Wrapped
 >param : any
@@ -38,10 +40,10 @@ export function Timestamped<TBase extends Constructor>(Base: TBase) {
     };
 }
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { wrapClass, Timestamped } from "./wrapClass";
 >wrapClass : (param: any) => typeof Wrapped
->Timestamped : <TBase extends import("tests/cases/compiler/wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
+>Timestamped : <TBase extends import("wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
 
 export default wrapClass(0);
 >wrapClass(0) : typeof Wrapped
@@ -61,7 +63,7 @@ export class User {
 export class TimestampedUser extends Timestamped(User) {
 >TimestampedUser : TimestampedUser
 >Timestamped(User) : Timestamped<typeof User>.(Anonymous class) & User
->Timestamped : <TBase extends import("tests/cases/compiler/wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
+>Timestamped : <TBase extends import("wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
 >User : typeof User
 
     constructor() {

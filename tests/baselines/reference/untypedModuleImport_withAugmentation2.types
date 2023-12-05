@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/untypedModuleImport_withAugmentation2.ts] ////
+
 === /a.ts ===
 
 import { } from "augmenter";

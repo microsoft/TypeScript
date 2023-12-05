@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParametersShouldNotBeEqual.ts ===
+//// [tests/cases/compiler/typeParametersShouldNotBeEqual.ts] ////
+
+=== typeParametersShouldNotBeEqual.ts ===
 function ff<T, U>(x: T, y: U) {
 >ff : Symbol(ff, Decl(typeParametersShouldNotBeEqual.ts, 0, 0))
 >T : Symbol(T, Decl(typeParametersShouldNotBeEqual.ts, 0, 12))

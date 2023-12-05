@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionalAccessorsInInterface1.ts] ////
+
 //// [optionalAccessorsInInterface1.ts]
 interface MyPropertyDescriptor {
     get? (): any;

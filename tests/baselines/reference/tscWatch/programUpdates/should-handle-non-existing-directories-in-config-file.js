@@ -1,9 +1,16 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/src/app.ts]
 let x = 1;
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{},"include":["src/**/*","notexistingfolder/*"]}
+{
+  "compilerOptions": {},
+  "include": [
+    "src/**/*",
+    "notexistingfolder/*"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -28,8 +35,35 @@ Output::
 
 
 
-Program root files: ["/a/src/app.ts"]
-Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+//// [/a/src/app.js]
+var x = 1;
+
+
+
+PolledWatches::
+/a/notexistingfolder: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/a/src/app.ts: *new*
+  {}
+/a/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a/src: *new*
+  {}
+
+Program root files: [
+  "/a/src/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -43,27 +77,4 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/src/app.ts (used version)
 
-PolledWatches::
-/a/node_modules/@types:
-  {"pollingInterval":500}
-/a/notexistingfolder:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/tsconfig.json:
-  {}
-/a/src/app.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/a/src:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/src/app.js]
-var x = 1;
-
-

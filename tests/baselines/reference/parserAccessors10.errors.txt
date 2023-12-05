@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,3): error TS1042: 'public' modifier cannot be used here.
-tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts(2,14): error TS2378: A 'get' accessor must return a value.
+parserAccessors10.ts(2,3): error TS1042: 'public' modifier cannot be used here.
+parserAccessors10.ts(2,14): error TS2378: A 'get' accessor must return a value.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts (2 errors) ====
+==== parserAccessors10.ts (2 errors) ====
     var v = {
       public get foo() { }
       ~~~~~~

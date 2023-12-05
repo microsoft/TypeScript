@@ -1,4 +1,6 @@
-=== tests/cases/compiler/awaitInClassInAsyncFunction.ts ===
+//// [tests/cases/compiler/awaitInClassInAsyncFunction.ts] ////
+
+=== awaitInClassInAsyncFunction.ts ===
 // https://github.com/microsoft/TypeScript/issues/34887
 
 async function bar() {

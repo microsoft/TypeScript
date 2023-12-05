@@ -1,3 +1,13 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/signatureHelpWithUnknown.ts ===
+// eval(\
+//       ^
+// | ----------------------------------------------------------------------
+// | eval(**x: string**): any
+// | Evaluates JavaScript code and executes it.
+// | @param x A String value that contains valid JavaScript code.
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +15,7 @@
       "position": 6,
       "name": "1"
     },
-    "signatureHelp": {
+    "item": {
       "items": [
         {
           "isVariadic": false,

@@ -1,31 +1,60 @@
 import {
-    appendText,
-    loadProjectFromDisk,
-    loadProjectFromFiles,
+    dedent,
+} from "../../_namespaces/Utils";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     noChangeRun,
-    replaceText,
     verifyTsc,
-    verifyTscWithEdits,
-} from "../tsc/helpers";
-import { dedent } from "../../_namespaces/Utils";
+} from "../helpers/tsc";
+import {
+    appendText,
+    loadProjectFromFiles,
+    replaceText,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
     verifyTsc({
         scenario: "configFileErrors",
         subScenario: "when tsconfig extends the missing file",
-        fs: () => loadProjectFromDisk("tests/projects/missingExtendedConfig"),
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/tsconfig.first.json": jsonToReadableText({
+                    extends: "./foobar.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                }),
+                "/src/tsconfig.second.json": jsonToReadableText({
+                    extends: "./foobar.json",
+                    compilerOptions: {
+                        composite: true,
+                    },
+                }),
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                    },
+                    references: [
+                        { path: "./tsconfig.first.json" },
+                        { path: "./tsconfig.second.json" },
+                    ],
+                }),
+            }),
         commandLineArgs: ["--b", "/src/tsconfig.json"],
     });
 });
 
 describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in config file", () => {
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "configFileErrors",
         subScenario: "reports syntax errors in config file",
-        fs: () => loadProjectFromFiles({
-            "/src/a.ts": "export function foo() { }",
-            "/src/b.ts": "export function bar() { }",
-            "/src/tsconfig.json": dedent`
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/a.ts": "export function foo() { }",
+                "/src/b.ts": "export function bar() { }",
+                "/src/tsconfig.json": dedent`
 {
     "compilerOptions": {
         "composite": true,
@@ -34,34 +63,41 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         "a.ts"
         "b.ts"
     ]
-}`
-        }),
+}`,
+            }),
         commandLineArgs: ["--b", "/src/tsconfig.json"],
         edits: [
             {
-                modifyFs: fs => replaceText(fs, "/src/tsconfig.json", ",", `,
-        "declaration": true,`),
-                subScenario: "reports syntax errors after change to config file",
+                edit: fs =>
+                    replaceText(
+                        fs,
+                        "/src/tsconfig.json",
+                        ",",
+                        `,
+        "declaration": true,`,
+                    ),
+                caption: "reports syntax errors after change to config file",
                 discrepancyExplanation: () => [
                     "During incremental build, tsbuildinfo is not emitted, so declaration option is not present",
                     "Clean build has declaration option in tsbuildinfo",
                 ],
             },
             {
-                modifyFs: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
-                subScenario: "reports syntax errors after change to ts file",
+                edit: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
+                caption: "reports syntax errors after change to ts file",
             },
             noChangeRun,
             {
-                modifyFs: fs => fs.writeFileSync(
-                    "/src/tsconfig.json",
-                    JSON.stringify({
-                        compilerOptions: { composite: true, declaration: true },
-                        files: ["a.ts", "b.ts"]
-                    })
-                ),
-                subScenario: "builds after fixing config file errors"
+                edit: fs =>
+                    fs.writeFileSync(
+                        "/src/tsconfig.json",
+                        jsonToReadableText({
+                            compilerOptions: { composite: true, declaration: true },
+                            files: ["a.ts", "b.ts"],
+                        }),
+                    ),
+                caption: "builds after fixing config file errors",
             },
-        ]
+        ],
     });
 });

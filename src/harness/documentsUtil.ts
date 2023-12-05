@@ -27,15 +27,16 @@ export class TextDocument {
             file.unitName,
             file.content,
             file.fileOptions && Object.keys(file.fileOptions)
-                .reduce((meta, key) => meta.set(key, file.fileOptions[key]), new Map<string, string>()));
+                .reduce((meta, key) => meta.set(key, file.fileOptions[key]), new Map<string, string>()),
+        );
     }
 
     public asTestFile() {
         return this._testFile || (this._testFile = {
             unitName: this.file,
             content: this.text,
-            fileOptions: Array.from(this.meta)
-                .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>)
+            fileOptions: ts.arrayFrom(this.meta)
+                .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>),
         });
     }
 }

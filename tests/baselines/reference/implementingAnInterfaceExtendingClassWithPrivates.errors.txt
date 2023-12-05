@@ -1,14 +1,14 @@
-tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(9,7): error TS2420: Class 'Bar' incorrectly implements interface 'I'.
+implementingAnInterfaceExtendingClassWithPrivates.ts(9,7): error TS2420: Class 'Bar' incorrectly implements interface 'I'.
   Type 'Bar' is missing the following properties from type 'I': y, x
-tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(12,7): error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
+implementingAnInterfaceExtendingClassWithPrivates.ts(12,7): error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
   Property 'x' is missing in type 'Bar2' but required in type 'I'.
-tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(16,7): error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
+implementingAnInterfaceExtendingClassWithPrivates.ts(16,7): error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
   Property 'x' is private in type 'I' but not in type 'Bar3'.
-tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts(21,7): error TS2420: Class 'Bar4' incorrectly implements interface 'I'.
+implementingAnInterfaceExtendingClassWithPrivates.ts(21,7): error TS2420: Class 'Bar4' incorrectly implements interface 'I'.
   Types have separate declarations of a private property 'x'.
 
 
-==== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts (4 errors) ====
+==== implementingAnInterfaceExtendingClassWithPrivates.ts (4 errors) ====
     class Foo {
         private x: string;
     }
@@ -27,7 +27,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
           ~~~~
 !!! error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'x' is missing in type 'Bar2' but required in type 'I'.
-!!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates.ts:2:13: 'x' is declared here.
+!!! related TS2728 implementingAnInterfaceExtendingClassWithPrivates.ts:2:13: 'x' is declared here.
         y: number;
     }
     

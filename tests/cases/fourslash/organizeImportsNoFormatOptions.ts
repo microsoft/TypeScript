@@ -16,7 +16,7 @@ format.setFormatOptions({});
 // Default newline is carriage return.
 // See `getNewLineOrDefaultFromHost()` in services/utilities.ts.
 verify.organizeImports(
-`import {\r\nstat,\r\nstatSync\r\n} from "fs";\r\nexport function fakeFn() {
+`import {\r\nstat,\r\nstatSync,\r\n} from "fs";\r\nexport function fakeFn() {
   stat;
   statSync;
 }`);

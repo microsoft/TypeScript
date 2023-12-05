@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionSuperAndLocalFunctionInAccessors.ts] ////
+
 //// [collisionSuperAndLocalFunctionInAccessors.ts]
 function _super() { // No error
 }

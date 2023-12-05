@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/spread/spreadOverwritesProperty.ts] ////
+
 //// [spreadOverwritesProperty.ts]
 // without strict null checks, none of these should be an error
 declare var ab: { a: number, b: number };

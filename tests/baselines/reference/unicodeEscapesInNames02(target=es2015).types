@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendedEscapesForAstralsInVarsAndClasses.ts ===
+//// [tests/cases/compiler/unicodeEscapesInNames02.ts] ////
+
+=== extendedEscapesForAstralsInVarsAndClasses.ts ===
 // Example from https://mathiasbynens.be/notes/javascript-identifiers-es6
 // Astral characters should be accepted in ES2015
 
@@ -69,7 +71,7 @@ _\u{102A7} += "!";
 >_\u{102A7} : string
 >"!" : "!"
 
-=== tests/cases/compiler/astralAsSurrogatePair.ts ===
+=== astralAsSurrogatePair.ts ===
 import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
 >_𐊧 : string
 > : string

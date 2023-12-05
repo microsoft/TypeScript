@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts] ////
+
 //// [untypedFunctionCallsWithTypeParameters1.ts]
 // none of these function calls should be allowed
 var x = function () { return; };

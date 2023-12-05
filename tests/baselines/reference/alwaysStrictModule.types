@@ -1,4 +1,6 @@
-=== tests/cases/compiler/alwaysStrictModule.ts ===
+//// [tests/cases/compiler/alwaysStrictModule.ts] ////
+
+=== alwaysStrictModule.ts ===
 module M {
 >M : typeof M
 

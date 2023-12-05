@@ -1,8 +1,10 @@
-=== tests/cases/conformance/declarationEmit/a.ts ===
+//// [tests/cases/conformance/declarationEmit/leaveOptionalParameterAsWritten.ts] ////
+
+=== a.ts ===
 
 export interface Foo {}
 
-=== tests/cases/conformance/declarationEmit/b.ts ===
+=== b.ts ===
 import * as a from "./a";
 >a : typeof a
 
@@ -23,14 +25,14 @@ declare global {
   }
 }
 
-=== tests/cases/conformance/declarationEmit/c.ts ===
+=== c.ts ===
 type Foo = teams.calling.Foo;
->Foo : import("tests/cases/conformance/declarationEmit/a").Foo
+>Foo : import("a").Foo
 >teams : any
 >calling : any
 
 export const bar = (p?: Foo) => {}
 >bar : (p?: Foo) => void
 >(p?: Foo) => {} : (p?: Foo) => void
->p : import("tests/cases/conformance/declarationEmit/a").Foo | undefined
+>p : import("a").Foo | undefined
 

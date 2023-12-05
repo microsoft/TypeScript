@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInFunctions.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctions.ts] ////
+
+=== thisTypeInFunctions.ts ===
 // body checking
 class B {
 >B : Symbol(B, Decl(thisTypeInFunctions.ts, 0, 0))

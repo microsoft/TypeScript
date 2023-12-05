@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleReopenedTypeSameBlock.ts ===
+//// [tests/cases/compiler/moduleReopenedTypeSameBlock.ts] ////
+
+=== moduleReopenedTypeSameBlock.ts ===
 module M { export class C1 { } }
 >M : typeof M
 >C1 : C1
@@ -12,6 +14,5 @@ module M {
     export class C2 { f(): I { return null; } }
 >C2 : C2
 >f : () => I
->null : null
 }
 

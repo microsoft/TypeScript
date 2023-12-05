@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectCreate-errors.ts ===
+//// [tests/cases/compiler/objectCreate-errors.ts] ////
+
+=== objectCreate-errors.ts ===
 var e1 = Object.create(1);               // Error
 >e1 : any
 >Object.create(1) : any

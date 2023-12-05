@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadTypeRemovesReadonly.ts ===
+//// [tests/cases/compiler/spreadTypeRemovesReadonly.ts] ////
+
+=== spreadTypeRemovesReadonly.ts ===
 interface ReadonlyData {
 >ReadonlyData : Symbol(ReadonlyData, Decl(spreadTypeRemovesReadonly.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations.ts ===
+//// [tests/cases/compiler/constDeclarations.ts] ////
+
+=== constDeclarations.ts ===
 // No error
 const c1 = false;
 >c1 : false
@@ -14,7 +16,6 @@ const c3 = 0, c4 :string = "", c5 = null;
 >c4 : string
 >"" : ""
 >c5 : any
->null : null
 
 
 for(const c4 = 0; c4 < 9; ) { break; }

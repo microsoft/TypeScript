@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndFunctionInGlobalFile.ts] ////
+
 //// [collisionExportsRequireAndFunctionInGlobalFile.ts]
 function exports() {
     return 1;

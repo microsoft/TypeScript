@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/argsInScope.ts] ////
+
 //// [argsInScope.ts]
 class C {
     P(ii:number, j:number, k:number) {

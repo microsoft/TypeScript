@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportAssignmentWithImportStatementPrivacyError.ts ===
+//// [tests/cases/compiler/exportAssignmentWithImportStatementPrivacyError.ts] ////
+
+=== exportAssignmentWithImportStatementPrivacyError.ts ===
 module m2 {
 >m2 : Symbol(m2, Decl(exportAssignmentWithImportStatementPrivacyError.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing6.ts] ////
+
 //// [checkSuperCallBeforeThisAccessing6.ts]
 class Base {
     constructor(...arg) {
@@ -40,8 +42,7 @@ var Super = /** @class */ (function (_super) {
     function Super() {
         var _this = this;
         (function () { return _this; }); // No Error
-        _this = _super.call(this) || this;
-        return _this;
+        return _this = _super.call(this) || this;
     }
     return Super;
 }(Base));

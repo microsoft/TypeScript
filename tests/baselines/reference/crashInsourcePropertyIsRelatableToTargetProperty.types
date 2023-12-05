@@ -1,4 +1,6 @@
-=== tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts ===
+//// [tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts] ////
+
+=== crashInsourcePropertyIsRelatableToTargetProperty.ts ===
 class C {
 >C : C
 
@@ -23,7 +25,6 @@ function foo(x: string, items: string[]): typeof foo {
 >foo : (x: "hi", items: string[]) => typeof foo
 
     return null;
->null : null
 }
 var a: D = foo("hi", []);
 >a : D

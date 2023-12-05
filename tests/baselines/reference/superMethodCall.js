@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/optionalChaining/callChain/superMethodCall.ts] ////
+
 //// [superMethodCall.ts]
 class Base {
     method?() { }
@@ -36,8 +38,8 @@ class Derived extends Base {
         const _super = Object.create(null, {
             method: { get: () => super.method }
         });
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             return (_a = _super.method) === null || _a === void 0 ? void 0 : _a.call(this);
         });
     }

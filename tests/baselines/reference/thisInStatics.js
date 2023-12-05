@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInStatics.ts] ////
+
 //// [thisInStatics.ts]
 class C {
     static f() {

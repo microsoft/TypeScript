@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualSignatureInstatiationContravariance.ts] ////
+
 //// [contextualSignatureInstatiationContravariance.ts]
 interface Animal { x }
 interface Giraffe extends Animal { y }

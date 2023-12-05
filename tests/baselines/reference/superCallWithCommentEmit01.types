@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallWithCommentEmit01.ts ===
+//// [tests/cases/compiler/superCallWithCommentEmit01.ts] ////
+
+=== superCallWithCommentEmit01.ts ===
 class A {
 >A : A
 

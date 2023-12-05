@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowedConstInMethod.ts] ////
+
 //// [narrowedConstInMethod.ts]
 // Fixes #10501, possibly null 'x'
 function f() {

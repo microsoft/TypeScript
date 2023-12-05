@@ -1,9 +1,9 @@
-tests/cases/conformance/salsa/b.js(1,7): error TS2739: Type '{}' is missing the following properties from type 'typeof A': prototype, d
+b.js(1,7): error TS2739: Type '{}' is missing the following properties from type 'typeof A': prototype, d
 
 
-==== tests/cases/conformance/salsa/a.d.ts (0 errors) ====
+==== a.d.ts (0 errors) ====
     declare class A {}
-==== tests/cases/conformance/salsa/b.js (1 errors) ====
+==== b.js (1 errors) ====
     const A = { };
           ~
 !!! error TS2739: Type '{}' is missing the following properties from type 'typeof A': prototype, d

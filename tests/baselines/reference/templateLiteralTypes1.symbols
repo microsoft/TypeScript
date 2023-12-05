@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/templateLiteralTypes1.ts ===
+//// [tests/cases/conformance/types/literal/templateLiteralTypes1.ts] ////
+
+=== templateLiteralTypes1.ts ===
 // Template types example from #12754
 
 const createScopedActionType = <S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}`;

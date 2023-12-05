@@ -1,8 +1,8 @@
-tests/cases/compiler/recursiveBaseCheck4.ts(1,7): error TS2506: 'M' is referenced directly or indirectly in its own base expression.
-tests/cases/compiler/recursiveBaseCheck4.ts(2,9): error TS2339: Property 'blah' does not exist on type 'M<unknown>'.
+recursiveBaseCheck4.ts(1,7): error TS2506: 'M' is referenced directly or indirectly in its own base expression.
+recursiveBaseCheck4.ts(2,9): error TS2339: Property 'blah' does not exist on type 'M<unknown>'.
 
 
-==== tests/cases/compiler/recursiveBaseCheck4.ts (2 errors) ====
+==== recursiveBaseCheck4.ts (2 errors) ====
     class M<T> extends M<string> { }
           ~
 !!! error TS2506: 'M' is referenced directly or indirectly in its own base expression.

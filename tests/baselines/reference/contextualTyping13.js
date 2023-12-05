@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualTyping13.ts] ////
+
 //// [contextualTyping13.ts]
 var foo:(a:number)=>number = function(a){return a};
 

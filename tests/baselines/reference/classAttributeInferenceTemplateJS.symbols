@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/classAttributeInferenceTemplateJS.ts] ////
+
+=== index.js ===
 class MyClass {
 >MyClass : Symbol(MyClass, Decl(index.js, 0, 0))
 

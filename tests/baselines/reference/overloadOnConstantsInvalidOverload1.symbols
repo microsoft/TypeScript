@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts ===
+//// [tests/cases/compiler/overloadOnConstantsInvalidOverload1.ts] ////
+
+=== overloadOnConstantsInvalidOverload1.ts ===
 class Base { foo() { } }
 >Base : Symbol(Base, Decl(overloadOnConstantsInvalidOverload1.ts, 0, 0))
 >foo : Symbol(Base.foo, Decl(overloadOnConstantsInvalidOverload1.ts, 0, 12))

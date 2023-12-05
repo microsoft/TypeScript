@@ -38,7 +38,8 @@
 const x = ["test", "A", "B", "C", "y", "z", "x", "user"];
 const globals = completion.sorted([...x, ...completion.globals])
 verify.completions(
-    { marker: ["1", "3"], exact: [{ name: "type", sortText: completion.SortText.GlobalsOrKeywords }], isNewIdentifierLocation: true, isGlobalCompletion: false },
+    { marker: ["1"], exact: ["x", "y", { name: "type", sortText: completion.SortText.GlobalsOrKeywords }], isGlobalCompletion: false },
+    { marker: ["3"], exact: [{ name: "type", sortText: completion.SortText.GlobalsOrKeywords }], isNewIdentifierLocation: true, isGlobalCompletion: false },
     { marker: ["6", "8", "12", "14"], exact: undefined, isGlobalCompletion: false },
     { marker: "2", exact: ["a.ts", "file.ts"], isGlobalCompletion: false, isNewIdentifierLocation: true },
     { marker: ["4", "19"], exact: [], isGlobalCompletion: false },

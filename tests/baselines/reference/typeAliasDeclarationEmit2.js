@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeAliasDeclarationEmit2.ts] ////
+
 //// [typeAliasDeclarationEmit2.ts]
 export type A<a> = { value: a };
 

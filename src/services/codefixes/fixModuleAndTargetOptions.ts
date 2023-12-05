@@ -1,10 +1,4 @@
 import {
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-    setJsonCompilerOptionValue,
-    setJsonCompilerOptionValues,
-} from "../_namespaces/ts.codefix";
-import {
     CodeFixAction,
     Diagnostics,
     Expression,
@@ -16,10 +10,17 @@ import {
     ScriptTarget,
     textChanges,
 } from "../_namespaces/ts";
+import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+    setJsonCompilerOptionValue,
+    setJsonCompilerOptionValues,
+} from "../_namespaces/ts.codefix";
 
 registerCodeFix({
     errorCodes: [
         Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher.code,
+        Diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher.code,
         Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher.code,
     ],
     getCodeActions: function getCodeActionsToFixModuleAndTarget(context) {
@@ -59,5 +60,5 @@ registerCodeFix({
         }
 
         return codeFixes.length ? codeFixes : undefined;
-    }
+    },
 });

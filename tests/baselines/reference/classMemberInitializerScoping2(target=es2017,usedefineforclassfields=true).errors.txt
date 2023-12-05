@@ -1,7 +1,7 @@
-tests/cases/compiler/classMemberInitializerScoping2.ts(3,9): error TS2301: Initializer of instance member variable 'p' cannot reference identifier 'x' declared in the constructor.
+classMemberInitializerScoping2.ts(3,9): error TS2301: Initializer of instance member variable 'p' cannot reference identifier 'x' declared in the constructor.
 
 
-==== tests/cases/compiler/classMemberInitializerScoping2.ts (1 errors) ====
+==== classMemberInitializerScoping2.ts (1 errors) ====
     const x = 1
     class C {
         p = x

@@ -1,29 +1,29 @@
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(15,11): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(16,11): error TS2322: Type 'void' is not assignable to type 'string | number | symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(17,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(19,11): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(20,11): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(22,11): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(23,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(24,12): error TS2322: Type 'string | Foo' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(15,11): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(16,11): error TS2322: Type 'void' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(17,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(19,11): error TS18050: The value 'null' cannot be used here.
+inOperatorWithInvalidOperands.ts(20,11): error TS18050: The value 'undefined' cannot be used here.
+inOperatorWithInvalidOperands.ts(22,11): error TS2322: Type 'boolean' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(23,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(24,12): error TS2322: Type 'string | Foo' is not assignable to type 'string | number | symbol'.
   Type 'Foo' is not assignable to type 'string | number | symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(25,12): error TS2322: Type 'Foo' is not assignable to type 'string | number | symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(35,16): error TS2322: Type 'number' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(36,16): error TS2322: Type 'boolean' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(37,16): error TS2322: Type 'string' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(38,16): error TS2322: Type 'void' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(39,16): error TS2322: Type 'string | number' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(25,12): error TS2322: Type 'Foo' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(35,16): error TS2322: Type 'number' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(36,16): error TS2322: Type 'boolean' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(37,16): error TS2322: Type 'string' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(38,16): error TS2322: Type 'void' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(39,16): error TS2322: Type 'string | number' is not assignable to type 'object'.
   Type 'string' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(40,16): error TS2322: Type 'number' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(41,16): error TS2322: Type 'boolean' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(42,16): error TS2322: Type 'string' is not assignable to type 'object'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(43,16): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(44,17): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(47,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
-tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts(47,17): error TS2322: Type 'string' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(40,16): error TS2322: Type 'number' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(41,16): error TS2322: Type 'boolean' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(42,16): error TS2322: Type 'string' is not assignable to type 'object'.
+inOperatorWithInvalidOperands.ts(43,16): error TS18050: The value 'null' cannot be used here.
+inOperatorWithInvalidOperands.ts(44,17): error TS18050: The value 'undefined' cannot be used here.
+inOperatorWithInvalidOperands.ts(47,11): error TS2322: Type '{}' is not assignable to type 'string | number | symbol'.
+inOperatorWithInvalidOperands.ts(47,17): error TS2322: Type 'string' is not assignable to type 'object'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts (21 errors) ====
+==== inOperatorWithInvalidOperands.ts (21 errors) ====
     class Foo {}
     enum E { a }
     

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentsWithTypeArguments3.tsx] ////
+
 //// [file.tsx]
 import React = require('react')
 
@@ -26,7 +28,7 @@ function createLink(func: (a: number)=>void) {
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     // OK
     function Baz(arg1, arg2) {
         var a0 = <OverloadComponent {...arg1} a="hello" ignore-prop/>;

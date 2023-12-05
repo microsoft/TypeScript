@@ -1,4 +1,6 @@
-=== tests/cases/compiler/vueLikeDataAndPropsInference.ts ===
+//// [tests/cases/compiler/vueLikeDataAndPropsInference.ts] ////
+
+=== vueLikeDataAndPropsInference.ts ===
 interface Instance {
     _instanceBrand: never
 >_instanceBrand : never

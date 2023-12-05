@@ -1,16 +1,17 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    baselineTsserverLogs,
+    openFilesForSession,
+    TestSession,
+    textSpanFromSubstring,
+} from "../helpers/tsserver";
+import {
     createServerHost,
     File,
-} from "../virtualFileSystemWithWatch";
-import {
-    createProjectService,
-    createSession,
-    executeSessionRequest,
-    openFilesForSession,
-    protocolTextSpanFromSubstring,
-    textSpanFromSubstring,
-} from "./helpers";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: getEditsForFileRename", () => {
     it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {
@@ -28,13 +29,25 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         };
 
         const host = createServerHost([userTs, newTs, tsconfig]);
-        const projectService = createProjectService(host);
-        projectService.openClientFile(userTs.path);
-        const project = projectService.configuredProjects.get(tsconfig.path)!;
-
-        ts.Debug.assert(!!project.resolveModuleNames);
-
-        const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", ts.testFormatSettings, ts.emptyOptions);
+        const options: ts.CompilerOptions = {};
+        const moduleResolutionCache = ts.createModuleResolutionCache(host.getCurrentDirectory(), ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames), options);
+        const lsHost: ts.LanguageServiceHost = {
+            getCompilationSettings: () => options,
+            getScriptFileNames: () => [newTs.path, userTs.path],
+            getScriptVersion: fileName => host.readFile(fileName)!,
+            getScriptSnapshot: fileName => {
+                const text = host.readFile(fileName);
+                return text ? ts.ScriptSnapshot.fromString(text) : undefined;
+            },
+            getCurrentDirectory: () => host.getCurrentDirectory(),
+            getDefaultLibFileName: options => ts.getDefaultLibFileName(options),
+            readFile: path => host.readFile(path),
+            fileExists: path => host.fileExists(path),
+            resolveModuleNames: (moduleNames, containingFile) => moduleNames.map(name => ts.resolveModuleName(name, containingFile, options, lsHost, moduleResolutionCache).resolvedModule),
+            getResolvedModuleWithFailedLookupLocationsFromCache: (moduleName, containingFile, mode) => moduleResolutionCache.getFromDirectoryCache(moduleName, mode, ts.getDirectoryPath(containingFile), /*redirectedReference*/ undefined),
+        };
+        const service = ts.createLanguageService(lsHost);
+        const edits = service.getEditsForFileRename("/old.ts", "/new.ts", ts.testFormatSettings, ts.emptyOptions);
         assert.deepEqual<readonly ts.FileTextChanges[]>(edits, [{
             fileName: "/user.ts",
             textChanges: [{
@@ -55,7 +68,7 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         };
         const aTsconfig: File = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({ files: ["./old.ts", "./user.ts"] }),
+            content: jsonToReadableText({ files: ["./old.ts", "./user.ts"] }),
         };
         const bUserTs: File = {
             path: "/b/user.ts",
@@ -67,51 +80,35 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         };
 
         const host = createServerHost([aUserTs, aOldTs, aTsconfig, bUserTs, bTsconfig]);
-        const session = createSession(host);
+        const session = new TestSession(host);
         openFilesForSession([aUserTs, bUserTs], session);
 
-        const response = executeSessionRequest<ts.server.protocol.GetEditsForFileRenameRequest, ts.server.protocol.GetEditsForFileRenameResponse>(session, ts.server.CommandNames.GetEditsForFileRename, {
-            oldFilePath: aOldTs.path,
-            newFilePath: "/a/new.ts",
+        session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
+            arguments: {
+                oldFilePath: aOldTs.path,
+                newFilePath: "/a/new.ts",
+            },
         });
-        assert.deepEqual<readonly ts.server.protocol.FileCodeEdits[]>(response, [
-            {
-                fileName: aTsconfig.path,
-                textChanges: [{ ...protocolTextSpanFromSubstring(aTsconfig.content, "./old.ts"), newText: "new.ts" }],
-            },
-            {
-                fileName: aUserTs.path,
-                textChanges: [{ ...protocolTextSpanFromSubstring(aUserTs.content, "./old"), newText: "./new" }],
-            },
-            {
-                fileName: bUserTs.path,
-                textChanges: [{ ...protocolTextSpanFromSubstring(bUserTs.content, "../a/old"), newText: "../a/new" }],
-            },
-        ]);
+        baselineTsserverLogs("getEditsForFileRename", "works with multiple projects", session);
     });
 
     it("works with file moved to inferred project", () => {
         const aTs: File = { path: "/a.ts", content: 'import {} from "./b";' };
         const cTs: File = { path: "/c.ts", content: "export {};" };
-        const tsconfig: File = { path: "/tsconfig.json", content: JSON.stringify({ files: ["./a.ts", "./b.ts"] }) };
+        const tsconfig: File = { path: "/tsconfig.json", content: jsonToReadableText({ files: ["./a.ts", "./b.ts"] }) };
 
         const host = createServerHost([aTs, cTs, tsconfig]);
-        const session = createSession(host);
+        const session = new TestSession(host);
         openFilesForSession([aTs, cTs], session);
 
-        const response = executeSessionRequest<ts.server.protocol.GetEditsForFileRenameRequest, ts.server.protocol.GetEditsForFileRenameResponse>(session, ts.server.CommandNames.GetEditsForFileRename, {
-            oldFilePath: "/b.ts",
-            newFilePath: cTs.path,
+        session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
+            command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
+            arguments: {
+                oldFilePath: "/b.ts",
+                newFilePath: cTs.path,
+            },
         });
-        assert.deepEqual<readonly ts.server.protocol.FileCodeEdits[]>(response, [
-            {
-                fileName: "/tsconfig.json",
-                textChanges: [{ ...protocolTextSpanFromSubstring(tsconfig.content, "./b.ts"), newText: "c.ts" }],
-            },
-            {
-                fileName: "/a.ts",
-                textChanges: [{ ...protocolTextSpanFromSubstring(aTs.content, "./b"), newText: "./c" }],
-            },
-        ]);
+        baselineTsserverLogs("getEditsForFileRename", "works with file moved to inferred project", session);
     });
 });

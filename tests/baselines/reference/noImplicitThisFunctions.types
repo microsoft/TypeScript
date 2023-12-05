@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitThisFunctions.ts ===
+//// [tests/cases/compiler/noImplicitThisFunctions.ts] ////
+
+=== noImplicitThisFunctions.ts ===
 function f1(x) {
 >f1 : (x: any) => any
 >x : any

@@ -1,0 +1,12 @@
+file2.ts(1,37): error TS2344: Type 'T' does not satisfy the constraint 'string'.
+
+
+==== file1.ts (0 errors) ====
+    export type Foo<T extends string> = { foo: T }
+    
+==== file2.ts (1 errors) ====
+    type Bar<T> = import('./file1').Foo<T>;
+                                        ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'string'.
+!!! related TS2208 file2.ts:1:10: This type parameter might need an `extends string` constraint.
+    

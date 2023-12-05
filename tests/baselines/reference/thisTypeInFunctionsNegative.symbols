@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts] ////
+
+=== thisTypeInFunctionsNegative.ts ===
 class C {
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
 
@@ -627,9 +629,11 @@ function notFirst(a: number, this: C): number { return this.n; }
 ///// parse errors /////
 function modifiers(async this: C): number { return this.n; }
 >modifiers : Symbol(modifiers, Decl(thisTypeInFunctionsNegative.ts, 164, 64))
-> : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 167, 19))
->this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 167, 24))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 167, 19))
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+>this.n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 167, 19))
+>n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
 
 function restParam(...this: C): number { return this.n; }
 >restParam : Symbol(restParam, Decl(thisTypeInFunctionsNegative.ts, 167, 60))
@@ -695,4 +699,19 @@ const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 177, 39))
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 177, 39))
 >this : Symbol(globalThis)
+
+class Derived3 extends Base2 {
+>Derived3 : Symbol(Derived3, Decl(thisTypeInFunctionsNegative.ts, 177, 65))
+>Base2 : Symbol(Base2, Decl(thisTypeInFunctionsNegative.ts, 128, 1))
+
+    f(this: this) {
+>f : Symbol(Derived3.f, Decl(thisTypeInFunctionsNegative.ts, 179, 30))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 180, 6))
+
+        super.polymorphic();
+>super.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+>super : Symbol(Base2, Decl(thisTypeInFunctionsNegative.ts, 128, 1))
+>polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+    }
+}
 

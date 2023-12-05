@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceWithOptionalProperty.ts ===
+//// [tests/cases/compiler/interfaceWithOptionalProperty.ts] ////
+
+=== interfaceWithOptionalProperty.ts ===
 interface I {
     x?: number;
 >x : number

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts ===
+//// [tests/cases/compiler/privateFieldAssignabilityFromUnknown.ts] ////
+
+=== privateFieldAssignabilityFromUnknown.ts ===
 export class Class {
 >Class : Symbol(Class, Decl(privateFieldAssignabilityFromUnknown.ts, 0, 0))
 

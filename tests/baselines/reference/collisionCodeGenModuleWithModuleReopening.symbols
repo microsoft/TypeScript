@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionCodeGenModuleWithModuleReopening.ts ===
+//// [tests/cases/compiler/collisionCodeGenModuleWithModuleReopening.ts] ////
+
+=== collisionCodeGenModuleWithModuleReopening.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(collisionCodeGenModuleWithModuleReopening.ts, 0, 0), Decl(collisionCodeGenModuleWithModuleReopening.ts, 4, 22))
 

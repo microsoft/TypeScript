@@ -1,7 +1,7 @@
-tests/cases/compiler/newMap.ts(1,9): error TS2743: No overload expects 1 type arguments, but overloads do exist that expect either 0 or 2 type arguments.
+newMap.ts(1,9): error TS2743: No overload expects 1 type arguments, but overloads do exist that expect either 0 or 2 type arguments.
 
 
-==== tests/cases/compiler/newMap.ts (1 errors) ====
+==== newMap.ts (1 errors) ====
     new Map<string>();
             ~~~~~~
 !!! error TS2743: No overload expects 1 type arguments, but overloads do exist that expect either 0 or 2 type arguments.

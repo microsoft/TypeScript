@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fixTypeParameterInSignatureWithRestParameters.ts ===
+//// [tests/cases/compiler/fixTypeParameterInSignatureWithRestParameters.ts] ////
+
+=== fixTypeParameterInSignatureWithRestParameters.ts ===
 function bar<T>(item1: T, item2: T) { }
 >bar : Symbol(bar, Decl(fixTypeParameterInSignatureWithRestParameters.ts, 0, 0))
 >T : Symbol(T, Decl(fixTypeParameterInSignatureWithRestParameters.ts, 0, 13))

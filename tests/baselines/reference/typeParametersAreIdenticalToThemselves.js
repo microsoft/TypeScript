@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/typeParametersAreIdenticalToThemselves.ts] ////
+
 //// [typeParametersAreIdenticalToThemselves.ts]
 // type parameters from the same declaration are identical to themself
 

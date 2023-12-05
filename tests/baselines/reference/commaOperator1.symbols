@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commaOperator1.ts ===
+//// [tests/cases/compiler/commaOperator1.ts] ////
+
+=== commaOperator1.ts ===
 var v1 = ((1, 2, 3), 4, 5, (6, 7));
 >v1 : Symbol(v1, Decl(commaOperator1.ts, 0, 3))
 

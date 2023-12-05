@@ -1,3 +1,89 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoDisplayPartsClassMethod.ts ===
+// class c {
+//     public publicMethod() { }
+//            ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.publicMethod(): void
+// | ----------------------------------------------------------------------
+//     private privateMethod() { }
+//             ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.privateMethod(): void
+// | ----------------------------------------------------------------------
+//     protected protectedMethod() { }
+//               ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.protectedMethod(): void
+// | ----------------------------------------------------------------------
+//     static staticMethod() { }
+//            ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.staticMethod(): void
+// | ----------------------------------------------------------------------
+//     private static privateStaticMethod() { }
+//                    ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.privateStaticMethod(): void
+// | ----------------------------------------------------------------------
+//     protected static protectedStaticMethod() { }
+//                      ^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.protectedStaticMethod(): void
+// | ----------------------------------------------------------------------
+//     method() {
+//         this.publicMethod();
+//              ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.publicMethod(): void
+// | ----------------------------------------------------------------------
+//         this.privateMethod();
+//              ^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.privateMethod(): void
+// | ----------------------------------------------------------------------
+//         this.protectedMethod();
+//              ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.protectedMethod(): void
+// | ----------------------------------------------------------------------
+//         c.staticMethod();
+//           ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.staticMethod(): void
+// | ----------------------------------------------------------------------
+//         c.privateStaticMethod();
+//           ^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.privateStaticMethod(): void
+// | ----------------------------------------------------------------------
+//         c.protectedStaticMethod();
+//           ^^^^^^^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.protectedStaticMethod(): void
+// | ----------------------------------------------------------------------
+//     }
+// }
+// var cInstance = new c();
+// cInstance.publicMethod();
+// ^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | var cInstance: c
+// | ----------------------------------------------------------------------
+//           ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.publicMethod(): void
+// | ----------------------------------------------------------------------
+// c.staticMethod();
+// ^
+// | ----------------------------------------------------------------------
+// | class c
+// | ----------------------------------------------------------------------
+//   ^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | (method) c.staticMethod(): void
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +91,7 @@
       "position": 21,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "public",
       "textSpan": {
@@ -71,7 +157,7 @@
       "position": 52,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "private",
       "textSpan": {
@@ -137,7 +223,7 @@
       "position": 86,
       "name": "21"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "protected",
       "textSpan": {
@@ -203,7 +289,7 @@
       "position": 119,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {
@@ -269,7 +355,7 @@
       "position": 157,
       "name": "4"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "private,static",
       "textSpan": {
@@ -335,7 +421,7 @@
       "position": 204,
       "name": "41"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "protected,static",
       "textSpan": {
@@ -401,7 +487,7 @@
       "position": 260,
       "name": "5"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "public",
       "textSpan": {
@@ -467,7 +553,7 @@
       "position": 289,
       "name": "6"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "private",
       "textSpan": {
@@ -533,7 +619,7 @@
       "position": 319,
       "name": "61"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "protected",
       "textSpan": {
@@ -599,7 +685,7 @@
       "position": 348,
       "name": "7"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {
@@ -665,7 +751,7 @@
       "position": 374,
       "name": "8"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "private,static",
       "textSpan": {
@@ -731,7 +817,7 @@
       "position": 407,
       "name": "81"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "protected,static",
       "textSpan": {
@@ -797,7 +883,7 @@
       "position": 465,
       "name": "9"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -839,7 +925,7 @@
       "position": 475,
       "name": "10"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "public",
       "textSpan": {
@@ -905,7 +991,7 @@
       "position": 491,
       "name": "11"
     },
-    "quickInfo": {
+    "item": {
       "kind": "class",
       "kindModifiers": "",
       "textSpan": {
@@ -935,7 +1021,7 @@
       "position": 493,
       "name": "12"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "static",
       "textSpan": {

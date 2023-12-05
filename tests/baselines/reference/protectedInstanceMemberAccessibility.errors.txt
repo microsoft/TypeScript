@@ -1,19 +1,19 @@
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(14,23): error TS2339: Property 'z' does not exist on type 'B'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(16,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(18,24): error TS2339: Property 'y' does not exist on type 'A'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(19,24): error TS2339: Property 'z' does not exist on type 'A'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(22,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'. This is an instance of class 'A'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(23,20): error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'. This is an instance of class 'A'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(24,20): error TS2339: Property 'y' does not exist on type 'A'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(25,20): error TS2339: Property 'z' does not exist on type 'A'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(31,20): error TS2339: Property 'z' does not exist on type 'B'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(34,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'. This is an instance of class 'C'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(35,20): error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'. This is an instance of class 'C'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(36,20): error TS2339: Property 'y' does not exist on type 'C'.
-tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts(37,20): error TS2445: Property 'z' is protected and only accessible within class 'C' and its subclasses.
+protectedInstanceMemberAccessibility.ts(14,23): error TS2339: Property 'z' does not exist on type 'B'.
+protectedInstanceMemberAccessibility.ts(16,24): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+protectedInstanceMemberAccessibility.ts(18,24): error TS2339: Property 'y' does not exist on type 'A'.
+protectedInstanceMemberAccessibility.ts(19,24): error TS2339: Property 'z' does not exist on type 'A'.
+protectedInstanceMemberAccessibility.ts(22,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'. This is an instance of class 'A'.
+protectedInstanceMemberAccessibility.ts(23,20): error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'. This is an instance of class 'A'.
+protectedInstanceMemberAccessibility.ts(24,20): error TS2339: Property 'y' does not exist on type 'A'.
+protectedInstanceMemberAccessibility.ts(25,20): error TS2339: Property 'z' does not exist on type 'A'.
+protectedInstanceMemberAccessibility.ts(31,20): error TS2339: Property 'z' does not exist on type 'B'.
+protectedInstanceMemberAccessibility.ts(34,20): error TS2446: Property 'x' is protected and only accessible through an instance of class 'B'. This is an instance of class 'C'.
+protectedInstanceMemberAccessibility.ts(35,20): error TS2446: Property 'f' is protected and only accessible through an instance of class 'B'. This is an instance of class 'C'.
+protectedInstanceMemberAccessibility.ts(36,20): error TS2339: Property 'y' does not exist on type 'C'.
+protectedInstanceMemberAccessibility.ts(37,20): error TS2445: Property 'z' is protected and only accessible within class 'C' and its subclasses.
 
 
-==== tests/cases/conformance/classes/members/accessibility/protectedInstanceMemberAccessibility.ts (13 errors) ====
+==== protectedInstanceMemberAccessibility.ts (13 errors) ====
     class A {
         protected x: string;
         protected f(): string {

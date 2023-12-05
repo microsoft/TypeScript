@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualSignatureConditionalTypeInstantiationUsingDefault.ts ===
+//// [tests/cases/compiler/contextualSignatureConditionalTypeInstantiationUsingDefault.ts] ////
+
+=== contextualSignatureConditionalTypeInstantiationUsingDefault.ts ===
 // repro #46310
 
 export interface TypegenDisabled {

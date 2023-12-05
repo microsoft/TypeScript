@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/moduleAugmentationInAmbientModule3.ts] ////
+
+=== main.ts ===
 /// <reference path="O.d.ts" />
 
 import {Observable} from "Observable";
@@ -24,7 +26,7 @@ x.foo2().x2;
 >foo2 : () => import("Map").Cls2
 >x2 : number
 
-=== tests/cases/compiler/O.d.ts ===
+=== O.d.ts ===
 declare module "Observable" {
 >"Observable" : typeof import("Observable")
 

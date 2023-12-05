@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/exportDefaultMarksIdentifierAsUsed.ts] ////
+
+=== a.js ===
 const Obj = {};
 >Obj : {}
 >{} : {}
@@ -6,7 +8,7 @@ const Obj = {};
 export default Obj;
 >Obj : {}
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 import Obj from './a';
 >Obj : {}
 

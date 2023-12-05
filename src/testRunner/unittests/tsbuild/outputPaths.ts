@@ -1,18 +1,23 @@
-import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
+import * as ts from "../../_namespaces/ts";
 import {
-    loadProjectFromFiles,
+    jsonToReadableText,
+} from "../helpers";
+import {
     noChangeRun,
     TestTscEdit,
     TscCompileSystem,
-    verifyTscWithEdits,
+    verifyTsc,
     VerifyTscWithEditsInput,
-} from "../tsc/helpers";
+} from "../helpers/tsc";
+import {
+    loadProjectFromFiles,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: TestTscEdit = {
-        modifyFs: ts.noop,
-        subScenario: "Normal build without change, that does not block emit on error to show files that get emitted",
+        edit: ts.noop,
+        caption: "Normal build without change, that does not block emit on error to show files that get emitted",
         commandLineArgs: ["-p", "/src/tsconfig.json"],
     };
     const edits: TestTscEdit[] = [
@@ -21,10 +26,10 @@ describe("unittests:: tsbuild - output file paths", () => {
     ];
 
     function verify(input: Pick<VerifyTscWithEditsInput, "subScenario" | "fs" | "edits">, expectedOuptutNames: readonly string[]) {
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "outputPaths",
             commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
-            ...input
+            ...input,
         });
 
         it("verify getOutputFileNames", () => {
@@ -34,82 +39,87 @@ describe("unittests:: tsbuild - output file paths", () => {
                 ts.getOutputFileNames(
                     ts.parseConfigFileWithSystem("/src/tsconfig.json", {}, /*extendedConfigCache*/ undefined, {}, sys, ts.noop)!,
                     "/src/src/index.ts",
-                    /*ignoreCase*/ false
+                    /*ignoreCase*/ false,
                 ),
-                expectedOuptutNames
+                expectedOuptutNames,
             );
         });
     }
 
     verify({
         subScenario: "when rootDir is not specified",
-        fs: () => loadProjectFromFiles({
-            "/src/src/index.ts": "export const x = 10;",
-            "/src/tsconfig.json": JSON.stringify({
-                compilerOptions: {
-                    outDir: "dist"
-                }
-            })
-        }),
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/src/index.ts": "export const x = 10;",
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        outDir: "dist",
+                    },
+                }),
+            }),
         edits,
     }, ["/src/dist/index.js"]);
 
     verify({
         subScenario: "when rootDir is not specified and is composite",
-        fs: () => loadProjectFromFiles({
-            "/src/src/index.ts": "export const x = 10;",
-            "/src/tsconfig.json": JSON.stringify({
-                compilerOptions: {
-                    outDir: "dist",
-                    composite: true
-                }
-            })
-        }),
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/src/index.ts": "export const x = 10;",
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        outDir: "dist",
+                        composite: true,
+                    },
+                }),
+            }),
         edits,
     }, ["/src/dist/src/index.js", "/src/dist/src/index.d.ts"]);
 
     verify({
         subScenario: "when rootDir is specified",
-        fs: () => loadProjectFromFiles({
-            "/src/src/index.ts": "export const x = 10;",
-            "/src/tsconfig.json": JSON.stringify({
-                compilerOptions: {
-                    outDir: "dist",
-                    rootDir: "src"
-                }
-            })
-        }),
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/src/index.ts": "export const x = 10;",
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        outDir: "dist",
+                        rootDir: "src",
+                    },
+                }),
+            }),
         edits,
     }, ["/src/dist/index.js"]);
 
     verify({
         subScenario: "when rootDir is specified but not all files belong to rootDir",
-        fs: () => loadProjectFromFiles({
-            "/src/src/index.ts": "export const x = 10;",
-            "/src/types/type.ts": "export type t = string;",
-            "/src/tsconfig.json": JSON.stringify({
-                compilerOptions: {
-                    outDir: "dist",
-                    rootDir: "src"
-                }
-            })
-        }),
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/src/index.ts": "export const x = 10;",
+                "/src/types/type.ts": "export type t = string;",
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        outDir: "dist",
+                        rootDir: "src",
+                    },
+                }),
+            }),
         edits,
     }, ["/src/dist/index.js"]);
 
     verify({
         subScenario: "when rootDir is specified but not all files belong to rootDir and is composite",
-        fs: () => loadProjectFromFiles({
-            "/src/src/index.ts": "export const x = 10;",
-            "/src/types/type.ts": "export type t = string;",
-            "/src/tsconfig.json": JSON.stringify({
-                compilerOptions: {
-                    outDir: "dist",
-                    rootDir: "src",
-                    composite: true
-                }
-            })
-        }),
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/src/index.ts": "export const x = 10;",
+                "/src/types/type.ts": "export type t = string;",
+                "/src/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        outDir: "dist",
+                        rootDir: "src",
+                        composite: true,
+                    },
+                }),
+            }),
         edits,
     }, ["/src/dist/index.js", "/src/dist/index.d.ts"]);
 });

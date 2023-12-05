@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importDefaultNamedType.ts] ////
+
 === /a.ts ===
 export default class A {}
 >A : A

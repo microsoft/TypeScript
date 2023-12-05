@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendAndImplementTheSameBaseType2.ts ===
+//// [tests/cases/compiler/extendAndImplementTheSameBaseType2.ts] ////
+
+=== extendAndImplementTheSameBaseType2.ts ===
 class C<T> {
 >C : Symbol(C, Decl(extendAndImplementTheSameBaseType2.ts, 0, 0))
 >T : Symbol(T, Decl(extendAndImplementTheSameBaseType2.ts, 0, 8))

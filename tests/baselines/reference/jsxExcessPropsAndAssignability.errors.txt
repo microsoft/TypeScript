@@ -1,10 +1,10 @@
-tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(13,27): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(14,6): error TS2322: Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>'.
+jsxExcessPropsAndAssignability.tsx(13,27): error TS2698: Spread types may only be created from object types.
+jsxExcessPropsAndAssignability.tsx(14,6): error TS2322: Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>'.
   Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'Readonly<WrapperComponentProps>'.
-tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(14,27): error TS2698: Spread types may only be created from object types.
+jsxExcessPropsAndAssignability.tsx(14,27): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/compiler/jsxExcessPropsAndAssignability.tsx (3 errors) ====
+==== jsxExcessPropsAndAssignability.tsx (3 errors) ====
     /// <reference path="/.lib/react16.d.ts" />
     
     import * as React from 'react';

@@ -1,0 +1,171 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesFilteringMappedTypeProperty.ts ===
+// const obj = { /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}a|]: 1|>, b: 2 };
+// const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { <|[|{| isWriteAccess: true |}a|]: 0|> };
+// filtered.[|a|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesFilteringMappedTypeProperty.ts ===
+  // const obj = { /*FIND ALL REFS*/<|[|a|]: 1|>, b: 2 };
+  // const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { a: 0 };
+  // filtered.a;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) a: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesFilteringMappedTypeProperty.ts ===
+// const obj = { <|[|{| isWriteAccess: true |}a|]: 1|>, b: 2 };
+// const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { /*FIND ALL REFS*/<|[|{| isWriteAccess: true, isDefinition: true |}a|]: 0|> };
+// filtered.[|a|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesFilteringMappedTypeProperty.ts ===
+  // const obj = { <|[|a|]: 1|>, b: 2 };
+  // const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { /*FIND ALL REFS*/a: 0 };
+  // filtered.a;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) a: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllReferencesFilteringMappedTypeProperty.ts ===
+// const obj = { <|[|{| isWriteAccess: true |}a|]: 1|>, b: 2 };
+// const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { <|[|{| isWriteAccess: true |}a|]: 0|> };
+// filtered./*FIND ALL REFS*/[|a|];
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllReferencesFilteringMappedTypeProperty.ts ===
+  // const obj = { <|[|a|]: 1|>, b: 2 };
+  // const filtered: { [P in keyof typeof obj as P extends 'b' ? never : P]: 0; } = { a: 0 };
+  // filtered./*FIND ALL REFS*/a;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) a: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]

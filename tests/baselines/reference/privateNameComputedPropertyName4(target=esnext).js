@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameComputedPropertyName4.ts] ////
+
 //// [privateNameComputedPropertyName4.ts]
 // https://github.com/microsoft/TypeScript/issues/44113
 class C1 {

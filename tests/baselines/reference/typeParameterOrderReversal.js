@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterOrderReversal.ts] ////
+
 //// [typeParameterOrderReversal.ts]
 interface X<T> {
     n: T;

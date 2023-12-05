@@ -15,6 +15,7 @@ import {
     isExpression,
     isImportCall,
     isNamedDeclaration,
+    isTransientSymbol,
     makeImport,
     ModuleKind,
     NamespaceImport,
@@ -23,7 +24,6 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-    TransientSymbol,
 } from "../_namespaces/ts";
 import {
     createCodeFixActionWithoutFixAll,
@@ -43,12 +43,17 @@ function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportD
 
     if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
         // import Bluebird = require("bluebird");
-        variations.push(createAction(context, sourceFile, node, factory.createImportEqualsDeclaration(
-            /*modifiers*/ undefined,
-            /*isTypeOnly*/ false,
-            namespace.name,
-            factory.createExternalModuleReference(node.moduleSpecifier)
-        )));
+        variations.push(createAction(
+            context,
+            sourceFile,
+            node,
+            factory.createImportEqualsDeclaration(
+                /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
+                namespace.name,
+                factory.createExternalModuleReference(node.moduleSpecifier),
+            ),
+        ));
     }
 
     return variations;
@@ -64,7 +69,7 @@ registerCodeFix({
         Diagnostics.This_expression_is_not_callable.code,
         Diagnostics.This_expression_is_not_constructable.code,
     ],
-    getCodeActions: getActionsForUsageOfInvalidImport
+    getCodeActions: getActionsForUsageOfInvalidImport,
 });
 
 function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
@@ -93,7 +98,7 @@ registerCodeFix({
         Diagnostics.Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property.code,
         Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1.code,
     ],
-    getCodeActions: getActionsForInvalidImportLocation
+    getCodeActions: getActionsForInvalidImportLocation,
 });
 
 function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAction[] | undefined {
@@ -107,11 +112,11 @@ function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAct
 
 function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): CodeFixAction[] | undefined {
     const type = context.program.getTypeChecker().getTypeAtLocation(expr);
-    if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
+    if (!(type.symbol && isTransientSymbol(type.symbol) && type.symbol.links.originatingImport)) {
         return [];
     }
     const fixes: CodeFixAction[] = [];
-    const relatedImport = (type.symbol as TransientSymbol).originatingImport!; // TODO: GH#18217
+    const relatedImport = type.symbol.links.originatingImport;
     if (!isImportCall(relatedImport)) {
         addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
     }

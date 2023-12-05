@@ -19,7 +19,7 @@ x + y;
 
 //// [/app/bin/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="../types/bar.d.ts"/>
 var foo_1 = require("foo");
 var bar_1 = require("bar");

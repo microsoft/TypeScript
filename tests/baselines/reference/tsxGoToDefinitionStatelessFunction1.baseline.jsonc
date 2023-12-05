@@ -1,0 +1,163 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: "hell"
+//     optional?: boolean
+// }
+// <|declare function [|Opt|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <O/*GOTO DEF*/pt />;
+// let opt1 = <Opt propx={100} />;
+// let opt2 = <Opt propx={100} optional />;
+// let opt3 = <Opt wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "Opt",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: "hell"
+//     optional?: boolean
+// }
+// <|declare function [|Opt|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <Opt />;
+// let opt1 = <Op/*GOTO DEF*/t propx={100} />;
+// let opt2 = <Opt propx={100} optional />;
+// let opt3 = <Opt wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "Opt",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: "hell"
+//     optional?: boolean
+// }
+// <|declare function [|Opt|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <Opt />;
+// let opt1 = <Opt propx={100} />;
+// let opt2 = <Op/*GOTO DEF*/t propx={100} optional />;
+// let opt3 = <Opt wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "Opt",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 8) skipped ---
+//     propString: "hell"
+//     optional?: boolean
+// }
+// <|declare function [|Opt|](attributes: OptionPropBag): JSX.Element;|>
+// let opt = <Opt />;
+// let opt1 = <Opt propx={100} />;
+// let opt2 = <Opt propx={100} optional />;
+// let opt3 = <Op/*GOTO DEF*/t wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "function",
+    "name": "Opt",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 4) skipped ---
+//     interface ElementAttributesProperty { props; }
+// }
+// interface OptionPropBag {
+//     <|[|propx|]: number|>
+//     propString: "hell"
+//     optional?: boolean
+// }
+// declare function Opt(attributes: OptionPropBag): JSX.Element;
+// let opt = <Opt />;
+// let opt1 = <Opt pr/*GOTO DEF*/opx={100} />;
+// let opt2 = <Opt propx={100} optional />;
+// let opt3 = <Opt wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "propx",
+    "containerName": "OptionPropBag",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
+
+
+
+// === goToDefinition ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 6) skipped ---
+// interface OptionPropBag {
+//     propx: number
+//     propString: "hell"
+//     <|[|optional|]?: boolean|>
+// }
+// declare function Opt(attributes: OptionPropBag): JSX.Element;
+// let opt = <Opt />;
+// let opt1 = <Opt propx={100} />;
+// let opt2 = <Opt propx={100} opt/*GOTO DEF*/ional />;
+// let opt3 = <Opt wrong />;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "optional",
+    "containerName": "OptionPropBag",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

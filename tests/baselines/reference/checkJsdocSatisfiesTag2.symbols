@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag2.ts] ////
+
+=== /a.js ===
+/** @typedef {Object.<string, (n: number) => boolean>} Predicates */
+
+const p = /** @satisfies {Predicates} */ ({
+>p : Symbol(p, Decl(a.js, 2, 5))
+
+    isEven: n => n % 2 === 0,
+>isEven : Symbol(isEven, Decl(a.js, 2, 43))
+>n : Symbol(n, Decl(a.js, 3, 11))
+>n : Symbol(n, Decl(a.js, 3, 11))
+
+    isOdd: n => n % 2 === 1
+>isOdd : Symbol(isOdd, Decl(a.js, 3, 29))
+>n : Symbol(n, Decl(a.js, 4, 10))
+>n : Symbol(n, Decl(a.js, 4, 10))
+
+});
+

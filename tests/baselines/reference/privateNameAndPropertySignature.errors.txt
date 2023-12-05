@@ -1,15 +1,15 @@
-tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(2,5): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(3,5): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(7,5): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(8,5): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(12,5): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(14,9): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(15,9): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(17,5): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts(20,28): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameAndPropertySignature.ts(2,5): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameAndPropertySignature.ts(3,5): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameAndPropertySignature.ts(7,5): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameAndPropertySignature.ts(8,5): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameAndPropertySignature.ts(12,5): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameAndPropertySignature.ts(14,9): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameAndPropertySignature.ts(15,9): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameAndPropertySignature.ts(17,5): error TS18016: Private identifiers are not allowed outside class bodies.
+privateNameAndPropertySignature.ts(20,28): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameAndPropertySignature.ts (9 errors) ====
+==== privateNameAndPropertySignature.ts (9 errors) ====
     type A = {
         #foo: string;
         ~~~~

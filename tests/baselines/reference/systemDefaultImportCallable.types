@@ -1,4 +1,6 @@
-=== tests/cases/compiler/core-js.d.ts ===
+//// [tests/cases/compiler/systemDefaultImportCallable.ts] ////
+
+=== core-js.d.ts ===
 declare module core {
 >core : typeof core
 
@@ -26,7 +28,7 @@ declare module "core-js/fn/string/repeat" {
     export default repeat;
 >repeat : (text: string, count: number) => string
 }
-=== tests/cases/compiler/greeter.ts ===
+=== greeter.ts ===
 import repeat from "core-js/fn/string/repeat";
 >repeat : (text: string, count: number) => string
 

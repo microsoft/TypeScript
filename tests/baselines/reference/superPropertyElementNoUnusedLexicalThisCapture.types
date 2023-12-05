@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superPropertyElementNoUnusedLexicalThisCapture.ts ===
+//// [tests/cases/compiler/superPropertyElementNoUnusedLexicalThisCapture.ts] ////
+
+=== superPropertyElementNoUnusedLexicalThisCapture.ts ===
 class A { x() {} }
 >A : A
 >x : () => void

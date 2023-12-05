@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts] ////
+
 //// [decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts]
 declare var decorator: any;
 

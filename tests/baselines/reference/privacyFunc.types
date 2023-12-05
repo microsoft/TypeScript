@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyFunc.ts ===
+//// [tests/cases/compiler/privacyFunc.ts] ////
+
+=== privacyFunc.ts ===
 module m1 {
 >m1 : typeof m1
 

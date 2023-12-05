@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/MethodSignatures/parserMethodSignature12.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/MethodSignatures/parserMethodSignature12.ts] ////
+
+=== parserMethodSignature12.ts ===
 interface I {
 >I : Symbol(I, Decl(parserMethodSignature12.ts, 0, 0))
 

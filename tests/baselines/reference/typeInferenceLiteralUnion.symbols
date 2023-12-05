@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceLiteralUnion.ts ===
+//// [tests/cases/compiler/typeInferenceLiteralUnion.ts] ////
+
+=== typeInferenceLiteralUnion.ts ===
 // Repro from #10901
 /**
  * Administrivia: JavaScript primitive types and Date

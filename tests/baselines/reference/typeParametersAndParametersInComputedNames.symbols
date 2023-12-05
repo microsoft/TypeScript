@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParametersAndParametersInComputedNames.ts ===
+//// [tests/cases/compiler/typeParametersAndParametersInComputedNames.ts] ////
+
+=== typeParametersAndParametersInComputedNames.ts ===
 function foo<T>(a: T) : string {
 >foo : Symbol(foo, Decl(typeParametersAndParametersInComputedNames.ts, 0, 0))
 >T : Symbol(T, Decl(typeParametersAndParametersInComputedNames.ts, 0, 13))

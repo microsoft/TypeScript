@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface2.ts ===
+//// [tests/cases/compiler/privacyCheckExportAssignmentOnExportedGenericInterface2.ts] ////
+
+=== privacyCheckExportAssignmentOnExportedGenericInterface2.ts ===
 export = Foo;
 >Foo : Foo<T>
 

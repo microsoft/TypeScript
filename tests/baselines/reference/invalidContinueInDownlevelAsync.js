@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invalidContinueInDownlevelAsync.ts] ////
+
 //// [invalidContinueInDownlevelAsync.ts]
 async function func() {
     if (true) {

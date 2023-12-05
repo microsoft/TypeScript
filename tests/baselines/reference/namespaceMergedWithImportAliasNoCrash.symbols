@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/namespaceMergedWithImportAliasNoCrash.ts] ////
+
+=== file1.ts ===
 export namespace Library {
 >Library : Symbol(Library, Decl(file1.ts, 0, 0))
 
@@ -12,7 +14,7 @@ var x: Library.Bar; // should work
 >Bar : Symbol(Library.Bar, Decl(file1.ts, 0, 26))
 
 Library.foo; // should be an error
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 import * as Lib from './file1';
 >Lib : Symbol(Lib, Decl(file2.ts, 0, 6), Decl(file2.ts, 0, 31))
 

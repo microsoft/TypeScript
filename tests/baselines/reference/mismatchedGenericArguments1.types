@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mismatchedGenericArguments1.ts ===
+//// [tests/cases/compiler/mismatchedGenericArguments1.ts] ////
+
+=== mismatchedGenericArguments1.ts ===
 interface IFoo<T> {
    foo<T>(x: T): T;
 >foo : <T>(x: T) => T
@@ -12,7 +14,6 @@ class C<T> implements IFoo<T> {
 >x : string
 
      return null;
->null : null
    }
 }
 
@@ -24,7 +25,6 @@ class C2<T> implements IFoo<T> {
 >x : string
 
      return null;
->null : null
    }
 }
 

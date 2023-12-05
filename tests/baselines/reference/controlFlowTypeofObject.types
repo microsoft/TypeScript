@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts] ////
+
+=== controlFlowTypeofObject.ts ===
 declare function obj(x: object): void;
 >obj : (x: object) => void
 >x : object
@@ -33,7 +35,6 @@ function f2(x: unknown) {
     if (x === null) {
 >x === null : boolean
 >x : unknown
->null : null
 
         return;
     }
@@ -57,7 +58,6 @@ function f3(x: unknown) {
     if (x == null) {
 >x == null : boolean
 >x : unknown
->null : null
 
         return;
     }
@@ -118,7 +118,6 @@ function f5(x: unknown) {
         if (x === null) {
 >x === null : boolean
 >x : unknown
->null : null
 
             return;
         }
@@ -143,7 +142,6 @@ function f6(x: unknown) {
     if (x === null) {
 >x === null : boolean
 >x : unknown
->null : null
 
         x;
 >x : null

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/db.ts ===
+//// [tests/cases/compiler/decoratorMetadataWithImportDeclarationNameCollision2.ts] ////
+
+=== db.ts ===
 export class db {
 >db : db
 
@@ -7,7 +9,7 @@ export class db {
     }
 }
 
-=== tests/cases/compiler/service.ts ===
+=== service.ts ===
 import {db as Database} from './db';
 >db : typeof Database
 >Database : typeof Database

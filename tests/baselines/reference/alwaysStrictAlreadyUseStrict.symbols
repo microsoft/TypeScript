@@ -1,4 +1,6 @@
-=== tests/cases/compiler/alwaysStrictAlreadyUseStrict.ts ===
+//// [tests/cases/compiler/alwaysStrictAlreadyUseStrict.ts] ////
+
+=== alwaysStrictAlreadyUseStrict.ts ===
 "use strict"
 function f() {
 >f : Symbol(f, Decl(alwaysStrictAlreadyUseStrict.ts, 0, 12))

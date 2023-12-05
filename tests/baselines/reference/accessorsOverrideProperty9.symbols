@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty9.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty9.ts] ////
+
+=== accessorsOverrideProperty9.ts ===
 // #41347, based on microsoft/rushstack
 
 // Mixin utilities
@@ -29,7 +31,7 @@ class ApiItem {
 
   public get members(): ReadonlyArray<ApiItem> {
 >members : Symbol(ApiItem.members, Decl(accessorsOverrideProperty9.ts, 9, 15))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
 >ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
 
     return [];
@@ -49,7 +51,7 @@ interface ApiItemContainerMixin extends ApiItem {
 
   readonly members: ReadonlyArray<ApiItem>;
 >members : Symbol(ApiItemContainerMixin.members, Decl(accessorsOverrideProperty9.ts, 20, 49))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
 >ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
 }
 
@@ -82,7 +84,7 @@ function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
 
     public get members(): ReadonlyArray<ApiItem> {
 >members : Symbol(MixedClass.members, Decl(accessorsOverrideProperty9.ts, 30, 5))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
 >ApiItem : Symbol(ApiItem, Decl(accessorsOverrideProperty9.ts, 6, 91))
 
       return [];
@@ -102,7 +104,7 @@ export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
   // This worked prior to TypeScript 4.0:
   public get members(): ReadonlyArray<ApiEnumMember> {
 >members : Symbol(ApiEnum.members, Decl(accessorsOverrideProperty9.ts, 41, 61))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
 >ApiEnumMember : Symbol(ApiEnumMember, Decl(accessorsOverrideProperty9.ts, 13, 1))
 
     return [];

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts ===
+//// [tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts] ////
+
+=== assignLambdaToNominalSubtypeOfFunction.ts ===
 interface IResultCallback extends Function {
 >IResultCallback : Symbol(IResultCallback, Decl(assignLambdaToNominalSubtypeOfFunction.ts, 0, 0))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

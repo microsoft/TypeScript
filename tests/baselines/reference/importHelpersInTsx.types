@@ -1,4 +1,6 @@
-=== tests/cases/compiler/external.tsx ===
+//// [tests/cases/compiler/importHelpersInTsx.tsx] ////
+
+=== external.tsx ===
 declare var React: any;
 >React : any
 
@@ -11,7 +13,7 @@ export const x = <span {...o} />
 >span : any
 >o : any
 
-=== tests/cases/compiler/script.tsx ===
+=== script.tsx ===
 declare var React: any;
 >React : any
 
@@ -24,7 +26,7 @@ const x = <span {...o} />
 >span : any
 >o : any
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
 >d : Function

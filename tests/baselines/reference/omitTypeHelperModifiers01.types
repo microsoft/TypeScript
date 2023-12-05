@@ -1,4 +1,6 @@
-=== tests/cases/compiler/omitTypeHelperModifiers01.ts ===
+//// [tests/cases/compiler/omitTypeHelperModifiers01.ts] ////
+
+=== omitTypeHelperModifiers01.ts ===
 type A = {
 >A : { a: number; b?: string | undefined; readonly c: boolean; d: unknown; }
 

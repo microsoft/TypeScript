@@ -44,11 +44,15 @@ registerCodeFix({
             createCodeFixActionWithoutFixAll(
                 fixName,
                 [createFileTextChanges(sourceFile.fileName, [
-                    createTextChange(sourceFile.checkJsDirective
-                        ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
-                        : createTextSpan(0, 0), `// @ts-nocheck${newLineCharacter}`),
+                    createTextChange(
+                        sourceFile.checkJsDirective
+                            ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
+                            : createTextSpan(0, 0),
+                        `// @ts-nocheck${newLineCharacter}`,
+                    ),
                 ])],
-                Diagnostics.Disable_checking_for_this_file),
+                Diagnostics.Disable_checking_for_this_file,
+            ),
         ];
 
         if (textChanges.isValidLocationToAddComment(sourceFile, span.start)) {

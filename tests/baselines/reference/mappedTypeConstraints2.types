@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeConstraints2.ts] ////
+
+=== mappedTypeConstraints2.ts ===
 type Mapped1<K extends string> = { [P in K]: { a: P } };
 >Mapped1 : Mapped1<K>
 >a : P
@@ -93,9 +95,9 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 >key : string
 >val : any
 >Object.entries(obj) : [string, any][]
->Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>Object.entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
 >obj : T
 
         const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];
@@ -126,5 +128,29 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
     }
     return true;
 >true : true
+}
+
+// repro from #50030
+
+type ObjectWithUnderscoredKeys<K extends string> = {
+>ObjectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
+
+    [k in K as `_${k}`]: true;
+>true : true
+
+};
+
+function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
+>genericTest : <K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) => void
+>objectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
+>key : K
+
+  const shouldBeTrue: true = objectWithUnderscoredKeys[`_${key}`];
+>shouldBeTrue : true
+>true : true
+>objectWithUnderscoredKeys[`_${key}`] : ObjectWithUnderscoredKeys<K>[`_${K}`]
+>objectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
+>`_${key}` : `_${K}`
+>key : K
 }
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExtendsInterfaceInModule.ts ===
+//// [tests/cases/compiler/classExtendsInterfaceInModule.ts] ////
+
+=== classExtendsInterfaceInModule.ts ===
 module M {
   export interface I1 {}
   export interface I2<T> {}

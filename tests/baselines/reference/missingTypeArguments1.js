@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/missingTypeArguments1.ts] ////
+
 //// [missingTypeArguments1.ts]
 interface I<T> { }
 class Y<T> {}

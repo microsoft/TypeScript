@@ -1,4 +1,6 @@
-=== tests/cases/compiler/switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts ===
+//// [tests/cases/compiler/switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts] ////
+
+=== switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts ===
 export const narrowToLiterals = (str: string) => {
 >narrowToLiterals : Symbol(narrowToLiterals, Decl(switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts, 0, 12))
 >str : Symbol(str, Decl(switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts, 0, 33))

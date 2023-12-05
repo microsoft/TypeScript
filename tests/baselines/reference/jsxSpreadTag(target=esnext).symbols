@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/jsxSpreadTag.ts] ////
+
+=== /a.tsx ===
+declare const React: any;
+>React : Symbol(React, Decl(a.tsx, 0, 13))
+
+const t1 = <div {...<span />} />;
+>t1 : Symbol(t1, Decl(a.tsx, 2, 5))
+
+const t2 = <div {...<span className="foo" />} />;
+>t2 : Symbol(t2, Decl(a.tsx, 3, 5))
+>className : Symbol(className, Decl(a.tsx, 3, 25))
+
+const t3 = <Comp
+>t3 : Symbol(t3, Decl(a.tsx, 4, 5))
+
+    right={<div>x</div>}
+>right : Symbol(right, Decl(a.tsx, 4, 16))
+
+    {...{ wrong: <div>x</div>}}
+>wrong : Symbol(wrong, Decl(a.tsx, 6, 9))
+
+/>;
+const t4 = <Comp
+>t4 : Symbol(t4, Decl(a.tsx, 8, 5))
+
+    right={<div>x</div>}
+>right : Symbol(right, Decl(a.tsx, 8, 16))
+
+    {...{ wrong() { return <div>x</div>; }}}
+>wrong : Symbol(wrong, Decl(a.tsx, 10, 9))
+
+/>;
+const t5 = <Comp
+>t5 : Symbol(t5, Decl(a.tsx, 12, 5))
+
+    right={<div>x</div>}
+>right : Symbol(right, Decl(a.tsx, 12, 16))
+
+    {...{ get wrong() { return <div>x</div>; }}}
+>wrong : Symbol(wrong, Decl(a.tsx, 14, 9))
+
+/>;
+const t6 = <Comp
+>t6 : Symbol(t6, Decl(a.tsx, 16, 5))
+
+    right={<div>x</div>}
+>right : Symbol(right, Decl(a.tsx, 16, 16))
+
+    {...{ set wrong(s) { let a = <div>x</div>; }}}
+>wrong : Symbol(wrong, Decl(a.tsx, 18, 9))
+>s : Symbol(s, Decl(a.tsx, 18, 20))
+>a : Symbol(a, Decl(a.tsx, 18, 28))
+
+/>;
+

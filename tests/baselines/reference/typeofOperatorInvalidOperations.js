@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorInvalidOperations.ts] ////
+
 //// [typeofOperatorInvalidOperations.ts]
 // Unary operator typeof
 

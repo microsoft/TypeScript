@@ -1,16 +1,18 @@
-=== tests/cases/conformance/salsa/main.js ===
+//// [tests/cases/conformance/salsa/commonJSReexport.ts] ////
+
+=== main.js ===
 const { hardline } = require('./second').nested;
 >hardline : { type: string; }
->require('./second').nested : typeof import("tests/cases/conformance/salsa/first")
->require('./second') : { nested: typeof import("tests/cases/conformance/salsa/first"); }
+>require('./second').nested : typeof import("first")
+>require('./second') : { nested: typeof import("first"); }
 >require : any
 >'./second' : "./second"
->nested : typeof import("tests/cases/conformance/salsa/first")
+>nested : typeof import("first")
 
 hardline
 >hardline : { type: string; }
 
-=== tests/cases/conformance/salsa/first.js ===
+=== first.js ===
 // #41422, based on prettier's exports
 
 const hardline = { type: "hard" }
@@ -31,17 +33,17 @@ module.exports = {
 }
 
 
-=== tests/cases/conformance/salsa/second.js ===
+=== second.js ===
 module.exports = {
->module.exports = {  nested: require('./first')} : { nested: typeof import("tests/cases/conformance/salsa/first"); }
->module.exports : { nested: typeof import("tests/cases/conformance/salsa/first"); }
->module : { exports: { nested: typeof import("tests/cases/conformance/salsa/first"); }; }
->exports : { nested: typeof import("tests/cases/conformance/salsa/first"); }
->{  nested: require('./first')} : { nested: typeof import("tests/cases/conformance/salsa/first"); }
+>module.exports = {  nested: require('./first')} : { nested: typeof import("first"); }
+>module.exports : { nested: typeof import("first"); }
+>module : { exports: { nested: typeof import("first"); }; }
+>exports : { nested: typeof import("first"); }
+>{  nested: require('./first')} : { nested: typeof import("first"); }
 
   nested: require('./first')
->nested : typeof import("tests/cases/conformance/salsa/first")
->require('./first') : typeof import("tests/cases/conformance/salsa/first")
+>nested : typeof import("first")
+>require('./first') : typeof import("first")
 >require : any
 >'./first' : "./first"
 

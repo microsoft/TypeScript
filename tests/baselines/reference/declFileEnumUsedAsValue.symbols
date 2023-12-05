@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileEnumUsedAsValue.ts ===
+//// [tests/cases/compiler/declFileEnumUsedAsValue.ts] ////
+
+=== declFileEnumUsedAsValue.ts ===
 enum e {
 >e : Symbol(e, Decl(declFileEnumUsedAsValue.ts, 0, 0))
 

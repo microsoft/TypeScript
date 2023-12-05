@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherType.ts] ////
+
+=== decrementOperatorWithAnyOtherType.ts ===
 // -- operator on any type
 
 var ANY: any;
@@ -19,7 +21,6 @@ var obj = {x:1,y:null};
 >x : number
 >1 : 1
 >y : null
->null : null
 
 class A {
 >A : A

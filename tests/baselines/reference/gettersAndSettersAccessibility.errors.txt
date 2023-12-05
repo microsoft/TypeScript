@@ -1,19 +1,13 @@
-tests/cases/compiler/gettersAndSettersAccessibility.ts(2,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/gettersAndSettersAccessibility.ts(2,14): error TS2808: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/gettersAndSettersAccessibility.ts(3,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/gettersAndSettersAccessibility.ts(3,13): error TS2808: A get accessor must be at least as accessible as the setter
+gettersAndSettersAccessibility.ts(2,14): error TS2808: A get accessor must be at least as accessible as the setter
+gettersAndSettersAccessibility.ts(3,13): error TS2808: A get accessor must be at least as accessible as the setter
 
 
-==== tests/cases/compiler/gettersAndSettersAccessibility.ts (4 errors) ====
+==== gettersAndSettersAccessibility.ts (2 errors) ====
     class C99 {
     	private get Baz():number { return 0; }
     	            ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-    	            ~~~
 !!! error TS2808: A get accessor must be at least as accessible as the setter
     	public set Baz(n:number) {} // error - accessors do not agree in visibility
-    	           ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     	           ~~~
 !!! error TS2808: A get accessor must be at least as accessible as the setter
     }

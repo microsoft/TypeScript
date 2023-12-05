@@ -1,4 +1,6 @@
-=== tests/cases/compiler/varAndFunctionShareName.ts ===
+//// [tests/cases/compiler/varAndFunctionShareName.ts] ////
+
+=== varAndFunctionShareName.ts ===
 var myFn;
 >myFn : any
 

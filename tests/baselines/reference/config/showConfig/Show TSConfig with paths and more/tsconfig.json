@@ -4,7 +4,7 @@
         "outDir": "./lib",
         "esModuleInterop": true,
         "module": "commonjs",
-        "moduleResolution": "node",
+        "moduleResolution": "node10",
         "target": "es2017",
         "sourceMap": true,
         "baseUrl": "./",

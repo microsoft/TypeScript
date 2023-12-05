@@ -1,133 +1,101 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsCatchClause.ts ===
 // try { }
-// catch (/*FIND ALL REFS*/[|err|]) {
+// catch (/*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}err|]) {
 //     [|err|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsCatchClause.ts",
-      "kind": "var",
-      "name": "var err: any",
-      "textSpan": {
-        "start": 15,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "err",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 15,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsCatchClause.ts",
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsCatchClause.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsCatchClause.ts ===
+  // try { }
+  // catch (/*FIND ALL REFS*/[|err|]) {
+  //     err;
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var err: any",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "err",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsCatchClause.ts ===
 // try { }
-// catch ([|err|]) {
+// catch ([|{| isWriteAccess: true |}err|]) {
 //     /*FIND ALL REFS*/[|err|];
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsCatchClause.ts",
-      "kind": "var",
-      "name": "var err: any",
-      "textSpan": {
-        "start": 15,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "err",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 15,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsCatchClause.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsCatchClause.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsCatchClause.ts ===
+  // try { }
+  // catch ([|err|]) {
+  //     /*FIND ALL REFS*/err;
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var err: any",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "err",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/typings/typingsLookup4.ts] ////
+
 === /a.ts ===
 import { j } from "jquery";
 >j : Symbol(j, Decl(a.ts, 0, 8))

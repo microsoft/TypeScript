@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloads2.ts] ////
+
 //// [constructSignaturesWithOverloads2.ts]
 // No errors expected for basic overloads of construct signatures with merged declarations
 

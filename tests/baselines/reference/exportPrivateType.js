@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportPrivateType.ts] ////
+
 //// [exportPrivateType.ts]
 module foo {
     class C1 {

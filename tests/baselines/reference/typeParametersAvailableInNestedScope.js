@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope.ts] ////
+
 //// [typeParametersAvailableInNestedScope.ts]
 class C<T> {
     data: T;

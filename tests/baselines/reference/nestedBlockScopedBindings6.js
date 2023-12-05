@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/nestedBlockScopedBindings6.ts] ////
+
 //// [nestedBlockScopedBindings6.ts]
 function a0() {
     for (let x of [1]) {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExpressionAssignment.ts ===
+//// [tests/cases/compiler/classExpressionAssignment.ts] ////
+
+=== classExpressionAssignment.ts ===
 interface A {
   prop: string;
 >prop : string

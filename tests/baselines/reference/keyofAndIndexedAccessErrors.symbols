@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts ===
+//// [tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts] ////
+
+=== keyofAndIndexedAccessErrors.ts ===
 class Shape {
 >Shape : Symbol(Shape, Decl(keyofAndIndexedAccessErrors.ts, 0, 0))
 
@@ -521,5 +523,46 @@ function f31<T, K extends keyof T>() {
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 150, 13))
 >K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 150, 15))
+}
+
+// Repro from #51069
+
+class Test<T extends Record<string, number>> {
+>Test : Symbol(Test, Decl(keyofAndIndexedAccessErrors.ts, 152, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 156, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  testy: T;
+>testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 156, 11))
+
+  constructor(t: T) {
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 159, 14))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 156, 11))
+
+    this.testy = t;
+>this.testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+>this : Symbol(Test, Decl(keyofAndIndexedAccessErrors.ts, 152, 1))
+>testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 159, 14))
+  }
+
+  public t(key: keyof T): number {
+>t : Symbol(Test.t, Decl(keyofAndIndexedAccessErrors.ts, 161, 3))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 163, 11))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 156, 11))
+
+    this.testy[key] += 1; // Error
+>this.testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+>this : Symbol(Test, Decl(keyofAndIndexedAccessErrors.ts, 152, 1))
+>testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 163, 11))
+
+    return this.testy[key];
+>this.testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+>this : Symbol(Test, Decl(keyofAndIndexedAccessErrors.ts, 152, 1))
+>testy : Symbol(Test.testy, Decl(keyofAndIndexedAccessErrors.ts, 156, 46))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 163, 11))
+  }
 }
 

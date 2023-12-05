@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.d.ts ===
+//// [tests/cases/compiler/augmentExportEquals4_1.ts] ////
+
+=== file1.d.ts ===
 declare module "file1" {
 >"file1" : Symbol("file1", Decl(file1.d.ts, 0, 0))
 
@@ -16,7 +18,7 @@ declare module "file1" {
 }
 
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 /// <reference path="file1.d.ts"/>
 import x = require("file1"); 
 >x : Symbol(x, Decl(file2.ts, 0, 0))
@@ -38,7 +40,7 @@ declare module "file1" {
 >b : Symbol(b, Decl(file2.ts, 7, 7))
 }
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 import * as x from "file1";
 >x : Symbol(x, Decl(file3.ts, 0, 6))
 

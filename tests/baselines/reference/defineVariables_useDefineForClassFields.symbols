@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defineVariables_useDefineForClassFields.ts ===
+//// [tests/cases/compiler/defineVariables_useDefineForClassFields.ts] ////
+
+=== defineVariables_useDefineForClassFields.ts ===
 const a = () => b()
 >a : Symbol(a, Decl(defineVariables_useDefineForClassFields.ts, 0, 5))
 >b : Symbol(b, Decl(defineVariables_useDefineForClassFields.ts, 1, 5))

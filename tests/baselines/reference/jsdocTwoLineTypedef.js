@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocTwoLineTypedef.ts] ////
+
 //// [jsdocTwoLineTypedef.ts]
 // Regression from #18301
 /**

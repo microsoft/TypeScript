@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts ===
+//// [tests/cases/compiler/mismatchedExplicitTypeParameterAndArgumentType.ts] ////
+
+=== mismatchedExplicitTypeParameterAndArgumentType.ts ===
 function map<T, U>(xs: T[], f: (x: T) => U) {
 >map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
 >T : Symbol(T, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 13))

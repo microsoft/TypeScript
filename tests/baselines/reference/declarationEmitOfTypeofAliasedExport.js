@@ -11,7 +11,7 @@ export default a.D;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
 var C = /** @class */ (function () {
     function C() {
@@ -21,9 +21,9 @@ var C = /** @class */ (function () {
 exports.D = C;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = require("./a");
-exports["default"] = a.D;
+exports.default = a.D;
 
 
 //// [a.d.ts]

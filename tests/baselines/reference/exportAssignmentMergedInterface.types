@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo_1.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignmentMergedInterface.ts] ////
+
+=== foo_1.ts ===
 import foo = require("./foo_0");
 >foo : any
 
@@ -43,7 +45,7 @@ z = x.d;
 >x : foo
 >d : { x: number; y: number; }
 
-=== tests/cases/conformance/externalModules/foo_0.ts ===
+=== foo_0.ts ===
 interface Foo {
 	(a: string): void;
 >a : string

@@ -1,23 +1,23 @@
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(12,17): error TS6133: 'b1' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(13,12): error TS6133: 'a2' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(14,12): error TS6133: 'a3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(14,16): error TS6133: 'b3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(23,12): error TS6133: 'a3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(23,18): error TS6133: 'b3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(23,22): error TS6133: 'c3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(23,28): error TS6133: 'd3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(23,32): error TS6133: 'e3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(37,22): error TS6133: 'b1' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(38,13): error TS6133: 'a2' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(39,11): error TS6198: All destructured elements are unused.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(68,9): error TS6133: 'a3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(70,18): error TS6198: All destructured elements are unused.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(74,9): error TS6133: 'c3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(75,9): error TS6133: 'd3' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts(81,11): error TS6198: All destructured elements are unused.
+unusedVariablesWithUnderscoreInBindingElement.ts(12,17): error TS6133: 'b1' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(13,12): error TS6133: 'a2' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(14,12): error TS6133: 'a3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(14,16): error TS6133: 'b3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(23,12): error TS6133: 'a3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(23,18): error TS6133: 'b3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(23,22): error TS6133: 'c3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(23,28): error TS6133: 'd3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(23,32): error TS6133: 'e3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(37,22): error TS6133: 'b1' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(38,13): error TS6133: 'a2' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(39,11): error TS6198: All destructured elements are unused.
+unusedVariablesWithUnderscoreInBindingElement.ts(68,9): error TS6133: 'a3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(70,18): error TS6198: All destructured elements are unused.
+unusedVariablesWithUnderscoreInBindingElement.ts(74,9): error TS6133: 'c3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(75,9): error TS6133: 'd3' is declared but its value is never read.
+unusedVariablesWithUnderscoreInBindingElement.ts(81,11): error TS6198: All destructured elements are unused.
 
 
-==== tests/cases/compiler/unusedVariablesWithUnderscoreInBindingElement.ts (17 errors) ====
+==== unusedVariablesWithUnderscoreInBindingElement.ts (17 errors) ====
     function t1() {
         const [_a1, b1] = [1, 2];
         console.log(b1);

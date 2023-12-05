@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterExtendingUnion2.ts ===
+//// [tests/cases/compiler/typeParameterExtendingUnion2.ts] ////
+
+=== typeParameterExtendingUnion2.ts ===
 class Animal { run() { } }
 >Animal : Animal
 >run : () => void

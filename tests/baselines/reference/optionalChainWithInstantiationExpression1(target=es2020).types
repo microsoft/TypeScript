@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalChainWithInstantiationExpression1.ts ===
+//// [tests/cases/compiler/optionalChainWithInstantiationExpression1.ts] ////
+
+=== optionalChainWithInstantiationExpression1.ts ===
 declare namespace A {
 >A : typeof A
 

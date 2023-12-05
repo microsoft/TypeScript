@@ -22,8 +22,8 @@ System.register(["./b"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            b_1["default"].bar();
-            b_1["default"].foo();
+            b_1.default.bar();
+            b_1.default.foo();
         }
     };
 });

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsArgumentsOfCallExpression1.ts ===
+//// [tests/cases/compiler/commentsArgumentsOfCallExpression1.ts] ////
+
+=== commentsArgumentsOfCallExpression1.ts ===
 function foo(/*c1*/ x: any) { }
 >foo : (x: any) => void
 >x : any

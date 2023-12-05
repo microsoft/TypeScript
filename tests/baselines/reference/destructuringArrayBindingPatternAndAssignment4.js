@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment4.ts] ////
+
 //// [destructuringArrayBindingPatternAndAssignment4.ts]
 // #35497
 

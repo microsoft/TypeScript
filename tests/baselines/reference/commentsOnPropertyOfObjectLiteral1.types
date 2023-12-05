@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsOnPropertyOfObjectLiteral1.ts ===
+//// [tests/cases/compiler/commentsOnPropertyOfObjectLiteral1.ts] ////
+
+=== commentsOnPropertyOfObjectLiteral1.ts ===
 var resolve = {
 >resolve : { id: (details: any) => any; id1: string; id2: (details: any) => any; id3: (details: any) => any; id4: (details: any) => any; }
 >{    id: /*! @ngInject */ (details: any) => details.id,    id1: /* c1 */ "hello",    id2:        /*! @ngInject */ (details: any) => details.id,    id3:    /*! @ngInject */    (details: any) => details.id,    id4:    /*! @ngInject */    /* C2 */    (details: any) => details.id,} : { id: (details: any) => any; id1: string; id2: (details: any) => any; id3: (details: any) => any; id4: (details: any) => any; }

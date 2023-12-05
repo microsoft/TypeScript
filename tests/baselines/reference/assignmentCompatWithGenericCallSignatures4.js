@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts] ////
+
 //// [assignmentCompatWithGenericCallSignatures4.ts]
 // some complex cases of assignment compat of generic signatures.
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadWithCallbacksWithDifferingOptionalityOnArgs.ts ===
+//// [tests/cases/compiler/overloadWithCallbacksWithDifferingOptionalityOnArgs.ts] ////
+
+=== overloadWithCallbacksWithDifferingOptionalityOnArgs.ts ===
 function x2(callback: (x?: number) => number);
 >x2 : { (callback: (x?: number) => number): any; (callback: (x: string) => number): any; }
 >callback : (x?: number) => number

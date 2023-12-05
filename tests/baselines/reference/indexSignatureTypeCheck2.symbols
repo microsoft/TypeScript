@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexSignatureTypeCheck2.ts ===
+//// [tests/cases/compiler/indexSignatureTypeCheck2.ts] ////
+
+=== indexSignatureTypeCheck2.ts ===
 class IPropertySet {
 >IPropertySet : Symbol(IPropertySet, Decl(indexSignatureTypeCheck2.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticMethodAssignment.ts] ////
+
 //// [privateNameStaticMethodAssignment.ts]
 class A3 {
     static #method() { };
@@ -29,11 +31,11 @@ class A3 {
     ;
     constructor(a, b) {
         var _b, _c;
-        __classPrivateFieldSet(A3, _a, () => { }, "m"); // Error, not writable 
+        __classPrivateFieldSet(_a, _a, () => { }, "m"); // Error, not writable 
         __classPrivateFieldSet(a, _a, () => { }, "m"); // Error, not writable 
         __classPrivateFieldSet(b, _a, () => { }, "m"); //Error, not writable 
-        ({ x: ({ set value(_b) { __classPrivateFieldSet(A3, _a, _b, "m"); } }).value } = { x: () => { } }); //Error, not writable 
-        let x = __classPrivateFieldGet(A3, _a, "m", _A3_method);
+        ({ x: ({ set value(_b) { __classPrivateFieldSet(_a, _a, _b, "m"); } }).value } = { x: () => { } }); //Error, not writable 
+        let x = __classPrivateFieldGet(_a, _a, "m", _A3_method);
         __classPrivateFieldSet(_b = b, _a, (_c = __classPrivateFieldGet(_b, _a, "m", _A3_method), _c++, _c), "m"); //Error, not writable 
     }
 }

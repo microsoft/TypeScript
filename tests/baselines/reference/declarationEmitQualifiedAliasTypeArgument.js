@@ -29,7 +29,7 @@ export const fun2 = create<Q>();
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fun2 = exports.fun = void 0;
 var bbb_1 = require("./bbb");
 exports.fun = (0, bbb_1.create)();

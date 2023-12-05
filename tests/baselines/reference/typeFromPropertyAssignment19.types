@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/index.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment19.ts] ////
+
+=== index.js ===
 /// <reference path='./types.d.ts'/>
 const C = require("./semver")
 >C : typeof C
@@ -14,14 +16,14 @@ var two = C.f(1)
 >f : (n: any) => any
 >1 : 1
 
-=== tests/cases/conformance/salsa/types.d.ts ===
+=== types.d.ts ===
 declare var require: any;
 >require : any
 
 declare var module: any;
 >module : any
 
-=== tests/cases/conformance/salsa/semver.js ===
+=== semver.js ===
 /// <reference path='./types.d.ts'/>
 exports = module.exports = C
 >exports = module.exports = C : typeof C

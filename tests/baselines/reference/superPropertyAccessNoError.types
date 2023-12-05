@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/superPropertyAccess/superPropertyAccessNoError.ts ===
+//// [tests/cases/conformance/expressions/superPropertyAccess/superPropertyAccessNoError.ts] ////
+
+=== superPropertyAccessNoError.ts ===
 //super.publicInstanceMemberFunction in constructor of derived class
 //super.publicInstanceMemberFunction in instance member function of derived class
 //super.publicInstanceMemberFunction in instance member accessor(get and set) of derived class
@@ -88,7 +90,6 @@ class SomeDerivedClass extends SomeBaseClass {
 >x : string
 
         return null;
->null : null
     }
 
     set a(n) {
@@ -134,7 +135,6 @@ class SomeDerivedClass extends SomeBaseClass {
 >x : number
 
         return null;
->null : null
     }
 
     static set a(n) {

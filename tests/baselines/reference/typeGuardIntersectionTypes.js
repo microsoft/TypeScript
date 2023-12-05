@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardIntersectionTypes.ts] ////
+
 //// [typeGuardIntersectionTypes.ts]
 interface X {
     x: string;

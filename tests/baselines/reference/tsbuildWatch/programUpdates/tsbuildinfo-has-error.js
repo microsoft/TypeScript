@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/src/project/main.ts]
 export const x = 10;
@@ -31,41 +32,12 @@ Output::
 
 
 
-Program root files: ["/src/project/main.ts"]
-Program options: {"watch":true,"incremental":true,"configFilePath":"/src/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/src/project/main.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/src/project/main.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/src/project/main.ts (used version)
-
-PolledWatches::
-
-FsWatches::
-/src/project/tsconfig.json:
-  {}
-/src/project/main.ts:
-  {}
-
-FsWatchesRecursive::
-/src/project:
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"root":[2],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
 
 //// [/src/project/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -92,6 +64,12 @@ exports.x = 10;
         "signature": "-10726455937-export const x = 10;"
       }
     },
+    "root": [
+      [
+        2,
+        "./main.ts"
+      ]
+    ],
     "referencedMap": {},
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
@@ -100,6 +78,39 @@ exports.x = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 615
+  "size": 626
 }
 
+
+FsWatches::
+/src/project/main.ts: *new*
+  {}
+/src/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/src/project: *new*
+  {}
+
+Program root files: [
+  "/src/project/main.ts"
+]
+Program options: {
+  "watch": true,
+  "incremental": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/src/project/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/src/project/main.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/src/project/main.ts (used version)
+
+exitCode:: ExitStatus.undefined

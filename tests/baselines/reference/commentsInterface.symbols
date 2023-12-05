@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsInterface.ts ===
+//// [tests/cases/compiler/commentsInterface.ts] ////
+
+=== commentsInterface.ts ===
 /** this is interface 1*/
 interface i1 {
 >i1 : Symbol(i1, Decl(commentsInterface.ts, 0, 0))

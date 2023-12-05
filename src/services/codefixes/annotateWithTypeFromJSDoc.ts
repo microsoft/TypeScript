@@ -17,6 +17,7 @@ import {
     isJSDocIndexSignature,
     isOptionalJSDocPropertyLikeTag,
     isParameter,
+    isTypeNode,
     JSDocFunctionType,
     JSDocNonNullableType,
     JSDocNullableType,
@@ -35,7 +36,6 @@ import {
     SyntaxKind,
     textChanges,
     tryCast,
-    TypeNode,
     TypeReferenceNode,
     VariableDeclaration,
     visitEachChild,
@@ -59,10 +59,11 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Annotate_with_type_from_JSDoc, fixId, Diagnostics.Annotate_everything_with_types_from_JSDoc)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const decl = getDeclaration(diag.file, diag.start);
-        if (decl) doChange(changes, diag.file, decl);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const decl = getDeclaration(diag.file, diag.start);
+            if (decl) doChange(changes, diag.file, decl);
+        }),
 });
 
 function getDeclaration(file: SourceFile, pos: number): DeclarationWithType | undefined {
@@ -100,19 +101,19 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
         for (const param of decl.parameters) {
             if (!param.type) {
                 const paramType = getJSDocType(param);
-                if (paramType) changes.tryInsertTypeAnnotation(sourceFile, param, transformJSDocType(paramType));
+                if (paramType) changes.tryInsertTypeAnnotation(sourceFile, param, visitNode(paramType, transformJSDocType, isTypeNode));
             }
         }
         if (needParens) changes.insertNodeAfter(sourceFile, last(decl.parameters), factory.createToken(SyntaxKind.CloseParenToken));
         if (!decl.type) {
             const returnType = getJSDocReturnType(decl);
-            if (returnType) changes.tryInsertTypeAnnotation(sourceFile, decl, transformJSDocType(returnType));
+            if (returnType) changes.tryInsertTypeAnnotation(sourceFile, decl, visitNode(returnType, transformJSDocType, isTypeNode));
         }
     }
     else {
         const jsdocType = Debug.checkDefined(getJSDocType(decl), "A JSDocType for this declaration should exist"); // If not defined, shouldn't have been an error to fix
         Debug.assert(!decl.type, "The JSDocType decl should have a type"); // If defined, shouldn't have been an error to fix.
-        changes.tryInsertTypeAnnotation(sourceFile, decl, transformJSDocType(jsdocType));
+        changes.tryInsertTypeAnnotation(sourceFile, decl, visitNode(jsdocType, transformJSDocType, isTypeNode));
     }
 }
 
@@ -123,7 +124,7 @@ function isDeclarationWithType(node: Node): node is DeclarationWithType {
         node.kind === SyntaxKind.PropertyDeclaration;
 }
 
-function transformJSDocType(node: TypeNode): TypeNode {
+function transformJSDocType(node: Node): Node {
     switch (node.kind) {
         case SyntaxKind.JSDocAllType:
         case SyntaxKind.JSDocUnknownType:
@@ -155,21 +156,22 @@ function transformJSDocTypeLiteral(node: JSDocTypeLiteral) {
             /*modifiers*/ undefined,
             isIdentifier(tag.name) ? tag.name : tag.name.right,
             isOptionalJSDocPropertyLikeTag(tag) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-            tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword))));
+            tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+        )));
     setEmitFlags(typeNode, EmitFlags.SingleLine);
     return typeNode;
 }
 
 function transformJSDocOptionalType(node: JSDocOptionalType) {
-    return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType), factory.createTypeReferenceNode("undefined", emptyArray)]);
+    return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType, isTypeNode), factory.createTypeReferenceNode("undefined", emptyArray)]);
 }
 
 function transformJSDocNullableType(node: JSDocNullableType) {
-    return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType), factory.createTypeReferenceNode("null", emptyArray)]);
+    return factory.createUnionTypeNode([visitNode(node.type, transformJSDocType, isTypeNode), factory.createTypeReferenceNode("null", emptyArray)]);
 }
 
 function transformJSDocVariadicType(node: JSDocVariadicType) {
-    return factory.createArrayTypeNode(visitNode(node.type, transformJSDocType));
+    return factory.createArrayTypeNode(visitNode(node.type, transformJSDocType, isTypeNode));
 }
 
 function transformJSDocFunctionType(node: JSDocFunctionType) {
@@ -183,7 +185,7 @@ function transformJSDocParameter(node: ParameterDeclaration) {
     const isRest = node.type!.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1; // TODO: GH#18217
     const name = node.name || (isRest ? "rest" : "arg" + index);
     const dotdotdot = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : node.dotDotDotToken;
-    return factory.createParameterDeclaration(node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
+    return factory.createParameterDeclaration(node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType, isTypeNode), node.initializer);
 }
 
 function transformJSDocTypeReference(node: TypeReferenceNode) {
@@ -212,7 +214,7 @@ function transformJSDocTypeReference(node: TypeReferenceNode) {
             args = factory.createNodeArray([factory.createTypeReferenceNode("any", emptyArray)]);
         }
         else {
-            args = visitNodes(node.typeArguments, transformJSDocType);
+            args = visitNodes(node.typeArguments, transformJSDocType, isTypeNode);
         }
     }
     return factory.createTypeReferenceNode(name, args);
@@ -225,7 +227,8 @@ function transformJSDocIndexSignature(node: TypeReferenceNode) {
         node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
         /*questionToken*/ undefined,
         factory.createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
-        /*initializer*/ undefined);
+        /*initializer*/ undefined,
+    );
     const indexSignature = factory.createTypeLiteralNode([factory.createIndexSignature(/*modifiers*/ undefined, [index], node.typeArguments![1])]);
     setEmitFlags(indexSignature, EmitFlags.SingleLine);
     return indexSignature;

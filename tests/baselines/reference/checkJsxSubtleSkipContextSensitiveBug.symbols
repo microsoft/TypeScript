@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx ===
+//// [tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx] ////
+
+=== checkJsxSubtleSkipContextSensitiveBug.tsx ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
 >React : Symbol(React, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 1, 6))

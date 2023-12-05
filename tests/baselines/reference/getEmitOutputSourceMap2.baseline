@@ -1,3 +1,4 @@
+// === EmitOutput ===
 EmitSkipped: false
 
 FileName : sample/outDir/inputFile1.js.map
@@ -14,7 +15,7 @@ var M = /** @class */ (function () {
 EmitSkipped: false
 
 FileName : sample/outDir/inputFile2.js.map
-{"version":3,"file":"inputFile2.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile2.ts"],"names":[],"mappings":"AAAA,IAAI,KAAK,GAAG,aAAa,CAAC;AAC1B,IAAI,KAAK,KAAK,SAAS,EAAE;IACtB,IAAI,CAAC,GAAG,EAAE,CAAC;CACb"}
+{"version":3,"file":"inputFile2.js","sourceRoot":"","sources":["../../tests/cases/fourslash/inputFile2.ts"],"names":[],"mappings":"AAAA,IAAI,KAAK,GAAG,aAAa,CAAC;AAC1B,IAAI,KAAK,KAAK,SAAS,EAAE,CAAC;IACvB,IAAI,CAAC,GAAG,EAAE,CAAC;AACd,CAAC"}
 FileName : sample/outDir/inputFile2.js
 var intro = "hello world";
 if (intro !== undefined) {

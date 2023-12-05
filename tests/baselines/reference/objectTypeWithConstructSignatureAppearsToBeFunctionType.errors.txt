@@ -1,8 +1,8 @@
-tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts(8,18): error TS2348: Value of type 'I' is not callable. Did you mean to include 'new'?
-tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts(16,18): error TS2348: Value of type 'new () => number' is not callable. Did you mean to include 'new'?
+objectTypeWithConstructSignatureAppearsToBeFunctionType.ts(8,18): error TS2348: Value of type 'I' is not callable. Did you mean to include 'new'?
+objectTypeWithConstructSignatureAppearsToBeFunctionType.ts(16,18): error TS2348: Value of type 'new () => number' is not callable. Did you mean to include 'new'?
 
 
-==== tests/cases/conformance/types/members/objectTypeWithConstructSignatureAppearsToBeFunctionType.ts (2 errors) ====
+==== objectTypeWithConstructSignatureAppearsToBeFunctionType.ts (2 errors) ====
     // no errors expected below 
     
     interface I {

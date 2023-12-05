@@ -1,15 +1,15 @@
-tests/cases/compiler/exportDefaultTypeAndClass.ts(1,22): error TS2528: A module cannot have multiple default exports.
-tests/cases/compiler/exportDefaultTypeAndClass.ts(3,16): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeAndClass.ts(1,22): error TS2528: A module cannot have multiple default exports.
+exportDefaultTypeAndClass.ts(3,16): error TS2528: A module cannot have multiple default exports.
 
 
-==== tests/cases/compiler/exportDefaultTypeAndClass.ts (2 errors) ====
+==== exportDefaultTypeAndClass.ts (2 errors) ====
     export default class Foo {}
                          ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2753 tests/cases/compiler/exportDefaultTypeAndClass.ts:3:16: Another export default is here.
+!!! related TS2753 exportDefaultTypeAndClass.ts:3:16: Another export default is here.
     type Bar = {}
     export default Bar
                    ~~~
 !!! error TS2528: A module cannot have multiple default exports.
-!!! related TS2752 tests/cases/compiler/exportDefaultTypeAndClass.ts:1:22: The first export default is here.
+!!! related TS2752 exportDefaultTypeAndClass.ts:1:22: The first export default is here.
     

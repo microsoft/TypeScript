@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts] ////
+
 //// [deleteOperatorWithNumberType.ts]
 // delete  operator on number type
 var NUMBER: number;

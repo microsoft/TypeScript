@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfUnion.ts] ////
+
 //// [subtypesOfUnion.ts]
 enum E { e1, e2 }
 interface I8 { [x: string]: number[]; }

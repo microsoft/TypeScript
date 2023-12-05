@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorsInGenericTypeReference.ts ===
+//// [tests/cases/compiler/errorsInGenericTypeReference.ts] ////
+
+=== errorsInGenericTypeReference.ts ===
 interface IFoo<T> { }
 >IFoo : Symbol(IFoo, Decl(errorsInGenericTypeReference.ts, 0, 0))
 >T : Symbol(T, Decl(errorsInGenericTypeReference.ts, 0, 15))

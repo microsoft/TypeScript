@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intrinsics.ts] ////
+
 //// [intrinsics.ts]
 var hasOwnProperty: hasOwnProperty; // Error
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts] ////
+
 //// [sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts]
 declare var console: {
     log(msg: string): void;

@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(14,9): error TS2367: This comparison appears to be unintentional because the types 'E1' and '0' have no overlap.
-tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(23,9): error TS2367: This comparison appears to be unintentional because the types 'E1' and '3' have no overlap.
-tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(29,9): error TS2367: This comparison appears to be unintentional because the types 'E2' and '0' have no overlap.
-tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts(38,9): error TS2367: This comparison appears to be unintentional because the types 'E2' and '3' have no overlap.
+equalityWithEnumTypes.ts(14,9): error TS2367: This comparison appears to be unintentional because the types 'E1' and '0' have no overlap.
+equalityWithEnumTypes.ts(23,9): error TS2367: This comparison appears to be unintentional because the types 'E1' and '3' have no overlap.
+equalityWithEnumTypes.ts(29,9): error TS2367: This comparison appears to be unintentional because the types 'E2' and '0' have no overlap.
+equalityWithEnumTypes.ts(38,9): error TS2367: This comparison appears to be unintentional because the types 'E2' and '3' have no overlap.
 
 
-==== tests/cases/conformance/types/typeRelationships/comparable/equalityWithEnumTypes.ts (4 errors) ====
+==== equalityWithEnumTypes.ts (4 errors) ====
     // Literal enum type
     enum E1 {
         a = 1,

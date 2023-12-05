@@ -1,9 +1,9 @@
 error TS2318: Cannot find global type 'IterableIterator'.
-tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts(1,15): error TS1005: '(' expected.
+templateStringWithEmbeddedYieldKeyword.ts(1,15): error TS1005: '(' expected.
 
 
 !!! error TS2318: Cannot find global type 'IterableIterator'.
-==== tests/cases/conformance/es6/templates/templateStringWithEmbeddedYieldKeyword.ts (1 errors) ====
+==== templateStringWithEmbeddedYieldKeyword.ts (1 errors) ====
     function* gen {
                   ~
 !!! error TS1005: '(' expected.

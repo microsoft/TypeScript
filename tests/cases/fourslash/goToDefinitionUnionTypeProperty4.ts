@@ -18,4 +18,4 @@
 ////
 ////var x = (snapcrackle || magnitude || art).[|/*usage*/pop|];
 
-verify.goToDefinition("usage", ["def1", "def2", "def3"]);
+verify.baselineGoToDefinition("usage");

@@ -19,6 +19,4 @@
 // does not exist, but should return a response to it anyway so an editor can create it.
 //// import [|/*3*/"./foo.txt"|];
 
-verify.goToDefinition("1", { marker: "1d", unverified: true });
-verify.goToDefinition("2", { marker: "2d", unverified: true });
-verify.goToDefinition("3", { file: "/foo.txt", unverified: true });
+verify.baselineGoToDefinition("1", "2", "3");

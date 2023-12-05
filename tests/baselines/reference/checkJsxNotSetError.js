@@ -12,11 +12,11 @@ const a = <Foo />
 
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Foo = function () { return (<div>foo</div>); };
-exports["default"] = Foo;
+exports.default = Foo;
 //// [bar.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("/foo");
-var a = <foo_1["default"] />;
+var a = <foo_1.default />;

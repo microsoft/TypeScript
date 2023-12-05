@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/enumMapBackIntoItself.ts] ////
+
 //// [enumMapBackIntoItself.ts]
 enum TShirtSize {
    Small,

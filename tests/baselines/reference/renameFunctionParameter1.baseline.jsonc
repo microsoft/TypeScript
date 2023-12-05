@@ -1,0 +1,10 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameFunctionParameter1.ts ===
+// function Foo() {
+//     /**
+//      * @param {number} [|pRENAME|]
+//      */
+//     this.foo = function foo([|pRENAME|]/*RENAME*/) {
+//         return [|pRENAME|];
+//     }
+// }

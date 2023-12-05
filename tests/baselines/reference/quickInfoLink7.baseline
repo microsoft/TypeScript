@@ -1,3 +1,15 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoLink7.ts ===
+// /**
+//  * See {@link |       } instead
+//  */
+// const B = 456;
+//       ^
+// | ----------------------------------------------------------------------
+// | const B: 456
+// | See {@link |       } instead
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +17,7 @@
       "position": 46,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {

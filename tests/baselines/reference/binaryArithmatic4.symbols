@@ -1,4 +1,6 @@
-=== tests/cases/compiler/binaryArithmatic4.ts ===
+//// [tests/cases/compiler/binaryArithmatic4.ts] ////
+
+=== binaryArithmatic4.ts ===
 var v = null | null;
 >v : Symbol(v, Decl(binaryArithmatic4.ts, 0, 3))
 

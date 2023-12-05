@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/elidedJSImport2.ts] ////
+
+=== index.js ===
 import { Foo } from "./other.js";
 >Foo : Symbol(Foo, Decl(index.js, 0, 8))
 
@@ -18,7 +20,7 @@ const y = other.Foo();
 const z = new defaultFoo();
 >z : Symbol(z, Decl(index.js, 6, 5))
 
-=== tests/cases/compiler/other.d.ts ===
+=== other.d.ts ===
 export interface Foo {
 >Foo : Symbol(Foo, Decl(other.d.ts, 0, 0))
 
@@ -33,7 +35,7 @@ export default interface Bar {
 >foo : Symbol(Bar.foo, Decl(other.d.ts, 4, 30))
 }
 
-=== tests/cases/compiler/other.js ===
+=== other.js ===
 export class Foo {
 >Foo : Symbol(Foo, Decl(other.js, 0, 0))
 

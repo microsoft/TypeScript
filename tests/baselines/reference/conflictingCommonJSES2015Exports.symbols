@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug24934.js ===
+//// [tests/cases/conformance/salsa/conflictingCommonJSES2015Exports.ts] ////
+
+=== bug24934.js ===
 export function abc(a, b, c) { return 5; }
 >abc : Symbol(abc, Decl(bug24934.js, 0, 0))
 >a : Symbol(a, Decl(bug24934.js, 0, 20))
@@ -8,7 +10,7 @@ export function abc(a, b, c) { return 5; }
 module.exports = { abc };
 >abc : Symbol(abc, Decl(bug24934.js, 1, 18))
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 import { abc } from './bug24934';
 >abc : Symbol(abc, Decl(use.js, 0, 8))
 

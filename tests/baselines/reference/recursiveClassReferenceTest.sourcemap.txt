@@ -5,7 +5,7 @@ sourceRoot:
 sources: recursiveClassReferenceTest.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/recursiveClassReferenceTest.js
+emittedFile:recursiveClassReferenceTest.js
 sourceFile:recursiveClassReferenceTest.ts
 -------------------------------------------------------------------
 >>>// Scenario 1: Test reqursive function call with "this" parameter
@@ -756,6 +756,7 @@ sourceFile:recursiveClassReferenceTest.ts
 7 >                                                               ^^^^
 8 >                                                                   ^^^^
 9 >                                                                       ^^
+10>                                                                         ^
 1->
 2 >                gar
 3 >                                        
@@ -765,6 +766,7 @@ sourceFile:recursiveClassReferenceTest.ts
 7 >                                                               if (
 8 >                                                                   true
 9 >                                                                       ) 
+10>                                                                         {
 1->Emitted(52, 17) Source(47, 10) + SourceIndex(0)
 2 >Emitted(52, 41) Source(47, 13) + SourceIndex(0)
 3 >Emitted(52, 44) Source(47, 3) + SourceIndex(0)
@@ -774,6 +776,7 @@ sourceFile:recursiveClassReferenceTest.ts
 7 >Emitted(52, 68) Source(47, 63) + SourceIndex(0)
 8 >Emitted(52, 72) Source(47, 67) + SourceIndex(0)
 9 >Emitted(52, 74) Source(47, 69) + SourceIndex(0)
+10>Emitted(52, 75) Source(47, 70) + SourceIndex(0)
 ---
 >>>                    return runner(this);
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -783,7 +786,7 @@ sourceFile:recursiveClassReferenceTest.ts
 5 >                                  ^^^^
 6 >                                      ^
 7 >                                       ^
-1 >{
+1 >
 2 >                    return 
 3 >                           runner
 4 >                                 (
@@ -799,16 +802,19 @@ sourceFile:recursiveClassReferenceTest.ts
 7 >Emitted(53, 41) Source(47, 90) + SourceIndex(0)
 ---
 >>>                } };
-1 >^^^^^^^^^^^^^^^^^
-2 >                 ^
-3 >                  ^
-4 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >}
-2 >                 
-3 >                  }
-1 >Emitted(54, 18) Source(47, 91) + SourceIndex(0)
-2 >Emitted(54, 19) Source(47, 91) + SourceIndex(0)
-3 >Emitted(54, 20) Source(47, 92) + SourceIndex(0)
+1 >^^^^^^^^^^^^^^^^
+2 >                ^
+3 >                 ^
+4 >                  ^
+5 >                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >                }
+3 >                 
+4 >                  }
+1 >Emitted(54, 17) Source(47, 90) + SourceIndex(0)
+2 >Emitted(54, 18) Source(47, 91) + SourceIndex(0)
+3 >Emitted(54, 19) Source(47, 91) + SourceIndex(0)
+4 >Emitted(54, 20) Source(47, 92) + SourceIndex(0)
 ---
 >>>                FindWidget.prototype.getDomNode = function () {
 1->^^^^^^^^^^^^^^^^

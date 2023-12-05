@@ -1,0 +1,49 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class class1 extends class1 {
+//    /*HIGHLIGHTS*/<|[|{| kind: "writtenReference" |}doStuff|]() { }|>
+//    propName: string;
+// }
+// 
+// var c: class1;
+// c.[|{| kind: "reference" |}doStuff|]();
+// c.propName;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    /*HIGHLIGHTS*/<|[|{| kind: "reference" |}propName|]: string;|>
+// }
+// 
+// var c: class1;
+// c.doStuff();
+// c.[|{| kind: "reference" |}propName|];
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class class1 extends class1 {
+//    <|[|{| kind: "writtenReference" |}doStuff|]() { }|>
+//    propName: string;
+// }
+// 
+// var c: class1;
+// c./*HIGHLIGHTS*/[|{| kind: "reference" |}doStuff|]();
+// c.propName;
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/file1.ts ===
+// class class1 extends class1 {
+//    doStuff() { }
+//    <|[|{| kind: "reference" |}propName|]: string;|>
+// }
+// 
+// var c: class1;
+// c.doStuff();
+// c./*HIGHLIGHTS*/[|{| kind: "reference" |}propName|];

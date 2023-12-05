@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts ===
+//// [tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts] ////
+
+=== logicalAssignment4.ts ===
 function foo1(results: number[] | undefined) {
 >foo1 : (results: number[] | undefined) => void
 >results : number[] | undefined

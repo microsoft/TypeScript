@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedClassExpressionShadowing.ts] ////
+
+=== index.js ===
 class A {
 >A : A
 
@@ -15,12 +17,12 @@ class Q {
 >42 : 42
 }
 module.exports = class Q {
->module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->class Q {    constructor() {        this.x = new A();    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->Q : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports = class Q {    constructor() {        this.x = new A();    }} : typeof import("index")
+>module.exports : typeof import("index")
+>module : { exports: typeof import("index"); }
+>exports : typeof import("index")
+>class Q {    constructor() {        this.x = new A();    }} : typeof import("index")
+>Q : typeof import("index")
 
     constructor() {
         this.x = new A();
@@ -35,9 +37,9 @@ module.exports = class Q {
 module.exports.Another = Q;
 >module.exports.Another = Q : typeof Q
 >module.exports.Another : typeof Q
->module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
->module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
->exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports : typeof import("index")
+>module : { exports: typeof import("index"); }
+>exports : typeof import("index")
 >Another : typeof Q
 >Q : typeof Q
 

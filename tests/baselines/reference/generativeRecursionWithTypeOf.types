@@ -1,4 +1,6 @@
-=== tests/cases/compiler/generativeRecursionWithTypeOf.ts ===
+//// [tests/cases/compiler/generativeRecursionWithTypeOf.ts] ////
+
+=== generativeRecursionWithTypeOf.ts ===
 class C<T> {
 >C : C<T>
 

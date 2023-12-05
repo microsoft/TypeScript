@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUnusedLocals_selfReference_skipsBlockLocations.ts ===
+//// [tests/cases/compiler/noUnusedLocals_selfReference_skipsBlockLocations.ts] ////
+
+=== noUnusedLocals_selfReference_skipsBlockLocations.ts ===
 namespace n {
 >n : Symbol(n, Decl(noUnusedLocals_selfReference_skipsBlockLocations.ts, 0, 0))
 

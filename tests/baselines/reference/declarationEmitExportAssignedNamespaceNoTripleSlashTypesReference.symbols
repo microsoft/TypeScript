@@ -1,4 +1,6 @@
-=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+//// [tests/cases/compiler/declarationEmitExportAssignedNamespaceNoTripleSlashTypesReference.ts] ////
+
+=== node_modules/@types/react/index.d.ts ===
 export = React;
 >React : Symbol(React, Decl(index.d.ts, 0, 15), Decl(index.d.ts, 3, 10))
 
@@ -21,7 +23,7 @@ declare namespace React {
 >DOMAttributes : Symbol(DOMAttributes, Decl(index.d.ts, 3, 74), Decl(index.d.ts, 5, 24))
 >T : Symbol(T, Decl(index.d.ts, 4, 35), Decl(index.d.ts, 6, 28))
 }
-=== tests/cases/compiler/node_modules/@emotion/core/index.d.ts ===
+=== node_modules/@emotion/core/index.d.ts ===
 import {
     Component
 >Component : Symbol(Component, Decl(index.d.ts, 0, 8))
@@ -41,7 +43,7 @@ declare module 'react' {
     }
 }
 
-=== tests/cases/compiler/src/get-comp.ts ===
+=== src/get-comp.ts ===
 import {Component} from 'react';
 >Component : Symbol(Component, Decl(get-comp.ts, 0, 8))
 
@@ -52,7 +54,7 @@ export function getComp(): Component {
     return {} as any as Component
 >Component : Symbol(Component, Decl(get-comp.ts, 0, 8))
 }
-=== tests/cases/compiler/src/inferred-comp-export.ts ===
+=== src/inferred-comp-export.ts ===
 import { getComp } from "./get-comp";
 >getComp : Symbol(getComp, Decl(inferred-comp-export.ts, 0, 8))
 
@@ -65,7 +67,7 @@ export const obj = {
 >comp : Symbol(comp, Decl(inferred-comp-export.ts, 4, 20))
 >getComp : Symbol(getComp, Decl(inferred-comp-export.ts, 0, 8))
 }
-=== tests/cases/compiler/src/some-other-file.ts ===
+=== src/some-other-file.ts ===
 
 export * from '@emotion/core';
 

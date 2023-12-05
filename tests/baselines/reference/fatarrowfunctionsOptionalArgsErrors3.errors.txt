@@ -1,7 +1,7 @@
-tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors3.ts(1,5): error TS1003: Identifier expected.
+fatarrowfunctionsOptionalArgsErrors3.ts(1,5): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors3.ts (1 errors) ====
+==== fatarrowfunctionsOptionalArgsErrors3.ts (1 errors) ====
     (...) => 105;
         ~
 !!! error TS1003: Identifier expected.

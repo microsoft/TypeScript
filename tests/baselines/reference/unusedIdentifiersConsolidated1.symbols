@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedIdentifiersConsolidated1.ts ===
+//// [tests/cases/compiler/unusedIdentifiersConsolidated1.ts] ////
+
+=== unusedIdentifiersConsolidated1.ts ===
 function greeter(person: string) {
 >greeter : Symbol(greeter, Decl(unusedIdentifiersConsolidated1.ts, 0, 0))
 >person : Symbol(person, Decl(unusedIdentifiersConsolidated1.ts, 0, 17))

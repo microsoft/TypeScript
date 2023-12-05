@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts] ////
+
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts]
 export module a {
     export module b {
@@ -15,7 +17,7 @@ export var d = new c.b.c();
 
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = exports.c = exports.a = void 0;
 var a;
 (function (a) {
@@ -28,10 +30,10 @@ var a;
         }());
         b.c = c;
     })(b = a.b || (a.b = {}));
-})(a = exports.a || (exports.a = {}));
+})(a || (exports.a = a = {}));
 var c;
 (function (c) {
     var b = a.b;
     c.x = new b.c();
-})(c = exports.c || (exports.c = {}));
+})(c || (exports.c = c = {}));
 exports.d = new c.b.c();

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks04.ts] ////
+
 //// [stringLiteralsWithEqualityChecks04.ts]
 interface Runnable {
     isRunning: boolean;

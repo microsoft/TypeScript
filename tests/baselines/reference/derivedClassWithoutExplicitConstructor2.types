@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor2.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor2.ts] ////
+
+=== derivedClassWithoutExplicitConstructor2.ts ===
 class Base {
 >Base : Base
 
@@ -97,7 +99,6 @@ class D<T extends Date> extends Base2<T> {
 
     y: T = null;
 >y : T
->null : null
 }
 
 var d = new D(); // error

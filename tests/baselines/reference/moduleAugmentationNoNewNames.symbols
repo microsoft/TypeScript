@@ -1,4 +1,6 @@
-=== tests/cases/compiler/map.ts ===
+//// [tests/cases/compiler/moduleAugmentationNoNewNames.ts] ////
+
+=== map.ts ===
 import { Observable } from "./observable"
 >Observable : Symbol(Observable, Decl(map.ts, 0, 8))
 
@@ -8,7 +10,7 @@ import { Observable } from "./observable"
 >prototype : Symbol(Observable.prototype)
 
 declare module "./observable" {
->"./observable" : Symbol("tests/cases/compiler/observable", Decl(observable.ts, 0, 0), Decl(map.ts, 2, 48))
+>"./observable" : Symbol("observable", Decl(observable.ts, 0, 0), Decl(map.ts, 2, 48))
 
     interface Observable<T> {
 >Observable : Symbol(Observable, Decl(observable.ts, 0, 0), Decl(map.ts, 4, 31))
@@ -43,7 +45,7 @@ declare module "./observable" {
 >Z : Symbol(Z, Decl(map.ts, 10, 46))
 }
 
-=== tests/cases/compiler/observable.ts ===
+=== observable.ts ===
 export declare class Observable<T> {
 >Observable : Symbol(Observable, Decl(observable.ts, 0, 0), Decl(map.ts, 4, 31))
 >T : Symbol(T, Decl(observable.ts, 0, 32), Decl(map.ts, 5, 25))
@@ -57,7 +59,7 @@ export declare class Observable<T> {
 >T : Symbol(T, Decl(observable.ts, 0, 32), Decl(map.ts, 5, 25))
 }
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { Observable } from "./observable"
 >Observable : Symbol(Observable, Decl(main.ts, 0, 8))
 

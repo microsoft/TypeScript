@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts] ////
+
 //// [emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts]
 var globalCounter = 0;
 function foo() {

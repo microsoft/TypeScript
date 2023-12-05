@@ -1,7 +1,7 @@
-tests/cases/compiler/catchClauseWithInitializer1.ts(3,12): error TS1197: Catch clause variable cannot have an initializer.
+catchClauseWithInitializer1.ts(3,12): error TS1197: Catch clause variable cannot have an initializer.
 
 
-==== tests/cases/compiler/catchClauseWithInitializer1.ts (1 errors) ====
+==== catchClauseWithInitializer1.ts (1 errors) ====
     try {
     }
     catch (e = 1) {

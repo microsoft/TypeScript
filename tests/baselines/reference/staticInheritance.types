@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticInheritance.ts ===
+//// [tests/cases/compiler/staticInheritance.ts] ////
+
+=== staticInheritance.ts ===
 function doThing(x: { n: string }) { }
 >doThing : (x: {    n: string;}) => void
 >x : { n: string; }

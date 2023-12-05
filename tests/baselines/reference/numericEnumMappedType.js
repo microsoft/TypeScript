@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericEnumMappedType.ts] ////
+
 //// [numericEnumMappedType.ts]
 // Repro from #31771
 

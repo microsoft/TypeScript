@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/widenedTypes/objectLiteralWidened.ts ===
+//// [tests/cases/conformance/types/typeRelationships/widenedTypes/objectLiteralWidened.ts] ////
+
+=== objectLiteralWidened.ts ===
 // object literal properties are widened to any
 
 var x1 = {
@@ -7,7 +9,6 @@ var x1 = {
 
     foo: null,
 >foo : null
->null : null
 
     bar: undefined
 >bar : undefined
@@ -20,7 +21,6 @@ var y1 = {
 
     foo: null,
 >foo : null
->null : null
 
     bar: {
 >bar : { baz: null; boo: undefined; }
@@ -28,7 +28,6 @@ var y1 = {
 
         baz: null,
 >baz : null
->null : null
 
         boo: undefined
 >boo : undefined
@@ -44,8 +43,6 @@ var u: undefined = undefined;
 
 var n: null = null;
 >n : null
->null : null
->null : null
 
 var x2 = {
 >x2 : { foo: null; bar: undefined; }

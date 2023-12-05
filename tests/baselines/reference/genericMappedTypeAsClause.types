@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericMappedTypeAsClause.ts ===
+//// [tests/cases/compiler/genericMappedTypeAsClause.ts] ////
+
+=== genericMappedTypeAsClause.ts ===
 type Model = {
 >Model : { a: string; b: number; }
 
@@ -64,4 +66,11 @@ function f1<T extends string>() {
 >x6 : MappedModel<T>
 >undefined : undefined
 }
+
+// repro from #43189
+
+type RemapRecord<K extends keyof any, V> = { [_ in never as K]: V }
+>RemapRecord : RemapRecord<K, V>
+
+interface RecordInterface2<K extends keyof any, V> extends RemapRecord<K, V> {} // should error
 

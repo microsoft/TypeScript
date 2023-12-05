@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts] ////
+
+=== parserGenericsInTypeContexts1.ts ===
 class C extends A<T> implements B<T> {
 >C : C
 >A : any
@@ -9,7 +11,6 @@ var v1: C<T>;
 
 var v2: D<T> = null;
 >v2 : D<T>
->null : null
 
 var v3: E.F<T>;
 >v3 : E.F<T>

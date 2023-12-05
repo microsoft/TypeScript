@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExpressionAssignment.ts ===
+//// [tests/cases/compiler/classExpressionAssignment.ts] ////
+
+=== classExpressionAssignment.ts ===
 interface A {
 >A : Symbol(A, Decl(classExpressionAssignment.ts, 0, 0), Decl(classExpressionAssignment.ts, 5, 5))
 

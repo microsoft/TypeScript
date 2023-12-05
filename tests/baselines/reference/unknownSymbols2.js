@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unknownSymbols2.ts] ////
+
 //// [unknownSymbols2.ts]
 module M {
     var x: asdf;

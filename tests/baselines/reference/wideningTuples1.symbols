@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/wideningTuples1.ts ===
+//// [tests/cases/conformance/types/tuple/wideningTuples1.ts] ////
+
+=== wideningTuples1.ts ===
 declare function foo<T extends [any]>(x: T): T;
 >foo : Symbol(foo, Decl(wideningTuples1.ts, 0, 0))
 >T : Symbol(T, Decl(wideningTuples1.ts, 0, 21))

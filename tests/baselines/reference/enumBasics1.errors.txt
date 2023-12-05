@@ -1,8 +1,8 @@
-tests/cases/compiler/enumBasics1.ts(26,5): error TS2339: Property 'A' does not exist on type 'E.A'.
-tests/cases/compiler/enumBasics1.ts(35,2): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+enumBasics1.ts(26,5): error TS2339: Property 'A' does not exist on type 'E.A'.
+enumBasics1.ts(35,2): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
 
 
-==== tests/cases/compiler/enumBasics1.ts (2 errors) ====
+==== enumBasics1.ts (2 errors) ====
     enum E {
     	A = 1,
     	B,

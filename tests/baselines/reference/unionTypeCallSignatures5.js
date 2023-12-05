@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/union/unionTypeCallSignatures5.ts] ////
+
 //// [unionTypeCallSignatures5.ts]
 // #31485
 interface A {

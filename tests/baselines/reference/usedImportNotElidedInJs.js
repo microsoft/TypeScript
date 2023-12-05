@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/usedImportNotElidedInJs.ts] ////
+
 //// [test.js]
 // #38412
 

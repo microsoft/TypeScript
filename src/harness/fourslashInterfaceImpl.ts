@@ -80,7 +80,6 @@ export class GoTo {
         this.state.goToEachMarker(markers, typeof a === "function" ? a : b!);
     }
 
-
     public rangeStart(range: FourSlash.Range) {
         this.state.goToRangeStart(range);
     }
@@ -95,10 +94,6 @@ export class GoTo {
 
     public eof() {
         this.state.goToEOF();
-    }
-
-    public implementation() {
-        this.state.goToImplementation();
     }
 
     public position(positionOrLineAndCharacter: number | ts.LineAndCharacter, fileNameOrIndex?: string | number): void {
@@ -133,7 +128,7 @@ export class VerifyNegatable {
 
     constructor(protected state: FourSlash.TestState, private negative = false) {
         if (!negative) {
-            this.not = new VerifyNegatable(state, true);
+            this.not = new VerifyNegatable(state, /*negative*/ true);
         }
     }
 
@@ -173,20 +168,20 @@ export class VerifyNegatable {
         this.state.verifyQuickInfoExists(this.negative);
     }
 
-    public typeDefinitionCountIs(expectedCount: number) {
-        this.state.verifyTypeDefinitionsCount(this.negative, expectedCount);
-    }
-
-    public implementationListIsEmpty() {
-        this.state.verifyImplementationListIsEmpty(this.negative);
-    }
-
     public isValidBraceCompletionAtPosition(openingBrace: string) {
         this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
     }
 
-    public jsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
+    public jsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined; }): void {
         this.state.verifyJsxClosingTag(map);
+    }
+
+    public linkedEditing(map: { [markerName: string]: ts.LinkedEditingInfo | undefined; }): void {
+        this.state.verifyLinkedEditingRange(map);
+    }
+
+    public baselineLinkedEditing(): void {
+        this.state.baselineLinkedEditing();
     }
 
     public isInCommentAtPosition(onlyMultiLineDiverges?: boolean) {
@@ -252,13 +247,21 @@ export class Verify extends VerifyNegatable {
     }
 
     public completions(...optionsArray: VerifyCompletionsOptions[]) {
+        if (optionsArray.length === 1) {
+            return this.state.verifyCompletions(optionsArray[0]);
+        }
         for (const options of optionsArray) {
             this.state.verifyCompletions(options);
         }
+        return {
+            andApplyCodeAction: () => {
+                throw new Error("Cannot call andApplyCodeAction on multiple completions requests");
+            },
+        };
     }
 
-    public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.UserPreferences) {
-        this.state.verifyInlayHints(expected, span, preference);
+    public baselineInlayHints(span: ts.TextSpan, preference?: ts.UserPreferences) {
+        this.state.baselineInlayHints(span, preference);
     }
 
     public quickInfoIs(expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
@@ -269,7 +272,7 @@ export class Verify extends VerifyNegatable {
         this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation, expectedTags);
     }
 
-    public quickInfos(namesAndTexts: { [name: string]: string }) {
+    public quickInfos(namesAndTexts: { [name: string]: string; }) {
         this.state.verifyQuickInfos(namesAndTexts);
     }
 
@@ -310,34 +313,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyFormatDocumentChangesNothing();
     }
 
-    public goToDefinitionIs(endMarkers: ArrayOrSingle<string>) {
-        this.state.verifyGoToDefinitionIs(endMarkers);
-    }
-
-    public goToDefinition(startMarkerName: ArrayOrSingle<string>, endMarkerName: ArrayOrSingle<string>, range?: FourSlash.Range): void;
-    public goToDefinition(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][] | { [startMarkerName: string]: ArrayOrSingle<string> }): void;
-    public goToDefinition(arg0: any, endMarkerName?: ArrayOrSingle<string>) {
-        this.state.verifyGoToDefinition(arg0, endMarkerName);
-    }
-
-    public goToType(startMarkerName: ArrayOrSingle<string>, endMarkerName: ArrayOrSingle<string>): void;
-    public goToType(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][] | { [startMarkerName: string]: ArrayOrSingle<string> }): void;
-    public goToType(arg0: any, endMarkerName?: ArrayOrSingle<string>) {
-        this.state.verifyGoToType(arg0, endMarkerName);
-    }
-
-    public goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, end: { file: string } | ArrayOrSingle<string>) {
-        this.state.verifyGoToSourceDefinition(startMarkerNames, end);
-    }
-
-    public goToDefinitionForMarkers(...markerNames: string[]) {
-        this.state.verifyGoToDefinitionForMarkers(markerNames);
-    }
-
-    public goToDefinitionName(name: string, containerName: string) {
-        this.state.verifyGoToDefinitionName(name, containerName);
-    }
-
     public verifyGetEmitOutputForCurrentFile(expected: string): void {
         this.state.verifyGetEmitOutputForCurrentFile(expected);
     }
@@ -354,20 +329,68 @@ export class Verify extends VerifyNegatable {
         this.state.verifyTypeOfSymbolAtLocation(range, symbol, expected);
     }
 
-    public baselineFindAllReferences(...markerNames: string[]) {
-        this.state.verifyBaselineFindAllReferences(...markerNames);
+    public typeAtLocation(range: FourSlash.Range, expected: string) {
+        this.state.verifyTypeAtLocation(range, expected);
     }
 
-    public baselineFindAllReferencesMulti(seq: number, ...markerNames: string[]) {
-        this.state.verifyBaselineFindAllReferencesMulti(seq, ...markerNames);
+    public baselineFindAllReferences(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.baselineFindAllReferences(markerOrRange, /*rangeText*/ undefined);
     }
 
-    public baselineGetFileReferences(fileName: string) {
-        this.state.verifyBaselineGetFileReferences(fileName);
+    public baselineFindAllReferencesAtRangesWithText(...rangeText: string[]) {
+        this.state.baselineFindAllReferences(/*markerOrRange*/ undefined, rangeText);
     }
 
-    public findReferencesDefinitionDisplayPartsAtCaretAre(expected: ts.SymbolDisplayPart[]) {
-        this.state.verifyDisplayPartsOfReferencedSymbol(expected);
+    public baselineGetFileReferences(...fileName: string[]) {
+        this.state.baselineGetFileReferences(fileName);
+    }
+
+    public baselineGoToDefinition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.baselineGoToDefinition(markerOrRange, /*rangeText*/ undefined);
+    }
+
+    public baselineGoToDefinitionAtRangesWithText(...rangeText: string[]) {
+        this.state.baselineGoToDefinition(/*markerOrRange*/ undefined, rangeText);
+    }
+
+    public baselineGetDefinitionAtPosition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.baselineGetDefinitionAtPosition(markerOrRange, /*rangeText*/ undefined);
+    }
+
+    public baselineGetDefinitionAtRangesWithText(...rangeText: string[]) {
+        this.state.baselineGetDefinitionAtPosition(/*markerOrRange*/ undefined, rangeText);
+    }
+
+    public baselineGoToSourceDefinition(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.baselineGoToSourceDefinition(markerOrRange, /*rangeText*/ undefined);
+    }
+
+    public baselineGoToSourceDefinitionAtRangesWithText(...rangeText: string[]) {
+        this.state.baselineGoToSourceDefinition(/*markerOrRange*/ undefined, rangeText);
+    }
+
+    public baselineGoToType(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.baselineGoToType(markerOrRange, /*rangeText*/ undefined);
+    }
+
+    public baselineGoToTypeAtRangesWithText(...rangeText: string[]) {
+        this.state.baselineGoToType(/*markerOrRange*/ undefined, rangeText);
+    }
+
+    public baselineGoToImplementation(...markerOrRange: FourSlash.MarkerOrNameOrRange[]) {
+        this.state.baselineGoToImplementation(markerOrRange, /*rangeText*/ undefined);
+    }
+
+    public baselineGoToImplementationAtRangesWithText(...rangeText: string[]) {
+        this.state.baselineGoToImplementation(/*markerOrRange*/ undefined, rangeText);
+    }
+
+    public baselineDocumentHighlights(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: VerifyDocumentHighlightsOptions) {
+        this.state.baselineDocumentHighlights(markerOrRange, /*rangeText*/ undefined, options);
+    }
+
+    public baselineDocumentHighlightsAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: VerifyDocumentHighlightsOptions) {
+        this.state.baselineDocumentHighlights(/*markerOrRange*/ undefined, rangeText, options);
     }
 
     public noErrors() {
@@ -448,7 +471,7 @@ export class Verify extends VerifyNegatable {
 
     public docCommentTemplateAt(marker: string | FourSlash.Marker, expectedOffset: number, expectedText: string, options?: ts.DocCommentTemplateOptions) {
         this.state.goToMarker(marker);
-        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, "\r\n"), caretOffset: expectedOffset }, options);
+        this.state.verifyDocCommentTemplate({ newText: expectedText.replace(/\r?\n/g, ts.testFormatSettings.newLineCharacter!), caretOffset: expectedOffset }, options);
     }
 
     public noDocCommentTemplateAt(marker: string | FourSlash.Marker) {
@@ -476,7 +499,7 @@ export class Verify extends VerifyNegatable {
         this.state.getAndApplyCodeActions(errorCode, index);
     }
 
-    public applyCodeActionFromCompletion(markerName: string, options: VerifyCompletionActionOptions): void {
+    public applyCodeActionFromCompletion(markerName: string | undefined, options: VerifyCompletionActionOptions): void {
         this.state.applyCodeActionFromCompletion(markerName, options);
     }
 
@@ -488,11 +511,15 @@ export class Verify extends VerifyNegatable {
         this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, preferences);
     }
 
-    public navigationBar(json: any, options?: { checkSpans?: boolean }) {
+    public baselineAutoImports(marker: string, fullNamesForCodeFix?: string[], options?: ts.UserPreferences) {
+        this.state.baselineAutoImports(marker, fullNamesForCodeFix, options);
+    }
+
+    public navigationBar(json: any, options?: { checkSpans?: boolean; }) {
         this.state.verifyNavigationBar(json, options);
     }
 
-    public navigationTree(json: any, options?: { checkSpans?: boolean }) {
+    public navigationTree(json: any, options?: { checkSpans?: boolean; }) {
         this.state.verifyNavigationTree(json, options);
     }
 
@@ -500,46 +527,10 @@ export class Verify extends VerifyNegatable {
         this.state.verifyNavigateTo(options);
     }
 
-    public occurrencesAtPositionContains(range: FourSlash.Range, isWriteAccess?: boolean) {
-        this.state.verifyOccurrencesAtPositionListContains(range.fileName, range.pos, range.end, isWriteAccess);
-    }
-
-    public occurrencesAtPositionCount(expectedCount: number) {
-        this.state.verifyOccurrencesAtPositionListCount(expectedCount);
-    }
-
-    public rangesAreOccurrences(isWriteAccess?: boolean, ranges?: FourSlash.Range[]) {
-        this.state.verifyRangesAreOccurrences(isWriteAccess, ranges);
-    }
-
-    public rangesWithSameTextAreRenameLocations(...texts: string[]) {
-        this.state.verifyRangesWithSameTextAreRenameLocations(...texts);
-    }
-
-    public rangesAreRenameLocations(options?: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges?: FourSlash.Range[], providePrefixAndSuffixTextForRename?: boolean }) {
-        this.state.verifyRangesAreRenameLocations(options);
-    }
-
-    public rangesAreDocumentHighlights(ranges?: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
-        this.state.verifyRangesAreDocumentHighlights(ranges, options);
-    }
-
-    public rangesWithSameTextAreDocumentHighlights() {
-        this.state.verifyRangesWithSameTextAreDocumentHighlights();
-    }
-
-    public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[], options?: VerifyDocumentHighlightsOptions) {
-        this.state.verifyDocumentHighlightsOf(startRange, ranges, options);
-    }
-
-    public noDocumentHighlights(startRange: FourSlash.Range) {
-        this.state.verifyNoDocumentHighlights(startRange);
-    }
-
     /**
      * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
      */
-    public syntacticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
+    public syntacticClassificationsAre(...classifications: { classificationType: string; text: string; }[]) {
         this.state.verifySyntacticClassifications(classifications);
     }
 
@@ -569,7 +560,8 @@ export class Verify extends VerifyNegatable {
         kindModifiers?: string,
         fileToRename?: string,
         expectedRange?: FourSlash.Range,
-        preferences?: ts.UserPreferences) {
+        preferences?: ts.UserPreferences,
+    ) {
         this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, preferences);
     }
 
@@ -577,16 +569,15 @@ export class Verify extends VerifyNegatable {
         this.state.verifyRenameInfoFailed(message, preferences);
     }
 
-    public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: RenameLocationsOptions) {
-        this.state.verifyRenameLocations(startRanges, options);
+    public baselineRename(markerOrRange?: ArrayOrSingle<FourSlash.MarkerOrNameOrRange>, options?: RenameOptions) {
+        this.state.baselineRename(markerOrRange, /*rangeText*/ undefined, options);
     }
 
-    public baselineRename(marker: string, options: RenameOptions) {
-        this.state.baselineRename(marker, options);
+    public baselineRenameAtRangesWithText(rangeText?: ArrayOrSingle<string>, options?: RenameOptions) {
+        this.state.baselineRename(/*markerOrRange*/ undefined, rangeText, options);
     }
 
-    public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan,
-        displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
+    public verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: FourSlash.TextSpan, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]) {
         this.state.verifyQuickInfoDisplayParts(kind, kindModifiers, textSpan, displayParts, documentation, tags);
     }
 
@@ -606,10 +597,6 @@ export class Verify extends VerifyNegatable {
         this.state.verifyProjectInfo(expected);
     }
 
-    public allRangesAppearInImplementationList(markerName: string) {
-        this.state.verifyRangesInImplementationList(markerName);
-    }
-
     public getEditsForFileRename(options: GetEditsForFileRenameOptions) {
         this.state.getEditsForFileRename(options);
     }
@@ -622,17 +609,24 @@ export class Verify extends VerifyNegatable {
         this.state.moveToNewFile(options);
     }
 
+    public moveToFile(options: MoveToFileOptions): void {
+        this.state.moveToFile(options);
+    }
+
     public noMoveToNewFile(): void {
         this.state.noMoveToNewFile();
     }
 
-    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode): void {
-        this.state.verifyOrganizeImports(newContent, mode);
+    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences): void {
+        this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 }
 
 export class Edit {
     constructor(private state: FourSlash.TestState) {
+    }
+    public caretPosition() {
+        return this.state.caretPosition();
     }
     public backspace(count?: number) {
         this.state.deleteCharBehindMarker(count);
@@ -825,17 +819,16 @@ interface ModernClassification {
 type Classification = OlderClassification | ModernClassification;
 
 export function classification(format: ts.SemanticClassificationFormat) {
-
     function semanticToken(identifier: string, text: string, _position: number): Classification {
         return {
             classificationType: identifier,
-            text
-         };
+            text,
+        };
     }
 
     if (format === ts.SemanticClassificationFormat.TwentyTwenty) {
         return {
-            semanticToken
+            semanticToken,
         };
     }
 
@@ -962,7 +955,7 @@ export function classification(format: ts.SemanticClassificationFormat) {
         jsxAttribute,
         jsxText,
         jsxAttributeStringLiteralValue,
-        getClassification
+        getClassification,
     };
 }
 
@@ -1001,7 +994,7 @@ export namespace Completion {
         name,
         kind: "function",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const deprecatedFunctionEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
@@ -1013,24 +1006,24 @@ export namespace Completion {
         name,
         kind: "var",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const moduleEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "module",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const keywordEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "keyword",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const methodEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "method",
         kindModifiers: "declare",
-        sortText: SortText.LocationPriority
+        sortText: SortText.LocationPriority,
     });
     const deprecatedMethodEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
@@ -1042,19 +1035,19 @@ export namespace Completion {
         name,
         kind: "property",
         kindModifiers: "declare",
-        sortText: SortText.LocationPriority
+        sortText: SortText.LocationPriority,
     });
     const interfaceEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "interface",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const typeEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "type",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
 
     const res: ExpectedCompletionEntryObject[] = [];
@@ -1062,7 +1055,7 @@ export namespace Completion {
         res.push({
             name: ts.Debug.checkDefined(ts.tokenToString(i)),
             kind: "keyword",
-            sortText: SortText.GlobalsOrKeywords
+            sortText: SortText.GlobalsOrKeywords,
         });
     }
     export const keywordsWithUndefined: readonly ExpectedCompletionEntryObject[] = res;
@@ -1084,6 +1077,7 @@ export namespace Completion {
         "string",
         "symbol",
         "true",
+        "typeof",
         "undefined",
         "unique",
         "unknown",
@@ -1135,6 +1129,7 @@ export namespace Completion {
         interfaceEntry("ImportMeta"),
         interfaceEntry("ImportCallOptions"),
         interfaceEntry("ImportAssertions"),
+        interfaceEntry("ImportAttributes"),
         varEntry("Math"),
         varEntry("Date"),
         interfaceEntry("DateConstructor"),
@@ -1166,6 +1161,18 @@ export namespace Completion {
         typeEntry("PropertyDecorator"),
         typeEntry("MethodDecorator"),
         typeEntry("ParameterDecorator"),
+        typeEntry("ClassMemberDecoratorContext"),
+        typeEntry("DecoratorContext"),
+        typeEntry("DecoratorMetadata"),
+        typeEntry("DecoratorMetadataObject"),
+        interfaceEntry("ClassDecoratorContext"),
+        interfaceEntry("ClassMethodDecoratorContext"),
+        interfaceEntry("ClassGetterDecoratorContext"),
+        interfaceEntry("ClassSetterDecoratorContext"),
+        interfaceEntry("ClassAccessorDecoratorContext"),
+        interfaceEntry("ClassAccessorDecoratorTarget"),
+        interfaceEntry("ClassAccessorDecoratorResult"),
+        interfaceEntry("ClassFieldDecoratorContext"),
         typeEntry("PromiseConstructorLike"),
         interfaceEntry("PromiseLike"),
         interfaceEntry("Promise"),
@@ -1215,24 +1222,25 @@ export namespace Completion {
         varEntry("Float64Array"),
         interfaceEntry("Float64ArrayConstructor"),
         moduleEntry("Intl"),
+        typeEntry("WeakKey"),
+        interfaceEntry("WeakKeyTypes"),
     ];
 
     export const globalThisEntry: ExpectedCompletionEntry = {
         name: "globalThis",
         kind: "module",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     };
     export const globalTypes = globalTypesPlus([]);
     export function globalTypesPlus(plus: readonly ExpectedCompletionEntry[]) {
         return combineExpectedCompletionEntries(
             "globalTypesPlus",
             [globalThisEntry, ...globalTypeDecls, ...typeKeywords],
-            plus
+            plus,
         );
     }
 
-    export const typeAssertionKeywords: readonly ExpectedCompletionEntry[] =
-        globalTypesPlus([keywordEntry("const")]);
+    export const typeAssertionKeywords: readonly ExpectedCompletionEntry[] = globalTypesPlus([keywordEntry("const")]);
 
     function getInJsKeywords(keywords: readonly ExpectedCompletionEntryObject[]): readonly ExpectedCompletionEntryObject[] {
         return keywords.filter(keyword => {
@@ -1289,12 +1297,11 @@ export namespace Completion {
 
     export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
-    export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] =
-        ["override", "private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({
-            name,
-            kind: "keyword",
-            sortText: SortText.GlobalsOrKeywords
-        }));
+    export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] = ["override", "private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({
+        name,
+        kind: "keyword",
+        sortText: SortText.GlobalsOrKeywords,
+    }));
 
     export const functionMembers: readonly ExpectedCompletionEntryObject[] = [
         methodEntry("apply"),
@@ -1534,29 +1541,31 @@ export namespace Completion {
     export const undefinedVarEntry: ExpectedCompletionEntryObject = {
         name: "undefined",
         kind: "var",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     };
     // TODO: many of these are inappropriate to always provide
-    export const globalsInsideFunction = (plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }): readonly ExpectedCompletionEntry[] => [
-        { name: "arguments", kind: "local var" },
-        ...plus,
-        globalThisEntry,
-        ...options?.noLib ? [] : globalsVars,
-        undefinedVarEntry,
-        ...globalKeywordsInsideFunction,
-    ].sort(compareExpectedCompletionEntries);
+    export const globalsInsideFunction = (plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean; }): readonly ExpectedCompletionEntry[] =>
+        [
+            { name: "arguments", kind: "local var" },
+            ...plus,
+            globalThisEntry,
+            ...options?.noLib ? [] : globalsVars,
+            undefinedVarEntry,
+            ...globalKeywordsInsideFunction,
+        ].sort(compareExpectedCompletionEntries);
 
     const globalInJsKeywordsInsideFunction = getInJsKeywords(globalKeywordsInsideFunction);
 
     // TODO: many of these are inappropriate to always provide
-    export const globalsInJsInsideFunction = (plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }): readonly ExpectedCompletionEntry[] => [
-        { name: "arguments", kind: "local var" },
-        globalThisEntry,
-        ...options?.noLib ? [] : globalsVars,
-        ...plus,
-        undefinedVarEntry,
-        ...globalInJsKeywordsInsideFunction,
-    ].sort(compareExpectedCompletionEntries);
+    export const globalsInJsInsideFunction = (plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean; }): readonly ExpectedCompletionEntry[] =>
+        [
+            { name: "arguments", kind: "local var" },
+            globalThisEntry,
+            ...options?.noLib ? [] : globalsVars,
+            ...plus,
+            undefinedVarEntry,
+            ...globalInJsKeywordsInsideFunction,
+        ].sort(compareExpectedCompletionEntries);
 
     // TODO: many of these are inappropriate to always provide
     export const globalKeywords: readonly ExpectedCompletionEntryObject[] = [
@@ -1683,17 +1692,17 @@ export namespace Completion {
         globalThisEntry,
         ...globalsVars,
         undefinedVarEntry,
-        ...globalKeywords
+        ...globalKeywords,
     ].sort(compareExpectedCompletionEntries);
 
     export const globalsInJs: readonly ExpectedCompletionEntryObject[] = [
         globalThisEntry,
         ...globalsVars,
         undefinedVarEntry,
-        ...globalInJsKeywords
+        ...globalInJsKeywords,
     ].sort(compareExpectedCompletionEntries);
 
-    export function globalsPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }) {
+    export function globalsPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean; }) {
         return combineExpectedCompletionEntries("globalsPlus", [
             globalThisEntry,
             ...options?.noLib ? [] : globalsVars,
@@ -1702,7 +1711,7 @@ export namespace Completion {
         ], plus);
     }
 
-    export function globalsInJsPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }) {
+    export function globalsInJsPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean; }) {
         return combineExpectedCompletionEntries("globalsInJsPlus", [
             globalThisEntry,
             ...options?.noLib ? [] : globalsVars,
@@ -1717,7 +1726,7 @@ export interface ReferenceGroup {
     ranges: FourSlash.Range[];
 }
 
-export type ReferenceGroupDefinition = string | { text: string, range: FourSlash.Range };
+export type ReferenceGroupDefinition = string | { text: string; range: FourSlash.Range; };
 
 export interface ApplyRefactorOptions {
     refactorName: string;
@@ -1732,6 +1741,7 @@ export interface ExpectedCompletionEntryObject {
     readonly name: string;
     readonly source?: string;
     readonly insertText?: string;
+    readonly filterText?: string;
     readonly replacementSpan?: FourSlash.Range;
     readonly hasAction?: boolean; // If not specified, will assert that this is false.
     readonly isRecommended?: boolean; // If not specified, will assert that this is false.
@@ -1754,8 +1764,8 @@ export interface ExpectedCompletionEntryLabelDetails {
 }
 
 export type ExpectedExactCompletionsPlus = readonly ExpectedCompletionEntry[] & {
-    plusFunctionName: string,
-    plusArgument: readonly ExpectedCompletionEntry[]
+    plusFunctionName: string;
+    plusArgument: readonly ExpectedCompletionEntry[];
 };
 
 export interface VerifyCompletionsOptions {
@@ -1796,6 +1806,7 @@ export interface VerifyNavigateToOptions {
     readonly pattern: string;
     readonly fileName?: string;
     readonly expected: readonly ExpectedNavigateToItem[];
+    readonly excludeLibFiles?: boolean;
 }
 
 export interface ExpectedNavigateToItem {
@@ -1828,10 +1839,10 @@ export interface VerifyCompletionListContainsOptions extends ts.UserPreferences 
 }
 
 export interface VerifyDocumentHighlightsOptions {
-    filesToSearch?: readonly string[];
+    filesToSearch: readonly string[];
 }
 
-export type NewFileContent = string | { readonly [filename: string]: string };
+export type NewFileContent = string | { readonly [filename: string]: string; };
 
 export interface NewContentOptions {
     // Exactly one of these should be defined.
@@ -1858,6 +1869,7 @@ export interface VerifyCodeFixAllOptions {
     fixAllDescription: string;
     newFileContent: NewFileContent;
     commands: readonly {}[];
+    preferences?: ts.UserPreferences;
 }
 
 export interface VerifyRefactorOptions {
@@ -1885,12 +1897,18 @@ export interface Diagnostic {
 export interface GetEditsForFileRenameOptions {
     readonly oldPath: string;
     readonly newPath: string;
-    readonly newFileContents: { readonly [fileName: string]: string };
+    readonly newFileContents: { readonly [fileName: string]: string; };
     readonly preferences?: ts.UserPreferences;
 }
 
 export interface MoveToNewFileOptions {
-    readonly newFileContents: { readonly [fileName: string]: string };
+    readonly newFileContents: { readonly [fileName: string]: string; };
+    readonly preferences?: ts.UserPreferences;
+}
+
+export interface MoveToFileOptions {
+    readonly newFileContents: { readonly [fileName: string]: string; };
+    readonly interactiveRefactorArguments: ts.InteractiveRefactorArguments;
     readonly preferences?: ts.UserPreferences;
 }
 
@@ -1901,11 +1919,12 @@ export type RenameLocationsOptions = readonly RenameLocationOptions[] | {
     readonly providePrefixAndSuffixTextForRename?: boolean;
 };
 export interface DiagnosticIgnoredInterpolations {
-    template: string
+    template: string;
 }
-export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
+export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range; readonly prefixText?: string; readonly suffixText?: string; };
 export interface RenameOptions {
     readonly findInStrings?: boolean;
     readonly findInComments?: boolean;
     readonly providePrefixAndSuffixTextForRename?: boolean;
+    readonly quotePreference?: "auto" | "double" | "single";
 }

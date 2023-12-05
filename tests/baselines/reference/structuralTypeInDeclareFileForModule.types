@@ -1,4 +1,6 @@
-=== tests/cases/compiler/structuralTypeInDeclareFileForModule.ts ===
+//// [tests/cases/compiler/structuralTypeInDeclareFileForModule.ts] ////
+
+=== structuralTypeInDeclareFileForModule.ts ===
 module M { export var x; }
 >M : typeof M
 >x : any

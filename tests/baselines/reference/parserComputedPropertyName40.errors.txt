@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName40.ts(2,6): error TS2304: Cannot find name 'a'.
+parserComputedPropertyName40.ts(2,6): error TS2304: Cannot find name 'a'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName40.ts (1 errors) ====
+==== parserComputedPropertyName40.ts (1 errors) ====
     class C {
         [a ? "" : ""]() {}
          ~

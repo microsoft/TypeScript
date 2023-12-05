@@ -1,10 +1,11 @@
-=== tests/cases/compiler/genericsWithoutTypeParameters1.ts ===
+//// [tests/cases/compiler/genericsWithoutTypeParameters1.ts] ////
+
+=== genericsWithoutTypeParameters1.ts ===
 class C<T> {
 >C : C<T>
 
     foo(): T { return null }
 >foo : () => T
->null : null
 }
 
 interface I<T> {
@@ -77,5 +78,4 @@ function f<T>(x: T): A {
 >x : T
 
     return null;
->null : null
 }

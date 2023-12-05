@@ -1,11 +1,13 @@
-=== tests/cases/compiler/thingB.ts ===
+//// [tests/cases/compiler/declarationEmitAliasExportStar.ts] ////
+
+=== thingB.ts ===
 export interface ThingB { }
 >ThingB : Symbol(ThingB, Decl(thingB.ts, 0, 0))
 
-=== tests/cases/compiler/things.ts ===
+=== things.ts ===
 
 export * from "./thingB";
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as things from "./things";
 >things : Symbol(things, Decl(index.ts, 0, 6))
 

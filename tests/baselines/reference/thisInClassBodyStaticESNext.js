@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInClassBodyStaticESNext.ts] ////
+
 //// [thisInClassBodyStaticESNext.ts]
 // all are allowed with es-compliant class field emit
 class Foo {

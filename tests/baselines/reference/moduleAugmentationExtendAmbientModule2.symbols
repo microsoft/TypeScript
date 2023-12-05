@@ -1,4 +1,6 @@
-=== tests/cases/compiler/main.ts ===
+//// [tests/cases/compiler/moduleAugmentationExtendAmbientModule2.ts] ////
+
+=== main.ts ===
 /// <reference path="observable.d.ts"/>
 import { Observable } from "observable"
 >Observable : Symbol(Observable, Decl(main.ts, 1, 8))
@@ -33,7 +35,7 @@ let z2 = Observable.someAnotherValue.toLowerCase();
 >someAnotherValue : Symbol(Observable.someAnotherValue, Decl(map.ts, 9, 11))
 >toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
-=== tests/cases/compiler/map.ts ===
+=== map.ts ===
 import { Observable } from "observable"
 >Observable : Symbol(Observable, Decl(map.ts, 0, 8))
 
@@ -67,7 +69,7 @@ declare module "observable" {
     }
 }
 
-=== tests/cases/compiler/observable.d.ts ===
+=== observable.d.ts ===
 declare module "observable" {
 >"observable" : Symbol("observable", Decl(observable.d.ts, 0, 0), Decl(map.ts, 2, 48))
 

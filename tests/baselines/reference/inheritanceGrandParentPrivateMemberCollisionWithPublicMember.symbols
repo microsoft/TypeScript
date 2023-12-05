@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts ===
+//// [tests/cases/compiler/inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts] ////
+
+=== inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts ===
 class A {
 >A : Symbol(A, Decl(inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts, 0, 0))
 

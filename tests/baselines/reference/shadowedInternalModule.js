@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts] ////
+
 //// [shadowedInternalModule.ts]
 // all errors imported modules conflict with local variables
 

@@ -1,9 +1,9 @@
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts(12,12): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts(13,1): error TS2322: Type 'object' is not assignable to type 'boolean'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts(17,5): error TS2322: Type 'number' is not assignable to type 'object'.
+nonPrimitiveInFunction.ts(12,12): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'object'.
+nonPrimitiveInFunction.ts(13,1): error TS2322: Type 'object' is not assignable to type 'boolean'.
+nonPrimitiveInFunction.ts(17,5): error TS2322: Type 'number' is not assignable to type 'object'.
 
 
-==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts (3 errors) ====
+==== nonPrimitiveInFunction.ts (3 errors) ====
     function takeObject(o: object) {}
     function returnObject(): object {
         return {};
@@ -25,7 +25,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts(17,5): erro
     function returnError(): object {
         var ret = 123;
         return ret; // expect error
-        ~~~~~~~~~~~
+        ~~~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'object'.
     }
     

@@ -1,7 +1,0 @@
-Exit Code: 2
-Standard output:
-node_modules/formik/dist/withFormik.d.ts(58,77): error TS2694: Namespace 'React' has no exported member 'StatelessComponent'.
-
-
-
-Standard error:

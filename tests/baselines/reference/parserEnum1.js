@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnum1.ts] ////
+
 //// [parserEnum1.ts]
     export enum SignatureFlags {
         None = 0,
@@ -8,7 +10,7 @@
 
 //// [parserEnum1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.SignatureFlags = void 0;
 var SignatureFlags;
 (function (SignatureFlags) {
@@ -16,4 +18,4 @@ var SignatureFlags;
     SignatureFlags[SignatureFlags["IsIndexer"] = 1] = "IsIndexer";
     SignatureFlags[SignatureFlags["IsStringIndexer"] = 2] = "IsStringIndexer";
     SignatureFlags[SignatureFlags["IsNumberIndexer"] = 4] = "IsNumberIndexer";
-})(SignatureFlags = exports.SignatureFlags || (exports.SignatureFlags = {}));
+})(SignatureFlags || (exports.SignatureFlags = SignatureFlags = {}));

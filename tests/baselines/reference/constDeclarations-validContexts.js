@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constDeclarations-validContexts.ts] ////
+
 //// [constDeclarations-validContexts.ts]
 // Control flow statements with blocks
 if (true) { 

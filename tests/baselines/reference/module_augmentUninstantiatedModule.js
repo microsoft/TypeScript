@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/module_augmentUninstantiatedModule.ts] ////
+
 //// [module_augmentUninstantiatedModule.ts]
 declare module "foo" {
    namespace M {}

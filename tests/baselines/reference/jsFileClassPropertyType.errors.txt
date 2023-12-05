@@ -1,14 +1,14 @@
-tests/cases/compiler/bar.ts(1,1): error TS2322: Type 'string' is not assignable to type 'number'.
+bar.ts(1,1): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/foo.js (0 errors) ====
+==== foo.js (0 errors) ====
     class C {
       constructor () {
           this.p = 0;
       }
     }
     
-==== tests/cases/compiler/bar.ts (1 errors) ====
+==== bar.ts (1 errors) ====
     (new C()).p = "string";
     ~~~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.

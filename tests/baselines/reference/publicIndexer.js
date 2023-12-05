@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/indexMemberDeclarations/publicIndexer.ts] ////
+
 //// [publicIndexer.ts]
 // public indexers not allowed
 

@@ -1,28 +1,28 @@
-tests/cases/compiler/optionalParamArgsTest.ts(31,12): error TS2393: Duplicate function implementation.
-tests/cases/compiler/optionalParamArgsTest.ts(34,12): error TS2393: Duplicate function implementation.
-tests/cases/compiler/optionalParamArgsTest.ts(98,11): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/optionalParamArgsTest.ts(99,11): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/optionalParamArgsTest.ts(100,4): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/optionalParamArgsTest.ts(101,4): error TS2554: Expected 0 arguments, but got 1.
-tests/cases/compiler/optionalParamArgsTest.ts(102,6): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(103,6): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(104,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(105,1): error TS2554: Expected 1 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(106,13): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/compiler/optionalParamArgsTest.ts(107,13): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/compiler/optionalParamArgsTest.ts(108,6): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/compiler/optionalParamArgsTest.ts(109,6): error TS2554: Expected 1 arguments, but got 2.
-tests/cases/compiler/optionalParamArgsTest.ts(110,15): error TS2554: Expected 0-2 arguments, but got 3.
-tests/cases/compiler/optionalParamArgsTest.ts(111,15): error TS2554: Expected 0-2 arguments, but got 3.
-tests/cases/compiler/optionalParamArgsTest.ts(112,8): error TS2554: Expected 0-2 arguments, but got 3.
-tests/cases/compiler/optionalParamArgsTest.ts(113,8): error TS2554: Expected 0-2 arguments, but got 3.
-tests/cases/compiler/optionalParamArgsTest.ts(114,6): error TS2554: Expected 1-2 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(115,6): error TS2554: Expected 1-2 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(116,1): error TS2554: Expected 1-2 arguments, but got 0.
-tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2 arguments, but got 0.
+optionalParamArgsTest.ts(31,12): error TS2393: Duplicate function implementation.
+optionalParamArgsTest.ts(34,12): error TS2393: Duplicate function implementation.
+optionalParamArgsTest.ts(98,11): error TS2554: Expected 0 arguments, but got 1.
+optionalParamArgsTest.ts(99,11): error TS2554: Expected 0 arguments, but got 1.
+optionalParamArgsTest.ts(100,4): error TS2554: Expected 0 arguments, but got 1.
+optionalParamArgsTest.ts(101,4): error TS2554: Expected 0 arguments, but got 1.
+optionalParamArgsTest.ts(102,6): error TS2554: Expected 1 arguments, but got 0.
+optionalParamArgsTest.ts(103,6): error TS2554: Expected 1 arguments, but got 0.
+optionalParamArgsTest.ts(104,1): error TS2554: Expected 1 arguments, but got 0.
+optionalParamArgsTest.ts(105,1): error TS2554: Expected 1 arguments, but got 0.
+optionalParamArgsTest.ts(106,13): error TS2554: Expected 1 arguments, but got 2.
+optionalParamArgsTest.ts(107,13): error TS2554: Expected 1 arguments, but got 2.
+optionalParamArgsTest.ts(108,6): error TS2554: Expected 1 arguments, but got 2.
+optionalParamArgsTest.ts(109,6): error TS2554: Expected 1 arguments, but got 2.
+optionalParamArgsTest.ts(110,15): error TS2554: Expected 0-2 arguments, but got 3.
+optionalParamArgsTest.ts(111,15): error TS2554: Expected 0-2 arguments, but got 3.
+optionalParamArgsTest.ts(112,8): error TS2554: Expected 0-2 arguments, but got 3.
+optionalParamArgsTest.ts(113,8): error TS2554: Expected 0-2 arguments, but got 3.
+optionalParamArgsTest.ts(114,6): error TS2554: Expected 1-2 arguments, but got 0.
+optionalParamArgsTest.ts(115,6): error TS2554: Expected 1-2 arguments, but got 0.
+optionalParamArgsTest.ts(116,1): error TS2554: Expected 1-2 arguments, but got 0.
+optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2 arguments, but got 0.
 
 
-==== tests/cases/compiler/optionalParamArgsTest.ts (22 errors) ====
+==== optionalParamArgsTest.ts (22 errors) ====
     // Optional parameter and default argument tests
     
     // Key:
@@ -137,21 +137,21 @@ tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2
        ~
 !!! error TS2554: Expected 0 arguments, but got 1.
     c1o1.C1M2();
-         ~~~~~~
+         ~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:23:17: An argument for 'C1M2A1' was not provided.
+!!! related TS6210 optionalParamArgsTest.ts:23:17: An argument for 'C1M2A1' was not provided.
     i1o1.C1M2();
-         ~~~~~~
+         ~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:11:10: An argument for 'C1M2A1' was not provided.
+!!! related TS6210 optionalParamArgsTest.ts:11:10: An argument for 'C1M2A1' was not provided.
     F2();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:45:13: An argument for 'F2A1' was not provided.
+!!! related TS6210 optionalParamArgsTest.ts:45:13: An argument for 'F2A1' was not provided.
     L2();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:50:20: An argument for 'L2A1' was not provided.
+!!! related TS6210 optionalParamArgsTest.ts:50:20: An argument for 'L2A1' was not provided.
     c1o1.C1M2(1,2);
                 ~
 !!! error TS2554: Expected 1 arguments, but got 2.
@@ -177,21 +177,21 @@ tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2
            ~
 !!! error TS2554: Expected 0-2 arguments, but got 3.
     c1o1.C1M4();
-         ~~~~~~
+         ~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:29:17: An argument for 'C1M4A1' was not provided.
+!!! related TS6210 optionalParamArgsTest.ts:29:17: An argument for 'C1M4A1' was not provided.
     i1o1.C1M4();
-         ~~~~~~
+         ~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:13:10: An argument for 'C1M4A1' was not provided.
+!!! related TS6210 optionalParamArgsTest.ts:13:10: An argument for 'C1M4A1' was not provided.
     F4();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:47:13: An argument for 'F4A1' was not provided.
+!!! related TS6210 optionalParamArgsTest.ts:47:13: An argument for 'F4A1' was not provided.
     L4();
-    ~~~~
+    ~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:52:20: An argument for 'L4A1' was not provided.
+!!! related TS6210 optionalParamArgsTest.ts:52:20: An argument for 'L4A1' was not provided.
     
     function fnOpt1(id: number, children: number[] = [], expectedPath: number[] = [], isRoot?: boolean): void {}
     function fnOpt2(id: number, children?: number[], expectedPath?: number[], isRoot?: boolean): void {}

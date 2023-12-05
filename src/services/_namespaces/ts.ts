@@ -16,7 +16,6 @@ export * from "../suggestionDiagnostics";
 export * from "../transpile";
 export * from "../services";
 export * from "../transform";
-export * from "../shims";
 import * as BreakpointResolver from "./ts.BreakpointResolver";
 export { BreakpointResolver };
 import * as CallHierarchy from "./ts.CallHierarchy";

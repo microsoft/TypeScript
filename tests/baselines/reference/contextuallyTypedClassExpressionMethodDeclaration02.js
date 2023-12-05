@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedClassExpressionMethodDeclaration02.ts] ////
+
 //// [contextuallyTypedClassExpressionMethodDeclaration02.ts]
 interface A {
     numProp: number;

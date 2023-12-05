@@ -21,19 +21,19 @@ A.displayName;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 function A() { }
 exports.A = A;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var a_1 = require("./a");
-exports.A = a_1.A;
+Object.defineProperty(exports, "A", { enumerable: true, get: function () { return a_1.A; } });
 //// [c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var A;
 (function (A) {
     A.displayName = "A";

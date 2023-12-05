@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ClassDeclaration25.ts ===
+//// [tests/cases/compiler/ClassDeclaration25.ts] ////
+
+=== ClassDeclaration25.ts ===
 interface IList<T> {
     data(): T;
 >data : () => T
