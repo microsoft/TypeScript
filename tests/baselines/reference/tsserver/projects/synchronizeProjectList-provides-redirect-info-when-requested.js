@@ -73,8 +73,8 @@ Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/A/tsconfig.jso
   "configFilePath": "/users/username/projects/project/A/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/a 1 undefined Config: /users/username/projects/project/A/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/a 1 undefined Config: /users/username/projects/project/A/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/A 1 undefined Config: /users/username/projects/project/A/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/A 1 undefined Config: /users/username/projects/project/A/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/A/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/A/node_modules/@types 1 undefined Project: /users/username/projects/project/A/tsconfig.json WatchType: Type roots
@@ -178,7 +178,7 @@ After request
 PolledWatches::
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/username/projects/project/a/node_modules/@types: *new*
+/users/username/projects/project/A/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -186,11 +186,11 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/users/username/projects/project/a/tsconfig.json: *new*
+/users/username/projects/project/A/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/a: *new*
+/users/username/projects/project/A: *new*
   {}
 
 Before request
@@ -234,8 +234,8 @@ Info seq  [hh:mm:ss:mss] Config: /users/username/projects/project/B/tsconfig.jso
   }
  ]
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/b 1 undefined Config: /users/username/projects/project/B/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/b 1 undefined Config: /users/username/projects/project/B/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/B 1 undefined Config: /users/username/projects/project/B/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/B 1 undefined Config: /users/username/projects/project/B/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/B/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/B/node_modules/@types 1 undefined Project: /users/username/projects/project/B/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/B/node_modules/@types 1 undefined Project: /users/username/projects/project/B/tsconfig.json WatchType: Type roots
@@ -347,9 +347,9 @@ After request
 PolledWatches::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/a/node_modules/@types:
+/users/username/projects/project/A/node_modules/@types:
   {"pollingInterval":500}
-/users/username/projects/project/b/node_modules/@types: *new*
+/users/username/projects/project/B/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -357,15 +357,15 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/users/username/projects/project/a/tsconfig.json:
+/users/username/projects/project/A/tsconfig.json:
   {}
-/users/username/projects/project/b/tsconfig.json: *new*
+/users/username/projects/project/B/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/a:
+/users/username/projects/project/A:
   {}
-/users/username/projects/project/b: *new*
+/users/username/projects/project/B: *new*
   {}
 
 Before request

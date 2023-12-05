@@ -150,25 +150,25 @@ Output::
 
 
 PolledWatches::
-/user/username/projects/node_modules/@types: *new*
+/user/username/projects/noEmitOnError/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/noemitonerror/node_modules/@types: *new*
+/user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/noemitonerror/shared/types/db.ts: *new*
+/user/username/projects/noEmitOnError/shared/types/db.ts: *new*
   {}
-/user/username/projects/noemitonerror/src/main.ts: *new*
+/user/username/projects/noEmitOnError/src/main.ts: *new*
   {}
-/user/username/projects/noemitonerror/src/other.ts: *new*
+/user/username/projects/noEmitOnError/src/other.ts: *new*
   {}
-/user/username/projects/noemitonerror/tsconfig.json: *new*
+/user/username/projects/noEmitOnError/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror: *new*
+/user/username/projects/noEmitOnError: *new*
   {}
 
 Program root files: [

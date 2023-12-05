@@ -316,7 +316,7 @@ function getTargetFileImportsAndAddExportInOldFile(
                 const resolved = program.getResolvedModule(oldFile, moduleSpecifier.text, getModeForUsageLocation(oldFile, moduleSpecifier));
                 const fileName = resolved?.resolvedModule?.resolvedFileName;
                 if (fileName && targetSourceFile) {
-                    const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), targetSourceFile, targetSourceFile.path, fileName, createModuleSpecifierResolutionHost(program, host));
+                    const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), targetSourceFile, targetSourceFile.fileName, fileName, createModuleSpecifierResolutionHost(program, host));
                     append(copiedOldImports, filterImport(i, makeStringLiteral(newModuleSpecifier, quotePreference), name => importsToCopy.has(checker.getSymbolAtLocation(name)!)));
                 }
                 else {
@@ -418,7 +418,7 @@ export function updateImportsInOtherFiles(
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
 
                 const pathToTargetFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), targetFileName);
-                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
+                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFileWithExtension, createModuleSpecifierResolutionHost(program, host));
                 const newImportDeclaration = filterImport(importNode, makeStringLiteral(newModuleSpecifier, quotePreference), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
@@ -570,7 +570,7 @@ export function makeImportOrRequire(
     quotePreference: QuotePreference,
 ): AnyImportOrRequireStatement | undefined {
     const pathToTargetFile = resolvePath(getDirectoryPath(sourceFile.path), targetFileNameWithExtension);
-    const pathToTargetFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
+    const pathToTargetFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
 
     if (useEs6Imports) {
         const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));

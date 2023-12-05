@@ -190,7 +190,7 @@ After request
 PolledWatches::
 /a/b: *new*
   {"pollingInterval":500}
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {"pollingInterval":500}
 /a/b/tsconfig.json: *new*
   {"pollingInterval":2000}
