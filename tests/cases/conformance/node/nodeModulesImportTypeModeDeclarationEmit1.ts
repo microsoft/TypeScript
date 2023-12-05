@@ -2,7 +2,8 @@
 // @module: node16,nodenext
 // @declaration: true
 // @outDir: out
-// @isolatedDeclarationFixedDiffReason: TODO: Import type has different module attributes
+// @isolatedDeclarationFixedDiffReason: TSC simplifies import type removing resolution-mode and uses with instead of assert
+// @isolatedDeclarationDiffReason: TSC simplifies import type removing resolution-mode and uses with instead of assert
 // @filename: /node_modules/pkg/package.json
 {
     "name": "pkg",

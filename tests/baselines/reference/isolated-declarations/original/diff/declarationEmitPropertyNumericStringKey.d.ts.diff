@@ -1,0 +1,20 @@
+// [[Reason: Computed property are not resolved]] ////
+
+//// [tests/cases/compiler/declarationEmitPropertyNumericStringKey.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,10 +5,10 @@
+     readonly "404": "not found";
+ };
+ declare const hundredStr = "100";
+ declare const obj: {
+-    "100": string;
++    [hundredStr]: string;
+ };
+ declare const hundredNum = 100;
+ declare const obj2: {
+-    100: string;
++    [hundredNum]: string;
+ };

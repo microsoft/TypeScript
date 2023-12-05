@@ -1,0 +1,24 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/compiler/parseTypes.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,10 +1,14 @@
+ 
+ 
+ //// [parseTypes.d.ts]
+ declare var x: () => number;
+-declare var y: () => number;
+-declare var z: new () => number;
++declare var y: {
++    (): number;
++};
++declare var z: {
++    new (): number;
++};
+ declare var w: {
+     [x: number]: number;
+ };
+ declare function f(): invalid;

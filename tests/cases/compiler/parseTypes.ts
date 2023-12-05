@@ -1,3 +1,4 @@
+// @isolatedDeclarationDiffReason: TS normalizes types
 
 var x = <() => number>null;
 var y = <{(): number; }>null;

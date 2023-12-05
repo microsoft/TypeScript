@@ -89,7 +89,7 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
         addDiagnostic(diag: any) {
             diagnostics.push(diag);
         },
-    } as TransformationContext);
+    } as TransformationContext, /*useTscEmit*/ false);
     const result = transformer(sourceFile);
 
     const printer = createPrinter({

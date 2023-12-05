@@ -1,0 +1,17 @@
+// [[Reason: TS normalizes types. Removes duplicate properties.]] ////
+
+//// [tests/cases/conformance/expressions/typeAssertions/duplicatePropertiesInTypeAssertions01.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -2,8 +2,9 @@
+ 
+ //// [duplicatePropertiesInTypeAssertions01.d.ts]
+ declare let x: {
+     a: number;
++    a: number;
+ };
+ 
+ /// [Errors] ////
+ 

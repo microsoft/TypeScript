@@ -1,0 +1,14 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/conformance/types/literal/stringLiteralsWithTypeAssertions01.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -6,5 +6,5 @@
+ declare let b: "foo";
+ declare let c: "foo";
+ declare let d: "bar";
+ declare let e: "baz";
+-declare let f: "foo" | "bar";
++declare let f: typeof fooOrBar;

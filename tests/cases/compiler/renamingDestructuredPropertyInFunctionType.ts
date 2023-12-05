@@ -1,5 +1,6 @@
 // @target: es2015
 // @declaration: true
+// @isolatedDeclarationDiffReason: TS normalizes types
 // @isolatedDeclarationFixedDiffReason: Aliases are preserved for binding patterns GH#55654
 // GH#37454, GH#41044
 

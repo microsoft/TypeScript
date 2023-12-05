@@ -4,6 +4,12 @@
 function Foo(): void {
 
 }
+let d: number = (Foo.inVariableInit = 1);
+
+
+function bar(p = (Foo.inNestedFunction = 1)) {
+
+}
 
 (Foo.bla = { foo: 1}).foo = (Foo.baz = 1) + (Foo.bar  = 0);
 
@@ -50,6 +56,10 @@ for(let f in (Foo.forIn = []) ){
 //// [expandoFunctionNestedAssigments.js]
 function Foo() {
 }
+var d = (Foo.inVariableInit = 1);
+function bar(p) {
+    if (p === void 0) { p = (Foo.inNestedFunction = 1); }
+}
 (Foo.bla = { foo: 1 }).foo = (Foo.baz = 1) + (Foo.bar = 0);
 if (Foo.fromIf = 1) {
     Foo.inIf = 1;
@@ -90,6 +100,7 @@ for (var f in (Foo.forIn = [])) {
 //// [expandoFunctionNestedAssigments.d.ts]
 declare function Foo(): void;
 declare namespace Foo {
+    var inVariableInit: number;
     var bla: {
         foo: number;
     };
@@ -115,3 +126,5 @@ declare namespace Foo {
     var fromForInBody: number;
     var fromForInBodyNested: number;
 }
+declare let d: number;
+declare function bar(p?: number): void;

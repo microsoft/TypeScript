@@ -1,0 +1,151 @@
+//// [tests/cases/compiler/isolatedDeclarationBinderConditionalTypes.ts] ////
+
+=== isolatedDeclarationBinderConditionalTypes.ts ===
+type TA = string;
+>TA : Symbol(TA, Decl(isolatedDeclarationBinderConditionalTypes.ts, 0, 0))
+
+type UA = string;
+>UA : Symbol(UA, Decl(isolatedDeclarationBinderConditionalTypes.ts, 0, 17))
+
+export type Conditional<UA> = UA extends infer TA ? TA: never;
+>Conditional : Symbol(Conditional, Decl(isolatedDeclarationBinderConditionalTypes.ts, 1, 17))
+>UA : Symbol(UA, Decl(isolatedDeclarationBinderConditionalTypes.ts, 2, 24))
+>UA : Symbol(UA, Decl(isolatedDeclarationBinderConditionalTypes.ts, 2, 24))
+>TA : Symbol(TA, Decl(isolatedDeclarationBinderConditionalTypes.ts, 2, 46))
+>TA : Symbol(TA, Decl(isolatedDeclarationBinderConditionalTypes.ts, 2, 46))
+
+
+type TF = string;
+>TF : Symbol(TF, Decl(isolatedDeclarationBinderConditionalTypes.ts, 2, 62))
+
+type UF = string;
+>UF : Symbol(UF, Decl(isolatedDeclarationBinderConditionalTypes.ts, 5, 17))
+
+export function test<UF>(o: UF extends infer TF ? TF: never): UF extends infer TF ? TF: never {
+>test : Symbol(test, Decl(isolatedDeclarationBinderConditionalTypes.ts, 6, 17))
+>UF : Symbol(UF, Decl(isolatedDeclarationBinderConditionalTypes.ts, 7, 21))
+>o : Symbol(o, Decl(isolatedDeclarationBinderConditionalTypes.ts, 7, 25))
+>UF : Symbol(UF, Decl(isolatedDeclarationBinderConditionalTypes.ts, 7, 21))
+>TF : Symbol(TF, Decl(isolatedDeclarationBinderConditionalTypes.ts, 7, 44))
+>TF : Symbol(TF, Decl(isolatedDeclarationBinderConditionalTypes.ts, 7, 44))
+>UF : Symbol(UF, Decl(isolatedDeclarationBinderConditionalTypes.ts, 7, 21))
+>TF : Symbol(TF, Decl(isolatedDeclarationBinderConditionalTypes.ts, 7, 78))
+>TF : Symbol(TF, Decl(isolatedDeclarationBinderConditionalTypes.ts, 7, 78))
+
+    return null!
+}
+
+type TC = string;
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 9, 1))
+
+type UC = string;
+>UC : Symbol(UC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 11, 17))
+
+export class C<UC> {
+>C : Symbol(C, Decl(isolatedDeclarationBinderConditionalTypes.ts, 12, 17))
+>UC : Symbol(UC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 13, 15))
+
+    member!: UC extends infer TC ? TC: never
+>member : Symbol(C.member, Decl(isolatedDeclarationBinderConditionalTypes.ts, 13, 20))
+>UC : Symbol(UC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 13, 15))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 14, 29))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 14, 29))
+
+    get accessor(): UC extends infer TC ? TC: never {
+>accessor : Symbol(C.accessor, Decl(isolatedDeclarationBinderConditionalTypes.ts, 14, 44), Decl(isolatedDeclarationBinderConditionalTypes.ts, 17, 5))
+>UC : Symbol(UC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 13, 15))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 15, 36))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 15, 36))
+
+        return null!
+    }
+    set accessor(value: UC extends infer TC ? TC: never) {
+>accessor : Symbol(C.accessor, Decl(isolatedDeclarationBinderConditionalTypes.ts, 14, 44), Decl(isolatedDeclarationBinderConditionalTypes.ts, 17, 5))
+>value : Symbol(value, Decl(isolatedDeclarationBinderConditionalTypes.ts, 18, 17))
+>UC : Symbol(UC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 13, 15))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 18, 40))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 18, 40))
+        
+    }
+    constructor(p: UC extends infer TC ? TC: never) {
+>p : Symbol(p, Decl(isolatedDeclarationBinderConditionalTypes.ts, 21, 16))
+>UC : Symbol(UC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 13, 15))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 21, 35))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 21, 35))
+
+        return null!;
+    }
+    method(p: UC extends infer TC ? TC: never): UC extends infer TC ? TC: never {
+>method : Symbol(C.method, Decl(isolatedDeclarationBinderConditionalTypes.ts, 23, 5))
+>p : Symbol(p, Decl(isolatedDeclarationBinderConditionalTypes.ts, 24, 11))
+>UC : Symbol(UC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 13, 15))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 24, 30))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 24, 30))
+>UC : Symbol(UC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 13, 15))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 24, 64))
+>TC : Symbol(TC, Decl(isolatedDeclarationBinderConditionalTypes.ts, 24, 64))
+
+        return null!;
+    }
+}
+
+type TI = string;
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 27, 1))
+
+type UI = string;
+>UI : Symbol(UI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 29, 17))
+
+export interface I<UI> {
+>I : Symbol(I, Decl(isolatedDeclarationBinderConditionalTypes.ts, 30, 17))
+>UI : Symbol(UI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 31, 19))
+
+    member: UI extends infer TI ? TI: never
+>member : Symbol(I.member, Decl(isolatedDeclarationBinderConditionalTypes.ts, 31, 24))
+>UI : Symbol(UI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 31, 19))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 32, 28))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 32, 28))
+
+    method(p: UI extends infer TI ? TI: never): UI extends infer TI ? TI: never;
+>method : Symbol(I.method, Decl(isolatedDeclarationBinderConditionalTypes.ts, 32, 43))
+>p : Symbol(p, Decl(isolatedDeclarationBinderConditionalTypes.ts, 33, 11))
+>UI : Symbol(UI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 31, 19))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 33, 30))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 33, 30))
+>UI : Symbol(UI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 31, 19))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 33, 64))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 33, 64))
+
+    new (p: UI extends infer TI ? TI: never): UI extends infer TI ? TI: never;
+>p : Symbol(p, Decl(isolatedDeclarationBinderConditionalTypes.ts, 34, 9))
+>UI : Symbol(UI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 31, 19))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 34, 28))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 34, 28))
+>UI : Symbol(UI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 31, 19))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 34, 62))
+>TI : Symbol(TI, Decl(isolatedDeclarationBinderConditionalTypes.ts, 34, 62))
+}
+
+
+
+type T2 = {}
+>T2 : Symbol(T2, Decl(isolatedDeclarationBinderConditionalTypes.ts, 35, 1))
+
+export type Prepend<Elm, T extends unknown[]> =
+>Prepend : Symbol(Prepend, Decl(isolatedDeclarationBinderConditionalTypes.ts, 39, 12))
+>Elm : Symbol(Elm, Decl(isolatedDeclarationBinderConditionalTypes.ts, 40, 20))
+>T : Symbol(T, Decl(isolatedDeclarationBinderConditionalTypes.ts, 40, 24))
+
+  T extends unknown ?
+>T : Symbol(T, Decl(isolatedDeclarationBinderConditionalTypes.ts, 40, 24))
+
+  ((arg: Elm, ...rest: T) => void) extends ((...args: infer T2) => void) ? T2 :
+>arg : Symbol(arg, Decl(isolatedDeclarationBinderConditionalTypes.ts, 42, 4))
+>Elm : Symbol(Elm, Decl(isolatedDeclarationBinderConditionalTypes.ts, 40, 20))
+>rest : Symbol(rest, Decl(isolatedDeclarationBinderConditionalTypes.ts, 42, 13))
+>T : Symbol(T, Decl(isolatedDeclarationBinderConditionalTypes.ts, 40, 24))
+>args : Symbol(args, Decl(isolatedDeclarationBinderConditionalTypes.ts, 42, 45))
+>T2 : Symbol(T2, Decl(isolatedDeclarationBinderConditionalTypes.ts, 42, 59))
+>T2 : Symbol(T2, Decl(isolatedDeclarationBinderConditionalTypes.ts, 42, 59))
+
+  never :
+  never;

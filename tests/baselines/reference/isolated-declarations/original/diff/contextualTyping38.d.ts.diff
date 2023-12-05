@@ -1,0 +1,15 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/compiler/contextualTyping38.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,4 +1,6 @@
+ 
+ 
+ //// [contextualTyping38.d.ts]
+-declare var foo: () => number;
++declare var foo: {
++    (): number;
++};

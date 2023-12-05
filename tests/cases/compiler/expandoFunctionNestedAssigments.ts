@@ -5,6 +5,12 @@
 function Foo(): void {
 
 }
+let d: number = (Foo.inVariableInit = 1);
+
+
+function bar(p = (Foo.inNestedFunction = 1)) {
+
+}
 
 (Foo.bla = { foo: 1}).foo = (Foo.baz = 1) + (Foo.bar  = 0);
 

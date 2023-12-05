@@ -41,6 +41,7 @@ import {
     isNumericLiteral,
     IsolatedEmitResolver,
     isPrefixUnaryExpression,
+    isPrimitiveLiteralValue,
     isPropertyAccessExpression,
     isSetAccessor,
     isSetAccessorDeclaration,
@@ -134,25 +135,6 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
         },
         onNumericLiteral() {},
     });
-    function isPrimitiveLiteralValue(node: Expression): boolean {
-        if (isNumericLiteral(node) || isBigIntLiteral(node) || isStringLiteralLike(node)) return true;
-
-        if (node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword) return true;
-
-        if (isPrefixUnaryExpression(node)) {
-            const operand = node.operand;
-            if (node.operator === SyntaxKind.MinusToken) {
-                return isNumericLiteral(operand) || isBigIntLiteral(operand);
-            }
-            if (node.operator === SyntaxKind.PlusToken) {
-                return isNumericLiteral(operand);
-            }
-        }
-        if (isTemplateExpression(node)) {
-            return node.templateSpans.every(t => isPrimitiveLiteralValue(t.expression));
-        }
-        return false;
-    }
     function clonePrimitiveLiteralValue(node: Expression): Expression {
         if (isNumericLiteral(node)) {
             return factory.createNumericLiteral(node.text);
@@ -205,8 +187,6 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
 
             const initializer = node.initializer;
             return isPrimitiveLiteralValue(initializer);
-            // Original TS version
-            // return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
         }
         return false;
     }
@@ -216,7 +196,7 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
         // - it might be a narrowed symbol
         // - the type might not be appropriate as a computed property name.
         const expression = node.expression;
-        if (isPrimitiveLiteralValue(expression)) {
+        if (isPrimitiveLiteralValue(expression, /*includeBigInt*/ false)) {
             return true;
         }
         if (!isEntityNameExpression(expression)) {
@@ -266,13 +246,8 @@ export function createEmitDeclarationResolver(file: SourceFile): IsolatedEmitRes
             return [...node.symbol.exports?.values() ?? []];
         },
         getAllAccessorDeclarations(declaration) {
-            const parentLinks = getNodeLinks(declaration.parent);
-            const key = getMemberKey(declaration.name);
-            const members = hasSyntacticModifier(declaration, ModifierFlags.Static) ?
-                parentLinks.symbol?.exports :
-                parentLinks.symbol?.members;
-            const symbol = key && members?.get(key);
-            const declaredAccessors = symbol?.declarations.filter(isAccessor);
+            const symbol = declaration.symbol;
+            const declaredAccessors = symbol?.declarations?.filter(isAccessor);
             const declarations = declaredAccessors?.length ? declaredAccessors : [declaration];
             return {
                 firstAccessor: declarations[0],

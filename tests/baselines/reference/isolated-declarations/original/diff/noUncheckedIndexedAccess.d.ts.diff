@@ -1,0 +1,20 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -86,10 +86,10 @@
+     a: string;
+     b: string;
+     [key: string]: string;
+ };
+-declare const fn1: <Key extends "a" | "b">(key: Key) => string;
+-declare const fn2: <Key extends "a" | "b">(key: Key) => string;
++declare const fn1: <Key extends keyof typeof myRecord1>(key: Key) => string;
++declare const fn2: <Key extends keyof typeof myRecord1>(key: Key) => string;
+ declare const fn3: <Key extends keyof typeof myRecord2>(key: Key) => invalid;
+ 
+ /// [Errors] ////
+ 

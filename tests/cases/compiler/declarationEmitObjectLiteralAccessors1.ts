@@ -1,7 +1,8 @@
 // @strict: true
 // @declaration: true
 // @emitDeclarationOnly: true
-// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
+// @isolatedDeclarationFixedDiffReason: TS merges accessors with the same type. DTE can only merge if one type is specified.
+// @isolatedDeclarationDiffReason: TS merges accessors with the same type. DTE can only merge if one type is specified.
 
 // same type accessors
 export const obj1 = {

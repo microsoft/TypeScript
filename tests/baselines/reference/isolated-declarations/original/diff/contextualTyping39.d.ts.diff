@@ -1,0 +1,19 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/compiler/contextualTyping39.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,8 +1,10 @@
+ 
+ 
+ //// [contextualTyping39.d.ts]
+-declare var foo: () => number;
++declare var foo: {
++    (): number;
++};
+ 
+ /// [Errors] ////
+ 
+ contextualTyping39.ts(1,11): error TS2352: Conversion of type '() => string' to type '() => number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.

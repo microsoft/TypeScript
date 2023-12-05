@@ -1,3 +1,4 @@
+// @isolatedDeclarations: false
 // Unary operator -
 
 // operand before -

@@ -1,0 +1,24 @@
+// [[Reason: TS changes the order of union constituents]] ////
+
+//// [tests/cases/conformance/types/typeRelationships/typeInference/contextualSignatureInstantiation.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -9,12 +9,12 @@
+ declare var a: number;
+ declare var a: number;
+ declare var a: number;
+ declare var b: number | string;
+-declare var b: string | number;
+-declare var b: string | number;
+-declare var b: string | number;
+-declare var b: string | number;
++declare var b: number | string;
++declare var b: number | string;
++declare var b: number | string;
++declare var b: number | string;
+ declare var d: number[] | string[];
+ declare var d: number[] | string[];
+ declare var d: number[] | string[];
+ declare var d: number[] | string[];

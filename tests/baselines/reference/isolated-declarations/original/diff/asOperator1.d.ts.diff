@@ -1,0 +1,18 @@
+// [[Reason: TS changes the order of union constituents]] ////
+
+//// [tests/cases/conformance/expressions/asOperator/asOperator1.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -4,9 +4,9 @@
+ declare var as: number;
+ declare var x: number;
+ declare var y: invalid;
+ declare var z: string;
+-declare var j: string | number;
++declare var j: number | string;
+ 
+ /// [Errors] ////
+ 
+ asOperator1.ts(3,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.

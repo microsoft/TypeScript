@@ -1,6 +1,7 @@
 // @module: node16,nodenext
 // @declaration: true
 // @outDir: out
+// @isolatedDeclarationDiffReason: TSC simplifies import type removing resolution-mode
 // @filename: /node_modules/pkg/package.json
 {
     "name": "pkg",

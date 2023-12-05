@@ -1,4 +1,5 @@
 // @strict: true
+// @isolatedDeclarationDiffReason: Syntactically invalid.
 
 function f1(a: string): a is ?string {
     return true;

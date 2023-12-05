@@ -1,0 +1,27 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -633,12 +633,16 @@
+     var t: Genric<Base>;
+ }
+ declare var x206: () => Base[];
+ declare var x207: () => Base[];
+-declare var x209: () => Base[];
+-declare var x210: () => Base[];
++declare var x209: {
++    (): Base[];
++};
++declare var x210: {
++    (): Base[];
++};
+ declare var x211: Base[];
+-declare var x212: Base[];
++declare var x212: Array<Base>;
+ declare var x213: {
+     [n: number]: Base;
+ };
+ declare var x214: {

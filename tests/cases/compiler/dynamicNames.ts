@@ -2,6 +2,7 @@
 // @lib: esnext
 // @module: commonjs
 // @declaration: true
+// @isolatedDeclarationDiffReason: Computed property are not resolved
 // @isolatedDeclarationFixedDiffReason: Printing differences
 // @filename: module.ts
 export const c0 = "a";

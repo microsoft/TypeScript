@@ -36,7 +36,7 @@ export interface Thing {} // not exported in export map, inaccessible under new 
 
 
 //// [index.d.ts]
-export declare const a: invalid;
+export declare const a: () => invalid;
 //# sourceMappingURL=index.d.ts.map
 /// [Errors] ////
 

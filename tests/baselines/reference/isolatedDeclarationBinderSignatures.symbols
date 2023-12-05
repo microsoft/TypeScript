@@ -1,0 +1,231 @@
+//// [tests/cases/compiler/isolatedDeclarationBinderSignatures.ts] ////
+
+=== isolatedDeclarationBinderSignatures.ts ===
+type N = "not used";
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 0, 0), Decl(isolatedDeclarationBinderSignatures.ts, 1, 5))
+
+const N = "not used"
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 0, 0), Decl(isolatedDeclarationBinderSignatures.ts, 1, 5))
+
+export type F = <N>() => N;
+>F : Symbol(F, Decl(isolatedDeclarationBinderSignatures.ts, 1, 20))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 2, 17))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 2, 17))
+
+export const fn = <N>(): N  => {
+>fn : Symbol(fn, Decl(isolatedDeclarationBinderSignatures.ts, 4, 12))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 4, 19))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 4, 19))
+
+    return null!;
+}
+export const fn2 = <N>(p:  N): void => {
+>fn2 : Symbol(fn2, Decl(isolatedDeclarationBinderSignatures.ts, 7, 12))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 7, 20))
+>p : Symbol(p, Decl(isolatedDeclarationBinderSignatures.ts, 7, 23))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 7, 20))
+
+    return null!
+}
+
+
+export module M1 {
+>M1 : Symbol(M1, Decl(isolatedDeclarationBinderSignatures.ts, 9, 1))
+
+    export type N<T> =  T extends T? N<T> : never;
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 13, 50), Decl(isolatedDeclarationBinderSignatures.ts, 12, 18))
+>T : Symbol(T, Decl(isolatedDeclarationBinderSignatures.ts, 13, 18))
+>T : Symbol(T, Decl(isolatedDeclarationBinderSignatures.ts, 13, 18))
+>T : Symbol(T, Decl(isolatedDeclarationBinderSignatures.ts, 13, 18))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 13, 50), Decl(isolatedDeclarationBinderSignatures.ts, 12, 18))
+>T : Symbol(T, Decl(isolatedDeclarationBinderSignatures.ts, 13, 18))
+
+    export function N(): typeof N {
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 13, 50), Decl(isolatedDeclarationBinderSignatures.ts, 12, 18))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 13, 50), Decl(isolatedDeclarationBinderSignatures.ts, 12, 18))
+
+        return N
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 13, 50), Decl(isolatedDeclarationBinderSignatures.ts, 12, 18))
+    }
+}
+
+export module M2 {
+>M2 : Symbol(M2, Decl(isolatedDeclarationBinderSignatures.ts, 17, 1))
+
+    export interface N { 
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 19, 18))
+
+        child: N
+>child : Symbol(N.child, Decl(isolatedDeclarationBinderSignatures.ts, 20, 24))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 19, 18))
+
+        m(): N;
+>m : Symbol(N.m, Decl(isolatedDeclarationBinderSignatures.ts, 21, 16))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 19, 18))
+
+        get X(): N
+>X : Symbol(N.X, Decl(isolatedDeclarationBinderSignatures.ts, 22, 15), Decl(isolatedDeclarationBinderSignatures.ts, 23, 18))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 19, 18))
+
+        set X(value: N);
+>X : Symbol(N.X, Decl(isolatedDeclarationBinderSignatures.ts, 22, 15), Decl(isolatedDeclarationBinderSignatures.ts, 23, 18))
+>value : Symbol(value, Decl(isolatedDeclarationBinderSignatures.ts, 24, 14))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 19, 18))
+    }
+}
+
+export module M3 {
+>M3 : Symbol(M3, Decl(isolatedDeclarationBinderSignatures.ts, 26, 1), Decl(isolatedDeclarationBinderSignatures.ts, 32, 1))
+
+    export interface N { 
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 28, 18), Decl(isolatedDeclarationBinderSignatures.ts, 33, 18))
+
+        [n: string]: N
+>n : Symbol(n, Decl(isolatedDeclarationBinderSignatures.ts, 30, 9))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 28, 18), Decl(isolatedDeclarationBinderSignatures.ts, 33, 18))
+    }
+}
+export module M3 {
+>M3 : Symbol(M3, Decl(isolatedDeclarationBinderSignatures.ts, 26, 1), Decl(isolatedDeclarationBinderSignatures.ts, 32, 1))
+
+    export class N { child: N }
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 28, 18), Decl(isolatedDeclarationBinderSignatures.ts, 33, 18))
+>child : Symbol(N.child, Decl(isolatedDeclarationBinderSignatures.ts, 34, 20))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 28, 18), Decl(isolatedDeclarationBinderSignatures.ts, 33, 18))
+
+    export function fn(): N {
+>fn : Symbol(fn, Decl(isolatedDeclarationBinderSignatures.ts, 34, 31))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 28, 18), Decl(isolatedDeclarationBinderSignatures.ts, 33, 18))
+
+        return new N();
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 28, 18), Decl(isolatedDeclarationBinderSignatures.ts, 33, 18))
+    }
+}
+export module M4 {
+>M4 : Symbol(M4, Decl(isolatedDeclarationBinderSignatures.ts, 38, 1))
+
+    export module N {
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 39, 18))
+
+        export function fn(): typeof N {
+>fn : Symbol(fn, Decl(isolatedDeclarationBinderSignatures.ts, 40, 21))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 39, 18))
+
+            return N;
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 39, 18))
+        }
+    }
+}
+
+
+export const fn3 = function <N>(p: N): void {
+>fn3 : Symbol(fn3, Decl(isolatedDeclarationBinderSignatures.ts, 48, 12))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 48, 29))
+>p : Symbol(p, Decl(isolatedDeclarationBinderSignatures.ts, 48, 32))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 48, 29))
+    
+}
+
+export const fn4 = function <N>(): { name: N } {
+>fn4 : Symbol(fn4, Decl(isolatedDeclarationBinderSignatures.ts, 52, 12))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 52, 29))
+>name : Symbol(name, Decl(isolatedDeclarationBinderSignatures.ts, 52, 36))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 52, 29))
+
+    return null!;
+}
+
+export interface I<N> {
+>I : Symbol(I, Decl(isolatedDeclarationBinderSignatures.ts, 54, 1), Decl(isolatedDeclarationBinderSignatures.ts, 70, 1))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 56, 19), Decl(isolatedDeclarationBinderSignatures.ts, 73, 19))
+
+    (): N;
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 56, 19), Decl(isolatedDeclarationBinderSignatures.ts, 73, 19))
+
+    new (): N
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 56, 19), Decl(isolatedDeclarationBinderSignatures.ts, 73, 19))
+
+    m(): N;
+>m : Symbol(I.m, Decl(isolatedDeclarationBinderSignatures.ts, 58, 13), Decl(isolatedDeclarationBinderSignatures.ts, 75, 13))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 56, 19), Decl(isolatedDeclarationBinderSignatures.ts, 73, 19))
+}
+
+export interface I2<N> {
+>I2 : Symbol(I2, Decl(isolatedDeclarationBinderSignatures.ts, 60, 1))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 62, 20))
+
+    [n: string]: N
+>n : Symbol(n, Decl(isolatedDeclarationBinderSignatures.ts, 63, 5))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 62, 20))
+}
+
+export interface I1 {
+>I1 : Symbol(I1, Decl(isolatedDeclarationBinderSignatures.ts, 64, 1))
+
+    <N>(): N;
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 67, 5))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 67, 5))
+
+    new <N>(): N
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 68, 9))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 68, 9))
+
+    m<N>(): N;
+>m : Symbol(I1.m, Decl(isolatedDeclarationBinderSignatures.ts, 68, 16))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 69, 6))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 69, 6))
+}
+
+
+export interface I<N> {
+>I : Symbol(I, Decl(isolatedDeclarationBinderSignatures.ts, 54, 1), Decl(isolatedDeclarationBinderSignatures.ts, 70, 1))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 56, 19), Decl(isolatedDeclarationBinderSignatures.ts, 73, 19))
+
+    (): N;
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 56, 19), Decl(isolatedDeclarationBinderSignatures.ts, 73, 19))
+
+    new (): N
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 56, 19), Decl(isolatedDeclarationBinderSignatures.ts, 73, 19))
+
+    m(): N;
+>m : Symbol(I.m, Decl(isolatedDeclarationBinderSignatures.ts, 58, 13), Decl(isolatedDeclarationBinderSignatures.ts, 75, 13))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 56, 19), Decl(isolatedDeclarationBinderSignatures.ts, 73, 19))
+}
+
+export class C<N> {
+>C : Symbol(C, Decl(isolatedDeclarationBinderSignatures.ts, 77, 1))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 79, 15), Decl(isolatedDeclarationBinderSignatures.ts, 85, 5), Decl(isolatedDeclarationBinderSignatures.ts, 86, 31))
+
+    constructor(n: N) {
+>n : Symbol(n, Decl(isolatedDeclarationBinderSignatures.ts, 80, 16))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 79, 15), Decl(isolatedDeclarationBinderSignatures.ts, 85, 5), Decl(isolatedDeclarationBinderSignatures.ts, 86, 31))
+
+    }
+    m(): N {
+>m : Symbol(C.m, Decl(isolatedDeclarationBinderSignatures.ts, 82, 5))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 79, 15), Decl(isolatedDeclarationBinderSignatures.ts, 85, 5), Decl(isolatedDeclarationBinderSignatures.ts, 86, 31))
+
+        return null!;
+    }
+    get N(): N { return null! }
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 79, 15), Decl(isolatedDeclarationBinderSignatures.ts, 85, 5), Decl(isolatedDeclarationBinderSignatures.ts, 86, 31))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 79, 15), Decl(isolatedDeclarationBinderSignatures.ts, 85, 5), Decl(isolatedDeclarationBinderSignatures.ts, 86, 31))
+
+    set N(value) { }
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 79, 15), Decl(isolatedDeclarationBinderSignatures.ts, 85, 5), Decl(isolatedDeclarationBinderSignatures.ts, 86, 31))
+>value : Symbol(value, Decl(isolatedDeclarationBinderSignatures.ts, 87, 10))
+}
+
+export class C2 {
+>C2 : Symbol(C2, Decl(isolatedDeclarationBinderSignatures.ts, 88, 1))
+
+    m<N>(): N {
+>m : Symbol(C2.m, Decl(isolatedDeclarationBinderSignatures.ts, 90, 17))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 91, 6))
+>N : Symbol(N, Decl(isolatedDeclarationBinderSignatures.ts, 91, 6))
+
+        return null!;
+    }
+}
+
+

@@ -13,7 +13,7 @@
 -export declare const useCsvParser: () => MutableRefObject<typeof import("csv-parse")>;
 -//# sourceMappingURL=index.d.ts.map
 \ No newline at end of file
-+export declare const useCsvParser: invalid;
++export declare const useCsvParser: () => invalid;
 +//# sourceMappingURL=index.d.ts.map
 +/// [Errors] ////
 +

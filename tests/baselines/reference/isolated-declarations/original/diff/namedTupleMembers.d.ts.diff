@@ -1,0 +1,18 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/conformance/types/tuple/named/namedTupleMembers.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -17,9 +17,9 @@
+ export declare const func: Func<SegmentAnnotated>;
+ export declare function useState<T>(initial: T): [value: T, setter: (T: invalid) => void];
+ export type Iter = Func<[step: number, iterations: number]>;
+ export declare function readSegment([length, count]: [number, number]): invalid;
+-export declare const val: [number, number];
++export declare const val: Parameters<typeof readSegment>[0];
+ export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
+ export type RecursiveTupleB = [first: string, ptr: RecursiveTupleB];
+ export type RecusiveRest = [first: string, ...rest: RecusiveRest[]];
+ export type RecusiveRest2 = [string, ...RecusiveRest2[]];

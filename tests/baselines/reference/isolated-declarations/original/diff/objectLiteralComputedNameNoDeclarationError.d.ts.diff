@@ -1,0 +1,16 @@
+// [[Reason: Computed property are not resolved]] ////
+
+//// [tests/cases/compiler/objectLiteralComputedNameNoDeclarationError.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -4,7 +4,7 @@
+ declare const Foo: {
+     BANANA: "banana";
+ };
+ export declare const Baa: {
+-    banana: number;
++    [Foo.BANANA]: number;
+ };
+ export {};

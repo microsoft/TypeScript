@@ -2,9 +2,9 @@ import {
     ArrayLiteralExpression,
     ArrowFunction,
     AsExpression,
-    ClassExpression,
     createDiagnosticForNode,
     createPropertyNameNodeForIdentifierOrLiteral,
+    Debug,
     DiagnosticMessage,
     Diagnostics,
     EntityNameOrEntityNameExpression,
@@ -14,6 +14,7 @@ import {
     getCommentRange,
     getEmitScriptTarget,
     getMemberKeyFromElement,
+    getNameOfDeclaration,
     HasInferredType,
     hasSyntacticModifier,
     Identifier,
@@ -22,11 +23,12 @@ import {
     isConstTypeReference,
     isEntityNameExpression,
     isExportAssignment,
-    isGetAccessorDeclaration,
+    isGetAccessor,
     isIdentifier,
     isInterfaceDeclaration,
     isLiteralTypeNode,
     isMethodDeclaration,
+    isMethodOrAccessor,
     isNoSubstitutionTemplateLiteral,
     isNumericLiteral,
     isOmittedExpression,
@@ -37,13 +39,13 @@ import {
     isPropertyAssignment,
     isPropertyDeclaration,
     isPropertyName,
-    isSetAccessorDeclaration,
     isShorthandPropertyAssignment,
     isSpreadAssignment,
     isSpreadElement,
     isStringDoubleQuoted,
     isStringLiteral,
     isStringLiteralLike,
+    isThisIdentifier,
     isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
@@ -51,6 +53,7 @@ import {
     isUnionTypeNode,
     isVariableDeclaration,
     KeywordTypeSyntaxKind,
+    length,
     LiteralExpression,
     MethodDeclaration,
     ModifierFlags,
@@ -67,6 +70,7 @@ import {
     setCommentRange,
     setTextRange,
     SourceFile,
+    Symbol,
     SyntaxKind,
     TransformationContext,
     TypeAssertion,
@@ -88,16 +92,19 @@ enum NarrowBehavior {
     NotKeepLiterals = ~KeepLiterals,
 }
 
-enum LocalTypeInfoFlags {
-    None = 0,
-    Invalid = 1 << 1,
+/**
+ * @internal
+ */
+export interface LocalType {
+    typeNode: TypeNode;
+    isInvalid: boolean;
 }
 /**
  * @internal
  */
 export interface LocalInferenceResolver {
     makeInvalidType(): Node;
-    fromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined, sourceFile: SourceFile): TypeNode;
+    fromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined, sourceFile: SourceFile): LocalType;
 }
 /**
  * @internal
@@ -122,25 +129,30 @@ export function createLocalInferenceResolver({
         return { resolver: undefined, isolatedDeclarations: false };
     }
     const { factory } = context;
+    let inferenceContext: { isInvalid: boolean; disableErrors: boolean; } = undefined!;
     const strictNullChecks = !!options.strict || !!options.strictNullChecks;
 
     return {
         resolver: {
-            fromInitializer(node: HasInferredType, type: TypeNode | undefined, sourceFile: SourceFile) {
+            fromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined, sourceFile: SourceFile) {
                 const oldSourceFile = currentSourceFile;
+                const hasExistingContext = inferenceContext !== undefined;
+                if (!hasExistingContext) {
+                    inferenceContext = { isInvalid: false, disableErrors: false };
+                }
                 currentSourceFile = sourceFile;
                 try {
-                    const localType = localInferenceFromInitializer(node, type);
-                    if (localType !== undefined) {
-                        return localType;
+                    const typeNode = localInferenceFromInitializer(node, type);
+                    if (typeNode !== undefined) {
+                        return { isInvalid: inferenceContext.isInvalid, typeNode };
                     }
-                    if (type) {
-                        return visitNode(type, visitDeclarationSubtree, isTypeNode)!;
-                    }
-                    return makeInvalidType();
+                    return { isInvalid: true, typeNode: invalid(node) };
                 }
                 finally {
                     currentSourceFile = oldSourceFile;
+                    if (!hasExistingContext) {
+                        inferenceContext = undefined!;
+                    }
                 }
             },
             makeInvalidType,
@@ -151,8 +163,11 @@ export function createLocalInferenceResolver({
         return !!(node.flags & NodeFlags.ThisNodeHasError);
     }
     function reportIsolatedDeclarationError(node: Node, diagMessage: DiagnosticMessage = Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit) {
+        if (inferenceContext) {
+            inferenceContext.isInvalid = true;
+        }
         // Do not report errors on nodes with other errors.
-        if (hasParseError(node)) return;
+        if (hasParseError(node) || inferenceContext.disableErrors) return;
         const message = createDiagnosticForNode(
             node,
             diagMessage,
@@ -164,74 +179,39 @@ export function createLocalInferenceResolver({
         return factory.createTypeReferenceNode("invalid");
     }
 
-    interface LocalTypeInfo {
-        typeNode: TypeNode;
-        sourceNode: Node;
-        flags: LocalTypeInfoFlags;
-    }
-
-    function getAccessorInfo(parent: ClassExpression | ObjectLiteralExpression, knownAccessor: SetAccessorDeclaration | GetAccessorDeclaration) {
-        const nameKey = getMemberKeyFromElement(knownAccessor);
-        const members = isClassExpression(parent) ? parent.members : parent.properties;
-        let getAccessor, setAccessor;
-        let otherAccessorIdx = -1, knownAccessorIdx = -1;
-        for (let i = 0; i < members.length; ++i) {
-            const member = members[i];
-            if (isGetAccessorDeclaration(member) && getMemberKeyFromElement(member) === nameKey) {
-                getAccessor = member;
-                if (knownAccessor !== member) {
-                    otherAccessorIdx = i;
-                }
-                else {
-                    knownAccessorIdx = i;
-                }
-            }
-            else if (isSetAccessorDeclaration(member) && getMemberKeyFromElement(member) === nameKey) {
-                setAccessor = member;
-                if (knownAccessor !== member) {
-                    otherAccessorIdx = i;
-                }
-                else {
-                    knownAccessorIdx = i;
-                }
-            }
-        }
-
-        return {
-            getAccessor,
-            setAccessor,
-            otherAccessorIdx,
-            knownAccessorIdx,
-        };
-    }
-    function inferAccessorType(getAccessor?: GetAccessorDeclaration, setAccessor?: SetAccessorDeclaration): LocalTypeInfo {
+    function inferAccessorType(getAccessor?: GetAccessorDeclaration, setAccessor?: SetAccessorDeclaration) {
+        let getAccessorType;
         if (getAccessor?.type) {
-            return visitTypeAndClone(getAccessor.type, getAccessor);
+            getAccessorType = getAccessor.type;
         }
 
-        if (setAccessor && setAccessor.parameters[0]?.type) {
-            const parameterType = setAccessor.parameters[0].type;
-            return visitTypeAndClone(parameterType, setAccessor);
+        let setAccessorType;
+        if (setAccessor) {
+            const param = setAccessor.parameters.find(p => !isThisIdentifier(p.name));
+            if (param?.type) {
+                const parameterType = param.type;
+                setAccessorType = parameterType;
+            }
         }
 
-        return invalid(getAccessor ?? setAccessor!);
+        return { getAccessorType, setAccessorType };
     }
-    function localInference(node: Node, inferenceFlags: NarrowBehavior = NarrowBehavior.None): LocalTypeInfo {
+    function localInference(node: Node, inferenceFlags: NarrowBehavior = NarrowBehavior.None): TypeNode {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
                 return localInference((node as ParenthesizedExpression).expression, inferenceFlags & NarrowBehavior.NotKeepLiterals);
             case SyntaxKind.Identifier: {
                 if ((node as Identifier).escapedText === "undefined") {
-                    return createUndefinedTypeNode(node);
+                    return createUndefinedTypeNode();
                 }
                 break;
             }
             case SyntaxKind.NullKeyword:
                 if (strictNullChecks) {
-                    return regular(factory.createLiteralTypeNode(factory.createNull()), node);
+                    return factory.createLiteralTypeNode(factory.createNull());
                 }
                 else {
-                    return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), node);
+                    return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
@@ -242,9 +222,9 @@ export function createLocalInferenceResolver({
                     const fnTypeNode = factory.createFunctionTypeNode(
                         visitNodes(fnNode.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration)?.map(deepClone),
                         fnNode.parameters.map(p => deepClone(ensureParameter(p))),
-                        returnType.typeNode,
+                        returnType,
                     );
-                    return regular(fnTypeNode, node, LocalTypeInfoFlags.None | returnType.flags);
+                    return fnTypeNode;
                 }
                 finally {
                     setEnclosingDeclarations(oldEnclosingDeclaration);
@@ -261,11 +241,8 @@ export function createLocalInferenceResolver({
                         isLiteralTypeNode(type) &&
                         (isNoSubstitutionTemplateLiteral(type.literal) || isStringLiteral(type.literal))
                     ) {
-                        return regular(
-                            factory.createLiteralTypeNode(
-                                normalizeLiteralValue(type.literal),
-                            ),
-                            node,
+                        return factory.createLiteralTypeNode(
+                            normalizeLiteralValue(type.literal),
                         );
                     }
 
@@ -279,25 +256,25 @@ export function createLocalInferenceResolver({
                             case SyntaxKind.NumericLiteral:
                                 switch (prefixOp.operator) {
                                     case SyntaxKind.MinusToken:
-                                        return regular(factory.createLiteralTypeNode(deepClone(prefixOp)), node);
+                                        return factory.createLiteralTypeNode(deepClone(prefixOp));
                                     case SyntaxKind.PlusToken:
-                                        return regular(factory.createLiteralTypeNode(deepClone(prefixOp.operand as LiteralExpression)), node);
+                                        return factory.createLiteralTypeNode(deepClone(prefixOp.operand as LiteralExpression));
                                 }
                                 break;
                             case SyntaxKind.BigIntLiteral:
                                 if (prefixOp.operator === SyntaxKind.MinusToken) {
-                                    return regular(factory.createLiteralTypeNode(deepClone(prefixOp)), node);
+                                    return factory.createLiteralTypeNode(deepClone(prefixOp));
                                 }
                         }
                     }
 
                     if (prefixOp.operator === SyntaxKind.PlusToken) {
-                        return regular(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword), prefixOp);
+                        return factory.createKeywordTypeNode(SyntaxKind.NumberKeyword);
                     }
                     else if (prefixOp.operator === SyntaxKind.MinusToken) {
                         return prefixOp.operand.kind === SyntaxKind.BigIntLiteral ?
-                            regular(factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword), node) :
-                            regular(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword), node);
+                            factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword) :
+                            factory.createKeywordTypeNode(SyntaxKind.NumberKeyword);
                     }
                 }
                 break;
@@ -305,7 +282,7 @@ export function createLocalInferenceResolver({
                 return literal(node, SyntaxKind.NumberKeyword, inferenceFlags);
             case SyntaxKind.TemplateExpression:
                 if (!(inferenceFlags & NarrowBehavior.AsConst)) {
-                    return regular(factory.createKeywordTypeNode(SyntaxKind.StringKeyword), node);
+                    return factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
                 }
                 return invalid(node);
             case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -321,74 +298,65 @@ export function createLocalInferenceResolver({
                     return invalid(node);
                 }
                 const arrayLiteral = node as ArrayLiteralExpression;
-                const elementTypesInfo: LocalTypeInfo[] = [];
-                let inheritedArrayTypeFlags = LocalTypeInfoFlags.None;
+                const elementTypesInfo: TypeNode[] = [];
                 for (const element of arrayLiteral.elements) {
                     if (isSpreadElement(element)) {
                         return invalid(element);
                     }
                     else if (isOmittedExpression(element)) {
                         elementTypesInfo.push(
-                            createUndefinedTypeNode(element),
+                            createUndefinedTypeNode(),
                         );
                     }
                     else {
                         const elementType = localInference(element, inferenceFlags & NarrowBehavior.NotKeepLiterals);
-                        inheritedArrayTypeFlags |= elementType.flags;
                         elementTypesInfo.push(elementType);
                     }
                 }
-                const tupleType = factory.createTupleTypeNode(
-                    elementTypesInfo.map(lti => lti.typeNode),
-                );
+                const tupleType = factory.createTupleTypeNode(elementTypesInfo);
                 tupleType.emitNode = { flags: 1, autoGenerate: undefined, internalFlags: 0 };
-                return regular(factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType), node, inheritedArrayTypeFlags);
+                return factory.createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleType);
             case SyntaxKind.ObjectLiteralExpression:
-                return getTypeForObjectLiteralExpression(node as ObjectLiteralExpression, inferenceFlags);
+                try {
+                    return getTypeForObjectLiteralExpression(node as ObjectLiteralExpression, inferenceFlags);
+                }
+                finally {
+                    inferenceContext.disableErrors = false;
+                }
         }
 
         return invalid(node);
     }
-    function invalid(sourceNode: Node, diagMessage = Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit): LocalTypeInfo {
+    function invalid(sourceNode: Node, diagMessage = Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit): TypeNode {
         reportIsolatedDeclarationError(sourceNode, diagMessage);
-        return { typeNode: makeInvalidType(), flags: LocalTypeInfoFlags.Invalid, sourceNode };
-    }
-    function regular(typeNode: TypeNode, sourceNode: Node, flags = LocalTypeInfoFlags.None): LocalTypeInfo {
-        return { typeNode, flags, sourceNode };
+        return makeInvalidType();
     }
     function getTypeForObjectLiteralExpression(objectLiteral: ObjectLiteralExpression, inferenceFlags: NarrowBehavior) {
         const properties: TypeElement[] = [];
-        let inheritedObjectTypeFlags = LocalTypeInfoFlags.None;
-        const members = new Map<string, {
-            name: PropertyName;
-            location: number;
-        }>();
-        let replaceWithInvalid = false;
+        const members = new Map<Symbol, number>();
         for (let propIndex = 0, length = objectLiteral.properties.length; propIndex < length; propIndex++) {
             const prop = objectLiteral.properties[propIndex];
-            if (hasParseError(prop)) continue;
-
             if (isShorthandPropertyAssignment(prop)) {
                 reportIsolatedDeclarationError(prop);
-                inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
                 continue;
             }
             else if (isSpreadAssignment(prop)) {
                 reportIsolatedDeclarationError(prop);
-                inheritedObjectTypeFlags |= LocalTypeInfoFlags.Invalid;
                 continue;
             }
-
-            if (hasParseError(prop.name)) continue;
+            inferenceContext.disableErrors = hasParseError(prop.name) || hasParseError(prop);
+            if (inferenceContext.disableErrors) {
+                inferenceContext.isInvalid = true;
+            }
 
             if (isPrivateIdentifier(prop.name)) {
+                inferenceContext.isInvalid = true;
                 // Not valid in object literals but the compiler will complain about this, we just ignore it here.
                 continue;
             }
             if (isComputedPropertyName(prop.name)) {
                 if (!resolver.isLiteralComputedName(prop.name)) {
                     reportIsolatedDeclarationError(prop.name);
-                    replaceWithInvalid = true;
                     continue;
                 }
                 if (isEntityNameExpression(prop.name.expression)) {
@@ -397,22 +365,18 @@ export function createLocalInferenceResolver({
             }
 
             const nameKey = getMemberKeyFromElement(prop);
-            const existingMember = nameKey ? members.get(nameKey) : undefined;
-            const name = simplifyComputedPropertyName(prop.name, existingMember?.name, isMethodDeclaration(prop)) ??
+            const name = normalizePropertyName(prop.symbol, isMethodDeclaration(prop)) ??
                 deepClone(visitNode(prop.name, visitDeclarationSubtree, isPropertyName)!);
 
             let newProp;
             if (isMethodDeclaration(prop)) {
-                const { method, flags } = handleMethodDeclaration(prop, name, inferenceFlags);
-                newProp = method;
-                inheritedObjectTypeFlags |= flags;
+                newProp = handleMethodDeclaration(prop, name, inferenceFlags);
             }
             else if (isPropertyAssignment(prop)) {
                 const modifiers = inferenceFlags & NarrowBehavior.AsConst ?
                     [factory.createModifier(SyntaxKind.ReadonlyKeyword)] :
                     [];
-                const { typeNode, flags: propTypeFlags } = localInference(prop.initializer, inferenceFlags & NarrowBehavior.NotKeepLiterals);
-                inheritedObjectTypeFlags |= propTypeFlags;
+                const typeNode = localInference(prop.initializer, inferenceFlags & NarrowBehavior.NotKeepLiterals);
                 newProp = factory.createPropertySignature(
                     modifiers,
                     name,
@@ -421,14 +385,7 @@ export function createLocalInferenceResolver({
                 );
             }
             else {
-                const accessorType = handleAccessors(prop, objectLiteral, name, nameKey);
-                if (accessorType) {
-                    inheritedObjectTypeFlags |= accessorType.flags;
-                    newProp = accessorType.type;
-                }
-                else {
-                    return invalid(prop);
-                }
+                newProp = handleAccessors(prop, name, nameKey);
             }
 
             if (newProp) {
@@ -439,14 +396,12 @@ export function createLocalInferenceResolver({
                 });
 
                 if (nameKey) {
-                    if (existingMember !== undefined && !isMethodDeclaration(prop)) {
-                        properties[existingMember.location] = newProp;
+                    const exitingIndex = members.get(prop.symbol);
+                    if (exitingIndex !== undefined && !isMethodOrAccessor(prop)) {
+                        properties[exitingIndex] = newProp;
                     }
                     else {
-                        members.set(nameKey, {
-                            location: properties.length,
-                            name,
-                        });
+                        members.set(prop.symbol, properties.length);
                         properties.push(newProp);
                     }
                 }
@@ -456,8 +411,7 @@ export function createLocalInferenceResolver({
             }
         }
 
-        const typeNode: TypeNode = replaceWithInvalid ? makeInvalidType() : factory.createTypeLiteralNode(properties);
-        return regular(typeNode, objectLiteral, inheritedObjectTypeFlags);
+        return inferenceContext.isInvalid ? makeInvalidType() : factory.createTypeLiteralNode(properties);
     }
 
     function handleMethodDeclaration(method: MethodDeclaration, name: PropertyName, inferenceFlags: NarrowBehavior) {
@@ -465,35 +419,28 @@ export function createLocalInferenceResolver({
         try {
             const returnType = visitTypeAndClone(method.type, method);
             const typeParameters = visitNodes(method.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration)?.map(deepClone);
-            // TODO: We need to see about inheriting flags from parameters
             const parameters = method.parameters.map(p => deepClone(ensureParameter(p)));
             if (inferenceFlags & NarrowBehavior.AsConst) {
-                return {
-                    flags: returnType.flags,
-                    method: factory.createPropertySignature(
-                        [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
-                        name,
-                        /*questionToken*/ undefined,
-                        factory.createFunctionTypeNode(
-                            typeParameters,
-                            parameters,
-                            returnType.typeNode,
-                        ),
-                    ),
-                };
-            }
-            else {
-                return {
-                    flags: returnType.flags,
-                    method: factory.createMethodSignature(
-                        [],
-                        name,
-                        /*questionToken*/ undefined,
+                return factory.createPropertySignature(
+                    [factory.createModifier(SyntaxKind.ReadonlyKeyword)],
+                    name,
+                    /*questionToken*/ undefined,
+                    factory.createFunctionTypeNode(
                         typeParameters,
                         parameters,
-                        returnType.typeNode,
+                        returnType,
                     ),
-                };
+                );
+            }
+            else {
+                return factory.createMethodSignature(
+                    [],
+                    name,
+                    /*questionToken*/ undefined,
+                    typeParameters,
+                    parameters,
+                    returnType,
+                );
             }
         }
         finally {
@@ -501,23 +448,43 @@ export function createLocalInferenceResolver({
         }
     }
 
-    function handleAccessors(accessor: GetAccessorDeclaration | SetAccessorDeclaration, parent: ObjectLiteralExpression | ClassExpression, name: PropertyName, nameKey: string | undefined) {
+    function handleAccessors(accessor: GetAccessorDeclaration | SetAccessorDeclaration, name: PropertyName, nameKey: string | undefined) {
         if (!nameKey) {
             return;
         }
 
-        const { getAccessor, setAccessor, knownAccessorIdx, otherAccessorIdx } = getAccessorInfo(parent, accessor);
-        if (otherAccessorIdx === -1 || otherAccessorIdx > knownAccessorIdx) {
-            const accessorType = inferAccessorType(getAccessor, setAccessor);
-            return {
-                flags: accessorType.flags,
-                type: factory.createPropertySignature(
-                    setAccessor === undefined ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : [],
+        const { getAccessor, setAccessor, firstAccessor } = resolver.getAllAccessorDeclarations(accessor);
+        const accessorType = inferAccessorType(getAccessor, setAccessor);
+        // We have types for both accessors, we can't know if they are the same type so we keep both accessors
+        if (accessorType.getAccessorType !== undefined && accessorType.setAccessorType !== undefined) {
+            const parameters = accessor.parameters.map(p => deepClone(ensureParameter(p)));
+
+            if (isGetAccessor(accessor)) {
+                return factory.createGetAccessorDeclaration(
+                    [],
                     name,
-                    /*questionToken*/ undefined,
-                    accessorType.typeNode,
-                ),
-            };
+                    parameters,
+                    visitTypeAndClone(accessor.type, accessor),
+                    /*body*/ undefined,
+                );
+            }
+            else {
+                return factory.createSetAccessorDeclaration(
+                    [],
+                    name,
+                    parameters,
+                    /*body*/ undefined,
+                );
+            }
+        }
+        else if (firstAccessor === accessor) {
+            const type = accessorType.getAccessorType ?? accessorType.setAccessorType;
+            return factory.createPropertySignature(
+                setAccessor === undefined ? [factory.createModifier(SyntaxKind.ReadonlyKeyword)] : [],
+                name,
+                /*questionToken*/ undefined,
+                visitTypeAndClone(type, accessor),
+            );
         }
     }
 
@@ -535,76 +502,67 @@ export function createLocalInferenceResolver({
         }
         throw new Error("Not supported");
     }
-    function createUndefinedTypeNode(node: Node, flags = LocalTypeInfoFlags.None) {
+    function createUndefinedTypeNode() {
         if (strictNullChecks) {
-            return regular(
-                factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
-                node,
-                flags,
-            );
+            return factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
         }
         else {
-            return regular(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword), node, flags);
+            return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
         }
     }
-    function literal(node: Node, baseType: string | KeywordTypeSyntaxKind, narrowBehavior: NarrowBehavior, flags: LocalTypeInfoFlags = 0) {
+    function literal(node: Node, baseType: string | KeywordTypeSyntaxKind, narrowBehavior: NarrowBehavior) {
         if (narrowBehavior & NarrowBehavior.AsConstOrKeepLiterals) {
-            return regular(
-                factory.createLiteralTypeNode(
-                    normalizeLiteralValue(node as LiteralExpression),
-                ),
-                node,
-                flags,
+            return factory.createLiteralTypeNode(
+                normalizeLiteralValue(node as LiteralExpression),
             );
         }
         else {
-            return regular(
-                typeof baseType === "number" ? factory.createKeywordTypeNode(baseType) : factory.createTypeReferenceNode(baseType),
-                node,
-                flags,
-            );
+            return typeof baseType === "number" ? factory.createKeywordTypeNode(baseType) : factory.createTypeReferenceNode(baseType);
         }
     }
 
     function visitTypeAndClone(type: TypeNode | undefined, owner: Node) {
         const visitedType = visitNode(type, visitDeclarationSubtree, isTypeNode);
         if (!visitedType) return invalid(owner);
-        return regular(deepClone(visitedType), owner);
+        return deepClone(visitedType);
     }
 
-    function simplifyComputedPropertyName(name: PropertyName, _existingName: PropertyName | undefined, isMethod: boolean) {
+    function normalizePropertyName(symbol: Symbol, isMethod: boolean) {
         let nameText;
-        let stringNamed = false;
-        let singleQuote = false;
-        if (isIdentifier(name)) {
-            nameText = unescapeLeadingUnderscores(name.escapedText);
-        }
-        if (isNumericLiteral(name)) {
-            nameText = name.text;
-        }
-        else if (isStringLiteralLike(name)) {
-            stringNamed = true;
-            singleQuote = !isStringDoubleQuoted(name, currentSourceFile);
-            nameText = name.text;
-        }
-        else if (isComputedPropertyName(name)) {
-            const expression = name.expression;
-            if (isStringLiteralLike(expression) || isNumericLiteral(expression)) {
-                stringNamed = isStringLiteralLike(expression);
-                nameText = expression.text;
+        Debug.assert(symbol.declarations !== undefined, "Symbol has no declarations");
+        let stringNamed = !!length(symbol.declarations);
+        let singleQuote = stringNamed;
+        for (const declaration of symbol.declarations) {
+            const name = getNameOfDeclaration(declaration);
+            if (!name) {
+                stringNamed = false;
+                continue;
+            }
+            const actualName = isComputedPropertyName(name) ? name.expression : name;
+            if (isStringLiteralLike(actualName)) {
+                nameText = actualName.text;
+                singleQuote &&= !isStringDoubleQuoted(actualName, currentSourceFile);
+                continue;
+            }
+            stringNamed = false;
+            singleQuote = false;
+            if (isIdentifier(actualName)) {
+                if (actualName !== name) return undefined;
+                nameText = unescapeLeadingUnderscores(actualName.escapedText);
+            }
+            else if (isNumericLiteral(actualName)) {
+                nameText = actualName.text;
             }
             else if (
-                isPrefixUnaryExpression(expression)
-                && isNumericLiteral(expression.operand)
+                isPrefixUnaryExpression(actualName)
+                && isNumericLiteral(actualName.operand)
             ) {
-                if (expression.operator === SyntaxKind.MinusToken) {
-                    return name;
-                }
-                else if (expression.operator === SyntaxKind.PlusToken) {
-                    nameText = expression.operand.text;
+                if (actualName.operator === SyntaxKind.PlusToken) {
+                    nameText = actualName.operand.text;
                 }
             }
         }
+
         if (nameText === undefined) {
             return undefined;
         }
@@ -659,13 +617,10 @@ export function createLocalInferenceResolver({
         ]);
     }
     function localInferenceFromInitializer(node: HasInferredType | ExportAssignment, type: TypeNode | undefined): TypeNode | undefined {
-        let localType: LocalTypeInfo | undefined;
+        let localType: TypeNode | undefined;
         if (isParameter(node)) {
             if (type) {
-                localType = regular(
-                    visitNode(type, visitDeclarationSubtree, isTypeNode)!,
-                    node,
-                );
+                localType = visitNode(type, visitDeclarationSubtree, isTypeNode)!;
             }
             // We do not support inferring to binding patterns
             // Binding patterns can add properties and default values in the pattern also complicate inference as we have two sources for the property type.
@@ -676,49 +631,60 @@ export function createLocalInferenceResolver({
                 localType = invalid(node);
             }
 
-            if (strictNullChecks && !(localType.flags & LocalTypeInfoFlags.Invalid)) {
+            if (strictNullChecks && !inferenceContext.isInvalid) {
                 const isOptional = resolver.isOptionalParameter(node);
                 /**
                  * If a parameter with a default value is not optional we need to add undefined
                  * function x(o = "", v: string)
                  */
                 if (node.initializer && !isOptional) {
-                    localType.typeNode = addUndefinedInUnion(localType.typeNode);
+                    localType = addUndefinedInUnion(localType);
                 }
                 /**
                  * Constructor properties that are optional must have | undefined included to work well with exactOptionalPropertyTypes
                  * constructor(public x?: number) -> x?: number | undefined
                  */
                 if (isOptional && !node.initializer && hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
-                    localType.typeNode = addUndefinedInUnion(localType.typeNode);
+                    localType = addUndefinedInUnion(localType);
+                }
+            }
+        }
+        else if (isExportAssignment(node)) {
+            localType = localInference(node.expression, NarrowBehavior.KeepLiterals);
+        }
+        else if (isVariableDeclaration(node)) {
+            const firstDeclaration = node.symbol.valueDeclaration;
+            // Use first declaration of variable for the type
+            if (node !== firstDeclaration && firstDeclaration && isVariableDeclaration(firstDeclaration)) {
+                node = firstDeclaration;
+                type = type ?? firstDeclaration.type;
+            }
+            if (type) {
+                localType = visitNode(type, visitDeclarationSubtree, isTypeNode)!;
+            }
+            else if (node.initializer) {
+                if (resolver.isExpandoFunction(node)) {
+                    context.addDiagnostic(createDiagnosticForNode(
+                        node,
+                        Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+                    ));
+                    localType = invalid(node);
+                }
+                else if (isClassExpression(node.initializer)) {
+                    localType = invalid(node.initializer, Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations);
+                }
+                else {
+                    localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.KeepLiterals : NarrowBehavior.None);
                 }
             }
         }
         else if (type) {
             return visitNode(type, visitDeclarationSubtree, isTypeNode);
         }
-        else if (isExportAssignment(node)) {
-            localType = localInference(node.expression, NarrowBehavior.KeepLiterals);
-        }
-        else if (isVariableDeclaration(node) && node.initializer) {
-            if (resolver.isExpandoFunction(node)) {
-                context.addDiagnostic(createDiagnosticForNode(
-                    node,
-                    Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
-                ));
-                localType = invalid(node);
-            }
-            else if (isClassExpression(node.initializer)) {
-                localType = invalid(node.initializer, Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations);
-            }
-            else {
-                localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.KeepLiterals : NarrowBehavior.None);
-            }
-        }
         else if (isPropertyDeclaration(node) && node.initializer) {
             localType = localInference(node.initializer);
             if (isOptionalDeclaration(node)) {
-                localType.typeNode = addUndefinedInUnion(localType.typeNode);
+                localType = addUndefinedInUnion(localType);
             }
         }
         else if (isInterfaceDeclaration(node.parent) || isTypeLiteralNode(node.parent)) {
@@ -727,9 +693,6 @@ export function createLocalInferenceResolver({
         else {
             reportIsolatedDeclarationError(node);
         }
-        if (!localType || localType.flags & LocalTypeInfoFlags.Invalid) {
-            return undefined;
-        }
-        return localType.typeNode;
+        return localType;
     }
 }

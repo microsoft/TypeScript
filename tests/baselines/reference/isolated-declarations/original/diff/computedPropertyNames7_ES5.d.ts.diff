@@ -1,0 +1,15 @@
+// [[Reason: Computed property are not resolved]] ////
+
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames7_ES5.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -4,6 +4,6 @@
+ declare enum E {
+     member = 0
+ }
+ declare var v: {
+-    0: number;
++    [E.member]: number;
+ };

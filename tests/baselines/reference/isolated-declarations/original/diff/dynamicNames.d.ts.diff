@@ -1,0 +1,22 @@
+// [[Reason: Computed property are not resolved]] ////
+
+//// [tests/cases/compiler/dynamicNames.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -5,11 +5,11 @@
+ export declare const c4 = "a";
+ export declare const c5 = 1;
+ export declare const s2: typeof s0;
+ export declare const o1: {
+-    a: number;
+-    1: string;
+-    [s0]: boolean;
++    [c4]: number;
++    [c5]: string;
++    [s2]: boolean;
+ };
+ export declare const o1_c4: invalid;
+ export declare const o1_c5: invalid;
+ export declare const o1_s2: invalid;

@@ -1,0 +1,21 @@
+// [[Reason: Syntactically invalid.]] ////
+
+//// [tests/cases/compiler/parseInvalidNullableTypes.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -6,11 +6,11 @@
+ declare function f3(a: ?number): invalid;
+ declare function f4(a: ?string): invalid;
+ declare function f5(a: ?number): invalid;
+ declare function f6(a: string): ?string;
+-declare const a: any;
++declare const a: ?any;
+ declare const b: ?number;
+-declare const c: any;
++declare const c: ?any;
+ declare const d: ?number;
+ declare let e: ?unknown;
+ declare let f: ?never;
+ declare let g: ?void;

@@ -1,5 +1,6 @@
 // @module: commonjs
 // @declaration: true
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // @filename: server.ts
 export var a = 10;

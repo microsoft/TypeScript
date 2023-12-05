@@ -1,4 +1,5 @@
 // @declaration: true
+// @isolatedDeclarationDiffReason: TS normalizes types
 // @isolatedDeclarationFixedDiffReason: Printing differences
 // Any instance type
 type Client = string

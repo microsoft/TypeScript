@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/parseInvalidNonNullableTypes.ts] ////
+
+//// [parseInvalidNonNullableTypes.ts]
+function f1(a: string): a is string! {
+    return true;
+}
+
+function f2(a: string): a is !string {
+    return true;
+}
+
+function f3(a: string!) {}
+function f4(a: number!) {}
+
+function f5(a: !string) {}
+function f6(a: !number) {}
+
+function f7(): string! {}
+function f8(): !string {}
+
+const a = 1 as any!;
+const b: number! = 1;
+
+const c = 1 as !any;
+const d: !number = 1;
+
+
+/// [Declarations] ////
+
+
+
+//// [parseInvalidNonNullableTypes.d.ts]
+declare function f1(a: string): a is !string;
+declare function f2(a: string): a is !string;
+declare function f3(a: !string): invalid;
+declare function f4(a: !number): invalid;
+declare function f5(a: !string): invalid;
+declare function f6(a: !number): invalid;
+declare function f7(): !string;
+declare function f8(): !string;
+declare const a: !any;
+declare const b: !number;
+declare const c: !any;
+declare const d: !number;
+
+/// [Errors] ////
+
+parseInvalidNonNullableTypes.ts(1,30): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(5,30): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(9,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parseInvalidNonNullableTypes.ts(9,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(10,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parseInvalidNonNullableTypes.ts(10,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+parseInvalidNonNullableTypes.ts(12,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parseInvalidNonNullableTypes.ts(12,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(13,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parseInvalidNonNullableTypes.ts(13,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+parseInvalidNonNullableTypes.ts(15,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+parseInvalidNonNullableTypes.ts(15,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(16,16): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+parseInvalidNonNullableTypes.ts(16,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+parseInvalidNonNullableTypes.ts(18,16): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+parseInvalidNonNullableTypes.ts(19,10): error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+parseInvalidNonNullableTypes.ts(21,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+parseInvalidNonNullableTypes.ts(22,10): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+
+
+==== parseInvalidNonNullableTypes.ts (18 errors) ====
+    function f1(a: string): a is string! {
+                                 ~~~~~~~
+!!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+        return true;
+    }
+    
+    function f2(a: string): a is !string {
+                                 ~~~~~~~
+!!! error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+        return true;
+    }
+    
+    function f3(a: string!) {}
+             ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                   ~~~~~~~
+!!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+    function f4(a: number!) {}
+             ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                   ~~~~~~~
+!!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+    
+    function f5(a: !string) {}
+             ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                   ~~~~~~~
+!!! error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+    function f6(a: !number) {}
+             ~~
+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                   ~~~~~~~
+!!! error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+    
+    function f7(): string! {}
+                   ~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+                   ~~~~~~~
+!!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+    function f8(): !string {}
+                   ~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+                   ~~~~~~~
+!!! error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string'?
+    
+    const a = 1 as any!;
+                   ~~~~
+!!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+    const b: number! = 1;
+             ~~~~~~~
+!!! error TS17019: '!' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+    
+    const c = 1 as !any;
+                   ~~~~
+!!! error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'any'?
+    const d: !number = 1;
+             ~~~~~~~
+!!! error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
+    

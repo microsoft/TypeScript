@@ -1,4 +1,5 @@
 // @target: es6
+// @isolatedDeclarationDiffReason: Computed property are not resolved
 enum E {
     member
 }

@@ -1,0 +1,18 @@
+// [[Reason: Computed property are not resolved]] ////
+
+//// [tests/cases/compiler/declarationEmitWithDefaultAsComputedName.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -2,9 +2,9 @@
+ 
+ //// [main.d.ts]
+ import other from "./other";
+ export declare const obj: {
+-    foo: number;
++    [other.name]: number;
+ };
+ 
+ //// [other.d.ts]
+ declare const _default: invalid;

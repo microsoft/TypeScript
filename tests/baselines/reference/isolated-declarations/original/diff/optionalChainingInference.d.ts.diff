@@ -1,0 +1,18 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/conformance/expressions/optionalChaining/optionalChainingInference.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -14,9 +14,9 @@
+ } | undefined;
+ declare const b1: invalid;
+ declare const v1: number;
+ declare const b2: {
+-    value: number;
++    value: number | undefined;
+ };
+ declare const v2: number;
+ declare const b3: {
+     value: number | undefined;

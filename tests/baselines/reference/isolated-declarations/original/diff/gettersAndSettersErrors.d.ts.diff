@@ -1,0 +1,18 @@
+// [[Reason: Duplicate identifiers in class result in different types]] ////
+
+//// [tests/cases/compiler/gettersAndSettersErrors.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -3,9 +3,9 @@
+ //// [gettersAndSettersErrors.d.ts]
+ declare class C {
+     get Foo(): invalid;
+     set Foo(foo: string);
+-    Foo: string;
++    Foo: number;
+     get Goo(): string;
+     set Goo(v: string): string;
+ }
+ declare class E {
