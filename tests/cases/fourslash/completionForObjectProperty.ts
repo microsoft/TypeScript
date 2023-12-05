@@ -15,6 +15,12 @@
 // @Filename: /e.ts
 //// const test4 = { foo/*4*/ }
 
+// @Filename: /f.ts
+//// const test5 = { foo: /*5*/ }
+
+// @Filename: /g.ts
+//// const test6 = { unrelated: foo/*6*/ }
+
 verify.completions({ 
     marker: "1",
     includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
@@ -34,5 +40,15 @@ verify.completions({
     marker: "4", 
     includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: true, 
+    preferences: { includeCompletionsForModuleExports: true } 
+}, {
+    marker: "5", 
+    includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    isNewIdentifierLocation: false, 
+    preferences: { includeCompletionsForModuleExports: true } 
+}, {
+    marker: "6", 
+    includes: { name: "foo", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
+    isNewIdentifierLocation: false, 
     preferences: { includeCompletionsForModuleExports: true } 
 });
