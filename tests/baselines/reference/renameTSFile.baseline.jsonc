@@ -1,0 +1,3 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|import * as foo from '[|.//*RENAME*/b.jsRENAME|]';|>
