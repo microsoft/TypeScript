@@ -1333,7 +1333,11 @@ export function getImpliedNodeFormatForFileWorker(
         case ModuleFormatDetectionKind.Bundler:
         case ModuleFormatDetectionKind.Node16:
         case ModuleFormatDetectionKind.NodeNext:
-            const defaultFormat = formatDetection === ModuleFormatDetectionKind.Bundler ? undefined : ModuleKind.CommonJS;
+        case ModuleFormatDetectionKind.DefaultModule:
+        case ModuleFormatDetectionKind.DefaultCommonJS:
+            const defaultFormat = formatDetection === ModuleFormatDetectionKind.Bundler ? undefined :
+                formatDetection === ModuleFormatDetectionKind.DefaultModule ? ModuleKind.ESNext :
+                ModuleKind.CommonJS;
             return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
                 fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
                 fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson(defaultFormat) :
