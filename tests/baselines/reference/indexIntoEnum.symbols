@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexIntoEnum.ts ===
+//// [tests/cases/compiler/indexIntoEnum.ts] ////
+
+=== indexIntoEnum.ts ===
 module M {
 >M : Symbol(M, Decl(indexIntoEnum.ts, 0, 0))
 

@@ -1,3 +1,5 @@
-=== tests/cases/conformance/es6/templates/templateStringInDeleteExpressionES6.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringInDeleteExpressionES6.ts] ////
+
+=== templateStringInDeleteExpressionES6.ts ===
+
 delete `abc${0}abc`;
-No type information for this code.

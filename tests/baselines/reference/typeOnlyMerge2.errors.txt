@@ -1,0 +1,24 @@
+d.ts(2,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+
+
+==== a.ts (0 errors) ====
+    const A = {}
+    export { A };
+    
+==== b.ts (0 errors) ====
+    import { A } from "./a";
+    type A = any;
+    export type { A };
+    
+==== c.ts (0 errors) ====
+    import { A } from "./b";
+    namespace A {}
+    export { A };
+    
+==== d.ts (1 errors) ====
+    import { A } from "./c";
+    A;
+    ~
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 b.ts:3:15: 'A' was exported here.
+    

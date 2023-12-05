@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypeWithAny.ts] ////
+
+=== mappedTypeWithAny.ts ===
 type Item = { value: string };
 >Item : Symbol(Item, Decl(mappedTypeWithAny.ts, 0, 0))
 >value : Symbol(value, Decl(mappedTypeWithAny.ts, 0, 13))

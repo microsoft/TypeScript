@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reservedWords3.ts ===
+//// [tests/cases/compiler/reservedWords3.ts] ////
+
+=== reservedWords3.ts ===
 function f1(enum) {}
 >f1 : Symbol(f1, Decl(reservedWords3.ts, 0, 0))
 > : Symbol((Missing), Decl(reservedWords3.ts, 0, 12))

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/witness/witness.ts] ////
+
 //// [witness.ts]
 // Initializers
 var varInit = varInit; // any

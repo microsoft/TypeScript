@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/decoratorMetadataNoStrictNull.ts] ////
+
 //// [decoratorMetadataNoStrictNull.ts]
 const dec = (obj: {}, prop: string) => undefined
 
@@ -23,10 +25,10 @@ var Foo = /** @class */ (function () {
     __decorate([
         dec,
         __metadata("design:type", String)
-    ], Foo.prototype, "foo");
+    ], Foo.prototype, "foo", void 0);
     __decorate([
         dec,
         __metadata("design:type", String)
-    ], Foo.prototype, "bar");
+    ], Foo.prototype, "bar", void 0);
     return Foo;
 }());

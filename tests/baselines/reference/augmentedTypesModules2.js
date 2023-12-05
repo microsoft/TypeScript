@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesModules2.ts] ////
+
 //// [augmentedTypesModules2.ts]
 // module then function
 module m2 { }

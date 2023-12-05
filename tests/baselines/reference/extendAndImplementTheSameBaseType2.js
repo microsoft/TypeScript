@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendAndImplementTheSameBaseType2.ts] ////
+
 //// [extendAndImplementTheSameBaseType2.ts]
 class C<T> {
     foo: number

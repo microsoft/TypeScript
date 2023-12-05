@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mixinPrivateAndProtected.ts] ////
+
 //// [mixinPrivateAndProtected.ts]
 // Repro from #13830
 

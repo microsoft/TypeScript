@@ -1,4 +1,6 @@
-=== tests/cases/compiler/undefinedTypeAssignment4.ts ===
+//// [tests/cases/compiler/undefinedTypeAssignment4.ts] ////
+
+=== undefinedTypeAssignment4.ts ===
 class undefined {
 >undefined : undefined
 

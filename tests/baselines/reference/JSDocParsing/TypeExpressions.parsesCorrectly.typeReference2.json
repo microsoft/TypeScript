@@ -12,8 +12,7 @@
         "flags": "JSDoc",
         "modifierFlagsCache": 0,
         "transformFlags": 0,
-        "escapedText": "a",
-        "jsdocDotPos": 2
+        "escapedText": "a"
     },
     "typeArguments": {
         "0": {

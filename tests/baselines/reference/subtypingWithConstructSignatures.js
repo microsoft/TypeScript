@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures.ts] ////
+
 //// [subtypingWithConstructSignatures.ts]
 module ConstructSignature {
     declare function foo1(cb: new (x: number) => void): typeof cb;

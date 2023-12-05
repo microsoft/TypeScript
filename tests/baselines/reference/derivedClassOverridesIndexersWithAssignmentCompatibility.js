@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesIndexersWithAssignmentCompatibility.ts] ////
+
 //// [derivedClassOverridesIndexersWithAssignmentCompatibility.ts]
 class Base {
     [x: string]: Object;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constantOverloadFunctionNoSubtypeError.ts ===
+//// [tests/cases/compiler/constantOverloadFunctionNoSubtypeError.ts] ////
+
+=== constantOverloadFunctionNoSubtypeError.ts ===
 class Base { foo() { } }
 >Base : Symbol(Base, Decl(constantOverloadFunctionNoSubtypeError.ts, 0, 0))
 >foo : Symbol(Base.foo, Decl(constantOverloadFunctionNoSubtypeError.ts, 0, 12))

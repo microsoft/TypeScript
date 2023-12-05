@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superCallAssignResult.ts ===
+//// [tests/cases/compiler/superCallAssignResult.ts] ////
+
+=== superCallAssignResult.ts ===
 class E {
 >E : Symbol(E, Decl(superCallAssignResult.ts, 0, 0))
 

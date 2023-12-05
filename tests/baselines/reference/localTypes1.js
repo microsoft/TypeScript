@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/localTypes/localTypes1.ts] ////
+
 //// [localTypes1.ts]
 function f1() {
     enum E {

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.ts ===
+//// [tests/cases/compiler/moduleAugmentationDoesNamespaceEnumMergeOfReexport.ts] ////
+
+=== file.ts ===
 export namespace Root {
     // type-only NS
     export interface Foo {
@@ -6,9 +8,10 @@ export namespace Root {
 >x : number
     }
 }
-=== tests/cases/compiler/reexport.ts ===
+=== reexport.ts ===
+
 export * from "./file";
-No type information for this code.=== tests/cases/compiler/augment.ts ===
+=== augment.ts ===
 import * as ns from "./reexport";
 >ns : typeof ns
 
@@ -20,13 +23,13 @@ declare module "./reexport" {
 >Root : Root
 
         A,
->A : Root
+>A : Root.A
 
         B,
->B : Root
+>B : Root.B
 
         C
->C : Root
+>C : Root.C
     }
 }
 
@@ -38,11 +41,11 @@ declare const f: ns.Root.Foo;
 const g: ns.Root = ns.Root.A;
 >g : ns.Root
 >ns : any
->ns.Root.A : ns.Root
+>ns.Root.A : ns.Root.A
 >ns.Root : typeof ns.Root
 >ns : typeof ns
 >Root : typeof ns.Root
->A : ns.Root
+>A : ns.Root.A
 
 f.x;
 >f.x : number

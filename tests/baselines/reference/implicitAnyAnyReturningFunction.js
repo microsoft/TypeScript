@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyAnyReturningFunction.ts] ////
+
 //// [implicitAnyAnyReturningFunction.ts]
 function A() {
     return <any>"";

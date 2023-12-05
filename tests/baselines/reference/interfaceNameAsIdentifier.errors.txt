@@ -1,8 +1,8 @@
-tests/cases/compiler/interfaceNameAsIdentifier.ts(4,1): error TS2693: 'C' only refers to a type, but is being used as a value here.
-tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2708: Cannot use namespace 'm2' as a value.
+interfaceNameAsIdentifier.ts(4,1): error TS2693: 'C' only refers to a type, but is being used as a value here.
+interfaceNameAsIdentifier.ts(12,1): error TS2708: Cannot use namespace 'm2' as a value.
 
 
-==== tests/cases/compiler/interfaceNameAsIdentifier.ts (2 errors) ====
+==== interfaceNameAsIdentifier.ts (2 errors) ====
     interface C {
         (): void;
     }

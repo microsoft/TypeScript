@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationForIn.ts ===
+//// [tests/cases/compiler/sourceMapValidationForIn.ts] ////
+
+=== sourceMapValidationForIn.ts ===
 for (var x in String) {
 >x : string
 >String : StringConstructor

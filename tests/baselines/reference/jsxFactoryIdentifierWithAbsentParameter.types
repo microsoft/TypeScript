@@ -1,4 +1,6 @@
-=== tests/cases/compiler/test.tsx ===
+//// [tests/cases/compiler/jsxFactoryIdentifierWithAbsentParameter.ts] ////
+
+=== test.tsx ===
 declare module JSX {
     interface IntrinsicElements {
         [s: string]: any;

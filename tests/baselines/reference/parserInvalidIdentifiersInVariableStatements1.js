@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/VariableLists/parserInvalidIdentifiersInVariableStatements1.ts] ////
+
 //// [parserInvalidIdentifiersInVariableStatements1.ts]
 var export;
 var foo;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionOverloads23.ts ===
+//// [tests/cases/compiler/functionOverloads23.ts] ////
+
+=== functionOverloads23.ts ===
 function foo(bar:(b:string)=>void);
 >foo : Symbol(foo, Decl(functionOverloads23.ts, 0, 0), Decl(functionOverloads23.ts, 0, 35), Decl(functionOverloads23.ts, 1, 35))
 >bar : Symbol(bar, Decl(functionOverloads23.ts, 0, 13))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts ===
+//// [tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts] ////
+
+=== assignmentCompatFunctionsWithOptionalArgs.ts ===
 function foo(x: { id: number; name?: string; }): void;
 >foo : Symbol(foo, Decl(assignmentCompatFunctionsWithOptionalArgs.ts, 0, 0))
 >x : Symbol(x, Decl(assignmentCompatFunctionsWithOptionalArgs.ts, 0, 13))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.js ===
+//// [tests/cases/compiler/checkJsObjectLiteralIndexSignatures.ts] ////
+
+=== file.js ===
 // @ts-check
 
 let n = Math.random();

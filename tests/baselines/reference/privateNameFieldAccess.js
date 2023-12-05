@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameFieldAccess.ts] ////
+
 //// [privateNameFieldAccess.ts]
 class A {
     #myField = "hello world";

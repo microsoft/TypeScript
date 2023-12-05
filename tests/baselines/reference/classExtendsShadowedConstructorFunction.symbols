@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsShadowedConstructorFunction.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsShadowedConstructorFunction.ts] ////
+
+=== classExtendsShadowedConstructorFunction.ts ===
 class C { foo: string; }
 >C : Symbol(C, Decl(classExtendsShadowedConstructorFunction.ts, 0, 0))
 >foo : Symbol(C.foo, Decl(classExtendsShadowedConstructorFunction.ts, 0, 9))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/variadicTuples2.ts ===
+//// [tests/cases/conformance/types/tuple/variadicTuples2.ts] ////
+
+=== variadicTuples2.ts ===
 // Declarations
 
 type V00 = [number, ...string[]];
@@ -297,6 +299,14 @@ function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [nu
 >x : [number, ...T]
 }
 
+// repro #50216
+declare let tt3: [number, string, ...any[]]
+>tt3 : [number, string, ...any[]]
+
+let tt4: [number, ...number[]] = tt3  // Error
+>tt4 : [number, ...number[]]
+>tt3 : [number, string, ...any[]]
+
 // Inference
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
@@ -457,7 +467,7 @@ fn1([1, 'abc']);  // [number, string]
 fn1([1, 'abc', true]);  // [string, boolean]
 >fn1([1, 'abc', true]) : [string, boolean]
 >fn1 : <T, U>(t: [...unknown[], T, U]) => [T, U]
->[1, 'abc', true] : [number, string, boolean]
+>[1, 'abc', true] : [number, string, true]
 >1 : 1
 >'abc' : "abc"
 >true : true
@@ -487,7 +497,7 @@ fn2([1, 'abc']);  // [number, string]
 fn2([1, 'abc', true]);  // [number, boolean]
 >fn2([1, 'abc', true]) : [number, boolean]
 >fn2 : <T, U>(t: [T, ...unknown[], U]) => [T, U]
->[1, 'abc', true] : [number, string, boolean]
+>[1, 'abc', true] : [number, string, true]
 >1 : 1
 >'abc' : "abc"
 >true : true
@@ -497,7 +507,7 @@ fn2([1, 'abc', true]);  // [number, boolean]
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
 >stringsAndNumber : readonly [...S, number]
-    
+
 const a1 = foo('blah1', 1);
 >a1 : ["blah1", number]
 >foo('blah1', 1) : ["blah1", number]

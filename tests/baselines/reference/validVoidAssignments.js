@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/void/validVoidAssignments.ts] ////
+
 //// [validVoidAssignments.ts]
 var x: void;
 var y: any;

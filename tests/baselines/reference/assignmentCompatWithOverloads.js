@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatWithOverloads.ts] ////
+
 //// [assignmentCompatWithOverloads.ts]
 function f1(x: string): number { return null; }
 

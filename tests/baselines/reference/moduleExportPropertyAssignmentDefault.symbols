@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/axios.js ===
+//// [tests/cases/conformance/salsa/moduleExportPropertyAssignmentDefault.ts] ////
+
+=== axios.js ===
 var axios = {}
 >axios : Symbol(axios, Decl(axios.js, 0, 3))
 

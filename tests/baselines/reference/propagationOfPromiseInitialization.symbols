@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propagationOfPromiseInitialization.ts ===
+//// [tests/cases/compiler/propagationOfPromiseInitialization.ts] ////
+
+=== propagationOfPromiseInitialization.ts ===
 interface IPromise<T> {
 >IPromise : Symbol(IPromise, Decl(propagationOfPromiseInitialization.ts, 0, 0))
 >T : Symbol(T, Decl(propagationOfPromiseInitialization.ts, 0, 19))

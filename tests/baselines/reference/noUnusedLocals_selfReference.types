@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUnusedLocals_selfReference.ts ===
+//// [tests/cases/compiler/noUnusedLocals_selfReference.ts] ////
+
+=== noUnusedLocals_selfReference.ts ===
 export {}; // Make this a module scope, so these are local variables.
 
 function f() {
@@ -23,9 +25,9 @@ class C {
 }
 enum E { A = 0, B = E.A }
 >E : E
->A : E
+>A : E.A
 >0 : 0
->B : E
+>B : E.A
 >E.A : E
 >E : typeof E
 >A : E

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedParametersInInitializers2.ts] ////
+
 //// [capturedParametersInInitializers2.ts]
 function foo(
     y = class {
@@ -15,6 +17,10 @@ function foo2(y = class {[x] = x}, x = 1) {
 }
 
 //// [capturedParametersInInitializers2.js]
+var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
+    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+};
 function foo(y, x, z) {
     var _a;
     if (y === void 0) { y = (_a = /** @class */ (function () {
@@ -29,6 +35,7 @@ function foo(y, x, z) {
             class_1.prototype[z] = function () { return z; };
             return class_1;
         }()),
+        __setFunctionName(_a, "y"),
         _a.c = x,
         _a); }
     if (x === void 0) { x = 1; }

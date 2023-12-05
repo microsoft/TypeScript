@@ -1,3 +1,5 @@
-=== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens11.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens11.ts] ////
+
+=== parserSkippedTokens11.ts ===
+
 ; \ \ \ 
-No type information for this code.

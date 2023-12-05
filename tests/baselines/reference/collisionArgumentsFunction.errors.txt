@@ -1,10 +1,10 @@
-tests/cases/compiler/collisionArgumentsFunction.ts(2,13): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
-tests/cases/compiler/collisionArgumentsFunction.ts(5,25): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
-tests/cases/compiler/collisionArgumentsFunction.ts(25,13): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
-tests/cases/compiler/collisionArgumentsFunction.ts(30,22): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+collisionArgumentsFunction.ts(2,13): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+collisionArgumentsFunction.ts(5,25): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+collisionArgumentsFunction.ts(25,13): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
+collisionArgumentsFunction.ts(30,22): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 
 
-==== tests/cases/compiler/collisionArgumentsFunction.ts (4 errors) ====
+==== collisionArgumentsFunction.ts (4 errors) ====
     // Functions
     function f1(arguments: number, ...restParameters) { //arguments is error
                 ~~~~~~~~~~~~~~~~~

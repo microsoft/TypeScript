@@ -1,14 +1,14 @@
-tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target10.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
-tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target10.ts(1,20): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target10.ts(6,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+es6modulekindWithES5Target10.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+es6modulekindWithES5Target10.ts(1,20): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+es6modulekindWithES5Target10.ts(6,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
-==== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target10.ts (3 errors) ====
+==== es6modulekindWithES5Target10.ts (3 errors) ====
     import i = require("mod"); // Error;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
                        ~~~~~
-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
     
     namespace N {

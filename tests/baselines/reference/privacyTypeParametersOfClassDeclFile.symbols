@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts ===
+//// [tests/cases/compiler/privacyTypeParametersOfClassDeclFile.ts] ////
+
+=== privacyTypeParametersOfClassDeclFile.ts ===
 class privateClass {
 >privateClass : Symbol(privateClass, Decl(privacyTypeParametersOfClassDeclFile.ts, 0, 0))
 }

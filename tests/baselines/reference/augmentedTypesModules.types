@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypesModules.ts ===
+//// [tests/cases/compiler/augmentedTypesModules.ts] ////
+
+=== augmentedTypesModules.ts ===
 // module then var
 module m1 { }
 var m1 = 1; // Should be allowed

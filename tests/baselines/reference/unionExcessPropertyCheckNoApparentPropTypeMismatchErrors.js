@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts] ////
+
 //// [unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.ts]
 interface IStringDictionary<V> {
 	[name: string]: V;

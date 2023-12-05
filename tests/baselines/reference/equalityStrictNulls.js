@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts] ////
+
 //// [equalityStrictNulls.ts]
 function f1(x: string) {
     if (x == undefined) {

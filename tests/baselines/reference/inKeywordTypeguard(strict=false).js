@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inKeywordTypeguard.ts] ////
+
 //// [inKeywordTypeguard.ts]
 class A { a: string; }
 class B { b: string; }
@@ -271,11 +273,115 @@ function f9(x: object) {
     }
 }
 
+function f10(x: { a: unknown }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f11(x: { a: any }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f12(x: { a: string }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f13(x: { a?: string }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f14(x: { a: string | undefined }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f15(x: { a?: string | undefined }) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+
+function f16(x: typeof globalThis, y: Window & typeof globalThis) {
+    x = y;
+}
+
 // Repro from #50639
 
 function foo<A>(value: A) {
     if (typeof value === "object" && value !== null && "prop" in value) {
         value;  // A & object & Record<"prop", unknown>
+    }
+}
+
+// Repro from #50954
+
+const checkIsTouchDevice = () =>
+    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
+
+// Repro from #51501
+
+function isHTMLTable<T extends object | null>(table: T): boolean {
+    return !!table && 'html' in table;
+}
+
+// Repro from #51549
+
+const f = <P extends object>(a: P & {}) => {
+    "foo" in a;
+};
+
+// Repro from #53773
+
+function test1<T extends any[] | Record<string, any>>(obj: T) {
+    if (Array.isArray(obj) || 'length' in obj) {
+      obj;  // T
+    }
+    else {
+      obj;  // T
+    }
+}
+
+function test2<T extends any[] | Record<string, any>>(obj: T) {
+    if (Array.isArray(obj)) {
+      obj;  // T & any[]
+    }
+    else {
+      obj;  // T
+    }
+}
+
+function test3<T extends any[] | Record<string, any>>(obj: T) {
+    if ('length' in obj) {
+      obj;  // T
+    }
+    else {
+      obj;  // T
     }
 }
 
@@ -533,9 +639,95 @@ function f9(x) {
         x[sym];
     }
 }
+function f10(x) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+function f11(x) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+function f12(x) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+function f13(x) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+function f14(x) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+function f15(x) {
+    if ("a" in x) {
+        x;
+    }
+    else {
+        x;
+    }
+}
+function f16(x, y) {
+    x = y;
+}
 // Repro from #50639
 function foo(value) {
     if (typeof value === "object" && value !== null && "prop" in value) {
         value; // A & object & Record<"prop", unknown>
+    }
+}
+// Repro from #50954
+const checkIsTouchDevice = () => "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
+// Repro from #51501
+function isHTMLTable(table) {
+    return !!table && 'html' in table;
+}
+// Repro from #51549
+const f = (a) => {
+    "foo" in a;
+};
+// Repro from #53773
+function test1(obj) {
+    if (Array.isArray(obj) || 'length' in obj) {
+        obj; // T
+    }
+    else {
+        obj; // T
+    }
+}
+function test2(obj) {
+    if (Array.isArray(obj)) {
+        obj; // T & any[]
+    }
+    else {
+        obj; // T
+    }
+}
+function test3(obj) {
+    if ('length' in obj) {
+        obj; // T
+    }
+    else {
+        obj; // T
     }
 }

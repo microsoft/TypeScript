@@ -1,7 +1,7 @@
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration13_es5.ts(3,11): error TS2552: Cannot find name 'await'. Did you mean 'Awaited'?
+asyncFunctionDeclaration13_es5.ts(3,11): error TS2552: Cannot find name 'await'. Did you mean 'Awaited'?
 
 
-==== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration13_es5.ts (1 errors) ====
+==== asyncFunctionDeclaration13_es5.ts (1 errors) ====
     async function foo(): Promise<void> {
        // Legal to use 'await' in a type context.
        var v: await;

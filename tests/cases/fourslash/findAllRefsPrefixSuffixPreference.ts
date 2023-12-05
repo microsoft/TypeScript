@@ -28,12 +28,6 @@ const qFile2ReferenceGroup: FourSlashInterface.ReferenceGroup = {
     definition: "(alias) const q: 1\nimport q",
     ranges: qFile2Ranges
 };
-verify.renameLocations(q0, { ranges: [q0, { range: q1, suffixText: " as q" }], providePrefixAndSuffixTextForRename: true });
-verify.renameLocations(q1, { ranges: [{ range: q1, prefixText: "q as " }, q2, q3], providePrefixAndSuffixTextForRename: true });
-verify.renameLocations([q2, q3], { ranges: [{ range: q2, prefixText: "q as " }, q3], providePrefixAndSuffixTextForRename: true });
-
-verify.renameLocations([q0, q1, q2, q3], { ranges: [q0, q1, q2, q3], providePrefixAndSuffixTextForRename: false });
-
 const zReferenceGroup1: FourSlashInterface.ReferenceGroup = {
     definition: "(property) z: string",
     ranges: [z0]
@@ -43,8 +37,8 @@ const zReferenceGroup2: FourSlashInterface.ReferenceGroup = {
     ranges: [z1, z2]
 };
 
-verify.renameLocations([z0], { ranges: [z0, { range: z1, suffixText: ": z" }], providePrefixAndSuffixTextForRename: true });
-verify.renameLocations([z1, z2], { ranges: [{ range: z1, prefixText: "z: " }, z2], providePrefixAndSuffixTextForRename: true });
-
-verify.renameLocations([z0, z1, z2], { ranges: [z0, z1, z2], providePrefixAndSuffixTextForRename: false });
-verify.baselineFindAllReferences('q0', 'q1', 'q2', 'q3', 'z0', 'z1', 'z2')
+verify.baselineFindAllReferences('q0', 'q1', 'q2', 'q3', 'z0', 'z1', 'z2');
+verify.baselineRename([q0, q1, q2, q3], { providePrefixAndSuffixTextForRename: true });
+verify.baselineRename([q0, q1, q2, q3], { providePrefixAndSuffixTextForRename: false });
+verify.baselineRename([z0, z1, z2], { providePrefixAndSuffixTextForRename: true });
+verify.baselineRename([z0, z1, z2], { providePrefixAndSuffixTextForRename: false });

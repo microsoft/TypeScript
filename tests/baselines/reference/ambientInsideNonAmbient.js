@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/ambient/ambientInsideNonAmbient.ts] ////
+
 //// [ambientInsideNonAmbient.ts]
 module M {
     export declare var x;

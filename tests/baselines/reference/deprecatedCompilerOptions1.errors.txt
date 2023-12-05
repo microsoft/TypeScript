@@ -1,0 +1,45 @@
+/foo/tsconfig.json(3,19): error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+/foo/tsconfig.json(4,9): error TS5101: Option 'noImplicitUseStrict' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+/foo/tsconfig.json(5,9): error TS5101: Option 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+/foo/tsconfig.json(6,9): error TS5101: Option 'suppressExcessPropertyErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+/foo/tsconfig.json(7,9): error TS5101: Option 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+/foo/tsconfig.json(8,9): error TS5101: Option 'noStrictGenericChecks' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+/foo/tsconfig.json(9,9): error TS5101: Option 'charset' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+/foo/tsconfig.json(10,9): error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+  Use 'outFile' instead.
+
+
+==== /foo/tsconfig.json (8 errors) ====
+    {
+        "compilerOptions": {
+            "target": "ES3",
+                      ~~~~~
+!!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+            "noImplicitUseStrict": true,
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5101: Option 'noImplicitUseStrict' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+            "keyofStringsOnly": true,
+            ~~~~~~~~~~~~~~~~~~
+!!! error TS5101: Option 'keyofStringsOnly' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+            "suppressExcessPropertyErrors": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5101: Option 'suppressExcessPropertyErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+            "suppressImplicitAnyIndexErrors": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5101: Option 'suppressImplicitAnyIndexErrors' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+            "noStrictGenericChecks": true,
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS5101: Option 'noStrictGenericChecks' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+            "charset": "utf8",
+            ~~~~~~~~~
+!!! error TS5101: Option 'charset' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+            "out": "dist.js"
+            ~~~~~
+!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+!!! error TS5101:   Use 'outFile' instead.
+        }
+    }
+    
+==== /foo/a.ts (0 errors) ====
+    const a = 1;
+    

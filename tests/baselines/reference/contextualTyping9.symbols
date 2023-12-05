@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTyping9.ts ===
+//// [tests/cases/compiler/contextualTyping9.ts] ////
+
+=== contextualTyping9.ts ===
 var foo:{id:number;}[] = [{id:1}, {id:2, name:"foo"}];
 >foo : Symbol(foo, Decl(contextualTyping9.ts, 0, 3))
 >id : Symbol(id, Decl(contextualTyping9.ts, 0, 9))

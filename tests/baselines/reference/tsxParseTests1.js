@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxParseTests1.tsx] ////
+
 //// [file.tsx]
 declare module JSX {
 	interface Element { }

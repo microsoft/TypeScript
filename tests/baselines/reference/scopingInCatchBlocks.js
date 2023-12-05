@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/scopingInCatchBlocks.ts] ////
+
 //// [scopingInCatchBlocks.ts]
 try { } catch(ex1) { 
 	throw ex1;

@@ -26,7 +26,7 @@ class Bar {
 
 //// [yoha.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Yoha = void 0;
 // https://github.com/Microsoft/TypeScript/issues/19799
 var Yoha = /** @class */ (function () {
@@ -49,7 +49,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var yoha_1 = require("./yoha");
 function foo() {
     var args = [];
@@ -66,7 +66,7 @@ var Bar = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, yoha_1.Yoha]),
         __metadata("design:returntype", void 0)
-    ], Bar.prototype, "yoha");
+    ], Bar.prototype, "yoha", null);
     return Bar;
 }());
 //// [index2.js]
@@ -83,7 +83,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var yoha_1 = require("./yoha");
 function foo() {
     var args = [];
@@ -105,6 +105,6 @@ var Bar = /** @class */ (function () {
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, yoha_1.Yoha]),
         __metadata("design:returntype", void 0)
-    ], Bar.prototype, "yoha");
+    ], Bar.prototype, "yoha", null);
     return Bar;
 }());

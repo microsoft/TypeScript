@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterDiamond2.ts ===
+//// [tests/cases/compiler/typeParameterDiamond2.ts] ////
+
+=== typeParameterDiamond2.ts ===
 function diamondTop<Top>() {
 >diamondTop : Symbol(diamondTop, Decl(typeParameterDiamond2.ts, 0, 0))
 >Top : Symbol(Top, Decl(typeParameterDiamond2.ts, 0, 20))

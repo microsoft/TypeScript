@@ -1,8 +1,8 @@
-tests/cases/compiler/module_augmentExistingVariable.ts(1,5): error TS2300: Duplicate identifier 'console'.
-tests/cases/compiler/module_augmentExistingVariable.ts(3,8): error TS2300: Duplicate identifier 'console'.
+module_augmentExistingVariable.ts(1,5): error TS2300: Duplicate identifier 'console'.
+module_augmentExistingVariable.ts(3,8): error TS2300: Duplicate identifier 'console'.
 
 
-==== tests/cases/compiler/module_augmentExistingVariable.ts (2 errors) ====
+==== module_augmentExistingVariable.ts (2 errors) ====
     var console: any;
         ~~~~~~~
 !!! error TS2300: Duplicate identifier 'console'.

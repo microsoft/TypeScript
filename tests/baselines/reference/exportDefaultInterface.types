@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/exportDefaultInterface.ts] ////
+
+=== a.ts ===
 export default interface A { value: number; }
 >value : number
 
@@ -13,7 +15,7 @@ a.value.toExponential();
 >value : number
 >toExponential : (fractionDigits?: number) => string
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import A from './a';
 >A : any
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers02.ts ===
+//// [tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers02.ts] ////
+
+=== objectBindingPatternKeywordIdentifiers02.ts ===
 var { while: while } = { while: 1 }
 >while : Symbol(while, Decl(objectBindingPatternKeywordIdentifiers02.ts, 0, 24))
 > : Symbol((Missing), Decl(objectBindingPatternKeywordIdentifiers02.ts, 0, 5), Decl(objectBindingPatternKeywordIdentifiers02.ts, 0, 12))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorRecoveryInClassDeclaration.ts ===
+//// [tests/cases/compiler/errorRecoveryInClassDeclaration.ts] ////
+
+=== errorRecoveryInClassDeclaration.ts ===
 class C {
 >C : Symbol(C, Decl(errorRecoveryInClassDeclaration.ts, 0, 0))
 

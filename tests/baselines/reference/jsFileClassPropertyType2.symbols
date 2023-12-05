@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.js ===
+//// [tests/cases/compiler/jsFileClassPropertyType2.ts] ////
+
+=== foo.js ===
 class C {
 >C : Symbol(C, Decl(foo.js, 0, 0))
 
@@ -11,7 +13,7 @@ class C {
   }
 }
 
-=== tests/cases/compiler/bar.ts ===
+=== bar.ts ===
 (new C()).p.push("string");
 >(new C()).p.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >(new C()).p : Symbol(C.p, Decl(foo.js, 1, 19))

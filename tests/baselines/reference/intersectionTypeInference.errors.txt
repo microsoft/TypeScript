@@ -1,12 +1,12 @@
-tests/cases/conformance/types/intersection/intersectionTypeInference.ts(5,5): error TS2322: Type 'T' is not assignable to type 'T & U'.
+intersectionTypeInference.ts(5,5): error TS2322: Type 'T' is not assignable to type 'T & U'.
   Type 'T' is not assignable to type 'U'.
     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/intersection/intersectionTypeInference.ts(6,5): error TS2322: Type 'U' is not assignable to type 'T & U'.
+intersectionTypeInference.ts(6,5): error TS2322: Type 'U' is not assignable to type 'T & U'.
   Type 'U' is not assignable to type 'T'.
     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 
 
-==== tests/cases/conformance/types/intersection/intersectionTypeInference.ts (2 errors) ====
+==== intersectionTypeInference.ts (2 errors) ====
     function extend<T, U>(obj1: T, obj2: U): T & U {
         var result: T & U;
         obj1 = result;
@@ -16,13 +16,13 @@ tests/cases/conformance/types/intersection/intersectionTypeInference.ts(6,5): er
 !!! error TS2322: Type 'T' is not assignable to type 'T & U'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:17: This type parameter might need an `extends U` constraint.
+!!! related TS2208 intersectionTypeInference.ts:1:17: This type parameter might need an `extends U` constraint.
         result = obj2;  // Error
         ~~~~~~
 !!! error TS2322: Type 'U' is not assignable to type 'T & U'.
 !!! error TS2322:   Type 'U' is not assignable to type 'T'.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:20: This type parameter might need an `extends T` constraint.
+!!! related TS2208 intersectionTypeInference.ts:1:20: This type parameter might need an `extends T` constraint.
         return result;
     }
     

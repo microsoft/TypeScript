@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/mod2.js ===
+//// [tests/cases/conformance/jsdoc/moduleExportsElementAccessAssignment.ts] ////
+
+=== mod2.js ===
 const mod1 = require("./mod1");
 >mod1 : typeof mod1
 >require("./mod1") : typeof mod1
@@ -37,11 +39,11 @@ mod1.default;
 >mod1 : typeof mod1
 >default : { x: string; }
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 exports.a = { x: "x" };
 >exports.a = { x: "x" } : { x: string; }
 >exports.a : { x: string; }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>exports : typeof import("mod1")
 >a : { x: string; }
 >{ x: "x" } : { x: string; }
 >x : string
@@ -50,7 +52,7 @@ exports.a = { x: "x" };
 exports["b"] = { x: "x" };
 >exports["b"] = { x: "x" } : { x: string; }
 >exports["b"] : { x: string; }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>exports : typeof import("mod1")
 >"b" : "b"
 >{ x: "x" } : { x: string; }
 >x : string
@@ -59,7 +61,7 @@ exports["b"] = { x: "x" };
 exports["default"] = { x: "x" };
 >exports["default"] = { x: "x" } : { x: string; }
 >exports["default"] : { x: string; }
->exports : typeof import("tests/cases/conformance/jsdoc/mod1")
+>exports : typeof import("mod1")
 >"default" : "default"
 >{ x: "x" } : { x: string; }
 >x : string

@@ -1,7 +1,10 @@
-=== tests/cases/compiler/other.ts ===
+//// [tests/cases/compiler/tsconfigMapOptionsAreCaseInsensitive.ts] ////
+
+=== other.ts ===
+
 export default 42;
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/index.ts ===
+
+=== index.ts ===
 import Answer from "./other.js";
 >Answer : Symbol(Answer, Decl(index.ts, 0, 6))
 

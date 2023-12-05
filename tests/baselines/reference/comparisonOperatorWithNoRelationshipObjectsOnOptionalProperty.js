@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts] ////
+
 //// [comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts]
 interface A1 {
     b?: number;

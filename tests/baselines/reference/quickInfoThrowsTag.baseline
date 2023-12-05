@@ -1,0 +1,230 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoThrowsTag.ts ===
+// class E extends Error {}
+// 
+// /**
+//  * @throws {E}
+//  */
+// function f1() {}
+// 
+// /**
+//  * @throws {E} description
+//  */
+// function f2() {}
+// 
+// /**
+//  * @throws description
+//  */
+// function f3() {}
+// f1()
+// ^^
+// | ----------------------------------------------------------------------
+// | function f1(): void
+// | @throws {E}
+// | ----------------------------------------------------------------------
+// f2()
+// ^^
+// | ----------------------------------------------------------------------
+// | function f2(): void
+// | @throws {E} description
+// | ----------------------------------------------------------------------
+// f3()
+// ^^
+// | ----------------------------------------------------------------------
+// | function f3(): void
+// | @throws description
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoThrowsTag.ts",
+      "position": 170,
+      "name": "1"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 168,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f1",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "throws",
+          "text": [
+            {
+              "text": "{E}",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoThrowsTag.ts",
+      "position": 175,
+      "name": "2"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 173,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f2",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "throws",
+          "text": [
+            {
+              "text": "{E}",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "description",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoThrowsTag.ts",
+      "position": 180,
+      "name": "3"
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 178,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f3",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "throws",
+          "text": [
+            {
+              "text": "description",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

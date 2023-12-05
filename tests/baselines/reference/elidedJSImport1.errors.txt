@@ -1,10 +1,10 @@
-tests/cases/compiler/caller.js(1,21): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
-tests/cases/compiler/caller.js(2,8): error TS18042: 'TruffleContract' is a type and cannot be imported in JavaScript files. Use 'import("@truffle/contract").TruffleContract' in a JSDoc type annotation.
-tests/cases/compiler/caller.js(4,43): error TS2708: Cannot use namespace 'TruffleContract' as a value.
-tests/cases/compiler/caller.js(4,60): error TS2708: Cannot use namespace 'TruffleContract' as a value.
+caller.js(1,21): error TS2307: Cannot find module 'fs' or its corresponding type declarations.
+caller.js(2,8): error TS18042: 'TruffleContract' is a type and cannot be imported in JavaScript files. Use 'import("@truffle/contract").TruffleContract' in a JSDoc type annotation.
+caller.js(4,43): error TS2708: Cannot use namespace 'TruffleContract' as a value.
+caller.js(4,60): error TS2708: Cannot use namespace 'TruffleContract' as a value.
 
 
-==== tests/cases/compiler/caller.js (4 errors) ====
+==== caller.js (4 errors) ====
     import * as fs from 'fs';
                         ~~~~
 !!! error TS2307: Cannot find module 'fs' or its corresponding type declarations.
@@ -19,7 +19,7 @@ tests/cases/compiler/caller.js(4,60): error TS2708: Cannot use namespace 'Truffl
 !!! error TS2708: Cannot use namespace 'TruffleContract' as a value.
     
     
-==== tests/cases/compiler/node_modules/@truffle/contract/index.d.ts (0 errors) ====
+==== node_modules/@truffle/contract/index.d.ts (0 errors) ====
     declare module "@truffle/contract" {
         interface ContractObject {
             foo: number;

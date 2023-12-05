@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of9.ts] ////
+
 //// [ES5For-of9.ts]
 function foo() {
     return { x: 0 };

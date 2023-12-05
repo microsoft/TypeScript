@@ -1,9 +1,11 @@
-=== tests/cases/conformance/jsdoc/declarations/main.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsReexportedCjsAlias.ts] ////
+
+=== main.js ===
 const { SomeClass, SomeClass: Another } = require('./lib');
 >SomeClass : typeof SomeClass
 >SomeClass : any
 >Another : typeof SomeClass
->require('./lib') : typeof import("tests/cases/conformance/jsdoc/declarations/lib")
+>require('./lib') : typeof import("lib")
 >require : any
 >'./lib' : "./lib"
 
@@ -20,7 +22,7 @@ module.exports = {
     Another
 >Another : typeof SomeClass
 }
-=== tests/cases/conformance/jsdoc/declarations/lib.js ===
+=== lib.js ===
 /**
  * @param {string} a
  */

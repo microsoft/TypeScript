@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/multiModuleFundule1.ts] ////
+
 //// [multiModuleFundule1.ts]
 function C(x: number) { }
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts ===
+//// [tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts] ////
+
+=== arrayLiterals.ts ===
 // Empty array literal with no contextual type has type Undefined[]
 
 var arr1= [[], [1], ['']];
@@ -14,7 +16,6 @@ var arr2 = [[null], [1], ['']];
 >arr2 : (number[] | string[])[]
 >[[null], [1], ['']] : (number[] | string[])[]
 >[null] : null[]
->null : null
 >[1] : number[]
 >1 : 1
 >[''] : string[]

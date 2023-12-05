@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncMethodWithSuper_es6.ts] ////
+
 //// [asyncMethodWithSuper_es6.ts]
 class A {
     x() {
@@ -184,6 +186,32 @@ class B extends A {
         // element access (assign) in async arrow
         (async () => super["x"] = f);
     }
+}
+
+// https://github.com/microsoft/TypeScript/issues/46828
+class Base {
+    set setter(x: any) {}
+    get getter(): any { return; }
+    method(x: string): any {}
+
+    static set setter(x: any) {}
+    static get getter(): any { return; }
+    static method(x: string): any {}
+}
+
+class Derived extends Base {
+    a() { return async () => super.method('') }
+    b() { return async () => super.getter }
+    c() { return async () => super.setter = '' }
+    d() { return async () => super["method"]('') }
+    e() { return async () => super["getter"] }
+    f() { return async () => super["setter"] = '' }
+    static a() { return async () => super.method('') }
+    static b() { return async () => super.getter }
+    static c() { return async () => super.setter = '' }
+    static d() { return async () => super["method"]('') }
+    static e() { return async () => super["getter"] }
+    static f() { return async () => super["setter"] = '' }
 }
 
 
@@ -375,5 +403,64 @@ class B extends A {
             // element access (assign) in async arrow
             (() => __awaiter(this, void 0, void 0, function* () { return _superIndex("x").value = f; }));
         });
+    }
+}
+// https://github.com/microsoft/TypeScript/issues/46828
+class Base {
+    set setter(x) { }
+    get getter() { return; }
+    method(x) { }
+    static set setter(x) { }
+    static get getter() { return; }
+    static method(x) { }
+}
+class Derived extends Base {
+    a() { const _super = Object.create(null, {
+        method: { get: () => super.method }
+    }); return () => __awaiter(this, void 0, void 0, function* () { return _super.method.call(this, ''); }); }
+    b() { const _super = Object.create(null, {
+        getter: { get: () => super.getter }
+    }); return () => __awaiter(this, void 0, void 0, function* () { return _super.getter; }); }
+    c() { const _super = Object.create(null, {
+        setter: { get: () => super.setter, set: v => super.setter = v }
+    }); return () => __awaiter(this, void 0, void 0, function* () { return _super.setter = ''; }); }
+    d() {
+        const _superIndex = name => super[name];
+        return () => __awaiter(this, void 0, void 0, function* () { return _superIndex("method").call(this, ''); });
+    }
+    e() {
+        const _superIndex = name => super[name];
+        return () => __awaiter(this, void 0, void 0, function* () { return _superIndex("getter"); });
+    }
+    f() {
+        const _superIndex = (function (geti, seti) {
+            const cache = Object.create(null);
+            return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+        })(name => super[name], (name, value) => super[name] = value);
+        return () => __awaiter(this, void 0, void 0, function* () { return _superIndex("setter").value = ''; });
+    }
+    static a() { const _super = Object.create(null, {
+        method: { get: () => super.method }
+    }); return () => __awaiter(this, void 0, void 0, function* () { return _super.method.call(this, ''); }); }
+    static b() { const _super = Object.create(null, {
+        getter: { get: () => super.getter }
+    }); return () => __awaiter(this, void 0, void 0, function* () { return _super.getter; }); }
+    static c() { const _super = Object.create(null, {
+        setter: { get: () => super.setter, set: v => super.setter = v }
+    }); return () => __awaiter(this, void 0, void 0, function* () { return _super.setter = ''; }); }
+    static d() {
+        const _superIndex = name => super[name];
+        return () => __awaiter(this, void 0, void 0, function* () { return _superIndex("method").call(this, ''); });
+    }
+    static e() {
+        const _superIndex = name => super[name];
+        return () => __awaiter(this, void 0, void 0, function* () { return _superIndex("getter"); });
+    }
+    static f() {
+        const _superIndex = (function (geti, seti) {
+            const cache = Object.create(null);
+            return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
+        })(name => super[name], (name, value) => super[name] = value);
+        return () => __awaiter(this, void 0, void 0, function* () { return _superIndex("setter").value = ''; });
     }
 }

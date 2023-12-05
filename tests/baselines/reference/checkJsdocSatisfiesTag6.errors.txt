@@ -1,0 +1,21 @@
+/a.js(14,11): error TS2339: Property 'y' does not exist on type '{ x: number; }'.
+
+
+==== /a.js (1 errors) ====
+    /**
+     * @typedef {Object} Point2d
+     * @property {number} x
+     * @property {number} y
+     */
+    
+    // Undesirable behavior today with type annotation
+    const a = /** @satisfies {Partial<Point2d>} */ ({ x: 10 });
+    
+    // Should OK
+    console.log(a.x.toFixed());
+    
+    // Should error
+    let p = a.y;
+              ~
+!!! error TS2339: Property 'y' does not exist on type '{ x: number; }'.
+    

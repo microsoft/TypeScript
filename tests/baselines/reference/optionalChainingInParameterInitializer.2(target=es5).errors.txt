@@ -1,8 +1,8 @@
-tests/cases/conformance/expressions/optionalChaining/optionalChainingInParameterInitializer.2.ts(3,7): error TS2373: Parameter 'b' cannot reference identifier 'a' declared after it.
-tests/cases/conformance/expressions/optionalChaining/optionalChainingInParameterInitializer.2.ts(6,19): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
+optionalChainingInParameterInitializer.2.ts(3,7): error TS2373: Parameter 'b' cannot reference identifier 'a' declared after it.
+optionalChainingInParameterInitializer.2.ts(6,19): error TS2373: Parameter 'd' cannot reference identifier 'x' declared after it.
 
 
-==== tests/cases/conformance/expressions/optionalChaining/optionalChainingInParameterInitializer.2.ts (2 errors) ====
+==== optionalChainingInParameterInitializer.2.ts (2 errors) ====
     // https://github.com/microsoft/TypeScript/issues/36295
     const a = (): { d: string } | undefined => undefined;
     ((b = a()?.d) => { var a; })();

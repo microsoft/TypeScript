@@ -1,5 +1,7 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag5.ts] ////
+
 === /a.ts ===
+
 /** {@link UNRESOLVED_LINK} */
-No type information for this code.export interface A {}
-No type information for this code.
-No type information for this code.
+export interface A {}
+

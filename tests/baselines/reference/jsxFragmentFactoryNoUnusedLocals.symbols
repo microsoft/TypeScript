@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx ===
+//// [tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx] ////
+
+=== jsxFragmentFactoryNoUnusedLocals.tsx ===
 /// <reference path="react16.d.ts" />
 import { Fragment, createElement } from "react"
 >Fragment : Symbol(Fragment, Decl(jsxFragmentFactoryNoUnusedLocals.tsx, 1, 8))

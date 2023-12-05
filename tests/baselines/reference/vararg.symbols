@@ -1,4 +1,6 @@
-=== tests/cases/compiler/vararg.ts ===
+//// [tests/cases/compiler/vararg.ts] ////
+
+=== vararg.ts ===
 module M {
 >M : Symbol(M, Decl(vararg.ts, 0, 0))
 

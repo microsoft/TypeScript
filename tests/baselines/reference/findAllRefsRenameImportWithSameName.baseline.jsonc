@@ -1,565 +1,431 @@
-// === /b.ts ===
-// import { [|x|] as [|x|] } from "./a";
-// [|x|];
-
+// === findAllReferences ===
 // === /a.ts ===
-// export const /*FIND ALL REFS*/[|x|] = 0;
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "const",
-      "name": "const x: 0",
-      "textSpan": {
-        "start": 13,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) const x: 0\nimport x",
-      "textSpan": {
-        "start": 14,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 30,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// <|export const /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}x|] = 0;|>
 
 // === /b.ts ===
-// import { /*FIND ALL REFS*/[|x|] as [|x|] } from "./a";
-// [|x|];
+// <|<|import { [|{| contextId: 1, defId: 0 |}x|] as [|{| contextId: 2, defId: 1, isWriteAccess: true |}x|] } from "./a";|>|>
+// [|{| defId: 1 |}x|];
 
+  // === Definitions ===
+  // === /a.ts ===
+  // <|export const /*FIND ALL REFS*/[|{| defId: 0 |}x|] = 0;|>
+
+  // === /b.ts ===
+  // <|import { x as [|{| defId: 1 |}x|] } from "./a";|>
+  // x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: 0",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const x: 0\nimport x",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.ts ===
-// export const [|x|] = 0;
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "const",
-      "name": "const x: 0",
-      "textSpan": {
-        "start": 13,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 19
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) const x: 0\nimport x",
-      "textSpan": {
-        "start": 14,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 30,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+// <|export const [|{| defId: 0, isWriteAccess: true |}x|] = 0;|>
 
 // === /b.ts ===
-// import { x as /*FIND ALL REFS*/[|x|] } from "./a";
+// <|<|import { /*FIND ALL REFS*/[|{| contextId: 1, defId: 0 |}x|] as [|{| contextId: 2, defId: 1, isWriteAccess: true |}x|] } from "./a";|>|>
+// [|{| defId: 1 |}x|];
+
+  // === Definitions ===
+  // === /a.ts ===
+  // <|export const [|{| defId: 0 |}x|] = 0;|>
+
+  // === /b.ts ===
+  // <|import { /*FIND ALL REFS*/x as [|{| defId: 1 |}x|] } from "./a";|>
+  // x;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: 0",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const x: 0\nimport x",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// <|import { x as /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] } from "./a";|>
 // [|x|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) const x: 0\nimport x",
-      "textSpan": {
-        "start": 14,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 30,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /b.ts ===
+  // <|import { x as /*FIND ALL REFS*/[|x|] } from "./a";|>
+  // x;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const x: 0\nimport x",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /b.ts ===
-// import { x as [|x|] } from "./a";
+// <|import { x as [|{| isWriteAccess: true |}x|] } from "./a";|>
 // /*FIND ALL REFS*/[|x|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) const x: 0\nimport x",
-      "textSpan": {
-        "start": 14,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "0",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 14,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 29
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 30,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /b.ts ===
+  // <|import { x as [|x|] } from "./a";|>
+  // /*FIND ALL REFS*/x;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const x: 0\nimport x",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "0",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|export const /*RENAME*/[|xRENAME|] = 0;|>
+
+// === /b.ts ===
+// <|<|import { [|{| contextId: 1 |}xRENAME|] as [|{| contextId: 2 |}xRENAME|] } from "./a";|>|>
+// [|xRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /a.ts ===
+// <|export const [|xRENAME|] = 0;|>
+
+// === /b.ts ===
+// <|<|import { /*RENAME*/[|{| contextId: 1 |}xRENAME|] as [|{| contextId: 2 |}xRENAME|] } from "./a";|>|>
+// [|xRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|import { x as /*RENAME*/[|xRENAME|] } from "./a";|>
+// [|xRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /b.ts ===
+// <|import { x as [|xRENAME|] } from "./a";|>
+// /*RENAME*/[|xRENAME|];

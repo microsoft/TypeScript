@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typedGenericPrototypeMember.ts] ////
+
 //// [typedGenericPrototypeMember.ts]
 class List<T> {
    add(item: T) { }

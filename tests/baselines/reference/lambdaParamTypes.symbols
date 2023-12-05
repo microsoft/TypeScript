@@ -1,4 +1,6 @@
-=== tests/cases/compiler/lambdaParamTypes.ts ===
+//// [tests/cases/compiler/lambdaParamTypes.ts] ////
+
+=== lambdaParamTypes.ts ===
 interface MyArrayWrapper<T> {
 >MyArrayWrapper : Symbol(MyArrayWrapper, Decl(lambdaParamTypes.ts, 0, 0))
 >T : Symbol(T, Decl(lambdaParamTypes.ts, 0, 25))

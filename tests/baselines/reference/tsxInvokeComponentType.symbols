@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tsxInvokeComponentType.tsx ===
+//// [tests/cases/compiler/tsxInvokeComponentType.tsx] ////
+
+=== tsxInvokeComponentType.tsx ===
 /// <reference path="react16.d.ts" />
 import React, { ComponentType } from "react";
 >React : Symbol(React, Decl(tsxInvokeComponentType.tsx, 1, 6))

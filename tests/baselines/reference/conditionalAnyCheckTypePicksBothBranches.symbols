@@ -1,4 +1,6 @@
-=== tests/cases/compiler/conditionalAnyCheckTypePicksBothBranches.ts ===
+//// [tests/cases/compiler/conditionalAnyCheckTypePicksBothBranches.ts] ////
+
+=== conditionalAnyCheckTypePicksBothBranches.ts ===
 type T = any extends number ? 1 : 0;
 >T : Symbol(T, Decl(conditionalAnyCheckTypePicksBothBranches.ts, 0, 0))
 

@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/unmetTypeConstraintInJSDocImportCall.ts] ////
+
+=== file1.js ===
+
+/**
+ * @template {string} T
+ * @typedef {{ foo: T }} Foo
+ */
+
+export default {};
+
+=== file2.js ===
+
+/**
+ * @template T
+ * @typedef {import('./file1').Foo<T>} Bar
+ */
+

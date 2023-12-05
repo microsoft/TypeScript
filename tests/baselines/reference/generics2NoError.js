@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics2NoError.ts] ////
+
 //// [generics2NoError.ts]
 interface A { a: string; }
 interface B extends A { b: string; }

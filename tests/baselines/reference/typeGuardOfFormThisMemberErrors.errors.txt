@@ -1,10 +1,10 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(4,10): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(5,17): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(11,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
-tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts(14,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardOfFormThisMemberErrors.ts(4,10): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardOfFormThisMemberErrors.ts(5,17): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardOfFormThisMemberErrors.ts(11,22): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+typeGuardOfFormThisMemberErrors.ts(14,16): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormThisMemberErrors.ts (4 errors) ====
+==== typeGuardOfFormThisMemberErrors.ts (4 errors) ====
     // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
     namespace Test {
     	export class FileSystemObject {

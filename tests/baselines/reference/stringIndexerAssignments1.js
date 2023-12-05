@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/stringIndexerAssignments1.ts] ////
+
 //// [stringIndexerAssignments1.ts]
 var x: { [index: string]: string; one: string; };
 var a: { one: string; };

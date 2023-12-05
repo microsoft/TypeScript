@@ -1,43 +1,43 @@
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(5,9): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(8,5): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(11,5): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(14,5): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(17,5): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(24,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(24,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(25,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(25,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(26,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(26,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(27,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(27,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(34,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(34,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(35,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(35,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(36,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(36,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(37,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(37,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(44,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(44,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(45,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(45,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(46,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(46,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(47,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(47,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(55,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(55,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(56,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(56,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(57,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(57,6): error TS1109: Expression expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,4): error TS1005: ';' expected.
-tests/cases/conformance/expressions/operators/incrementAndDecrement.ts(58,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(5,9): error TS2304: Cannot find name 'window'.
+incrementAndDecrement.ts(8,5): error TS1005: ';' expected.
+incrementAndDecrement.ts(11,5): error TS1005: ';' expected.
+incrementAndDecrement.ts(14,5): error TS1005: ';' expected.
+incrementAndDecrement.ts(17,5): error TS1005: ';' expected.
+incrementAndDecrement.ts(24,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(24,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(25,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(25,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(26,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(26,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(27,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(27,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(34,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(34,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(35,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(35,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(36,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(36,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(37,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(37,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(44,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(44,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(45,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(45,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(46,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(46,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(47,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(47,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(55,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(55,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(56,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(56,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(57,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(57,6): error TS1109: Expression expected.
+incrementAndDecrement.ts(58,4): error TS1005: ';' expected.
+incrementAndDecrement.ts(58,6): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/expressions/operators/incrementAndDecrement.ts (37 errors) ====
+==== incrementAndDecrement.ts (37 errors) ====
     enum E { A, B, C };
     var x = 4;
     var e = E.B;

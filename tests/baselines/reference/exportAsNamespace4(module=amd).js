@@ -24,7 +24,7 @@ foo1.b;
 //// [0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = exports.a = void 0;
     exports.a = 1;
     exports.b = 2;
@@ -55,9 +55,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 define(["require", "exports", "./0"], function (require, exports, _0_1) {
     "use strict";
-    exports.__esModule = true;
-    exports["default"] = void 0;
-    exports["default"] = __importStar(_0_1);
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = void 0;
+    exports.default = __importStar(_0_1);
 });
 //// [11.js]
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -85,9 +85,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 define(["require", "exports", "./0"], function (require, exports, ns) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     ns = __importStar(ns);
-    exports["default"] = ns;
+    exports.default = ns;
 });
 //// [2.js]
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -95,13 +95,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 define(["require", "exports", "./1", "./11"], function (require, exports, _1_1, _11_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     _1_1 = __importDefault(_1_1);
     _11_1 = __importDefault(_11_1);
-    _1_1["default"].a;
-    _11_1["default"].a;
-    _1_1["default"].b;
-    _11_1["default"].b;
+    _1_1.default.a;
+    _11_1.default.a;
+    _1_1.default.b;
+    _11_1.default.b;
 });
 
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.ts] ////
+
+=== classAndVariableWithSameName.ts ===
 class C { foo: string; } // error
 >C : Symbol(C, Decl(classAndVariableWithSameName.ts, 0, 0))
 >foo : Symbol(C.foo, Decl(classAndVariableWithSameName.ts, 0, 9))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDeclarationsInAmbientNamespaces.ts] ////
+
 //// [exportDeclarationsInAmbientNamespaces.ts]
 declare namespace Q {
     function _try(method: Function, ...args: any[]): any;
@@ -9,4 +11,4 @@ Q.try(() => { });
 
 
 //// [exportDeclarationsInAmbientNamespaces.js]
-Q["try"](function () { });
+Q.try(function () { });

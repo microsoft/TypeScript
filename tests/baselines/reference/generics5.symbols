@@ -1,4 +1,6 @@
-=== tests/cases/compiler/generics5.ts ===
+//// [tests/cases/compiler/generics5.ts] ////
+
+=== generics5.ts ===
 interface A { a: string; }
 >A : Symbol(A, Decl(generics5.ts, 0, 0))
 >a : Symbol(A.a, Decl(generics5.ts, 0, 13))

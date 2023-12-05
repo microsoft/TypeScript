@@ -1,0 +1,55 @@
+thisInFunctionCall.ts(10,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInFunctionCall.ts(16,25): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInFunctionCall.ts(24,25): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+thisInFunctionCall.ts(32,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+
+
+==== thisInFunctionCall.ts (4 errors) ====
+    class Test {
+      data: number[]
+    
+      constructor() {
+        this.data = [1, 2, 3]
+      }
+    
+      finderRaw() {
+        this.data.find(function (d) {
+          return d === this.data.length
+                       ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 thisInFunctionCall.ts:9:20: An outer value of 'this' is shadowed by this container.
+        })
+      }
+    
+      forEacherRaw() {
+        this.data.forEach(function (d) {
+          console.log(d === this.data.length)
+                            ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 thisInFunctionCall.ts:15:23: An outer value of 'this' is shadowed by this container.
+        })
+      }
+    
+      forEacher() {
+        this.data.forEach(
+        /** @this {Test} */
+        function (d) {
+          console.log(d === this.data.length)
+                            ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 thisInFunctionCall.ts:23:5: An outer value of 'this' is shadowed by this container.
+        }, this)
+      }
+    
+      finder() {
+        this.data.find(
+        /** @this {Test} */
+        function (d) {
+          return d === this.data.length
+                       ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 thisInFunctionCall.ts:31:5: An outer value of 'this' is shadowed by this container.
+        }, this)
+      }
+    }
+    

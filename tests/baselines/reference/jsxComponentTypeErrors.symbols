@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxComponentTypeErrors.tsx ===
+//// [tests/cases/compiler/jsxComponentTypeErrors.tsx] ////
+
+=== jsxComponentTypeErrors.tsx ===
 namespace JSX {
 >JSX : Symbol(JSX, Decl(jsxComponentTypeErrors.tsx, 0, 0))
 

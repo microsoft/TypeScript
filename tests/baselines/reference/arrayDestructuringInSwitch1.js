@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/arrayDestructuringInSwitch1.ts] ////
+
 //// [arrayDestructuringInSwitch1.ts]
 export type Expression = BooleanLogicExpression | 'true' | 'false';
 export type BooleanLogicExpression = ['and', ...Expression[]] | ['not', Expression];
@@ -23,7 +25,7 @@ export function evaluate(expression: Expression): boolean {
 
 //// [arrayDestructuringInSwitch1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.evaluate = void 0;
 function evaluate(expression) {
     if (Array.isArray(expression)) {

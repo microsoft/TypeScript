@@ -1,4 +1,6 @@
-=== tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration11_es6.ts ===
+//// [tests/cases/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration11_es6.ts] ////
+
+=== asyncFunctionDeclaration11_es6.ts ===
 async function await(): Promise<void> {
 >await : Symbol(await, Decl(asyncFunctionDeclaration11_es6.ts, 0, 0))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

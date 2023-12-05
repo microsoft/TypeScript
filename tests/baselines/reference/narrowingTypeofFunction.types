@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingTypeofFunction.ts ===
+//// [tests/cases/compiler/narrowingTypeofFunction.ts] ////
+
+=== narrowingTypeofFunction.ts ===
 type Meta = { foo: string }
 >Meta : { foo: string; }
 >foo : string

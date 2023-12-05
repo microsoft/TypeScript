@@ -7,6 +7,8 @@
     "project": "importHigher",
     "resolvedInputFiles": [
         "lib.es5.d.ts",
+        "lib.decorators.d.ts",
+        "lib.decorators.legacy.d.ts",
         "importHigher/node_modules/m2/entry.js",
         "importHigher/node_modules/m1/index.js",
         "importHigher/node_modules/m2/node_modules/m3/index.js",

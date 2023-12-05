@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts] ////
+
+=== privateNamesUnique-4.ts ===
 class A1 { }
 >A1 : A1
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/salsa/a.js(9,1): error TS2322: Type 'undefined' is not assignable to type 'number'.
+a.js(9,1): error TS2322: Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/salsa/a.js (1 errors) ====
+==== a.js (1 errors) ====
     /** @param {number} x */
     function C(x) {
         this.x = x

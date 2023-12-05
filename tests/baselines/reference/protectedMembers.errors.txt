@@ -1,22 +1,22 @@
-tests/cases/compiler/protectedMembers.ts(40,4): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(41,4): error TS2445: Property 'f' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(42,4): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(43,4): error TS2445: Property 'sf' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(46,4): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(47,4): error TS2445: Property 'f' is protected and only accessible within class 'C2' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(48,4): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(49,4): error TS2445: Property 'sf' is protected and only accessible within class 'C2' and its subclasses.
-tests/cases/compiler/protectedMembers.ts(68,11): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'. This is an instance of class 'A'.
-tests/cases/compiler/protectedMembers.ts(69,11): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'. This is an instance of class 'B'.
-tests/cases/compiler/protectedMembers.ts(97,1): error TS2322: Type 'B1' is not assignable to type 'A1'.
+protectedMembers.ts(40,4): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
+protectedMembers.ts(41,4): error TS2445: Property 'f' is protected and only accessible within class 'C1' and its subclasses.
+protectedMembers.ts(42,4): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
+protectedMembers.ts(43,4): error TS2445: Property 'sf' is protected and only accessible within class 'C1' and its subclasses.
+protectedMembers.ts(46,4): error TS2445: Property 'x' is protected and only accessible within class 'C1' and its subclasses.
+protectedMembers.ts(47,4): error TS2445: Property 'f' is protected and only accessible within class 'C2' and its subclasses.
+protectedMembers.ts(48,4): error TS2445: Property 'sx' is protected and only accessible within class 'C1' and its subclasses.
+protectedMembers.ts(49,4): error TS2445: Property 'sf' is protected and only accessible within class 'C2' and its subclasses.
+protectedMembers.ts(68,11): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'. This is an instance of class 'A'.
+protectedMembers.ts(69,11): error TS2446: Property 'x' is protected and only accessible through an instance of class 'C'. This is an instance of class 'B'.
+protectedMembers.ts(97,1): error TS2322: Type 'B1' is not assignable to type 'A1'.
   Property 'x' is protected but type 'B1' is not a class derived from 'A1'.
-tests/cases/compiler/protectedMembers.ts(98,1): error TS2322: Type 'A1' is not assignable to type 'B1'.
+protectedMembers.ts(98,1): error TS2322: Type 'A1' is not assignable to type 'B1'.
   Property 'x' is protected in type 'A1' but public in type 'B1'.
-tests/cases/compiler/protectedMembers.ts(111,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
+protectedMembers.ts(111,7): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
   Property 'x' is protected in type 'B3' but public in type 'A3'.
 
 
-==== tests/cases/compiler/protectedMembers.ts (13 errors) ====
+==== protectedMembers.ts (13 errors) ====
     // Class with protected members
     class C1 {
         protected x: number;

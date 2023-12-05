@@ -1,6 +1,9 @@
+//// [tests/cases/compiler/importDeclFromTypeNodeInJsSource.ts] ////
+
 === /src/node_modules/@types/node/index.d.ts ===
+
 /// <reference path="events.d.ts" />
-No type information for this code.=== /src/node_modules/@types/node/events.d.ts ===
+=== /src/node_modules/@types/node/events.d.ts ===
 declare module "events" {
 >"events" : Symbol("events", Decl(events.d.ts, 0, 0))
 

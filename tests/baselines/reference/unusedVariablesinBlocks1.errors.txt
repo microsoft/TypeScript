@@ -1,8 +1,8 @@
-tests/cases/compiler/unusedVariablesinBlocks1.ts(2,9): error TS6133: 'x' is declared but its value is never read.
-tests/cases/compiler/unusedVariablesinBlocks1.ts(4,13): error TS6133: 'x' is declared but its value is never read.
+unusedVariablesinBlocks1.ts(2,9): error TS6133: 'x' is declared but its value is never read.
+unusedVariablesinBlocks1.ts(4,13): error TS6133: 'x' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedVariablesinBlocks1.ts (2 errors) ====
+==== unusedVariablesinBlocks1.ts (2 errors) ====
     function f1 () {
         let x = 10;
             ~
@@ -11,6 +11,5 @@ tests/cases/compiler/unusedVariablesinBlocks1.ts(4,13): error TS6133: 'x' is dec
             let x = 11;
                 ~
 !!! error TS6133: 'x' is declared but its value is never read.
-            x++;
         }
     }

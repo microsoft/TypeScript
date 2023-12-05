@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyIndexer.ts] ////
+
 //// [emptyIndexer.ts]
 interface I1 {
 	m(): number;

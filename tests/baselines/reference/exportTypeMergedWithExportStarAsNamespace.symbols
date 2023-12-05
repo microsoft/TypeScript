@@ -1,0 +1,53 @@
+//// [tests/cases/conformance/externalModules/exportTypeMergedWithExportStarAsNamespace.ts] ////
+
+=== usage.ts ===
+import { Something } from "./prelude"
+>Something : Symbol(Something, Decl(usage.ts, 0, 8))
+
+export const myValue: Something<string> = Something.of("abc")
+>myValue : Symbol(myValue, Decl(usage.ts, 1, 12))
+>Something : Symbol(Something, Decl(usage.ts, 0, 8))
+>Something.of : Symbol(of, Decl(Something.ts, 1, 37))
+>Something : Symbol(Something, Decl(usage.ts, 0, 8))
+>of : Symbol(of, Decl(Something.ts, 1, 37))
+
+export type MyType = Something.SubType<string>
+>MyType : Symbol(MyType, Decl(usage.ts, 1, 61))
+>Something : Symbol(Something, Decl(usage.ts, 0, 8))
+>SubType : Symbol(SubType, Decl(Something.ts, 0, 39))
+
+=== Something.ts ===
+export type Something<A> = { value: A }
+>Something : Symbol(Something, Decl(Something.ts, 0, 0))
+>A : Symbol(A, Decl(Something.ts, 0, 22))
+>value : Symbol(value, Decl(Something.ts, 0, 28))
+>A : Symbol(A, Decl(Something.ts, 0, 22))
+
+export type SubType<A> = { value: A }
+>SubType : Symbol(SubType, Decl(Something.ts, 0, 39))
+>A : Symbol(A, Decl(Something.ts, 1, 20))
+>value : Symbol(value, Decl(Something.ts, 1, 26))
+>A : Symbol(A, Decl(Something.ts, 1, 20))
+
+export declare function of<A>(value: A): Something<A>
+>of : Symbol(of, Decl(Something.ts, 1, 37))
+>A : Symbol(A, Decl(Something.ts, 2, 27))
+>value : Symbol(value, Decl(Something.ts, 2, 30))
+>A : Symbol(A, Decl(Something.ts, 2, 27))
+>Something : Symbol(Something, Decl(Something.ts, 0, 0))
+>A : Symbol(A, Decl(Something.ts, 2, 27))
+
+=== prelude.ts ===
+import * as S from "./Something"
+>S : Symbol(S, Decl(prelude.ts, 0, 6))
+
+export * as Something from "./Something"
+>Something : Symbol(Something, Decl(prelude.ts, 1, 6), Decl(prelude.ts, 1, 40))
+
+export type Something<A> = S.Something<A>
+>Something : Symbol(Something, Decl(prelude.ts, 1, 6), Decl(prelude.ts, 1, 40))
+>A : Symbol(A, Decl(prelude.ts, 2, 22))
+>S : Symbol(S, Decl(prelude.ts, 0, 6))
+>Something : Symbol(S.Something, Decl(Something.ts, 0, 0))
+>A : Symbol(A, Decl(prelude.ts, 2, 22))
+

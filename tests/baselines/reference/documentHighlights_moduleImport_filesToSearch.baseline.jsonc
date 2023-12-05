@@ -1,0 +1,25 @@
+// === documentHighlights ===
+// filesToSearch:
+//   /a.ts
+//   /b.ts
+
+// === /b.ts ===
+// <|import { [|{| kind: "writtenReference" |}x|] } from "foo";|>
+
+// === /a.ts ===
+// import * as foo from "foo";
+// foo./*HIGHLIGHTS*/[|{| kind: "reference" |}x|];
+
+
+
+// === documentHighlights ===
+// filesToSearch:
+//   /a.ts
+//   /b.ts
+
+// === /b.ts ===
+// <|import { /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}x|] } from "foo";|>
+
+// === /a.ts ===
+// import * as foo from "foo";
+// foo.[|{| kind: "reference" |}x|];

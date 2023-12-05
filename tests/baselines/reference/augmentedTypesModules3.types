@@ -1,4 +1,6 @@
-=== tests/cases/compiler/augmentedTypesModules3.ts ===
+//// [tests/cases/compiler/augmentedTypesModules3.ts] ////
+
+=== augmentedTypesModules3.ts ===
 //// module then class
 module m3 { }
 class m3 { } // ok since the module is not instantiated

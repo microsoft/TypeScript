@@ -1,4 +1,6 @@
-=== tests/cases/compiler/types.ts ===
+//// [tests/cases/compiler/declarationEmitMappedTypeDistributivityPreservesConstraints.ts] ////
+
+=== types.ts ===
 type Fns = Record<string, (...params: unknown[]) => unknown>
 >Fns : { [x: string]: (...params: unknown[]) => unknown; }
 >params : unknown[]
@@ -16,18 +18,17 @@ function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
 
     return null!;
 >null! : null
->null : null
 }
 
 export default { fn };
 >{ fn } : { fn: <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>; }
 >fn : <T extends { x: Map<T["x"]>; }>(sliceIndex: T) => AllArg<T["x"]>
 
-=== tests/cases/compiler/reexport.ts ===
+=== reexport.ts ===
 import test from "./types";
->test : { fn: <T extends { x: { [K in keyof T["x"]]: T["x"][K]; }; }>(sliceIndex: T) => { [K in keyof T["x"]]: Parameters<T["x"][K]>; }; }
+>test : { fn: <T_1 extends { x: T_1["x"] extends infer T extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T]: T_1["x"][K]; } : never; }>(sliceIndex: T_1) => T_1["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T_1["x"][K_1]>; } : never; }
 
 export default { test };
->{ test } : { test: { fn: <T extends { x: { [K in keyof T["x"]]: T["x"][K]; }; }>(sliceIndex: T) => { [K in keyof T["x"]]: Parameters<T["x"][K]>; }; }; }
->test : { fn: <T extends { x: { [K in keyof T["x"]]: T["x"][K]; }; }>(sliceIndex: T) => { [K in keyof T["x"]]: Parameters<T["x"][K]>; }; }
+>{ test } : { test: { fn: <T_1 extends { x: T_1["x"] extends infer T extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T]: T_1["x"][K]; } : never; }>(sliceIndex: T_1) => T_1["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T_1["x"][K_1]>; } : never; }; }
+>test : { fn: <T_1 extends { x: T_1["x"] extends infer T extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K in keyof T]: T_1["x"][K]; } : never; }>(sliceIndex: T_1) => T_1["x"] extends infer T_2 extends { [x: string]: (...params: unknown[]) => unknown; } ? { [K_1 in keyof T_2]: Parameters<T_1["x"][K_1]>; } : never; }
 

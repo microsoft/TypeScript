@@ -1,4 +1,6 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/commentOnSignature1.ts] ////
+
+=== b.ts ===
 ///<reference path='a.ts'/>
 function foo2(n: number): void;
 >foo2 : { (n: number): void; (s: string): void; }
@@ -13,7 +15,7 @@ function foo2(a: any): void {
 >foo2 : { (n: number): void; (s: string): void; }
 >a : any
 }
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 /*!=================
     Keep this pinned
    =================

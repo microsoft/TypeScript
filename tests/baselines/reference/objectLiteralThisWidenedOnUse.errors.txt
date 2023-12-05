@@ -1,8 +1,8 @@
-tests/cases/compiler/objectLiteralThisWidenedOnUse.ts(8,21): error TS2345: Argument of type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' is not assignable to parameter of type 'Foo'.
+objectLiteralThisWidenedOnUse.ts(8,21): error TS2345: Argument of type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' is not assignable to parameter of type 'Foo'.
   Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' but required in type 'Foo'.
 
 
-==== tests/cases/compiler/objectLiteralThisWidenedOnUse.ts (1 errors) ====
+==== objectLiteralThisWidenedOnUse.ts (1 errors) ====
     interface Foo { bar: boolean; }
     
     var GlobalIns = {
@@ -14,7 +14,7 @@ tests/cases/compiler/objectLiteralThisWidenedOnUse.ts(8,21): error TS2345: Argum
                         ~~~~
 !!! error TS2345: Argument of type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' is not assignable to parameter of type 'Foo'.
 !!! error TS2345:   Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' but required in type 'Foo'.
-!!! related TS2728 tests/cases/compiler/objectLiteralThisWidenedOnUse.ts:1:17: 'bar' is declared here.
+!!! related TS2728 objectLiteralThisWidenedOnUse.ts:1:17: 'bar' is declared here.
       },
       accept_foo (foo: Foo): boolean {
         return !!foo && !!foo.bar;

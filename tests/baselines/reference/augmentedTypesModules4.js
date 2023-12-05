@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesModules4.ts] ////
+
 //// [augmentedTypesModules4.ts]
 // module then enum
 // should be errors

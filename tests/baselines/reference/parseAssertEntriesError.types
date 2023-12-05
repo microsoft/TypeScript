@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseAssertEntriesError.ts] ////
+
 === /index.ts ===
 export type LocalInterface =
 >LocalInterface : any
@@ -28,7 +30,6 @@ export const a = (null as any as import("pkg", { assert: {1234, "resolution-mode
 >(null as any as import("pkg", { assert: { : any
 >null as any as import("pkg", { assert: { : any
 >null as any : any
->null : null
 >1234, "resolution-mode" : "resolution-mode"
 >1234 : 1234
 >"resolution-mode" : "resolution-mode"
@@ -40,7 +41,6 @@ export const b = (null as any as import("pkg", { assert: {1234, "resolution-mode
 >(null as any as import("pkg", { assert: { : any
 >null as any as import("pkg", { assert: { : any
 >null as any : any
->null : null
 >1234, "resolution-mode" : "resolution-mode"
 >1234 : 1234
 >"resolution-mode" : "resolution-mode"
@@ -48,7 +48,8 @@ export const b = (null as any as import("pkg", { assert: {1234, "resolution-mode
 >ImportInterface : any
 
 === /node_modules/pkg/import.d.ts ===
+
 export interface ImportInterface {}
-No type information for this code.=== /node_modules/pkg/require.d.ts ===
+=== /node_modules/pkg/require.d.ts ===
+
 export interface RequireInterface {}
-No type information for this code.

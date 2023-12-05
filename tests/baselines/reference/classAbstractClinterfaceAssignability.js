@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractClinterfaceAssignability.ts] ////
+
 //// [classAbstractClinterfaceAssignability.ts]
 interface I {
     x: number;

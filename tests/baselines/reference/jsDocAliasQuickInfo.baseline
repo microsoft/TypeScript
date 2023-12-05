@@ -1,3 +1,32 @@
+// === QuickInfo ===
+=== /jsDocAliasQuickInfo.ts ===
+// /**
+//  * Comment
+//  * @type {number}
+//  */
+// export default 10;
+//        ^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) default: 10
+// | Comment
+// | @type {number}
+// | ----------------------------------------------------------------------
+
+=== /test.ts ===
+// export { default as test } from "./jsDocAliasQuickInfo";
+//          ^^^^^^^
+// | ----------------------------------------------------------------------
+// | (property) default: 10
+// | Comment
+// | @type {number}
+// | ----------------------------------------------------------------------
+//                     ^^^^
+// | ----------------------------------------------------------------------
+// | export test
+// | Comment
+// | @type {number}
+// | ----------------------------------------------------------------------
+
 [
   {
     "marker": {
@@ -5,7 +34,7 @@
       "position": 44,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "export",
       "textSpan": {
@@ -71,7 +100,7 @@
       "position": 9,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "property",
       "kindModifiers": "export",
       "textSpan": {
@@ -137,7 +166,7 @@
       "position": 20,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "alias",
       "kindModifiers": "export",
       "textSpan": {

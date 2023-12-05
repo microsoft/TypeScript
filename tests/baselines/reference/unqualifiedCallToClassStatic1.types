@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unqualifiedCallToClassStatic1.ts ===
+//// [tests/cases/compiler/unqualifiedCallToClassStatic1.ts] ////
+
+=== unqualifiedCallToClassStatic1.ts ===
 class Vector {
 >Vector : Vector
 

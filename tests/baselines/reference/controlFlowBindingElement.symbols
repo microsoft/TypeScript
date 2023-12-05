@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowBindingElement.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowBindingElement.ts] ////
+
+=== controlFlowBindingElement.ts ===
 {
     const data =  { param: 'value' };
 >data : Symbol(data, Decl(controlFlowBindingElement.ts, 1, 9))

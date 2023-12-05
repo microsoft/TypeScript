@@ -1,4 +1,6 @@
-=== tests/cases/compiler/spreadExpressionContextualTypeWithNamespace_0.ts ===
+//// [tests/cases/compiler/spreadExpressionContextualTypeWithNamespace.ts] ////
+
+=== spreadExpressionContextualTypeWithNamespace_0.ts ===
 // Repro from #44179 with some modification
 
 function func() {}
@@ -21,7 +23,7 @@ export { func, klass, obj };
 export function exportedDirectly() {}
 >exportedDirectly : () => void
 
-=== tests/cases/compiler/spreadExpressionContextualTypeWithNamespace_1.ts ===
+=== spreadExpressionContextualTypeWithNamespace_1.ts ===
 import * as stuff from "./spreadExpressionContextualTypeWithNamespace_0";
 >stuff : typeof stuff
 

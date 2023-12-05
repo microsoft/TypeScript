@@ -4,7 +4,7 @@
 ////const x = /*next*/ function f(p) {}
 
 for (const marker of test.markerNames()) {
-    verify.docCommentTemplateAt(marker, 8,
+    verify.docCommentTemplateAt(marker, 7,
 `/**
  * 
  * @param p

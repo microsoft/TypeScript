@@ -1,1078 +1,798 @@
+// === findAllReferences ===
 // === /a.ts ===
-// type /*FIND ALL REFS*/[|T|] = number;
-// export = [|T|];
+// <|type /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}T|] = number;|>
+// <|export = [|{| defId: 0 |}T|];|>
 
 // === /b.ts ===
-// import [|T|] = require("./a");
+// <|import [|{| defId: 1, isWriteAccess: true |}T|] = require("./a");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) type T = number\nimport T = require(\"./a\")",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"./a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.ts ===
+  // <|type /*FIND ALL REFS*/[|{| defId: 0 |}T|] = number;|>
+  // export = T;
 
+  // === /b.ts ===
+  // <|import [|{| defId: 1 |}T|] = require("./a");|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) type T = number\nimport T = require(\"./a\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./a\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.ts ===
-// type [|T|] = number;
-// /*FIND ALL REFS*/export = [|T|];
+// <|type [|{| defId: 0, isWriteAccess: true |}T|] = number;|>
+// /*FIND ALL REFS*/<|export = [|{| defId: 0 |}T|];|>
 
 // === /b.ts ===
-// import [|T|] = require("./a");
+// <|import [|{| defId: 1, isWriteAccess: true |}T|] = require("./a");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) type T = number\nimport T = require(\"./a\")",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"./a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": true
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.ts ===
+  // <|type [|{| defId: 0 |}T|] = number;|>
+  // /*FIND ALL REFS*/export = T;
 
+  // === /b.ts ===
+  // <|import [|{| defId: 1 |}T|] = require("./a");|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) type T = number\nimport T = require(\"./a\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./a\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.ts ===
-// type [|T|] = number;
-// export = /*FIND ALL REFS*/[|T|];
+// <|type [|{| defId: 0, isWriteAccess: true |}T|] = number;|>
+// <|export = /*FIND ALL REFS*/[|{| defId: 0 |}T|];|>
 
 // === /b.ts ===
-// import [|T|] = require("./a");
+// <|import [|{| defId: 1, isWriteAccess: true |}T|] = require("./a");|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // <|type [|{| defId: 0 |}T|] = number;|>
+  // export = /*FIND ALL REFS*/T;
+
+  // === /b.ts ===
+  // <|import [|{| defId: 1 |}T|] = require("./a");|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) type T = number\nimport T = require(\"./a\")",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"./a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": true
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) type T = number\nimport T = require(\"./a\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./a\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /b.ts ===
+// <|import /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}T|] = require("./a");|>
 
 // === /a.ts ===
-// type [|T|] = number;
-// export = [|T|];
+// <|type [|{| defId: 1, isWriteAccess: true |}T|] = number;|>
+// <|export = [|{| defId: 1 |}T|];|>
 
+  // === Definitions ===
+  // === /b.ts ===
+  // <|import /*FIND ALL REFS*/[|{| defId: 0 |}T|] = require("./a");|>
+
+  // === /a.ts ===
+  // <|type [|{| defId: 1 |}T|] = number;|>
+  // export = T;
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) type T = number\nimport T = require(\"./a\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./a\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /b.ts ===
-// import /*FIND ALL REFS*/[|T|] = require("./a");
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) type T = number\nimport T = require(\"./a\")",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"./a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 11
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// <|<|import [|{| defId: 2, isWriteAccess: true |}T|] = require("/*FIND ALL REFS*/[|{| contextId: 0, defId: 0 |}./a|]");|>|>
 
 // === /a.ts ===
-// type [|T|] = number;
-// [|export|] = [|T|];
+// <|type [|{| defId: 1, isWriteAccess: true |}T|] = number;|>
+// <|[|{| defId: 0 |}<|export|] = [|{| contextId: 4, defId: 1 |}T|];|>|>
 
-// === /b.ts ===
-// import [|T|] = require("/*FIND ALL REFS*/[|./a|]");
+  // === Definitions ===
+  // === /a.ts ===
+  // [|{| defId: 0 |}<|type [|{| defId: 1 |}T|] = number;|>
+  // export = T;|]
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "module",
-      "name": "module \"/a\"",
-      "textSpan": {
-        "start": 0,
-        "length": 28
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/a\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 3
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 17,
-          "length": 6
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
+  // === /b.ts ===
+  // <|import [|{| defId: 2 |}T|] = require("/*FIND ALL REFS*/./a");|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/a\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/a\"",
+      "kind": "stringLiteral"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "type",
-      "name": "type T = number",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 16
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 26,
-          "length": 1
-        },
-        "fileName": "/a.ts",
-        "contextSpan": {
-          "start": 17,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "alias",
-      "name": "(alias) type T = number\nimport T = require(\"./a\")",
-      "textSpan": {
-        "start": 7,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"./a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 7,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 26
-        },
-        "isWriteAccess": true
-      }
+   },
+   {
+    "defId": 2,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) type T = number\nimport T = require(\"./a\")",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./a\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/optionsSourcemapInlineSourcesMapRoot.ts] ////
+
 //// [optionsSourcemapInlineSourcesMapRoot.ts]
 var a = 10;
 

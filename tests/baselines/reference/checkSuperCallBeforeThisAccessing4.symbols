@@ -1,4 +1,6 @@
-=== tests/cases/compiler/checkSuperCallBeforeThisAccessing4.ts ===
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing4.ts] ////
+
+=== checkSuperCallBeforeThisAccessing4.ts ===
 class Based { }
 >Based : Symbol(Based, Decl(checkSuperCallBeforeThisAccessing4.ts, 0, 0))
 

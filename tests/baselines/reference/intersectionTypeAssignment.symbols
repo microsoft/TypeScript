@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts] ////
+
+=== intersectionTypeAssignment.ts ===
 var a: { a: string };
 >a : Symbol(a, Decl(intersectionTypeAssignment.ts, 0, 3))
 >a : Symbol(a, Decl(intersectionTypeAssignment.ts, 0, 8))

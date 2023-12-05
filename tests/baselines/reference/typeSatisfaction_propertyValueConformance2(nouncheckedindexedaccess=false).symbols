@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance2.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_propertyValueConformance2.ts] ////
+
+=== typeSatisfaction_propertyValueConformance2.ts ===
 type Facts = { [key: string]: boolean };
 >Facts : Symbol(Facts, Decl(typeSatisfaction_propertyValueConformance2.ts, 0, 0))
 >key : Symbol(key, Decl(typeSatisfaction_propertyValueConformance2.ts, 0, 16))

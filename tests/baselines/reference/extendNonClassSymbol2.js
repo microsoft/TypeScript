@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/extendNonClassSymbol2.ts] ////
+
 //// [extendNonClassSymbol2.ts]
 function Foo() {
    this.x = 1;

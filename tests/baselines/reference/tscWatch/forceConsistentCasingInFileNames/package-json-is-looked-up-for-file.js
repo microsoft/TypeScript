@@ -1,6 +1,12 @@
+currentDirectory:: /Users/name/projects/lib-boilerplate useCaseSensitiveFileNames: false
 Input::
 //// [/Users/name/projects/lib-boilerplate/package.json]
-{"name":"lib-boilerplate","version":"0.0.2","type":"module","exports":"./src/index.ts"}
+{
+  "name": "lib-boilerplate",
+  "version": "0.0.2",
+  "type": "module",
+  "exports": "./src/index.ts"
+}
 
 //// [/Users/name/projects/lib-boilerplate/src/index.ts]
 export function thing(): void {}
@@ -11,7 +17,14 @@ import { thing } from 'lib-boilerplate'
 
 
 //// [/Users/name/projects/lib-boilerplate/tsconfig.json]
-{"compilerOptions":{"module":"node16","target":"es2021","forceConsistentCasingInFileNames":true,"traceResolution":true}}
+{
+  "compilerOptions": {
+    "module": "node16",
+    "target": "es2021",
+    "forceConsistentCasingInFileNames": true,
+    "traceResolution": true
+  }
+}
 
 //// [/a/lib/lib.es2021.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -34,14 +47,15 @@ Output::
 
 File '/Users/name/projects/lib-boilerplate/src/package.json' does not exist.
 Found 'package.json' at '/Users/name/projects/lib-boilerplate/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist.
 File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'lib-boilerplate' from '/Users/name/projects/lib-boilerplate/test/basic.spec.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
 File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist according to earlier cached lookups.
 File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
-File '/Users/name/projects/lib-boilerplate/src/index.ts' exist - use it as a name resolution result.
+Using 'exports' subpath '.' with target './src/index.ts'.
+File '/Users/name/projects/lib-boilerplate/src/index.ts' exists - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/lib-boilerplate/src/index.ts', result '/Users/name/projects/lib-boilerplate/src/index.ts'.
 ======== Module name 'lib-boilerplate' was successfully resolved to '/Users/name/projects/lib-boilerplate/src/index.ts' with Package ID 'lib-boilerplate/src/index.ts@0.0.2'. ========
 File '/a/lib/package.json' does not exist.
@@ -60,8 +74,56 @@ test/basic.spec.ts
 
 
 
-Program root files: ["/Users/name/projects/lib-boilerplate/src/index.ts","/Users/name/projects/lib-boilerplate/test/basic.spec.ts"]
-Program options: {"module":100,"target":8,"forceConsistentCasingInFileNames":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/Users/name/projects/lib-boilerplate/tsconfig.json"}
+//// [/Users/name/projects/lib-boilerplate/src/index.js]
+export function thing() { }
+
+
+//// [/Users/name/projects/lib-boilerplate/test/basic.spec.js]
+export {};
+
+
+
+PolledWatches::
+/Users/name/projects/lib-boilerplate/node_modules/@types: *new*
+  {"pollingInterval":500}
+/Users/name/projects/lib-boilerplate/src/package.json: *new*
+  {"pollingInterval":2000}
+/Users/name/projects/lib-boilerplate/test/package.json: *new*
+  {"pollingInterval":2000}
+/Users/name/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/Users/name/projects/lib-boilerplate/package.json: *new*
+  {}
+/Users/name/projects/lib-boilerplate/src/index.ts: *new*
+  {}
+/Users/name/projects/lib-boilerplate/test/basic.spec.ts: *new*
+  {}
+/Users/name/projects/lib-boilerplate/tsconfig.json: *new*
+  {}
+/a/lib/lib.es2021.full.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/Users/name/projects/lib-boilerplate: *new*
+  {}
+/Users/name/projects/lib-boilerplate/test: *new*
+  {}
+
+Program root files: [
+  "/Users/name/projects/lib-boilerplate/src/index.ts",
+  "/Users/name/projects/lib-boilerplate/test/basic.spec.ts"
+]
+Program options: {
+  "module": 100,
+  "target": 8,
+  "forceConsistentCasingInFileNames": true,
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "configFilePath": "/Users/name/projects/lib-boilerplate/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2021.full.d.ts
@@ -78,39 +140,4 @@ Shape signatures in builder refreshed for::
 /users/name/projects/lib-boilerplate/src/index.ts (used version)
 /users/name/projects/lib-boilerplate/test/basic.spec.ts (used version)
 
-PolledWatches::
-/users/name/projects/lib-boilerplate/src/package.json:
-  {"pollingInterval":2000}
-/users/name/projects/lib-boilerplate/test/package.json:
-  {"pollingInterval":2000}
-/users/name/projects/lib-boilerplate/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/users/name/projects/lib-boilerplate/tsconfig.json:
-  {}
-/users/name/projects/lib-boilerplate/src/index.ts:
-  {}
-/users/name/projects/lib-boilerplate/test/basic.spec.ts:
-  {}
-/a/lib/lib.es2021.full.d.ts:
-  {}
-/users/name/projects/lib-boilerplate/package.json:
-  {}
-
-FsWatchesRecursive::
-/users/name/projects/lib-boilerplate/test:
-  {}
-/users/name/projects/lib-boilerplate:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/Users/name/projects/lib-boilerplate/src/index.js]
-export function thing() { }
-
-
-//// [/Users/name/projects/lib-boilerplate/test/basic.spec.js]
-export {};
-
-

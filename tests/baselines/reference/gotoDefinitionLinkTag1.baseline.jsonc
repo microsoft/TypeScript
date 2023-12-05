@@ -1,0 +1,222 @@
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|interface [|Foo|] {
+//     foo: string
+// }|>
+// namespace NS {
+//     export interface Bar {
+//         baz: Foo
+//     }
+// }
+// /** {@link /*GOTO DEF POS*/Foo} foooo*/
+// const a = ""
+// /** {@link NS.Bar} ns.bar*/
+// const b = ""
+// --- (line: 13) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/foo.ts ===
+// interface Foo {
+//     foo: string
+// }
+// namespace NS {
+//     <|export interface [|Bar|] {
+//         baz: Foo
+//     }|>
+// }
+// /** {@link Foo} foooo*/
+// const a = ""
+// /** {@link NS./*GOTO DEF POS*/Bar} ns.bar*/
+// const b = ""
+// /** {@link Foo f1}*/
+// const c = ""
+// --- (line: 15) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Bar",
+    "containerName": "NS",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|interface [|Foo|] {
+//     foo: string
+// }|>
+// namespace NS {
+//     export interface Bar {
+//         baz: Foo
+//     }
+// }
+// /** {@link Foo} foooo*/
+// const a = ""
+// /** {@link NS.Bar} ns.bar*/
+// const b = ""
+// /** {@link /*GOTO DEF POS*/Foo f1}*/
+// const c = ""
+// /** {@link NS.Bar ns.bar}*/
+// const d = ""
+// --- (line: 17) skipped ---
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/foo.ts ===
+// interface Foo {
+//     foo: string
+// }
+// namespace NS {
+//     <|export interface [|Bar|] {
+//         baz: Foo
+//     }|>
+// }
+// /** {@link Foo} foooo*/
+// const a = ""
+// /** {@link NS.Bar} ns.bar*/
+// const b = ""
+// /** {@link Foo f1}*/
+// const c = ""
+// /** {@link NS./*GOTO DEF POS*/Bar ns.bar}*/
+// const d = ""
+// /** {@link d }dd*/
+// const e = ""
+// /** @param x {@link Foo} */
+// function foo(x) { }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Bar",
+    "containerName": "NS",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/foo.ts ===
+// --- (line: 12) skipped ---
+// /** {@link Foo f1}*/
+// const c = ""
+// /** {@link NS.Bar ns.bar}*/
+// <|const [|d|] = ""|>
+// /** {@link /*GOTO DEF POS*/d }dd*/
+// const e = ""
+// /** @param x {@link Foo} */
+// function foo(x) { }
+
+  // === Details ===
+  [
+   {
+    "kind": "const",
+    "name": "d",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|interface [|Foo|] {
+//     foo: string
+// }|>
+// namespace NS {
+//     export interface Bar {
+//         baz: Foo
+// --- (line: 7) skipped ---
+
+// --- (line: 15) skipped ---
+// const d = ""
+// /** {@link d }dd*/
+// const e = ""
+// /** @param x {@link /*GOTO DEF POS*/Foo} */
+// function foo(x) { }
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
+
+
+
+// === getDefinitionAtPosition ===
+// === /tests/cases/fourslash/foo.ts ===
+// <|interface [|Foo|] {
+//     foo: string
+// }|>
+// namespace NS {
+//     export interface Bar {
+//         baz: Foo
+// --- (line: 7) skipped ---
+
+// === /tests/cases/fourslash/bar.ts ===
+// /** {@link /*GOTO DEF POS*/Foo }dd*/
+// const f = ""
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "Foo",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

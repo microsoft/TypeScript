@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forLoopEndingMultilineComments.ts ===
+//// [tests/cases/compiler/forLoopEndingMultilineComments.ts] ////
+
+=== forLoopEndingMultilineComments.ts ===
 declare var a: any;
 >a : any
 

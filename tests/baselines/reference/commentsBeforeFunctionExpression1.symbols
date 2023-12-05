@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsBeforeFunctionExpression1.ts ===
+//// [tests/cases/compiler/commentsBeforeFunctionExpression1.ts] ////
+
+=== commentsBeforeFunctionExpression1.ts ===
 var v = {
 >v : Symbol(v, Decl(commentsBeforeFunctionExpression1.ts, 0, 3))
 

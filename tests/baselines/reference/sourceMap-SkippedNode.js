@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/sourceMap-SkippedNode.ts] ////
+
 //// [sourceMap-SkippedNode.ts]
 try {
 // ...

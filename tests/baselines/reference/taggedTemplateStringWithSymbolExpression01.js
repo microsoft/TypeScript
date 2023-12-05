@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplateStringWithSymbolExpression01.ts] ////
+
 //// [taggedTemplateStringWithSymbolExpression01.ts]
 // taggedTemplateStringWithSymbolExpression01.ts
 

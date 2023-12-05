@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures.ts] ////
+
 //// [objectTypesIdentityWithCallSignatures.ts]
 // object types are identical structurally
 

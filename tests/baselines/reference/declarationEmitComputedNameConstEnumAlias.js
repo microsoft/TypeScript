@@ -16,19 +16,19 @@ export default {
 
 //// [EnumExample.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var EnumExample;
 (function (EnumExample) {
     EnumExample["TEST"] = "TEST";
 })(EnumExample || (EnumExample = {}));
-exports["default"] = EnumExample;
+exports.default = EnumExample;
 //// [index.js]
 "use strict";
 var _a;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var EnumExample_1 = require("./EnumExample");
-exports["default"] = (_a = {},
-    _a[EnumExample_1["default"].TEST] = {},
+exports.default = (_a = {},
+    _a[EnumExample_1.default.TEST] = {},
     _a);
 
 

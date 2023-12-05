@@ -6153,6 +6153,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Export_0_from_module_1_90059" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Export '{0}' from module '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'을(를) '{1}' 모듈에서 내보냅니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Export_all_referenced_locals_90060" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Export all referenced locals]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[참조된 모든 로컬 내보내기]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or__1203" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.]]></Val>
@@ -8456,6 +8474,15 @@
           <Val><![CDATA[Mapped object type implicitly has an 'any' template type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[매핑된 개체 형식에는 'any' 템플릿 형식이 암시적으로 포함됩니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Matched_0_condition_1_6403" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Matched '{0}' condition '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 조건 '{1}'과(와) 일치합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11307,6 +11334,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Resolving_in_0_mode_with_conditions_1_6402" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolving in {0} mode with conditions {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[조건이 {1}인 {0} 모드에서 확인하는 중입니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Resolving_module_0_from_1_6086" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[======== Resolving module '{0}' from '{1}'. ========]]></Val>
@@ -11819,6 +11855,15 @@
           <Val><![CDATA[Save .tsbuildinfo files to allow for incremental compilation of projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[프로젝트의 증분 컴파일을 허용하도록 .tsbuildinfo 파일을 저장합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Saw_non_matching_condition_0_6405" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Saw non-matching condition '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[비일치 조건 '{0}'을(를) 확인했습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15290,6 +15335,15 @@
           <Val><![CDATA[Use synthetic 'default' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[가상 '기본' 멤버를 사용합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Using_0_subpath_1_with_target_2_6404" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Using '{0}' subpath '{1}' with target '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 하위 경로 '{1}'과(와) 대상 '{2}'을(를) 사용하는 중입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

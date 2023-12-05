@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCloneReturnTypes2.ts ===
+//// [tests/cases/compiler/genericCloneReturnTypes2.ts] ////
+
+=== genericCloneReturnTypes2.ts ===
 class MyList<T> {
 >MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
 >T : Symbol(T, Decl(genericCloneReturnTypes2.ts, 0, 13))

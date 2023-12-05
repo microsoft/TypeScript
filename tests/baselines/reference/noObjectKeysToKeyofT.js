@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noObjectKeysToKeyofT.ts] ////
+
 //// [noObjectKeysToKeyofT.ts]
 // Do not change Object.keys to return keyof T.
 // The current return type (string[]) is intentional.

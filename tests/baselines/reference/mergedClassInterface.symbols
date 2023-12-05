@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/file1.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/mergedClassInterface.ts] ////
+
+=== file1.ts ===
 declare class C1 { }
 >C1 : Symbol(C1, Decl(file1.ts, 0, 0), Decl(file1.ts, 0, 20))
 
@@ -76,14 +78,14 @@ c5.x4;
 >c5 : Symbol(c5, Decl(file1.ts, 33, 3))
 >x4 : Symbol(C5.x4, Decl(file1.ts, 28, 14))
 
-=== tests/cases/conformance/classes/classDeclarations/file2.ts ===
+=== file2.ts ===
 declare class C6 { }
 >C6 : Symbol(C6, Decl(file2.ts, 0, 0), Decl(file3.ts, 0, 0))
 
 interface C7 { }
 >C7 : Symbol(C7, Decl(file2.ts, 0, 20), Decl(file3.ts, 0, 16))
 
-=== tests/cases/conformance/classes/classDeclarations/file3.ts ===
+=== file3.ts ===
 interface C6 { }
 >C6 : Symbol(C6, Decl(file2.ts, 0, 0), Decl(file3.ts, 0, 0))
 

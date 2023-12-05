@@ -5,7 +5,7 @@ sourceRoot:
 sources: ES5For-of8.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of8.js
+emittedFile:ES5For-of8.js
 sourceFile:ES5For-of8.ts
 -------------------------------------------------------------------
 >>>function foo() {
@@ -74,6 +74,7 @@ sourceFile:ES5For-of8.ts
 14>                                                     ^^
 15>                                                       ^^^^
 16>                                                           ^^
+17>                                                             ^
 1->
   >
 2 >for (foo().x of 
@@ -91,6 +92,7 @@ sourceFile:ES5For-of8.ts
 14>                                                     
 15>                                                       ['a', 'b', 'c']
 16>                                                           ) 
+17>                                                             {
 1->Emitted(4, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(4, 6) Source(4, 17) + SourceIndex(0)
 3 >Emitted(4, 16) Source(4, 32) + SourceIndex(0)
@@ -107,6 +109,7 @@ sourceFile:ES5For-of8.ts
 14>Emitted(4, 56) Source(4, 17) + SourceIndex(0)
 15>Emitted(4, 60) Source(4, 32) + SourceIndex(0)
 16>Emitted(4, 62) Source(4, 34) + SourceIndex(0)
+17>Emitted(4, 63) Source(4, 35) + SourceIndex(0)
 ---
 >>>    foo().x = _a[_i];
 1 >^^^^
@@ -160,10 +163,13 @@ sourceFile:ES5For-of8.ts
 9 >Emitted(6, 21) Source(5, 21) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(7, 2) Source(6, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(7, 1) Source(6, 1) + SourceIndex(0)
+2 >Emitted(7, 2) Source(6, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=ES5For-of8.js.map

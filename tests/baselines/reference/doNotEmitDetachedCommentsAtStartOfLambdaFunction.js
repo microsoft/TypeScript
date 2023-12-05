@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doNotEmitDetachedCommentsAtStartOfLambdaFunction.ts] ////
+
 //// [doNotEmitDetachedCommentsAtStartOfLambdaFunction.ts]
 () => {
     // Single line comment

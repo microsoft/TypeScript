@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternWithReservedWord.ts] ////
+
 //// [declarationEmitBindingPatternWithReservedWord.ts]
 type LocaleData = Record<string, never>
 type ConvertLocaleConfig<T extends LocaleData = LocaleData> = Record<
@@ -25,10 +27,10 @@ export const getLocales = <T extends LocaleData>({
 
 //// [declarationEmitBindingPatternWithReservedWord.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLocales = void 0;
 var getLocales = function (_a) {
-    var app = _a.app, name = _a.name, defaultLocalesConfig = _a["default"], _b = _a.config, userLocalesConfig = _b === void 0 ? {} : _b;
+    var app = _a.app, name = _a.name, defaultLocalesConfig = _a.default, _b = _a.config, userLocalesConfig = _b === void 0 ? {} : _b;
     return defaultLocalesConfig;
 };
 exports.getLocales = getLocales;

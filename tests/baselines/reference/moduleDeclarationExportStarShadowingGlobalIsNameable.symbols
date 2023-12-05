@@ -1,7 +1,10 @@
-=== tests/cases/compiler/model/index.ts ===
+//// [tests/cases/compiler/moduleDeclarationExportStarShadowingGlobalIsNameable.ts] ////
+
+=== model/index.ts ===
+
 export * from "./account";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/model/account.ts ===
+
+=== model/account.ts ===
 export interface Account {
 >Account : Symbol(Account, Decl(account.ts, 0, 0))
 
@@ -18,7 +21,7 @@ export { Account2 as Acc };
 >Account2 : Symbol(Account2, Decl(account.ts, 2, 1))
 >Acc : Symbol(Acc, Decl(account.ts, 6, 8))
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 declare global {
 >global : Symbol(global, Decl(index.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/parser/ecmascript5/RegressionTests/parserNotHexLiteral1.ts ===
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parserNotHexLiteral1.ts] ////
+
+=== parserNotHexLiteral1.ts ===
 var x = {e0: 'cat', x0: 'dog'};
 >x : { e0: string; x0: string; }
 >{e0: 'cat', x0: 'dog'} : { e0: string; x0: string; }

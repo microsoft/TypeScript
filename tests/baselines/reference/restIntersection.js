@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/restIntersection.ts] ////
+
 //// [restIntersection.ts]
 var intersection: { x: number, y: number } & { w: string, z: string };
 

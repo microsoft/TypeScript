@@ -1,7 +1,7 @@
-tests/cases/compiler/undeclaredMethod.ts(10,3): error TS2339: Property 'saltbar' does not exist on type 'C'.
+undeclaredMethod.ts(10,3): error TS2339: Property 'saltbar' does not exist on type 'C'.
 
 
-==== tests/cases/compiler/undeclaredMethod.ts (1 errors) ====
+==== undeclaredMethod.ts (1 errors) ====
     module M {
         export class C {
             public salt() {}

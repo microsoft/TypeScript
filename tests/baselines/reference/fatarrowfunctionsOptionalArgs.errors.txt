@@ -1,8 +1,8 @@
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,23): error TS1005: ';' expected.
-tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts(88,38): error TS1005: ';' expected.
+fatarrowfunctionsOptionalArgs.ts(88,23): error TS1005: ';' expected.
+fatarrowfunctionsOptionalArgs.ts(88,38): error TS1005: ';' expected.
 
 
-==== tests/cases/compiler/fatarrowfunctionsOptionalArgs.ts (2 errors) ====
+==== fatarrowfunctionsOptionalArgs.ts (2 errors) ====
     // valid
     
     // no params

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitialization.ts] ////
+
+=== strictPropertyInitialization.ts ===
 // Properties with non-undefined types require initialization
 
 class C1 {
@@ -345,6 +347,33 @@ class C12 {
         this['c'] = 1;
 >this : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
 >'c' : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
+    }
+}
+
+enum E {
+>E : Symbol(E, Decl(strictPropertyInitialization.ts, 147, 1))
+
+    A = "A",
+>A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
+
+    B = "B"
+>B : Symbol(E.B, Decl(strictPropertyInitialization.ts, 150, 12))
+}
+class C13 {
+>C13 : Symbol(C13, Decl(strictPropertyInitialization.ts, 152, 1))
+
+    [E.A]: number;
+>[E.A] : Symbol(C13[E.A], Decl(strictPropertyInitialization.ts, 153, 11))
+>E.A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
+>E : Symbol(E, Decl(strictPropertyInitialization.ts, 147, 1))
+>A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
+
+    constructor() {
+        this[E.A] = 1;
+>this : Symbol(C13, Decl(strictPropertyInitialization.ts, 152, 1))
+>E.A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
+>E : Symbol(E, Decl(strictPropertyInitialization.ts, 147, 1))
+>A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
     }
 }
 

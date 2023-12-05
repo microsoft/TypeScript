@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/gettersAndSettersAccessibility.ts] ////
+
 //// [gettersAndSettersAccessibility.ts]
 class C99 {
 	private get Baz():number { return 0; }

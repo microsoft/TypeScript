@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/out-flag.ts] ////
+
 //// [out-flag.ts]
 //// @out: bin\
 

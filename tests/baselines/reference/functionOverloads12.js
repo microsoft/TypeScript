@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads12.ts] ////
+
 //// [functionOverloads12.ts]
 function foo():string;
 function foo():number;

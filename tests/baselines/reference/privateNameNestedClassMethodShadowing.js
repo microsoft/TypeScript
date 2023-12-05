@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedClassMethodShadowing.ts] ////
+
 //// [privateNameNestedClassMethodShadowing.ts]
 class Base {
     #x() { };

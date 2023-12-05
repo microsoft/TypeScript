@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring3.ts ===
+//// [tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring3.ts] ////
+
+=== for-inStatementsDestructuring3.ts ===
 var a, b;
 >a : Symbol(a, Decl(for-inStatementsDestructuring3.ts, 0, 3))
 >b : Symbol(b, Decl(for-inStatementsDestructuring3.ts, 0, 6))

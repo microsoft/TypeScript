@@ -1,15 +1,13 @@
-tests/cases/compiler/noUnusedLocals_writeOnly.ts(1,12): error TS6133: 'x' is declared but its value is never read.
-tests/cases/compiler/noUnusedLocals_writeOnly.ts(18,9): error TS6133: 'z' is declared but its value is never read.
+noUnusedLocals_writeOnly.ts(1,12): error TS6133: 'x' is declared but its value is never read.
+noUnusedLocals_writeOnly.ts(16,9): error TS6133: 'z' is declared but its value is never read.
 
 
-==== tests/cases/compiler/noUnusedLocals_writeOnly.ts (2 errors) ====
+==== noUnusedLocals_writeOnly.ts (2 errors) ====
     function f(x = 0, b = false) {
                ~
 !!! error TS6133: 'x' is declared but its value is never read.
         // None of these statements read from 'x', so it will be marked unused.
         x = 1;
-        x++;
-        x /= 2;
         ([x] = [1]);
         ({ x } = { x: 1 });
         ({ x: x } = { x: 1 });

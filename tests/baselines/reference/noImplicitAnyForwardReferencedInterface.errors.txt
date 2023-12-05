@@ -1,7 +1,7 @@
-tests/cases/compiler/noImplicitAnyForwardReferencedInterface.ts(5,5): error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
+noImplicitAnyForwardReferencedInterface.ts(5,5): error TS7013: Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== tests/cases/compiler/noImplicitAnyForwardReferencedInterface.ts (1 errors) ====
+==== noImplicitAnyForwardReferencedInterface.ts (1 errors) ====
     declare var x: Entry;
     
     interface Entry {

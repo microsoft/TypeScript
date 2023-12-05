@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/EnumAndModuleWithSameNameAndCommonRoot.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/EnumAndModuleWithSameNameAndCommonRoot.ts] ////
+
+=== EnumAndModuleWithSameNameAndCommonRoot.ts ===
 enum enumdule {
 >enumdule : enumdule
 

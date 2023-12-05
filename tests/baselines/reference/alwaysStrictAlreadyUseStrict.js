@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/alwaysStrictAlreadyUseStrict.ts] ////
+
 //// [alwaysStrictAlreadyUseStrict.ts]
 "use strict"
 function f() {

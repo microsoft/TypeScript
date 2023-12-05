@@ -1,3 +1,36 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/jsdocLink4.ts ===
+// declare class I {
+//   /** {@link I} */
+//   bar(): void
+//   ^^^
+// | ----------------------------------------------------------------------
+// | (method) I.bar(): void
+// | {@link I}
+// | ----------------------------------------------------------------------
+// }
+// /** {@link I} */
+// var n = 1
+//     ^
+// | ----------------------------------------------------------------------
+// | var n: number
+// | {@link I}
+// | ----------------------------------------------------------------------
+// /**
+//  * A real, very serious {@link I to an interface}. Right there.
+//  * @param x one {@link Pos here too}
+//  */
+// function f(x) {
+// }
+// f()
+// ^
+// | ----------------------------------------------------------------------
+// | function f(x: any): void
+// | A real, very serious {@link Ito an interface}. Right there.
+// | @param x one {@link Poshere too}
+// | ----------------------------------------------------------------------
+// type Pos = [number, number]
+
 [
   {
     "marker": {
@@ -5,7 +38,7 @@
       "position": 42,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "method",
       "kindModifiers": "declare",
       "textSpan": {
@@ -95,7 +128,7 @@
       "position": 75,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "var",
       "kindModifiers": "",
       "textSpan": {
@@ -161,7 +194,7 @@
       "position": 208,
       "name": "3"
     },
-    "quickInfo": {
+    "item": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {

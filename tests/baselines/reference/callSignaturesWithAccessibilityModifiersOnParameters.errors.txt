@@ -1,46 +1,46 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(3,14): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(3,24): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(4,22): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(4,32): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(5,20): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(5,30): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(6,14): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(7,14): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(9,15): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(9,34): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(10,23): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(10,42): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(11,20): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(11,39): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(12,11): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(12,30): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(13,14): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(13,28): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(16,9): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(16,19): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(17,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(17,28): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(18,13): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(18,26): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(22,6): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(22,17): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(23,6): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(23,25): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(24,9): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(24,20): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(25,9): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(26,19): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(30,9): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(30,19): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(31,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(31,29): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(35,9): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(36,32): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(37,12): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts(37,25): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(3,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(3,24): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(4,22): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(4,32): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(5,20): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(5,30): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(6,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(7,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(9,15): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(9,34): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(10,23): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(10,42): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(11,20): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(11,39): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(12,11): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(12,30): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(13,14): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(13,28): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(16,9): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(16,19): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(17,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(17,28): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(18,13): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(18,26): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(22,6): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(22,17): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(23,6): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(23,25): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(24,9): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(24,20): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(25,9): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(26,19): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(30,9): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(30,19): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(31,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(31,29): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(35,9): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(36,32): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(37,12): error TS2369: A parameter property is only allowed in a constructor implementation.
+callSignaturesWithAccessibilityModifiersOnParameters.ts(37,25): error TS2369: A parameter property is only allowed in a constructor implementation.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignaturesWithAccessibilityModifiersOnParameters.ts (40 errors) ====
+==== callSignaturesWithAccessibilityModifiersOnParameters.ts (40 errors) ====
     // Call signature parameters do not allow accessibility modifiers
     
     function foo(public x, private y) { }

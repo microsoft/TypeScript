@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/duplicateIdentifierRelatedSpans1.ts] ////
+
+=== file1.ts ===
 class Foo { }
 >Foo : Foo
 
@@ -6,14 +8,14 @@ const Bar = 3;
 >Bar : 3
 >3 : 3
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 type Foo = number;
 >Foo : number
 
 class Bar {}
 >Bar : Bar
 
-=== tests/cases/compiler/file3.ts ===
+=== file3.ts ===
 type Foo = 54;
 >Foo : 54
 

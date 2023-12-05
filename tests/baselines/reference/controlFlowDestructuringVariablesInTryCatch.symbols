@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts] ////
+
+=== controlFlowDestructuringVariablesInTryCatch.ts ===
+declare function f1(): string;
+>f1 : Symbol(f1, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 0, 0))
+
+declare function f2(): [b: string];
+>f2 : Symbol(f2, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 0, 30))
+
+declare function f3(): { c: string };
+>f3 : Symbol(f3, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 1, 35))
+>c : Symbol(c, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 2, 24))
+
+try {
+    var a = f1();
+>a : Symbol(a, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 5, 7))
+>f1 : Symbol(f1, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 0, 0))
+
+    var [b] = f2();
+>b : Symbol(b, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 6, 9))
+>f2 : Symbol(f2, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 0, 30))
+
+    var { c } = f3();
+>c : Symbol(c, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 7, 9))
+>f3 : Symbol(f3, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 1, 35))
+
+    var [d = 1] = [];
+>d : Symbol(d, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 9, 9))
+
+    var { e = 1 } = { };
+>e : Symbol(e, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 10, 9))
+
+} catch {
+    console.error("error");
+>console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+}
+
+a;
+>a : Symbol(a, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 5, 7))
+
+b;
+>b : Symbol(b, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 6, 9))
+
+c;
+>c : Symbol(c, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 7, 9))
+
+d;
+>d : Symbol(d, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 9, 9))
+
+e;
+>e : Symbol(e, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 10, 9))
+

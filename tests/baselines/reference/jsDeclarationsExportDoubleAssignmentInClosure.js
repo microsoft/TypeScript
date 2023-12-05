@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportDoubleAssignmentInClosure.ts] ////
+
 //// [index.js]
 // @ts-nocheck
 function foo() {

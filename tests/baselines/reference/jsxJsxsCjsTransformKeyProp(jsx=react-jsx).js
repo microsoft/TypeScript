@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformKeyProp.tsx] ////
+
 //// [jsxJsxsCjsTransformKeyProp.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 const props = { answer: 42 }
@@ -20,7 +22,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
 var jsx_runtime_1 = require("react/jsx-runtime");
 /// <reference path="react16.d.ts" />

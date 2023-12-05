@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceDeclaration3.ts] ////
+
 //// [interfaceDeclaration3.ts]
 interface I1 { item:number; }
 
@@ -58,7 +60,7 @@ interface I2 extends I1 { item:string; }
 //// [interfaceDeclaration3.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.M2 = void 0;
     var M1;
     (function (M1) {
@@ -105,7 +107,7 @@ define(["require", "exports"], function (require, exports) {
             }
             return C3;
         }());
-    })(M2 = exports.M2 || (exports.M2 = {}));
+    })(M2 || (exports.M2 = M2 = {}));
     var C1 = /** @class */ (function () {
         function C1() {
         }

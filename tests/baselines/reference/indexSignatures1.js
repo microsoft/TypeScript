@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/indexSignatures1.ts] ////
+
 //// [indexSignatures1.ts]
 // Symbol index signature checking
 
@@ -354,7 +356,7 @@ const y2 = dom.data123;
 dom = { data123: 'hello' };
 dom = { date123: 'hello' }; // Error
 const funcs = {
-    sfoo: x => x.length,
+    sfoo: x => x.length, // x: string
     nfoo: x => x * 2, // n: number
 };
 i1[s0]; // Error

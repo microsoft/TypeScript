@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts ===
+//// [tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts] ////
+
+=== implicitAnyFunctionInvocationWithAnyArguements.ts ===
 // this should be errors
 var arg0 = null;  // error at "arg0"
 >arg0 : Symbol(arg0, Decl(implicitAnyFunctionInvocationWithAnyArguements.ts, 1, 3))

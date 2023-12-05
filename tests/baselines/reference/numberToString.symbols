@@ -1,4 +1,6 @@
-=== tests/cases/compiler/numberToString.ts ===
+//// [tests/cases/compiler/numberToString.ts] ////
+
+=== numberToString.ts ===
 function f1(n:number):string {
 >f1 : Symbol(f1, Decl(numberToString.ts, 0, 0))
 >n : Symbol(n, Decl(numberToString.ts, 0, 12))

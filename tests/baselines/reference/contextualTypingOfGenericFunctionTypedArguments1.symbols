@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts ===
+//// [tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts] ////
+
+=== contextualTypingOfGenericFunctionTypedArguments1.ts ===
 interface Collection<T> {
 >Collection : Symbol(Collection, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 0, 0))
 >T : Symbol(T, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 0, 21))

@@ -1,8 +1,8 @@
-tests/cases/conformance/statements/continueStatements/invalidSwitchContinueStatement.ts(4,10): error TS2678: Type '5' is not comparable to type '12'.
-tests/cases/conformance/statements/continueStatements/invalidSwitchContinueStatement.ts(5,9): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
+invalidSwitchContinueStatement.ts(4,10): error TS2678: Type '5' is not comparable to type '12'.
+invalidSwitchContinueStatement.ts(5,9): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
 
 
-==== tests/cases/conformance/statements/continueStatements/invalidSwitchContinueStatement.ts (2 errors) ====
+==== invalidSwitchContinueStatement.ts (2 errors) ====
     // continue is not allowed in a switch statement
     
     switch (12) {

@@ -1,8 +1,8 @@
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration8_es5.ts(1,12): error TS2304: Cannot find name 'await'.
-tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration8_es5.ts(1,20): error TS2304: Cannot find name 'foo'.
+asyncFunctionDeclaration8_es5.ts(1,12): error TS2304: Cannot find name 'await'.
+asyncFunctionDeclaration8_es5.ts(1,20): error TS2304: Cannot find name 'foo'.
 
 
-==== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration8_es5.ts (2 errors) ====
+==== asyncFunctionDeclaration8_es5.ts (2 errors) ====
     var v = { [await]: foo }
                ~~~~~
 !!! error TS2304: Cannot find name 'await'.

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorReferences.ts ===
+//// [tests/cases/compiler/decoratorReferences.ts] ////
+
+=== decoratorReferences.ts ===
 declare function y(...args: any[]): any;
 >y : Symbol(y, Decl(decoratorReferences.ts, 0, 0))
 >args : Symbol(args, Decl(decoratorReferences.ts, 0, 19))

@@ -1,21 +1,21 @@
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(23,13): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(24,7): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(27,5): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+callWithSpread2.ts(23,13): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread2.ts(24,7): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread2.ts(27,5): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(28,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(29,13): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+callWithSpread2.ts(28,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+callWithSpread2.ts(29,13): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(30,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(31,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+callWithSpread2.ts(30,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+callWithSpread2.ts(31,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(32,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(33,8): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(34,8): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(35,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(36,14): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread2.ts(32,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+callWithSpread2.ts(33,8): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread2.ts(34,8): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
+callWithSpread2.ts(35,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+callWithSpread2.ts(36,14): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts (12 errors) ====
+==== callWithSpread2.ts (12 errors) ====
     declare function all(a?: number, b?: number): void;
     declare function weird(a?: number | string, b?: number | string): void;
     declare function prefix(s: string, a?: number, b?: number): void;

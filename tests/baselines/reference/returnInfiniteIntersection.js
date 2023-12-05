@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/returnInfiniteIntersection.ts] ////
+
 //// [returnInfiniteIntersection.ts]
 function recursive() {
     let x = <T>(subkey: T) => recursive();

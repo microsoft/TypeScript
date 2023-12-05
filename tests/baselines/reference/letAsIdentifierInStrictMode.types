@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letAsIdentifierInStrictMode.ts ===
+//// [tests/cases/compiler/letAsIdentifierInStrictMode.ts] ////
+
+=== letAsIdentifierInStrictMode.ts ===
 "use strict";
 >"use strict" : "use strict"
 

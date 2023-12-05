@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionExpressionInWithBlock.ts ===
+//// [tests/cases/compiler/functionExpressionInWithBlock.ts] ////
+
+=== functionExpressionInWithBlock.ts ===
 function x() {
 >x : Symbol(x, Decl(functionExpressionInWithBlock.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/import/foo.ts ===
+//// [tests/cases/conformance/types/import/importTypeGenericTypes.ts] ////
+
+=== foo.ts ===
 interface Point<T> {
     x: number;
 >x : number
@@ -12,7 +14,7 @@ interface Point<T> {
 export = Point;
 >Point : Point<T>
 
-=== tests/cases/conformance/types/import/foo2.ts ===
+=== foo2.ts ===
 namespace Bar {
     export interface I<T> {
         a: string;
@@ -53,9 +55,9 @@ class Bar<T> {
 export { Bar }
 >Bar : typeof Bar
 
-=== tests/cases/conformance/types/import/usage.ts ===
+=== usage.ts ===
 export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
->x : import("tests/cases/conformance/types/import/foo")<{ x: number; }>
+>x : import("foo")<{ x: number; }>
 >x : number
 >{ x: 0, y: 0, data: {x: 12} } : { x: number; y: number; data: { x: number; }; }
 >x : number
@@ -68,7 +70,7 @@ export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
 >12 : 12
 
 export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
->y : import("tests/cases/conformance/types/import/foo2").Bar.I<{ x: number; }>
+>y : import("foo2").Bar.I<{ x: number; }>
 >Bar : any
 >x : number
 >{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
@@ -96,7 +98,7 @@ export class Bar2<T> {
 }
 
 export let shim: typeof import("./foo2") = {
->shim : typeof import("tests/cases/conformance/types/import/foo2")
+>shim : typeof import("foo2")
 >{    Bar: Bar2} : { Bar: typeof Bar2; }
 
     Bar: Bar2

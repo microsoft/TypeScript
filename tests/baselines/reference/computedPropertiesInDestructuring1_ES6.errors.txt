@@ -1,28 +1,28 @@
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(3,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(9,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(11,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(12,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(15,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(16,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(17,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(18,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2349: This expression is not callable.
+computedPropertiesInDestructuring1_ES6.ts(3,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(9,7): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(11,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(12,8): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(15,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(16,15): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(17,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(18,16): error TS2537: Type '{ bar: number; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(22,8): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(22,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(25,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(29,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(31,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(32,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2349: This expression is not callable.
+computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2538: Type 'any' cannot be used as an index type.
+computedPropertiesInDestructuring1_ES6.ts(22,8): error TS2538: Type 'any' cannot be used as an index type.
+computedPropertiesInDestructuring1_ES6.ts(22,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(25,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(29,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(31,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(32,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2349: This expression is not callable.
   Type 'String' has no call signatures.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,4): error TS2538: Type 'any' cannot be used as an index type.
-tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
+computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2538: Type 'any' cannot be used as an index type.
+computedPropertiesInDestructuring1_ES6.ts(35,4): error TS2538: Type 'any' cannot be used as an index type.
+computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cannot be applied to types 'number' and '{}'.
 
 
-==== tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts (20 errors) ====
+==== computedPropertiesInDestructuring1_ES6.ts (20 errors) ====
     // destructuring in variable declarations
     let foo = "bar";
     let {[foo]: bar} = {bar: "bar"};

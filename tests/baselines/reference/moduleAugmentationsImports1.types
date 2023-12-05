@@ -1,13 +1,15 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/moduleAugmentationsImports1.ts] ////
+
+=== a.ts ===
 export class A {}
 >A : A
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 export class B {x: number;}
 >B : B
 >x : number
 
-=== tests/cases/compiler/c.d.ts ===
+=== c.d.ts ===
 declare module "C" {
 >"C" : typeof import("C")
 
@@ -16,7 +18,7 @@ declare module "C" {
 >y : string
 }
 
-=== tests/cases/compiler/d.ts ===
+=== d.ts ===
 /// <reference path="c.d.ts"/>
 
 import {A} from "./a";
@@ -49,7 +51,7 @@ A.prototype.getCls = function () { return undefined; }
 >undefined : undefined
 
 declare module "./a" {
->"./a" : typeof import("tests/cases/compiler/a")
+>"./a" : typeof import("a")
 
     interface A {
         getB(): B;
@@ -58,7 +60,7 @@ declare module "./a" {
 }
 
 declare module "./a" {
->"./a" : typeof import("tests/cases/compiler/a")
+>"./a" : typeof import("a")
 
     interface A {
         getCls(): Cls;
@@ -66,7 +68,7 @@ declare module "./a" {
     }
 }
 
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import {A} from "./a";
 >A : typeof A
 
@@ -80,10 +82,10 @@ let b = a.getB().x.toFixed();
 >a.getB().x.toFixed() : string
 >a.getB().x.toFixed : (fractionDigits?: number) => string
 >a.getB().x : number
->a.getB() : import("tests/cases/compiler/b").B
->a.getB : () => import("tests/cases/compiler/b").B
+>a.getB() : import("b").B
+>a.getB : () => import("b").B
 >a : A
->getB : () => import("tests/cases/compiler/b").B
+>getB : () => import("b").B
 >x : number
 >toFixed : (fractionDigits?: number) => string
 

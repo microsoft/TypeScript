@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/blockScopedBindingsReassignedInLoop5.ts] ////
+
 //// [blockScopedBindingsReassignedInLoop5.ts]
 for (let x = 1, y = 2; x < y; ++x, --y) {
     let a = () => x++ + y++;

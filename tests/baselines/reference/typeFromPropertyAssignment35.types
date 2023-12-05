@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug26877.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment35.ts] ////
+
+=== bug26877.js ===
 /** @param {Emu.D} x */
 function ollKorrect(x) {
 >ollKorrect : (x: D) => void
@@ -41,7 +43,7 @@ Emu.D = class {
     }
 }
 
-=== tests/cases/conformance/salsa/second.js ===
+=== second.js ===
 var Emu = {}
 >Emu : typeof Emu
 >{} : {}

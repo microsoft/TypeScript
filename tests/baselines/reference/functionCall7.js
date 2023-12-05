@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionCall7.ts] ////
+
 //// [functionCall7.ts]
 module m1 { export class c1 { public a; }}
 function foo(a:m1.c1){ a.a = 1; }; 

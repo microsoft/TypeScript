@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assigningFunctionToTupleIssuesError.ts ===
+//// [tests/cases/compiler/assigningFunctionToTupleIssuesError.ts] ////
+
+=== assigningFunctionToTupleIssuesError.ts ===
 declare let a: () => void;
 >a : () => void
 

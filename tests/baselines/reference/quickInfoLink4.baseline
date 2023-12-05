@@ -1,3 +1,18 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoLink4.ts ===
+// type A = 1 | 2;
+// 
+// switch (0 as A) {
+// 	/** {@link A} */
+//             ^
+// | ----------------------------------------------------------------------
+// | type A = 1 | 2
+// | ----------------------------------------------------------------------
+// 	case 1:
+// 	case 2:
+//     break;
+// }
+
 [
   {
     "marker": {
@@ -5,7 +20,7 @@
       "position": 47,
       "name": ""
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {

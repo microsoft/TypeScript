@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.d.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/AmbientModuleAndAmbientFunctionWithTheSameNameAndCommonRoot.ts] ////
+
+=== module.d.ts ===
 declare module Point {
 >Point : typeof Point
 
@@ -8,13 +10,13 @@ declare module Point {
 >y : number
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/function.d.ts ===
+=== function.d.ts ===
 declare function Point(): { x: number; y: number; }
 >Point : typeof Point
 >x : number
 >y : number
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+=== test.ts ===
 var cl: { x: number; y: number; }
 >cl : { x: number; y: number; }
 >x : number

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/tsxResolveExternalModuleExportsTypes.ts] ////
+
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
 >a : import("/node_modules/@types/a/index.d.ts").Foo
@@ -21,11 +23,10 @@ declare module 'a' {
     interface Foo {
         Test: null;
 >Test : null
->null : null
     }
 }
 
-=== tests/cases/compiler/foo.tsx ===
+=== foo.tsx ===
 import { Test } from 'a';
 >Test : null
 

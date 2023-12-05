@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file1.tsx ===
+//// [tests/cases/conformance/jsx/tsxElementResolution5.tsx] ////
+
+=== file1.tsx ===
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file1.tsx, 0, 0))
 

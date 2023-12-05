@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignedToUndefined.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/nullAssignedToUndefined.ts] ////
+
+=== nullAssignedToUndefined.ts ===
 var x = undefined = null; // error
 >x : Symbol(x, Decl(nullAssignedToUndefined.ts, 0, 3))
 >undefined : Symbol(undefined)

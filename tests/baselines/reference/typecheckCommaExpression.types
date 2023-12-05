@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typecheckCommaExpression.ts ===
+//// [tests/cases/compiler/typecheckCommaExpression.ts] ////
+
+=== typecheckCommaExpression.ts ===
 (a, b)
 >(a, b) : any
 >a, b : any

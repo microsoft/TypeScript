@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts(12,4): error TS2341: Property 'p' is private and only accessible within class 'C2'.
-tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts(19,4): error TS2445: Property 'p' is protected and only accessible within class 'C3' and its subclasses.
+classConstructorParametersAccessibility2.ts(12,4): error TS2341: Property 'p' is private and only accessible within class 'C2'.
+classConstructorParametersAccessibility2.ts(19,4): error TS2445: Property 'p' is protected and only accessible within class 'C3' and its subclasses.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/classConstructorParametersAccessibility2.ts (2 errors) ====
+==== classConstructorParametersAccessibility2.ts (2 errors) ====
     class C1 {
         constructor(public x?: number) { }
     }

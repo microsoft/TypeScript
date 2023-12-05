@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonGenericClassExtendingGenericClassWithAny.ts ===
+//// [tests/cases/compiler/nonGenericClassExtendingGenericClassWithAny.ts] ////
+
+=== nonGenericClassExtendingGenericClassWithAny.ts ===
 class Foo<T> {
 >Foo : Foo<T>
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/crashInresolveReturnStatement.ts] ////
+
 //// [crashInresolveReturnStatement.ts]
 class WorkItemToolbar {
     public onToolbarItemClick() {

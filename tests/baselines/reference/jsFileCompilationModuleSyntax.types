@@ -1,3 +1,5 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/jsFileCompilationModuleSyntax.ts] ////
+
+=== a.js ===
+
 module M { }
-No type information for this code.

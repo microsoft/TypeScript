@@ -1,10 +1,10 @@
-tests/cases/compiler/controlFlowNoImplicitAny.ts(101,9): error TS7034: Variable 'x' implicitly has type 'any' in some locations where its type cannot be determined.
-tests/cases/compiler/controlFlowNoImplicitAny.ts(110,19): error TS7005: Variable 'x' implicitly has an 'any' type.
-tests/cases/compiler/controlFlowNoImplicitAny.ts(116,9): error TS7034: Variable 'x' implicitly has type 'any' in some locations where its type cannot be determined.
-tests/cases/compiler/controlFlowNoImplicitAny.ts(125,19): error TS7005: Variable 'x' implicitly has an 'any' type.
+controlFlowNoImplicitAny.ts(101,9): error TS7034: Variable 'x' implicitly has type 'any' in some locations where its type cannot be determined.
+controlFlowNoImplicitAny.ts(110,19): error TS7005: Variable 'x' implicitly has an 'any' type.
+controlFlowNoImplicitAny.ts(116,9): error TS7034: Variable 'x' implicitly has type 'any' in some locations where its type cannot be determined.
+controlFlowNoImplicitAny.ts(125,19): error TS7005: Variable 'x' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/controlFlowNoImplicitAny.ts (4 errors) ====
+==== controlFlowNoImplicitAny.ts (4 errors) ====
     declare let cond: boolean;
     
     // CFA for 'let' with no type annotation and initializer

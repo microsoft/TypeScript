@@ -1,8 +1,8 @@
-tests/cases/compiler/controlFlowLoopAnalysis.ts(12,25): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+controlFlowLoopAnalysis.ts(12,25): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/compiler/controlFlowLoopAnalysis.ts (1 errors) ====
+==== controlFlowLoopAnalysis.ts (1 errors) ====
     // Repro from #8418
     
     let cond: boolean;

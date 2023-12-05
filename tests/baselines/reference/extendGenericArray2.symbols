@@ -1,4 +1,6 @@
-=== tests/cases/compiler/extendGenericArray2.ts ===
+//// [tests/cases/compiler/extendGenericArray2.ts] ////
+
+=== extendGenericArray2.ts ===
 interface IFoo<T> {
 >IFoo : Symbol(IFoo, Decl(extendGenericArray2.ts, 0, 0))
 >T : Symbol(T, Decl(extendGenericArray2.ts, 0, 15))

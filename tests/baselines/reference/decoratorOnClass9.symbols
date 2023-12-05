@@ -1,4 +1,6 @@
-=== tests/cases/conformance/decorators/class/decoratorOnClass9.ts ===
+//// [tests/cases/conformance/decorators/class/decoratorOnClass9.ts] ////
+
+=== decoratorOnClass9.ts ===
 declare var dec: any;
 >dec : Symbol(dec, Decl(decoratorOnClass9.ts, 0, 11))
 

@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode13.ts(4,7): error TS1100: Invalid use of 'eval' in strict mode.
+parserStrictMode13.ts(4,7): error TS1100: Invalid use of 'eval' in strict mode.
 
 
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode13.ts (1 errors) ====
+==== parserStrictMode13.ts (1 errors) ====
     "use strict";
     try {
     }

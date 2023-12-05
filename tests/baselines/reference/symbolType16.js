@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType16.ts] ////
+
 //// [symbolType16.ts]
 interface Symbol {
     newSymbolProp: number;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_main.ts ===
+//// [tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause.ts] ////
+
+=== aliasUsageInTypeArgumentOfExtendsClause_main.ts ===
 import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 >Backbone : typeof Backbone
 
@@ -26,7 +28,7 @@ class D extends C<IHasVisualizationModel> {
 >x : typeof moduleA
 >moduleA : typeof moduleA
 }
-=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_backbone.ts ===
+=== aliasUsageInTypeArgumentOfExtendsClause_backbone.ts ===
 export class Model {
 >Model : Model
 
@@ -34,7 +36,7 @@ export class Model {
 >someData : string
 }
 
-=== tests/cases/compiler/aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts ===
+=== aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts ===
 import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 >Backbone : typeof Backbone
 

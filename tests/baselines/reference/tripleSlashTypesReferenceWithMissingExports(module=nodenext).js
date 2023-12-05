@@ -17,4 +17,4 @@ const a: GlobalThing = { a: 0 };
 "use strict";
 /// <reference types="pkg" />
 Object.defineProperty(exports, "__esModule", { value: true });
-const a = { a: 0 };
+var a = { a: 0 };

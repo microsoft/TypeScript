@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedClassesinModule1.ts ===
+//// [tests/cases/compiler/unusedClassesinModule1.ts] ////
+
+=== unusedClassesinModule1.ts ===
 module A {
 >A : Symbol(A, Decl(unusedClassesinModule1.ts, 0, 0))
 

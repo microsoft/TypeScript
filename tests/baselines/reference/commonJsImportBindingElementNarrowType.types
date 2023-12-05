@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/commonJsImportBindingElementNarrowType.ts] ////
+
 === /bar.js ===
 const { a } = require("./foo");
 >a : number | null
@@ -20,5 +22,4 @@ if (a) {
 
 export const a: number | null;
 >a : number | null
->null : null
 

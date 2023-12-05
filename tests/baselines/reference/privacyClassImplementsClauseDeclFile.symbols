@@ -1,4 +1,6 @@
-=== tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts ===
+//// [tests/cases/compiler/privacyClassImplementsClauseDeclFile.ts] ////
+
+=== privacyClassImplementsClauseDeclFile_externalModule.ts ===
 export module publicModule {
 >publicModule : Symbol(publicModule, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 0, 0))
 
@@ -129,7 +131,7 @@ export class publicClassImplementingFromPrivateModuleInterface implements privat
 >publicInterfaceInPrivateModule : Symbol(privateModule.publicInterfaceInPrivateModule, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 25, 22))
 }
 
-=== tests/cases/compiler/privacyClassImplementsClauseDeclFile_GlobalFile.ts ===
+=== privacyClassImplementsClauseDeclFile_GlobalFile.ts ===
 module publicModuleInGlobal {
 >publicModuleInGlobal : Symbol(publicModuleInGlobal, Decl(privacyClassImplementsClauseDeclFile_GlobalFile.ts, 0, 0))
 

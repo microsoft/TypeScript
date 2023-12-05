@@ -1,9 +1,9 @@
-tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts(1,10): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts(1,11): error TS2339: Property 'a' does not exist on type 'String'.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts(1,14): error TS2339: Property 'b' does not exist on type 'String'.
+for-inStatementsDestructuring2.ts(1,10): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
+for-inStatementsDestructuring2.ts(1,11): error TS2339: Property 'a' does not exist on type 'String'.
+for-inStatementsDestructuring2.ts(1,14): error TS2339: Property 'b' does not exist on type 'String'.
 
 
-==== tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts (3 errors) ====
+==== for-inStatementsDestructuring2.ts (3 errors) ====
     for (var {a, b} in []) {}
              ~~~~~~
 !!! error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.

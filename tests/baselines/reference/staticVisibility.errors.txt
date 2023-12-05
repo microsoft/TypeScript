@@ -1,13 +1,11 @@
-tests/cases/compiler/staticVisibility.ts(9,9): error TS2662: Cannot find name 's'. Did you mean the static member 'C1.s'?
-tests/cases/compiler/staticVisibility.ts(12,9): error TS2662: Cannot find name 'b'. Did you mean the static member 'C1.b'?
-tests/cases/compiler/staticVisibility.ts(17,9): error TS2304: Cannot find name 'v'.
-tests/cases/compiler/staticVisibility.ts(18,14): error TS2339: Property 'p' does not exist on type 'typeof C1'.
-tests/cases/compiler/staticVisibility.ts(30,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/staticVisibility.ts(32,12): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/staticVisibility.ts(32,29): error TS2304: Cannot find name 'barback'.
+staticVisibility.ts(9,9): error TS2662: Cannot find name 's'. Did you mean the static member 'C1.s'?
+staticVisibility.ts(12,9): error TS2662: Cannot find name 'b'. Did you mean the static member 'C1.b'?
+staticVisibility.ts(17,9): error TS2304: Cannot find name 'v'.
+staticVisibility.ts(18,14): error TS2339: Property 'p' does not exist on type 'typeof C1'.
+staticVisibility.ts(32,29): error TS2304: Cannot find name 'barback'.
 
 
-==== tests/cases/compiler/staticVisibility.ts (7 errors) ====
+==== staticVisibility.ts (5 errors) ====
     class C1 {
         
         p: any;
@@ -46,12 +44,8 @@ tests/cases/compiler/staticVisibility.ts(32,29): error TS2304: Cannot find name 
     
     
     static get Bar() {return "bar";} // ok
-               ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
      
     static set Bar(bar:string) {barback = bar;} // not ok
-               ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                                 ~~~~~~~
 !!! error TS2304: Cannot find name 'barback'.
     

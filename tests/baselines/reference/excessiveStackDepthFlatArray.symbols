@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/excessiveStackDepthFlatArray.ts] ////
+
+=== index.tsx ===
 interface MiddlewareArray<T> extends Array<T> {}
 >MiddlewareArray : Symbol(MiddlewareArray, Decl(index.tsx, 0, 0))
 >T : Symbol(T, Decl(index.tsx, 0, 26))

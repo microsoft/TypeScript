@@ -1,0 +1,68 @@
+//// [tests/cases/compiler/coAndContraVariantInferences5.ts] ////
+
+=== coAndContraVariantInferences5.ts ===
+type Thing = 'a' | 'b';
+>Thing : Symbol(Thing, Decl(coAndContraVariantInferences5.ts, 0, 0))
+
+function f(
+>f : Symbol(f, Decl(coAndContraVariantInferences5.ts, 0, 23))
+
+    options: SelectOptions<Thing>,
+>options : Symbol(options, Decl(coAndContraVariantInferences5.ts, 2, 11))
+>SelectOptions : Symbol(SelectOptions, Decl(coAndContraVariantInferences5.ts, 17, 2))
+>Thing : Symbol(Thing, Decl(coAndContraVariantInferences5.ts, 0, 0))
+
+    onChange: (status: Thing | null) => void,
+>onChange : Symbol(onChange, Decl(coAndContraVariantInferences5.ts, 3, 34))
+>status : Symbol(status, Decl(coAndContraVariantInferences5.ts, 4, 15))
+>Thing : Symbol(Thing, Decl(coAndContraVariantInferences5.ts, 0, 0))
+
+): void {
+    select({
+>select : Symbol(select, Decl(coAndContraVariantInferences5.ts, 10, 1))
+
+        options,
+>options : Symbol(options, Decl(coAndContraVariantInferences5.ts, 6, 12))
+
+        onChange,
+>onChange : Symbol(onChange, Decl(coAndContraVariantInferences5.ts, 7, 16))
+
+    });
+}
+
+declare function select<KeyT extends string>(props: SelectProps<KeyT>): void;
+>select : Symbol(select, Decl(coAndContraVariantInferences5.ts, 10, 1))
+>KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 12, 24))
+>props : Symbol(props, Decl(coAndContraVariantInferences5.ts, 12, 45))
+>SelectProps : Symbol(SelectProps, Decl(coAndContraVariantInferences5.ts, 12, 77))
+>KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 12, 24))
+
+type SelectProps<KeyT extends string> = {
+>SelectProps : Symbol(SelectProps, Decl(coAndContraVariantInferences5.ts, 12, 77))
+>KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 14, 17))
+
+    options?: SelectOptions<KeyT>;
+>options : Symbol(options, Decl(coAndContraVariantInferences5.ts, 14, 41))
+>SelectOptions : Symbol(SelectOptions, Decl(coAndContraVariantInferences5.ts, 17, 2))
+>KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 14, 17))
+
+    onChange: (key: KeyT) => void;
+>onChange : Symbol(onChange, Decl(coAndContraVariantInferences5.ts, 15, 34))
+>key : Symbol(key, Decl(coAndContraVariantInferences5.ts, 16, 15))
+>KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 14, 17))
+
+};
+
+type SelectOptions<KeyT extends string> =
+>SelectOptions : Symbol(SelectOptions, Decl(coAndContraVariantInferences5.ts, 17, 2))
+>KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 19, 19))
+
+    | Array<{key: KeyT}>
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(coAndContraVariantInferences5.ts, 20, 13))
+>KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 19, 19))
+
+    | Array<KeyT>;
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>KeyT : Symbol(KeyT, Decl(coAndContraVariantInferences5.ts, 19, 19))
+

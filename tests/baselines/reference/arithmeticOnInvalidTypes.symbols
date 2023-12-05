@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arithmeticOnInvalidTypes.ts ===
+//// [tests/cases/compiler/arithmeticOnInvalidTypes.ts] ////
+
+=== arithmeticOnInvalidTypes.ts ===
 var x: Number;
 >x : Symbol(x, Decl(arithmeticOnInvalidTypes.ts, 0, 3))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

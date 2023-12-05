@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferSetterParamType.ts] ////
+
 //// [inferSetterParamType.ts]
 class Foo {
 

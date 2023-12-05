@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericCallWithoutArgs.ts ===
+//// [tests/cases/compiler/genericCallWithoutArgs.ts] ////
+
+=== genericCallWithoutArgs.ts ===
 function f<X, Y>(x: X, y: Y) {
 >f : <X, Y>(x: X, y: Y) => void
 >x : X

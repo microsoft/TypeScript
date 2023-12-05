@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkerInitializationCrash.ts] ////
+
 === /node_modules/@fullcalendar/react/index.d.ts ===
 import * as react from 'react';
 >react : Symbol(react, Decl(index.d.ts, 0, 6))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowCommaOperatorNestedWithinLHS.ts ===
+//// [tests/cases/compiler/narrowCommaOperatorNestedWithinLHS.ts] ////
+
+=== narrowCommaOperatorNestedWithinLHS.ts ===
 const otherValue = () => true;
 >otherValue : () => boolean
 >() => true : () => boolean
@@ -8,7 +10,6 @@ const value: { inner: number | string } = null as any;
 >value : { inner: number | string; }
 >inner : string | number
 >null as any : any
->null : null
 
 function isNumber(obj: any): obj is number {
 >isNumber : (obj: any) => obj is number

@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/file.tsx(17,7): error TS2322: Type '{ x: number; }' is not assignable to type '{ q?: number; }'.
+file.tsx(17,7): error TS2322: Type '{ x: number; }' is not assignable to type '{ q?: number; }'.
   Property 'x' does not exist on type '{ q?: number; }'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     declare module JSX {
     	interface Element { }
     	interface ElementAttributesProperty { }

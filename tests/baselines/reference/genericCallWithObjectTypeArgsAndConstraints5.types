@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints5.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints5.ts] ////
+
+=== genericCallWithObjectTypeArgsAndConstraints5.ts ===
 // Generic call with constraints infering type parameter from object member properties
 
 class C {
@@ -56,7 +58,7 @@ function other<T, U extends T>() {
     var r5 = foo<T, U>(c, d); // error
 >r5 : (x: T) => U
 >foo<T, U>(c, d) : (x: T) => U
->foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
+>foo : <T_1, U_1 extends T_1>(t: T_1, t2: U_1) => (x: T_1) => U_1
 >c : C
 >d : D
 }

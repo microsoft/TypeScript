@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration12.ts(2,8): error TS1054: A 'get' accessor cannot have parameters.
-tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration12.ts(2,8): error TS2378: A 'get' accessor must return a value.
+parserMemberAccessorDeclaration12.ts(2,8): error TS1054: A 'get' accessor cannot have parameters.
+parserMemberAccessorDeclaration12.ts(2,8): error TS2378: A 'get' accessor must return a value.
 
 
-==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration12.ts (2 errors) ====
+==== parserMemberAccessorDeclaration12.ts (2 errors) ====
     class C {
        get Foo(a: number) { }
            ~~~

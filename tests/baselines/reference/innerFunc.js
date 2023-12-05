@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/innerFunc.ts] ////
+
 //// [innerFunc.ts]
 function salt() {
   function pepper() { return 5;}

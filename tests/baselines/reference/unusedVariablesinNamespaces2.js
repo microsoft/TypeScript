@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesinNamespaces2.ts] ////
+
 //// [unusedVariablesinNamespaces2.ts]
 namespace Validation {
     const lettersRegexp = /^[A-Za-z]+$/;

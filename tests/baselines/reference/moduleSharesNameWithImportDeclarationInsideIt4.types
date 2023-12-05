@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt4.ts ===
+//// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt4.ts] ////
+
+=== moduleSharesNameWithImportDeclarationInsideIt4.ts ===
 module Z.M {
 >Z : typeof Z
 >M : typeof M

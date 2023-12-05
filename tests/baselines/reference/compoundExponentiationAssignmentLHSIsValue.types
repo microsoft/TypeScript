@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts ===
+//// [tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsValue.ts] ////
+
+=== compoundExponentiationAssignmentLHSIsValue.ts ===
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value: any;
 >value : any
@@ -76,7 +78,6 @@ foo **= value;
 // literals
 null **= value;
 >null **= value : number
->null : null
 >value : any
 
 true **= value;
@@ -209,7 +210,6 @@ foo() **= value;
 (null) **= value;
 >(null) **= value : number
 >(null) : null
->null : null
 >value : any
 
 (true) **= value;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/identicalTypesNoDifferByCheckOrder.ts] ////
+
 //// [identicalTypesNoDifferByCheckOrder.ts]
 interface SomeProps {
     x?: string;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexer3.ts] ////
+
 //// [indexer3.ts]
 var dateMap: { [x: string]: Date; } = {}
 var r: Date = dateMap["hello"] // result type includes indexer using BCT

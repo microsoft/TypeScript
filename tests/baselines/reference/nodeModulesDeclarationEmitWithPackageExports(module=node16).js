@@ -96,15 +96,15 @@ export const cjsNonmain = true;
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";
-export const a = cjs;
-export const b = mjs;
-export const c = type;
+export var a = cjs;
+export var b = mjs;
+export var c = type;
 import * as cjsi from "inner/cjs";
 import * as mjsi from "inner/mjs";
 import * as typei from "inner";
-export const d = cjsi;
-export const e = mjsi;
-export const f = typei;
+export var d = cjsi;
+export var e = mjsi;
+export var f = typei;
 //// [index.cjs]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -133,15 +133,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
 // cjs format file
-const cjs = __importStar(require("package/cjs"));
-const mjs = __importStar(require("package/mjs"));
-const type = __importStar(require("package"));
+var cjs = __importStar(require("package/cjs"));
+var mjs = __importStar(require("package/mjs"));
+var type = __importStar(require("package"));
 exports.a = cjs;
 exports.b = mjs;
 exports.c = type;
-const cjsi = __importStar(require("inner/cjs"));
-const mjsi = __importStar(require("inner/mjs"));
-const typei = __importStar(require("inner"));
+var cjsi = __importStar(require("inner/cjs"));
+var mjsi = __importStar(require("inner/mjs"));
+var typei = __importStar(require("inner"));
 exports.d = cjsi;
 exports.e = mjsi;
 exports.f = typei;
@@ -150,15 +150,15 @@ exports.f = typei;
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";
-export const a = cjs;
-export const b = mjs;
-export const c = type;
+export var a = cjs;
+export var b = mjs;
+export var c = type;
 import * as cjsi from "inner/cjs";
 import * as mjsi from "inner/mjs";
 import * as typei from "inner";
-export const d = cjsi;
-export const e = mjsi;
-export const f = typei;
+export var d = cjsi;
+export var e = mjsi;
+export var f = typei;
 
 
 //// [index.d.mts]

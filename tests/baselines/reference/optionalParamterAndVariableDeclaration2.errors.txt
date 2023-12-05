@@ -1,13 +1,13 @@
-tests/cases/compiler/optionalParamterAndVariableDeclaration2.ts(3,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'options' must be of type 'number | undefined', but here has type 'number'.
+optionalParamterAndVariableDeclaration2.ts(3,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'options' must be of type 'number | undefined', but here has type 'number'.
 
 
-==== tests/cases/compiler/optionalParamterAndVariableDeclaration2.ts (1 errors) ====
+==== optionalParamterAndVariableDeclaration2.ts (1 errors) ====
     class C {
         constructor(options?: number) {
             var options = (options || 0);
                 ~~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'options' must be of type 'number | undefined', but here has type 'number'.
-!!! related TS6203 tests/cases/compiler/optionalParamterAndVariableDeclaration2.ts:2:17: 'options' was also declared here.
+!!! related TS6203 optionalParamterAndVariableDeclaration2.ts:2:17: 'options' was also declared here.
         }
     }
     

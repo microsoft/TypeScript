@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessOverriddenBaseClassMember1.ts ===
+//// [tests/cases/compiler/accessOverriddenBaseClassMember1.ts] ////
+
+=== accessOverriddenBaseClassMember1.ts ===
 class Point {
 >Point : Point
 

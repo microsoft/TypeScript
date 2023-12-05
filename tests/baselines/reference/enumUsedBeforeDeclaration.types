@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumUsedBeforeDeclaration.ts ===
+//// [tests/cases/compiler/enumUsedBeforeDeclaration.ts] ////
+
+=== enumUsedBeforeDeclaration.ts ===
 const v: Color = Color.Green;
 >v : Color
 >Color.Green : Color.Green

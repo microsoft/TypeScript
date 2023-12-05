@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleVisibilityTest2.ts ===
+//// [tests/cases/compiler/moduleVisibilityTest2.ts] ////
+
+=== moduleVisibilityTest2.ts ===
 module OuterMod {
 >OuterMod : typeof OuterMod
 
@@ -144,7 +146,6 @@ var cprime : M.I = <M.I>null;
 >M : any
 ><M.I>null : M.I
 >M : any
->null : null
 
 var c = new M.C();
 >c : M.C

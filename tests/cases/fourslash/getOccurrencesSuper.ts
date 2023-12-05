@@ -50,4 +50,4 @@
 ////    static super = 20;
 ////}
 
-verify.rangesAreOccurrences(false);
+verify.baselineDocumentHighlights();

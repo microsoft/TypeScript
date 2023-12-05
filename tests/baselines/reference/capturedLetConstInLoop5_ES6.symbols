@@ -1,4 +1,6 @@
-=== tests/cases/compiler/capturedLetConstInLoop5_ES6.ts ===
+//// [tests/cases/compiler/capturedLetConstInLoop5_ES6.ts] ////
+
+=== capturedLetConstInLoop5_ES6.ts ===
 declare function use(a: any);
 >use : Symbol(use, Decl(capturedLetConstInLoop5_ES6.ts, 0, 0))
 >a : Symbol(a, Decl(capturedLetConstInLoop5_ES6.ts, 0, 21))

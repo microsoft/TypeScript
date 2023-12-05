@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/augmentedTypesClass3.ts] ////
+
 //// [augmentedTypesClass3.ts]
 // class then module
 class c5 { public foo() { } }

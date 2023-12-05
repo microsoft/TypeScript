@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric1.ts(2,23): error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric1.ts(2,45): error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric1.ts(2,54): error TS1005: '>' expected.
+parserUnterminatedGeneric1.ts(2,23): error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
+parserUnterminatedGeneric1.ts(2,45): error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
+parserUnterminatedGeneric1.ts(2,54): error TS1005: '>' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric1.ts (3 errors) ====
+==== parserUnterminatedGeneric1.ts (3 errors) ====
      interface IQService {
             all(promises: IPromise < any > []): IPromise<
                           ~~~~~~~~

@@ -1,8 +1,8 @@
-error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'tests/cases/compiler/package.json'. Supply the `rootDir` compiler option to disambiguate.
+error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
 
 
-!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'tests/cases/compiler/package.json'. Supply the `rootDir` compiler option to disambiguate.
-==== tests/cases/compiler/package.json (0 errors) ====
+!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
+==== package.json (0 errors) ====
     {
       "name": "@this/package",
       "type": "module",
@@ -10,7 +10,7 @@ error TS2209: The project root is ambiguous, but is required to resolve export m
         ".": "./dist/index.js"
       }
     }
-==== tests/cases/compiler/index.ts (0 errors) ====
+==== index.ts (0 errors) ====
     import * as me from "@this/package";
     
     me.thing();

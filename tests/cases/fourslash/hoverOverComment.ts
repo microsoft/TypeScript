@@ -6,5 +6,5 @@
 
 goTo.marker();
 verify.quickInfoIs("");
-verify.goToDefinitionIs([]);
 verify.baselineFindAllReferences("");
+verify.baselineGetDefinitionAtPosition("");

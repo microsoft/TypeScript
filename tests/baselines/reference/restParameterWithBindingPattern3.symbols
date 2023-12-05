@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParameterWithBindingPattern3.ts ===
+//// [tests/cases/compiler/restParameterWithBindingPattern3.ts] ////
+
+=== restParameterWithBindingPattern3.ts ===
 function a(...[a = 1, b = true]: string[]) { }
 >a : Symbol(a, Decl(restParameterWithBindingPattern3.ts, 0, 0))
 >a : Symbol(a, Decl(restParameterWithBindingPattern3.ts, 0, 15))

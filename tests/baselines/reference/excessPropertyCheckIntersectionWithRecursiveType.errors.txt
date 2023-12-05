@@ -1,0 +1,129 @@
+excessPropertyCheckIntersectionWithRecursiveType.ts(13,9): error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema1<boolean>; }'.
+excessPropertyCheckIntersectionWithRecursiveType.ts(26,9): error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+excessPropertyCheckIntersectionWithRecursiveType.ts(39,9): error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema3<boolean>; }'.
+excessPropertyCheckIntersectionWithRecursiveType.ts(52,9): error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type 'Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+excessPropertyCheckIntersectionWithRecursiveType.ts(86,11): error TS2353: Object literal may only specify known properties, and 'children' does not exist in type 'User'.
+excessPropertyCheckIntersectionWithRecursiveType.ts(102,35): error TS2339: Property 'children' does not exist on type 'User'.
+
+
+==== excessPropertyCheckIntersectionWithRecursiveType.ts (6 errors) ====
+    // repro from #44750
+    
+    type Request = { l1: { l2: boolean } };
+    type Example<T> = { ex?: T | null };
+    
+    type Schema1<T> = (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema1<T[P]> }; }) & Example<T>;
+    
+    export const schemaObj1: Schema1<Request> = {
+      props: {
+        l1: {
+          props: {
+            l2: { type: 'boolean' },
+            invalid: false,
+            ~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema1<boolean>; }'.
+!!! related TS6500 excessPropertyCheckIntersectionWithRecursiveType.ts:6:65: The expected type comes from property 'props' which is declared here on type 'Schema1<{ l2: boolean; }>'
+          },
+        },
+      },
+    }
+    
+    type Schema2<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: { [P in keyof T]: Schema2<T[P]> }; } & Example<T>);
+    
+    export const schemaObj2: Schema2<Request> = {
+      props: {
+        l1: {
+          props: {
+            l2: { type: 'boolean' },
+            invalid: false,
+            ~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+!!! related TS6500 excessPropertyCheckIntersectionWithRecursiveType.ts:19:78: The expected type comes from property 'props' which is declared here on type '{ props: { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; } & Example<{ l2: boolean; }>'
+          },
+        },
+      },
+    }
+    
+    type Schema3<T> = Example<T> & (T extends boolean ? { type: 'boolean'; } : { props: { [P in keyof T]: Schema3<T[P]> }; });
+    
+    export const schemaObj3: Schema3<Request> = {
+      props: {
+        l1: {
+          props: {
+            l2: { type: 'boolean' },
+            invalid: false,
+            ~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type '{ l2: Schema3<boolean>; }'.
+!!! related TS6500 excessPropertyCheckIntersectionWithRecursiveType.ts:32:78: The expected type comes from property 'props' which is declared here on type 'Schema3<{ l2: boolean; }>'
+          },
+        },
+      },
+    }
+    
+    type Schema4<T> = (T extends boolean ? { type: 'boolean'; } & Example<T> : { props: Example<T> & { [P in keyof T]: Schema4<T[P]> }; });
+    
+    export const schemaObj4: Schema4<Request> = {
+      props: {
+        l1: {
+          props: {
+            l2: { type: 'boolean' },
+            invalid: false,
+            ~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type 'Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }'.
+!!! related TS6500 excessPropertyCheckIntersectionWithRecursiveType.ts:45:78: The expected type comes from property 'props' which is declared here on type '{ props: Example<{ l2: boolean; }> & { l2: ({ type: "boolean"; } & Example<false>) | ({ type: "boolean"; } & Example<true>); }; }'
+          },
+        },
+      },
+    }
+    
+    // repro from #40405
+    
+    type Length<T extends any[]> = T["length"];
+    type Prepend<V, T extends any[]> = ((head: V, ...args: T) => void) extends (
+      ...args: infer R
+    ) => void
+      ? R
+      : any;
+    
+    type BuildTree<T, N extends number = -1, I extends any[] = []> = {
+      1: T;
+      0: T & { children: BuildTree<T, N, Prepend<any, I>>[] };
+    }[Length<I> extends N ? 1 : 0];
+    
+    interface User {
+      name: string;
+    }
+    
+    type GrandUser = BuildTree<User, 2>;
+    
+    const grandUser: GrandUser = {
+      name: "Grand User",
+      children: [
+        {
+          name: "Son",
+          children: [
+            {
+              name: "Grand son",
+              children: [
+              ~~~~~~~~
+!!! error TS2353: Object literal may only specify known properties, and 'children' does not exist in type 'User'.
+                {
+                  name: "123",
+                  children: [
+                    {
+                      name: "Some other name",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    
+    grandUser.children[0].children[0].children[0];
+                                      ~~~~~~~~
+!!! error TS2339: Property 'children' does not exist on type 'User'.
+    
+    

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/twiceNestedKeyofIndexInference.ts] ////
+
 //// [twiceNestedKeyofIndexInference.ts]
 type Set1<T, K1 extends keyof T> = T extends any[] ? T : Pick<T, Exclude<keyof T, K1>> & {
     [SK1 in K1]-?: Required<Pick<T, SK1>>;
@@ -36,8 +38,8 @@ const newState: State = set(state, ["a", 'b'], 'why'); // shouldn't be an error
 var state = {
     a: {
         b: "",
-        c: 0
+        c: 0,
     },
-    d: false
+    d: false,
 };
 var newState = set(state, ["a", 'b'], 'why'); // shouldn't be an error

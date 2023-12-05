@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorAsType.ts] ////
+
 //// [constructorAsType.ts]
 var Person:new () => {name: string;} = function () {return {name:"joe"};};
 

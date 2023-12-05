@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts ===
+//// [tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts] ////
+
+=== errorsForCallAndAssignmentAreSimilar.ts ===
 function minimalExample1() {
 >minimalExample1 : Symbol(minimalExample1, Decl(errorsForCallAndAssignmentAreSimilar.ts, 0, 0))
 

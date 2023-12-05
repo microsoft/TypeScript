@@ -1,4 +1,6 @@
-=== tests/cases/compiler/alwaysStrictNoImplicitUseStrict.ts ===
+//// [tests/cases/compiler/alwaysStrictNoImplicitUseStrict.ts] ////
+
+=== alwaysStrictNoImplicitUseStrict.ts ===
 module M {
 >M : Symbol(M, Decl(alwaysStrictNoImplicitUseStrict.ts, 0, 0))
 

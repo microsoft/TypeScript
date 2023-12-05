@@ -1,4 +1,4 @@
-tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,1): error TS2769: No overload matches this call.
+underscoreTest1_underscoreTests.ts(26,3): error TS2769: No overload matches this call.
   Overload 1 of 2, '(list: (string | number | boolean)[], iterator?: Iterator_<string | number | boolean, boolean>, context?: any): boolean', gave the following error.
     Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator_<string | number | boolean, boolean>'.
       Type 'string | number | boolean' is not assignable to type 'boolean'.
@@ -8,7 +8,7 @@ tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,1): error TS2769: No 
       Index signature for type 'string' is missing in type '(string | number | boolean)[]'.
 
 
-==== tests/cases/compiler/underscoreTest1_underscoreTests.ts (1 errors) ====
+==== underscoreTest1_underscoreTests.ts (1 errors) ====
     /// <reference path="underscoreTest1_underscore.ts" />
     
     declare var $;
@@ -35,7 +35,7 @@ tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,1): error TS2769: No 
     var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
     
     _.all([true, 1, null, 'yes'], _.identity);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(list: (string | number | boolean)[], iterator?: Iterator_<string | number | boolean, boolean>, context?: any): boolean', gave the following error.
 !!! error TS2769:     Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator_<string | number | boolean, boolean>'.
@@ -270,7 +270,7 @@ tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,1): error TS2769: No 
     var template2 = _.template("Hello {{ name }}!");
     template2({ name: "Mustache" });
     _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'data' });
-==== tests/cases/compiler/underscoreTest1_underscore.ts (0 errors) ====
+==== underscoreTest1_underscore.ts (0 errors) ====
     interface Dictionary<T> {
         [x: string]: T;
     }

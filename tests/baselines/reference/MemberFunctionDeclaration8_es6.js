@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration8_es6.ts] ////
+
 //// [MemberFunctionDeclaration8_es6.ts]
 class C {
   foo() {

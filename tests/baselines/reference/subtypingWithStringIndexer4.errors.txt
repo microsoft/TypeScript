@@ -1,18 +1,18 @@
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts(11,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
+subtypingWithStringIndexer4.ts(11,7): error TS2415: Class 'B' incorrectly extends base class 'A'.
   'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'Derived'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts(20,11): error TS2415: Class 'B' incorrectly extends base class 'A<Base>'.
+subtypingWithStringIndexer4.ts(20,11): error TS2415: Class 'B' incorrectly extends base class 'A<Base>'.
   'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'Base'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts(20,23): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+subtypingWithStringIndexer4.ts(20,23): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts(24,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
+subtypingWithStringIndexer4.ts(24,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
   'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts (4 errors) ====
+==== subtypingWithStringIndexer4.ts (4 errors) ====
     // Derived type indexer must be subtype of base type indexer
     
     interface Base { foo: string; }
@@ -44,7 +44,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
                           ~~~~
 !!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
 !!! error TS2344:   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
-!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer4.ts:4:34: 'bar' is declared here.
+!!! related TS2728 subtypingWithStringIndexer4.ts:4:34: 'bar' is declared here.
             [x: string]: string; // error
         }
     

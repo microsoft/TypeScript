@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es2017/asyncAwait_es2017.ts] ////
+
 //// [asyncAwait_es2017.ts]
 type MyPromise<T> = Promise<T>;
 declare var MyPromise: typeof Promise;

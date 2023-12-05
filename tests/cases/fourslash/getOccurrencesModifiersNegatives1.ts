@@ -34,7 +34,4 @@
 ////[|{| "count": 0 |}public|] [|{| "count": 0 |}static|] [|{| "count": 0 |}protected|] [|{| "count": 0 |}private|] f;
 ////[|{| "count": 0 |}protected|] [|{| "count": 0 |}static|] [|{| "count": 0 |}public|] g;
 
-for (const range of test.ranges()) {
-    goTo.rangeStart(range);
-    verify.occurrencesAtPositionCount(range.marker.data.count);
-}
+verify.baselineDocumentHighlights();

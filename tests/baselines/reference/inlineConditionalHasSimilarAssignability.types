@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inlineConditionalHasSimilarAssignability.ts ===
+//// [tests/cases/compiler/inlineConditionalHasSimilarAssignability.ts] ////
+
+=== inlineConditionalHasSimilarAssignability.ts ===
 type MyExtract<T, U> = T extends U ? T : never
 >MyExtract : MyExtract<T, U>
 

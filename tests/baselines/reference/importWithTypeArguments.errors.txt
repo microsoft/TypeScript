@@ -1,11 +1,14 @@
-tests/cases/conformance/types/import/importWithTypeArguments.ts(1,1): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
-tests/cases/conformance/types/import/importWithTypeArguments.ts(2,11): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
+importWithTypeArguments.ts(1,1): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
+importWithTypeArguments.ts(1,8): error TS2304: Cannot find name 'T'.
+importWithTypeArguments.ts(2,11): error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
 
 
-==== tests/cases/conformance/types/import/importWithTypeArguments.ts (2 errors) ====
+==== importWithTypeArguments.ts (3 errors) ====
     import<T>
     ~~~~~~~~~
 !!! error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.
+           ~
+!!! error TS2304: Cannot find name 'T'.
     const a = import<string, number>
               ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1326: This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.

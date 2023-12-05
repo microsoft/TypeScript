@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/propertyNamesWithStringLiteral.ts] ////
+
 //// [propertyNamesWithStringLiteral.ts]
 class _Color {
     a: number; r: number; g: number; b: number;

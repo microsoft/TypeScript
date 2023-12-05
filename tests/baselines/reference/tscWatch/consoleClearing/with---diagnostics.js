@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/f.ts]
 
@@ -29,8 +30,23 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true,"diagnostics":true}
+//// [/f.js]
+
+
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/f.ts: *new*
+  {}
+
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true,
+  "diagnostics": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -44,21 +60,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /f.ts (used version)
 
-PolledWatches::
-
-FsWatches::
-/f.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/f.js]
-
-
 
 Change:: Comment added to file f
 
@@ -71,6 +73,16 @@ Output::
 FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
 
@@ -81,8 +93,19 @@ CreatingProgramWith::
 
 
 
-Program root files: ["/f.ts"]
-Program options: {"watch":true,"diagnostics":true}
+//// [/f.js]
+//
+
+
+
+
+Program root files: [
+  "/f.ts"
+]
+Program options: {
+  "watch": true,
+  "diagnostics": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -94,19 +117,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /f.ts (computed .d.ts)
 
-PolledWatches::
-
-FsWatches::
-/f.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-
 exitCode:: ExitStatus.undefined
-
-//// [/f.js]
-//
-
-

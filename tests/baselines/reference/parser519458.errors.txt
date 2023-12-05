@@ -1,9 +1,9 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts(1,15): error TS2503: Cannot find namespace 'module'.
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts(1,15): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts(1,21): error TS1005: ';' expected.
+parser519458.ts(1,15): error TS2503: Cannot find namespace 'module'.
+parser519458.ts(1,15): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parser519458.ts(1,21): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts (3 errors) ====
+==== parser519458.ts (3 errors) ====
     import rect = module("rect"); var bar = new rect.Rect();
                   ~~~~~~
 !!! error TS2503: Cannot find namespace 'module'.

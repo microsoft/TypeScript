@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arityErrorRelatedSpanBindingPattern.ts ===
+//// [tests/cases/compiler/arityErrorRelatedSpanBindingPattern.ts] ////
+
+=== arityErrorRelatedSpanBindingPattern.ts ===
 function foo(a, b, {c}): void {}
 >foo : (a: any, b: any, { c }: { c: any; }) => void
 >a : any

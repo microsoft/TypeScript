@@ -13,11 +13,12 @@ let fnumber: number = f;
 //// [f.ts]
 export = 10;
 
+
 //// [out/node_modules/f.js]
 "use strict";
 module.exports = 10;
 //// [out/projects/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var f = require("f"); // should work to f.ts
 var fnumber = f;

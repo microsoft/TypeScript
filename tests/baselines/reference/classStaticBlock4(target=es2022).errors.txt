@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(8,14): error TS2729: Property 's2' is used before its initialization.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(9,11): error TS2729: Property 's2' is used before its initialization.
+classStaticBlock4.ts(8,14): error TS2729: Property 's2' is used before its initialization.
+classStaticBlock4.ts(9,11): error TS2729: Property 's2' is used before its initialization.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts (2 errors) ====
+==== classStaticBlock4.ts (2 errors) ====
     class C {
         static s1 = 1;
     
@@ -13,11 +13,11 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(9,11): err
             this.s2;
                  ~~
 !!! error TS2729: Property 's2' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts:12:12: 's2' is declared here.
+!!! related TS2728 classStaticBlock4.ts:12:12: 's2' is declared here.
             C.s2;
               ~~
 !!! error TS2729: Property 's2' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts:12:12: 's2' is declared here.
+!!! related TS2728 classStaticBlock4.ts:12:12: 's2' is declared here.
         }
     
         static s2 = 2;

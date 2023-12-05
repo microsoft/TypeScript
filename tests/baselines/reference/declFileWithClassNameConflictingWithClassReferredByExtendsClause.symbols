@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts ===
+//// [tests/cases/compiler/declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts] ////
+
+=== declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts ===
 declare module A.B.Base {
 >A : Symbol(A, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 0))
 >B : Symbol(B, Decl(declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts, 0, 17))

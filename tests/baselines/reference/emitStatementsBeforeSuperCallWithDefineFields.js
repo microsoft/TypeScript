@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/superCalls/emitStatementsBeforeSuperCallWithDefineFields.ts] ////
+
 //// [emitStatementsBeforeSuperCallWithDefineFields.ts]
 class Base {
 }

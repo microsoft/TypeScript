@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/narrowingDestructuring.ts] ////
+
 //// [narrowingDestructuring.ts]
 type X = { kind: "a", a: string } | { kind: "b", b: string }
 
@@ -34,10 +36,11 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 
 function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
     const [head, ...tail] = x;
-    if (x[0] === 'number') {
+    if (typeof x[0] === 'number') {
         const [head, ...tail] = x;
     }
 }
+
 
 //// [narrowingDestructuring.js]
 var __rest = (this && this.__rest) || function (s, e) {
@@ -83,7 +86,7 @@ function func3(t) {
 }
 function farr(x) {
     var head = x[0], tail = x.slice(1);
-    if (x[0] === 'number') {
+    if (typeof x[0] === 'number') {
         var head_1 = x[0], tail_1 = x.slice(1);
     }
 }

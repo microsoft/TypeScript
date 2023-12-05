@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCollisionThisExpressionInFunctionAndVarInGlobal.ts ===
+//// [tests/cases/compiler/noCollisionThisExpressionInFunctionAndVarInGlobal.ts] ////
+
+=== noCollisionThisExpressionInFunctionAndVarInGlobal.ts ===
 var console: {
 >console : { log(val: any): any; }
 

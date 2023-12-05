@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts] ////
+
 //// [classExtendingClassLikeType.ts]
 interface Base<T, U> {
     x: T;

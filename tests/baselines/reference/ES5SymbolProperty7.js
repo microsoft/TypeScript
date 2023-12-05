@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty7.ts] ////
+
 //// [ES5SymbolProperty7.ts]
 var Symbol: { iterator: any };
 

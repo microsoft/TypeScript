@@ -56,16 +56,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var other_js_1 = require("./other.js");
 var other = __importStar(require("./other.js"));
 var other_js_2 = __importDefault(require("./other.js"));
 var x = new other_js_1.Foo();
 var y = other.Foo();
-var z = new other_js_2["default"]();
+var z = new other_js_2.default();
 //// [other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
@@ -80,4 +80,4 @@ var Bar = /** @class */ (function () {
     }
     return Bar;
 }());
-exports["default"] = Bar;
+exports.default = Bar;

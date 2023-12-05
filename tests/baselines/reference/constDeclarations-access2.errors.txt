@@ -1,23 +1,23 @@
-tests/cases/compiler/constDeclarations-access2.ts(4,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(5,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(6,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(7,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(8,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(9,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(10,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(11,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(12,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(13,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(14,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(15,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(17,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(18,1): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(19,3): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(20,3): error TS2588: Cannot assign to 'x' because it is a constant.
-tests/cases/compiler/constDeclarations-access2.ts(22,5): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(4,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(5,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(6,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(7,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(8,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(9,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(10,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(11,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(12,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(13,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(14,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(15,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(17,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(18,1): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(19,3): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(20,3): error TS2588: Cannot assign to 'x' because it is a constant.
+constDeclarations-access2.ts(22,5): error TS2588: Cannot assign to 'x' because it is a constant.
 
 
-==== tests/cases/compiler/constDeclarations-access2.ts (17 errors) ====
+==== constDeclarations-access2.ts (17 errors) ====
     const x = 0
     
     // Errors

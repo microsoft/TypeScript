@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/targetTypeObjectLiteralToAny.ts] ////
+
 //// [targetTypeObjectLiteralToAny.ts]
 function suggest(){ 
 	var TypeScriptKeywords:string[];  

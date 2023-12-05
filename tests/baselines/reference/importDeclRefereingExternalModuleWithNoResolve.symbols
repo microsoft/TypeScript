@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts ===
+//// [tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts] ////
+
+=== importDeclRefereingExternalModuleWithNoResolve.ts ===
 import b = require("externalModule");
 >b : Symbol(b, Decl(importDeclRefereingExternalModuleWithNoResolve.ts, 0, 0))
 

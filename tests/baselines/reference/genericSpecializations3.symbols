@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericSpecializations3.ts ===
+//// [tests/cases/compiler/genericSpecializations3.ts] ////
+
+=== genericSpecializations3.ts ===
 interface IFoo<T> {
 >IFoo : Symbol(IFoo, Decl(genericSpecializations3.ts, 0, 0))
 >T : Symbol(T, Decl(genericSpecializations3.ts, 0, 15))

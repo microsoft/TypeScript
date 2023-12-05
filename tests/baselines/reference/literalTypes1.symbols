@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/literal/literalTypes1.ts ===
+//// [tests/cases/conformance/types/literal/literalTypes1.ts] ////
+
+=== literalTypes1.ts ===
 let zero: 0 = 0;
 >zero : Symbol(zero, Decl(literalTypes1.ts, 0, 3))
 

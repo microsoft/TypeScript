@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectLiteralComputedNameNoDeclarationError.ts] ////
+
 //// [objectLiteralComputedNameNoDeclarationError.ts]
 const Foo = {
     BANANA: 'banana' as 'banana',
@@ -10,10 +12,10 @@ export const Baa = {
 //// [objectLiteralComputedNameNoDeclarationError.js]
 "use strict";
 var _a;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Baa = void 0;
 var Foo = {
-    BANANA: 'banana'
+    BANANA: 'banana',
 };
 exports.Baa = (_a = {},
     _a[Foo.BANANA] = 1,

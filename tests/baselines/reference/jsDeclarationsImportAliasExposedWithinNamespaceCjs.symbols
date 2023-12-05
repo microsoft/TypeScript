@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/declarations/file2.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsImportAliasExposedWithinNamespaceCjs.ts] ////
+
+=== file2.js ===
 const {myTypes} = require('./file.js');
 >myTypes : Symbol(myTypes, Decl(file2.js, 0, 7))
 >require : Symbol(require)
->'./file.js' : Symbol("tests/cases/conformance/jsdoc/declarations/file", Decl(file.js, 0, 0))
+>'./file.js' : Symbol("file", Decl(file.js, 0, 0))
 
 /**
  * @namespace testFnTypes
@@ -45,7 +47,7 @@ module.exports = {testFn, testFnTypes};
 >testFn : Symbol(testFn, Decl(file2.js, 27, 18))
 >testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 25))
 
-=== tests/cases/conformance/jsdoc/declarations/file.js ===
+=== file.js ===
 /**
  * @namespace myTypes
  * @global

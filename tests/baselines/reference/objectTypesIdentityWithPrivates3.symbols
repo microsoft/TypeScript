@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts] ////
+
+=== objectTypesIdentityWithPrivates3.ts ===
 interface T1 { }
 >T1 : Symbol(T1, Decl(objectTypesIdentityWithPrivates3.ts, 0, 0))
 

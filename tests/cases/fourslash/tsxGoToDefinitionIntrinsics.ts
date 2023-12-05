@@ -15,8 +15,8 @@
 //// var y = <[|s/*ss*/pan|] />;
 //// var z = <div [|na/*ps*/me|]='hello' />;
 
-verify.goToDefinition({
-    ds: "dt",
-    ss: "st",
-    ps: "pt"
-});
+verify.baselineGoToDefinition(
+    "ds",
+    "ss",
+    "ps",
+);

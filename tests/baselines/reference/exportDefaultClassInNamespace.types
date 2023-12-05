@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportDefaultClassInNamespace.ts ===
+//// [tests/cases/compiler/exportDefaultClassInNamespace.ts] ////
+
+=== exportDefaultClassInNamespace.ts ===
 namespace ns_class {
 >ns_class : typeof ns_class
 

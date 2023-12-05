@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/exportDefaultProperty2.ts] ////
+
+=== a.ts ===
 // This test is just like exportEqualsProperty2, but with `export default`.
 
 class C {
@@ -17,7 +19,7 @@ export default C.B;
 >C : typeof C
 >B : number
 
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import B from "./a";
 >B : number
 

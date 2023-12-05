@@ -23,11 +23,11 @@ export const build = (): DatastoreResult.T<string> => {
 //// [datastore.bundle.js]
 define("datastore_result", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 define("conditional_directive_field", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.build = void 0;
     var build = function () {
         return null;
@@ -37,6 +37,7 @@ define("conditional_directive_field", ["require", "exports"], function (require,
 
 
 //// [datastore.bundle.d.ts]
+/// <reference path="../lib/lib.d.ts" />
 declare module "datastore_result" {
     import { Result } from "lib/result";
     export type T<T> = Result<Error, T>;

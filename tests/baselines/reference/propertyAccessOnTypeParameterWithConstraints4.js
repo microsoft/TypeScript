@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints4.ts] ////
+
 //// [propertyAccessOnTypeParameterWithConstraints4.ts]
 class C<T extends Date> {
     f() {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsOverloads.ts] ////
+
 //// [commentsOverloads.ts]
 /** this is signature 1*/
 function f1(/**param a*/a: number): number;

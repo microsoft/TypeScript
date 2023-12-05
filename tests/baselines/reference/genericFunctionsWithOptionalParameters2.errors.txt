@@ -1,7 +1,7 @@
-tests/cases/compiler/genericFunctionsWithOptionalParameters2.ts(7,7): error TS2554: Expected 1-3 arguments, but got 0.
+genericFunctionsWithOptionalParameters2.ts(7,7): error TS2554: Expected 1-3 arguments, but got 0.
 
 
-==== tests/cases/compiler/genericFunctionsWithOptionalParameters2.ts (1 errors) ====
+==== genericFunctionsWithOptionalParameters2.ts (1 errors) ====
     interface Utils {
        fold<T, S>(c: Array<T>, folder?: (s: S, t: T) => T, init?: S): T;
     }
@@ -9,9 +9,9 @@ tests/cases/compiler/genericFunctionsWithOptionalParameters2.ts(7,7): error TS25
     var utils: Utils;
     
     utils.fold(); // error
-          ~~~~~~
+          ~~~~
 !!! error TS2554: Expected 1-3 arguments, but got 0.
-!!! related TS6210 tests/cases/compiler/genericFunctionsWithOptionalParameters2.ts:2:15: An argument for 'c' was not provided.
+!!! related TS6210 genericFunctionsWithOptionalParameters2.ts:2:15: An argument for 'c' was not provided.
     utils.fold(null); // no error
     utils.fold(null, null); // no error
     utils.fold(null, null, null); // error: Unable to invoke type with no call signatures

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentIndexedToPrimitives.ts ===
+//// [tests/cases/compiler/assignmentIndexedToPrimitives.ts] ////
+
+=== assignmentIndexedToPrimitives.ts ===
 const n1: number = [0];
 >n1 : number
 >[0] : number[]

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file.tsx ===
+//// [tests/cases/compiler/jsxClassAttributeResolution.tsx] ////
+
+=== file.tsx ===
 class App {}
 >App : Symbol(App, Decl(file.tsx, 0, 0))
 
@@ -7,7 +9,7 @@ export const a = <App></App>;
 >App : Symbol(App, Decl(file.tsx, 0, 0))
 >App : Symbol(App, Decl(file.tsx, 0, 0))
 
-=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+=== node_modules/@types/react/index.d.ts ===
 interface IntrinsicClassAttributesAlias<T> {
 >IntrinsicClassAttributesAlias : Symbol(IntrinsicClassAttributesAlias, Decl(index.d.ts, 0, 0))
 >T : Symbol(T, Decl(index.d.ts, 0, 40))
@@ -25,9 +27,10 @@ declare namespace JSX {
 >IntrinsicClassAttributesAlias : Symbol(IntrinsicClassAttributesAlias, Decl(index.d.ts, 0, 0))
 >T : Symbol(T, Decl(index.d.ts, 4, 34))
 }
-=== tests/cases/compiler/node_modules/@types/react/jsx-runtime.d.ts ===
+=== node_modules/@types/react/jsx-runtime.d.ts ===
+
 import './';
-No type information for this code.=== tests/cases/compiler/node_modules/@types/react/jsx-dev-runtime.d.ts ===
+=== node_modules/@types/react/jsx-dev-runtime.d.ts ===
+
 import './';
-No type information for this code.
-No type information for this code.
+

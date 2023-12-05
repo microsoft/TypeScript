@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts] ////
+
+=== derivedClassOverridesPrivates.ts ===
 class Base {
 >Base : Symbol(Base, Decl(derivedClassOverridesPrivates.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints.ts] ////
+
 //// [wrappedAndRecursiveConstraints.ts]
 // no errors expected
 

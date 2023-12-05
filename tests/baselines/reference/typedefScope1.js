@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/typedefScope1.ts] ////
+
 //// [typedefScope1.js]
 function B1() {
     /** @typedef {number} B */

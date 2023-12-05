@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isArray.ts] ////
+
 //// [isArray.ts]
 var maybeArray: number | number[];
 

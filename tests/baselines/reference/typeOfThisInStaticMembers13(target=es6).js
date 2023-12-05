@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers13.ts] ////
+
 //// [typeOfThisInStaticMembers13.ts]
 class C {
     static readonly c: "foo" = "foo"

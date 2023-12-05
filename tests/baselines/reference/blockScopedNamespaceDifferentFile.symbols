@@ -1,4 +1,6 @@
-=== tests/cases/compiler/test.ts ===
+//// [tests/cases/compiler/blockScopedNamespaceDifferentFile.ts] ////
+
+=== test.ts ===
 // #15734 failed when test.ts comes before typings.d.ts
 namespace C {
 >C : Symbol(C, Decl(test.ts, 0, 0))
@@ -27,7 +29,7 @@ namespace C {
     }
 }
 
-=== tests/cases/compiler/typings.d.ts ===
+=== typings.d.ts ===
 declare namespace A {
 >A : Symbol(A, Decl(typings.d.ts, 0, 0))
 

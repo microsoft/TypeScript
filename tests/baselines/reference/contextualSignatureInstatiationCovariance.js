@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualSignatureInstatiationCovariance.ts] ////
+
 //// [contextualSignatureInstatiationCovariance.ts]
 interface Animal { x }
 interface TallThing { x2 }

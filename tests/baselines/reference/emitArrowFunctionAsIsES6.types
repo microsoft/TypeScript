@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionAsIsES6.ts ===
+//// [tests/cases/conformance/es6/arrowFunction/emitArrowFunctionAsIsES6.ts] ////
+
+=== emitArrowFunctionAsIsES6.ts ===
 var arrow1 =  a => { };
 >arrow1 : (a: any) => void
 >a => { } : (a: any) => void

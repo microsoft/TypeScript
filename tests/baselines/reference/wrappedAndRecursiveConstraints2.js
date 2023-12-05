@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts] ////
+
 //// [wrappedAndRecursiveConstraints2.ts]
 class C<T extends C<T>> { // error
     constructor(x: T) { }

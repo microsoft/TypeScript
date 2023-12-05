@@ -1,8 +1,8 @@
-tests/cases/compiler/multipleClassPropertyModifiers.ts(3,12): error TS1029: 'public' modifier must precede 'static' modifier.
-tests/cases/compiler/multipleClassPropertyModifiers.ts(5,12): error TS1029: 'private' modifier must precede 'static' modifier.
+multipleClassPropertyModifiers.ts(3,12): error TS1029: 'public' modifier must precede 'static' modifier.
+multipleClassPropertyModifiers.ts(5,12): error TS1029: 'private' modifier must precede 'static' modifier.
 
 
-==== tests/cases/compiler/multipleClassPropertyModifiers.ts (2 errors) ====
+==== multipleClassPropertyModifiers.ts (2 errors) ====
     class C {
         public static p1;
         static public p2;

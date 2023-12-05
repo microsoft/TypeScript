@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction.ts] ////
+
 //// [typeSatisfaction.ts]
 interface I1 {
     a: number;

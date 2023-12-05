@@ -9,4 +9,4 @@ import j = require("./j.json");
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

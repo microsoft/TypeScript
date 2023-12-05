@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3.ts] ////
+
 //// [taggedTemplateStringsWithOverloadResolution3.ts]
 // Ambiguous call picks the first overload in declaration order
 function fn1(strs: TemplateStringsArray, s: string): string;

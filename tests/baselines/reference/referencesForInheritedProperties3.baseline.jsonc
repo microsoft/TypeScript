@@ -1,6 +1,7 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties3.ts ===
 // interface interface1 extends interface1 {
-//    /*FIND ALL REFS*/[|doStuff|](): void;
+//    /*FIND ALL REFS*/<|[|{| isDefinition: true |}doStuff|](): void;|>
 //    propName: string;
 // }
 // 
@@ -8,293 +9,233 @@
 // v.propName;
 // v.[|doStuff|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-      "kind": "method",
-      "name": "(method) interface1.doStuff(): void",
-      "textSpan": {
-        "start": 45,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "interface1",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "doStuff",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 45,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 45,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-        "contextSpan": {
-          "start": 45,
-          "length": 16
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 119,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties3.ts ===
+  // interface interface1 extends interface1 {
+  //    /*FIND ALL REFS*/<|[|doStuff|](): void;|>
+  //    propName: string;
+  // }
+  // 
+  // --- (line: 6) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) interface1.doStuff(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface1",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "doStuff",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties3.ts ===
 // interface interface1 extends interface1 {
 //    doStuff(): void;
-//    /*FIND ALL REFS*/[|propName|]: string;
+//    /*FIND ALL REFS*/<|[|{| isDefinition: true |}propName|]: string;|>
 // }
 // 
 // var v: interface1;
 // v.[|propName|];
 // v.doStuff();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-      "kind": "property",
-      "name": "(property) interface1.propName: string",
-      "textSpan": {
-        "start": 65,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "interface1",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "propName",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 65,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 65,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-        "contextSpan": {
-          "start": 65,
-          "length": 17
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 107,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties3.ts ===
+  // interface interface1 extends interface1 {
+  //    doStuff(): void;
+  //    /*FIND ALL REFS*/<|[|propName|]: string;|>
+  // }
+  // 
+  // var v: interface1;
+  // v.propName;
+  // v.doStuff();
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) interface1.propName: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface1",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "propName",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties3.ts ===
 // interface interface1 extends interface1 {
 //    doStuff(): void;
-//    [|propName|]: string;
+//    <|[|propName|]: string;|>
 // }
 // 
 // var v: interface1;
 // v./*FIND ALL REFS*/[|propName|];
 // v.doStuff();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-      "kind": "property",
-      "name": "(property) interface1.propName: string",
-      "textSpan": {
-        "start": 65,
-        "length": 8
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "interface1",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "propName",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 65,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 65,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-        "contextSpan": {
-          "start": 65,
-          "length": 17
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 107,
-          "length": 8
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties3.ts ===
+  // interface interface1 extends interface1 {
+  //    doStuff(): void;
+  //    <|[|propName|]: string;|>
+  // }
+  // 
+  // var v: interface1;
+  // v./*FIND ALL REFS*/propName;
+  // v.doStuff();
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) interface1.propName: string",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface1",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "propName",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "string",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForInheritedProperties3.ts ===
 // interface interface1 extends interface1 {
-//    [|doStuff|](): void;
+//    <|[|doStuff|](): void;|>
 //    propName: string;
 // }
 // 
@@ -302,94 +243,73 @@
 // v.propName;
 // v./*FIND ALL REFS*/[|doStuff|]();
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-      "kind": "method",
-      "name": "(method) interface1.doStuff(): void",
-      "textSpan": {
-        "start": 45,
-        "length": 7
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "method",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "interface1",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "doStuff",
-          "kind": "methodName"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "void",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 45,
-        "length": 16
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 45,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-        "contextSpan": {
-          "start": 45,
-          "length": 16
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 119,
-          "length": 7
-        },
-        "fileName": "/tests/cases/fourslash/referencesForInheritedProperties3.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForInheritedProperties3.ts ===
+  // interface interface1 extends interface1 {
+  //    <|[|doStuff|](): void;|>
+  //    propName: string;
+  // }
+  // 
+  // var v: interface1;
+  // v.propName;
+  // v./*FIND ALL REFS*/doStuff();
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "method",
+    "name": "(method) interface1.doStuff(): void",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "method",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "interface1",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "doStuff",
+      "kind": "methodName"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "void",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

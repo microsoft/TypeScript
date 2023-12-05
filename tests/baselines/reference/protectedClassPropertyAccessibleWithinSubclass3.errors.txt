@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+protectedClassPropertyAccessibleWithinSubclass3.ts(11,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts (1 errors) ====
+==== protectedClassPropertyAccessibleWithinSubclass3.ts (1 errors) ====
     class Base {
         protected x: string;
         method() {

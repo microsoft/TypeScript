@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDistributiveConditionalWithInfer.ts ===
+//// [tests/cases/compiler/declarationEmitDistributiveConditionalWithInfer.ts] ////
+
+=== declarationEmitDistributiveConditionalWithInfer.ts ===
 // This function's type is changed on declaration
 export const fun = (
 >fun : Symbol(fun, Decl(declarationEmitDistributiveConditionalWithInfer.ts, 1, 12))

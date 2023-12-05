@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxNamespaceGlobalReexport.tsx] ////
+
 === /node_modules/preact/index.d.ts ===
 type Defaultize<Props, Defaults> =
 >Defaultize : Symbol(Defaultize, Decl(index.d.ts, 0, 0))

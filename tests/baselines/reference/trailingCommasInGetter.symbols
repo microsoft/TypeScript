@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/trailingCommasInGetter.ts ===
+//// [tests/cases/conformance/es7/trailingCommasInGetter.ts] ////
+
+=== trailingCommasInGetter.ts ===
 class X {
 >X : Symbol(X, Decl(trailingCommasInGetter.ts, 0, 0))
 

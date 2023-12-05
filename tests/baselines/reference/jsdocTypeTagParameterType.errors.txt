@@ -1,8 +1,8 @@
-tests/cases/conformance/jsdoc/a.js(3,5): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/a.js(7,5): error TS2322: Type 'number' is not assignable to type 'string'.
+a.js(3,5): error TS2322: Type 'number' is not assignable to type 'string'.
+a.js(7,5): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsdoc/a.js (2 errors) ====
+==== a.js (2 errors) ====
     /** @type {function(string): void} */
     const f = (value) => {
         value = 1 // should error

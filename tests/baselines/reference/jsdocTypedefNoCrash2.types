@@ -1,4 +1,6 @@
-=== tests/cases/compiler/export.js ===
+//// [tests/cases/compiler/jsdocTypedefNoCrash2.ts] ////
+
+=== export.js ===
 export type foo = 5;
 >foo : 5
 

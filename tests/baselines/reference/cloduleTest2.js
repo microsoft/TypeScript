@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleTest2.ts] ////
+
 //// [cloduleTest2.ts]
 module T1 {
     module m3d { export var y = 2; }

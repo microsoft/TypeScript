@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors6.ts(2,14): error TS1183: An implementation cannot be declared in ambient contexts.
+parserAccessors6.ts(2,14): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors6.ts (1 errors) ====
+==== parserAccessors6.ts (1 errors) ====
     declare class C {
       set foo(v) { }
                  ~

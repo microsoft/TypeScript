@@ -1,4 +1,6 @@
-=== tests/cases/compiler/separate1-2.ts ===
+//// [tests/cases/compiler/separate1-2.ts] ////
+
+=== separate1-2.ts ===
 module X {
 >X : Symbol(X, Decl(separate1-2.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsClassMembers.ts] ////
+
 //// [commentsClassMembers.ts]
 /** This is comment for c1*/
 class c1 {

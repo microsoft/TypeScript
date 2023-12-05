@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/thisType/thisTypeOptionalCall.ts ===
+//// [tests/cases/conformance/types/thisType/thisTypeOptionalCall.ts] ////
+
+=== thisTypeOptionalCall.ts ===
 function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
 >maybeBind : Symbol(maybeBind, Decl(thisTypeOptionalCall.ts, 0, 0))
 >T : Symbol(T, Decl(thisTypeOptionalCall.ts, 0, 19))

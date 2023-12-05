@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterAssignmentCompat1.ts] ////
+
 //// [typeParameterAssignmentCompat1.ts]
 interface Foo<T> {
     frobble(value: T): T;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/substitutionTypeForIndexedAccessType2.ts ===
+//// [tests/cases/compiler/substitutionTypeForIndexedAccessType2.ts] ////
+
+=== substitutionTypeForIndexedAccessType2.ts ===
 interface Foo {
 >Foo : Symbol(Foo, Decl(substitutionTypeForIndexedAccessType2.ts, 0, 0))
 

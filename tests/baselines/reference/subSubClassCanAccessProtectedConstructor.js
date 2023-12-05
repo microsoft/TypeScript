@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/subSubClassCanAccessProtectedConstructor.ts] ////
+
 //// [subSubClassCanAccessProtectedConstructor.ts]
 class Base {
     protected constructor() { }

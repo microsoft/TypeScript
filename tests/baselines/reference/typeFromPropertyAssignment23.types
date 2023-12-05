@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment23.ts] ////
+
+=== a.js ===
 class B {
 >B : B
 
@@ -71,7 +73,6 @@ Module.prototype.size = null
 >Module : typeof Module
 >prototype : Module
 >size : any
->null : null
 
 class NormalModule extends Module {
 >NormalModule : NormalModule

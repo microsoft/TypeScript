@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parserNotHexLiteral1.ts] ////
+
 //// [parserNotHexLiteral1.ts]
 var x = {e0: 'cat', x0: 'dog'};
 console.info (x.x0);

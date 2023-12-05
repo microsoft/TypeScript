@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/intersection/operatorsAndIntersectionTypes.ts] ////
+
 //// [operatorsAndIntersectionTypes.ts]
 type Guid = string & { $Guid };          // Tagged string type
 type SerialNo = number & { $SerialNo };  // Tagged number type

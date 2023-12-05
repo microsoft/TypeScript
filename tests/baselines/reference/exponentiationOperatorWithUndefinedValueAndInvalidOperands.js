@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts] ////
+
 //// [exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts]
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.

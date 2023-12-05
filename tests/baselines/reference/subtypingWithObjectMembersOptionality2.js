@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersOptionality2.ts] ////
+
 //// [subtypingWithObjectMembersOptionality2.ts]
 // Derived member is optional but base member is not, should be an error
 

@@ -1,6 +1,8 @@
-=== tests/cases/conformance/es6/templates/templateStringMultiline2.ts ===
+//// [tests/cases/conformance/es6/templates/templateStringMultiline2.ts] ////
+
+=== templateStringMultiline2.ts ===
+
 // newlines are <LF>
-No type information for this code.`
-No type information for this code.\
-No type information for this code.`
-No type information for this code.
+`
+\
+`

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts ===
+//// [tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts] ////
+
+=== everyTypeWithAnnotationAndInvalidInitializer.ts ===
 interface I {
 >I : Symbol(I, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedVariables.ts] ////
+
 //// [ModuleWithExportedAndNonExportedVariables.ts]
 module A {
     export var x = 'hello world'

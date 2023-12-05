@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType11.ts] ////
+
 //// [symbolType11.ts]
 var s = Symbol.for("logical");
 s && s;

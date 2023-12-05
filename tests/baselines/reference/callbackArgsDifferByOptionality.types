@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callbackArgsDifferByOptionality.ts ===
+//// [tests/cases/compiler/callbackArgsDifferByOptionality.ts] ////
+
+=== callbackArgsDifferByOptionality.ts ===
 function x3(callback: (x?: 'hi') => number);
 >x3 : { (callback: (x?: 'hi') => number): any; (callback: (x: string) => number): any; }
 >callback : (x?: 'hi') => number

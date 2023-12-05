@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts] ////
+
+=== intersectionsAndEmptyObjects.ts ===
 // Empty object type literals are removed from intersections types
 // that contain other object types
 
@@ -272,9 +274,9 @@ declare function mock<M>(_: Promise<M>): {} & M;
 
 mock(import('./ex'))
 >mock : Symbol(mock, Decl(intersectionsAndEmptyObjects.ts, 80, 52))
->'./ex' : Symbol("tests/cases/conformance/types/intersection/ex", Decl(ex.d.ts, 0, 0))
+>'./ex' : Symbol("ex", Decl(ex.d.ts, 0, 0))
 
-=== tests/cases/conformance/types/intersection/ex.d.ts ===
+=== ex.d.ts ===
+
 export {}
-No type information for this code.
-No type information for this code.
+

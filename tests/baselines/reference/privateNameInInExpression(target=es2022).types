@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts] ////
+
+=== privateNameInInExpression.ts ===
 class Foo {
 >Foo : Foo
 
@@ -156,7 +158,6 @@ class Foo {
             if (u !== null) {
 >u !== null : boolean
 >u : object | null
->null : null
 
                 if (#field in u) {
 >#field in u : boolean

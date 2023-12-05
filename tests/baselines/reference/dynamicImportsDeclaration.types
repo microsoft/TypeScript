@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/dynamicImportsDeclaration.ts] ////
+
+=== /case0.ts ===
+
+export default 0;
+
+=== /case1.ts ===
+
+export default 1;
+
+=== /caseFallback.ts ===
+
+export default 'fallback';
+
+=== /index.ts ===
+export const mod = await (async () => {
+>mod : { default: typeof import("/case0"); } | { default: typeof import("/case1"); } | { default: typeof import("/caseFallback"); }
+>await (async () => {  const x: number = 0;  switch (x) {    case 0:      return await import("./case0.js");    case 1:      return await import("./case1.js");    default:      return await import("./caseFallback.js");  }})() : { default: typeof import("/case0"); } | { default: typeof import("/case1"); } | { default: typeof import("/caseFallback"); }
+>(async () => {  const x: number = 0;  switch (x) {    case 0:      return await import("./case0.js");    case 1:      return await import("./case1.js");    default:      return await import("./caseFallback.js");  }})() : Promise<{ default: typeof import("/case0"); } | { default: typeof import("/case1"); } | { default: typeof import("/caseFallback"); }>
+>(async () => {  const x: number = 0;  switch (x) {    case 0:      return await import("./case0.js");    case 1:      return await import("./case1.js");    default:      return await import("./caseFallback.js");  }}) : () => Promise<{ default: typeof import("/case0"); } | { default: typeof import("/case1"); } | { default: typeof import("/caseFallback"); }>
+>async () => {  const x: number = 0;  switch (x) {    case 0:      return await import("./case0.js");    case 1:      return await import("./case1.js");    default:      return await import("./caseFallback.js");  }} : () => Promise<{ default: typeof import("/case0"); } | { default: typeof import("/case1"); } | { default: typeof import("/caseFallback"); }>
+
+  const x: number = 0;
+>x : number
+>0 : 0
+
+  switch (x) {
+>x : number
+
+    case 0:
+>0 : 0
+
+      return await import("./case0.js");
+>await import("./case0.js") : { default: typeof import("/case0"); }
+>import("./case0.js") : Promise<{ default: typeof import("/case0"); }>
+>"./case0.js" : "./case0.js"
+
+    case 1:
+>1 : 1
+
+      return await import("./case1.js");
+>await import("./case1.js") : { default: typeof import("/case1"); }
+>import("./case1.js") : Promise<{ default: typeof import("/case1"); }>
+>"./case1.js" : "./case1.js"
+
+    default:
+      return await import("./caseFallback.js");
+>await import("./caseFallback.js") : { default: typeof import("/caseFallback"); }
+>import("./caseFallback.js") : Promise<{ default: typeof import("/caseFallback"); }>
+>"./caseFallback.js" : "./caseFallback.js"
+  }
+})();

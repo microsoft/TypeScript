@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug25926.js ===
+//// [tests/cases/conformance/salsa/typeFromContextualThisType.ts] ////
+
+=== bug25926.js ===
 /** @type {{ a(): void; b?(n: number): number; }} */
 const o1 = {
 >o1 : Symbol(o1, Decl(bug25926.js, 1, 5))

@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_Watch.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_Watch.ts]
@@ -89,12 +90,12 @@ watchMain();
  *       at: https://github.com/Microsoft/TypeScript-wiki/blob/master/Using-the-Compiler-API.md#writing-an-incremental-program-watcher
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ts = require("typescript");
 var formatHost = {
     getCanonicalFileName: function (path) { return path; },
     getCurrentDirectory: ts.sys.getCurrentDirectory,
-    getNewLine: function () { return ts.sys.newLine; }
+    getNewLine: function () { return ts.sys.newLine; },
 };
 function watchMain() {
     var configPath = ts.findConfigFile(/*searchPath*/ "./", ts.sys.fileExists, "tsconfig.json");

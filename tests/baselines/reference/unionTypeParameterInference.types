@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unionTypeParameterInference.ts ===
+//// [tests/cases/compiler/unionTypeParameterInference.ts] ////
+
+=== unionTypeParameterInference.ts ===
 // Regression test for #5861
 
 interface Foo<T> { prop: T; }
@@ -15,7 +17,7 @@ function unlift<U>(value: U | Foo<U>): U {
     return lift(value).prop;
 >lift(value).prop : U
 >lift(value) : Foo<U>
->lift : <U>(value: U | Foo<U>) => Foo<U>
+>lift : <U_1>(value: U_1 | Foo<U_1>) => Foo<U_1>
 >value : U | Foo<U>
 >prop : U
 }

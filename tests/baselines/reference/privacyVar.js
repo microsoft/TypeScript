@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyVar.ts] ////
+
 //// [privacyVar.ts]
 export module m1 {
     export class C1_public {
@@ -176,7 +178,7 @@ export var glo_v24_public: glo_C2_private = new glo_C2_private(); // error
 
 //// [privacyVar.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.glo_v24_public = exports.glo_v22_public = exports.glo_v14_public = exports.glo_v12_public = exports.glo_v4_public = exports.glo_v2_public = exports.glo_C3_public = exports.glo_C1_public = exports.m1 = void 0;
 var m1;
 (function (m1) {
@@ -230,7 +232,7 @@ var m1;
     m1.m1_v22_public = new C1_public();
     var m1_v23_private = new C2_private();
     m1.m1_v24_public = new C2_private(); // error
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 var m2;
 (function (m2) {
     var m2_C1_public = /** @class */ (function () {

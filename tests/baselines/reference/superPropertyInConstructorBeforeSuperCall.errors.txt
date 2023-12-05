@@ -1,8 +1,8 @@
-tests/cases/conformance/classes/constructorDeclarations/superCalls/superPropertyInConstructorBeforeSuperCall.ts(7,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/superPropertyInConstructorBeforeSuperCall.ts(13,15): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+superPropertyInConstructorBeforeSuperCall.ts(7,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+superPropertyInConstructorBeforeSuperCall.ts(13,15): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/superPropertyInConstructorBeforeSuperCall.ts (2 errors) ====
+==== superPropertyInConstructorBeforeSuperCall.ts (2 errors) ====
     class B {
         constructor(x?: string) {}
         x(): string { return ""; }

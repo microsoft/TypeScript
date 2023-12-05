@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts ===
+//// [tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts] ////
+
+=== objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts ===
 interface Function {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(objectTypeWithConstructSignatureHidingMembersOfExtendedFunction.ts, 0, 0))
 

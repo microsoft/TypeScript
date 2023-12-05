@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapSample.ts ===
+//// [tests/cases/compiler/sourceMapSample.ts] ////
+
+=== sourceMapSample.ts ===
 module Foo.Bar {
 >Foo : typeof Foo
 >Bar : typeof Bar

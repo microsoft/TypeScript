@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/flowControlTypeGuardThenSwitch.ts] ////
+
 //// [flowControlTypeGuardThenSwitch.ts]
 enum Kind {
     A,

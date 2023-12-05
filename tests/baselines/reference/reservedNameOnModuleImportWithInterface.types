@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts ===
+//// [tests/cases/compiler/reservedNameOnModuleImportWithInterface.ts] ////
+
+=== reservedNameOnModuleImportWithInterface.ts ===
 declare module test {
     interface mi_string { }
     module mi_string { }

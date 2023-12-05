@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {}
@@ -28,8 +29,35 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/main.js]
+var x = 10;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -43,28 +71,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js]
-var x = 10;
-
-
 
 Change:: Write a file
 
@@ -78,8 +85,39 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/bar.ts","/user/username/projects/myproject/main.ts"]
-Program options: {"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/main.js] file written with same contents
+//// [/user/username/projects/myproject/bar.js]
+var y = 10;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/bar.ts: *new*
+  {}
+/user/username/projects/myproject/main.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/bar.ts",
+  "/user/username/projects/myproject/main.ts"
+]
+Program options: {
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -95,28 +133,4 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/bar.ts (computed .d.ts)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/main.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/bar.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js] file written with same contents
-//// [/user/username/projects/myproject/bar.js]
-var y = 10;
-
-

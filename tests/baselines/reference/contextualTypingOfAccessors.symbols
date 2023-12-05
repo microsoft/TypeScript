@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingOfAccessors.ts ===
+//// [tests/cases/compiler/contextualTypingOfAccessors.ts] ////
+
+=== contextualTypingOfAccessors.ts ===
 // not contextually typing accessors
 
 var x: {

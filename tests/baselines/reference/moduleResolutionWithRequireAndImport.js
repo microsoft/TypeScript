@@ -14,7 +14,7 @@ function foo() {
 
 //// [other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.other = void 0;
 exports.other = 123;
 //// [index.js]

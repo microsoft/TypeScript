@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/incorrectNumberOfTypeArgumentsDuringErrorReporting.ts] ////
+
 //// [incorrectNumberOfTypeArgumentsDuringErrorReporting.ts]
 interface ObjA {
   y?:string,
@@ -26,5 +28,5 @@ fn<MyObjA>({
 var fn = function (opts) { return 'Z'; };
 fn({
     a: { x: 'X', y: 'Y' },
-    b: {}
+    b: {},
 });

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticMethodsReferencingClassTypeParameters.ts ===
+//// [tests/cases/compiler/staticMethodsReferencingClassTypeParameters.ts] ////
+
+=== staticMethodsReferencingClassTypeParameters.ts ===
 class C<T> {
 >C : C<T>
 

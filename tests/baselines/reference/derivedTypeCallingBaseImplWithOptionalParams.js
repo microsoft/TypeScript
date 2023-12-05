@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts] ////
+
 //// [derivedTypeCallingBaseImplWithOptionalParams.ts]
 interface MyInterface {
     myMethod(...myList: any[]);

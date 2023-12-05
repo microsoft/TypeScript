@@ -43,6 +43,4 @@
 //// 	 x.he/*function_call1*/llo();
 //// }
 
-for (var i = 0; i < 2; i++) {
-    verify.allRangesAppearInImplementationList("function_call" + i);
-}
+verify.baselineGoToImplementation("function_call0", "function_call1");

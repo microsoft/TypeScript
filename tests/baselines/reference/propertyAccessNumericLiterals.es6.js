@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/propertyAccess/propertyAccessNumericLiterals.es6.ts] ////
+
 //// [propertyAccessNumericLiterals.es6.ts]
 0xffffffff.toString();
 0o01234.toString();

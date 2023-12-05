@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts] ////
+
+=== interfaceThatIndirectlyInheritsFromItself.ts ===
 interface Base extends Derived2 { // error
 >Base : Symbol(Base, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 0, 0))
 >Derived2 : Symbol(Derived2, Decl(interfaceThatIndirectlyInheritsFromItself.ts, 6, 1))

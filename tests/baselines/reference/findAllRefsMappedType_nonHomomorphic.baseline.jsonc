@@ -1,147 +1,117 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts ===
 // function f(x: { [K in "m"]: number; }) {
 //     x./*FIND ALL REFS*/[|m|];
 //     x.[|m|]
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-      "kind": "property",
-      "name": "(property) m: number",
-      "textSpan": {
-        "start": 47,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "m",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 47,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 56,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts ===
+  // function f(x: { [K in "m"]: number; }) {
+  //     x./*FIND ALL REFS*/[|m|];
+  //     x.m
+  // }
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) m: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "m",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts ===
 // function f(x: { [K in "m"]: number; }) {
 //     x.[|m|];
 //     x./*FIND ALL REFS*/[|m|]
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-      "kind": "property",
-      "name": "(property) m: number",
-      "textSpan": {
-        "start": 56,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "m",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 47,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 56,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsMappedType_nonHomomorphic.ts ===
+  // function f(x: { [K in "m"]: number; }) {
+  //     x.m;
+  //     x./*FIND ALL REFS*/[|m|]
+  // }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) m: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "m",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

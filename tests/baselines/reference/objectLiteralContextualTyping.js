@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/contextualTyping/objectLiteralContextualTyping.ts] ////
+
 //// [objectLiteralContextualTyping.ts]
 // In a contextually typed object literal, each property value expression is contextually typed by
 //      the type of the property with a matching name in the contextual type, if any, or otherwise

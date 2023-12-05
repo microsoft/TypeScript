@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeProperties.ts] ////
+
 //// [mappedTypeProperties.ts]
 export type PlaceType = 'openSky' | 'roofed' | 'garage'
 type Before = {
@@ -45,7 +47,7 @@ const E = class {
 //// [mappedTypeProperties.js]
 "use strict";
 var _a, _b;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var C = /** @class */ (function () {
     function C() {
     }

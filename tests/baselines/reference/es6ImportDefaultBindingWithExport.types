@@ -1,4 +1,6 @@
-=== tests/cases/compiler/server.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingWithExport.ts] ////
+
+=== server.ts ===
 var a = 10;
 >a : number
 >10 : 10
@@ -6,7 +8,7 @@ var a = 10;
 export default a;
 >a : number
 
-=== tests/cases/compiler/client.ts ===
+=== client.ts ===
 export import defaultBinding from "server";
 >defaultBinding : number
 

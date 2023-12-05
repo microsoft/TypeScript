@@ -1,3 +1,5 @@
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: services:: DocumentRegistry", () => {
     it("documents are shared between projects", () => {
         const documentRegistry = ts.createDocumentRegistry();
@@ -20,7 +22,6 @@ describe("unittests:: services:: DocumentRegistry", () => {
         const f2 = documentRegistry.acquireDocument("file1.ts", compilerOptions, ts.ScriptSnapshot.fromString("var x = 1;"), /* version */ "1");
 
         assert(f1 === f2, "Expected to have the same document instance");
-
 
         // change value of compilation setting that is used during production of AST - new document is required
         compilerOptions.target = ts.ScriptTarget.ES3;

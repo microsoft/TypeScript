@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidOperands.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithInvalidOperands.ts] ////
+
+=== instanceofOperatorWithInvalidOperands.ts ===
 class C {
 >C : C
 
@@ -68,7 +70,6 @@ var ra7 = '' instanceof x;
 var ra8 = null instanceof x;
 >ra8 : boolean
 >null instanceof x : boolean
->null : null
 >x : any
 
 var ra9 = undefined instanceof x;

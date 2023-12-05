@@ -1,14 +1,14 @@
-tests/cases/compiler/objectCreate-errors.ts(1,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
-tests/cases/compiler/objectCreate-errors.ts(2,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
-tests/cases/compiler/objectCreate-errors.ts(3,24): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'object'.
-tests/cases/compiler/objectCreate-errors.ts(4,24): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.
-tests/cases/compiler/objectCreate-errors.ts(7,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
-tests/cases/compiler/objectCreate-errors.ts(8,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
-tests/cases/compiler/objectCreate-errors.ts(9,24): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'object'.
-tests/cases/compiler/objectCreate-errors.ts(10,24): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.
+objectCreate-errors.ts(1,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+objectCreate-errors.ts(2,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
+objectCreate-errors.ts(3,24): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'object'.
+objectCreate-errors.ts(4,24): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.
+objectCreate-errors.ts(7,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+objectCreate-errors.ts(8,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'object'.
+objectCreate-errors.ts(9,24): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'object'.
+objectCreate-errors.ts(10,24): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.
 
 
-==== tests/cases/compiler/objectCreate-errors.ts (8 errors) ====
+==== objectCreate-errors.ts (8 errors) ====
     var e1 = Object.create(1);               // Error
                            ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.

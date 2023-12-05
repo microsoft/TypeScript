@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext3.d.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorInAmbientContext3.d.ts] ////
+
+=== generatorInAmbientContext3.d.ts ===
 declare class C {
 >C : Symbol(C, Decl(generatorInAmbientContext3.d.ts, 0, 0))
 

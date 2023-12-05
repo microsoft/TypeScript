@@ -1,22 +1,22 @@
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(15,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'boolean'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(16,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'number'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(18,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'Object'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(19,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'E'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(20,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'void'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(24,14): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(25,15): error TS2365: Operator '+' cannot be applied to types 'number' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(27,15): error TS2365: Operator '+' cannot be applied to types 'Object' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(28,15): error TS2365: Operator '+' cannot be applied to types 'E' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(29,15): error TS2365: Operator '+' cannot be applied to types 'void' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(32,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'null'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(33,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(34,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(35,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'U'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(36,15): error TS2365: Operator '+' cannot be applied to types 'T' and '() => void'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(37,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined[]'.
+additionOperatorWithTypeParameter.ts(15,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'boolean'.
+additionOperatorWithTypeParameter.ts(16,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'number'.
+additionOperatorWithTypeParameter.ts(18,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'Object'.
+additionOperatorWithTypeParameter.ts(19,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'E'.
+additionOperatorWithTypeParameter.ts(20,14): error TS2365: Operator '+' cannot be applied to types 'T' and 'void'.
+additionOperatorWithTypeParameter.ts(24,14): error TS2365: Operator '+' cannot be applied to types 'boolean' and 'T'.
+additionOperatorWithTypeParameter.ts(25,15): error TS2365: Operator '+' cannot be applied to types 'number' and 'T'.
+additionOperatorWithTypeParameter.ts(27,15): error TS2365: Operator '+' cannot be applied to types 'Object' and 'T'.
+additionOperatorWithTypeParameter.ts(28,15): error TS2365: Operator '+' cannot be applied to types 'E' and 'T'.
+additionOperatorWithTypeParameter.ts(29,15): error TS2365: Operator '+' cannot be applied to types 'void' and 'T'.
+additionOperatorWithTypeParameter.ts(32,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'null'.
+additionOperatorWithTypeParameter.ts(33,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined'.
+additionOperatorWithTypeParameter.ts(34,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
+additionOperatorWithTypeParameter.ts(35,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'U'.
+additionOperatorWithTypeParameter.ts(36,15): error TS2365: Operator '+' cannot be applied to types 'T' and '() => void'.
+additionOperatorWithTypeParameter.ts(37,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined[]'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts (16 errors) ====
+==== additionOperatorWithTypeParameter.ts (16 errors) ====
     // type parameter type is not a valid operand of addition operator
     enum E { a, b }
     

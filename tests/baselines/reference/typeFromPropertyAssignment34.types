@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/file1.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment34.ts] ////
+
+=== file1.js ===
 var N = {};
 >N : typeof N
 >{} : {}
@@ -10,7 +12,7 @@ N.commands = {};
 >commands : typeof N.commands
 >{} : {}
 
-=== tests/cases/conformance/salsa/file2.js ===
+=== file2.js ===
 N.commands.a = 111;
 >N.commands.a = 111 : 111
 >N.commands.a : number

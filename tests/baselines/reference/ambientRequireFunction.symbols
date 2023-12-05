@@ -1,4 +1,6 @@
-=== tests/cases/compiler/app.js ===
+//// [tests/cases/compiler/ambientRequireFunction.ts] ////
+
+=== app.js ===
 /// <reference path="node.d.ts"/>
 
 const fs = require("fs");
@@ -12,7 +14,7 @@ const text = fs.readFileSync("/a/b/c");
 >fs : Symbol(fs, Decl(app.js, 2, 5))
 >readFileSync : Symbol(fs.readFileSync, Decl(node.d.ts, 2, 21))
 
-=== tests/cases/compiler/node.d.ts ===
+=== node.d.ts ===
 declare function require(moduleName: string): any;
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
 >moduleName : Symbol(moduleName, Decl(node.d.ts, 0, 25))

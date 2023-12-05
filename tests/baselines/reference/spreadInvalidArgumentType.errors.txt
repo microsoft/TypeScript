@@ -1,17 +1,17 @@
-tests/cases/compiler/spreadInvalidArgumentType.ts(33,16): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(34,16): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(39,16): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(42,17): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(44,17): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(45,17): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(47,17): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(48,17): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(52,17): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(53,17): error TS2698: Spread types may only be created from object types.
-tests/cases/compiler/spreadInvalidArgumentType.ts(55,17): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(33,16): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(34,16): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(39,16): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(42,17): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(44,17): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(45,17): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(47,17): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(48,17): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(52,17): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(53,17): error TS2698: Spread types may only be created from object types.
+spreadInvalidArgumentType.ts(55,17): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/compiler/spreadInvalidArgumentType.ts (11 errors) ====
+==== spreadInvalidArgumentType.ts (11 errors) ====
     enum E { v1, v2 };
     
     function f<T extends { b: string }>(p1: T, p2: T[]) {

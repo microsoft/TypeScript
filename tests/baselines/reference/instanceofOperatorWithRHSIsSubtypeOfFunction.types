@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithRHSIsSubtypeOfFunction.ts ===
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithRHSIsSubtypeOfFunction.ts] ////
+
+=== instanceofOperatorWithRHSIsSubtypeOfFunction.ts ===
 interface I extends Function { }
 
 var x: any;
@@ -44,7 +46,6 @@ var r5 = x instanceof null;
 >r5 : boolean
 >x instanceof null : boolean
 >x : any
->null : null
 
 var r6 = x instanceof undefined;
 >r6 : boolean

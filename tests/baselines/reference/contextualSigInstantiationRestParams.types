@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualSigInstantiationRestParams.ts ===
+//// [tests/cases/compiler/contextualSigInstantiationRestParams.ts] ////
+
+=== contextualSigInstantiationRestParams.ts ===
 declare function toInstantiate<A, B>(a?: A, b?: B): B;
 >toInstantiate : <A, B>(a?: A, b?: B) => B
 >a : A

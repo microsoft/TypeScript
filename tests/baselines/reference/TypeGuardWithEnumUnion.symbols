@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/TypeGuardWithEnumUnion.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/TypeGuardWithEnumUnion.ts] ////
+
+=== TypeGuardWithEnumUnion.ts ===
 enum Color { R, G, B }
 >Color : Symbol(Color, Decl(TypeGuardWithEnumUnion.ts, 0, 0))
 >R : Symbol(Color.R, Decl(TypeGuardWithEnumUnion.ts, 0, 12))

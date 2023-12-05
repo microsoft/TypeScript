@@ -1,11 +1,13 @@
-=== tests/cases/compiler/b.d.ts ===
+//// [tests/cases/compiler/allowSyntheticDefaultImports8.ts] ////
+
+=== b.d.ts ===
 export function foo();
 >foo : () => any
 
 export function bar();
 >bar : () => any
 
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 import { default as Foo } from "./b";
 >default : any
 >Foo : any

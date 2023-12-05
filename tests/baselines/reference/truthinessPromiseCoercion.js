@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/truthinessPromiseCoercion.ts] ////
+
 //// [truthinessPromiseCoercion.ts]
 declare const p: Promise<number>
 declare const p2: null | Promise<number>

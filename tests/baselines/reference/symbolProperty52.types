@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty52.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty52.ts] ////
+
+=== symbolProperty52.ts ===
 var obj = {
 >obj : { [x: number]: number; }
 >{    [Symbol.nonsense]: 0} : { [x: number]: number; }

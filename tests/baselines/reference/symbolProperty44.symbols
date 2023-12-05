@@ -1,9 +1,11 @@
-=== tests/cases/conformance/es6/Symbols/symbolProperty44.ts ===
+//// [tests/cases/conformance/es6/Symbols/symbolProperty44.ts] ////
+
+=== symbolProperty44.ts ===
 class C {
 >C : Symbol(C, Decl(symbolProperty44.ts, 0, 0))
 
     get [Symbol.hasInstance]() {
->[Symbol.hasInstance] : Symbol(C[Symbol.hasInstance], Decl(symbolProperty44.ts, 0, 9))
+>[Symbol.hasInstance] : Symbol(C[Symbol.hasInstance], Decl(symbolProperty44.ts, 0, 9), Decl(symbolProperty44.ts, 3, 5))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -11,7 +13,7 @@ class C {
         return "";
     }
     get [Symbol.hasInstance]() {
->[Symbol.hasInstance] : Symbol(C[Symbol.hasInstance], Decl(symbolProperty44.ts, 3, 5))
+>[Symbol.hasInstance] : Symbol(C[Symbol.hasInstance], Decl(symbolProperty44.ts, 0, 9), Decl(symbolProperty44.ts, 3, 5))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

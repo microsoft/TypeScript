@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newExpressionWithTypeParameterConstrainedToOuterTypeParameter.ts ===
+//// [tests/cases/compiler/newExpressionWithTypeParameterConstrainedToOuterTypeParameter.ts] ////
+
+=== newExpressionWithTypeParameterConstrainedToOuterTypeParameter.ts ===
 interface I<T> {
 >I : Symbol(I, Decl(newExpressionWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(newExpressionWithTypeParameterConstrainedToOuterTypeParameter.ts, 0, 12))

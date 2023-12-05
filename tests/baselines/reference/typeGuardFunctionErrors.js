@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts] ////
+
 //// [typeGuardFunctionErrors.ts]
 class A {
     propA: number;

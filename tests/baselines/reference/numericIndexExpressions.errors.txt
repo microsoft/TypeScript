@@ -1,10 +1,10 @@
-tests/cases/compiler/numericIndexExpressions.ts(10,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/numericIndexExpressions.ts(11,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/numericIndexExpressions.ts(14,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/numericIndexExpressions.ts(15,1): error TS2322: Type 'number' is not assignable to type 'string'.
+numericIndexExpressions.ts(10,1): error TS2322: Type 'number' is not assignable to type 'string'.
+numericIndexExpressions.ts(11,1): error TS2322: Type 'number' is not assignable to type 'string'.
+numericIndexExpressions.ts(14,1): error TS2322: Type 'number' is not assignable to type 'string'.
+numericIndexExpressions.ts(15,1): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/numericIndexExpressions.ts (4 errors) ====
+==== numericIndexExpressions.ts (4 errors) ====
     interface Numbers1 {
         1: string;
     }

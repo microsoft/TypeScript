@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorWithTruncatedType.ts ===
+//// [tests/cases/compiler/errorWithTruncatedType.ts] ////
+
+=== errorWithTruncatedType.ts ===
 var x: {
 >x : { propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propertyWithAnExceedinglyLongName3: string; propertyWithAnExceedinglyLongName4: string; propertyWithAnExceedinglyLongName5: string; }
 

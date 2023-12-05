@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/multipleExportDefault3.ts ===
+//// [tests/cases/conformance/externalModules/multipleExportDefault3.ts] ////
+
+=== multipleExportDefault3.ts ===
 export default {
 >{    uhoh: "another default",} : { uhoh: string; }
 
@@ -9,6 +11,6 @@ export default {
 };
 
 export default class C { }
->C : import("tests/cases/conformance/externalModules/multipleExportDefault3").default
+>C : import("multipleExportDefault3").default
 
 

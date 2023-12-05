@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadsWithProvisionalErrors.ts ===
+//// [tests/cases/compiler/overloadsWithProvisionalErrors.ts] ////
+
+=== overloadsWithProvisionalErrors.ts ===
 var func: {
 >func : Symbol(func, Decl(overloadsWithProvisionalErrors.ts, 0, 3))
 

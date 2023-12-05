@@ -1,4 +1,6 @@
-=== tests/cases/compiler/contextualTypingOfObjectLiterals2.ts ===
+//// [tests/cases/compiler/contextualTypingOfObjectLiterals2.ts] ////
+
+=== contextualTypingOfObjectLiterals2.ts ===
 interface Foo {
     foo: (t: string) => string;
 >foo : (t: string) => string

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/voidIsInitialized.ts] ////
+
 //// [voidIsInitialized.ts]
 const x: void = undefined;
 const y: void = undefined;

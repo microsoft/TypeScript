@@ -94,7 +94,7 @@ module m4 {
 //// [collisionExportsRequireAndModule_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo2 = exports.exports = exports.foo = exports.require = void 0;
     var require;
     (function (require) {
@@ -104,7 +104,7 @@ define(["require", "exports"], function (require, exports) {
             return C;
         }());
         require.C = C;
-    })(require = exports.require || (exports.require = {}));
+    })(require || (exports.require = require = {}));
     function foo() {
         return null;
     }
@@ -117,7 +117,7 @@ define(["require", "exports"], function (require, exports) {
             return C;
         }());
         exports.C = C;
-    })(exports = exports.exports || (exports.exports = {}));
+    })(exports || (exports.exports = exports = {}));
     function foo2() {
         return null;
     }

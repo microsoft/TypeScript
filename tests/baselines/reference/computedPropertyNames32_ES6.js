@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames32_ES6.ts] ////
+
 //// [computedPropertyNames32_ES6.ts]
 function foo<T>() { return '' }
 class C<T> {

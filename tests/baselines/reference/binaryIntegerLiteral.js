@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteral.ts] ////
+
 //// [binaryIntegerLiteral.ts]
 var bin1 = 0b11010;
 var bin2 = 0B11010;

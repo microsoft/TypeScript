@@ -21,4 +21,4 @@
 //// var y: SuperBar = new SuperBar();
 //// var z: AbstractBar = new NotAbstractBar();
 
-verify.allRangesAppearInImplementationList("interface_definition");
+verify.baselineGoToImplementation("interface_definition");

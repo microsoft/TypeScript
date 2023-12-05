@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuringAssignmentWithExportedName.ts] ////
+
 //// [destructuringAssignmentWithExportedName.ts]
 export let exportedFoo: any;
 let nonexportedFoo: any;
@@ -30,10 +32,7 @@ export { exportedFoo as foo, nonexportedFoo as nfoo };
 var _a, _b, _c, _d, _e;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.nfoo = exports.foo = exports.nonexportedFoo = exports.exportedFoo = void 0;
-exports.foo = exports.exportedFoo;
 let nonexportedFoo;
-exports.nonexportedFoo = nonexportedFoo;
-exports.nfoo = nonexportedFoo;
 // sanity checks
 exports.foo = exports.exportedFoo = null;
 exports.nfoo = exports.nonexportedFoo = nonexportedFoo = null;

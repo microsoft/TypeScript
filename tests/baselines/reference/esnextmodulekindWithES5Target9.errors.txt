@@ -1,22 +1,22 @@
-tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts(1,15): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts(3,17): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts(5,20): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts(13,15): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts(15,17): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+esnextmodulekindWithES5Target9.ts(1,15): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+esnextmodulekindWithES5Target9.ts(3,17): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+esnextmodulekindWithES5Target9.ts(5,20): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+esnextmodulekindWithES5Target9.ts(13,15): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+esnextmodulekindWithES5Target9.ts(15,17): error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
-==== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts (5 errors) ====
+==== esnextmodulekindWithES5Target9.ts (5 errors) ====
     import d from "mod";
                   ~~~~~
-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
     import {a} from "mod";
                     ~~~~~
-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
     import * as M from "mod";
                        ~~~~~
-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
     export {a};
     
@@ -26,11 +26,11 @@ tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts
     
     export * from "mod";
                   ~~~~~
-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
     export {b} from "mod"
                     ~~~~~
-!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'mod'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     
     export default d;
     

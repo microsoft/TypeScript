@@ -1,3 +1,5 @@
-=== tests/cases/compiler/asiContinue.ts ===
+//// [tests/cases/compiler/asiContinue.ts] ////
+
+=== asiContinue.ts ===
+
 while (true) continue
-No type information for this code.

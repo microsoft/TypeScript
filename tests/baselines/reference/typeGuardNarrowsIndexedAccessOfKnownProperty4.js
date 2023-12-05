@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty4.ts] ////
+
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty4.ts]
 class Foo {
     x: number | undefined;

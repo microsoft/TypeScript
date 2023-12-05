@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegressionTests/parser536727.ts] ////
+
 //// [parser536727.ts]
 function foo(f: (x: string) => string) {
     return f("");

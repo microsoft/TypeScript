@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericSpecializationToTypeLiteral1.ts ===
+//// [tests/cases/compiler/genericSpecializationToTypeLiteral1.ts] ////
+
+=== genericSpecializationToTypeLiteral1.ts ===
 interface IEnumerable<T> {
 >IEnumerable : Symbol(IEnumerable, Decl(genericSpecializationToTypeLiteral1.ts, 0, 0))
 >T : Symbol(T, Decl(genericSpecializationToTypeLiteral1.ts, 0, 22))

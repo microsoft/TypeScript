@@ -1,4 +1,6 @@
-=== tests/cases/compiler/missingCommaInTemplateStringsArray.ts ===
+//// [tests/cases/compiler/missingCommaInTemplateStringsArray.ts] ////
+
+=== missingCommaInTemplateStringsArray.ts ===
 var array = [
 >array : Symbol(array, Decl(missingCommaInTemplateStringsArray.ts, 0, 3))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitAnyInAmbientDeclaration.ts] ////
+
 //// [implicitAnyInAmbientDeclaration.ts]
 module Test {
     declare class C {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/castParentheses.ts] ////
+
 //// [castParentheses.ts]
 class a {
     static b: any;

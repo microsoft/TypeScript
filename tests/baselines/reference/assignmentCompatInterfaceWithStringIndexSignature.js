@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts] ////
+
 //// [assignmentCompatInterfaceWithStringIndexSignature.ts]
 interface IHandler {
     (e): boolean;

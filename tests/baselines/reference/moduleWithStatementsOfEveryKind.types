@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/moduleBody/moduleWithStatementsOfEveryKind.ts ===
+//// [tests/cases/conformance/internalModules/moduleBody/moduleWithStatementsOfEveryKind.ts] ////
+
+=== moduleWithStatementsOfEveryKind.ts ===
 module A {
 >A : typeof globalThis.A
 
@@ -51,7 +53,6 @@ module A {
     }
     var array: I[] = null;
 >array : I[]
->null : null
 
     var fn = (s: string) => {
 >fn : (s: string) => string
@@ -133,7 +134,6 @@ module Y {
     }
     export var array: I[] = null;
 >array : I[]
->null : null
 
     export var fn = (s: string) => {
 >fn : (s: string) => string

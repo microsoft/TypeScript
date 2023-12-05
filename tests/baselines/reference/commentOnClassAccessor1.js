@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentOnClassAccessor1.ts] ////
+
 //// [commentOnClassAccessor1.ts]
 class C {
   /**

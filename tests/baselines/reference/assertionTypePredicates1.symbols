@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts ===
+//// [tests/cases/conformance/controlFlow/assertionTypePredicates1.ts] ////
+
+=== assertionTypePredicates1.ts ===
 declare function isString(value: unknown): value is string;
 >isString : Symbol(isString, Decl(assertionTypePredicates1.ts, 0, 0))
 >value : Symbol(value, Decl(assertionTypePredicates1.ts, 0, 26))

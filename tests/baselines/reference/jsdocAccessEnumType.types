@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsdocAccessEnumType.ts] ////
+
 === /a.ts ===
 export enum E { A }
 >E : E

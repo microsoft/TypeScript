@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tile1.ts ===
+//// [tests/cases/compiler/subclassThisTypeAssignable01.ts] ////
+
+=== tile1.ts ===
 interface Lifecycle<Attrs, State> {
 >Lifecycle : Symbol(Lifecycle, Decl(tile1.ts, 0, 0))
 >Attrs : Symbol(Attrs, Decl(tile1.ts, 0, 20))
@@ -90,7 +92,7 @@ const test8: ClassComponent<any> = new C();
 >ClassComponent : Symbol(ClassComponent, Decl(tile1.ts, 11, 1))
 >C : Symbol(C, Decl(tile1.ts, 18, 32))
 
-=== tests/cases/compiler/file1.js ===
+=== file1.js ===
 /** @type {ClassComponent<any>} */
 const test9 = new C();
 >test9 : Symbol(test9, Decl(file1.js, 1, 5))

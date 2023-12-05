@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES5For-of31.ts] ////
+
 //// [ES5For-of31.ts]
 var a: string, b: number;
 

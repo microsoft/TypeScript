@@ -1,13 +1,13 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(2,19): error TS2583: Cannot find name 'Iterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(2,28): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(2,42): error TS2304: Cannot find name 'Query'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(2,48): error TS2304: Cannot find name 'T'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(3,16): error TS2304: Cannot find name 'fromDoWhile'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(4,13): error TS1005: '{' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts(5,25): error TS2339: Property 'doWhile' does not exist on type 'C'.
+parserMissingLambdaOpenBrace1.ts(2,19): error TS2583: Cannot find name 'Iterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+parserMissingLambdaOpenBrace1.ts(2,28): error TS2304: Cannot find name 'T'.
+parserMissingLambdaOpenBrace1.ts(2,42): error TS2304: Cannot find name 'Query'.
+parserMissingLambdaOpenBrace1.ts(2,48): error TS2304: Cannot find name 'T'.
+parserMissingLambdaOpenBrace1.ts(3,16): error TS2304: Cannot find name 'fromDoWhile'.
+parserMissingLambdaOpenBrace1.ts(4,13): error TS1005: '{' expected.
+parserMissingLambdaOpenBrace1.ts(5,25): error TS2339: Property 'doWhile' does not exist on type 'C'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserMissingLambdaOpenBrace1.ts (7 errors) ====
+==== parserMissingLambdaOpenBrace1.ts (7 errors) ====
     class C {
         where(filter: Iterator<T, boolean>): Query<T> {
                       ~~~~~~~~

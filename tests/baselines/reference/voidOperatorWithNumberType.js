@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/voidOperator/voidOperatorWithNumberType.ts] ////
+
 //// [voidOperatorWithNumberType.ts]
 // void  operator on number type
 var NUMBER: number;

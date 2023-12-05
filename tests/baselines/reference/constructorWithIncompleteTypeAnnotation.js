@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts] ////
+
 //// [constructorWithIncompleteTypeAnnotation.ts]
 declare module "fs" {
     export class File {
@@ -301,7 +303,7 @@ var TypeScriptAllInOne;
 (function (TypeScriptAllInOne) {
     var Program = /** @class */ (function () {
         function Program() {
-            this["case"] = bfs.STATEMENTS(4);
+            this.case = bfs.STATEMENTS(4);
         }
         Program.Main = function () {
             var args = [];
@@ -314,13 +316,13 @@ var TypeScriptAllInOne;
                 retValue = bfs.VARIABLES();
                 if (retValue != 0)
                      ^= {
-                        "return": 1
+                        return: 1
                     };
             }
             finally {
             }
         };
-        Program.prototype["if"] = function (retValue) { };
+        Program.prototype.if = function (retValue) { };
         return Program;
     }());
     TypeScriptAllInOne.Program = Program;
@@ -374,7 +376,7 @@ var BasicFeatures = /** @class */ (function () {
         ;
         var quoted = '"', quoted2 = "'";
         var reg = /\w*/;
-        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, "instanceof": function () { return 'objLit{42}'; } };
+        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, instanceof: function () { return 'objLit{42}'; } };
         var weekday = Weekdays.Monday;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //

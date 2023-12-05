@@ -1,8 +1,8 @@
-tests/cases/compiler/errorHandlingInInstanceOf.ts(1,5): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/errorHandlingInInstanceOf.ts(5,18): error TS2304: Cannot find name 'UnknownType'.
+errorHandlingInInstanceOf.ts(1,5): error TS2304: Cannot find name 'x'.
+errorHandlingInInstanceOf.ts(5,18): error TS2304: Cannot find name 'UnknownType'.
 
 
-==== tests/cases/compiler/errorHandlingInInstanceOf.ts (2 errors) ====
+==== errorHandlingInInstanceOf.ts (2 errors) ====
     if (x instanceof String) {
         ~
 !!! error TS2304: Cannot find name 'x'.

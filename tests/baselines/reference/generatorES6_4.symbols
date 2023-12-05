@@ -1,4 +1,6 @@
-=== tests/cases/compiler/generatorES6_4.ts ===
+//// [tests/cases/compiler/generatorES6_4.ts] ////
+
+=== generatorES6_4.ts ===
 var v = { 
 >v : Symbol(v, Decl(generatorES6_4.ts, 0, 3))
 

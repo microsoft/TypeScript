@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/isolatedModulesSourceMap.ts] ////
+
 //// [file1.ts]
 export var x = 1;
 

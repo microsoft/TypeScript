@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/silentNeverPropagation.ts] ////
+
 //// [silentNeverPropagation.ts]
 // Repro from #45041
 

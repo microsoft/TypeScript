@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateAnonymousModuleClasses.ts ===
+//// [tests/cases/compiler/duplicateAnonymousModuleClasses.ts] ////
+
+=== duplicateAnonymousModuleClasses.ts ===
 module F {
 >F : typeof F
 

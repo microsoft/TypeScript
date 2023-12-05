@@ -1,8 +1,10 @@
-=== tests/cases/compiler/f1.ts ===
+//// [tests/cases/compiler/moduleAugmentationImportsAndExports2.ts] ////
+
+=== f1.ts ===
 export class A {}
 >A : A
 
-=== tests/cases/compiler/f2.ts ===
+=== f2.ts ===
 export class B {
 >B : B
 
@@ -10,7 +12,7 @@ export class B {
 >n : number
 }
 
-=== tests/cases/compiler/f3.ts ===
+=== f3.ts ===
 import {A} from "./f1";
 >A : typeof A
 
@@ -33,7 +35,7 @@ namespace N {
 }
 
 declare module "./f1" {
->"./f1" : typeof import("tests/cases/compiler/f1")
+>"./f1" : typeof import("f1")
 
     import {B} from "./f2";
 >B : any
@@ -64,7 +66,7 @@ declare module "./f1" {
     }
 }
 
-=== tests/cases/compiler/f4.ts ===
+=== f4.ts ===
 import {A} from "./f1";
 >A : typeof A
 

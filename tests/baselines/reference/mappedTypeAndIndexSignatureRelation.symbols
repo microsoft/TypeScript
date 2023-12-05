@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mappedTypeAndIndexSignatureRelation.ts ===
+//// [tests/cases/compiler/mappedTypeAndIndexSignatureRelation.ts] ////
+
+=== mappedTypeAndIndexSignatureRelation.ts ===
 type Same<T> = { [P in keyof T]: T[P] };
 >Same : Symbol(Same, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeAndIndexSignatureRelation.ts, 0, 10))

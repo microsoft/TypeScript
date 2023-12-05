@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/mapped/mappedTypesArraysTuples.ts ===
+//// [tests/cases/conformance/types/mapped/mappedTypesArraysTuples.ts] ////
+
+=== mappedTypesArraysTuples.ts ===
 type Box<T> = { value: T };
 >Box : Symbol(Box, Decl(mappedTypesArraysTuples.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 0, 9))

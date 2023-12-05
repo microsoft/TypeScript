@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignToEnum.ts ===
+//// [tests/cases/compiler/assignToEnum.ts] ////
+
+=== assignToEnum.ts ===
 enum A { foo, bar }
 >A : Symbol(A, Decl(assignToEnum.ts, 0, 0))
 >foo : Symbol(A.foo, Decl(assignToEnum.ts, 0, 8))

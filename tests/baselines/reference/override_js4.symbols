@@ -1,4 +1,6 @@
-=== tests/cases/conformance/override/a.js ===
+//// [tests/cases/conformance/override/override_js4.ts] ////
+
+=== a.js ===
 class A {
 >A : Symbol(A, Decl(a.js, 0, 0))
 

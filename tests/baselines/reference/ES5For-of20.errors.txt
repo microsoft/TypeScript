@@ -1,14 +1,14 @@
-tests/cases/conformance/statements/for-ofStatements/ES5For-of20.ts(3,20): error TS2448: Block-scoped variable 'v' used before its declaration.
-tests/cases/conformance/statements/for-ofStatements/ES5For-of20.ts(4,15): error TS1155: 'const' declarations must be initialized.
+ES5For-of20.ts(3,20): error TS2448: Block-scoped variable 'v' used before its declaration.
+ES5For-of20.ts(4,15): error TS1155: 'const' declarations must be initialized.
 
 
-==== tests/cases/conformance/statements/for-ofStatements/ES5For-of20.ts (2 errors) ====
+==== ES5For-of20.ts (2 errors) ====
     for (let v of []) {
         let v;
         for (let v of [v]) {
                        ~
 !!! error TS2448: Block-scoped variable 'v' used before its declaration.
-!!! related TS2728 tests/cases/conformance/statements/for-ofStatements/ES5For-of20.ts:3:14: 'v' is declared here.
+!!! related TS2728 ES5For-of20.ts:3:14: 'v' is declared here.
             const v;
                   ~
 !!! error TS1155: 'const' declarations must be initialized.

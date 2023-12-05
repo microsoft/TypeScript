@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumAssignmentCompat3.ts ===
+//// [tests/cases/compiler/enumAssignmentCompat3.ts] ////
+
+=== enumAssignmentCompat3.ts ===
 namespace First {
 >First : typeof First
 
@@ -83,9 +85,9 @@ namespace Decl {
 >E : E
 
         a, b, c = 3,
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 >3 : 3
     }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/library_StringSlice.ts] ////
+
 //// [library_StringSlice.ts]
 // String.prototype.slice can have zero, one, or two arguments
 String.prototype.slice();

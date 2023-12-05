@@ -1,14 +1,14 @@
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(13,11): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(14,11): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(15,11): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(16,11): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(17,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(18,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(19,16): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts(20,18): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndValidOperands.ts(13,11): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndValidOperands.ts(14,11): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndValidOperands.ts(15,11): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndValidOperands.ts(16,11): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndValidOperands.ts(17,16): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndValidOperands.ts(18,16): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndValidOperands.ts(19,16): error TS18050: The value 'undefined' cannot be used here.
+exponentiationOperatorWithUndefinedValueAndValidOperands.ts(20,18): error TS18050: The value 'undefined' cannot be used here.
 
 
-==== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts (8 errors) ====
+==== exponentiationOperatorWithUndefinedValueAndValidOperands.ts (8 errors) ====
     // If one operand is the undefined or undefined value, it is treated as having the type of the
     // other operand.
     

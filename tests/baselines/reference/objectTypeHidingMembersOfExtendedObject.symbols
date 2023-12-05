@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts ===
+//// [tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts] ////
+
+=== objectTypeHidingMembersOfExtendedObject.ts ===
 class A {
 >A : Symbol(A, Decl(objectTypeHidingMembersOfExtendedObject.ts, 0, 0))
 

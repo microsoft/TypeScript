@@ -1,4 +1,6 @@
-=== tests/cases/compiler/uncalledFunctionChecksInConditional2.ts ===
+//// [tests/cases/compiler/uncalledFunctionChecksInConditional2.ts] ////
+
+=== uncalledFunctionChecksInConditional2.ts ===
 {
   const perf = window.performance
 >perf : Performance
@@ -69,6 +71,41 @@
 >perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
 >perf : Performance
 >measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>!!true : true
+>!true : false
+>true : true
+
+  ) {
+    perf.mark("");
+>perf.mark("") : PerformanceMark
+>perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+>mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>"" : ""
+  }
+
+  // With ??
+  if (
+    (
+>(      perf &&      perf.mark &&      perf.measure    ) ?? !!true : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>(      perf &&      perf.mark &&      perf.measure    ) : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+
+      perf &&
+>perf &&      perf.mark &&      perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf &&      perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+
+      perf.mark &&
+>perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+>mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+
+      perf.measure
+>perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf : Performance
+>measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+
+    ) ?? !!true
 >!!true : true
 >!true : false
 >true : true
@@ -177,4 +214,51 @@ declare let inBrowser: boolean;
     }
   }
 };
+
+let _isMobile: boolean;
+>_isMobile : boolean
+
+function isMobile() {
+>isMobile : () => boolean
+
+  if (_isMobile === undefined) {
+>_isMobile === undefined : boolean
+>_isMobile : boolean
+>undefined : undefined
+
+    const isMobileMatch =
+>isMobileMatch : false | MediaQueryList
+
+      typeof window !== 'undefined' &&
+>typeof window !== 'undefined' &&      window.matchMedia && // no error      window.matchMedia('(max-device-width: 680px)') : false | MediaQueryList
+>typeof window !== 'undefined' &&      window.matchMedia : false | (((query: string) => MediaQueryList) & ((query: string) => MediaQueryList))
+>typeof window !== 'undefined' : boolean
+>typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>window : Window & typeof globalThis
+>'undefined' : "undefined"
+
+      window.matchMedia && // no error
+>window.matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
+>window : Window & typeof globalThis
+>matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
+
+      window.matchMedia('(max-device-width: 680px)');
+>window.matchMedia('(max-device-width: 680px)') : MediaQueryList
+>window.matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
+>window : Window & typeof globalThis
+>matchMedia : ((query: string) => MediaQueryList) & ((query: string) => MediaQueryList)
+>'(max-device-width: 680px)' : "(max-device-width: 680px)"
+
+    _isMobile = isMobileMatch && isMobileMatch.matches;
+>_isMobile = isMobileMatch && isMobileMatch.matches : boolean
+>_isMobile : boolean
+>isMobileMatch && isMobileMatch.matches : boolean
+>isMobileMatch : false | MediaQueryList
+>isMobileMatch.matches : boolean
+>isMobileMatch : MediaQueryList
+>matches : boolean
+  }
+  return _isMobile;
+>_isMobile : boolean
+}
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/primitives/null/validNullAssignments.ts] ////
+
 //// [validNullAssignments.ts]
 var a: number = null;
 var b: boolean = null;

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsEveryObjectType2.ts] ////
+
 //// [classExtendsEveryObjectType2.ts]
 class C2 extends { foo: string; } { } // error
 

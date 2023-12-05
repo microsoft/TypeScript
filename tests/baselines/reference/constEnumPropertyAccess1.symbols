@@ -1,4 +1,6 @@
-=== tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts ===
+//// [tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts] ////
+
+=== constEnumPropertyAccess1.ts ===
 // constant enum declarations are completely erased in the emitted JavaScript code.
 // it is an error to reference a constant enum object in any other context
 // than a property access that selects one of the enum's members
@@ -62,7 +64,7 @@ class C {
 >A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
 
     get [G.B]() {
->[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 22, 15))
+>[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 22, 15), Decl(constEnumPropertyAccess1.ts, 25, 5))
 >G.B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
 >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
 >B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
@@ -70,7 +72,7 @@ class C {
         return true;
     }
     set [G.B](x: number) { }
->[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 25, 5))
+>[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 22, 15), Decl(constEnumPropertyAccess1.ts, 25, 5))
 >G.B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
 >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
 >B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))

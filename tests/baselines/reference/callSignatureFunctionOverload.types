@@ -1,4 +1,6 @@
-=== tests/cases/compiler/callSignatureFunctionOverload.ts ===
+//// [tests/cases/compiler/callSignatureFunctionOverload.ts] ////
+
+=== callSignatureFunctionOverload.ts ===
 var foo: {
 >foo : { (name: string): string; (name: 'order'): string; (name: 'content'): string; (name: 'done'): string; }
 

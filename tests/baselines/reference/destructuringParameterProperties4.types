@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts] ////
+
+=== destructuringParameterProperties4.ts ===
 class C1<T, U, V> {
 >C1 : C1<T, U, V>
 

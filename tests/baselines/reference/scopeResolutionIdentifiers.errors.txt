@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/identifiers/scopeResolutionIdentifiers.ts(24,14): error TS2729: Property 's' is used before its initialization.
+scopeResolutionIdentifiers.ts(24,14): error TS2729: Property 's' is used before its initialization.
 
 
-==== tests/cases/conformance/expressions/identifiers/scopeResolutionIdentifiers.ts (1 errors) ====
+==== scopeResolutionIdentifiers.ts (1 errors) ====
     // EveryType used in a nested scope of a different EveryType with the same name, type of the identifier is the one defined in the inner scope
     
     var s: string;
@@ -28,7 +28,7 @@ tests/cases/conformance/expressions/identifiers/scopeResolutionIdentifiers.ts(24
         n = this.s;
                  ~
 !!! error TS2729: Property 's' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/expressions/identifiers/scopeResolutionIdentifiers.ts:23:5: 's' is declared here.
+!!! related TS2728 scopeResolutionIdentifiers.ts:23:5: 's' is declared here.
         x() {
             var p = this.n;
             var p: Date;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors1.ts] ////
+
 //// [genericRecursiveImplicitConstructorErrors1.ts]
 export declare module TypeScript {
   class PullSymbol { }
@@ -16,5 +18,5 @@ export declare module TypeScript {
 //// [genericRecursiveImplicitConstructorErrors1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });

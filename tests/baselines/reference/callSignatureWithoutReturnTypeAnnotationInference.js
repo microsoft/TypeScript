@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithoutReturnTypeAnnotationInference.ts] ////
+
 //// [callSignatureWithoutReturnTypeAnnotationInference.ts]
 // Call signatures without a return type should infer one from the function body (if present)
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements01.ts] ////
+
 //// [stringLiteralsWithSwitchStatements01.ts]
 let x: "foo";
 let y: "foo" | "bar"; 

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 export class C {}
@@ -7,7 +8,9 @@ import {C} from './a';
 export function f(p: C) { return p; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,8 +35,55 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+exports.C = C;
+
+
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = void 0;
+function f(p) { return p; }
+exports.f = f;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -50,54 +100,26 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-exports.__esModule = true;
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
-
-
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-exports.__esModule = true;
-exports.f = void 0;
-function f(p) { return p; }
-exports.f = f;
-
-
 
 Change:: Set to "remove"
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"importsNotUsedAsValues":"remove"}}
+{
+  "compilerOptions": {
+    "importsNotUsedAsValues": "remove"
+  }
+}
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
@@ -106,8 +128,19 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"importsNotUsedAsValues":0,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "importsNotUsedAsValues": 0,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -121,88 +154,44 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents
 
 Change:: Set to "error"
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"importsNotUsedAsValues":"error"}}
+{
+  "compilerOptions": {
+    "importsNotUsedAsValues": "error"
+  }
+}
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-[96mb.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
 
-[7m1[0m import {C} from './a';
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m3[0m     "importsNotUsedAsValues": "error"
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"importsNotUsedAsValues":2,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-
-No shapes updated in the builder::
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
 require("./a");
 function f(p) { return p; }
@@ -210,55 +199,81 @@ exports.f = f;
 
 
 
-Change:: Set to "preserve"
 
-Input::
-//// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"importsNotUsedAsValues":"preserve"}}
-
-
-Output::
->> Screen clear
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"importsNotUsedAsValues":1,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "importsNotUsedAsValues": 2,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: Set to "preserve"
+
+Input::
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "importsNotUsedAsValues": "preserve"
+  }
+}
+
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
+
+[7m3[0m     "importsNotUsedAsValues": "preserve"
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "importsNotUsedAsValues": 1,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
+No cached semantic diagnostics in the builder::
+
 No shapes updated in the builder::
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {}
-/user/username/projects/myproject/a.ts:
-  {}
-/user/username/projects/myproject/b.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents

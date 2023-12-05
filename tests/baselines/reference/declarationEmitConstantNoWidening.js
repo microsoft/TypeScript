@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitConstantNoWidening.ts] ////
+
 //// [declarationEmitConstantNoWidening.ts]
 export const FOO = 'FOO'; 
 export class Bar {
@@ -6,7 +8,7 @@ export class Bar {
 
 //// [declarationEmitConstantNoWidening.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = exports.FOO = void 0;
 exports.FOO = 'FOO';
 var Bar = /** @class */ (function () {

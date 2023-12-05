@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts ===
+//// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck39.ts] ////
+
+=== generatorTypeCheck39.ts ===
 function decorator(x: any) {
 >decorator : Symbol(decorator, Decl(generatorTypeCheck39.ts, 0, 0))
 >x : Symbol(x, Decl(generatorTypeCheck39.ts, 0, 19))

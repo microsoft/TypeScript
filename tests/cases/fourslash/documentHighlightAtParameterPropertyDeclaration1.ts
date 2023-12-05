@@ -17,4 +17,4 @@
 ////     }
 //// }
 
-verify.rangesWithSameTextAreDocumentHighlights();
+verify.baselineDocumentHighlights();

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor6.ts] ////
+
 //// [autoAccessor6.ts]
 class C1 {
     accessor a: any;
@@ -14,6 +16,7 @@ class C3 extends C1 {
 
 //// [autoAccessor6.js]
 class C1 {
+    accessor a;
 }
 class C2 extends C1 {
     constructor() {

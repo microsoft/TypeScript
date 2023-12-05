@@ -1,9 +1,21 @@
-namespace ts {
-    describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
-        verifyTsc({
-            scenario: "javascriptProjectEmit",
-            subScenario: `loads js-based projects and emits them correctly`,
-            fs: () => loadProjectFromFiles({
+import * as Utils from "../../_namespaces/Utils";
+import {
+    symbolLibContent,
+} from "../helpers/contents";
+import {
+    verifyTsc,
+} from "../helpers/tsc";
+import {
+    loadProjectFromFiles,
+    replaceText,
+} from "../helpers/vfs";
+
+describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
+    verifyTsc({
+        scenario: "javascriptProjectEmit",
+        subScenario: `loads js-based projects and emits them correctly`,
+        fs: () =>
+            loadProjectFromFiles({
                 "/src/common/nominal.js": Utils.dedent`
                     /**
                      * @template T, Name
@@ -85,13 +97,14 @@ namespace ts {
                         }
                     }`,
             }, symbolLibContent),
-            commandLineArgs: ["-b", "/src"]
-        });
+        commandLineArgs: ["-b", "/src"],
+    });
 
-        verifyTscWithEdits({
-            scenario: "javascriptProjectEmit",
-            subScenario: `modifies outfile js projects and concatenates them correctly`,
-            fs: () => loadProjectFromFiles({
+    verifyTsc({
+        scenario: "javascriptProjectEmit",
+        subScenario: `modifies outfile js projects and concatenates them correctly`,
+        fs: () =>
+            loadProjectFromFiles({
                 "/src/common/nominal.js": Utils.dedent`
                     /**
                      * @template T, Name
@@ -118,6 +131,7 @@ namespace ts {
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
+                            "ignoreDeprecations":"5.0",
                             "composite": true,
                             "outFile": "sub-project.js",
                             
@@ -143,6 +157,7 @@ namespace ts {
                     {
                         "extends": "../tsconfig.base.json",
                         "compilerOptions": {
+                            "ignoreDeprecations":"5.0",
                             "composite": true,
                             "outFile": "sub-project-2.js",
                             
@@ -155,6 +170,7 @@ namespace ts {
                 "/src/tsconfig.json": Utils.dedent`
                     {
                         "compilerOptions": {
+                            "ignoreDeprecations":"5.0",
                             "composite": true,
                             "outFile": "src.js"
                         },
@@ -175,17 +191,18 @@ namespace ts {
                         }
                     }`,
             }, symbolLibContent),
-            commandLineArgs: ["-b", "/src"],
-            edits: [{
-                subScenario: "incremental-declaration-doesnt-change",
-                modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
-            }]
-        });
+        commandLineArgs: ["-b", "/src"],
+        edits: [{
+            caption: "incremental-declaration-doesnt-change",
+            edit: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined"),
+        }],
+    });
 
-        verifyTsc({
-            scenario: "javascriptProjectEmit",
-            subScenario: `loads js-based projects with non-moved json files and emits them correctly`,
-            fs: () => loadProjectFromFiles({
+    verifyTsc({
+        scenario: "javascriptProjectEmit",
+        subScenario: `loads js-based projects with non-moved json files and emits them correctly`,
+        fs: () =>
+            loadProjectFromFiles({
                 "/src/common/obj.json": Utils.dedent`
                     {
                         "val": 42
@@ -266,7 +283,6 @@ namespace ts {
                         }
                     }`,
             }, symbolLibContent),
-            commandLineArgs: ["-b", "/src"]
-        });
+        commandLineArgs: ["-b", "/src"],
     });
-}
+});

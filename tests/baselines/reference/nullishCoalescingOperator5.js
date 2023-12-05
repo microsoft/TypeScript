@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator5.ts] ////
+
 //// [nullishCoalescingOperator5.ts]
 declare const a: string | undefined
 declare const b: string | undefined

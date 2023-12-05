@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericImplements.ts ===
+//// [tests/cases/compiler/genericImplements.ts] ////
+
+=== genericImplements.ts ===
 class A { a; };
 >A : A
 >a : any

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enum.ts ===
+//// [tests/cases/compiler/importedEnumMemberMergedWithExportedAliasIsError.ts] ////
+
+=== enum.ts ===
 export enum Enum {
 >Enum : Symbol(Enum, Decl(enum.ts, 0, 0))
 
@@ -8,7 +10,7 @@ export enum Enum {
     B
 >B : Symbol(Enum.B, Decl(enum.ts, 1, 6))
 }
-=== tests/cases/compiler/alias.ts ===
+=== alias.ts ===
 import {Enum} from "./enum";
 >Enum : Symbol(Enum, Decl(alias.ts, 0, 8))
 

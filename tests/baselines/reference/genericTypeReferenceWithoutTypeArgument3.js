@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts] ////
+
 //// [genericTypeReferenceWithoutTypeArgument3.ts]
 // it is an error to use a generic type without type arguments
 // all of these are errors 

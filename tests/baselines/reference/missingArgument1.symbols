@@ -1,3 +1,5 @@
-=== tests/cases/compiler/missingArgument1.ts ===
+//// [tests/cases/compiler/missingArgument1.ts] ////
+
+=== missingArgument1.ts ===
+
 foo(a,,b);
-No type information for this code.

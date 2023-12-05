@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherTypeInvalidOperations.ts] ////
+
+=== decrementOperatorWithAnyOtherTypeInvalidOperations.ts ===
 // -- operator on any type
 var ANY1: any;
 >ANY1 : Symbol(ANY1, Decl(decrementOperatorWithAnyOtherTypeInvalidOperations.ts, 1, 3))

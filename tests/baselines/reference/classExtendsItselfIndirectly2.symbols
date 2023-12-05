@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts] ////
+
+=== classExtendsItselfIndirectly2.ts ===
 class C extends N.E { foo: string; } // error
 >C : Symbol(C, Decl(classExtendsItselfIndirectly2.ts, 0, 0))
 >N.E : Symbol(N.E, Decl(classExtendsItselfIndirectly2.ts, 7, 10))

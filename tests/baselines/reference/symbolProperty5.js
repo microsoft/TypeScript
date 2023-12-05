@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty5.ts] ////
+
 //// [symbolProperty5.ts]
 var x = {
     [Symbol.iterator]: 0,

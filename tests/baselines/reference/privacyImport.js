@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyImport.ts] ////
+
 //// [privacyImport.ts]
 export module m1 {
     export module m1_M1_public {
@@ -358,7 +360,7 @@ export module m3 {
 
 //// [privacyImport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m3 = exports.glo_im2_public = exports.glo_im1_public = exports.glo_im3_private_v4_public = exports.glo_im3_private_v3_public = exports.glo_im3_private_v2_public = exports.glo_im3_private_v1_public = exports.glo_im1_private_v4_public = exports.glo_im1_private_v3_public = exports.glo_im1_private_v2_public = exports.glo_im1_private_v1_public = exports.glo_M3_private = exports.glo_M1_public = exports.m1 = void 0;
 var m1;
 (function (m1) {
@@ -444,7 +446,7 @@ var m1;
     m1.m1_im2_public = m1_M2_private;
     //export import m1_im3_public = require("m1_M3_public");
     //export import m1_im4_public = require("m1_M4_private");
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 var m2;
 (function (m2) {
     var m2_M1_public;
@@ -544,7 +546,7 @@ var glo_M1_public;
     }
     glo_M1_public.f1 = f1;
     glo_M1_public.v1 = c1;
-})(glo_M1_public = exports.glo_M1_public || (exports.glo_M1_public = {}));
+})(glo_M1_public || (exports.glo_M1_public = glo_M1_public = {}));
 //export declare module "glo_M2_public" {
 //    export function f1();
 //    export class c1 {
@@ -565,7 +567,7 @@ var glo_M3_private;
     }
     glo_M3_private.f1 = f1;
     glo_M3_private.v1 = c1;
-})(glo_M3_private = exports.glo_M3_private || (exports.glo_M3_private = {}));
+})(glo_M3_private || (exports.glo_M3_private = glo_M3_private = {}));
 //export declare module "glo_M4_private" {
 //    export function f1();
 //    export class c1 {
@@ -702,19 +704,19 @@ var m3;
         var a = 10;
         //import m2 = require("use_glo_M1_public");
     })(m4 || (m4 = {}));
-})(m3 = exports.m3 || (exports.m3 = {}));
+})(m3 || (exports.m3 = m3 = {}));
 
 
 //// [privacyImport.d.ts]
-export declare module m1 {
-    export module m1_M1_public {
+export declare namespace m1 {
+    export namespace m1_M1_public {
         class c1 {
         }
         function f1(): c1;
         var v1: typeof c1;
         var v2: c1;
     }
-    module m1_M2_private {
+    namespace m1_M2_private {
         class c1 {
         }
         function f1(): c1;
@@ -735,14 +737,14 @@ export declare module m1 {
     export import m1_im2_public = m1_M2_private;
     export {};
 }
-export declare module glo_M1_public {
+export declare namespace glo_M1_public {
     class c1 {
     }
     function f1(): c1;
     var v1: typeof c1;
     var v2: c1;
 }
-export declare module glo_M3_private {
+export declare namespace glo_M3_private {
     class c1 {
     }
     function f1(): c1;
@@ -761,5 +763,5 @@ export declare var glo_im3_private_v3_public: typeof glo_im3_private.f1;
 export declare var glo_im3_private_v4_public: glo_im3_private.c1;
 export import glo_im1_public = glo_M1_public;
 export import glo_im2_public = glo_M3_private;
-export declare module m3 {
+export declare namespace m3 {
 }

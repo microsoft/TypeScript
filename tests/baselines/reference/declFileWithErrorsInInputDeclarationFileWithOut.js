@@ -21,5 +21,5 @@ var x = new M.C(); // Declaration file wont get emitted because there are errors
 
 
 //// [out.d.ts]
-/// <reference path="tests/cases/compiler/declFile.d.ts" />
+/// <reference path="declFile.d.ts" />
 declare var x: M.C;

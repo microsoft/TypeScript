@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts ===
+//// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts] ////
+
+=== ModuleWithExportedAndNonExportedFunctions.ts ===
 module A {
 >A : typeof A
 
@@ -15,7 +17,6 @@ module A {
 >s : T
 
         return null;
->null : null
     }
 
     function fn2(s: string) {
@@ -31,7 +32,6 @@ module A {
 >s : T
 
         return null;
->null : null
     }
 }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts] ////
+
 //// [destructuredLateBoundNameHasCorrectTypes.ts]
 let { [Symbol.iterator]: destructured } = [];
 void destructured;

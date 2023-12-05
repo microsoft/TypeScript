@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations2.ts ===
+//// [tests/cases/compiler/constDeclarations2.ts] ////
+
+=== constDeclarations2.ts ===
 // No error
 module M {
 >M : typeof M
@@ -17,6 +19,5 @@ module M {
 >c4 : string
 >"" : ""
 >c5 : any
->null : null
 }
 

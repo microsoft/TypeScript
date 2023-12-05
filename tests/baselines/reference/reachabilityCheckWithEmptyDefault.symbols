@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reachabilityCheckWithEmptyDefault.ts ===
+//// [tests/cases/compiler/reachabilityCheckWithEmptyDefault.ts] ////
+
+=== reachabilityCheckWithEmptyDefault.ts ===
 declare function print(s: string): void;
 >print : Symbol(print, Decl(lib.dom.d.ts, --, --), Decl(reachabilityCheckWithEmptyDefault.ts, 0, 0))
 >s : Symbol(s, Decl(reachabilityCheckWithEmptyDefault.ts, 0, 23))

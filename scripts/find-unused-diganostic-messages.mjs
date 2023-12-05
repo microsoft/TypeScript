@@ -1,14 +1,20 @@
-// @ts-check
 // This file requires a modern version of node 14+, and grep to be available.
 
 // node scripts/find-unused-diagnostic-messages.mjs
-import { readFileSync } from "fs";
-import {EOL} from "os";
-import { execSync } from "child_process";
+import {
+    execSync,
+} from "child_process";
+import {
+    readFileSync,
+} from "fs";
+import {
+    EOL,
+} from "os";
 
 const diags = readFileSync("src/compiler/diagnosticInformationMap.generated.ts", "utf8");
 const startOfDiags = diags.split("export const Diagnostics")[1];
 
+/** @type {string[]} */
 const missingNames = [];
 startOfDiags.split(EOL).forEach(line => {
     if (!line.includes(":")) return;

@@ -1,0 +1,10 @@
+// === findRenameLocations ===
+// @findInStrings: true
+// @findInComments: true
+
+// === /tests/cases/fourslash/server/rename01.ts ===
+// ///<reference path="./Bar.ts" />
+// <|function /*RENAME*/[|BarRENAME|]() {
+//     // This is a reference to [|BarRENAME|] in a comment.
+//     "this is a reference to [|BarRENAME|] in a string"
+// }|>

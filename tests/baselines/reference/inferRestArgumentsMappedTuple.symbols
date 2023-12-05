@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/inferRestArgumentsMappedTuple.ts] ////
+
+=== inferRestArgumentsMappedTuple.ts ===
+type MyMappedType<Primitive extends any> = {
+>MyMappedType : Symbol(MyMappedType, Decl(inferRestArgumentsMappedTuple.ts, 0, 0))
+>Primitive : Symbol(Primitive, Decl(inferRestArgumentsMappedTuple.ts, 0, 18))
+
+	primitive: Primitive;
+>primitive : Symbol(primitive, Decl(inferRestArgumentsMappedTuple.ts, 0, 44))
+>Primitive : Symbol(Primitive, Decl(inferRestArgumentsMappedTuple.ts, 0, 18))
+
+};
+
+type TupleMapperOld<Tuple extends any[]> = {
+>TupleMapperOld : Symbol(TupleMapperOld, Decl(inferRestArgumentsMappedTuple.ts, 2, 2))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 4, 20))
+
+	[Key in keyof Tuple]: Tuple[Key] extends Tuple[number] ? MyMappedType<Tuple[Key]> : never;
+>Key : Symbol(Key, Decl(inferRestArgumentsMappedTuple.ts, 5, 2))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 4, 20))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 4, 20))
+>Key : Symbol(Key, Decl(inferRestArgumentsMappedTuple.ts, 5, 2))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 4, 20))
+>MyMappedType : Symbol(MyMappedType, Decl(inferRestArgumentsMappedTuple.ts, 0, 0))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 4, 20))
+>Key : Symbol(Key, Decl(inferRestArgumentsMappedTuple.ts, 5, 2))
+
+};
+
+type MyMappedTupleOld = TupleMapperOld<[string, number]>; // [MyMappedType<string>, MyMappedType<number>]
+>MyMappedTupleOld : Symbol(MyMappedTupleOld, Decl(inferRestArgumentsMappedTuple.ts, 6, 2))
+>TupleMapperOld : Symbol(TupleMapperOld, Decl(inferRestArgumentsMappedTuple.ts, 2, 2))
+
+declare function extractPrimitivesOld<Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>): Tuple;
+>extractPrimitivesOld : Symbol(extractPrimitivesOld, Decl(inferRestArgumentsMappedTuple.ts, 8, 57))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 10, 38))
+>mappedTypes : Symbol(mappedTypes, Decl(inferRestArgumentsMappedTuple.ts, 10, 59))
+>TupleMapperOld : Symbol(TupleMapperOld, Decl(inferRestArgumentsMappedTuple.ts, 2, 2))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 10, 38))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 10, 38))
+
+const myPrimitiveTupleOld: [string, number] = extractPrimitivesOld({ primitive: "" }, { primitive: 0 });
+>myPrimitiveTupleOld : Symbol(myPrimitiveTupleOld, Decl(inferRestArgumentsMappedTuple.ts, 12, 5))
+>extractPrimitivesOld : Symbol(extractPrimitivesOld, Decl(inferRestArgumentsMappedTuple.ts, 8, 57))
+>primitive : Symbol(primitive, Decl(inferRestArgumentsMappedTuple.ts, 12, 68))
+>primitive : Symbol(primitive, Decl(inferRestArgumentsMappedTuple.ts, 12, 87))
+
+type TupleMapperNew<Tuple extends any[]> = {
+>TupleMapperNew : Symbol(TupleMapperNew, Decl(inferRestArgumentsMappedTuple.ts, 12, 104))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 14, 20))
+
+	[Key in keyof Tuple]: MyMappedType<Tuple[Key]>;
+>Key : Symbol(Key, Decl(inferRestArgumentsMappedTuple.ts, 15, 2))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 14, 20))
+>MyMappedType : Symbol(MyMappedType, Decl(inferRestArgumentsMappedTuple.ts, 0, 0))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 14, 20))
+>Key : Symbol(Key, Decl(inferRestArgumentsMappedTuple.ts, 15, 2))
+
+};
+
+type MyMappedTupleNew = TupleMapperNew<[string, number]>;
+>MyMappedTupleNew : Symbol(MyMappedTupleNew, Decl(inferRestArgumentsMappedTuple.ts, 16, 2))
+>TupleMapperNew : Symbol(TupleMapperNew, Decl(inferRestArgumentsMappedTuple.ts, 12, 104))
+
+declare function extractPrimitivesNew<Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>): Tuple;
+>extractPrimitivesNew : Symbol(extractPrimitivesNew, Decl(inferRestArgumentsMappedTuple.ts, 18, 57))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 20, 38))
+>mappedTypes : Symbol(mappedTypes, Decl(inferRestArgumentsMappedTuple.ts, 20, 59))
+>TupleMapperNew : Symbol(TupleMapperNew, Decl(inferRestArgumentsMappedTuple.ts, 12, 104))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 20, 38))
+>Tuple : Symbol(Tuple, Decl(inferRestArgumentsMappedTuple.ts, 20, 38))
+
+const myPrimitiveTupleNew: [string, number] = extractPrimitivesNew({ primitive: "" }, { primitive: 0 });
+>myPrimitiveTupleNew : Symbol(myPrimitiveTupleNew, Decl(inferRestArgumentsMappedTuple.ts, 22, 5))
+>extractPrimitivesNew : Symbol(extractPrimitivesNew, Decl(inferRestArgumentsMappedTuple.ts, 18, 57))
+>primitive : Symbol(primitive, Decl(inferRestArgumentsMappedTuple.ts, 22, 68))
+>primitive : Symbol(primitive, Decl(inferRestArgumentsMappedTuple.ts, 22, 87))
+

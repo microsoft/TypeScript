@@ -25,7 +25,7 @@ enum A {
 }
 enum B {
     b = A.a,
-    c
+    c = "c"
 }
 B.c`
 });

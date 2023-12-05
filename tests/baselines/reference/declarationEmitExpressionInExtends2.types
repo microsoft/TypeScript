@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitExpressionInExtends2.ts ===
+//// [tests/cases/compiler/declarationEmitExpressionInExtends2.ts] ////
+
+=== declarationEmitExpressionInExtends2.ts ===
 class C<T, U> {
 >C : C<T, U>
 

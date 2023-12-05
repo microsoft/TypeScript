@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts ===
+//// [tests/cases/compiler/accessorDeclarationEmitVisibilityErrors.ts] ////
+
+=== accessorDeclarationEmitVisibilityErrors.ts ===
 export class Q {
 >Q : Symbol(Q, Decl(accessorDeclarationEmitVisibilityErrors.ts, 0, 0))
 

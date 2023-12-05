@@ -83,7 +83,7 @@ export var useMultiImport_m4_f4 = multiImport_m4.foo();
 
 //// [importDecl_require.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.x = exports.d = void 0;
 var d = /** @class */ (function () {
     function d() {
@@ -95,7 +95,7 @@ function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.d = void 0;
 var d = /** @class */ (function () {
     function d() {
@@ -108,7 +108,7 @@ function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.x = exports.d = void 0;
 var d = /** @class */ (function () {
     function d() {
@@ -120,7 +120,7 @@ function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.x = exports.d = void 0;
 var d = /** @class */ (function () {
     function d() {
@@ -132,13 +132,13 @@ function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require4.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo2 = void 0;
 function foo2() { return null; }
 exports.foo2 = foo2;
 //// [importDecl_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.useMultiImport_m4_f4 = exports.useMultiImport_m4_d4 = exports.useMultiImport_m4_x4 = exports.d = exports.usePrivate_m4_m1 = exports.useFncOnly_m4_f4 = exports.useGlo_m4_f4 = exports.useGlo_m4_d4 = exports.m1 = exports.f4 = exports.d4 = exports.x4 = void 0;
 ///<reference path='importDecl_require.ts'/>
 ///<reference path='importDecl_require1.ts'/>
@@ -157,7 +157,7 @@ var m1;
     var x3 = m4.x;
     var d3 = m4.d;
     var f3 = m4.foo();
-})(m1 = exports.m1 || (exports.m1 = {}));
+})(m1 || (exports.m1 = m1 = {}));
 //Emit global only usage
 var glo_m4 = require("./importDecl_require1");
 exports.useGlo_m4_d4 = glo_m4.d;
@@ -172,7 +172,7 @@ var usePrivate_m4_m1;
     var x3 = private_m4.x;
     var d3 = private_m4.d;
     var f3 = private_m4.foo();
-})(usePrivate_m4_m1 = exports.usePrivate_m4_m1 || (exports.usePrivate_m4_m1 = {}));
+})(usePrivate_m4_m1 || (exports.usePrivate_m4_m1 = usePrivate_m4_m1 = {}));
 // Do not emit unused import
 var m5 = require("./importDecl_require4");
 exports.d = m5.foo2();
@@ -219,7 +219,7 @@ import m4 = require("./importDecl_require");
 export declare var x4: m4.d;
 export declare var d4: typeof m4.d;
 export declare var f4: m4.d;
-export declare module m1 {
+export declare namespace m1 {
     var x2: m4.d;
     var d2: typeof m4.d;
     var f2: m4.d;
@@ -229,7 +229,7 @@ export declare var useGlo_m4_d4: typeof glo_m4.d;
 export declare var useGlo_m4_f4: glo_m4.d;
 import fncOnly_m4 = require("./importDecl_require2");
 export declare var useFncOnly_m4_f4: fncOnly_m4.d;
-export declare module usePrivate_m4_m1 {
+export declare namespace usePrivate_m4_m1 {
 }
 export declare var d: m4.d;
 export declare var useMultiImport_m4_x4: m4.d;

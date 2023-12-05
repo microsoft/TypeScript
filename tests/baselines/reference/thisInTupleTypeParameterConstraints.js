@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/thisInTupleTypeParameterConstraints.ts] ////
+
 //// [thisInTupleTypeParameterConstraints.ts]
 /// <reference no-default-lib="true"/>
 

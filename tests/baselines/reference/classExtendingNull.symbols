@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classExtendingNull.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classExtendingNull.ts] ////
+
+=== classExtendingNull.ts ===
 class C1 extends null { }
 >C1 : Symbol(C1, Decl(classExtendingNull.ts, 0, 0))
 

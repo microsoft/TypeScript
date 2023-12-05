@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/cloduleWithDuplicateMember2.ts] ////
+
 //// [cloduleWithDuplicateMember2.ts]
 class C {
     set x(y) { }

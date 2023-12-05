@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/foo2.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignDottedName.ts] ////
+
+=== foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : Symbol(foo1, Decl(foo2.ts, 0, 0))
 
@@ -7,7 +9,7 @@ export = foo1.x; // Ok
 >foo1 : Symbol(foo1, Decl(foo2.ts, 0, 0))
 >x : Symbol(foo1.x, Decl(foo1.ts, 0, 0))
 
-=== tests/cases/conformance/externalModules/foo1.ts ===
+=== foo1.ts ===
 export function x(){
 >x : Symbol(x, Decl(foo1.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts] ////
+
+=== collisionExportsRequireAndInternalModuleAlias.ts ===
 export module m {
 >m : Symbol(m, Decl(collisionExportsRequireAndInternalModuleAlias.ts, 0, 0))
 

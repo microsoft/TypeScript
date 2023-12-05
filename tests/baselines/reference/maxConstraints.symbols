@@ -1,4 +1,6 @@
-=== tests/cases/compiler/maxConstraints.ts ===
+//// [tests/cases/compiler/maxConstraints.ts] ////
+
+=== maxConstraints.ts ===
 interface Comparable<T> {
 >Comparable : Symbol(Comparable, Decl(maxConstraints.ts, 0, 0))
 >T : Symbol(T, Decl(maxConstraints.ts, 0, 21))

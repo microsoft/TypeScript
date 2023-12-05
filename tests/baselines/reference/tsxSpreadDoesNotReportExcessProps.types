@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx ===
+//// [tests/cases/compiler/tsxSpreadDoesNotReportExcessProps.tsx] ////
+
+=== tsxSpreadDoesNotReportExcessProps.tsx ===
 /// <reference path="react16.d.ts" />
 
 import React from "react";

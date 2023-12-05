@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportModeDeclarationEmitErrors1.ts] ////
+
 === /index.ts ===
 // incorrect mode
 import type { RequireInterface } from "pkg" assert { "resolution-mode": "foobar" };
@@ -20,5 +22,5 @@ export interface LocalInterface extends RequireInterface, ImportInterface {}
 
 
 === /node_modules/pkg/require.d.ts ===
+
 export interface RequireInterface {}
-No type information for this code.

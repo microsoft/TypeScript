@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInheritance.ts] ////
+
 //// [classAbstractInheritance.ts]
 abstract class A {}
 

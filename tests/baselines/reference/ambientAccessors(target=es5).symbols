@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/ambientAccessors.ts ===
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/ambientAccessors.ts] ////
+
+=== ambientAccessors.ts ===
 // ok to use accessors in ambient class in ES3
 declare class C {
 >C : Symbol(C, Decl(ambientAccessors.ts, 0, 0))

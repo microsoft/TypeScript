@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritedConstructorPropertyContextualType.ts ===
+//// [tests/cases/compiler/inheritedConstructorPropertyContextualType.ts] ////
+
+=== inheritedConstructorPropertyContextualType.ts ===
 interface State {
 >State : Symbol(State, Decl(inheritedConstructorPropertyContextualType.ts, 0, 0))
 

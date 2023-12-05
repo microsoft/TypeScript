@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/use.js ===
+//// [tests/cases/conformance/salsa/chainedPrototypeAssignment.ts] ////
+
+=== use.js ===
 /// <reference path='./types.d.ts'/>
 var mod = require('./mod');
 >mod : typeof mod
@@ -34,7 +36,7 @@ b.m('not really')
 >m : (n: number) => number
 >'not really' : "not really"
 
-=== tests/cases/conformance/salsa/types.d.ts ===
+=== types.d.ts ===
 declare function require(name: string): any;
 >require : (name: string) => any
 >name : string
@@ -42,7 +44,7 @@ declare function require(name: string): any;
 declare var exports: any;
 >exports : any
 
-=== tests/cases/conformance/salsa/mod.js ===
+=== mod.js ===
 /// <reference path='./types.d.ts'/>
 var A = function A() {
 >A : typeof A
@@ -71,14 +73,14 @@ var B = function B() {
 exports.A = A
 >exports.A = A : typeof A
 >exports.A : typeof A
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>exports : typeof import("mod")
 >A : typeof A
 >A : typeof A
 
 exports.B = B
 >exports.B = B : typeof B
 >exports.B : typeof B
->exports : typeof import("tests/cases/conformance/salsa/mod")
+>exports : typeof import("mod")
 >B : typeof B
 >B : typeof B
 

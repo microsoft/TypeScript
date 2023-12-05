@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts ===
+//// [tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers11.ts] ////
+
+=== typeOfThisInStaticMembers11.ts ===
 declare const foo: any;
 >foo : Symbol(foo, Decl(typeOfThisInStaticMembers11.ts, 0, 13))
 

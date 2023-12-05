@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleReopenedTypeSameBlock.ts] ////
+
 //// [moduleReopenedTypeSameBlock.ts]
 module M { export class C1 { } }
 module M {

@@ -1,3 +1,4 @@
-=== tests/cases/compiler/emptyFile-declaration.ts ===
+//// [tests/cases/compiler/emptyFile-declaration.ts] ////
 
-No type information for this code.
+=== emptyFile-declaration.ts ===
+

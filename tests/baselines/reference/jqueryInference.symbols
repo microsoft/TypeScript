@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jqueryInference.ts ===
+//// [tests/cases/compiler/jqueryInference.ts] ////
+
+=== jqueryInference.ts ===
 // #22362
 interface MyPromise<T, U> {
 >MyPromise : Symbol(MyPromise, Decl(jqueryInference.ts, 0, 0))

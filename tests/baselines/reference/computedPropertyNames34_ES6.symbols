@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES6.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames34_ES6.ts] ////
+
+=== computedPropertyNames34_ES6.ts ===
 function foo<T>() { return '' }
 >foo : Symbol(foo, Decl(computedPropertyNames34_ES6.ts, 0, 0))
 >T : Symbol(T, Decl(computedPropertyNames34_ES6.ts, 0, 13))

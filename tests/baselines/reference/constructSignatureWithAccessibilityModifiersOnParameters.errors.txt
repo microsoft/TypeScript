@@ -1,10 +1,10 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters.ts(16,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters.ts(20,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters.ts(24,10): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters.ts(28,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters.ts(16,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters.ts(20,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters.ts(24,10): error TS2369: A parameter property is only allowed in a constructor implementation.
+constructSignatureWithAccessibilityModifiersOnParameters.ts(28,10): error TS2369: A parameter property is only allowed in a constructor implementation.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/constructSignatureWithAccessibilityModifiersOnParameters.ts (4 errors) ====
+==== constructSignatureWithAccessibilityModifiersOnParameters.ts (4 errors) ====
     // Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
     
     class C {

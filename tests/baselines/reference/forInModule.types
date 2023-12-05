@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forInModule.ts ===
+//// [tests/cases/compiler/forInModule.ts] ////
+
+=== forInModule.ts ===
 module Foo {
 >Foo : typeof Foo
 

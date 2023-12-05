@@ -1,13 +1,13 @@
-tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts(3,20): error TS2302: Static members cannot reference class type parameters.
-tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts(5,15): error TS2302: Static members cannot reference class type parameters.
-tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts(7,15): error TS2302: Static members cannot reference class type parameters.
-tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts(9,30): error TS2302: Static members cannot reference class type parameters.
-tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts(11,29): error TS2302: Static members cannot reference class type parameters.
-tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts(13,18): error TS2302: Static members cannot reference class type parameters.
-tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts(13,24): error TS2302: Static members cannot reference class type parameters.
+genericClassWithStaticsUsingTypeArguments.ts(3,20): error TS2302: Static members cannot reference class type parameters.
+genericClassWithStaticsUsingTypeArguments.ts(5,15): error TS2302: Static members cannot reference class type parameters.
+genericClassWithStaticsUsingTypeArguments.ts(7,15): error TS2302: Static members cannot reference class type parameters.
+genericClassWithStaticsUsingTypeArguments.ts(9,30): error TS2302: Static members cannot reference class type parameters.
+genericClassWithStaticsUsingTypeArguments.ts(11,29): error TS2302: Static members cannot reference class type parameters.
+genericClassWithStaticsUsingTypeArguments.ts(13,18): error TS2302: Static members cannot reference class type parameters.
+genericClassWithStaticsUsingTypeArguments.ts(13,24): error TS2302: Static members cannot reference class type parameters.
 
 
-==== tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts (7 errors) ====
+==== genericClassWithStaticsUsingTypeArguments.ts (7 errors) ====
     // Should be error to use 'T' in all declarations within Foo.
     class Foo<T> {
         static a = (n: T) => { };

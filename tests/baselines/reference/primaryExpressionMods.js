@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/primaryExpressionMods.ts] ////
+
 //// [primaryExpressionMods.ts]
 module M
 {

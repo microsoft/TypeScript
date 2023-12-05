@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/freshLiteralInference.ts] ////
+
 //// [freshLiteralInference.ts]
 declare function f1<T extends "1" | "2" | "3">(x: T): T;
 

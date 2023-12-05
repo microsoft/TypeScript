@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnGenericClassAndNonGenericClass.ts ===
+//// [tests/cases/compiler/overloadOnGenericClassAndNonGenericClass.ts] ////
+
+=== overloadOnGenericClassAndNonGenericClass.ts ===
 class A { a; }
 >A : A
 >a : any

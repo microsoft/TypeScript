@@ -1,7 +1,7 @@
-tests/cases/compiler/accessorWithoutBody2.ts(1,20): error TS1005: '{' expected.
+accessorWithoutBody2.ts(1,20): error TS1005: '{' expected.
 
 
-==== tests/cases/compiler/accessorWithoutBody2.ts (1 errors) ====
+==== accessorWithoutBody2.ts (1 errors) ====
     var v = { set foo(a) }
                        ~
 !!! error TS1005: '{' expected.

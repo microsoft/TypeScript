@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts ===
+//// [tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts] ////
+
+=== unresolvableSelfReferencingAwaitedUnion.ts ===
 // repro #49646
 
 type EnvFunction = <T>() => T;
@@ -8,7 +10,7 @@ type EnvFunction = <T>() => T;
 
 type SimpleType = string | Promise<SimpleType>;
 >SimpleType : Symbol(SimpleType, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >SimpleType : Symbol(SimpleType, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
 
 declare const simple: SimpleType;
@@ -24,7 +26,7 @@ const env: EnvFunction = () => simple;
 
 type T1 = 1 | Promise<T1> | T1[];
 >T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
 >T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
 
@@ -36,5 +38,40 @@ export async function myFunction(param: T1) {
   const awaited = await param
 >awaited : Symbol(awaited, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 15, 7))
 >param : Symbol(param, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 14, 33))
+}
+
+// repro #42948
+
+type EffectResult =
+>EffectResult : Symbol(EffectResult, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 16, 1))
+
+  | (() => EffectResult)
+>EffectResult : Symbol(EffectResult, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 16, 1))
+
+  | Promise<EffectResult>;
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>EffectResult : Symbol(EffectResult, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 16, 1))
+
+export async function handleEffectResult(result: EffectResult) {
+>handleEffectResult : Symbol(handleEffectResult, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 22, 26))
+>result : Symbol(result, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 24, 41))
+>EffectResult : Symbol(EffectResult, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 16, 1))
+
+  if (result instanceof Function) {
+>result : Symbol(result, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 24, 41))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+    await handleEffectResult(result());
+>handleEffectResult : Symbol(handleEffectResult, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 22, 26))
+>result : Symbol(result, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 24, 41))
+
+  } else if (result instanceof Promise) {
+>result : Symbol(result, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 24, 41))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    await handleEffectResult(await result);
+>handleEffectResult : Symbol(handleEffectResult, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 22, 26))
+>result : Symbol(result, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 24, 41))
+  }
 }
 

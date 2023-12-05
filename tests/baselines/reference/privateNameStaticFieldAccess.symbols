@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAccess.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAccess.ts] ////
+
+=== privateNameStaticFieldAccess.ts ===
 class A {
 >A : Symbol(A, Decl(privateNameStaticFieldAccess.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts] ////
+
 //// [controlFlowWithTemplateLiterals.ts]
 declare const envVar: string | undefined;
 if (typeof envVar === `string`) {

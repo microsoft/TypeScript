@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsConstsAsNamespacesWithReferences.ts] ////
+
 //// [index.js]
 export const colors = {
     royalBlue: "#6400e4",
@@ -18,7 +20,7 @@ export const brandColors = {
 
 //// [index.d.ts]
 export namespace colors {
-    const royalBlue: string;
+    let royalBlue: string;
 }
 export namespace brandColors {
     import purple = colors.royalBlue;

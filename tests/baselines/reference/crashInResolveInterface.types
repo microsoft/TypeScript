@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/crashInResolveInterface.ts] ////
+
+=== file2.ts ===
 ///<reference path='file1.ts'/>
 declare var c: C;
 >c : C
@@ -15,7 +17,7 @@ interface C {
 >optionalParams : any[]
 }
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 interface Q<T> {
     each(action: (item: T, index: number) => void): void;
 >each : (action: (item: T, index: number) => void) => void

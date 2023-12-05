@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleAssignmentCompat4.ts] ////
+
 //// [moduleAssignmentCompat4.ts]
 module A {
    export module M {

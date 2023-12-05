@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts ===
+//// [tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts] ////
+
+=== enumLiteralAssignableToEnumInsideUnion.ts ===
 module X {
 >X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
 

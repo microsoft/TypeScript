@@ -41,12 +41,10 @@ interface NodeList {
      */
     values(): IterableIterator<Node>;
 
-
     [Symbol.iterator](): IterableIterator<Node>;
 }
 
 interface NodeListOf<TNode extends Node> {
-
     /**
      * Returns an array of key, value pairs for every entry in the list
      */

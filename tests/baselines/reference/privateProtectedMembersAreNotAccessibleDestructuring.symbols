@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/privateProtectedMembersAreNotAccessibleDestructuring.ts] ////
+
+=== privateProtectedMembersAreNotAccessibleDestructuring.ts ===
 class K {
 >K : Symbol(K, Decl(privateProtectedMembersAreNotAccessibleDestructuring.ts, 0, 0))
 

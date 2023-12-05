@@ -1,4 +1,6 @@
-=== tests/cases/compiler/superWithTypeArgument3.ts ===
+//// [tests/cases/compiler/superWithTypeArgument3.ts] ////
+
+=== superWithTypeArgument3.ts ===
 class C<T> {
 >C : C<T>
 
@@ -27,6 +29,5 @@ class D<T> extends C<T> {
 >super.bar : <U>(x: U) => void
 >super : C<T>
 >bar : <U>(x: U) => void
->null : null
     }
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/thisType/thisTypeAccessibility.ts] ////
+
 //// [thisTypeAccessibility.ts]
 class MyClass {
     private p: number = 123;

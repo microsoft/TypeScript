@@ -1,10 +1,10 @@
-tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts(2,6): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts(2,13): error TS1018: An index signature parameter cannot have an accessibility modifier.
-tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts(6,6): error TS2369: A parameter property is only allowed in a constructor implementation.
-tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts(6,13): error TS1018: An index signature parameter cannot have an accessibility modifier.
+indexSignatureWithAccessibilityModifier.ts(2,6): error TS2369: A parameter property is only allowed in a constructor implementation.
+indexSignatureWithAccessibilityModifier.ts(2,13): error TS1018: An index signature parameter cannot have an accessibility modifier.
+indexSignatureWithAccessibilityModifier.ts(6,6): error TS2369: A parameter property is only allowed in a constructor implementation.
+indexSignatureWithAccessibilityModifier.ts(6,13): error TS1018: An index signature parameter cannot have an accessibility modifier.
 
 
-==== tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts (4 errors) ====
+==== indexSignatureWithAccessibilityModifier.ts (4 errors) ====
     interface I {
         [public x: string]: string;
          ~~~~~~~~~~~~~~~~

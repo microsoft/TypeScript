@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts ===
+//// [tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts] ////
+
+=== generatedContextualTyping.ts ===
 class Base { private p; }
 >Base : Symbol(Base, Decl(generatedContextualTyping.ts, 0, 0))
 >p : Symbol(Base.p, Decl(generatedContextualTyping.ts, 0, 12))

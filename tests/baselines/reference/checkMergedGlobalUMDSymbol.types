@@ -1,4 +1,6 @@
-=== tests/cases/compiler/three.d.ts ===
+//// [tests/cases/compiler/checkMergedGlobalUMDSymbol.ts] ////
+
+=== three.d.ts ===
 export namespace THREE {
 >THREE : typeof THREE
 
@@ -6,23 +8,23 @@ export namespace THREE {
 >Vector2 : Vector2
 }
 
-=== tests/cases/compiler/global.d.ts ===
+=== global.d.ts ===
 import * as _three from './three';
 >_three : typeof _three
 
 export as namespace THREE;
->THREE : typeof import("tests/cases/compiler/global")
+>THREE : typeof import("global")
 
 declare global {
 >global : typeof global
 
   export const THREE: typeof _three;
->THREE : typeof import("tests/cases/compiler/global")
+>THREE : typeof import("global")
 >_three : typeof _three
 }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 const m = THREE
->m : typeof import("tests/cases/compiler/global")
->THREE : typeof import("tests/cases/compiler/global")
+>m : typeof import("global")
+>THREE : typeof import("global")
 

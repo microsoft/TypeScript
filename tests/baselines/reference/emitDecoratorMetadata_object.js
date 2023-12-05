@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitDecoratorMetadata_object.ts] ////
+
 //// [emitDecoratorMetadata_object.ts]
 declare const MyClassDecorator: ClassDecorator;
 declare const MyMethodDecorator: MethodDecorator;

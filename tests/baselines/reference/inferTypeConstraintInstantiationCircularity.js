@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts] ////
+
 //// [inferTypeConstraintInstantiationCircularity.ts]
 type AMappedType<T> = { [KeyType in keyof T]: number };
 
@@ -93,4 +95,4 @@ type InferIOItemToJSType<T extends Items> =
 
 //// [inferTypeConstraintInstantiationCircularity.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

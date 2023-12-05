@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target6.ts] ////
+
 //// [es6modulekindWithES5Target6.ts]
 export function f1(d = 0) {
 }

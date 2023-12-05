@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnGenericClassAndNonGenericClass.ts ===
+//// [tests/cases/compiler/overloadOnGenericClassAndNonGenericClass.ts] ////
+
+=== overloadOnGenericClassAndNonGenericClass.ts ===
 class A { a; }
 >A : Symbol(A, Decl(overloadOnGenericClassAndNonGenericClass.ts, 0, 0))
 >a : Symbol(A.a, Decl(overloadOnGenericClassAndNonGenericClass.ts, 0, 9))

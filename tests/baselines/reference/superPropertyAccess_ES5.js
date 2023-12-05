@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/superPropertyAccess_ES5.ts] ////
+
 //// [superPropertyAccess_ES5.ts]
 class MyBase {
   getValue(): number { return 1; }

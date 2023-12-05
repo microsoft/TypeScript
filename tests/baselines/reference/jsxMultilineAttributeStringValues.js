@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxMultilineAttributeStringValues.tsx] ////
+
 //// [jsxMultilineAttributeStringValues.tsx]
 const a = <input value="
   foo: 23

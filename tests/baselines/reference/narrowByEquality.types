@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowByEquality.ts ===
+//// [tests/cases/compiler/narrowByEquality.ts] ////
+
+=== narrowByEquality.ts ===
 declare let x: number | string | boolean
 >x : string | number | boolean
 
@@ -137,7 +139,6 @@ function test(level: number | string):number {
 if (xUnknown == null) {
 >xUnknown == null : boolean
 >xUnknown : unknown
->null : null
 
     xUnknown;
 >xUnknown : null | undefined
@@ -150,7 +151,6 @@ if (xUnknown == null) {
 if (xUnknown != null) {
 >xUnknown != null : boolean
 >xUnknown : unknown
->null : null
 
     xUnknown;
 >xUnknown : {}

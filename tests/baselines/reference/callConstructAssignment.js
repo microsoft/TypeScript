@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/callConstructAssignment.ts] ////
+
 //// [callConstructAssignment.ts]
 var foo:{ ( ):void; }
 

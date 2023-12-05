@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es5-souremap-amd.ts] ////
+
 //// [es5-souremap-amd.ts]
 class A
 {

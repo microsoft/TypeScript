@@ -1,8 +1,8 @@
-tests/cases/compiler/templateStringsArrayTypeNotDefinedES5Mode.ts(4,3): error TS2345: Argument of type '{}' is not assignable to parameter of type 'TemplateStringsArray'.
+templateStringsArrayTypeNotDefinedES5Mode.ts(4,3): error TS2345: Argument of type '{}' is not assignable to parameter of type 'TemplateStringsArray'.
   Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 10 more.
 
 
-==== tests/cases/compiler/templateStringsArrayTypeNotDefinedES5Mode.ts (1 errors) ====
+==== templateStringsArrayTypeNotDefinedES5Mode.ts (1 errors) ====
     function f(x: TemplateStringsArray, y: number, z: number) {
     }
     

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/propertySignatures/numericNamedPropertyDuplicates.ts] ////
+
 //// [numericNamedPropertyDuplicates.ts]
 class C {
     1: number;

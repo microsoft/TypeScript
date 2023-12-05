@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts] ////
+
+=== privateNamesInGenericClasses.ts ===
 class C<T> {
 >C : Symbol(C, Decl(privateNamesInGenericClasses.ts, 0, 0))
 >T : Symbol(T, Decl(privateNamesInGenericClasses.ts, 0, 8))

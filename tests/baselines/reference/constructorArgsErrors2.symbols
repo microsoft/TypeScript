@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constructorArgsErrors2.ts ===
+//// [tests/cases/compiler/constructorArgsErrors2.ts] ////
+
+=== constructorArgsErrors2.ts ===
 class foo {
 >foo : Symbol(foo, Decl(constructorArgsErrors2.ts, 0, 0))
 

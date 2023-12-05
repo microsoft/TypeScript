@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedParametersWithUnderscore.ts] ////
+
 //// [unusedParametersWithUnderscore.ts]
 function f(a, _b, c, ___, d,e___, _f) {
 }

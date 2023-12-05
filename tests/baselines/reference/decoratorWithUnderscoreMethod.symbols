@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorWithUnderscoreMethod.ts ===
+//// [tests/cases/compiler/decoratorWithUnderscoreMethod.ts] ////
+
+=== decoratorWithUnderscoreMethod.ts ===
 declare var console : { log(arg: string): void };
 >console : Symbol(console, Decl(decoratorWithUnderscoreMethod.ts, 0, 11))
 >log : Symbol(log, Decl(decoratorWithUnderscoreMethod.ts, 0, 23))

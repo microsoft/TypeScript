@@ -1,57 +1,57 @@
-tests/cases/conformance/jsx/file.tsx(12,22): error TS2769: No overload matches this call.
+file.tsx(12,22): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'extraProp' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
       Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(13,12): error TS2769: No overload matches this call.
+file.tsx(13,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ yy: number; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'yy' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Property 'yy1' is missing in type '{ yy: number; }' but required in type '{ yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(14,31): error TS2769: No overload matches this call.
+file.tsx(14,31): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ yy1: true; yy: number; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'yy1' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(16,31): error TS2769: No overload matches this call.
+file.tsx(16,31): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'y1' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
       Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(17,13): error TS2769: No overload matches this call.
+file.tsx(17,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(): Element', gave the following error.
     Type '{ yy: boolean; yy1: string; }' has no properties in common with type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type '{ yy: boolean; yy1: string; }' is not assignable to type '{ yy: number; yy1: string; }'.
       Types of property 'yy' are incompatible.
         Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(25,13): error TS2769: No overload matches this call.
+file.tsx(25,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
     Type '{ "extra-data": true; }' is not assignable to type '{ "extra-data": string; }'.
       Types of property '"extra-data"' are incompatible.
         Type 'boolean' is not assignable to type 'string'.
   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
     Property 'yy' is missing in type '{ "extra-data": true; }' but required in type '{ yy: string; direction?: number; }'.
-tests/cases/conformance/jsx/file.tsx(26,12): error TS2769: No overload matches this call.
+file.tsx(26,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
     Type '{ yy: string; direction: string; }' is not assignable to type 'IntrinsicAttributes & { "extra-data": string; }'.
       Property 'yy' does not exist on type 'IntrinsicAttributes & { "extra-data": string; }'.
   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(33,12): error TS2769: No overload matches this call.
+file.tsx(33,13): error TS2769: No overload matches this call.
   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
     Type 'boolean' is not assignable to type 'string'.
   Overload 2 of 3, '(a: { y1?: string; y2?: number; children: Element; }): Element', gave the following error.
     Type 'boolean' is not assignable to type 'string'.
   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(34,12): error TS2769: No overload matches this call.
+file.tsx(34,13): error TS2769: No overload matches this call.
   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
     Type '{ y1: string; y2: number; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
       Property 'y3' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
@@ -60,7 +60,7 @@ tests/cases/conformance/jsx/file.tsx(34,12): error TS2769: No overload matches t
       Property 'y3' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'.
   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(35,12): error TS2769: No overload matches this call.
+file.tsx(35,13): error TS2769: No overload matches this call.
   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
     Type '{ y1: string; y2: number; children: string; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
@@ -68,7 +68,7 @@ tests/cases/conformance/jsx/file.tsx(35,12): error TS2769: No overload matches t
     Type 'string' is not assignable to type 'Element'.
   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
     Type 'string' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches this call.
+file.tsx(36,13): error TS2769: No overload matches this call.
   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
     Type '{ children: string; y1: string; y2: number; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
       Property 'children' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
@@ -78,7 +78,7 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
     Type 'string' is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (11 errors) ====
+==== file.tsx (11 errors) ====
     import React = require('react')
     declare function OneThing(): JSX.Element;
     declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
@@ -100,14 +100,14 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
 !!! error TS2769:       Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
     const c1 = <OneThing yy={10}/>;  // missing property;
-               ~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
 !!! error TS2769:     Type '{ yy: number; }' is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2769:       Property 'yy' does not exist on type 'IntrinsicAttributes'.
 !!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
 !!! error TS2769:     Property 'yy1' is missing in type '{ yy: number; }' but required in type '{ yy: number; yy1: string; }'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:3:43: 'yy1' is declared here.
+!!! related TS2728 file.tsx:3:43: 'yy1' is declared here.
     const c2 = <OneThing {...obj} yy1 />; // type incompatible;
                                   ~~~
 !!! error TS2769: No overload matches this call.
@@ -116,7 +116,7 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:       Property 'yy1' does not exist on type 'IntrinsicAttributes'.
 !!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
 !!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:43: The expected type comes from property 'yy1' which is declared here on type 'IntrinsicAttributes & { yy: number; yy1: string; }'
+!!! related TS6500 file.tsx:3:43: The expected type comes from property 'yy1' which is declared here on type 'IntrinsicAttributes & { yy: number; yy1: string; }'
     const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK because all attribute are spread
     const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
                                   ~~
@@ -152,16 +152,16 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:         Type 'boolean' is not assignable to type 'string'.
 !!! error TS2769:   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
 !!! error TS2769:     Property 'yy' is missing in type '{ "extra-data": true; }' but required in type '{ yy: string; direction?: number; }'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:22:38: 'yy' is declared here.
+!!! related TS2728 file.tsx:22:38: 'yy' is declared here.
     const d2 = <TestingOneThing yy="hello" direction="left" />
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(j: { "extra-data": string; }): Element', gave the following error.
 !!! error TS2769:     Type '{ yy: string; direction: string; }' is not assignable to type 'IntrinsicAttributes & { "extra-data": string; }'.
 !!! error TS2769:       Property 'yy' does not exist on type 'IntrinsicAttributes & { "extra-data": string; }'.
 !!! error TS2769:   Overload 2 of 2, '(n: { yy: string; direction?: number; }): Element', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'number'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:22:50: The expected type comes from property 'direction' which is declared here on type 'IntrinsicAttributes & { yy: string; direction?: number; }'
+!!! related TS6500 file.tsx:22:50: The expected type comes from property 'direction' which is declared here on type 'IntrinsicAttributes & { yy: string; direction?: number; }'
     
     declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
     declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
@@ -169,7 +169,7 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
     
     // Error
     const e1 = <TestingOptional y1 y3="hello"/>
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
 !!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
@@ -177,11 +177,11 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
 !!! error TS2769:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:28:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:29:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:64: The expected type comes from property 'y3' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
+!!! related TS6500 file.tsx:28:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; }'
+!!! related TS6500 file.tsx:29:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
+!!! related TS6500 file.tsx:30:64: The expected type comes from property 'y3' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     const e2 = <TestingOptional y1="hello" y2={1000} y3 />
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
 !!! error TS2769:     Type '{ y1: string; y2: number; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
@@ -191,9 +191,9 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:       Property 'y3' does not exist on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'.
 !!! error TS2769:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
+!!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
 !!! error TS2769:     Type '{ y1: string; y2: number; children: string; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
@@ -202,10 +202,10 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:     Type 'string' is not assignable to type 'Element'.
 !!! error TS2769:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:29:64: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
+!!! related TS6500 file.tsx:29:64: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
+!!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(a: { y1?: string; y2?: number; }): Element', gave the following error.
 !!! error TS2769:     Type '{ children: string; y1: string; y2: number; }' is not assignable to type 'IntrinsicAttributes & { y1?: string; y2?: number; }'.
@@ -214,6 +214,6 @@ tests/cases/conformance/jsx/file.tsx(36,12): error TS2769: No overload matches t
 !!! error TS2769:     'TestingOptional' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of 'children' is 'Element'.
 !!! error TS2769:   Overload 3 of 3, '(a: { y1: boolean; y2?: number; y3: boolean; }): Element', gave the following error.
 !!! error TS2769:     Type 'string' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:29:64: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
+!!! related TS6500 file.tsx:29:64: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & { y1?: string; y2?: number; children: Element; }'
+!!! related TS6500 file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     

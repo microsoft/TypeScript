@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/systemDefaultExportCommentValidity.ts] ////
+
 //// [systemDefaultExportCommentValidity.ts]
 const Home = {}
 

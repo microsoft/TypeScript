@@ -1,0 +1,77 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringPropertyNames.ts ===
+// var o = {
+//     /*RENAME*/<|[|propRENAME|]: 0|>
+// };
+// 
+// o = {
+//     <|"[|propRENAME|]": 1|>
+// };
+// 
+// o["[|propRENAME|]"];
+// o['[|propRENAME|]'];
+// o.[|propRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringPropertyNames.ts ===
+// var o = {
+//     <|[|propRENAME|]: 0|>
+// };
+// 
+// o = {
+//     <|"/*RENAME*/[|propRENAME|]": 1|>
+// };
+// 
+// o["[|propRENAME|]"];
+// o['[|propRENAME|]'];
+// o.[|propRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringPropertyNames.ts ===
+// var o = {
+//     <|[|propRENAME|]: 0|>
+// };
+// 
+// o = {
+//     <|"[|propRENAME|]": 1|>
+// };
+// 
+// o["/*RENAME*/[|propRENAME|]"];
+// o['[|propRENAME|]'];
+// o.[|propRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringPropertyNames.ts ===
+// var o = {
+//     <|[|propRENAME|]: 0|>
+// };
+// 
+// o = {
+//     <|"[|propRENAME|]": 1|>
+// };
+// 
+// o["[|propRENAME|]"];
+// o['/*RENAME*/[|propRENAME|]'];
+// o.[|propRENAME|];
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameStringPropertyNames.ts ===
+// var o = {
+//     <|[|propRENAME|]: 0|>
+// };
+// 
+// o = {
+//     <|"[|propRENAME|]": 1|>
+// };
+// 
+// o["[|propRENAME|]"];
+// o['[|propRENAME|]'];
+// o./*RENAME*/[|propRENAME|];

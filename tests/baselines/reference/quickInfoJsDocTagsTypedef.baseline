@@ -1,3 +1,37 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/quickInfoJsDocTagsTypedef.js ===
+// /**
+//  * Bar comment
+//  * @typedef {Object} Bar
+//                      ^^^
+// | ----------------------------------------------------------------------
+// | type Bar = {
+// |     baz: string;
+// |     qux: string;
+// | }
+// | Bar comment
+// | ----------------------------------------------------------------------
+//  * @property {string} baz - baz comment
+//  * @property {string} qux - qux comment
+//  */
+// 
+// /**
+//  * foo comment
+//  * @param {Bar} x - x comment
+//            ^^^
+// | ----------------------------------------------------------------------
+// | type Bar = {
+// |     baz: string;
+// |     qux: string;
+// | }
+// | Bar comment
+// | ----------------------------------------------------------------------
+//  * @returns {Bar}
+//  */
+// function foo(x) {
+//     return x;
+// }
+
 [
   {
     "marker": {
@@ -5,7 +39,7 @@
       "position": 40,
       "name": "1"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {
@@ -120,7 +154,7 @@
       "position": 159,
       "name": "2"
     },
-    "quickInfo": {
+    "item": {
       "kind": "type",
       "kindModifiers": "",
       "textSpan": {

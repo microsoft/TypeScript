@@ -1,4 +1,6 @@
-=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts ===
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts] ////
+
+=== interfaceWithPropertyOfEveryType.ts ===
 class C { foo: string; }
 >C : C
 >foo : string
@@ -90,7 +92,6 @@ var a: Foo = {
 
     e: null ,
 >e : null
->null : null
 
     f: [1],
 >f : number[]
@@ -116,7 +117,6 @@ var a: Foo = {
     j: <Foo>null,
 >j : Foo
 ><Foo>null : Foo
->null : null
 
     k: new C(),
 >k : C

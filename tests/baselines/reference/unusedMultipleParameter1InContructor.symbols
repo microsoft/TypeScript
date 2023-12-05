@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedMultipleParameter1InContructor.ts ===
+//// [tests/cases/compiler/unusedMultipleParameter1InContructor.ts] ////
+
+=== unusedMultipleParameter1InContructor.ts ===
 class Dummy {
 >Dummy : Symbol(Dummy, Decl(unusedMultipleParameter1InContructor.ts, 0, 0))
 

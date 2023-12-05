@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatBug3.ts ===
+//// [tests/cases/compiler/assignmentCompatBug3.ts] ////
+
+=== assignmentCompatBug3.ts ===
 function makePoint(x: number, y: number) {
 >makePoint : (x: number, y: number) => { readonly x: number; readonly y: number; dist: () => number; }
 >x : number

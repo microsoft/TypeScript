@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts ===
+//// [tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts] ////
+
+=== trailingCommasInFunctionParametersAndArguments.ts ===
 function f1(x,) {}
 >f1 : Symbol(f1, Decl(trailingCommasInFunctionParametersAndArguments.ts, 0, 0))
 >x : Symbol(x, Decl(trailingCommasInFunctionParametersAndArguments.ts, 0, 12))

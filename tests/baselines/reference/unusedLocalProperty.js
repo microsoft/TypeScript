@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalProperty.ts] ////
+
 //// [unusedLocalProperty.ts]
 declare var console: { log(msg: any): void; }
 class Animal {

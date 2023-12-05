@@ -1,4 +1,6 @@
-=== tests/cases/conformance/enums/enumConstantMemberWithString.ts ===
+//// [tests/cases/conformance/enums/enumConstantMemberWithString.ts] ////
+
+=== enumConstantMemberWithString.ts ===
 enum T1 {
 >T1 : T1
 
@@ -27,7 +29,7 @@ enum T1 {
 >"a" : "a"
 
     e = "a" + 1
->e : T1.d
+>e : T1.e
 >"a" + 1 : string
 >"a" : "a"
 >1 : 1

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParamAsOptional.ts ===
+//// [tests/cases/compiler/restParamAsOptional.ts] ////
+
+=== restParamAsOptional.ts ===
 function f(...x?) { }
 >f : Symbol(f, Decl(restParamAsOptional.ts, 0, 0))
 >x : Symbol(x, Decl(restParamAsOptional.ts, 0, 11))

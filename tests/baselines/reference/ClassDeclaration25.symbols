@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ClassDeclaration25.ts ===
+//// [tests/cases/compiler/ClassDeclaration25.ts] ////
+
+=== ClassDeclaration25.ts ===
 interface IList<T> {
 >IList : Symbol(IList, Decl(ClassDeclaration25.ts, 0, 0))
 >T : Symbol(T, Decl(ClassDeclaration25.ts, 0, 16))

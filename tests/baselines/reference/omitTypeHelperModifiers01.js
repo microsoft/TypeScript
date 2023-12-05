@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/omitTypeHelperModifiers01.ts] ////
+
 //// [omitTypeHelperModifiers01.ts]
 type A = {
     a: number;

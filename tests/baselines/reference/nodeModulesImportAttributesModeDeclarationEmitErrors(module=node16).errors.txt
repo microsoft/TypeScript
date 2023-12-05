@@ -1,0 +1,43 @@
+/index.ts(2,45): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+/index.ts(2,71): error TS1453: `resolution-mode` should be either `require` or `import`.
+/index.ts(4,10): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
+/index.ts(4,39): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+/index.ts(6,76): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+
+
+==== /index.ts (5 errors) ====
+    // incorrect mode
+    import type { RequireInterface } from "pkg" with { "resolution-mode": "foobar" };
+                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+                                                                          ~~~~~~~~
+!!! error TS1453: `resolution-mode` should be either `require` or `import`.
+    // not type-only
+    import { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+             ~~~~~~~~~~~~~~~
+!!! error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
+                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+    // not exclusively type-only
+    import {type RequireInterface as Req, RequireInterface as Req2} from "pkg" with { "resolution-mode": "require" };
+                                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+    
+    export interface LocalInterface extends RequireInterface, ImportInterface {}
+    
+    
+    
+    
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export interface ImportInterface {}
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export interface RequireInterface {}

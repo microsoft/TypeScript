@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithEnumIndexer.ts ===
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithEnumIndexer.ts] ////
+
+=== assignmentCompatWithEnumIndexer.ts ===
 enum E {
 >E : Symbol(E, Decl(assignmentCompatWithEnumIndexer.ts, 0, 0))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declareDottedExtend.ts ===
+//// [tests/cases/compiler/declareDottedExtend.ts] ////
+
+=== declareDottedExtend.ts ===
 declare module A.B
 >A : Symbol(A, Decl(declareDottedExtend.ts, 0, 0))
 >B : Symbol(B, Decl(declareDottedExtend.ts, 0, 17))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/lambdaParameterWithTupleArgsHasCorrectAssignability.ts] ////
+
 //// [lambdaParameterWithTupleArgsHasCorrectAssignability.ts]
 type MyTupleItem = {};
 type MyTuple = [MyTupleItem, ...MyTupleItem[]];

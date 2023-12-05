@@ -1,4 +1,6 @@
-=== tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts ===
+//// [tests/cases/compiler/renamingDestructuredPropertyInFunctionType.ts] ////
+
+=== renamingDestructuredPropertyInFunctionType.ts ===
 // GH#37454, GH#41044
 
 type O = { a?: string; b: number; c: number; };

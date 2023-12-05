@@ -1,11 +1,11 @@
-tests/cases/conformance/jsx/file.tsx(13,2): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(13,2): error TS2786: 'Obj1' cannot be used as a JSX component.
+file.tsx(13,2): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
+file.tsx(13,2): error TS2786: 'Obj1' cannot be used as a JSX component.
   Its instance type '{ x: number; }' is not a valid JSX element.
     Property 'render' is missing in type '{ x: number; }' but required in type 'ElementClass'.
-tests/cases/conformance/jsx/file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assignable to type 'string'.
+file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== file.tsx (3 errors) ====
     declare module JSX {
     	interface Element { }
     	interface ElementClass {
@@ -25,7 +25,7 @@ tests/cases/conformance/jsx/file.tsx(19,2): error TS2322: Type '{ x: number; ren
 !!! error TS2786: 'Obj1' cannot be used as a JSX component.
 !!! error TS2786:   Its instance type '{ x: number; }' is not a valid JSX element.
 !!! error TS2786:     Property 'render' is missing in type '{ x: number; }' but required in type 'ElementClass'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:4:3: 'render' is declared here.
+!!! related TS2728 file.tsx:4:3: 'render' is declared here.
     
     interface Obj2type {
     	(n: string): { x: number; render: any; };

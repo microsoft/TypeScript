@@ -1,4 +1,6 @@
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/C1.ts ===
+//// [tests/cases/conformance/emitter/es2018/asyncGenerators/emitter.asyncGenerators.classMethods.es2018.ts] ////
+
+=== C1.ts ===
 class C1 {
 >C1 : C1
 
@@ -6,7 +8,7 @@ class C1 {
 >f : () => AsyncGenerator<never, void, unknown>
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/C2.ts ===
+=== C2.ts ===
 class C2 {
 >C2 : C2
 
@@ -18,7 +20,7 @@ class C2 {
 >yield : any
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/C3.ts ===
+=== C3.ts ===
 class C3 {
 >C3 : C3
 
@@ -31,7 +33,7 @@ class C3 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/C4.ts ===
+=== C4.ts ===
 class C4 {
 >C4 : C4
 
@@ -45,7 +47,7 @@ class C4 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/C5.ts ===
+=== C5.ts ===
 class C5 {
 >C5 : C5
 
@@ -62,7 +64,7 @@ class C5 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/C6.ts ===
+=== C6.ts ===
 class C6 {
 >C6 : C6
 
@@ -75,7 +77,7 @@ class C6 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/C7.ts ===
+=== C7.ts ===
 class C7 {
 >C7 : C7
 
@@ -86,7 +88,7 @@ class C7 {
 >1 : 1
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/C8.ts ===
+=== C8.ts ===
 class C8 {
 >C8 : C8
 
@@ -103,7 +105,7 @@ class C8 {
 >g : () => void
     }
 }
-=== tests/cases/conformance/emitter/es2018/asyncGenerators/C9.ts ===
+=== C9.ts ===
 class B9 {
 >B9 : B9
 

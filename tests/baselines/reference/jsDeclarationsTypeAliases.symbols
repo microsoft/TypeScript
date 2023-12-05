@@ -1,32 +1,35 @@
-=== tests/cases/conformance/jsdoc/declarations/index.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypeAliases.ts] ////
+
+=== index.js ===
+
 export {}; // flag file as module
-No type information for this code./**
-No type information for this code. * @typedef {string | number | symbol} PropName 
-No type information for this code. */
-No type information for this code.
-No type information for this code./**
-No type information for this code. * Callback
-No type information for this code. *
-No type information for this code. * @callback NumberToStringCb
-No type information for this code. * @param {number} a
-No type information for this code. * @returns {string}
-No type information for this code. */
-No type information for this code.
-No type information for this code./**
-No type information for this code. * @template T
-No type information for this code. * @typedef {T & {name: string}} MixinName 
-No type information for this code. */
-No type information for this code.
-No type information for this code./**
-No type information for this code. * Identity function
-No type information for this code. *
-No type information for this code. * @template T
-No type information for this code. * @callback Identity
-No type information for this code. * @param {T} x
-No type information for this code. * @returns {T}
-No type information for this code. */
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsdoc/declarations/mixed.js ===
+/**
+ * @typedef {string | number | symbol} PropName 
+ */
+
+/**
+ * Callback
+ *
+ * @callback NumberToStringCb
+ * @param {number} a
+ * @returns {string}
+ */
+
+/**
+ * @template T
+ * @typedef {T & {name: string}} MixinName 
+ */
+
+/**
+ * Identity function
+ *
+ * @template T
+ * @callback Identity
+ * @param {T} x
+ * @returns {T}
+ */
+
+=== mixed.js ===
 /**
  * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
  */

@@ -1,12 +1,12 @@
-tests/cases/compiler/nonIdenticalTypeConstraints.ts(7,7): error TS2428: All declarations of 'Foo' must have identical type parameters.
-tests/cases/compiler/nonIdenticalTypeConstraints.ts(10,11): error TS2428: All declarations of 'Foo' must have identical type parameters.
-tests/cases/compiler/nonIdenticalTypeConstraints.ts(13,11): error TS2428: All declarations of 'Qux' must have identical type parameters.
-tests/cases/compiler/nonIdenticalTypeConstraints.ts(16,7): error TS2428: All declarations of 'Qux' must have identical type parameters.
-tests/cases/compiler/nonIdenticalTypeConstraints.ts(33,7): error TS2428: All declarations of 'Quux' must have identical type parameters.
-tests/cases/compiler/nonIdenticalTypeConstraints.ts(36,11): error TS2428: All declarations of 'Quux' must have identical type parameters.
+nonIdenticalTypeConstraints.ts(7,7): error TS2428: All declarations of 'Foo' must have identical type parameters.
+nonIdenticalTypeConstraints.ts(10,11): error TS2428: All declarations of 'Foo' must have identical type parameters.
+nonIdenticalTypeConstraints.ts(13,11): error TS2428: All declarations of 'Qux' must have identical type parameters.
+nonIdenticalTypeConstraints.ts(16,7): error TS2428: All declarations of 'Qux' must have identical type parameters.
+nonIdenticalTypeConstraints.ts(33,7): error TS2428: All declarations of 'Quux' must have identical type parameters.
+nonIdenticalTypeConstraints.ts(36,11): error TS2428: All declarations of 'Quux' must have identical type parameters.
 
 
-==== tests/cases/compiler/nonIdenticalTypeConstraints.ts (6 errors) ====
+==== nonIdenticalTypeConstraints.ts (6 errors) ====
     class Different {
         a: number;
         b: string;

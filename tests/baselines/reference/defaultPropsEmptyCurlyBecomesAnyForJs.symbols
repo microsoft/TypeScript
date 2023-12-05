@@ -1,4 +1,6 @@
-=== tests/cases/compiler/library.d.ts ===
+//// [tests/cases/compiler/defaultPropsEmptyCurlyBecomesAnyForJs.ts] ////
+
+=== library.d.ts ===
 export class Foo<T = {}, U = {}> {
 >Foo : Symbol(Foo, Decl(library.d.ts, --, --))
 >T : Symbol(T, Decl(library.d.ts, --, --))
@@ -19,7 +21,7 @@ export class Foo<T = {}, U = {}> {
 >U : Symbol(U, Decl(library.d.ts, --, --))
 }
 
-=== tests/cases/compiler/component.js ===
+=== component.js ===
 import { Foo } from "./library";
 >Foo : Symbol(Foo, Decl(component.js, 0, 8))
 
@@ -31,7 +33,7 @@ export class MyFoo extends Foo {
 >member : Symbol(MyFoo.member, Decl(component.js, 1, 32))
 }
 
-=== tests/cases/compiler/typed_component.ts ===
+=== typed_component.ts ===
 import { MyFoo } from "./component";
 >MyFoo : Symbol(MyFoo, Decl(typed_component.ts, 0, 8))
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritance1.ts ===
+//// [tests/cases/compiler/inheritance1.ts] ////
+
+=== inheritance1.ts ===
 class Control {
 >Control : Control
 

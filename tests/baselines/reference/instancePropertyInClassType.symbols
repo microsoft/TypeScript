@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts ===
+//// [tests/cases/conformance/classes/members/classTypes/instancePropertyInClassType.ts] ////
+
+=== instancePropertyInClassType.ts ===
 module NonGeneric {
 >NonGeneric : Symbol(NonGeneric, Decl(instancePropertyInClassType.ts, 0, 0))
 

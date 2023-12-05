@@ -1,4 +1,6 @@
-=== tests/cases/compiler/methodContainingLocalFunction.ts ===
+//// [tests/cases/compiler/methodContainingLocalFunction.ts] ////
+
+=== methodContainingLocalFunction.ts ===
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 class BugExhibition<T> {
 >BugExhibition : BugExhibition<T>
@@ -37,7 +39,6 @@ class BugExhibition2<T> {
 >localFunction : () => void
 
         return null;
->null : null
     }
 }
 
@@ -105,7 +106,7 @@ enum E {
 >E : E
 
     A = (() => {
->A : E
+>A : E.A
 >(() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    })() : number
 >(() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    }) : () => number
 >() => {        function localFunction() { }        var x: { (): void; };        x = localFunction;        return 0;    } : () => number

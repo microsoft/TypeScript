@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/generators/generatorReturnContextualType.ts] ////
+
 //// [generatorReturnContextualType.ts]
 // #35995
 

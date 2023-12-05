@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unknownTypeArgOnCall.ts ===
+//// [tests/cases/compiler/unknownTypeArgOnCall.ts] ////
+
+=== unknownTypeArgOnCall.ts ===
 class Foo<T> {
 >Foo : Foo<T>
 
@@ -6,7 +8,6 @@ class Foo<T> {
 >clone : <U>() => any
 
    return null;
->null : null
    }
 }
 var f = new Foo<number>();

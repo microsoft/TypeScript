@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/parseEntityNameWithReservedWord.ts] ////
+
 //// [parseEntityNameWithReservedWord.ts]
 enum Bool { false }
 const x: Bool.false = Bool.false;
@@ -8,4 +10,4 @@ var Bool;
 (function (Bool) {
     Bool[Bool["false"] = 0] = "false";
 })(Bool || (Bool = {}));
-var x = Bool["false"];
+var x = Bool.false;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/reactHOCSpreadprops.tsx ===
+//// [tests/cases/compiler/reactHOCSpreadprops.tsx] ////
+
+=== reactHOCSpreadprops.tsx ===
 /// <reference path="react16.d.ts" />
 import React = require("react");
 >React : Symbol(React, Decl(reactHOCSpreadprops.tsx, 0, 0))

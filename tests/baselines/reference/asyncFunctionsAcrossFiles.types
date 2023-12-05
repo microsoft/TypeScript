@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/asyncFunctionsAcrossFiles.ts] ////
+
+=== a.ts ===
 import { b } from './b';
 >b : { f: () => Promise<void>; }
 
@@ -18,7 +20,7 @@ export const a = {
 >f : () => Promise<void>
     }
 };
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 import { a } from './a';
 >a : { f: () => Promise<void>; }
 

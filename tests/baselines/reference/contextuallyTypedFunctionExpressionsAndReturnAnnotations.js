@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/functions/contextuallyTypedFunctionExpressionsAndReturnAnnotations.ts] ////
+
 //// [contextuallyTypedFunctionExpressionsAndReturnAnnotations.ts]
 declare function foo(x: (y: string) => (y2: number) => void);
 

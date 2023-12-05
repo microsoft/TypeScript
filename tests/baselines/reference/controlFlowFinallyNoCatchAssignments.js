@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/controlFlowFinallyNoCatchAssignments.ts] ////
+
 //// [controlFlowFinallyNoCatchAssignments.ts]
 let x: number;
 x = Math.random();

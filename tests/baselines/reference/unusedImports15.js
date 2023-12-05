@@ -22,7 +22,7 @@ declare global {
 
 //// [foo.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.FooComponent = void 0;
 var Element = require("react");
 exports.FooComponent = <div></div>;

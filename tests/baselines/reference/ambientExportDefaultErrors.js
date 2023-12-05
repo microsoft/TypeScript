@@ -30,7 +30,7 @@ import "foo2";
 
 //// [consumer.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="./indirection.d.ts" />
 /// <reference path="./indirection2.d.ts" />
 require("indirect");

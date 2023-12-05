@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasesInSystemModule2.ts ===
+//// [tests/cases/compiler/aliasesInSystemModule2.ts] ////
+
+=== aliasesInSystemModule2.ts ===
 import {alias} from "foo";
 >alias : Symbol(alias, Decl(aliasesInSystemModule2.ts, 0, 8))
 

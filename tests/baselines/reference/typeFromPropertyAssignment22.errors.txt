@@ -1,7 +1,7 @@
-tests/cases/conformance/salsa/npm-install.js(7,9): error TS2322: Type 'string' is not assignable to type 'number'.
+npm-install.js(7,9): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/salsa/npm-install.js (1 errors) ====
+==== npm-install.js (1 errors) ====
     function Installer () {
         this.args = 0
     }

@@ -79,7 +79,7 @@ define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
 //# sourceMappingURL=all.js.map
 
 //// [all.d.ts]
-/// <reference path="tests/cases/compiler/ref/c.d.ts" />
+/// <reference path="ref/c.d.ts" />
 declare class Foo {
     member: Bar;
 }

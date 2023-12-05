@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentToObject.ts ===
+//// [tests/cases/compiler/assignmentToObject.ts] ////
+
+=== assignmentToObject.ts ===
 var a = { toString: 5 };
 >a : { toString: number; }
 >{ toString: 5 } : { toString: number; }

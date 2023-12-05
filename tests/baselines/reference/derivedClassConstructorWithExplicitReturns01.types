@@ -1,4 +1,6 @@
-=== tests/cases/compiler/derivedClassConstructorWithExplicitReturns01.ts ===
+//// [tests/cases/compiler/derivedClassConstructorWithExplicitReturns01.ts] ////
+
+=== derivedClassConstructorWithExplicitReturns01.ts ===
 class C {
 >C : C
 
@@ -79,6 +81,5 @@ class D extends C {
         }
         else
             return null;
->null : null
     }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/partiallyAmbientFundule.ts ===
+//// [tests/cases/compiler/partiallyAmbientFundule.ts] ////
+
+=== partiallyAmbientFundule.ts ===
 declare module foo {
 >foo : typeof foo
 

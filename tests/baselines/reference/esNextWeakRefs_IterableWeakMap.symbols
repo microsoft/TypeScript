@@ -1,4 +1,6 @@
-=== tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts ===
+//// [tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts] ////
+
+=== esNextWeakRefs_IterableWeakMap.ts ===
 /** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }: {
 >IterableWeakMap_cleanup : Symbol(IterableWeakMap_cleanup, Decl(esNextWeakRefs_IterableWeakMap.ts, 1, 5))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declFileGenericType.ts] ////
+
 //// [declFileGenericType.ts]
 export module C {
     export class A<T>{ }
@@ -56,7 +58,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.j = exports.h = exports.g = exports.f = exports.x = exports.e = exports.d = exports.c = exports.b = exports.a = exports.C = void 0;
 var C;
 (function (C) {
@@ -91,7 +93,7 @@ var C;
         return D;
     }());
     C.D = D;
-})(C = exports.C || (exports.C = {}));
+})(C || (exports.C = C = {}));
 exports.b = C.F;
 exports.c = C.F2;
 exports.d = C.F3;
@@ -112,7 +114,7 @@ exports.j = C.F6;
 
 
 //// [declFileGenericType.d.ts]
-export declare module C {
+export declare namespace C {
     class A<T> {
     }
     class B {

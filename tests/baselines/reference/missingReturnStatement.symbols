@@ -1,4 +1,6 @@
-=== tests/cases/compiler/missingReturnStatement.ts ===
+//// [tests/cases/compiler/missingReturnStatement.ts] ////
+
+=== missingReturnStatement.ts ===
 module Test {
 >Test : Symbol(Test, Decl(missingReturnStatement.ts, 0, 0))
 

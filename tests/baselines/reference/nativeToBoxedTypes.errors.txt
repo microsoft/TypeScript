@@ -1,14 +1,14 @@
-tests/cases/compiler/nativeToBoxedTypes.ts(3,1): error TS2322: Type 'Number' is not assignable to type 'number'.
+nativeToBoxedTypes.ts(3,1): error TS2322: Type 'Number' is not assignable to type 'number'.
   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
-tests/cases/compiler/nativeToBoxedTypes.ts(7,1): error TS2322: Type 'String' is not assignable to type 'string'.
+nativeToBoxedTypes.ts(7,1): error TS2322: Type 'String' is not assignable to type 'string'.
   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
-tests/cases/compiler/nativeToBoxedTypes.ts(11,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
+nativeToBoxedTypes.ts(11,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
   'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
-tests/cases/compiler/nativeToBoxedTypes.ts(15,1): error TS2322: Type 'Symbol' is not assignable to type 'symbol'.
+nativeToBoxedTypes.ts(15,1): error TS2322: Type 'Symbol' is not assignable to type 'symbol'.
   'symbol' is a primitive, but 'Symbol' is a wrapper object. Prefer using 'symbol' when possible.
 
 
-==== tests/cases/compiler/nativeToBoxedTypes.ts (4 errors) ====
+==== nativeToBoxedTypes.ts (4 errors) ====
     var N = new Number();
     var n = 100;
     n = N;

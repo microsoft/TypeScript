@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/node.d.ts ===
+//// [tests/cases/conformance/salsa/typeFromParamTagForFunction.ts] ////
+
+=== node.d.ts ===
 declare function require(id: string): any;
 >require : (id: string) => any
 >id : string
@@ -7,11 +9,11 @@ declare var module: any, exports: any;
 >module : any
 >exports : any
 
-=== tests/cases/conformance/salsa/a-ext.js ===
+=== a-ext.js ===
 exports.A = function () {
 >exports.A = function () {    this.x = 1;} : typeof A
 >exports.A : typeof A
->exports : typeof import("tests/cases/conformance/salsa/a-ext")
+>exports : typeof import("a-ext")
 >A : typeof A
 >function () {    this.x = 1;} : typeof A
 
@@ -24,10 +26,10 @@ exports.A = function () {
 
 };
 
-=== tests/cases/conformance/salsa/a.js ===
+=== a.js ===
 const { A } = require("./a-ext");
 >A : typeof A
->require("./a-ext") : typeof import("tests/cases/conformance/salsa/a-ext")
+>require("./a-ext") : typeof import("a-ext")
 >require : (id: string) => any
 >"./a-ext" : "./a-ext"
 
@@ -39,11 +41,11 @@ function a(p) { p.x; }
 >p : A
 >x : number
 
-=== tests/cases/conformance/salsa/b-ext.js ===
+=== b-ext.js ===
 exports.B = class {
 >exports.B = class {    constructor() {        this.x = 1;    }} : typeof B
 >exports.B : typeof B
->exports : typeof import("tests/cases/conformance/salsa/b-ext")
+>exports : typeof import("b-ext")
 >B : typeof B
 >class {    constructor() {        this.x = 1;    }} : typeof B
 
@@ -57,10 +59,10 @@ exports.B = class {
     }
 };
 
-=== tests/cases/conformance/salsa/b.js ===
+=== b.js ===
 const { B } = require("./b-ext");
 >B : typeof B
->require("./b-ext") : typeof import("tests/cases/conformance/salsa/b-ext")
+>require("./b-ext") : typeof import("b-ext")
 >require : (id: string) => any
 >"./b-ext" : "./b-ext"
 
@@ -72,7 +74,7 @@ function b(p) { p.x; }
 >p : B
 >x : number
 
-=== tests/cases/conformance/salsa/c-ext.js ===
+=== c-ext.js ===
 export function C() {
 >C : typeof C
 
@@ -84,10 +86,10 @@ export function C() {
 >1 : 1
 }
 
-=== tests/cases/conformance/salsa/c.js ===
+=== c.js ===
 const { C } = require("./c-ext");
 >C : typeof C
->require("./c-ext") : typeof import("tests/cases/conformance/salsa/c-ext")
+>require("./c-ext") : typeof import("c-ext")
 >require : (id: string) => any
 >"./c-ext" : "./c-ext"
 
@@ -99,7 +101,7 @@ function c(p) { p.x; }
 >p : C
 >x : number
 
-=== tests/cases/conformance/salsa/d-ext.js ===
+=== d-ext.js ===
 export var D = function() {
 >D : typeof D
 >function() {    this.x = 1;} : typeof D
@@ -113,10 +115,10 @@ export var D = function() {
 
 };
 
-=== tests/cases/conformance/salsa/d.js ===
+=== d.js ===
 const { D } = require("./d-ext");
 >D : typeof D
->require("./d-ext") : typeof import("tests/cases/conformance/salsa/d-ext")
+>require("./d-ext") : typeof import("d-ext")
 >require : (id: string) => any
 >"./d-ext" : "./d-ext"
 
@@ -128,7 +130,7 @@ function d(p) { p.x; }
 >p : D
 >x : number
 
-=== tests/cases/conformance/salsa/e-ext.js ===
+=== e-ext.js ===
 export class E {
 >E : E
 
@@ -142,10 +144,10 @@ export class E {
     }
 }
 
-=== tests/cases/conformance/salsa/e.js ===
+=== e.js ===
 const { E } = require("./e-ext");
 >E : typeof E
->require("./e-ext") : typeof import("tests/cases/conformance/salsa/e-ext")
+>require("./e-ext") : typeof import("e-ext")
 >require : (id: string) => any
 >"./e-ext" : "./e-ext"
 
@@ -157,7 +159,7 @@ function e(p) { p.x; }
 >p : E
 >x : number
 
-=== tests/cases/conformance/salsa/f.js ===
+=== f.js ===
 var F = function () {
 >F : typeof F
 >function () {    this.x = 1;} : typeof F
@@ -179,7 +181,7 @@ function f(p) { p.x; }
 >p : F
 >x : number
 
-=== tests/cases/conformance/salsa/g.js ===
+=== g.js ===
 function G() {
 >G : typeof G
 
@@ -199,7 +201,7 @@ function g(p) { p.x; }
 >p : G
 >x : number
 
-=== tests/cases/conformance/salsa/h.js ===
+=== h.js ===
 class H {
 >H : H
 

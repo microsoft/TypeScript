@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveTypeParameterReferenceError1.ts ===
+//// [tests/cases/compiler/recursiveTypeParameterReferenceError1.ts] ////
+
+=== recursiveTypeParameterReferenceError1.ts ===
 class X<T> { }
 >X : X<T>
 

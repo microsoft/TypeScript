@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/metadataOfStringLiteral.ts] ////
+
 //// [metadataOfStringLiteral.ts]
 function PropDeco(target: Object, propKey: string | symbol) { }
 
@@ -23,6 +25,6 @@ var Foo = /** @class */ (function () {
     __decorate([
         PropDeco,
         __metadata("design:type", String)
-    ], Foo.prototype, "foo");
+    ], Foo.prototype, "foo", void 0);
     return Foo;
 }());

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeofAnExportedType.ts] ////
+
 //// [typeofAnExportedType.ts]
 export var x = 1;
 export var r1: typeof x;
@@ -53,7 +55,7 @@ export var r13: typeof foo;
 
 //// [typeofAnExportedType.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.r13 = exports.foo = exports.r12 = exports.r11 = exports.r10 = exports.E = exports.r9 = exports.r8 = exports.Z = exports.r7 = exports.r6 = exports.M = exports.r5 = exports.i = exports.r4b = exports.r4 = exports.r3 = exports.c = exports.C = exports.r2 = exports.y = exports.r1 = exports.x = void 0;
 exports.x = 1;
 exports.y = { foo: '' };
@@ -74,12 +76,12 @@ var M;
         return C;
     }());
     M.C = C;
-})(M = exports.M || (exports.M = {}));
+})(M || (exports.M = M = {}));
 exports.Z = M;
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E = exports.E || (exports.E = {}));
+})(E || (exports.E = E = {}));
 function foo() { }
 exports.foo = foo;
 (function (foo) {
@@ -90,4 +92,4 @@ exports.foo = foo;
         return C;
     }());
     foo.C = C;
-})(foo = exports.foo || (exports.foo = {}));
+})(foo || (exports.foo = foo = {}));

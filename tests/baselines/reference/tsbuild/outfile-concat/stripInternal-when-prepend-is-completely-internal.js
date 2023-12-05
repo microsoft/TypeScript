@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -26,8 +27,21 @@ function f() {
     return "JS does hoists";
 }
 
+
 //// [/src/first/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true,"sourceMap":true,"outFile":"./bin/first-output.js"},"files":["/src/first/first_PART1.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "skipDefaultLibCheck": true,
+    "sourceMap": true,
+    "outFile": "./bin/first-output.js"
+  },
+  "files": [
+    "/src/first/first_PART1.ts"
+  ]
+}
 
 //// [/src/second/second_part1.ts]
 namespace N {
@@ -54,6 +68,7 @@ class C {
 //// [/src/second/tsconfig.json]
 {
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true,
     "removeComments": true,
@@ -64,32 +79,49 @@ class C {
     "outFile": "../2/second-output.js",
     "skipDefaultLibCheck": true
   },
-  "references": [
-  ]
+  "references": []
 }
-
 
 //// [/src/third/third_part1.ts]
 const B = 2;
 
 //// [/src/third/tsconfig.json]
-{"compilerOptions":{"composite":true,"declaration":true,"declarationMap":false,"stripInternal":true,"sourceMap":true,"outFile":"./thirdjs/output/third-output.js"},"references":[{"path":"../first","prepend":true}],"files":["/src/third/third_part1.ts"]}
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": false,
+    "stripInternal": true,
+    "sourceMap": true,
+    "outFile": "./thirdjs/output/third-output.js"
+  },
+  "references": [
+    {
+      "path": "../first",
+      "prepend": true
+    }
+  ],
+  "files": [
+    "/src/third/third_part1.ts"
+  ]
+}
 
 
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:10 AM[0m] Projects in this build: 
+[[90m12:00:22 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:11 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
+[[90m12:00:23 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
 
-[[90m12:00:12 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:24 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:22 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90m12:00:34 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:23 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:35 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -183,13 +215,13 @@ sourceFile:../first_PART1.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts"],"js":{"sections":[{"pos":0,"end":28,"kind":"text"}],"mapHash":"8137573854-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC\"}","hash":"-14536113207-/* @internal */ var A = 1;\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":20,"kind":"internal"}],"mapHash":"1199471594-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAgB,QAAA,MAAM,CAAC,IAAI,CAAC\"}","hash":"10602481092-declare const A = 1;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts"],"fileInfos":["2890484261-/* @internal */ const A = 1;"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-2963648387-declare const A = 1;\r\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts"],"js":{"sections":[{"pos":0,"end":27,"kind":"text"}],"mapHash":"8137573854-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC\"}","hash":"-4091813828-/* @internal */ var A = 1;\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":20,"kind":"internal"}],"mapHash":"1199471594-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAgB,QAAA,MAAM,CAAC,IAAI,CAAC\"}","hash":"-2434260201-declare const A = 1;\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","2890484261-/* @internal */ const A = 1;"],"root":[2],"options":{"composite":true,"declaration":true,"declarationMap":true,"outFile":"./first-output.js","skipDefaultLibCheck":true,"sourceMap":true},"outSignature":"-2042065392-declare const A = 1;\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-text: (0-28)
+text: (0-27)
 /* @internal */ var A = 1;
 
 ======================================================================
@@ -211,11 +243,11 @@ declare const A = 1;
       "sections": [
         {
           "pos": 0,
-          "end": 28,
+          "end": 27,
           "kind": "text"
         }
       ],
-      "hash": "-14536113207-/* @internal */ var A = 1;\r\n//# sourceMappingURL=first-output.js.map",
+      "hash": "-4091813828-/* @internal */ var A = 1;\n//# sourceMappingURL=first-output.js.map",
       "mapHash": "8137573854-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC\"}"
     },
     "dts": {
@@ -226,26 +258,38 @@ declare const A = 1;
           "kind": "internal"
         }
       ],
-      "hash": "10602481092-declare const A = 1;\r\n//# sourceMappingURL=first-output.d.ts.map",
+      "hash": "-2434260201-declare const A = 1;\n//# sourceMappingURL=first-output.d.ts.map",
       "mapHash": "1199471594-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAgB,QAAA,MAAM,CAAC,IAAI,CAAC\"}"
     }
   },
   "program": {
     "fileNames": [
+      "../../../lib/lib.d.ts",
       "../first_part1.ts"
     ],
     "fileInfos": {
+      "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../first_part1.ts": "2890484261-/* @internal */ const A = 1;"
     },
+    "root": [
+      [
+        2,
+        "../first_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./first-output.js"
+      "declaration": true,
+      "declarationMap": true,
+      "outFile": "./first-output.js",
+      "skipDefaultLibCheck": true,
+      "sourceMap": true
     },
-    "outSignature": "-2963648387-declare const A = 1;\r\n",
+    "outSignature": "-2042065392-declare const A = 1;\n",
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1036
+  "size": 1590
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -325,19 +369,19 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":28,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":28,"kind":"text"}]},{"pos":28,"end":40,"kind":"text"}],"mapHash":"27220614446-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC;ACA5B,IAAM,CAAC,GAAG,CAAC,CAAC\"}","hash":"-10155812952-/* @internal */ var A = 1;\r\nvar B = 2;\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":0,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[]},{"pos":0,"end":22,"kind":"text"}],"hash":"1000124863-declare const B = 2;\r\n"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["1943613816-const B = 2;"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"1000124863-declare const B = 2;\r\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":27,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":27,"kind":"text"}]},{"pos":27,"end":38,"kind":"text"}],"mapHash":"27220614446-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC;ACA5B,IAAM,CAAC,GAAG,CAAC,CAAC\"}","hash":"4330366254-/* @internal */ var A = 1;\nvar B = 2;\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":0,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[]},{"pos":0,"end":21,"kind":"text"}],"hash":"-750596334-declare const B = 2;\n"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-2042065392-declare const A = 1;\n","1943613816-const B = 2;"],"root":[3],"options":{"composite":true,"declaration":true,"declarationMap":false,"outFile":"./third-output.js","sourceMap":true,"stripInternal":true},"outSignature":"-750596334-declare const B = 2;\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-28):: ../../../first/bin/first-output.js texts:: 1
+prepend: (0-27):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (0-28)
+text: (0-27)
 /* @internal */ var A = 1;
 
 ----------------------------------------------------------------------
-text: (28-40)
+text: (27-38)
 var B = 2;
 
 ======================================================================
@@ -346,7 +390,7 @@ File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
 prepend: (0-0):: ../../../first/bin/first-output.d.ts texts:: 0
 ----------------------------------------------------------------------
-text: (0-22)
+text: (0-21)
 declare const B = 2;
 
 ======================================================================
@@ -362,24 +406,24 @@ declare const B = 2;
       "sections": [
         {
           "pos": 0,
-          "end": 28,
+          "end": 27,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
               "pos": 0,
-              "end": 28,
+              "end": 27,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 28,
-          "end": 40,
+          "pos": 27,
+          "end": 38,
           "kind": "text"
         }
       ],
-      "hash": "-10155812952-/* @internal */ var A = 1;\r\nvar B = 2;\r\n//# sourceMappingURL=third-output.js.map",
+      "hash": "4330366254-/* @internal */ var A = 1;\nvar B = 2;\n//# sourceMappingURL=third-output.js.map",
       "mapHash": "27220614446-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC;ACA5B,IAAM,CAAC,GAAG,CAAC,CAAC\"}"
     },
     "dts": {
@@ -393,28 +437,42 @@ declare const B = 2;
         },
         {
           "pos": 0,
-          "end": 22,
+          "end": 21,
           "kind": "text"
         }
       ],
-      "hash": "1000124863-declare const B = 2;\r\n"
+      "hash": "-750596334-declare const B = 2;\n"
     }
   },
   "program": {
     "fileNames": [
+      "../../../../lib/lib.d.ts",
+      "../../../first/bin/first-output.d.ts",
       "../../third_part1.ts"
     ],
     "fileInfos": {
+      "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "../../../first/bin/first-output.d.ts": "-2042065392-declare const A = 1;\n",
       "../../third_part1.ts": "1943613816-const B = 2;"
     },
+    "root": [
+      [
+        3,
+        "../../third_part1.ts"
+      ]
+    ],
     "options": {
       "composite": true,
-      "outFile": "./third-output.js"
+      "declaration": true,
+      "declarationMap": false,
+      "outFile": "./third-output.js",
+      "sourceMap": true,
+      "stripInternal": true
     },
-    "outSignature": "1000124863-declare const B = 2;\r\n",
+    "outSignature": "-750596334-declare const B = 2;\n",
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1093
+  "size": 1718
 }
 

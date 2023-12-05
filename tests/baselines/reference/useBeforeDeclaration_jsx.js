@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/useBeforeDeclaration_jsx.tsx] ////
+
 //// [useBeforeDeclaration_jsx.tsx]
 namespace JSX {
     export interface Element {}

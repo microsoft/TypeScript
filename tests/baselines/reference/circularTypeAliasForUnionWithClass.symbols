@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeAliases/circularTypeAliasForUnionWithClass.ts ===
+//// [tests/cases/conformance/types/typeAliases/circularTypeAliasForUnionWithClass.ts] ////
+
+=== circularTypeAliasForUnionWithClass.ts ===
 var v0: T0;
 >v0 : Symbol(v0, Decl(circularTypeAliasForUnionWithClass.ts, 0, 3))
 >T0 : Symbol(T0, Decl(circularTypeAliasForUnionWithClass.ts, 0, 11))

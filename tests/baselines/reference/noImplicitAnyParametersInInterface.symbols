@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyParametersInInterface.ts ===
+//// [tests/cases/compiler/noImplicitAnyParametersInInterface.ts] ////
+
+=== noImplicitAnyParametersInInterface.ts ===
 interface I {
 >I : Symbol(I, Decl(noImplicitAnyParametersInInterface.ts, 0, 0))
 

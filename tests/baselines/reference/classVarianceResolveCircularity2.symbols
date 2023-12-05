@@ -1,0 +1,65 @@
+//// [tests/cases/compiler/classVarianceResolveCircularity2.ts] ////
+
+=== classVarianceResolveCircularity2.ts ===
+// Issue #52813
+
+export {};
+
+class Bar<T> {
+>Bar : Symbol(Bar, Decl(classVarianceResolveCircularity2.ts, 2, 10))
+>T : Symbol(T, Decl(classVarianceResolveCircularity2.ts, 4, 10))
+
+    num!: number;
+>num : Symbol(Bar.num, Decl(classVarianceResolveCircularity2.ts, 4, 14))
+
+    Value = callme(new Foo(this)).bar.num;
+>Value : Symbol(Bar.Value, Decl(classVarianceResolveCircularity2.ts, 5, 17))
+>callme(new Foo(this)).bar.num : Symbol(Bar.num, Decl(classVarianceResolveCircularity2.ts, 4, 14))
+>callme(new Foo(this)).bar : Symbol(Foo.bar, Decl(classVarianceResolveCircularity2.ts, 12, 14))
+>callme : Symbol(callme, Decl(classVarianceResolveCircularity2.ts, 8, 1), Decl(classVarianceResolveCircularity2.ts, 9, 47))
+>Foo : Symbol(Foo, Decl(classVarianceResolveCircularity2.ts, 10, 43))
+>this : Symbol(Bar, Decl(classVarianceResolveCircularity2.ts, 2, 10))
+>bar : Symbol(Foo.bar, Decl(classVarianceResolveCircularity2.ts, 12, 14))
+>num : Symbol(Bar.num, Decl(classVarianceResolveCircularity2.ts, 4, 14))
+
+    Field: number = callme(new Foo(this)).bar.num;
+>Field : Symbol(Bar.Field, Decl(classVarianceResolveCircularity2.ts, 6, 42))
+>callme(new Foo(this)).bar.num : Symbol(Bar.num, Decl(classVarianceResolveCircularity2.ts, 4, 14))
+>callme(new Foo(this)).bar : Symbol(Foo.bar, Decl(classVarianceResolveCircularity2.ts, 12, 14))
+>callme : Symbol(callme, Decl(classVarianceResolveCircularity2.ts, 8, 1), Decl(classVarianceResolveCircularity2.ts, 9, 47))
+>Foo : Symbol(Foo, Decl(classVarianceResolveCircularity2.ts, 10, 43))
+>this : Symbol(Bar, Decl(classVarianceResolveCircularity2.ts, 2, 10))
+>bar : Symbol(Foo.bar, Decl(classVarianceResolveCircularity2.ts, 12, 14))
+>num : Symbol(Bar.num, Decl(classVarianceResolveCircularity2.ts, 4, 14))
+}
+declare function callme(x: Foo<any>): Foo<any>;
+>callme : Symbol(callme, Decl(classVarianceResolveCircularity2.ts, 8, 1), Decl(classVarianceResolveCircularity2.ts, 9, 47))
+>x : Symbol(x, Decl(classVarianceResolveCircularity2.ts, 9, 24))
+>Foo : Symbol(Foo, Decl(classVarianceResolveCircularity2.ts, 10, 43))
+>Foo : Symbol(Foo, Decl(classVarianceResolveCircularity2.ts, 10, 43))
+
+declare function callme(x: object): string;
+>callme : Symbol(callme, Decl(classVarianceResolveCircularity2.ts, 8, 1), Decl(classVarianceResolveCircularity2.ts, 9, 47))
+>x : Symbol(x, Decl(classVarianceResolveCircularity2.ts, 10, 24))
+
+class Foo<T> {
+>Foo : Symbol(Foo, Decl(classVarianceResolveCircularity2.ts, 10, 43))
+>T : Symbol(T, Decl(classVarianceResolveCircularity2.ts, 12, 10))
+
+    bar!: Bar<T>;
+>bar : Symbol(Foo.bar, Decl(classVarianceResolveCircularity2.ts, 12, 14))
+>Bar : Symbol(Bar, Decl(classVarianceResolveCircularity2.ts, 2, 10))
+>T : Symbol(T, Decl(classVarianceResolveCircularity2.ts, 12, 10))
+
+    constructor(bar: Bar<T>) {
+>bar : Symbol(bar, Decl(classVarianceResolveCircularity2.ts, 14, 16))
+>Bar : Symbol(Bar, Decl(classVarianceResolveCircularity2.ts, 2, 10))
+>T : Symbol(T, Decl(classVarianceResolveCircularity2.ts, 12, 10))
+
+        this.bar = bar;
+>this.bar : Symbol(Foo.bar, Decl(classVarianceResolveCircularity2.ts, 12, 14))
+>this : Symbol(Foo, Decl(classVarianceResolveCircularity2.ts, 10, 43))
+>bar : Symbol(Foo.bar, Decl(classVarianceResolveCircularity2.ts, 12, 14))
+>bar : Symbol(bar, Decl(classVarianceResolveCircularity2.ts, 14, 16))
+    }
+}

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importEquals2.ts] ////
+
 === /c.ts ===
 import a = require('./b');
 >a : Symbol(a, Decl(c.ts, 0, 0))

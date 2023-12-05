@@ -1,4 +1,6 @@
-=== tests/cases/compiler/propertiesAndIndexersForNumericNames.ts ===
+//// [tests/cases/compiler/propertiesAndIndexersForNumericNames.ts] ////
+
+=== propertiesAndIndexersForNumericNames.ts ===
 class C {
 >C : Symbol(C, Decl(propertiesAndIndexersForNumericNames.ts, 0, 0))
 

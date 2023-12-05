@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverride5.ts] ////
+
 === /index.ts ===
 /// <reference types="pkg" resolution-mode="import" />
 /// <reference types="pkg" resolution-mode="require" />

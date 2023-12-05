@@ -27,4 +27,4 @@ export const x: () => Thing;
 }
 
 //// [index.js]
-export const a = (await import("inner")).x();
+export var a = (await import("inner")).x();
