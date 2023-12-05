@@ -1,4 +1,4 @@
-// [[Reason: TS normalizes types]] ////
+// [[Reason: TS expands type]] ////
 
 //// [tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty2.ts] ////
 

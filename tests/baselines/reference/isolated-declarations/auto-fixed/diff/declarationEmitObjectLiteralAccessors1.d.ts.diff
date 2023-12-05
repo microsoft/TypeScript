@@ -1,4 +1,4 @@
-// [[Reason: Sourcemap is more detailed]] ////
+// [[Reason: TS merges accessors with the same type. DTE can only merge if one type is specified.]] ////
 
 //// [tests/cases/compiler/declarationEmitObjectLiteralAccessors1.ts] ////
 

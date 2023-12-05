@@ -1,4 +1,4 @@
-// [[Reason: TS merges accessors wth the same type. DTE can only merge if one type is specified.]] ////
+// [[Reason: TS merges accessors with the same type. DTE can only merge if one type is specified.]] ////
 
 //// [tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts] ////
 
