@@ -63,9 +63,9 @@ exports.y = 10;
 
 
 FsWatches::
-/a/b/file1consumer1.ts: *new*
+/a/b/file1Consumer1.ts: *new*
   {}
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}

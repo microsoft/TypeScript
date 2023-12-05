@@ -601,3 +601,23 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
 >Boom : `a${string}` | Lowercase<string> | "def"
 
+// Repro from #56582
+
+function a<T extends {id: string}>() {
+>a : <T extends { id: string; }>() => void
+>id : string
+
+    let x: keyof T & string | `-${keyof T & string}`;
+>x : (keyof T & string) | `-${keyof T & string}`
+
+    x = "id";
+>x = "id" : "id"
+>x : (keyof T & string) | `-${keyof T & string}`
+>"id" : "id"
+
+    x = "-id";
+>x = "-id" : "-id"
+>x : (keyof T & string) | `-${keyof T & string}`
+>"-id" : "-id"
+}
+

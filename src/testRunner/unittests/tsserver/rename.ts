@@ -1,5 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    dedent,
+} from "../../_namespaces/Utils";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    libContent,
+} from "../helpers/contents";
+import {
     baselineTsserverLogs,
     openFilesForSession,
     protocolFileLocationFromSubstring,
@@ -8,6 +17,7 @@ import {
 import {
     createServerHost,
     File,
+    libFile,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: rename", () => {
@@ -130,5 +140,57 @@ describe("unittests:: tsserver:: rename", () => {
             arguments: protocolFileLocationFromSubstring(bTs, "x"),
         });
         baselineTsserverLogs("rename", "rename behavior is based on file of rename initiation", session);
+    });
+
+    it("with symlinks and case difference", () => {
+        const file: File = {
+            path: "C:/temp/test/project1/index.ts",
+            content: dedent`
+                export function myFunc() {
+                }
+            `,
+        };
+        const host = createServerHost({
+            [file.path]: file.content,
+            "C:/temp/test/project1/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                },
+            }),
+            "C:/temp/test/project1/package.json": jsonToReadableText({
+                name: "project1",
+                version: "1.0.0",
+                main: "index.js",
+            }),
+            "C:/temp/test/project2/index.ts": dedent`
+                import { myFunc } from 'project1'
+                myFunc();
+            `,
+            "C:/temp/test/project2/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                },
+                references: [
+                    { path: "../project1" },
+                ],
+            }),
+            "C:/temp/test/tsconfig.json": jsonToReadableText({
+                references: [
+                    { path: "./project1" },
+                    { path: "./project2" },
+                ],
+                files: [],
+                include: [],
+            }),
+            "C:/temp/test/node_modules/project1": { symLink: "c:/temp/test/project1" },
+            [libFile.path]: libContent,
+        }, { windowsStyleRoot: "C:/" });
+        const session = new TestSession(host);
+        openFilesForSession([file.path.toLowerCase()], session);
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: protocolFileLocationFromSubstring(file, "myFunc"),
+        });
+        baselineTsserverLogs("rename", "with symlinks and case difference", session);
     });
 });

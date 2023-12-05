@@ -119,9 +119,9 @@ Output::
 
 
 FsWatches::
-/user/username/projects/solution/app/filewitherror.ts: *new*
+/user/username/projects/solution/app/fileWithError.ts: *new*
   {}
-/user/username/projects/solution/app/filewithouterror.ts: *new*
+/user/username/projects/solution/app/fileWithoutError.ts: *new*
   {}
 /user/username/projects/solution/app/tsconfig.json: *new*
   {}

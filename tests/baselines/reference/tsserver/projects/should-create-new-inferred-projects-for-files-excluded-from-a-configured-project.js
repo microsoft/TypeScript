@@ -187,7 +187,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -449,5 +449,5 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {}

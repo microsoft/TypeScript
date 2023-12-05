@@ -514,7 +514,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
 
 interface ResolveSingleModuleNameWithoutWatchingData {
     resolutionToData: Map<ts.ResolutionWithFailedLookupLocations, Pick<ts.ResolvedModuleWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics">>;
-    packageJsonMap: Map<ts.Path, ts.PackageJsonInfo | boolean> | undefined;
+    packageJsonMap: Map<ts.Path, ts.PackageJsonInfoCacheEntry> | undefined;
 }
 
 function beforeResolveSingleModuleNameWithoutWatching(
