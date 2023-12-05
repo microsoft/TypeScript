@@ -36221,9 +36221,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const len = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
         for (let i = 0; i < len; i++) {
             const parameter = signature.parameters[i];
-            if (!getEffectiveTypeAnnotationNode(parameter.valueDeclaration as ParameterDeclaration)) {
-                const contextualParameterType = tryGetTypeAtPosition(context, i);
-                assignParameterType(parameter, contextualParameterType);
+            const declaration = parameter.valueDeclaration as ParameterDeclaration;
+            if (!getEffectiveTypeAnnotationNode(declaration)) {
+                let type = tryGetTypeAtPosition(context, i);
+                if (type && declaration.initializer) {
+                    let initializerType = checkDeclarationInitializer(declaration, CheckMode.Normal);
+                    if (!isTypeAssignableTo(initializerType, type) && isTypeAssignableTo(type, initializerType = widenTypeInferredFromInitializer(declaration, initializerType))) {
+                        type = initializerType;
+                    }
+                }
+                assignParameterType(parameter, type);
             }
         }
         if (signatureHasRestParameter(signature)) {
