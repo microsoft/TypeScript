@@ -750,7 +750,7 @@ function createDefinitionInfoFromStatement(
     sourceFile: SourceFile,
     name: string,
 ): DefinitionInfo {
-    const keyword = find(statement.getChildren(sourceFile), (node) => node.kind === keywordKind)!;
+    const keyword = find(statement.getChildren(sourceFile), node => node.kind === keywordKind)!;
     return {
         fileName: sourceFile.fileName,
         textSpan: createTextSpanFromNode(keyword, sourceFile),
