@@ -1,13 +1,10 @@
-parserConstructorAmbiguity4.ts(1,1): error TS2365: Operator '<' cannot be applied to types 'Date' and 'any'.
 parserConstructorAmbiguity4.ts(1,10): error TS2304: Cannot find name 'A'.
 parserConstructorAmbiguity4.ts(1,14): error TS2304: Cannot find name 'B'.
 parserConstructorAmbiguity4.ts(1,18): error TS2304: Cannot find name 'C'.
 
 
-==== parserConstructorAmbiguity4.ts (4 errors) ====
+==== parserConstructorAmbiguity4.ts (3 errors) ====
     new Date<A ? B : C
-    ~~~~~~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types 'Date' and 'any'.
              ~
 !!! error TS2304: Cannot find name 'A'.
                  ~

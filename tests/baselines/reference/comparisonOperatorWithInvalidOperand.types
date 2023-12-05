@@ -53,516 +53,616 @@ const l = 9007199254740991n;
 
 // operator <
 // boolean
-a < a;
+var r1a1 = a < a;
+>r1a1 : boolean
 >a < a : boolean
 >a : false
 >a : false
 
-a < b;
+var r1a2 = a < b;
+>r1a2 : boolean
 >a < b : boolean
 >a : false
 >b : number
 
-a < c;
+var r1a3 = a < c;
+>r1a3 : boolean
 >a < c : boolean
 >a : false
 >c : string
 
-a < d;
+var r1a4 = a < d;
+>r1a4 : boolean
 >a < d : boolean
 >a : false
 >d : Date
 
-a < e;
+var r1a5 = a < e;
+>r1a5 : boolean
 >a < e : boolean
 >a : false
 >e : number[]
 
-a < f;
+var r1a6 = a < f;
+>r1a6 : boolean
 >a < f : boolean
 >a : false
 >f : {}
 
-a < g;
+var r1a7 = a < g;
+>r1a7 : boolean
 >a < g : boolean
 >a : false
 >g : string[]
 
-a < h;
+var r1a8 = a < h;
+>r1a8 : boolean
 >a < h : boolean
 >a : false
 >h : bigint
 
-a < i;
+var r1a9 = a < i;
+>r1a9 : boolean
 >a < i : boolean
 >a : false
 >i : Number
 
-a < j;
+var r1a10 = a < j;
+>r1a10 : boolean
 >a < j : boolean
 >a : false
 >j : any
 
-a < k;
+var r1a11 = a < k;
+>r1a11 : boolean
 >a < k : boolean
 >a : false
 >k : 0
 
-a < l;
+var r1a12 = a < l;
+>r1a12 : boolean
 >a < l : boolean
 >a : false
 >l : 9007199254740991n
 
 // number
-b < c;
+var r1b1 = b < c;
+>r1b1 : boolean
 >b < c : boolean
 >b : number
 >c : string
 
-b < d;
+var r1b2 = b < d;
+>r1b2 : boolean
 >b < d : boolean
 >b : number
 >d : Date
 
-b < e;
+var r1b3 = b < e;
+>r1b3 : boolean
 >b < e : boolean
 >b : number
 >e : number[]
 
-b < f;
+var r1b4 = b < f;
+>r1b4 : boolean
 >b < f : boolean
 >b : number
 >f : {}
 
-b < g;
+var r1b5 = b < g;
+>r1b5 : boolean
 >b < g : boolean
 >b : number
 >g : string[]
 
-b < h;
+var r1b6 = b < h;
+>r1b6 : boolean
 >b < h : boolean
 >b : number
 >h : bigint
 
-b < i;
+var r1b7 = b < i;
+>r1b7 : boolean
 >b < i : boolean
 >b : number
 >i : Number
 
-b < j;
+var r1b8 = b < j;
+>r1b8 : boolean
 >b < j : boolean
 >b : number
 >j : any
 
-b < k;
+var r1b9 = b < k;
+>r1b9 : boolean
 >b < k : boolean
 >b : number
 >k : 0
 
-b < l;
+var r1b10 = b < l;
+>r1b10 : boolean
 >b < l : boolean
 >b : number
 >l : 9007199254740991n
 
-k < l;
+var r1b11 = k < l;
+>r1b11 : boolean
 >k < l : boolean
 >k : 0
 >l : 9007199254740991n
 
 // Date
-d < d;
+var r1c1 = d < d;
+>r1c1 : boolean
 >d < d : boolean
 >d : Date
 >d : Date
 
-d < a;
+var r1c2 = d < a;
+>r1c2 : boolean
 >d < a : boolean
 >d : Date
 >a : false
 
 // operator >
 // boolean
-a > a;
+var r2a1 = a > a;
+>r2a1 : boolean
 >a > a : boolean
 >a : false
 >a : false
 
-a > b;
+var r2a2 = a > b;
+>r2a2 : boolean
 >a > b : boolean
 >a : false
 >b : number
 
-a > c;
+var r2a3 = a > c;
+>r2a3 : boolean
 >a > c : boolean
 >a : false
 >c : string
 
-a > d;
+var r2a4 = a > d;
+>r2a4 : boolean
 >a > d : boolean
 >a : false
 >d : Date
 
-a > e;
+var r2a5 = a > e;
+>r2a5 : boolean
 >a > e : boolean
 >a : false
 >e : number[]
 
-a > f;
+var r2a6 = a > f;
+>r2a6 : boolean
 >a > f : boolean
 >a : false
 >f : {}
 
-a > g;
+var r2a7 = a > g;
+>r2a7 : boolean
 >a > g : boolean
 >a : false
 >g : string[]
 
-a > h;
+var r2a8 = a > h;
+>r2a8 : boolean
 >a > h : boolean
 >a : false
 >h : bigint
 
-a > i;
+var r2a9 = a > i;
+>r2a9 : boolean
 >a > i : boolean
 >a : false
 >i : Number
 
-a > j;
+var r2a10 = a > j;
+>r2a10 : boolean
 >a > j : boolean
 >a : false
 >j : any
 
-a > k;
+var r2a11 = a > k;
+>r2a11 : boolean
 >a > k : boolean
 >a : false
 >k : 0
 
-a > l;
+var r2a12 = a > l;
+>r2a12 : boolean
 >a > l : boolean
 >a : false
 >l : 9007199254740991n
 
 // number
-b > c;
+var r2b1 = b > c;
+>r2b1 : boolean
 >b > c : boolean
 >b : number
 >c : string
 
-b > d;
+var r2b2 = b > d;
+>r2b2 : boolean
 >b > d : boolean
 >b : number
 >d : Date
 
-b > e;
+var r2b3 = b > e;
+>r2b3 : boolean
 >b > e : boolean
 >b : number
 >e : number[]
 
-b > f;
+var r2b4 = b > f;
+>r2b4 : boolean
 >b > f : boolean
 >b : number
 >f : {}
 
-b > g;
+var r2b5 = b > g;
+>r2b5 : boolean
 >b > g : boolean
 >b : number
 >g : string[]
 
-b > h;
+var r2b6 = b > h;
+>r2b6 : boolean
 >b > h : boolean
 >b : number
 >h : bigint
 
-b > i;
+var r2b7 = b > i;
+>r2b7 : boolean
 >b > i : boolean
 >b : number
 >i : Number
 
-b > j;
+var r2b8 = b > j;
+>r2b8 : boolean
 >b > j : boolean
 >b : number
 >j : any
 
-b > k;
+var r2b9 = b > k;
+>r2b9 : boolean
 >b > k : boolean
 >b : number
 >k : 0
 
-b > l;
+var r2b10 = b > l;
+>r2b10 : boolean
 >b > l : boolean
 >b : number
 >l : 9007199254740991n
 
-k > l;
+var r2b11 = k > l;
+>r2b11 : boolean
 >k > l : boolean
 >k : 0
 >l : 9007199254740991n
 
 // Date
-d > d;
+var r2c1 = d > d;
+>r2c1 : boolean
 >d > d : boolean
 >d : Date
 >d : Date
 
-d > a;
+var r2c2 = d > a;
+>r2c2 : boolean
 >d > a : boolean
 >d : Date
 >a : false
 
 // operator <=
 // boolean
-a <= a;
+var r3a1 = a <= a;
+>r3a1 : boolean
 >a <= a : boolean
 >a : false
 >a : false
 
-a <= b;
+var r3a2 = a <= b;
+>r3a2 : boolean
 >a <= b : boolean
 >a : false
 >b : number
 
-a <= c;
+var r3a3 = a <= c;
+>r3a3 : boolean
 >a <= c : boolean
 >a : false
 >c : string
 
-a <= d;
+var r3a4 = a <= d;
+>r3a4 : boolean
 >a <= d : boolean
 >a : false
 >d : Date
 
-a <= e;
+var r3a5 = a <= e;
+>r3a5 : boolean
 >a <= e : boolean
 >a : false
 >e : number[]
 
-a <= f;
+var r3a6 = a <= f;
+>r3a6 : boolean
 >a <= f : boolean
 >a : false
 >f : {}
 
-a <= g;
+var r3a7 = a <= g;
+>r3a7 : boolean
 >a <= g : boolean
 >a : false
 >g : string[]
 
-a <= h;
+var r3a8 = a <= h;
+>r3a8 : boolean
 >a <= h : boolean
 >a : false
 >h : bigint
 
-a <= i;
+var r3a9 = a <= i;
+>r3a9 : boolean
 >a <= i : boolean
 >a : false
 >i : Number
 
-a <= j;
+var r3a10 = a <= j;
+>r3a10 : boolean
 >a <= j : boolean
 >a : false
 >j : any
 
-a <= k;
+var r3a11 = a <= k;
+>r3a11 : boolean
 >a <= k : boolean
 >a : false
 >k : 0
 
-a <= l;
+var r3a12 = a <= l;
+>r3a12 : boolean
 >a <= l : boolean
 >a : false
 >l : 9007199254740991n
 
 // number
-b <= c;
+var r3b1 = b <= c;
+>r3b1 : boolean
 >b <= c : boolean
 >b : number
 >c : string
 
-b <= d;
+var r3b2 = b <= d;
+>r3b2 : boolean
 >b <= d : boolean
 >b : number
 >d : Date
 
-b <= e;
+var r3b3 = b <= e;
+>r3b3 : boolean
 >b <= e : boolean
 >b : number
 >e : number[]
 
-b <= f;
+var r3b4 = b <= f;
+>r3b4 : boolean
 >b <= f : boolean
 >b : number
 >f : {}
 
-b <= g;
+var r3b5 = b <= g;
+>r3b5 : boolean
 >b <= g : boolean
 >b : number
 >g : string[]
 
-b <= h;
+var r3b6 = b <= h;
+>r3b6 : boolean
 >b <= h : boolean
 >b : number
 >h : bigint
 
-b <= i;
+var r3b7 = b <= i;
+>r3b7 : boolean
 >b <= i : boolean
 >b : number
 >i : Number
 
-b <= j;
+var r3b8 = b <= j;
+>r3b8 : boolean
 >b <= j : boolean
 >b : number
 >j : any
 
-b <= k;
+var r3b9 = b <= k;
+>r3b9 : boolean
 >b <= k : boolean
 >b : number
 >k : 0
 
-b <= l;
+var r3b10 = b <= l;
+>r3b10 : boolean
 >b <= l : boolean
 >b : number
 >l : 9007199254740991n
 
-k <= l;
+var r3b11 = k <= l;
+>r3b11 : boolean
 >k <= l : boolean
 >k : 0
 >l : 9007199254740991n
 
 // Date
-d <= d;
+var r3c1 = d <= d;
+>r3c1 : boolean
 >d <= d : boolean
 >d : Date
 >d : Date
 
-d <= a;
+var r3c2 = d <= a;
+>r3c2 : boolean
 >d <= a : boolean
 >d : Date
 >a : false
 
 // operator >=
 // boolean
-a >= a;
+var r4a1 = a >= a;
+>r4a1 : boolean
 >a >= a : boolean
 >a : false
 >a : false
 
-a >= b;
+var r4a2 = a >= b;
+>r4a2 : boolean
 >a >= b : boolean
 >a : false
 >b : number
 
-a >= c;
+var r4a3 = a >= c;
+>r4a3 : boolean
 >a >= c : boolean
 >a : false
 >c : string
 
-a >= d;
+var r4a4 = a >= d;
+>r4a4 : boolean
 >a >= d : boolean
 >a : false
 >d : Date
 
-a >= e;
+var r4a5 = a >= e;
+>r4a5 : boolean
 >a >= e : boolean
 >a : false
 >e : number[]
 
-a >= f;
+var r4a6 = a >= f;
+>r4a6 : boolean
 >a >= f : boolean
 >a : false
 >f : {}
 
-a >= g;
+var r4a7 = a >= g;
+>r4a7 : boolean
 >a >= g : boolean
 >a : false
 >g : string[]
 
-a >= h;
+var r4a8 = a >= h;
+>r4a8 : boolean
 >a >= h : boolean
 >a : false
 >h : bigint
 
-a >= i;
+var r4a9 = a >= i;
+>r4a9 : boolean
 >a >= i : boolean
 >a : false
 >i : Number
 
-a >= j;
+var r4a10 = a >= j;
+>r4a10 : boolean
 >a >= j : boolean
 >a : false
 >j : any
 
-a >= k;
+var r4a11 = a >= k;
+>r4a11 : boolean
 >a >= k : boolean
 >a : false
 >k : 0
 
-a >= l;
+var r4a12 = a >= l;
+>r4a12 : boolean
 >a >= l : boolean
 >a : false
 >l : 9007199254740991n
 
 // number
-b >= c;
+var r4b1 = b >= c;
+>r4b1 : boolean
 >b >= c : boolean
 >b : number
 >c : string
 
-b >= d;
+var r4b2 = b >= d;
+>r4b2 : boolean
 >b >= d : boolean
 >b : number
 >d : Date
 
-b >= e;
+var r4b3 = b >= e;
+>r4b3 : boolean
 >b >= e : boolean
 >b : number
 >e : number[]
 
-b >= f;
+var r4b4 = b >= f;
+>r4b4 : boolean
 >b >= f : boolean
 >b : number
 >f : {}
 
-b >= g;
+var r4b5 = b >= g;
+>r4b5 : boolean
 >b >= g : boolean
 >b : number
 >g : string[]
 
-b >= h;
+var r4b6 = b >= h;
+>r4b6 : boolean
 >b >= h : boolean
 >b : number
 >h : bigint
 
-b >= i;
+var r4b7 = b >= i;
+>r4b7 : boolean
 >b >= i : boolean
 >b : number
 >i : Number
 
-b >= j;
+var r4b8 = b >= j;
+>r4b8 : boolean
 >b >= j : boolean
 >b : number
 >j : any
 
-b >= k;
+var r4b9 = b >= k;
+>r4b9 : boolean
 >b >= k : boolean
 >b : number
 >k : 0
 
-b >= l;
+var r4b10 = b >= l;
+>r4b10 : boolean
 >b >= l : boolean
 >b : number
 >l : 9007199254740991n
 
-k >= l;
+var r4b11 = k >= l;
+>r4b11 : boolean
 >k >= l : boolean
 >k : 0
 >l : 9007199254740991n
 
 // Date
-d >= d;
+var r4c1 = d >= d;
+>r4c1 : boolean
 >d >= d : boolean
 >d : Date
 >d : Date
 
-d >= a;
+var r4c2 = d >= a;
+>r4c2 : boolean
 >d >= a : boolean
 >d : Date
 >a : false

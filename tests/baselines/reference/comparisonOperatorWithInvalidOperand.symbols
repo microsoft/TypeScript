@@ -44,417 +44,517 @@ const l = 9007199254740991n;
 
 // operator <
 // boolean
-a < a;
+var r1a1 = a < a;
+>r1a1 : Symbol(r1a1, Decl(comparisonOperatorWithInvalidOperand.ts, 17, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 
-a < b;
+var r1a2 = a < b;
+>r1a2 : Symbol(r1a2, Decl(comparisonOperatorWithInvalidOperand.ts, 18, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 
-a < c;
+var r1a3 = a < c;
+>r1a3 : Symbol(r1a3, Decl(comparisonOperatorWithInvalidOperand.ts, 19, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithInvalidOperand.ts, 4, 3))
 
-a < d;
+var r1a4 = a < d;
+>r1a4 : Symbol(r1a4, Decl(comparisonOperatorWithInvalidOperand.ts, 20, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-a < e;
+var r1a5 = a < e;
+>r1a5 : Symbol(r1a5, Decl(comparisonOperatorWithInvalidOperand.ts, 21, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithInvalidOperand.ts, 6, 3))
 
-a < f;
+var r1a6 = a < f;
+>r1a6 : Symbol(r1a6, Decl(comparisonOperatorWithInvalidOperand.ts, 22, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithInvalidOperand.ts, 7, 3))
 
-a < g;
+var r1a7 = a < g;
+>r1a7 : Symbol(r1a7, Decl(comparisonOperatorWithInvalidOperand.ts, 23, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithInvalidOperand.ts, 8, 3))
 
-a < h;
+var r1a8 = a < h;
+>r1a8 : Symbol(r1a8, Decl(comparisonOperatorWithInvalidOperand.ts, 24, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >h : Symbol(h, Decl(comparisonOperatorWithInvalidOperand.ts, 9, 3))
 
-a < i;
+var r1a9 = a < i;
+>r1a9 : Symbol(r1a9, Decl(comparisonOperatorWithInvalidOperand.ts, 25, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >i : Symbol(i, Decl(comparisonOperatorWithInvalidOperand.ts, 10, 3))
 
-a < j;
+var r1a10 = a < j;
+>r1a10 : Symbol(r1a10, Decl(comparisonOperatorWithInvalidOperand.ts, 26, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >j : Symbol(j, Decl(comparisonOperatorWithInvalidOperand.ts, 11, 3))
 
-a < k;
+var r1a11 = a < k;
+>r1a11 : Symbol(r1a11, Decl(comparisonOperatorWithInvalidOperand.ts, 27, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
-a < l;
+var r1a12 = a < l;
+>r1a12 : Symbol(r1a12, Decl(comparisonOperatorWithInvalidOperand.ts, 28, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // number
-b < c;
+var r1b1 = b < c;
+>r1b1 : Symbol(r1b1, Decl(comparisonOperatorWithInvalidOperand.ts, 31, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithInvalidOperand.ts, 4, 3))
 
-b < d;
+var r1b2 = b < d;
+>r1b2 : Symbol(r1b2, Decl(comparisonOperatorWithInvalidOperand.ts, 32, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-b < e;
+var r1b3 = b < e;
+>r1b3 : Symbol(r1b3, Decl(comparisonOperatorWithInvalidOperand.ts, 33, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithInvalidOperand.ts, 6, 3))
 
-b < f;
+var r1b4 = b < f;
+>r1b4 : Symbol(r1b4, Decl(comparisonOperatorWithInvalidOperand.ts, 34, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithInvalidOperand.ts, 7, 3))
 
-b < g;
+var r1b5 = b < g;
+>r1b5 : Symbol(r1b5, Decl(comparisonOperatorWithInvalidOperand.ts, 35, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithInvalidOperand.ts, 8, 3))
 
-b < h;
+var r1b6 = b < h;
+>r1b6 : Symbol(r1b6, Decl(comparisonOperatorWithInvalidOperand.ts, 36, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >h : Symbol(h, Decl(comparisonOperatorWithInvalidOperand.ts, 9, 3))
 
-b < i;
+var r1b7 = b < i;
+>r1b7 : Symbol(r1b7, Decl(comparisonOperatorWithInvalidOperand.ts, 37, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >i : Symbol(i, Decl(comparisonOperatorWithInvalidOperand.ts, 10, 3))
 
-b < j;
+var r1b8 = b < j;
+>r1b8 : Symbol(r1b8, Decl(comparisonOperatorWithInvalidOperand.ts, 38, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >j : Symbol(j, Decl(comparisonOperatorWithInvalidOperand.ts, 11, 3))
 
-b < k;
+var r1b9 = b < k;
+>r1b9 : Symbol(r1b9, Decl(comparisonOperatorWithInvalidOperand.ts, 39, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
-b < l;
+var r1b10 = b < l;
+>r1b10 : Symbol(r1b10, Decl(comparisonOperatorWithInvalidOperand.ts, 40, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
-k < l;
+var r1b11 = k < l;
+>r1b11 : Symbol(r1b11, Decl(comparisonOperatorWithInvalidOperand.ts, 41, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // Date
-d < d;
+var r1c1 = d < d;
+>r1c1 : Symbol(r1c1, Decl(comparisonOperatorWithInvalidOperand.ts, 44, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-d < a;
+var r1c2 = d < a;
+>r1c2 : Symbol(r1c2, Decl(comparisonOperatorWithInvalidOperand.ts, 45, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 
 // operator >
 // boolean
-a > a;
+var r2a1 = a > a;
+>r2a1 : Symbol(r2a1, Decl(comparisonOperatorWithInvalidOperand.ts, 49, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 
-a > b;
+var r2a2 = a > b;
+>r2a2 : Symbol(r2a2, Decl(comparisonOperatorWithInvalidOperand.ts, 50, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 
-a > c;
+var r2a3 = a > c;
+>r2a3 : Symbol(r2a3, Decl(comparisonOperatorWithInvalidOperand.ts, 51, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithInvalidOperand.ts, 4, 3))
 
-a > d;
+var r2a4 = a > d;
+>r2a4 : Symbol(r2a4, Decl(comparisonOperatorWithInvalidOperand.ts, 52, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-a > e;
+var r2a5 = a > e;
+>r2a5 : Symbol(r2a5, Decl(comparisonOperatorWithInvalidOperand.ts, 53, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithInvalidOperand.ts, 6, 3))
 
-a > f;
+var r2a6 = a > f;
+>r2a6 : Symbol(r2a6, Decl(comparisonOperatorWithInvalidOperand.ts, 54, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithInvalidOperand.ts, 7, 3))
 
-a > g;
+var r2a7 = a > g;
+>r2a7 : Symbol(r2a7, Decl(comparisonOperatorWithInvalidOperand.ts, 55, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithInvalidOperand.ts, 8, 3))
 
-a > h;
+var r2a8 = a > h;
+>r2a8 : Symbol(r2a8, Decl(comparisonOperatorWithInvalidOperand.ts, 56, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >h : Symbol(h, Decl(comparisonOperatorWithInvalidOperand.ts, 9, 3))
 
-a > i;
+var r2a9 = a > i;
+>r2a9 : Symbol(r2a9, Decl(comparisonOperatorWithInvalidOperand.ts, 57, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >i : Symbol(i, Decl(comparisonOperatorWithInvalidOperand.ts, 10, 3))
 
-a > j;
+var r2a10 = a > j;
+>r2a10 : Symbol(r2a10, Decl(comparisonOperatorWithInvalidOperand.ts, 58, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >j : Symbol(j, Decl(comparisonOperatorWithInvalidOperand.ts, 11, 3))
 
-a > k;
+var r2a11 = a > k;
+>r2a11 : Symbol(r2a11, Decl(comparisonOperatorWithInvalidOperand.ts, 59, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
-a > l;
+var r2a12 = a > l;
+>r2a12 : Symbol(r2a12, Decl(comparisonOperatorWithInvalidOperand.ts, 60, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // number
-b > c;
+var r2b1 = b > c;
+>r2b1 : Symbol(r2b1, Decl(comparisonOperatorWithInvalidOperand.ts, 63, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithInvalidOperand.ts, 4, 3))
 
-b > d;
+var r2b2 = b > d;
+>r2b2 : Symbol(r2b2, Decl(comparisonOperatorWithInvalidOperand.ts, 64, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-b > e;
+var r2b3 = b > e;
+>r2b3 : Symbol(r2b3, Decl(comparisonOperatorWithInvalidOperand.ts, 65, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithInvalidOperand.ts, 6, 3))
 
-b > f;
+var r2b4 = b > f;
+>r2b4 : Symbol(r2b4, Decl(comparisonOperatorWithInvalidOperand.ts, 66, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithInvalidOperand.ts, 7, 3))
 
-b > g;
+var r2b5 = b > g;
+>r2b5 : Symbol(r2b5, Decl(comparisonOperatorWithInvalidOperand.ts, 67, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithInvalidOperand.ts, 8, 3))
 
-b > h;
+var r2b6 = b > h;
+>r2b6 : Symbol(r2b6, Decl(comparisonOperatorWithInvalidOperand.ts, 68, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >h : Symbol(h, Decl(comparisonOperatorWithInvalidOperand.ts, 9, 3))
 
-b > i;
+var r2b7 = b > i;
+>r2b7 : Symbol(r2b7, Decl(comparisonOperatorWithInvalidOperand.ts, 69, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >i : Symbol(i, Decl(comparisonOperatorWithInvalidOperand.ts, 10, 3))
 
-b > j;
+var r2b8 = b > j;
+>r2b8 : Symbol(r2b8, Decl(comparisonOperatorWithInvalidOperand.ts, 70, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >j : Symbol(j, Decl(comparisonOperatorWithInvalidOperand.ts, 11, 3))
 
-b > k;
+var r2b9 = b > k;
+>r2b9 : Symbol(r2b9, Decl(comparisonOperatorWithInvalidOperand.ts, 71, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
-b > l;
+var r2b10 = b > l;
+>r2b10 : Symbol(r2b10, Decl(comparisonOperatorWithInvalidOperand.ts, 72, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
-k > l;
+var r2b11 = k > l;
+>r2b11 : Symbol(r2b11, Decl(comparisonOperatorWithInvalidOperand.ts, 73, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // Date
-d > d;
+var r2c1 = d > d;
+>r2c1 : Symbol(r2c1, Decl(comparisonOperatorWithInvalidOperand.ts, 76, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-d > a;
+var r2c2 = d > a;
+>r2c2 : Symbol(r2c2, Decl(comparisonOperatorWithInvalidOperand.ts, 77, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 
 // operator <=
 // boolean
-a <= a;
+var r3a1 = a <= a;
+>r3a1 : Symbol(r3a1, Decl(comparisonOperatorWithInvalidOperand.ts, 81, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 
-a <= b;
+var r3a2 = a <= b;
+>r3a2 : Symbol(r3a2, Decl(comparisonOperatorWithInvalidOperand.ts, 82, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 
-a <= c;
+var r3a3 = a <= c;
+>r3a3 : Symbol(r3a3, Decl(comparisonOperatorWithInvalidOperand.ts, 83, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithInvalidOperand.ts, 4, 3))
 
-a <= d;
+var r3a4 = a <= d;
+>r3a4 : Symbol(r3a4, Decl(comparisonOperatorWithInvalidOperand.ts, 84, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-a <= e;
+var r3a5 = a <= e;
+>r3a5 : Symbol(r3a5, Decl(comparisonOperatorWithInvalidOperand.ts, 85, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithInvalidOperand.ts, 6, 3))
 
-a <= f;
+var r3a6 = a <= f;
+>r3a6 : Symbol(r3a6, Decl(comparisonOperatorWithInvalidOperand.ts, 86, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithInvalidOperand.ts, 7, 3))
 
-a <= g;
+var r3a7 = a <= g;
+>r3a7 : Symbol(r3a7, Decl(comparisonOperatorWithInvalidOperand.ts, 87, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithInvalidOperand.ts, 8, 3))
 
-a <= h;
+var r3a8 = a <= h;
+>r3a8 : Symbol(r3a8, Decl(comparisonOperatorWithInvalidOperand.ts, 88, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >h : Symbol(h, Decl(comparisonOperatorWithInvalidOperand.ts, 9, 3))
 
-a <= i;
+var r3a9 = a <= i;
+>r3a9 : Symbol(r3a9, Decl(comparisonOperatorWithInvalidOperand.ts, 89, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >i : Symbol(i, Decl(comparisonOperatorWithInvalidOperand.ts, 10, 3))
 
-a <= j;
+var r3a10 = a <= j;
+>r3a10 : Symbol(r3a10, Decl(comparisonOperatorWithInvalidOperand.ts, 90, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >j : Symbol(j, Decl(comparisonOperatorWithInvalidOperand.ts, 11, 3))
 
-a <= k;
+var r3a11 = a <= k;
+>r3a11 : Symbol(r3a11, Decl(comparisonOperatorWithInvalidOperand.ts, 91, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
-a <= l;
+var r3a12 = a <= l;
+>r3a12 : Symbol(r3a12, Decl(comparisonOperatorWithInvalidOperand.ts, 92, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // number
-b <= c;
+var r3b1 = b <= c;
+>r3b1 : Symbol(r3b1, Decl(comparisonOperatorWithInvalidOperand.ts, 95, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithInvalidOperand.ts, 4, 3))
 
-b <= d;
+var r3b2 = b <= d;
+>r3b2 : Symbol(r3b2, Decl(comparisonOperatorWithInvalidOperand.ts, 96, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-b <= e;
+var r3b3 = b <= e;
+>r3b3 : Symbol(r3b3, Decl(comparisonOperatorWithInvalidOperand.ts, 97, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithInvalidOperand.ts, 6, 3))
 
-b <= f;
+var r3b4 = b <= f;
+>r3b4 : Symbol(r3b4, Decl(comparisonOperatorWithInvalidOperand.ts, 98, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithInvalidOperand.ts, 7, 3))
 
-b <= g;
+var r3b5 = b <= g;
+>r3b5 : Symbol(r3b5, Decl(comparisonOperatorWithInvalidOperand.ts, 99, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithInvalidOperand.ts, 8, 3))
 
-b <= h;
+var r3b6 = b <= h;
+>r3b6 : Symbol(r3b6, Decl(comparisonOperatorWithInvalidOperand.ts, 100, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >h : Symbol(h, Decl(comparisonOperatorWithInvalidOperand.ts, 9, 3))
 
-b <= i;
+var r3b7 = b <= i;
+>r3b7 : Symbol(r3b7, Decl(comparisonOperatorWithInvalidOperand.ts, 101, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >i : Symbol(i, Decl(comparisonOperatorWithInvalidOperand.ts, 10, 3))
 
-b <= j;
+var r3b8 = b <= j;
+>r3b8 : Symbol(r3b8, Decl(comparisonOperatorWithInvalidOperand.ts, 102, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >j : Symbol(j, Decl(comparisonOperatorWithInvalidOperand.ts, 11, 3))
 
-b <= k;
+var r3b9 = b <= k;
+>r3b9 : Symbol(r3b9, Decl(comparisonOperatorWithInvalidOperand.ts, 103, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
-b <= l;
+var r3b10 = b <= l;
+>r3b10 : Symbol(r3b10, Decl(comparisonOperatorWithInvalidOperand.ts, 104, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
-k <= l;
+var r3b11 = k <= l;
+>r3b11 : Symbol(r3b11, Decl(comparisonOperatorWithInvalidOperand.ts, 105, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // Date
-d <= d;
+var r3c1 = d <= d;
+>r3c1 : Symbol(r3c1, Decl(comparisonOperatorWithInvalidOperand.ts, 108, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-d <= a;
+var r3c2 = d <= a;
+>r3c2 : Symbol(r3c2, Decl(comparisonOperatorWithInvalidOperand.ts, 109, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 
 // operator >=
 // boolean
-a >= a;
+var r4a1 = a >= a;
+>r4a1 : Symbol(r4a1, Decl(comparisonOperatorWithInvalidOperand.ts, 113, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 
-a >= b;
+var r4a2 = a >= b;
+>r4a2 : Symbol(r4a2, Decl(comparisonOperatorWithInvalidOperand.ts, 114, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 
-a >= c;
+var r4a3 = a >= c;
+>r4a3 : Symbol(r4a3, Decl(comparisonOperatorWithInvalidOperand.ts, 115, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithInvalidOperand.ts, 4, 3))
 
-a >= d;
+var r4a4 = a >= d;
+>r4a4 : Symbol(r4a4, Decl(comparisonOperatorWithInvalidOperand.ts, 116, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-a >= e;
+var r4a5 = a >= e;
+>r4a5 : Symbol(r4a5, Decl(comparisonOperatorWithInvalidOperand.ts, 117, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithInvalidOperand.ts, 6, 3))
 
-a >= f;
+var r4a6 = a >= f;
+>r4a6 : Symbol(r4a6, Decl(comparisonOperatorWithInvalidOperand.ts, 118, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithInvalidOperand.ts, 7, 3))
 
-a >= g;
+var r4a7 = a >= g;
+>r4a7 : Symbol(r4a7, Decl(comparisonOperatorWithInvalidOperand.ts, 119, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithInvalidOperand.ts, 8, 3))
 
-a >= h;
+var r4a8 = a >= h;
+>r4a8 : Symbol(r4a8, Decl(comparisonOperatorWithInvalidOperand.ts, 120, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >h : Symbol(h, Decl(comparisonOperatorWithInvalidOperand.ts, 9, 3))
 
-a >= i;
+var r4a9 = a >= i;
+>r4a9 : Symbol(r4a9, Decl(comparisonOperatorWithInvalidOperand.ts, 121, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >i : Symbol(i, Decl(comparisonOperatorWithInvalidOperand.ts, 10, 3))
 
-a >= j;
+var r4a10 = a >= j;
+>r4a10 : Symbol(r4a10, Decl(comparisonOperatorWithInvalidOperand.ts, 122, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >j : Symbol(j, Decl(comparisonOperatorWithInvalidOperand.ts, 11, 3))
 
-a >= k;
+var r4a11 = a >= k;
+>r4a11 : Symbol(r4a11, Decl(comparisonOperatorWithInvalidOperand.ts, 123, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
-a >= l;
+var r4a12 = a >= l;
+>r4a12 : Symbol(r4a12, Decl(comparisonOperatorWithInvalidOperand.ts, 124, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // number
-b >= c;
+var r4b1 = b >= c;
+>r4b1 : Symbol(r4b1, Decl(comparisonOperatorWithInvalidOperand.ts, 127, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithInvalidOperand.ts, 4, 3))
 
-b >= d;
+var r4b2 = b >= d;
+>r4b2 : Symbol(r4b2, Decl(comparisonOperatorWithInvalidOperand.ts, 128, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-b >= e;
+var r4b3 = b >= e;
+>r4b3 : Symbol(r4b3, Decl(comparisonOperatorWithInvalidOperand.ts, 129, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithInvalidOperand.ts, 6, 3))
 
-b >= f;
+var r4b4 = b >= f;
+>r4b4 : Symbol(r4b4, Decl(comparisonOperatorWithInvalidOperand.ts, 130, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithInvalidOperand.ts, 7, 3))
 
-b >= g;
+var r4b5 = b >= g;
+>r4b5 : Symbol(r4b5, Decl(comparisonOperatorWithInvalidOperand.ts, 131, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithInvalidOperand.ts, 8, 3))
 
-b >= h;
+var r4b6 = b >= h;
+>r4b6 : Symbol(r4b6, Decl(comparisonOperatorWithInvalidOperand.ts, 132, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >h : Symbol(h, Decl(comparisonOperatorWithInvalidOperand.ts, 9, 3))
 
-b >= i;
+var r4b7 = b >= i;
+>r4b7 : Symbol(r4b7, Decl(comparisonOperatorWithInvalidOperand.ts, 133, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >i : Symbol(i, Decl(comparisonOperatorWithInvalidOperand.ts, 10, 3))
 
-b >= j;
+var r4b8 = b >= j;
+>r4b8 : Symbol(r4b8, Decl(comparisonOperatorWithInvalidOperand.ts, 134, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >j : Symbol(j, Decl(comparisonOperatorWithInvalidOperand.ts, 11, 3))
 
-b >= k;
+var r4b9 = b >= k;
+>r4b9 : Symbol(r4b9, Decl(comparisonOperatorWithInvalidOperand.ts, 135, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 
-b >= l;
+var r4b10 = b >= l;
+>r4b10 : Symbol(r4b10, Decl(comparisonOperatorWithInvalidOperand.ts, 136, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithInvalidOperand.ts, 3, 3))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
-k >= l;
+var r4b11 = k >= l;
+>r4b11 : Symbol(r4b11, Decl(comparisonOperatorWithInvalidOperand.ts, 137, 3))
 >k : Symbol(k, Decl(comparisonOperatorWithInvalidOperand.ts, 12, 5))
 >l : Symbol(l, Decl(comparisonOperatorWithInvalidOperand.ts, 13, 5))
 
 // Date
-d >= d;
+var r4c1 = d >= d;
+>r4c1 : Symbol(r4c1, Decl(comparisonOperatorWithInvalidOperand.ts, 140, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 
-d >= a;
+var r4c2 = d >= a;
+>r4c2 : Symbol(r4c2, Decl(comparisonOperatorWithInvalidOperand.ts, 141, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithInvalidOperand.ts, 5, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithInvalidOperand.ts, 2, 3))
 

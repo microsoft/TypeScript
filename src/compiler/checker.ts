@@ -20039,14 +20039,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const t = valueType.flags;
         return !!(
             (t & TypeFlags.Number ||
-                t & TypeFlags.NumberLiteral ||
-                t & TypeFlags.BigInt ||
-                t & TypeFlags.BigIntLiteral ||
-                t & TypeFlags.String ||
-                t & TypeFlags.StringLiteral ||
-                t & TypeFlags.Any) &&
-            !(t & TypeFlags.Boolean) &&
-            !(t & TypeFlags.Object)
+            t & TypeFlags.NumberLiteral ||
+            t & TypeFlags.BigInt ||
+            t & TypeFlags.BigIntLiteral ||
+            t & TypeFlags.String ||
+            t & TypeFlags.StringLiteral ||
+            t & TypeFlags.Any ||
+            t & TypeFlags.TypeParameter ||
+            t & TypeFlags.Object ||
+            t & TypeFlags.Intersection ||
+            t & TypeFlags.Union) &&
+            !(t & TypeFlags.Boolean)
         );
     }
 

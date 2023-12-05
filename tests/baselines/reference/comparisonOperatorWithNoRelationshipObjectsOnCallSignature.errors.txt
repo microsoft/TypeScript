@@ -4,56 +4,48 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(37,12): error TS23
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(38,12): error TS2365: Operator '<' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(39,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(40,12): error TS2365: Operator '<' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
-comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(41,12): error TS2365: Operator '<' cannot be applied to types '{ fn<T>(t: T): T; }' and '{ fn<T>(t: T[]): T; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(43,12): error TS2365: Operator '<' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(44,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(46,12): error TS2365: Operator '<' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(47,12): error TS2365: Operator '<' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(48,12): error TS2365: Operator '<' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
-comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(49,12): error TS2365: Operator '<' cannot be applied to types '{ fn<T>(t: T[]): T; }' and '{ fn<T>(t: T): T; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(52,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(53,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(54,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(55,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(56,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(57,12): error TS2365: Operator '>' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
-comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(58,12): error TS2365: Operator '>' cannot be applied to types '{ fn<T>(t: T): T; }' and '{ fn<T>(t: T[]): T; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(60,12): error TS2365: Operator '>' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(61,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(62,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(63,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(64,12): error TS2365: Operator '>' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(65,12): error TS2365: Operator '>' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
-comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(66,12): error TS2365: Operator '>' cannot be applied to types '{ fn<T>(t: T[]): T; }' and '{ fn<T>(t: T): T; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(69,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(70,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(71,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(72,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(73,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(74,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
-comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(75,12): error TS2365: Operator '<=' cannot be applied to types '{ fn<T>(t: T): T; }' and '{ fn<T>(t: T[]): T; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(77,12): error TS2365: Operator '<=' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(78,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(79,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(80,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(81,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(82,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
-comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(83,12): error TS2365: Operator '<=' cannot be applied to types '{ fn<T>(t: T[]): T; }' and '{ fn<T>(t: T): T; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(86,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(87,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(88,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(89,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): Base; }' and '{ fn(): C; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(90,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a?: Base): void; }' and '{ fn(a?: C): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(91,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
-comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(92,12): error TS2365: Operator '>=' cannot be applied to types '{ fn<T>(t: T): T; }' and '{ fn<T>(t: T[]): T; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(94,12): error TS2365: Operator '>=' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(95,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: string): void; }' and '{ fn(a: number, b: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(96,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a: Derived, b: Base): void; }' and '{ fn(a: Base, b: string): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(97,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): C; }' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(98,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(a?: C): void; }' and '{ fn(a?: Base): void; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(99,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
-comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(100,12): error TS2365: Operator '>=' cannot be applied to types '{ fn<T>(t: T[]): T; }' and '{ fn<T>(t: T): T; }'.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(103,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(104,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: number, b: string): void; }' and '{ fn(a: string): void; }' have no overlap.
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(105,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(a: Base, b: string): void; }' and '{ fn(a: Derived, b: Base): void; }' have no overlap.
@@ -104,7 +96,7 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(166,12): error TS2
 comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }' have no overlap.
 
 
-==== comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts (104 errors) ====
+==== comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts (96 errors) ====
     class Base {
         public a: string;
     }
@@ -158,8 +150,6 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2
                ~~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
     var r1a7 = a7 < b7;
-               ~~~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '{ fn<T>(t: T): T; }' and '{ fn<T>(t: T[]): T; }'.
     
     var r1b1 = b1 < a1;
                ~~~~~~~
@@ -180,8 +170,6 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2
                ~~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
     var r1b7 = b7 < a7;
-               ~~~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '{ fn<T>(t: T[]): T; }' and '{ fn<T>(t: T): T; }'.
     
     // operator >
     var r2a1 = a1 > b1;
@@ -203,8 +191,6 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2
                ~~~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
     var r2a7 = a7 > b7;
-               ~~~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types '{ fn<T>(t: T): T; }' and '{ fn<T>(t: T[]): T; }'.
     
     var r2b1 = b1 > a1;
                ~~~~~~~
@@ -225,8 +211,6 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2
                ~~~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
     var r2b7 = b7 > a7;
-               ~~~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types '{ fn<T>(t: T[]): T; }' and '{ fn<T>(t: T): T; }'.
     
     // operator <=
     var r3a1 = a1 <= b1;
@@ -248,8 +232,6 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2
                ~~~~~~~~
 !!! error TS2365: Operator '<=' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
     var r3a7 = a7 <= b7;
-               ~~~~~~~~
-!!! error TS2365: Operator '<=' cannot be applied to types '{ fn<T>(t: T): T; }' and '{ fn<T>(t: T[]): T; }'.
     
     var r3b1 = b1 <= a1;
                ~~~~~~~~
@@ -270,8 +252,6 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2
                ~~~~~~~~
 !!! error TS2365: Operator '<=' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
     var r3b7 = b7 <= a7;
-               ~~~~~~~~
-!!! error TS2365: Operator '<=' cannot be applied to types '{ fn<T>(t: T[]): T; }' and '{ fn<T>(t: T): T; }'.
     
     // operator >=
     var r4a1 = a1 >= b1;
@@ -293,8 +273,6 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2
                ~~~~~~~~
 !!! error TS2365: Operator '>=' cannot be applied to types '{ fn(...a: Base[]): void; }' and '{ fn(...a: C[]): void; }'.
     var r4a7 = a7 >= b7;
-               ~~~~~~~~
-!!! error TS2365: Operator '>=' cannot be applied to types '{ fn<T>(t: T): T; }' and '{ fn<T>(t: T[]): T; }'.
     
     var r4b1 = b1 >= a1;
                ~~~~~~~~
@@ -315,8 +293,6 @@ comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2
                ~~~~~~~~
 !!! error TS2365: Operator '>=' cannot be applied to types '{ fn(...a: C[]): void; }' and '{ fn(...a: Base[]): void; }'.
     var r4b7 = b7 >= a7;
-               ~~~~~~~~
-!!! error TS2365: Operator '>=' cannot be applied to types '{ fn<T>(t: T[]): T; }' and '{ fn<T>(t: T): T; }'.
     
     // operator ==
     var r5a1 = a1 == b1;
