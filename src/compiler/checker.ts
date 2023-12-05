@@ -597,6 +597,7 @@ import {
     isJSDocSatisfiesTag,
     isJSDocSignature,
     isJSDocTemplateTag,
+    isJSDocThisTag,
     isJSDocTypeAlias,
     isJSDocTypeAssertion,
     isJSDocTypedefTag,
@@ -2837,7 +2838,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // still might be illegal if usage is in the initializer of the variable declaration (eg var a = a)
                 return !isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration as VariableDeclaration, usage);
             }
-            else if (isClassDeclaration(declaration)) {
+            else if (isClassLike(declaration)) {
                 // still might be illegal if the usage is within a computed property name in the class (eg class A { static p = "a"; [A.p]() {} })
                 return !findAncestor(usage, n => isComputedPropertyName(n) && n.parent.parent === declaration);
             }
@@ -15079,6 +15080,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let flags = SignatureFlags.None;
             let minArgumentCount = 0;
             let thisParameter: Symbol | undefined;
+            let thisTag: JSDocThisTag | undefined = isInJSFile(declaration) ? getJSDocThisTag(declaration) : undefined;
             let hasThisParameter = false;
             const iife = getImmediatelyInvokedFunctionExpression(declaration);
             const isJSConstructSignature = isJSDocConstructSignature(declaration);
@@ -15096,6 +15098,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // signature.
             for (let i = isJSConstructSignature ? 1 : 0; i < declaration.parameters.length; i++) {
                 const param = declaration.parameters[i];
+                if (isInJSFile(param) && isJSDocThisTag(param)) {
+                    thisTag = param;
+                    continue;
+                }
 
                 let paramSymbol = param.symbol;
                 const type = isJSDocParameterTag(param) ? (param.typeExpression && param.typeExpression.type) : param.type;
@@ -15139,11 +15145,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
 
-            if (isInJSFile(declaration)) {
-                const thisTag = getJSDocThisTag(declaration);
-                if (thisTag && thisTag.typeExpression) {
-                    thisParameter = createSymbolWithType(createSymbol(SymbolFlags.FunctionScopedVariable, InternalSymbolName.This), getTypeFromTypeNode(thisTag.typeExpression));
-                }
+            if (thisTag && thisTag.typeExpression) {
+                thisParameter = createSymbolWithType(createSymbol(SymbolFlags.FunctionScopedVariable, InternalSymbolName.This), getTypeFromTypeNode(thisTag.typeExpression));
             }
 
             const hostDeclaration = isJSDocSignature(declaration) ? getEffectiveJSDocHost(declaration) : declaration;
@@ -20691,8 +20694,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
-                const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
-                const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
+                const sourceSig = checkMode & SignatureCheckMode.Callback || isInstantiatedGenericParameter(source, i) ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
+                const targetSig = checkMode & SignatureCheckMode.Callback || isInstantiatedGenericParameter(target, i) ? undefined : getSingleCallSignature(getNonNullableType(targetType));
                 const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
                     getTypeFacts(sourceType, TypeFacts.IsUndefinedOrNull) === getTypeFacts(targetType, TypeFacts.IsUndefinedOrNull);
                 let related = callbacks ?
@@ -33500,6 +33503,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (typeArguments.length >= minTypeArgumentCount && typeArguments.length <= numTypeParameters);
     }
 
+    function isInstantiatedGenericParameter(signature: Signature, pos: number) {
+        let type;
+        return !!(signature.target && (type = tryGetTypeAtPosition(signature.target, pos)) && isGenericType(type));
+    }
+
     // If type has a single call signature and no other members, return that signature. Otherwise, return undefined.
     function getSingleCallSignature(type: Type): Signature | undefined {
         return getSingleSignature(type, SignatureKind.Call, /*allowMembers*/ false);
@@ -36227,9 +36235,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const len = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
         for (let i = 0; i < len; i++) {
             const parameter = signature.parameters[i];
-            if (!getEffectiveTypeAnnotationNode(parameter.valueDeclaration as ParameterDeclaration)) {
-                const contextualParameterType = tryGetTypeAtPosition(context, i);
-                assignParameterType(parameter, contextualParameterType);
+            const declaration = parameter.valueDeclaration as ParameterDeclaration;
+            if (!getEffectiveTypeAnnotationNode(declaration)) {
+                let type = tryGetTypeAtPosition(context, i);
+                if (type && declaration.initializer) {
+                    let initializerType = checkDeclarationInitializer(declaration, CheckMode.Normal);
+                    if (!isTypeAssignableTo(initializerType, type) && isTypeAssignableTo(type, initializerType = widenTypeInferredFromInitializer(declaration, initializerType))) {
+                        type = initializerType;
+                    }
+                }
+                assignParameterType(parameter, type);
             }
         }
         if (signatureHasRestParameter(signature)) {
