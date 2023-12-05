@@ -1,6 +1,6 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionSwitchCase3.ts ===
-// <|[|switch|] (null|>) {
+// [|{| contextId: 0 |}switch|] (<|null|>) {
 //   /*GOTO DEF*/default: {
 //     switch (null) {
 //       default: break;
@@ -26,7 +26,7 @@
 // === /tests/cases/fourslash/goToDefinitionSwitchCase3.ts ===
 // switch (null) {
 //   default: {
-//     <|[|switch|] (null|>) {
+//     [|{| contextId: 0 |}switch|] (<|null|>) {
 //       /*GOTO DEF*/default: break;
 //     }
 //   };

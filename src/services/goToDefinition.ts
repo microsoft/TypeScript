@@ -15,7 +15,6 @@ import {
     DefinitionInfoAndBoundSpan,
     emptyArray,
     every,
-    Expression,
     FileReference,
     filter,
     find,
@@ -95,7 +94,7 @@ import {
     skipTrivia,
     some,
     SourceFile,
-    Statement,
+    SwitchStatement,
     Symbol,
     SymbolDisplay,
     SymbolFlags,
@@ -740,12 +739,8 @@ function isConstructorLike(node: Node): boolean {
     }
 }
 
-interface StatementWithExpression extends Statement {
-    readonly expression: Expression;
-}
-
 function createDefinitionInfoFromStatement(
-    statement: StatementWithExpression,
+    statement: SwitchStatement,
     keywordKind: KeywordSyntaxKind,
     sourceFile: SourceFile,
     name: string,
@@ -758,7 +753,7 @@ function createDefinitionInfoFromStatement(
         name,
         containerKind: undefined!,
         containerName: "",
-        contextSpan: createTextSpanFromBounds(keyword.getStart(sourceFile), statement.expression.getEnd()),
+        contextSpan: createTextSpanFromNode(statement.expression, sourceFile),
         isLocal: true,
         isAmbient: false,
         unverified: false,
