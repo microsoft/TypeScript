@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunction.ts] ////
+
 //// [objectTypeWithCallSignatureHidingMembersOfFunction.ts]
 // object types with call signatures can override members of Function
 // no errors expected below 

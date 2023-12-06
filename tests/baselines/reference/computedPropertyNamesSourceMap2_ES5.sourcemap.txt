@@ -5,7 +5,7 @@ sourceRoot:
 sources: computedPropertyNamesSourceMap2_ES5.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap2_ES5.js
+emittedFile:computedPropertyNamesSourceMap2_ES5.js
 sourceFile:computedPropertyNamesSourceMap2_ES5.ts
 -------------------------------------------------------------------
 >>>var _a;

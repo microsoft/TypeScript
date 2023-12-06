@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitLateBoundJSAssignments.ts] ////
+
 //// [file.js]
 export function foo() {}
 foo.bar = 12;
@@ -25,6 +27,6 @@ const a = foo[dashStrMem];
 //// [file.d.ts]
 export function foo(): void;
 export namespace foo {
-    const bar: number;
-    const strMemName: string;
+    let bar: number;
+    let strMemName: string;
 }

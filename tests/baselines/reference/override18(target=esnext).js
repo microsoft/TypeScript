@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/override/override18.ts] ////
+
 //// [override18.ts]
 class A {
     foo?: string;

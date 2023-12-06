@@ -1,120 +1,79 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/file.tsx ===
-// declare module JSX {
-//     interface Element { }
-//     interface IntrinsicElements {
-//     }
+// --- (line: 4) skipped ---
 //     interface ElementAttributesProperty { props; }
 // }
 // interface OptionPropBag {
-//     /*FIND ALL REFS*/[|propx|]: number
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}propx|]: number|>
 //     propString: string
 //     optional?: boolean
 // }
 // declare function Opt(attributes: OptionPropBag): JSX.Element;
 // let opt = <Opt />;
-// let opt1 = <Opt [|propx|]={100} propString />;
-// let opt2 = <Opt [|propx|]={100} optional/>;
+// let opt1 = <Opt <|[|{| isWriteAccess: true |}propx|]={100}|> propString />;
+// let opt2 = <Opt <|[|{| isWriteAccess: true |}propx|]={100}|> optional/>;
 // let opt3 = <Opt wrong />;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/file.tsx",
-      "kind": "property",
-      "name": "(property) OptionPropBag.propx: number",
-      "textSpan": {
-        "start": 170,
-        "length": 5
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "OptionPropBag",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "propx",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 170,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 170,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 170,
-          "length": 13
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 329,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 329,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 372,
-          "length": 5
-        },
-        "fileName": "/tests/cases/fourslash/file.tsx",
-        "contextSpan": {
-          "start": 372,
-          "length": 11
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/file.tsx ===
+  // --- (line: 4) skipped ---
+  //     interface ElementAttributesProperty { props; }
+  // }
+  // interface OptionPropBag {
+  //     /*FIND ALL REFS*/<|[|propx|]: number|>
+  //     propString: string
+  //     optional?: boolean
+  // }
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) OptionPropBag.propx: number",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "OptionPropBag",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "propx",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

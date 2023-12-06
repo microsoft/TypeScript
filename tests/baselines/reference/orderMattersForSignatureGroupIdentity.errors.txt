@@ -1,23 +1,19 @@
-tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(19,1): error TS2769: No overload matches this call.
+orderMattersForSignatureGroupIdentity.ts(19,1): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
-    Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ s: string; }'.
-      Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
+    Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
   Overload 2 of 2, '(x: { n: number; }): number', gave the following error.
-    Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
-      Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
-tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(19,20): error TS2339: Property 'toLowerCase' does not exist on type 'never'.
-tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
-tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,1): error TS2769: No overload matches this call.
+    Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+orderMattersForSignatureGroupIdentity.ts(19,20): error TS2339: Property 'toLowerCase' does not exist on type 'never'.
+orderMattersForSignatureGroupIdentity.ts(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
+orderMattersForSignatureGroupIdentity.ts(24,1): error TS2769: No overload matches this call.
   Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
-    Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ s: string; }'.
-      Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
+    Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
   Overload 2 of 2, '(x: { n: number; }): number', gave the following error.
-    Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
-      Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
-tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,20): error TS2339: Property 'toLowerCase' does not exist on type 'never'.
+    Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+orderMattersForSignatureGroupIdentity.ts(24,20): error TS2339: Property 'toLowerCase' does not exist on type 'never'.
 
 
-==== tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts (5 errors) ====
+==== orderMattersForSignatureGroupIdentity.ts (5 errors) ====
     interface A {
         (x: { s: string }): string
         (x: { n: number }): number
@@ -37,14 +33,12 @@ tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,20): error TS23
     var v: B;
     
     v({ s: "", n: 0 }).toLowerCase();
-    ~~~~~~~~~~~~~~~~~~
+    ~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
-!!! error TS2769:     Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ s: string; }'.
-!!! error TS2769:       Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
+!!! error TS2769:     Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
 !!! error TS2769:   Overload 2 of 2, '(x: { n: number; }): number', gave the following error.
-!!! error TS2769:     Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
-!!! error TS2769:       Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+!!! error TS2769:     Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
                        ~~~~~~~~~~~
 !!! error TS2339: Property 'toLowerCase' does not exist on type 'never'.
     
@@ -52,16 +46,14 @@ tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,20): error TS23
     var w: C;
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
-!!! related TS6203 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts:21:5: 'w' was also declared here.
+!!! related TS6203 orderMattersForSignatureGroupIdentity.ts:21:5: 'w' was also declared here.
     
     w({ s: "", n: 0 }).toLowerCase();
-    ~~~~~~~~~~~~~~~~~~
+    ~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(x: { s: string; }): string', gave the following error.
-!!! error TS2769:     Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ s: string; }'.
-!!! error TS2769:       Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
+!!! error TS2769:     Object literal may only specify known properties, and 'n' does not exist in type '{ s: string; }'.
 !!! error TS2769:   Overload 2 of 2, '(x: { n: number; }): number', gave the following error.
-!!! error TS2769:     Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
-!!! error TS2769:       Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+!!! error TS2769:     Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
                        ~~~~~~~~~~~
 !!! error TS2339: Property 'toLowerCase' does not exist on type 'never'.

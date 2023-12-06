@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentNonObjectTypeConstraints.ts] ////
+
 //// [assignmentNonObjectTypeConstraints.ts]
 const enum E { A, B, C }
 

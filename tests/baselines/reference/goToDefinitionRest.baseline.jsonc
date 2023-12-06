@@ -1,0 +1,23 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionRest.ts ===
+// interface Gen {
+//     x: number;
+//     <|[|parent|]: Gen;|>
+//     millenial: string;
+// }
+// let t: Gen;
+// var { x, ...rest } = t;
+// rest./*GOTO DEF*/parent;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "parent",
+    "containerName": "Gen",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

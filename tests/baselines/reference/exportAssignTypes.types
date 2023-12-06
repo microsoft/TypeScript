@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/consumer.ts ===
+//// [tests/cases/conformance/externalModules/exportAssignTypes.ts] ////
+
+=== consumer.ts ===
 import iString = require('./expString');
 >iString : string
 
@@ -49,7 +51,7 @@ var v7: {<x>(p1: x): x} = iGeneric;
 >p1 : x
 >iGeneric : <T>(a: T) => T
 
-=== tests/cases/conformance/externalModules/expString.ts ===
+=== expString.ts ===
 var x = "test";
 >x : string
 >"test" : "test"
@@ -57,7 +59,7 @@ var x = "test";
 export = x;
 >x : string
 
-=== tests/cases/conformance/externalModules/expNumber.ts ===
+=== expNumber.ts ===
 var x = 42;
 >x : number
 >42 : 42
@@ -65,7 +67,7 @@ var x = 42;
 export = x;
 >x : number
 
-=== tests/cases/conformance/externalModules/expBoolean.ts ===
+=== expBoolean.ts ===
 var x = true;
 >x : boolean
 >true : true
@@ -73,7 +75,7 @@ var x = true;
 export = x;
 >x : boolean
 
-=== tests/cases/conformance/externalModules/expArray.ts ===
+=== expArray.ts ===
 var x = [1,2];
 >x : number[]
 >[1,2] : number[]
@@ -83,7 +85,7 @@ var x = [1,2];
 export = x;
 >x : number[]
 
-=== tests/cases/conformance/externalModules/expObject.ts ===
+=== expObject.ts ===
 var x = { answer: 42, when: 1776};
 >x : { answer: number; when: number; }
 >{ answer: 42, when: 1776} : { answer: number; when: number; }
@@ -95,14 +97,14 @@ var x = { answer: 42, when: 1776};
 export = x;
 >x : { answer: number; when: number; }
 
-=== tests/cases/conformance/externalModules/expAny.ts ===
+=== expAny.ts ===
 var x;
 >x : any
 
 export = x;
 >x : any
 
-=== tests/cases/conformance/externalModules/expGeneric.ts ===
+=== expGeneric.ts ===
 function x<T>(a: T){
 >x : <T>(a: T) => T
 >a : T

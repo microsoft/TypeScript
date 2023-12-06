@@ -1,4 +1,6 @@
-=== tests/cases/compiler/derivedInterfaceCallSignature.ts ===
+//// [tests/cases/compiler/derivedInterfaceCallSignature.ts] ////
+
+=== derivedInterfaceCallSignature.ts ===
 interface D3SvgPath {
 >D3SvgPath : Symbol(D3SvgPath, Decl(derivedInterfaceCallSignature.ts, 0, 0))
 

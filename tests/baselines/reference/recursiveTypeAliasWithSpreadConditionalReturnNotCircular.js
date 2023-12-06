@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts] ////
+
 //// [recursiveTypeAliasWithSpreadConditionalReturnNotCircular.ts]
 export {}
 export interface Option<T> {

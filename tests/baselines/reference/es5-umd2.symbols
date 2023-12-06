@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es5-umd2.ts ===
+//// [tests/cases/compiler/es5-umd2.ts] ////
+
+=== es5-umd2.ts ===
 export class A
 >A : Symbol(A, Decl(es5-umd2.ts, 0, 0))
 {

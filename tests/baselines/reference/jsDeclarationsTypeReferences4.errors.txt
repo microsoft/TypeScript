@@ -1,7 +1,7 @@
-tests/cases/conformance/jsdoc/declarations/index.js(4,18): error TS8006: 'namespace' declarations can only be used in TypeScript files.
+index.js(4,18): error TS8006: 'namespace' declarations can only be used in TypeScript files.
 
 
-==== tests/cases/conformance/jsdoc/declarations/index.js (1 errors) ====
+==== index.js (1 errors) ====
     /// <reference types="node" />
     export const Something = 2; // to show conflict that can occur
     // @ts-ignore
@@ -17,7 +17,7 @@ tests/cases/conformance/jsdoc/declarations/index.js(4,18): error TS8006: 'namesp
         }
     }
     
-==== tests/cases/conformance/jsdoc/declarations/node_modules/@types/node/index.d.ts (0 errors) ====
+==== node_modules/@types/node/index.d.ts (0 errors) ====
     declare module "fs" {
         export class Something {}
     }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCollisionThisExpressionAndLocalVarInLambda.ts ===
+//// [tests/cases/compiler/noCollisionThisExpressionAndLocalVarInLambda.ts] ////
+
+=== noCollisionThisExpressionAndLocalVarInLambda.ts ===
 declare function alert(message?: any): void;
 >alert : { (message?: any): void; (message?: any): void; }
 >message : any

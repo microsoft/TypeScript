@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessor3.ts] ////
+
 //// [autoAccessor3.ts]
 class C1 {
     accessor "w": any;
@@ -29,10 +31,10 @@ class C1 {
     set "w"(value) { __classPrivateFieldSet(this, _C1__a_accessor_storage, value, "f"); }
     get "x"() { return __classPrivateFieldGet(this, _C1__b_accessor_storage, "f"); }
     set "x"(value) { __classPrivateFieldSet(this, _C1__b_accessor_storage, value, "f"); }
-    static get "y"() { return __classPrivateFieldGet(this, _a, "f", _C1__c_accessor_storage); }
-    static set "y"(value) { __classPrivateFieldSet(this, _a, value, "f", _C1__c_accessor_storage); }
-    static get "z"() { return __classPrivateFieldGet(this, _a, "f", _C1__d_accessor_storage); }
-    static set "z"(value) { __classPrivateFieldSet(this, _a, value, "f", _C1__d_accessor_storage); }
+    static get "y"() { return __classPrivateFieldGet(_a, _a, "f", _C1__c_accessor_storage); }
+    static set "y"(value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__c_accessor_storage); }
+    static get "z"() { return __classPrivateFieldGet(_a, _a, "f", _C1__d_accessor_storage); }
+    static set "z"(value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__d_accessor_storage); }
 }
 _a = C1, _C1__a_accessor_storage = new WeakMap(), _C1__b_accessor_storage = new WeakMap();
 _C1__c_accessor_storage = { value: void 0 };

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/identicalGenericConditionalsWithInferRelated.ts ===
+//// [tests/cases/compiler/identicalGenericConditionalsWithInferRelated.ts] ////
+
+=== identicalGenericConditionalsWithInferRelated.ts ===
 function f<X>(arg: X) {
 >f : <X>(arg: X) => void
 >arg : X

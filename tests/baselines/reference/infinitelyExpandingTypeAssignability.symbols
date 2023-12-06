@@ -1,4 +1,6 @@
-=== tests/cases/compiler/infinitelyExpandingTypeAssignability.ts ===
+//// [tests/cases/compiler/infinitelyExpandingTypeAssignability.ts] ////
+
+=== infinitelyExpandingTypeAssignability.ts ===
 interface A<T> {
 >A : Symbol(A, Decl(infinitelyExpandingTypeAssignability.ts, 0, 0))
 >T : Symbol(T, Decl(infinitelyExpandingTypeAssignability.ts, 0, 12))

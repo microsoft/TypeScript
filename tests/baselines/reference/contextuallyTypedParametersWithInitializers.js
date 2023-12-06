@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts] ////
+
 //// [contextuallyTypedParametersWithInitializers.ts]
 declare function id1<T>(input: T): T;
 declare function id2<T extends (x: any) => any>(input: T): T;

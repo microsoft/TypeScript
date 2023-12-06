@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritSameNamePropertiesWithDifferentOptionality.ts] ////
+
 //// [inheritSameNamePropertiesWithDifferentOptionality.ts]
 interface C {
     x?: number;

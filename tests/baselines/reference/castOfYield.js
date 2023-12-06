@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/castOfYield.ts] ////
+
 //// [castOfYield.ts]
 function* f() {
     <number> (yield 0);

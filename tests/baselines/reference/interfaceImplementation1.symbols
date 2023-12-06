@@ -1,4 +1,6 @@
-=== tests/cases/compiler/interfaceImplementation1.ts ===
+//// [tests/cases/compiler/interfaceImplementation1.ts] ////
+
+=== interfaceImplementation1.ts ===
 interface I1 {
 >I1 : Symbol(I1, Decl(interfaceImplementation1.ts, 0, 0))
 

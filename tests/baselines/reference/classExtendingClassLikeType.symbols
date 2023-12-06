@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts] ////
+
+=== classExtendingClassLikeType.ts ===
 interface Base<T, U> {
 >Base : Symbol(Base, Decl(classExtendingClassLikeType.ts, 0, 0))
 >T : Symbol(T, Decl(classExtendingClassLikeType.ts, 0, 15))

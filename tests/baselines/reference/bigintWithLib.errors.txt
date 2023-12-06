@@ -1,5 +1,5 @@
-tests/cases/compiler/bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
-tests/cases/compiler/bigintWithLib.ts(19,33): error TS2769: No overload matches this call.
+bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
+bigintWithLib.ts(19,33): error TS2769: No overload matches this call.
   Overload 1 of 3, '(length?: number): BigInt64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(array: Iterable<bigint>): BigInt64Array', gave the following error.
@@ -12,20 +12,20 @@ tests/cases/compiler/bigintWithLib.ts(19,33): error TS2769: No overload matches 
   Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigInt64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
       Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
-tests/cases/compiler/bigintWithLib.ts(24,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
-tests/cases/compiler/bigintWithLib.ts(31,35): error TS2769: No overload matches this call.
+bigintWithLib.ts(24,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
+bigintWithLib.ts(31,35): error TS2769: No overload matches this call.
   Overload 1 of 3, '(length?: number): BigUint64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(array: Iterable<bigint>): BigUint64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'Iterable<bigint>'.
   Overload 3 of 3, '(buffer: ArrayBufferLike, byteOffset?: number, length?: number): BigUint64Array', gave the following error.
     Argument of type 'number[]' is not assignable to parameter of type 'ArrayBufferLike'.
-tests/cases/compiler/bigintWithLib.ts(36,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
-tests/cases/compiler/bigintWithLib.ts(43,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
-tests/cases/compiler/bigintWithLib.ts(46,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
+bigintWithLib.ts(36,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
+bigintWithLib.ts(43,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
+bigintWithLib.ts(46,26): error TS2345: Argument of type 'number' is not assignable to parameter of type 'bigint'.
 
 
-==== tests/cases/compiler/bigintWithLib.ts (7 errors) ====
+==== bigintWithLib.ts (7 errors) ====
     // Test BigInt functions
     let bigintVal: bigint = BigInt(123);
     bigintVal = BigInt("456");

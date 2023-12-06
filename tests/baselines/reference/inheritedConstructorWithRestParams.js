@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritedConstructorWithRestParams.ts] ////
+
 //// [inheritedConstructorWithRestParams.ts]
 class Base {
     constructor(...a: string[]) { }

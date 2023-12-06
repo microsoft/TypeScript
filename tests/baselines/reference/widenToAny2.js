@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/widenToAny2.ts] ////
+
 //// [widenToAny2.ts]
 function foo3<T>(x: T[]): T {
     return undefined;

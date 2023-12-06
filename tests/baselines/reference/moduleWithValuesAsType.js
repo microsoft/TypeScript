@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleWithValuesAsType.ts] ////
+
 //// [moduleWithValuesAsType.ts]
 module A {
     var b = 1;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overEagerReturnTypeSpecialization.ts ===
+//// [tests/cases/compiler/overEagerReturnTypeSpecialization.ts] ////
+
+=== overEagerReturnTypeSpecialization.ts ===
 //Note: Below simpler repro
 
 interface I1<T> {

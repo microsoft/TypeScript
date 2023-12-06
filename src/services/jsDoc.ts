@@ -43,7 +43,10 @@ import {
     isFunctionTypeNode,
     isIdentifier,
     isJSDoc,
+    isJSDocOverloadTag,
     isJSDocParameterTag,
+    isJSDocPropertyLikeTag,
+    isJSDocTypeLiteral,
     isWhiteSpaceSingleLine,
     JSDoc,
     JSDocAugmentsTag,
@@ -173,7 +176,7 @@ const jsDocTagNames = [
     "variation",
     "version",
     "virtual",
-    "yields"
+    "yields",
 ];
 let jsDocTagNameCompletionEntries: CompletionEntry[];
 let jsDocTagCompletionEntries: CompletionEntry[];
@@ -194,12 +197,14 @@ export function getJsDocCommentsFromDeclarations(declarations: readonly Declarat
             // Exceptions:
             // - @typedefs are themselves declarations with associated comments
             // - @param or @return indicate that the author thinks of it as a 'local' @typedef that's part of the function documentation
-            if (jsdoc.comment === undefined && !inheritDoc
+            if (
+                jsdoc.comment === undefined && !inheritDoc
                 || isJSDoc(jsdoc)
-                   && declaration.kind !== SyntaxKind.JSDocTypedefTag && declaration.kind !== SyntaxKind.JSDocCallbackTag
-                   && jsdoc.tags
-                   && jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
-                   && !jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
+                    && declaration.kind !== SyntaxKind.JSDocTypedefTag && declaration.kind !== SyntaxKind.JSDocCallbackTag
+                    && jsdoc.tags
+                    && jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
+                    && !jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)
+            ) {
                 continue;
             }
             let newparts = jsdoc.comment ? getDisplayPartsFromComment(jsdoc.comment, checker) : [];
@@ -225,7 +230,12 @@ function getCommentHavingNodes(declaration: Declaration): readonly (JSDoc | JSDo
             return [declaration as JSDocPropertyTag];
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocTypedefTag:
-            return [(declaration as JSDocTypedefTag), (declaration as JSDocTypedefTag).parent];
+            return [declaration as JSDocTypedefTag, (declaration as JSDocTypedefTag).parent];
+        case SyntaxKind.JSDocSignature:
+            if (isJSDocOverloadTag(declaration.parent)) {
+                return [declaration.parent.parent];
+            }
+            // falls through
         default:
             return getJSDocCommentsAndTags(declaration);
     }
@@ -240,12 +250,20 @@ export function getJsDocTagsFromDeclarations(declarations?: Declaration[], check
         // skip comments containing @typedefs since they're not associated with particular declarations
         // Exceptions:
         // - @param or @return indicate that the author thinks of it as a 'local' @typedef that's part of the function documentation
-        if (tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
-            && !tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
+        if (
+            tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
+            && !tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)
+        ) {
             return;
         }
         for (const tag of tags) {
             infos.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
+
+            if (isJSDocPropertyLikeTag(tag) && tag.isNameFirst && tag.typeExpression && isJSDocTypeLiteral(tag.typeExpression.type)) {
+                forEach(tag.typeExpression.type.jsDocPropertyTags, propTag => {
+                    infos.push({ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) });
+                });
+            }
         }
     });
     return infos;
@@ -257,7 +275,7 @@ function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], c
     }
     return flatMap(
         comment,
-        node => node.kind === SyntaxKind.JSDocText ? [textPart(node.text)] : buildLinkParts(node, checker)
+        node => node.kind === SyntaxKind.JSDocText ? [textPart(node.text)] : buildLinkParts(node, checker),
     ) as SymbolDisplayPart[];
 }
 
@@ -368,7 +386,7 @@ export function getJSDocTagCompletions(): CompletionEntry[] {
             name: `@${tagName}`,
             kind: ScriptElementKind.keyword,
             kindModifiers: "",
-            sortText: Completions.SortText.LocationPriority
+            sortText: Completions.SortText.LocationPriority,
         };
     }));
 }
@@ -400,8 +418,10 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
         if (!isIdentifier(param.name)) return undefined;
 
         const name = param.name.text;
-        if (jsdoc.tags!.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name) // TODO: GH#18217
-            || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
+        if (
+            jsdoc.tags!.some(t => t !== tag && isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText === name) // TODO: GH#18217
+            || nameThusFar !== undefined && !startsWith(name, nameThusFar)
+        ) {
             return undefined;
         }
 
@@ -469,17 +489,18 @@ export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: Sou
     const { commentOwner, parameters, hasReturn } = commentOwnerInfo;
     const commentOwnerJsDoc = hasJSDocNodes(commentOwner) && commentOwner.jsDoc ? commentOwner.jsDoc : undefined;
     const lastJsDoc = lastOrUndefined(commentOwnerJsDoc);
-    if (commentOwner.getStart(sourceFile) < position
+    if (
+        commentOwner.getStart(sourceFile) < position
         || lastJsDoc
             && existingDocComment
-            && lastJsDoc !== existingDocComment) {
+            && lastJsDoc !== existingDocComment
+    ) {
         return undefined;
     }
 
     const indentationStr = getIndentationStringAtPosition(sourceFile, position);
     const isJavaScriptFile = hasJSFileExtension(sourceFile.fileName);
-    const tags =
-        (parameters ? parameterDocComments(parameters || [], isJavaScriptFile, indentationStr, newLine) : "") +
+    const tags = (parameters ? parameterDocComments(parameters || [], isJavaScriptFile, indentationStr, newLine) : "") +
         (hasReturn ? returnsDocComment(indentationStr, newLine) : "");
 
     // A doc comment consists of the following
@@ -492,9 +513,7 @@ export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: Sou
     // * if the caret was directly in front of the object, then we add an extra line and indentation.
     const openComment = "/**";
     const closeComment = " */";
-
-    // If any of the existing jsDoc has tags, ignore adding new ones.
-    const hasTag = (commentOwnerJsDoc || []).some(jsDoc => !!jsDoc.tags);
+    const hasTag = length(getJSDocTags(commentOwner)) > 0;
 
     if (tags && !hasTag) {
         const preamble = openComment + newLine + indentationStr + " * ";

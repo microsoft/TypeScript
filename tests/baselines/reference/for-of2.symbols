@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/for-ofStatements/for-of2.ts ===
+//// [tests/cases/conformance/es6/for-ofStatements/for-of2.ts] ////
+
+=== for-of2.ts ===
 const v;
 >v : Symbol(v, Decl(for-of2.ts, 0, 5))
 

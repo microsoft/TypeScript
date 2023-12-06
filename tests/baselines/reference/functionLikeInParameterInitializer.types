@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionLikeInParameterInitializer.ts ===
+//// [tests/cases/compiler/functionLikeInParameterInitializer.ts] ////
+
+=== functionLikeInParameterInitializer.ts ===
 // error
 export function bar(func = () => foo) {
 >bar : (func?: () => string) => void

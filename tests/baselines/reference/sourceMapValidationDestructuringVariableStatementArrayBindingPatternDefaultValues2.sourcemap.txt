@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.js
+emittedFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.js
 sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.ts
 -------------------------------------------------------------------
 >>>var multiRobotA = ["mower", ["mowing", ""]];
@@ -507,7 +507,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 4 >          ^^^^
 5 >              ^^^^^^
 6 >                    ^^
-7 >                      ^^^^^^^^^^^^^^^^^^->
+7 >                      ^
+8 >                       ^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
@@ -516,12 +517,14 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 4 >           == 
 5 >              nameMA
 6 >                    ) 
+7 >                      {
 1 >Emitted(8, 1) Source(15, 1) + SourceIndex(0)
 2 >Emitted(8, 5) Source(15, 5) + SourceIndex(0)
 3 >Emitted(8, 11) Source(15, 11) + SourceIndex(0)
 4 >Emitted(8, 15) Source(15, 15) + SourceIndex(0)
 5 >Emitted(8, 21) Source(15, 21) + SourceIndex(0)
 6 >Emitted(8, 23) Source(15, 23) + SourceIndex(0)
+7 >Emitted(8, 24) Source(15, 24) + SourceIndex(0)
 ---
 >>>    console.log(skillA[0] + skillA[1]);
 1->^^^^
@@ -540,7 +543,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 14>                                    ^
 15>                                     ^
 16>                                      ^
-1->{
+1->
   >    
 2 >    console
 3 >           .
@@ -575,10 +578,13 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 16>Emitted(9, 40) Source(16, 40) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(10, 2) Source(17, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(10, 1) Source(17, 1) + SourceIndex(0)
+2 >Emitted(10, 2) Source(17, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.js.map

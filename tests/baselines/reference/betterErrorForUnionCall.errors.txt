@@ -1,13 +1,13 @@
-tests/cases/compiler/betterErrorForUnionCall.ts(2,1): error TS2349: This expression is not callable.
+betterErrorForUnionCall.ts(2,1): error TS2349: This expression is not callable.
   No constituent of type '{ a: string; } | { b: string; }' is callable.
-tests/cases/compiler/betterErrorForUnionCall.ts(5,1): error TS2349: This expression is not callable.
+betterErrorForUnionCall.ts(5,1): error TS2349: This expression is not callable.
   Not all constituents of type '{ a: string; } | ((a: string) => void)' are callable.
     Type '{ a: string; }' has no call signatures.
-tests/cases/compiler/betterErrorForUnionCall.ts(8,1): error TS2349: This expression is not callable.
+betterErrorForUnionCall.ts(8,1): error TS2349: This expression is not callable.
   Each member of the union type '(<T extends number>(a: T) => void) | (<T>(a: string) => void)' has signatures, but none of those signatures are compatible with each other.
 
 
-==== tests/cases/compiler/betterErrorForUnionCall.ts (3 errors) ====
+==== betterErrorForUnionCall.ts (3 errors) ====
     declare const union: { a: string } | { b: string }
     union("");
     ~~~~~

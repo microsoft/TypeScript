@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceStaticFuncOverridingAccessorOfFuncType.ts] ////
+
 //// [inheritanceStaticFuncOverridingAccessorOfFuncType.ts]
 class a {
     static get x(): () => string {

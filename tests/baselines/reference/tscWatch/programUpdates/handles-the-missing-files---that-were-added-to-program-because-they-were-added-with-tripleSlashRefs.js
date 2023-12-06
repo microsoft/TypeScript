@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>
@@ -36,8 +37,28 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts"]
-Program options: {"watch":true}
+//// [/a/b/commonFile1.js]
+/// <reference path="commonFile2.ts"/>
+var x = y;
+
+
+
+PolledWatches::
+/a/b/commonFile2.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/commonFile1.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/b/commonFile1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -51,23 +72,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/commonfile1.ts (used version)
 
-PolledWatches::
-/a/b/commonfile2.ts: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/commonfile1.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-/// <reference path="commonFile2.ts"/>
-var x = y;
-
-
 
 Change:: create file2
 
@@ -77,15 +82,22 @@ let y = 1
 
 
 PolledWatches *deleted*::
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
 /a/lib/lib.d.ts:
   {}
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
@@ -94,8 +106,27 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts"]
-Program options: {"watch":true}
+//// [/a/b/commonFile1.js] file written with same contents
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+
+
+FsWatches::
+/a/b/commonFile1.ts:
+  {}
+/a/b/commonFile2.ts: *new*
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+
+Program root files: [
+  "/a/b/commonFile1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -111,18 +142,4 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/commonfile1.ts (computed .d.ts)
 
-FsWatches::
-/a/b/commonfile1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/commonfile2.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js] file written with same contents
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-

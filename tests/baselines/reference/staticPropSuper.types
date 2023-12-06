@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticPropSuper.ts ===
+//// [tests/cases/compiler/staticPropSuper.ts] ////
+
+=== staticPropSuper.ts ===
 class A {
 >A : A
 }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ramdaToolsNoInfinite2.ts ===
+//// [tests/cases/compiler/ramdaToolsNoInfinite2.ts] ////
+
+=== ramdaToolsNoInfinite2.ts ===
 declare module "Any/Kind" {
 >"Any/Kind" : Symbol("Any/Kind", Decl(ramdaToolsNoInfinite2.ts, 0, 0))
 

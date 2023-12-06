@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectFreezeLiteralsDontWiden.ts] ////
+
 //// [objectFreezeLiteralsDontWiden.ts]
 const PUPPETEER_REVISIONS = Object.freeze({
   chromium: '1011831',

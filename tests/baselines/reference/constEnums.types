@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constEnums.ts ===
+//// [tests/cases/compiler/constEnums.ts] ////
+
+=== constEnums.ts ===
 const enum Enum1 {
 >Enum1 : Enum1
 

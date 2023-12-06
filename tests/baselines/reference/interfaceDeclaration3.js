@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/interfaceDeclaration3.ts] ////
+
 //// [interfaceDeclaration3.ts]
 interface I1 { item:number; }
 
@@ -105,7 +107,7 @@ define(["require", "exports"], function (require, exports) {
             }
             return C3;
         }());
-    })(M2 = exports.M2 || (exports.M2 = {}));
+    })(M2 || (exports.M2 = M2 = {}));
     var C1 = /** @class */ (function () {
         function C1() {
         }

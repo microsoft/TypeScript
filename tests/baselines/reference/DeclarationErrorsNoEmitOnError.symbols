@@ -1,4 +1,6 @@
-=== tests/cases/compiler/DeclarationErrorsNoEmitOnError.ts ===
+//// [tests/cases/compiler/DeclarationErrorsNoEmitOnError.ts] ////
+
+=== DeclarationErrorsNoEmitOnError.ts ===
 type T = { x : number }
 >T : Symbol(T, Decl(DeclarationErrorsNoEmitOnError.ts, 0, 0))
 >x : Symbol(x, Decl(DeclarationErrorsNoEmitOnError.ts, 0, 10))

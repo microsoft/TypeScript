@@ -1,4 +1,6 @@
-=== tests/cases/compiler/primitiveTypeAssignment.ts ===
+//// [tests/cases/compiler/primitiveTypeAssignment.ts] ////
+
+=== primitiveTypeAssignment.ts ===
 var x = any;
 >x : Symbol(x, Decl(primitiveTypeAssignment.ts, 0, 3))
 

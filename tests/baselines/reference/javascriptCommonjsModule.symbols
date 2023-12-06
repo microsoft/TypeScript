@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/javascriptCommonjsModule.ts] ////
+
+=== index.js ===
 class Foo {}
 >Foo : Symbol(Foo, Decl(index.js, 0, 0))
 

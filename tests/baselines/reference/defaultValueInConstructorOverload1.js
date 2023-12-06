@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/defaultValueInConstructorOverload1.ts] ////
+
 //// [defaultValueInConstructorOverload1.ts]
 class C {
     constructor(x = '');

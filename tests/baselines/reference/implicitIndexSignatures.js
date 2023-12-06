@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/implicitIndexSignatures.ts] ////
+
 //// [implicitIndexSignatures.ts]
 type StringMap = { [x: string]: string };
 

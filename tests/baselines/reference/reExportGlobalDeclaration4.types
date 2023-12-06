@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.d.ts ===
+//// [tests/cases/compiler/reExportGlobalDeclaration4.ts] ////
+
+=== file1.d.ts ===
 declare class Cls1 {
 >Cls1 : Cls1
 
@@ -13,7 +15,7 @@ declare class Cls2 {
 }
 
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 export {Cls1, Cls1 as CCls1};
 >Cls1 : typeof Cls1
 >Cls1 : typeof Cls1

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/node.d.ts ===
+//// [tests/cases/conformance/salsa/constructorFunctions2.ts] ////
+
+=== node.d.ts ===
 declare function require(id: string): any;
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
 >id : Symbol(id, Decl(node.d.ts, 0, 25))
@@ -7,11 +9,11 @@ declare var module: any, exports: any;
 >module : Symbol(module, Decl(node.d.ts, 1, 11))
 >exports : Symbol(exports, Decl(node.d.ts, 1, 24))
 
-=== tests/cases/conformance/salsa/index.js ===
+=== index.js ===
 const A = require("./other");
 >A : Symbol(A, Decl(index.js, 0, 5))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
->"./other" : Symbol("tests/cases/conformance/salsa/other", Decl(other.js, 0, 0))
+>"./other" : Symbol("other", Decl(other.js, 0, 0))
 
 const a = new A().id;
 >a : Symbol(a, Decl(index.js, 1, 5))
@@ -48,7 +50,7 @@ b.x;
 >b : Symbol(b, Decl(index.js, 5, 5))
 >x : Symbol(B.x, Decl(index.js, 4, 28))
 
-=== tests/cases/conformance/salsa/other.js ===
+=== other.js ===
 function A() { this.id = 1; }
 >A : Symbol(A, Decl(other.js, 0, 0))
 >this.id : Symbol(A.id, Decl(other.js, 0, 14))

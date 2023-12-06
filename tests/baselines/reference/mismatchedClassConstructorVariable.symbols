@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mismatchedClassConstructorVariable.ts ===
+//// [tests/cases/compiler/mismatchedClassConstructorVariable.ts] ////
+
+=== mismatchedClassConstructorVariable.ts ===
 var baz: foo;
 >baz : Symbol(baz, Decl(mismatchedClassConstructorVariable.ts, 0, 3))
 >foo : Symbol(foo, Decl(mismatchedClassConstructorVariable.ts, 1, 13))

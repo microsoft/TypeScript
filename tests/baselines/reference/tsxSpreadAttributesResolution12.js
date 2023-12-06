@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution12.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

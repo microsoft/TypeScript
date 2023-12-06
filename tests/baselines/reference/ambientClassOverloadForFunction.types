@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientClassOverloadForFunction.ts ===
+//// [tests/cases/compiler/ambientClassOverloadForFunction.ts] ////
+
+=== ambientClassOverloadForFunction.ts ===
 declare class foo{};
 >foo : foo
 

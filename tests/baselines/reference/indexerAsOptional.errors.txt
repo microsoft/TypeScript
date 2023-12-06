@@ -1,8 +1,8 @@
-tests/cases/compiler/indexerAsOptional.ts(3,9): error TS1019: An index signature parameter cannot have a question mark.
-tests/cases/compiler/indexerAsOptional.ts(8,9): error TS1019: An index signature parameter cannot have a question mark.
+indexerAsOptional.ts(3,9): error TS1019: An index signature parameter cannot have a question mark.
+indexerAsOptional.ts(8,9): error TS1019: An index signature parameter cannot have a question mark.
 
 
-==== tests/cases/compiler/indexerAsOptional.ts (2 errors) ====
+==== indexerAsOptional.ts (2 errors) ====
     interface indexSig {
         //Index signatures can't be optional
         [idx?: number]: any; //err

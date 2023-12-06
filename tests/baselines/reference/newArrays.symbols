@@ -1,4 +1,6 @@
-=== tests/cases/compiler/newArrays.ts ===
+//// [tests/cases/compiler/newArrays.ts] ////
+
+=== newArrays.ts ===
 module M {
 >M : Symbol(M, Decl(newArrays.ts, 0, 0))
 

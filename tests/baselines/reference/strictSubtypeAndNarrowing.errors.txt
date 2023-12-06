@@ -1,12 +1,9 @@
-tests/cases/compiler/strictSubtypeAndNarrowing.ts(123,27): error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
-  Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
-tests/cases/compiler/strictSubtypeAndNarrowing.ts(124,27): error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
-  Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
-tests/cases/compiler/strictSubtypeAndNarrowing.ts(129,26): error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
-  Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+strictSubtypeAndNarrowing.ts(123,27): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+strictSubtypeAndNarrowing.ts(124,27): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+strictSubtypeAndNarrowing.ts(129,26): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
 
 
-==== tests/cases/compiler/strictSubtypeAndNarrowing.ts (3 errors) ====
+==== strictSubtypeAndNarrowing.ts (3 errors) ====
     // Check that `any` is a strict supertype of `unknown`
     
     declare const x11: { x: unknown };
@@ -131,20 +128,17 @@ tests/cases/compiler/strictSubtypeAndNarrowing.ts(129,26): error TS2322: Type '{
     function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
         obj1 = obj2 = { x: 1, y: 2 };
                               ~
-!!! error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
         obj2 = obj1 = { x: 1, y: 2 };
                               ~
-!!! error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
     }
     
     function fx11(): { x?: number } {
         let obj: { x?: number, y?: number };
         return obj = { x: 1, y: 2 };
                              ~
-!!! error TS2322: Type '{ x: number; y: number; }' is not assignable to type '{ x?: number | undefined; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x?: number | undefined; }'.
     }
     
     // Repros from #52827

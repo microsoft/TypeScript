@@ -1,4 +1,6 @@
-=== tests/cases/compiler/promiseTest.ts ===
+//// [tests/cases/compiler/promiseTest.ts] ////
+
+=== promiseTest.ts ===
 interface Promise<T> {
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 0))
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promiseTest.ts, 0, 18))

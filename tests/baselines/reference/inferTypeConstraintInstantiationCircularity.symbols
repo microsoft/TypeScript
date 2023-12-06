@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts ===
+//// [tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts] ////
+
+=== inferTypeConstraintInstantiationCircularity.ts ===
 type AMappedType<T> = { [KeyType in keyof T]: number };
 >AMappedType : Symbol(AMappedType, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 0))
 >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 17))

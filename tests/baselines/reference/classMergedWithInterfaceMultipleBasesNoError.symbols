@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts ===
+//// [tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts] ////
+
+=== classMergedWithInterfaceMultipleBasesNoError.ts ===
 interface Bar { }
 >Bar : Symbol(Bar, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 0, 0))
 

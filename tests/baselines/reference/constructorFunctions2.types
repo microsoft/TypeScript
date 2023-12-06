@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/node.d.ts ===
+//// [tests/cases/conformance/salsa/constructorFunctions2.ts] ////
+
+=== node.d.ts ===
 declare function require(id: string): any;
 >require : (id: string) => any
 >id : string
@@ -7,7 +9,7 @@ declare var module: any, exports: any;
 >module : any
 >exports : any
 
-=== tests/cases/conformance/salsa/index.js ===
+=== index.js ===
 const A = require("./other");
 >A : typeof A
 >require("./other") : typeof A
@@ -59,7 +61,7 @@ b.x;
 >b : B
 >x : number
 
-=== tests/cases/conformance/salsa/other.js ===
+=== other.js ===
 function A() { this.id = 1; }
 >A : typeof A
 >this.id = 1 : 1

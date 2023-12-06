@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noDefaultLib.ts ===
+//// [tests/cases/compiler/noDefaultLib.ts] ////
+
+=== noDefaultLib.ts ===
 /// <reference no-default-lib="true"/>
 var x;
 >x : Symbol(x, Decl(noDefaultLib.ts, 1, 3))

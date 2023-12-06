@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitOverloadedPrivateInference.ts] ////
+
 //// [declarationEmitOverloadedPrivateInference.ts]
 function noArgs(): string {
     return null as any;

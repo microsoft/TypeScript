@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode15-negative.ts(2,8): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode15-negative.ts(2,10): error TS2304: Cannot find name 'b'.
+parserStrictMode15-negative.ts(2,8): error TS2304: Cannot find name 'a'.
+parserStrictMode15-negative.ts(2,10): error TS2304: Cannot find name 'b'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode15-negative.ts (2 errors) ====
+==== parserStrictMode15-negative.ts (2 errors) ====
     "use strict";
     delete a[b];
            ~

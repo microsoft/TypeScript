@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsExportMemberMergedWithModuleAugmentation.ts] ////
+
 === /test.js ===
 class Abcde {
 >Abcde : Symbol(Abcde, Decl(test.js, 0, 0), Decl(index.ts, 2, 25))

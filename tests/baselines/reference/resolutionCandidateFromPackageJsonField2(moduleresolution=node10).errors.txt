@@ -1,7 +1,7 @@
-tests/cases/compiler/test.ts(1,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+test.ts(1,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 
 
-==== tests/cases/compiler/tsconfig.json (0 errors) ====
+==== tsconfig.json (0 errors) ====
     {
         "compilerOptions": {
             "paths": {
@@ -11,13 +11,13 @@ tests/cases/compiler/test.ts(1,19): error TS5097: An import path can only end wi
         }
     }
     
-==== tests/cases/compiler/dist/bar.ts (0 errors) ====
+==== dist/bar.ts (0 errors) ====
     export const a = 1234;
     
-==== tests/cases/compiler/types/main.d.ts (0 errors) ====
+==== types/main.d.ts (0 errors) ====
     export const b: string;
     
-==== tests/cases/compiler/test.ts (1 errors) ====
+==== test.ts (1 errors) ====
     import { a } from "foo/bar.ts";
                       ~~~~~~~~~~~~
 !!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.

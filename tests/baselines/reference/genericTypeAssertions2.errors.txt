@@ -1,14 +1,14 @@
-tests/cases/compiler/genericTypeAssertions2.ts(10,5): error TS2322: Type 'B<string>' is not assignable to type 'A<number>'.
+genericTypeAssertions2.ts(10,5): error TS2322: Type 'B<string>' is not assignable to type 'A<number>'.
   Types of property 'foo' are incompatible.
     Type '(x: string) => void' is not assignable to type '(x: number) => void'.
       Types of parameters 'x' and 'x' are incompatible.
         Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/genericTypeAssertions2.ts(11,5): error TS2741: Property 'bar' is missing in type 'A<number>' but required in type 'B<number>'.
-tests/cases/compiler/genericTypeAssertions2.ts(13,21): error TS2352: Conversion of type 'undefined[]' to type 'A<number>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+genericTypeAssertions2.ts(11,5): error TS2741: Property 'bar' is missing in type 'A<number>' but required in type 'B<number>'.
+genericTypeAssertions2.ts(13,21): error TS2352: Conversion of type 'undefined[]' to type 'A<number>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'foo' is missing in type 'undefined[]' but required in type 'A<number>'.
 
 
-==== tests/cases/compiler/genericTypeAssertions2.ts (3 errors) ====
+==== genericTypeAssertions2.ts (3 errors) ====
     class A<T> { foo(x: T) { } }
     class B<T> extends A<T> {
         bar(): T {
@@ -28,10 +28,10 @@ tests/cases/compiler/genericTypeAssertions2.ts(13,21): error TS2352: Conversion 
     var r3: B<number> = <A<number>>new B(); // error
         ~~
 !!! error TS2741: Property 'bar' is missing in type 'A<number>' but required in type 'B<number>'.
-!!! related TS2728 tests/cases/compiler/genericTypeAssertions2.ts:3:5: 'bar' is declared here.
+!!! related TS2728 genericTypeAssertions2.ts:3:5: 'bar' is declared here.
     var r4: A<number> = <A<number>>new A();
     var r5: A<number> = <A<number>>[]; // error
                         ~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type 'undefined[]' to type 'A<number>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'foo' is missing in type 'undefined[]' but required in type 'A<number>'.
-!!! related TS2728 tests/cases/compiler/genericTypeAssertions2.ts:1:14: 'foo' is declared here.
+!!! related TS2728 genericTypeAssertions2.ts:1:14: 'foo' is declared here.

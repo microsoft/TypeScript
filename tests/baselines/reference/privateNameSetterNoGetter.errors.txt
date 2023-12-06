@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/privateNames/privateNameSetterNoGetter.ts(4,9): error TS2806: Private accessor was defined without a getter.
+privateNameSetterNoGetter.ts(4,9): error TS2806: Private accessor was defined without a getter.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameSetterNoGetter.ts (1 errors) ====
+==== privateNameSetterNoGetter.ts (1 errors) ====
     const C = class {
         set #x(x) {}
         m() {

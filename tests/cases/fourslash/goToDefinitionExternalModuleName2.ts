@@ -8,4 +8,4 @@
 /////*2*/class Foo {}
 ////export var x = 0;
 
-verify.goToDefinition("1", "2");
+verify.baselineGoToDefinition("1");

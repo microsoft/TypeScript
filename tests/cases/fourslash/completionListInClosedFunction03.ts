@@ -9,5 +9,5 @@
 verify.completions({
     marker: "1",
     // Note: `c = c` would be a compile error
-    includes: ["foo", "x", "y", "z", "bar", "a", "b", "c"],
+    includes: ["foo", "x", "y", "z", "bar", "a", "b"],
 });

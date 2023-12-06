@@ -1,15 +1,15 @@
-tests/cases/conformance/jsdoc/test.js(3,17): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/test.js(5,14): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/test.js(7,24): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/test.js(10,17): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/test.js(12,14): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/test.js(14,24): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/test.js(28,12): error TS8030: The type of a function declaration must match the function's signature.
-tests/cases/conformance/jsdoc/test.js(34,5): error TS2322: Type '1 | 2' is not assignable to type '2 | 3'.
+test.js(3,17): error TS2322: Type 'number' is not assignable to type 'string'.
+test.js(5,14): error TS2322: Type 'number' is not assignable to type 'string'.
+test.js(7,24): error TS2322: Type 'number' is not assignable to type 'string'.
+test.js(10,17): error TS2322: Type 'number' is not assignable to type 'string'.
+test.js(12,14): error TS2322: Type 'number' is not assignable to type 'string'.
+test.js(14,24): error TS2322: Type 'number' is not assignable to type 'string'.
+test.js(28,12): error TS8030: The type of a function declaration must match the function's signature.
+test.js(34,5): error TS2322: Type '1 | 2' is not assignable to type '2 | 3'.
   Type '1' is not assignable to type '2 | 3'.
 
 
-==== tests/cases/conformance/jsdoc/test.js (8 errors) ====
+==== test.js (8 errors) ====
     // all 6 should error on return statement/expression
     /** @type {(x: number) => string} */
     function h(x) { return x }

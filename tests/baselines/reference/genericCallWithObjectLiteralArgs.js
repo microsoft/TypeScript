@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts] ////
+
 //// [genericCallWithObjectLiteralArgs.ts]
 function foo<T>(x: { bar: T; baz: T }) {
     return x;

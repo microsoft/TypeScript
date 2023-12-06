@@ -1,0 +1,98 @@
+// === goToImplementation ===
+// === /tests/cases/fourslash/goToImplementationInterface_01.ts ===
+// interface Fo/*GOTO IMPL*/o { hello(): void }
+// 
+// <|class [|{| defId: 0 |}SuperBar|] implements Foo {
+//     hello () {}
+// }|>
+// 
+// <|abstract class [|{| defId: 1 |}AbstractBar|] implements Foo {
+//     abstract hello (): void;
+// }|>
+// 
+// <|class [|{| defId: 2 |}Bar|] extends SuperBar {
+// }|>
+// 
+// <|class [|{| defId: 3 |}NotAbstractBar|] extends AbstractBar {
+//     hello () {}
+// }|>
+// 
+// var x = new SuperBar();
+// var y: SuperBar = new SuperBar();
+// var z: AbstractBar = new NotAbstractBar();
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "SuperBar",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   },
+   {
+    "defId": 1,
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "AbstractBar",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   },
+   {
+    "defId": 2,
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Bar",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   },
+   {
+    "defId": 3,
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "NotAbstractBar",
+      "kind": "className"
+     }
+    ],
+    "kind": "class"
+   }
+  ]

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeOfOperator1.ts ===
+//// [tests/cases/compiler/typeOfOperator1.ts] ////
+
+=== typeOfOperator1.ts ===
 var x = 1;
 >x : Symbol(x, Decl(typeOfOperator1.ts, 0, 3))
 

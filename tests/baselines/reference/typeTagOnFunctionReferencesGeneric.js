@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/salsa/typeTagOnFunctionReferencesGeneric.ts] ////
+
 //// [typeTagOnFunctionReferencesGeneric.js]
 /**
  * @typedef {<T>(m : T) => T} IFn

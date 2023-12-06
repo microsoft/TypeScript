@@ -1,0 +1,158 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIfElse.ts ===
+// /*HIGHLIGHTS*/[|{| kind: "none" |}if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|{| kind: "reference" |}else            if|] (null) {
+// }
+// [|{| kind: "none" |}else|] /* whar garbl */ [|{| kind: "none" |}if|] (undefined) {
+// }
+// [|{| kind: "none" |}else|]
+// [|{| kind: "none" |}if|] (false) {
+// }
+// [|{| kind: "none" |}else|] { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIfElse.ts ===
+// [|{| kind: "none" |}if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// /*HIGHLIGHTS*/[|{| kind: "reference" |}else            if|] (null) {
+// }
+// [|{| kind: "none" |}else|] /* whar garbl */ [|{| kind: "none" |}if|] (undefined) {
+// }
+// [|{| kind: "none" |}else|]
+// [|{| kind: "none" |}if|] (false) {
+// }
+// [|{| kind: "none" |}else|] { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIfElse.ts ===
+// [|{| kind: "none" |}if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|{| kind: "reference" |}else            if|] (null) {
+// }
+// /*HIGHLIGHTS*/[|{| kind: "none" |}else|] /* whar garbl */ [|{| kind: "none" |}if|] (undefined) {
+// }
+// [|{| kind: "none" |}else|]
+// [|{| kind: "none" |}if|] (false) {
+// }
+// [|{| kind: "none" |}else|] { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIfElse.ts ===
+// [|{| kind: "none" |}if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|{| kind: "reference" |}else            if|] (null) {
+// }
+// [|{| kind: "none" |}else|] /* whar garbl */ /*HIGHLIGHTS*/[|{| kind: "none" |}if|] (undefined) {
+// }
+// [|{| kind: "none" |}else|]
+// [|{| kind: "none" |}if|] (false) {
+// }
+// [|{| kind: "none" |}else|] { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIfElse.ts ===
+// [|{| kind: "none" |}if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|{| kind: "reference" |}else            if|] (null) {
+// }
+// [|{| kind: "none" |}else|] /* whar garbl */ [|{| kind: "none" |}if|] (undefined) {
+// }
+// /*HIGHLIGHTS*/[|{| kind: "none" |}else|]
+// [|{| kind: "none" |}if|] (false) {
+// }
+// [|{| kind: "none" |}else|] { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIfElse.ts ===
+// [|{| kind: "none" |}if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|{| kind: "reference" |}else            if|] (null) {
+// }
+// [|{| kind: "none" |}else|] /* whar garbl */ [|{| kind: "none" |}if|] (undefined) {
+// }
+// [|{| kind: "none" |}else|]
+// /*HIGHLIGHTS*/[|{| kind: "none" |}if|] (false) {
+// }
+// [|{| kind: "none" |}else|] { }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesIfElse.ts ===
+// [|{| kind: "none" |}if|] (true) {
+//     if (false) {
+//     }
+//     else {
+// --- (line: 5) skipped ---
+
+// --- (line: 10) skipped ---
+//                 var x = undefined;
+//     }
+// }
+// [|{| kind: "reference" |}else            if|] (null) {
+// }
+// [|{| kind: "none" |}else|] /* whar garbl */ [|{| kind: "none" |}if|] (undefined) {
+// }
+// [|{| kind: "none" |}else|]
+// [|{| kind: "none" |}if|] (false) {
+// }
+// /*HIGHLIGHTS*/[|{| kind: "none" |}else|] { }

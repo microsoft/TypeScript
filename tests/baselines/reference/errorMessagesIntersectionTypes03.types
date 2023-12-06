@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorMessagesIntersectionTypes03.ts ===
+//// [tests/cases/compiler/errorMessagesIntersectionTypes03.ts] ////
+
+=== errorMessagesIntersectionTypes03.ts ===
 interface A {
     a;
 >a : any

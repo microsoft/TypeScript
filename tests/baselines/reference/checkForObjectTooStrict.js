@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/checkForObjectTooStrict.ts] ////
+
 //// [checkForObjectTooStrict.ts]
 module Foo {
 

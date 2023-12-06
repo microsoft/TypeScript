@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/externalModules/exportNonInitializedVariablesAMD.ts] ////
+
 //// [exportNonInitializedVariablesAMD.ts]
 var;
 let;

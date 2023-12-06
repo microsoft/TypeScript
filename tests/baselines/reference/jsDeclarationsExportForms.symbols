@@ -1,42 +1,44 @@
-=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportForms.ts] ////
+
+=== cls.js ===
 export class Foo {}
 >Foo : Symbol(Foo, Decl(cls.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/declarations/func.js ===
+=== func.js ===
 export function func() {}
 >func : Symbol(func, Decl(func.js, 0, 0))
 
-=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+=== bar.js ===
 
 export * from "./cls";
 
-=== tests/cases/conformance/jsdoc/declarations/bar2.js ===
+=== bar2.js ===
 
 export * from "./func";
 export * from "./cls";
 
-=== tests/cases/conformance/jsdoc/declarations/baz.js ===
+=== baz.js ===
 import {Foo} from "./cls";
 >Foo : Symbol(Foo, Decl(baz.js, 0, 8))
 
 export {Foo};
 >Foo : Symbol(Foo, Decl(baz.js, 1, 8))
 
-=== tests/cases/conformance/jsdoc/declarations/bat.js ===
+=== bat.js ===
 import * as ns from "./cls";
 >ns : Symbol(ns, Decl(bat.js, 0, 6))
 
 export default ns;
 >ns : Symbol(ns, Decl(bat.js, 0, 6))
 
-=== tests/cases/conformance/jsdoc/declarations/ban.js ===
+=== ban.js ===
 import * as ns from "./cls";
 >ns : Symbol(ns, Decl(ban.js, 0, 6))
 
 export {ns};
 >ns : Symbol(ns, Decl(ban.js, 1, 8))
 
-=== tests/cases/conformance/jsdoc/declarations/bol.js ===
+=== bol.js ===
 import * as ns from "./cls";
 >ns : Symbol(ns, Decl(bol.js, 0, 6))
 
@@ -44,7 +46,7 @@ export { ns as classContainer };
 >ns : Symbol(ns, Decl(bol.js, 0, 6))
 >classContainer : Symbol(classContainer, Decl(bol.js, 1, 8))
 
-=== tests/cases/conformance/jsdoc/declarations/cjs.js ===
+=== cjs.js ===
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs.js, 0, 5))
 >require : Symbol(require)
@@ -56,7 +58,7 @@ module.exports = { ns };
 >exports : Symbol(module.exports, Decl(cjs.js, 0, 0))
 >ns : Symbol(ns, Decl(cjs.js, 1, 18))
 
-=== tests/cases/conformance/jsdoc/declarations/cjs2.js ===
+=== cjs2.js ===
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs2.js, 0, 5))
 >require : Symbol(require)
@@ -68,7 +70,7 @@ module.exports = ns;
 >exports : Symbol(export=, Decl(cjs2.js, 0, 28))
 >ns : Symbol(ns, Decl(cjs2.js, 0, 5))
 
-=== tests/cases/conformance/jsdoc/declarations/cjs3.js ===
+=== cjs3.js ===
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs3.js, 0, 5))
 >require : Symbol(require)
@@ -82,7 +84,7 @@ module.exports.ns = ns;
 >ns : Symbol(ns, Decl(cjs3.js, 0, 28))
 >ns : Symbol(ns, Decl(cjs3.js, 0, 5))
 
-=== tests/cases/conformance/jsdoc/declarations/cjs4.js ===
+=== cjs4.js ===
 const ns = require("./cls");
 >ns : Symbol(ns, Decl(cjs4.js, 0, 5))
 >require : Symbol(require)
@@ -96,7 +98,7 @@ module.exports.names = ns;
 >names : Symbol(names, Decl(cjs4.js, 0, 28))
 >ns : Symbol(ns, Decl(cjs4.js, 0, 5))
 
-=== tests/cases/conformance/jsdoc/declarations/includeAll.js ===
+=== includeAll.js ===
 
 import "./cjs4";
 import "./cjs3";

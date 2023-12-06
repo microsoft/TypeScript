@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/addMoreOverloadsToBaseSignature.ts] ////
+
 //// [addMoreOverloadsToBaseSignature.ts]
 interface Foo {
     f(): string;

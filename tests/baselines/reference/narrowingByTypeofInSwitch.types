@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingByTypeofInSwitch.ts ===
+//// [tests/cases/compiler/narrowingByTypeofInSwitch.ts] ////
+
+=== narrowingByTypeofInSwitch.ts ===
 function assertNever(x: never) {
 >assertNever : (x: never) => never
 >x : never
@@ -551,7 +553,7 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
         case 'function': return [xy, 1];
 >'function' : "function"
->[xy, 1] : [X & Function, 1]
+>[xy, 1] : [X & Function, number]
 >xy : X & Function
 >1 : 1
 
@@ -1091,7 +1093,7 @@ function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>
 
         case `function`: return [xy, 1];
 >`function` : "function"
->[xy, 1] : [X & Function, 1]
+>[xy, 1] : [X & Function, number]
 >xy : X & Function
 >1 : 1
 

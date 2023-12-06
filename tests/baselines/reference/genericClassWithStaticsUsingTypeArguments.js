@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts] ////
+
 //// [genericClassWithStaticsUsingTypeArguments.ts]
 // Should be error to use 'T' in all declarations within Foo.
 class Foo<T> {

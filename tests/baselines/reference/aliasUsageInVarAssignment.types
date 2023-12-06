@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasUsageInVarAssignment_main.ts ===
+//// [tests/cases/compiler/aliasUsageInVarAssignment.ts] ////
+
+=== aliasUsageInVarAssignment_main.ts ===
 import Backbone = require("./aliasUsageInVarAssignment_backbone");
 >Backbone : typeof Backbone
 
@@ -20,7 +22,7 @@ var m: typeof moduleA = i;
 >moduleA : typeof moduleA
 >i : IHasVisualizationModel
 
-=== tests/cases/compiler/aliasUsageInVarAssignment_backbone.ts ===
+=== aliasUsageInVarAssignment_backbone.ts ===
 export class Model {
 >Model : Model
 
@@ -28,7 +30,7 @@ export class Model {
 >someData : string
 }
 
-=== tests/cases/compiler/aliasUsageInVarAssignment_moduleA.ts ===
+=== aliasUsageInVarAssignment_moduleA.ts ===
 import Backbone = require("./aliasUsageInVarAssignment_backbone");
 >Backbone : typeof Backbone
 

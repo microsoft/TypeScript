@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/declarationMerging/mergeThreeInterfaces2.ts] ////
+
 //// [mergeThreeInterfaces2.ts]
 // two interfaces with the same root module should merge
 

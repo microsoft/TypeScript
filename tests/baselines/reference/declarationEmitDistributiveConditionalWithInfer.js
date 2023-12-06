@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitDistributiveConditionalWithInfer.ts] ////
+
 //// [declarationEmitDistributiveConditionalWithInfer.ts]
 // This function's type is changed on declaration
 export const fun = (
@@ -15,4 +17,4 @@ exports.fun = fun;
 
 
 //// [declarationEmitDistributiveConditionalWithInfer.d.ts]
-export declare const fun: (subFun: <Collection, Field extends keyof Collection>() => (Collection[Field] extends infer T ? T extends Collection[Field] ? T extends readonly (infer InnerArr)[] ? InnerArr : T : never : never)[]) => void;
+export declare const fun: (subFun: <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]) => void;

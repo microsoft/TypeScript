@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reactImportUnusedInNewJSXEmit.tsx] ////
+
 //// [index.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
@@ -16,7 +18,7 @@ export function Foo() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-var _jsxFileName = "tests/cases/compiler/index.tsx";
+var _jsxFileName = "index.tsx";
 function Bar() {
     return (0, jsx_dev_runtime_1.jsxDEV)("div", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 9 }, this);
 }

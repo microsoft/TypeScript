@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/optionalChaining/optionalChainingInTypeAssertions.ts ===
+//// [tests/cases/conformance/expressions/optionalChaining/optionalChainingInTypeAssertions.ts] ////
+
+=== optionalChainingInTypeAssertions.ts ===
 class Foo {
 >Foo : Foo
 

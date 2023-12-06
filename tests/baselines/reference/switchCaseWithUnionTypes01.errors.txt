@@ -1,7 +1,7 @@
-tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts(22,10): error TS2678: Type 'boolean' is not comparable to type 'string | number'.
+switchCaseWithUnionTypes01.ts(22,10): error TS2678: Type 'boolean' is not comparable to type 'string | number'.
 
 
-==== tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithUnionTypes01.ts (1 errors) ====
+==== switchCaseWithUnionTypes01.ts (1 errors) ====
     var strOrNum: string | number;
     var numOrBool: number | boolean;
     var str: string;

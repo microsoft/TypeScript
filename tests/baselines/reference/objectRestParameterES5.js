@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/rest/objectRestParameterES5.ts] ////
+
 //// [objectRestParameterES5.ts]
 function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 }

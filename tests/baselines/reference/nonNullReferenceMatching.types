@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonNullReferenceMatching.ts ===
+//// [tests/cases/compiler/nonNullReferenceMatching.ts] ////
+
+=== nonNullReferenceMatching.ts ===
 type ElementRef = (element: HTMLElement | null) => void;
 >ElementRef : (element: HTMLElement | null) => void
 >element : HTMLElement | null

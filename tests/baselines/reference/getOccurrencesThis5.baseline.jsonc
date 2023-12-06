@@ -1,0 +1,556 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = /*HIGHLIGHTS*/[|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if (/*HIGHLIGHTS*/[|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 /*HIGHLIGHTS*/[|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if (/*HIGHLIGHTS*/[|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 /*HIGHLIGHTS*/[|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesThis5.ts ===
+// --- (line: 85) skipped ---
+//         }
+//     }
+// 
+//     public static staticB = [|{| kind: "reference" |}this|].staticMethod1;
+// 
+//     public static staticMethod1() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 [|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 104) skipped ---
+
+// --- (line: 108) skipped ---
+//     }
+// 
+//     private static staticMethod2() {
+//         [|{| kind: "reference" |}this|];
+//         [|{| kind: "reference" |}this|];
+//         () => [|{| kind: "reference" |}this|];
+//         () => {
+//             if ([|{| kind: "reference" |}this|]) {
+//                 [|{| kind: "reference" |}this|];
+//             }
+//             else {
+//                 /*HIGHLIGHTS*/[|{| kind: "reference" |}this|].this;
+//             }
+//         }
+//         function inside() {
+// --- (line: 124) skipped ---

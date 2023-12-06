@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowUnknownByTypeofObject.ts ===
+//// [tests/cases/compiler/narrowUnknownByTypeofObject.ts] ////
+
+=== narrowUnknownByTypeofObject.ts ===
 function foo(x: unknown) {
 >foo : Symbol(foo, Decl(narrowUnknownByTypeofObject.ts, 0, 0))
 >x : Symbol(x, Decl(narrowUnknownByTypeofObject.ts, 0, 13))

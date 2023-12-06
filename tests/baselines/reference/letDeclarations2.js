@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/letDeclarations2.ts] ////
+
 //// [letDeclarations2.ts]
 module M {
     let l1 = "s";
@@ -13,6 +15,6 @@ var M;
 
 
 //// [letDeclarations2.d.ts]
-declare module M {
+declare namespace M {
     let l2: number;
 }

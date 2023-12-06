@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts] ////
+
 //// [staticPropertyNotInClassType.ts]
 module NonGeneric {
     class C {

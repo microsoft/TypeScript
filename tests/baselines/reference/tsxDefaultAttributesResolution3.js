@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxDefaultAttributesResolution3.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

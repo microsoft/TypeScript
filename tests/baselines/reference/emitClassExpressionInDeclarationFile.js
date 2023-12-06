@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emitClassExpressionInDeclarationFile.ts] ////
+
 //// [emitClassExpressionInDeclarationFile.ts]
 export var simpleExample = class {
     static getTags() { }

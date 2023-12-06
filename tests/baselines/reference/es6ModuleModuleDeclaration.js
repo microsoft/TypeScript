@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleModuleDeclaration.ts] ////
+
 //// [es6ModuleModuleDeclaration.ts]
 export module m1 {
     export var a = 10;

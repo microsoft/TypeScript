@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts] ////
+
 //// [this_inside-object-literal-getters-and-setters.ts]
 module ObjectLiteral {
     var ThisInObjectLiteral = {

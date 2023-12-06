@@ -46,7 +46,6 @@ import {
     DotDotDotToken,
     ElementAccessExpression,
     EmptyStatement,
-    EndOfDeclarationMarker,
     EnumDeclaration,
     EnumMember,
     EqualsGreaterThanToken,
@@ -68,6 +67,8 @@ import {
     HeritageClause,
     Identifier,
     IfStatement,
+    ImportAttribute,
+    ImportAttributes,
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
@@ -128,6 +129,7 @@ import {
     JsxElement,
     JsxExpression,
     JsxFragment,
+    JsxNamespacedName,
     JsxOpeningElement,
     JsxOpeningFragment,
     JsxSelfClosingElement,
@@ -136,7 +138,6 @@ import {
     LabeledStatement,
     LiteralTypeNode,
     MappedTypeNode,
-    MergeDeclarationMarker,
     MetaProperty,
     MethodDeclaration,
     MethodSignature,
@@ -848,12 +849,22 @@ export function isImportTypeAssertionContainer(node: Node): node is ImportTypeAs
     return node.kind === SyntaxKind.ImportTypeAssertionContainer;
 }
 
+/** @deprecated */
 export function isAssertClause(node: Node): node is AssertClause {
     return node.kind === SyntaxKind.AssertClause;
 }
 
+/** @deprecated */
 export function isAssertEntry(node: Node): node is AssertEntry {
     return node.kind === SyntaxKind.AssertEntry;
+}
+
+export function isImportAttributes(node: Node): node is ImportAttributes {
+    return node.kind === SyntaxKind.ImportAttributes;
+}
+
+export function isImportAttribute(node: Node): node is ImportAttribute {
+    return node.kind === SyntaxKind.ImportAttribute;
 }
 
 export function isNamespaceImport(node: Node): node is NamespaceImport {
@@ -899,16 +910,6 @@ export function isNotEmittedStatement(node: Node): node is NotEmittedStatement {
 /** @internal */
 export function isSyntheticReference(node: Node): node is SyntheticReferenceExpression {
     return node.kind === SyntaxKind.SyntheticReferenceExpression;
-}
-
-/** @internal */
-export function isMergeDeclarationMarker(node: Node): node is MergeDeclarationMarker {
-    return node.kind === SyntaxKind.MergeDeclarationMarker;
-}
-
-/** @internal */
-export function isEndOfDeclarationMarker(node: Node): node is EndOfDeclarationMarker {
-    return node.kind === SyntaxKind.EndOfDeclarationMarker;
 }
 
 // Module References
@@ -961,6 +962,10 @@ export function isJsxSpreadAttribute(node: Node): node is JsxSpreadAttribute {
 
 export function isJsxExpression(node: Node): node is JsxExpression {
     return node.kind === SyntaxKind.JsxExpression;
+}
+
+export function isJsxNamespacedName(node: Node): node is JsxNamespacedName {
+    return node.kind === SyntaxKind.JsxNamespacedName;
 }
 
 // Clauses

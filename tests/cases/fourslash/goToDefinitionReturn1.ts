@@ -4,4 +4,4 @@
 ////    [|/*start*/return|] 10;
 ////}
 
-verify.goToDefinition("start", "end");
+verify.baselineGoToDefinition("start");

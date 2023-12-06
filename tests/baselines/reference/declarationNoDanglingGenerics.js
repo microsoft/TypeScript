@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationNoDanglingGenerics.ts] ////
+
 //// [declarationNoDanglingGenerics.ts]
 const kindCache: { [kind: string]: boolean } = {};
 

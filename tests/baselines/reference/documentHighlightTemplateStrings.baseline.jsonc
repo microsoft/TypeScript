@@ -1,0 +1,13 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightTemplateStrings.ts ===
+// type Foo = "[|{| kind: "reference", isInString: true |}a|]" | "b";
+// 
+// class C {
+//    p: Foo = `[|{| kind: "reference", isInString: true |}a|]`;
+//    m() {
+//        switch (this.p) {
+//            case `/*HIGHLIGHTS*/[|{| kind: "reference", isInString: true |}a|]`:
+//                return 1;
+//            case "b":
+//                return 2;
+// --- (line: 11) skipped ---

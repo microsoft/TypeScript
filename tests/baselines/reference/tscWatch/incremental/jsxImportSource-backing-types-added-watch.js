@@ -1,3 +1,4 @@
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -18,7 +19,14 @@ declare const console: { log(msg: any): void; };
 export const App = () => <div propA={true}></div>;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","jsx":"react-jsx","incremental":true,"jsxImportSource":"react"}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "jsx": "react-jsx",
+    "incremental": true,
+    "jsxImportSource": "react"
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -34,41 +42,6 @@ Output::
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.tsx
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/index.tsx (used version)
-
-PolledWatches::
-/users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-/users/username/projects/project/index.tsx: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js]
 "use strict";
@@ -139,6 +112,54 @@ exports.App = App;
 }
 
 
+PolledWatches::
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/index.tsx: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "module": 1,
+  "jsx": 4,
+  "incremental": true,
+  "jsxImportSource": "react",
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.tsx
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change::
 
 Input::
@@ -157,21 +178,28 @@ export const Fragment: unique symbol;
 
 
 //// [/users/username/projects/project/node_modules/react/package.json]
-{"name":"react","version":"0.0.1"}
+{
+  "name": "react",
+  "version": "0.0.1"
+}
 
 
 PolledWatches *deleted*::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules:
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/users/username/projects/project/tsconfig.json:
+/a/lib/lib.d.ts:
   {}
 /users/username/projects/project/index.tsx:
   {}
-/a/lib/lib.d.ts:
+/users/username/projects/project/tsconfig.json:
   {}
 
 FsWatchesRecursive *deleted*::
@@ -185,46 +213,6 @@ Output::
 [[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/users/username/projects/project/index.tsx"]
-Program options: {"module":1,"jsx":4,"incremental":true,"jsxImportSource":"react","watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
-/users/username/projects/project/index.tsx
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
-/users/username/projects/project/index.tsx
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
-/users/username/projects/project/index.tsx (computed .d.ts)
-
-PolledWatches::
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-/users/username/projects/project/index.tsx: *new*
-  {}
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/node_modules/react/package.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project/node_modules: *new*
-  {}
-/users/username/projects/project: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -297,3 +285,54 @@ exitCode:: ExitStatus.undefined
   "size": 1292
 }
 
+
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/index.tsx: *new*
+  {}
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/react/package.json: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+/users/username/projects/project/node_modules: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/index.tsx"
+]
+Program options: {
+  "module": 1,
+  "jsx": 4,
+  "incremental": true,
+  "jsxImportSource": "react",
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
+/users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
+/users/username/projects/project/index.tsx (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

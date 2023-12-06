@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/capturedLetConstInLoop8_ES6.ts] ////
+
 //// [capturedLetConstInLoop8_ES6.ts]
 function foo() {
     l0:

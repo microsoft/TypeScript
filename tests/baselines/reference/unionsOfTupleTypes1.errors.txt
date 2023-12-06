@@ -1,14 +1,14 @@
-tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts(8,15): error TS2493: Tuple type 'T1' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts(13,15): error TS2339: Property '2' does not exist on type 'T2'.
-tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts(27,20): error TS2493: Tuple type 'T1' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts(28,20): error TS2339: Property '2' does not exist on type 'T2'.
-tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts(31,16): error TS2493: Tuple type 'T1' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts(32,16): error TS2339: Property '2' does not exist on type 'T2'.
-tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts(37,18): error TS2493: Tuple type 'T1' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts(41,18): error TS2339: Property '2' does not exist on type 'T2'.
+unionsOfTupleTypes1.ts(8,15): error TS2493: Tuple type 'T1' of length '2' has no element at index '2'.
+unionsOfTupleTypes1.ts(13,15): error TS2339: Property '2' does not exist on type 'T2'.
+unionsOfTupleTypes1.ts(27,20): error TS2493: Tuple type 'T1' of length '2' has no element at index '2'.
+unionsOfTupleTypes1.ts(28,20): error TS2339: Property '2' does not exist on type 'T2'.
+unionsOfTupleTypes1.ts(31,16): error TS2493: Tuple type 'T1' of length '2' has no element at index '2'.
+unionsOfTupleTypes1.ts(32,16): error TS2339: Property '2' does not exist on type 'T2'.
+unionsOfTupleTypes1.ts(37,18): error TS2493: Tuple type 'T1' of length '2' has no element at index '2'.
+unionsOfTupleTypes1.ts(41,18): error TS2339: Property '2' does not exist on type 'T2'.
 
 
-==== tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts (8 errors) ====
+==== unionsOfTupleTypes1.ts (8 errors) ====
     type T1 = [string, number];
     type T2 = [boolean] | [string, number];
     type T3 = [string, ...number[]];

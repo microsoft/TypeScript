@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitAnyWithOverloads.ts ===
+//// [tests/cases/compiler/noImplicitAnyWithOverloads.ts] ////
+
+=== noImplicitAnyWithOverloads.ts ===
 interface A {
 >A : Symbol(A, Decl(noImplicitAnyWithOverloads.ts, 0, 0))
 

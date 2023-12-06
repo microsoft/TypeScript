@@ -1,0 +1,28 @@
+// === Linked Editing ===
+=== /customElements.tsx ===
+const jsx = <[|/*0*/fbt:enum|] knownProp="accepted"
+    unknownProp="rejected">
+</[|/*0*/fbt:enum|]>;
+
+const customElement = <[|/*1*/custom-element|]></[|/*1*/custom-element|]>;
+
+const standardElement = 
+   <[|/*2*/Link|] href="/hello" passHref>
+       <[|/*3*/Button|] component="a">
+           Next
+       </[|/*3*/Button|]>
+   </[|/*2*/Link|]>;
+
+=== 0 ===
+{"ranges":[{"start":13,"length":8},{"start":73,"length":8}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+=== 1 ===
+{"ranges":[{"start":108,"length":14},{"start":125,"length":14}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+=== 2 ===
+{"ranges":[{"start":172,"length":4},{"start":269,"length":4}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+=== 3 ===
+{"ranges":[{"start":209,"length":6},{"start":256,"length":6}],"wordPattern":"[a-zA-Z0-9:\\-\\._$]*"}
+
+

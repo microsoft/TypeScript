@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/bindingPatternOmittedExpressionNesting.ts] ////
+
 //// [bindingPatternOmittedExpressionNesting.ts]
 export let [,,[,[],,[],]] = undefined as any;
 

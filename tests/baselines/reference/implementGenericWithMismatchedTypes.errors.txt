@@ -1,14 +1,14 @@
-tests/cases/compiler/implementGenericWithMismatchedTypes.ts(8,5): error TS2416: Property 'foo' in type 'C<T>' is not assignable to the same property in base type 'IFoo<T>'.
+implementGenericWithMismatchedTypes.ts(8,5): error TS2416: Property 'foo' in type 'C<T>' is not assignable to the same property in base type 'IFoo<T>'.
   Type '(x: string) => number' is not assignable to type '(x: T) => T'.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'T' is not assignable to type 'string'.
-tests/cases/compiler/implementGenericWithMismatchedTypes.ts(17,5): error TS2416: Property 'foo' in type 'C2<T>' is not assignable to the same property in base type 'IFoo2<T>'.
+implementGenericWithMismatchedTypes.ts(17,5): error TS2416: Property 'foo' in type 'C2<T>' is not assignable to the same property in base type 'IFoo2<T>'.
   Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T'.
     Type 'number' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 
 
-==== tests/cases/compiler/implementGenericWithMismatchedTypes.ts (2 errors) ====
+==== implementGenericWithMismatchedTypes.ts (2 errors) ====
     // no errors because in the derived types the best common type for T's value is Object
     // and that matches the original signature for assignability since we treat its T's as Object
     
@@ -22,7 +22,7 @@ tests/cases/compiler/implementGenericWithMismatchedTypes.ts(17,5): error TS2416:
 !!! error TS2416:   Type '(x: string) => number' is not assignable to type '(x: T) => T'.
 !!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2416:       Type 'T' is not assignable to type 'string'.
-!!! related TS2208 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:7:9: This type parameter might need an `extends string` constraint.
+!!! related TS2208 implementGenericWithMismatchedTypes.ts:7:9: This type parameter might need an `extends string` constraint.
             return null;
         }
     }

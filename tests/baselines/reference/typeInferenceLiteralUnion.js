@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeInferenceLiteralUnion.ts] ////
+
 //// [typeInferenceLiteralUnion.ts]
 // Repro from #10901
 /**

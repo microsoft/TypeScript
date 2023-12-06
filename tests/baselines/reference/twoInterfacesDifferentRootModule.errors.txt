@@ -1,8 +1,8 @@
-tests/cases/conformance/interfaces/declarationMerging/twoInterfacesDifferentRootModule.ts(19,16): error TS2339: Property 'foo' does not exist on type 'A'.
-tests/cases/conformance/interfaces/declarationMerging/twoInterfacesDifferentRootModule.ts(27,16): error TS2339: Property 'foo' does not exist on type 'B<string>'.
+twoInterfacesDifferentRootModule.ts(19,16): error TS2339: Property 'foo' does not exist on type 'A'.
+twoInterfacesDifferentRootModule.ts(27,16): error TS2339: Property 'foo' does not exist on type 'B<string>'.
 
 
-==== tests/cases/conformance/interfaces/declarationMerging/twoInterfacesDifferentRootModule.ts (2 errors) ====
+==== twoInterfacesDifferentRootModule.ts (2 errors) ====
     // two interfaces with different root modules should not merge
     
     module M {

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsx/file.tsx ===
+//// [tests/cases/conformance/jsx/jsxParsingError2.tsx] ////
+
+=== file.tsx ===
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -7,7 +9,7 @@ declare module JSX {
 	}
 }
 
-=== tests/cases/conformance/jsx/Error1.tsx ===
+=== Error1.tsx ===
 // Issue error about missing span closing tag, not missing div closing tag
 let x1 = <div><span></div>;
 >x1 : JSX.Element
@@ -18,7 +20,7 @@ let x1 = <div><span></div>;
 > : any
 >div : any
 
-=== tests/cases/conformance/jsx/Error2.tsx ===
+=== Error2.tsx ===
 let x2 = <div></span>;
 >x2 : JSX.Element
 ><div></span> : JSX.Element
@@ -26,7 +28,7 @@ let x2 = <div></span>;
 >span : any
 
 
-=== tests/cases/conformance/jsx/Error3.tsx ===
+=== Error3.tsx ===
 let x3 = <div>;
 >x3 : JSX.Element
 ><div>; : JSX.Element
@@ -35,7 +37,7 @@ let x3 = <div>;
 
 > : any
 
-=== tests/cases/conformance/jsx/Error4.tsx ===
+=== Error4.tsx ===
 let x4 = <div><div></span>;
 >x4 : JSX.Element
 ><div><div></span>; : JSX.Element
@@ -46,7 +48,7 @@ let x4 = <div><div></span>;
 
 > : any
 
-=== tests/cases/conformance/jsx/Error5.tsx ===
+=== Error5.tsx ===
 let x5 = <div><span>
 >x5 : JSX.Element
 ><div><span> : JSX.Element

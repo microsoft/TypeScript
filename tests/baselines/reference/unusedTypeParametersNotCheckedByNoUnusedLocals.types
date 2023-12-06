@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedTypeParametersNotCheckedByNoUnusedLocals.ts ===
+//// [tests/cases/compiler/unusedTypeParametersNotCheckedByNoUnusedLocals.ts] ////
+
+=== unusedTypeParametersNotCheckedByNoUnusedLocals.ts ===
 function f<T>() { }
 >f : <T>() => void
 

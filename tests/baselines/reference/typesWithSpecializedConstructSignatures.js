@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/members/typesWithSpecializedConstructSignatures.ts] ////
+
 //// [typesWithSpecializedConstructSignatures.ts]
 // basic uses of specialized signatures without errors
 

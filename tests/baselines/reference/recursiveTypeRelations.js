@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveTypeRelations.ts] ////
+
 //// [recursiveTypeRelations.ts]
 // Repro from #14896
 

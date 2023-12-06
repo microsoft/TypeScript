@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/async/es6/asyncEnum_es6.ts] ////
+
 //// [asyncEnum_es6.ts]
 async enum E {  
   Value

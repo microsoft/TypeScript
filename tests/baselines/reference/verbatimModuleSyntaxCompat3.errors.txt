@@ -17,6 +17,8 @@ error TS5101: Option 'preserveValueImports' is deprecated and will stop function
             "verbatimModuleSyntax": true
         }
     }
+==== /index.ts (0 errors) ====
+    
 ==== /tsconfig.base.json (0 errors) ====
     {
         "compilerOptions": {
@@ -25,5 +27,3 @@ error TS5101: Option 'preserveValueImports' is deprecated and will stop function
             "importsNotUsedAsValues": "error",
         }
     }
-==== /index.ts (0 errors) ====
-    

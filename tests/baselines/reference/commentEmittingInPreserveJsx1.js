@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/commentEmittingInPreserveJsx1.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

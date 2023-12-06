@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesinModules1.ts] ////
+
 //// [unusedVariablesinModules1.ts]
 export {};
 

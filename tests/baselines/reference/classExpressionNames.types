@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ts.ts ===
+//// [tests/cases/compiler/classExpressionNames.ts] ////
+
+=== ts.ts ===
 var o = {
 >o : { C: typeof C; }
 >{    C: class {    }} : { C: typeof C; }

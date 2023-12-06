@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName26.ts(3,5): error TS1164: Computed property names are not allowed in enums.
-tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName26.ts(4,6): error TS2304: Cannot find name 'e2'.
+parserComputedPropertyName26.ts(3,5): error TS1164: Computed property names are not allowed in enums.
+parserComputedPropertyName26.ts(4,6): error TS2304: Cannot find name 'e2'.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName26.ts (2 errors) ====
+==== parserComputedPropertyName26.ts (2 errors) ====
     enum E {
         // No ASI
         [e] = 0

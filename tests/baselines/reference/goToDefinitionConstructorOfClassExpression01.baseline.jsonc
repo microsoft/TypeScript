@@ -1,0 +1,20 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/goToDefinitionConstructorOfClassExpression01.ts ===
+// var x = class C {
+//     [|constructor() {
+//         var other = new /*GOTO DEF*/C;
+//     }|]
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/emptyObjectBindingPatternParameter04.ts ===
+//// [tests/cases/conformance/es6/destructuring/emptyObjectBindingPatternParameter04.ts] ////
+
+=== emptyObjectBindingPatternParameter04.ts ===
 function f({} = {a: 1, b: "2", c: true}) {
 >f : ({}?: { a: number; b: string; c: boolean; }) => void
 >{a: 1, b: "2", c: true} : { a: number; b: string; c: boolean; }

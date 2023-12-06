@@ -1,8 +1,8 @@
-tests/cases/compiler/accessorWithRestParam.ts(2,11): error TS1053: A 'set' accessor cannot have rest parameter.
-tests/cases/compiler/accessorWithRestParam.ts(3,18): error TS1053: A 'set' accessor cannot have rest parameter.
+accessorWithRestParam.ts(2,11): error TS1053: A 'set' accessor cannot have rest parameter.
+accessorWithRestParam.ts(3,18): error TS1053: A 'set' accessor cannot have rest parameter.
 
 
-==== tests/cases/compiler/accessorWithRestParam.ts (2 errors) ====
+==== accessorWithRestParam.ts (2 errors) ====
     class C {
         set X(...v) { }
               ~~~

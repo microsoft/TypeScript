@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unicodeIdentifierName2.ts ===
+//// [tests/cases/compiler/unicodeIdentifierName2.ts] ////
+
+=== unicodeIdentifierName2.ts ===
 var a₁ = "hello"; alert(a₁)
 >a : any
 >"hello" : "hello"

@@ -1,0 +1,102 @@
+//// [tests/cases/compiler/inferenceAndHKTs.ts] ////
+
+=== inferenceAndHKTs.ts ===
+// Repro from #53970
+
+export interface TypeLambda {
+>TypeLambda : Symbol(TypeLambda, Decl(inferenceAndHKTs.ts, 0, 0))
+
+    readonly A: unknown;
+>A : Symbol(TypeLambda.A, Decl(inferenceAndHKTs.ts, 2, 29))
+}
+
+export interface TypeClass<F extends TypeLambda> {
+>TypeClass : Symbol(TypeClass, Decl(inferenceAndHKTs.ts, 4, 1))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 6, 27))
+>TypeLambda : Symbol(TypeLambda, Decl(inferenceAndHKTs.ts, 0, 0))
+
+    readonly _F: F;
+>_F : Symbol(TypeClass._F, Decl(inferenceAndHKTs.ts, 6, 50))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 6, 27))
+}
+
+export type Apply<F extends TypeLambda, A> = F extends { readonly type: unknown }
+>Apply : Symbol(Apply, Decl(inferenceAndHKTs.ts, 8, 1))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 10, 18))
+>TypeLambda : Symbol(TypeLambda, Decl(inferenceAndHKTs.ts, 0, 0))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 10, 39))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 10, 18))
+>type : Symbol(type, Decl(inferenceAndHKTs.ts, 10, 56))
+
+    ? (F & { readonly A: A })['type']
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 10, 18))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 11, 12))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 10, 39))
+
+    : { readonly F: F, readonly A: A };
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 12, 7))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 10, 18))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 12, 22))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 10, 39))
+
+export interface T<A> {
+>T : Symbol(T, Decl(inferenceAndHKTs.ts, 12, 39))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 14, 19))
+
+    value: A;
+>value : Symbol(T.value, Decl(inferenceAndHKTs.ts, 14, 23))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 14, 19))
+}
+
+export interface TTypeLambda extends TypeLambda {
+>TTypeLambda : Symbol(TTypeLambda, Decl(inferenceAndHKTs.ts, 16, 1))
+>TypeLambda : Symbol(TypeLambda, Decl(inferenceAndHKTs.ts, 0, 0))
+
+    readonly type: T<this["A"]>;
+>type : Symbol(TTypeLambda.type, Decl(inferenceAndHKTs.ts, 18, 49))
+>T : Symbol(T, Decl(inferenceAndHKTs.ts, 12, 39))
+}
+
+export declare const map: <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>;
+>map : Symbol(map, Decl(inferenceAndHKTs.ts, 22, 20))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 22, 27), Decl(inferenceAndHKTs.ts, 22, 49))
+>TypeLambda : Symbol(TypeLambda, Decl(inferenceAndHKTs.ts, 0, 0))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 22, 27), Decl(inferenceAndHKTs.ts, 22, 49))
+>TypeClass : Symbol(TypeClass, Decl(inferenceAndHKTs.ts, 4, 1))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 22, 27), Decl(inferenceAndHKTs.ts, 22, 49))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 22, 70))
+>B : Symbol(B, Decl(inferenceAndHKTs.ts, 22, 72))
+>a : Symbol(a, Decl(inferenceAndHKTs.ts, 22, 76))
+>Apply : Symbol(Apply, Decl(inferenceAndHKTs.ts, 8, 1))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 22, 27), Decl(inferenceAndHKTs.ts, 22, 49))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 22, 70))
+>f : Symbol(f, Decl(inferenceAndHKTs.ts, 22, 91))
+>a : Symbol(a, Decl(inferenceAndHKTs.ts, 22, 96))
+>A : Symbol(A, Decl(inferenceAndHKTs.ts, 22, 70))
+>B : Symbol(B, Decl(inferenceAndHKTs.ts, 22, 72))
+>Apply : Symbol(Apply, Decl(inferenceAndHKTs.ts, 8, 1))
+>F : Symbol(F, Decl(inferenceAndHKTs.ts, 22, 27), Decl(inferenceAndHKTs.ts, 22, 49))
+>B : Symbol(B, Decl(inferenceAndHKTs.ts, 22, 72))
+
+declare const typeClass: TypeClass<TTypeLambda>;
+>typeClass : Symbol(typeClass, Decl(inferenceAndHKTs.ts, 24, 13))
+>TypeClass : Symbol(TypeClass, Decl(inferenceAndHKTs.ts, 4, 1))
+>TTypeLambda : Symbol(TTypeLambda, Decl(inferenceAndHKTs.ts, 16, 1))
+
+declare const a: T<number>;
+>a : Symbol(a, Decl(inferenceAndHKTs.ts, 26, 13))
+>T : Symbol(T, Decl(inferenceAndHKTs.ts, 12, 39))
+
+const x1 = map(typeClass);
+>x1 : Symbol(x1, Decl(inferenceAndHKTs.ts, 28, 5))
+>map : Symbol(map, Decl(inferenceAndHKTs.ts, 22, 20))
+>typeClass : Symbol(typeClass, Decl(inferenceAndHKTs.ts, 24, 13))
+
+const x2 = map(typeClass)(a, (_) => _);  // T<number>
+>x2 : Symbol(x2, Decl(inferenceAndHKTs.ts, 29, 5))
+>map : Symbol(map, Decl(inferenceAndHKTs.ts, 22, 20))
+>typeClass : Symbol(typeClass, Decl(inferenceAndHKTs.ts, 24, 13))
+>a : Symbol(a, Decl(inferenceAndHKTs.ts, 26, 13))
+>_ : Symbol(_, Decl(inferenceAndHKTs.ts, 29, 30))
+>_ : Symbol(_, Decl(inferenceAndHKTs.ts, 29, 30))
+

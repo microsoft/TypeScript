@@ -1,4 +1,6 @@
-=== tests/cases/compiler/ambientEnumElementInitializer3.ts ===
+//// [tests/cases/compiler/ambientEnumElementInitializer3.ts] ////
+
+=== ambientEnumElementInitializer3.ts ===
 declare enum E {
 >E : Symbol(E, Decl(ambientEnumElementInitializer3.ts, 0, 0))
 

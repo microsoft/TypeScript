@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importAnImport.ts ===
+//// [tests/cases/compiler/importAnImport.ts] ////
+
+=== importAnImport.ts ===
 module c.a.b {
     import ma = a;
 >ma : any

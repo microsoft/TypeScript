@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/exportNonInitializedVariablesAMD.ts ===
+//// [tests/cases/conformance/externalModules/exportNonInitializedVariablesAMD.ts] ////
+
+=== exportNonInitializedVariablesAMD.ts ===
 var;
 let;
 const;

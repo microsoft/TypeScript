@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitPrivateNameCausesError.ts] ////
+
 //// [file.ts]
 const IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 

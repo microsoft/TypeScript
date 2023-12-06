@@ -1,4 +1,6 @@
-=== tests/cases/compiler/objectLiteralIndexerNoImplicitAny.ts ===
+//// [tests/cases/compiler/objectLiteralIndexerNoImplicitAny.ts] ////
+
+=== objectLiteralIndexerNoImplicitAny.ts ===
 interface I {
     [s: string]: any;
 >s : string

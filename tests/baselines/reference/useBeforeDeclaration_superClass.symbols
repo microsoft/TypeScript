@@ -1,4 +1,6 @@
-=== tests/cases/compiler/useBeforeDeclaration_superClass.ts ===
+//// [tests/cases/compiler/useBeforeDeclaration_superClass.ts] ////
+
+=== useBeforeDeclaration_superClass.ts ===
 class C {
 >C : Symbol(C, Decl(useBeforeDeclaration_superClass.ts, 0, 0))
 

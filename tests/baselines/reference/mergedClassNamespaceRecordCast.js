@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/mergedClassNamespaceRecordCast.ts] ////
+
 //// [mergedClassNamespaceRecordCast.ts]
 class C1 { foo() {} }
 

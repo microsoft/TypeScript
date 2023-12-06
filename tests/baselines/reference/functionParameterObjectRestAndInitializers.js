@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/functions/functionParameterObjectRestAndInitializers.ts] ////
+
 //// [functionParameterObjectRestAndInitializers.ts]
 // https://github.com/microsoft/TypeScript/issues/47079
 

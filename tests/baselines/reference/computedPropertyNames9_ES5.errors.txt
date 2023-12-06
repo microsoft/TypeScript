@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNames9_ES5.ts(9,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+computedPropertyNames9_ES5.ts(9,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames9_ES5.ts (1 errors) ====
+==== computedPropertyNames9_ES5.ts (1 errors) ====
     function f(s: string): string;
     function f(n: number): number;
     function f<T>(x: T): T;

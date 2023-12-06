@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericTypeWithCallableMembers.ts] ////
+
 //// [genericTypeWithCallableMembers.ts]
 interface Constructable {
     new (): Constructable;

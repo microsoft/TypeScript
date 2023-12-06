@@ -1,9 +1,11 @@
-=== tests/cases/conformance/salsa/def.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment14.ts] ////
+
+=== def.js ===
 var Outer = {};
 >Outer : typeof Outer
 >{} : {}
 
-=== tests/cases/conformance/salsa/work.js ===
+=== work.js ===
 Outer.Inner = function () {}
 >Outer.Inner = function () {} : typeof Inner
 >Outer.Inner : typeof Inner
@@ -28,7 +30,7 @@ Outer.Inner.prototype = {
 >m : () => void
 }
 
-=== tests/cases/conformance/salsa/use.js ===
+=== use.js ===
 /** @type {Outer.Inner} */
 var inner
 >inner : Inner

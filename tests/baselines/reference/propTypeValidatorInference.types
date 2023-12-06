@@ -1,4 +1,6 @@
-=== tests/cases/compiler/node_modules/prop-types/index.d.ts ===
+//// [tests/cases/compiler/propTypeValidatorInference.ts] ////
+
+=== node_modules/prop-types/index.d.ts ===
 export const nominalTypeHack: unique symbol;
 >nominalTypeHack : unique symbol
 
@@ -73,7 +75,7 @@ export function oneOfType<T extends Validator<any>>(types: T[]): Requireable<Non
 >types : T[]
 
 
-=== tests/cases/compiler/file.ts ===
+=== file.ts ===
 import * as PropTypes from "prop-types";
 >PropTypes : typeof PropTypes
 

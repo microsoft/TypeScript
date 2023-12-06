@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedLocalsAndObjectSpread.ts ===
+//// [tests/cases/compiler/unusedLocalsAndObjectSpread.ts] ////
+
+=== unusedLocalsAndObjectSpread.ts ===
 declare var console: { log(a: any): void };
 >console : { log(a: any): void; }
 >log : (a: any) => void

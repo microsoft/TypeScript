@@ -1,183 +1,105 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
-// /*FIND ALL REFS*/enum [|E|] { A }
+// /*FIND ALL REFS*/<|enum [|{| isWriteAccess: true, isDefinition: true |}E|] { A }|>
 // let e: [|E|].A;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsEnumAsNamespace.ts",
-      "kind": "enum",
-      "name": "enum E",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "enum",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "enumName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsEnumAsNamespace.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 12
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsEnumAsNamespace.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
+  // /*FIND ALL REFS*/<|enum [|E|] { A }|>
+  // let e: E.A;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
-// enum /*FIND ALL REFS*/[|E|] { A }
+// <|enum /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}E|] { A }|>
 // let e: [|E|].A;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsEnumAsNamespace.ts",
-      "kind": "enum",
-      "name": "enum E",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "enum",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "enumName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsEnumAsNamespace.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 12
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsEnumAsNamespace.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
+  // <|enum /*FIND ALL REFS*/[|E|] { A }|>
+  // let e: E.A;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
-// enum [|E|] { A }
+// <|enum [|{| isWriteAccess: true |}E|] { A }|>
 // let e: /*FIND ALL REFS*/[|E|].A;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsEnumAsNamespace.ts",
-      "kind": "enum",
-      "name": "enum E",
-      "textSpan": {
-        "start": 5,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "enum",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "E",
-          "kind": "enumName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 5,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsEnumAsNamespace.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 12
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 20,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsEnumAsNamespace.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsEnumAsNamespace.ts ===
+  // <|enum [|E|] { A }|>
+  // let e: /*FIND ALL REFS*/E.A;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "enum",
+    "name": "enum E",
+    "displayParts": [
+     {
+      "text": "enum",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "E",
+      "kind": "enumName"
+     }
     ]
-  }
-]
+   }
+  ]

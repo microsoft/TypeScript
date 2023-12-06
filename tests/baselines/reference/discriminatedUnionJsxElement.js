@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/discriminatedUnionJsxElement.tsx] ////
+
 //// [discriminatedUnionJsxElement.tsx]
 // Repro from #46021
 

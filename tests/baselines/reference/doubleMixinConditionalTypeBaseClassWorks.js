@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/doubleMixinConditionalTypeBaseClassWorks.ts] ////
+
 //// [doubleMixinConditionalTypeBaseClassWorks.ts]
 type Constructor = new (...args: any[]) => {};
 

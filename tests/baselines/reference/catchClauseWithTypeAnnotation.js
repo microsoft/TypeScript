@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/statements/tryStatements/catchClauseWithTypeAnnotation.ts] ////
+
 //// [catchClauseWithTypeAnnotation.ts]
 type any1 = any;
 type unknown1 = unknown;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictSubtypeAndNarrowing.ts] ////
+
 //// [strictSubtypeAndNarrowing.ts]
 // Check that `any` is a strict supertype of `unknown`
 

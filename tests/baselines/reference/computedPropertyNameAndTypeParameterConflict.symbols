@@ -1,4 +1,6 @@
-=== tests/cases/compiler/computedPropertyNameAndTypeParameterConflict.ts ===
+//// [tests/cases/compiler/computedPropertyNameAndTypeParameterConflict.ts] ////
+
+=== computedPropertyNameAndTypeParameterConflict.ts ===
 declare const O: unique symbol;
 >O : Symbol(O, Decl(computedPropertyNameAndTypeParameterConflict.ts, 0, 13))
 

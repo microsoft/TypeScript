@@ -1,0 +1,284 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// [|{| kind: "none" |}switch|]/*HIGHLIGHTS*/ (10) {
+//     [|{| kind: "none" |}case|] 1:
+//     [|{| kind: "none" |}case|] 2:
+//     [|{| kind: "none" |}case|] 4:
+//     [|{| kind: "none" |}case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|{| kind: "none" |}case|] 0xBEEF:
+//     [|{| kind: "none" |}default|]:
+//         [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// [|{| kind: "none" |}switch|] (10) {
+//     [|{| kind: "none" |}case|]/*HIGHLIGHTS*/ 1:
+//     [|{| kind: "none" |}case|] 2:
+//     [|{| kind: "none" |}case|] 4:
+//     [|{| kind: "none" |}case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|{| kind: "none" |}case|] 0xBEEF:
+//     [|{| kind: "none" |}default|]:
+//         [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// [|{| kind: "none" |}switch|] (10) {
+//     [|{| kind: "none" |}case|] 1:
+//     [|{| kind: "none" |}case|]/*HIGHLIGHTS*/ 2:
+//     [|{| kind: "none" |}case|] 4:
+//     [|{| kind: "none" |}case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|{| kind: "none" |}case|] 0xBEEF:
+//     [|{| kind: "none" |}default|]:
+//         [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// [|{| kind: "none" |}switch|] (10) {
+//     [|{| kind: "none" |}case|] 1:
+//     [|{| kind: "none" |}case|] 2:
+//     [|{| kind: "none" |}case|]/*HIGHLIGHTS*/ 4:
+//     [|{| kind: "none" |}case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|{| kind: "none" |}case|] 0xBEEF:
+//     [|{| kind: "none" |}default|]:
+//         [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// [|{| kind: "none" |}switch|] (10) {
+//     [|{| kind: "none" |}case|] 1:
+//     [|{| kind: "none" |}case|] 2:
+//     [|{| kind: "none" |}case|] 4:
+//     [|{| kind: "none" |}case|]/*HIGHLIGHTS*/ 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|{| kind: "none" |}case|] 0xBEEF:
+//     [|{| kind: "none" |}default|]:
+//         [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|{| kind: "none" |}switch|]/*HIGHLIGHTS*/ (20) {
+//             [|{| kind: "none" |}case|] 1:
+//             [|{| kind: "none" |}case|] 2:
+//                 [|{| kind: "none" |}break|];
+//             [|{| kind: "none" |}default|]:
+//                 [|{| kind: "none" |}break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|{| kind: "none" |}switch|] (20) {
+//             [|{| kind: "none" |}case|]/*HIGHLIGHTS*/ 1:
+//             [|{| kind: "none" |}case|] 2:
+//                 [|{| kind: "none" |}break|];
+//             [|{| kind: "none" |}default|]:
+//                 [|{| kind: "none" |}break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|{| kind: "none" |}switch|] (20) {
+//             [|{| kind: "none" |}case|] 1:
+//             [|{| kind: "none" |}case|]/*HIGHLIGHTS*/ 2:
+//                 [|{| kind: "none" |}break|];
+//             [|{| kind: "none" |}default|]:
+//                 [|{| kind: "none" |}break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|{| kind: "none" |}switch|] (20) {
+//             [|{| kind: "none" |}case|] 1:
+//             [|{| kind: "none" |}case|] 2:
+//                 [|{| kind: "none" |}break|]/*HIGHLIGHTS*/;
+//             [|{| kind: "none" |}default|]:
+//                 [|{| kind: "none" |}break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// switch (10) {
+//     case 1:
+//     case 2:
+//     case 4:
+//     case 8:
+//         foo: [|{| kind: "none" |}switch|] (20) {
+//             [|{| kind: "none" |}case|] 1:
+//             [|{| kind: "none" |}case|] 2:
+//                 [|{| kind: "none" |}break|];
+//             [|{| kind: "none" |}default|]/*HIGHLIGHTS*/:
+//                 [|{| kind: "none" |}break|] foo;
+//         }
+//     case 0xBEEF:
+//     default:
+// --- (line: 15) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// [|{| kind: "none" |}switch|] (10) {
+//     [|{| kind: "none" |}case|] 1:
+//     [|{| kind: "none" |}case|] 2:
+//     [|{| kind: "none" |}case|] 4:
+//     [|{| kind: "none" |}case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|{| kind: "none" |}case|]/*HIGHLIGHTS*/ 0xBEEF:
+//     [|{| kind: "none" |}default|]:
+//         [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// [|{| kind: "none" |}switch|] (10) {
+//     [|{| kind: "none" |}case|] 1:
+//     [|{| kind: "none" |}case|] 2:
+//     [|{| kind: "none" |}case|] 4:
+//     [|{| kind: "none" |}case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|{| kind: "none" |}case|] 0xBEEF:
+//     [|{| kind: "none" |}default|]/*HIGHLIGHTS*/:
+//         [|{| kind: "none" |}break|];
+//     [|{| kind: "none" |}case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// [|{| kind: "none" |}switch|] (10) {
+//     [|{| kind: "none" |}case|] 1:
+//     [|{| kind: "none" |}case|] 2:
+//     [|{| kind: "none" |}case|] 4:
+//     [|{| kind: "none" |}case|] 8:
+//         foo: switch (20) {
+//             case 1:
+//             case 2:
+//                 break;
+//             default:
+//                 break foo;
+//         }
+//     [|{| kind: "none" |}case|] 0xBEEF:
+//     [|{| kind: "none" |}default|]:
+//         [|{| kind: "none" |}break|]/*HIGHLIGHTS*/;
+//     [|{| kind: "none" |}case|] 16:
+// }
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesSwitchCaseDefault5.ts ===
+// --- (line: 12) skipped ---
+//     case 0xBEEF:
+//     default:
+//         break;
+//     case 16/*HIGHLIGHTS*/:
+// }

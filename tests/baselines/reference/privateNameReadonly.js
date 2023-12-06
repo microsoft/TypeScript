@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameReadonly.ts] ////
+
 //// [privateNameReadonly.ts]
 const C = class {
     #bar() {}

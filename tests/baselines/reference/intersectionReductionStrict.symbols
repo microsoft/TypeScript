@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/intersection/intersectionReductionStrict.ts ===
+//// [tests/cases/conformance/types/intersection/intersectionReductionStrict.ts] ////
+
+=== intersectionReductionStrict.ts ===
 declare const sym1: unique symbol;
 >sym1 : Symbol(sym1, Decl(intersectionReductionStrict.ts, 0, 13))
 

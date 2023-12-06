@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceTypePredicate.ts ===
+//// [tests/cases/compiler/typeInferenceTypePredicate.ts] ////
+
+=== typeInferenceTypePredicate.ts ===
 declare function f<T>(predicate: (x: {}) => x is T): T;
 >f : <T>(predicate: (x: {}) => x is T) => T
 >predicate : (x: {}) => x is T

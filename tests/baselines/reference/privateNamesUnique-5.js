@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesUnique-5.ts] ////
+
 //// [privateNamesUnique-5.ts]
 // same as privateNamesUnique-1, but with an interface
 

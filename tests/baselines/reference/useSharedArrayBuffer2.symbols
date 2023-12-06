@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2017/useSharedArrayBuffer2.ts ===
+//// [tests/cases/conformance/es2017/useSharedArrayBuffer2.ts] ////
+
+=== useSharedArrayBuffer2.ts ===
 var foge = new SharedArrayBuffer(1024);
 >foge : Symbol(foge, Decl(useSharedArrayBuffer2.ts, 0, 3))
 

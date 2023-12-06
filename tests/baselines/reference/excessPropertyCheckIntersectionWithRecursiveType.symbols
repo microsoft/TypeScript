@@ -1,4 +1,6 @@
-=== tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts ===
+//// [tests/cases/compiler/excessPropertyCheckIntersectionWithRecursiveType.ts] ////
+
+=== excessPropertyCheckIntersectionWithRecursiveType.ts ===
 // repro from #44750
 
 type Request = { l1: { l2: boolean } };

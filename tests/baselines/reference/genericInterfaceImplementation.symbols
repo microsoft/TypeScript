@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericInterfaceImplementation.ts ===
+//// [tests/cases/compiler/genericInterfaceImplementation.ts] ////
+
+=== genericInterfaceImplementation.ts ===
 interface IOption<A> {
 >IOption : Symbol(IOption, Decl(genericInterfaceImplementation.ts, 0, 0))
 >A : Symbol(A, Decl(genericInterfaceImplementation.ts, 0, 18))

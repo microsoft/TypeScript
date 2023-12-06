@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -31,7 +32,14 @@ declare function Component(props: { children?: number }): any;
 </Component>)
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"strict":true,"jsx":"react","module":"esnext"}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "strict": true,
+    "jsx": "react",
+    "module": "esnext"
+  }
+}
 
 
 

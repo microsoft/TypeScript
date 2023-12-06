@@ -1,9 +1,9 @@
-tests/cases/conformance/jsdoc/overloadTag2.js(14,9): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/conformance/jsdoc/overloadTag2.js(25,20): error TS7006: Parameter 'b' implicitly has an 'any' type.
-tests/cases/conformance/jsdoc/overloadTag2.js(30,9): error TS2554: Expected 1-2 arguments, but got 0.
+overloadTag2.js(14,9): error TS2394: This overload signature is not compatible with its implementation signature.
+overloadTag2.js(25,20): error TS7006: Parameter 'b' implicitly has an 'any' type.
+overloadTag2.js(30,9): error TS2554: Expected 1-2 arguments, but got 0.
 
 
-==== tests/cases/conformance/jsdoc/overloadTag2.js (3 errors) ====
+==== overloadTag2.js (3 errors) ====
     export class Foo {
         #a = true ? 1 : "1"
         #b
@@ -20,7 +20,7 @@ tests/cases/conformance/jsdoc/overloadTag2.js(30,9): error TS2554: Expected 1-2 
          * @overload
             ~~~~~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/conformance/jsdoc/overloadTag2.js:25:5: The implementation signature is declared here.
+!!! related TS2750 overloadTag2.js:25:5: The implementation signature is declared here.
          * @param {number} a
          */
         /**
@@ -41,7 +41,7 @@ tests/cases/conformance/jsdoc/overloadTag2.js(30,9): error TS2554: Expected 1-2 
     var a = new Foo()
             ~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
-!!! related TS6210 tests/cases/conformance/jsdoc/overloadTag2.js:15:8: An argument for 'a' was not provided.
+!!! related TS6210 overloadTag2.js:15:8: An argument for 'a' was not provided.
     var b = new Foo('str')
     var c = new Foo(2)
     var d = new Foo('str', 2)

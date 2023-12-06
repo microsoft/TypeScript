@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationMapsWithoutDeclaration.ts ===
+//// [tests/cases/compiler/declarationMapsWithoutDeclaration.ts] ////
+
+=== declarationMapsWithoutDeclaration.ts ===
 module m2 {
 >m2 : Symbol(m2, Decl(declarationMapsWithoutDeclaration.ts, 0, 0), Decl(declarationMapsWithoutDeclaration.ts, 11, 3))
 

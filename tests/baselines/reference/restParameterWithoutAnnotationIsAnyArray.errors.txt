@@ -1,9 +1,9 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParameterWithoutAnnotationIsAnyArray.ts(5,11): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParameterWithoutAnnotationIsAnyArray.ts(13,9): error TS1014: A rest parameter must be last in a parameter list.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParameterWithoutAnnotationIsAnyArray.ts(23,21): error TS1014: A rest parameter must be last in a parameter list.
+restParameterWithoutAnnotationIsAnyArray.ts(5,11): error TS1014: A rest parameter must be last in a parameter list.
+restParameterWithoutAnnotationIsAnyArray.ts(13,9): error TS1014: A rest parameter must be last in a parameter list.
+restParameterWithoutAnnotationIsAnyArray.ts(23,21): error TS1014: A rest parameter must be last in a parameter list.
 
 
-==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParameterWithoutAnnotationIsAnyArray.ts (3 errors) ====
+==== restParameterWithoutAnnotationIsAnyArray.ts (3 errors) ====
     // Rest parameters without type annotations are 'any', errors only for the functions with 2 rest params
     
     function foo(...x) { }

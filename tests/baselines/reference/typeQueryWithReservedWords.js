@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/typeQueryWithReservedWords.ts] ////
+
 //// [typeQueryWithReservedWords.ts]
 class Controller {
     create() {

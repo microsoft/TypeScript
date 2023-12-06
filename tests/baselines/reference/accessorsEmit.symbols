@@ -1,4 +1,6 @@
-=== tests/cases/compiler/accessorsEmit.ts ===
+//// [tests/cases/compiler/accessorsEmit.ts] ////
+
+=== accessorsEmit.ts ===
 class Result { }
 >Result : Symbol(Result, Decl(accessorsEmit.ts, 0, 0))
 

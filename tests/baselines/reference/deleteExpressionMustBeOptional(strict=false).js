@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deleteExpressionMustBeOptional.ts] ////
+
 //// [deleteExpressionMustBeOptional.ts]
 interface Foo {
     a: number

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/forStatementInnerComments.ts ===
+//// [tests/cases/compiler/forStatementInnerComments.ts] ////
+
+=== forStatementInnerComments.ts ===
 declare var a;
 >a : any
 

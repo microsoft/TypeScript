@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameMethodAccess.ts] ////
+
 //// [privateNameMethodAccess.ts]
 class A2 {
     #method() { return "" }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/cloduleWithRecursiveReference.ts ===
+//// [tests/cases/compiler/cloduleWithRecursiveReference.ts] ////
+
+=== cloduleWithRecursiveReference.ts ===
 module M
 >M : Symbol(M, Decl(cloduleWithRecursiveReference.ts, 0, 0))
 {

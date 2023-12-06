@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleIdentifiers.ts ===
+//// [tests/cases/compiler/moduleIdentifiers.ts] ////
+
+=== moduleIdentifiers.ts ===
 module M {
 >M : typeof M
 

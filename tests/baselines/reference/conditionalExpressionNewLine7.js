@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/conditionalExpressionNewLine7.ts] ////
+
 //// [conditionalExpressionNewLine7.ts]
 var v = a ? 
   b :

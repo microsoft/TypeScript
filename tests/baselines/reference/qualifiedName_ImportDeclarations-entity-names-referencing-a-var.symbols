@@ -1,4 +1,6 @@
-=== tests/cases/compiler/qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts ===
+//// [tests/cases/compiler/qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts] ////
+
+=== qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts ===
 module Alpha {
 >Alpha : Symbol(Alpha, Decl(qualifiedName_ImportDeclarations-entity-names-referencing-a-var.ts, 0, 0))
 

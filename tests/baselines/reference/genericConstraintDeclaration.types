@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericConstraintDeclaration.ts ===
+//// [tests/cases/compiler/genericConstraintDeclaration.ts] ////
+
+=== genericConstraintDeclaration.ts ===
 class List<T extends {}>{
 >List : List<T>
 

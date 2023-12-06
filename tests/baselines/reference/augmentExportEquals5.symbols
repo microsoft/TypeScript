@@ -1,4 +1,6 @@
-=== tests/cases/compiler/express.d.ts ===
+//// [tests/cases/compiler/augmentExportEquals5.ts] ////
+
+=== express.d.ts ===
 declare module Express {
 >Express : Symbol(Express, Decl(express.d.ts, 0, 0))
 
@@ -163,7 +165,7 @@ declare module "express" {
 >e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
 }
 
-=== tests/cases/compiler/augmentation.ts ===
+=== augmentation.ts ===
 /// <reference path="express.d.ts"/>
 import * as e from "express";
 >e : Symbol(e, Decl(augmentation.ts, 1, 6))
@@ -179,7 +181,7 @@ declare module "express" {
     }
 }
 
-=== tests/cases/compiler/consumer.ts ===
+=== consumer.ts ===
 import { Request } from "express";
 >Request : Symbol(Request, Decl(consumer.ts, 0, 8))
 

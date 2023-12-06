@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeCheckTypeArgument.ts] ////
+
 //// [typeCheckTypeArgument.ts]
 var f: <T extends UNKNOWN>() => void;
 

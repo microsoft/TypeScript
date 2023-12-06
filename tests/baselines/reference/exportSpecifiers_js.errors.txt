@@ -1,7 +1,7 @@
-tests/cases/conformance/externalModules/typeOnly/a.js(2,10): error TS8006: 'export...type' declarations can only be used in TypeScript files.
+a.js(2,10): error TS8006: 'export...type' declarations can only be used in TypeScript files.
 
 
-==== tests/cases/conformance/externalModules/typeOnly/a.js (1 errors) ====
+==== ./a.js (1 errors) ====
     const foo = 0;
     export { type foo };
              ~~~~~~~~

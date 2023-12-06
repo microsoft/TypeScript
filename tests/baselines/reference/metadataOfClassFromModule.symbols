@@ -1,4 +1,6 @@
-=== tests/cases/compiler/metadataOfClassFromModule.ts ===
+//// [tests/cases/compiler/metadataOfClassFromModule.ts] ////
+
+=== metadataOfClassFromModule.ts ===
 module MyModule {
 >MyModule : Symbol(MyModule, Decl(metadataOfClassFromModule.ts, 0, 0))
 

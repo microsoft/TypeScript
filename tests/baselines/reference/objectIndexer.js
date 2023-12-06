@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectIndexer.ts] ////
+
 //// [objectIndexer.ts]
 export interface Callback {
     (value: any): void;

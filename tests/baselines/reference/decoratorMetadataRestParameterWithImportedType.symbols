@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aux.ts ===
+//// [tests/cases/compiler/decoratorMetadataRestParameterWithImportedType.ts] ////
+
+=== aux.ts ===
 export class SomeClass {
 >SomeClass : Symbol(SomeClass, Decl(aux.ts, 0, 0))
 
@@ -6,7 +8,7 @@ export class SomeClass {
 >field : Symbol(SomeClass.field, Decl(aux.ts, 0, 24))
 }
 
-=== tests/cases/compiler/aux1.ts ===
+=== aux1.ts ===
 export class SomeClass1 {
 >SomeClass1 : Symbol(SomeClass1, Decl(aux1.ts, 0, 0))
 
@@ -14,14 +16,14 @@ export class SomeClass1 {
 >field : Symbol(SomeClass1.field, Decl(aux1.ts, 0, 25))
 }
 
-=== tests/cases/compiler/aux2.ts ===
+=== aux2.ts ===
 export class SomeClass2 {
 >SomeClass2 : Symbol(SomeClass2, Decl(aux2.ts, 0, 0))
 
     field: string;
 >field : Symbol(SomeClass2.field, Decl(aux2.ts, 0, 25))
 }
-=== tests/cases/compiler/main.ts ===
+=== main.ts ===
 import { SomeClass } from './aux';
 >SomeClass : Symbol(SomeClass, Decl(main.ts, 0, 8))
 

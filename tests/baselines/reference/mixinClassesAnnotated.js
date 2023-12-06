@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/mixinClassesAnnotated.ts] ////
+
 //// [mixinClassesAnnotated.ts]
 type Constructor<T> = new(...args: any[]) => T;
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts ===
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts] ////
+
+=== protectedClassPropertyAccessibleWithinSubclass3.ts ===
 class Base {
 >Base : Symbol(Base, Decl(protectedClassPropertyAccessibleWithinSubclass3.ts, 0, 0))
 

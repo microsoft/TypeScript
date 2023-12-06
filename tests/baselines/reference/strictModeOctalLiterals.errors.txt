@@ -1,17 +1,17 @@
-tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts(2,14): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'.
-tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts(4,16): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'.
-tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts(4,21): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'.
+strictModeOctalLiterals.ts(2,14): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+strictModeOctalLiterals.ts(4,16): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
+strictModeOctalLiterals.ts(4,21): error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
 
 
-==== tests/cases/conformance/expressions/literals/strictModeOctalLiterals.ts (3 errors) ====
+==== strictModeOctalLiterals.ts (3 errors) ====
     export enum E {
         A = 12 + 01
                  ~~
-!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
     }
     const orbitol: 01 = 01
                    ~~
-!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
                         ~~
-!!! error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o1'.
     

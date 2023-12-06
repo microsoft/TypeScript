@@ -1,4 +1,6 @@
-=== tests/cases/compiler/library.d.ts ===
+//// [tests/cases/compiler/defaultPropsEmptyCurlyBecomesAnyForJs.ts] ////
+
+=== library.d.ts ===
 export class Foo<T = {}, U = {}> {
 >Foo : Foo<T, U>
 
@@ -13,7 +15,7 @@ export class Foo<T = {}, U = {}> {
 >state : U
 }
 
-=== tests/cases/compiler/component.js ===
+=== component.js ===
 import { Foo } from "./library";
 >Foo : typeof Foo
 
@@ -25,7 +27,7 @@ export class MyFoo extends Foo {
 >member : any
 }
 
-=== tests/cases/compiler/typed_component.ts ===
+=== typed_component.ts ===
 import { MyFoo } from "./component";
 >MyFoo : typeof MyFoo
 

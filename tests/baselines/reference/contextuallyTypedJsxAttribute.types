@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.tsx ===
+//// [tests/cases/compiler/contextuallyTypedJsxAttribute.ts] ////
+
+=== index.tsx ===
 interface Elements {
   foo: { callback?: (value: number) => void };
 >foo : { callback?: (value: number) => void; }

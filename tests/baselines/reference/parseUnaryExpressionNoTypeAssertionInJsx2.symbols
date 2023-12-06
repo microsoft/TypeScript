@@ -1,4 +1,6 @@
-=== tests/cases/compiler/index.js ===
+//// [tests/cases/compiler/parseUnaryExpressionNoTypeAssertionInJsx2.ts] ////
+
+=== index.js ===
 const x = "oops";
 >x : Symbol(x, Decl(index.js, 0, 5))
 

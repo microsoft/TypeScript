@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts] ////
+
 //// [constEnumPropertyAccess2.ts]
 // constant enum declarations are completely erased in the emitted JavaScript code.
 // it is an error to reference a constant enum object in any other context

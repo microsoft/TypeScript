@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithBooleanType.ts] ////
+
 //// [typeofOperatorWithBooleanType.ts]
 // typeof  operator on boolean type
 var BOOLEAN: boolean;

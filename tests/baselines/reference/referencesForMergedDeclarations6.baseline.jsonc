@@ -1,204 +1,141 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations6.ts ===
 // interface Foo { }
-// /*FIND ALL REFS*/module [|Foo|] {
+// /*FIND ALL REFS*/<|module [|{| isWriteAccess: true, isDefinition: true |}Foo|] {
 //     export interface Bar { }
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
-// }
+// }|>
 // 
 // // module
 // import a1 = [|Foo|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-      "kind": "interface",
-      "name": "namespace Foo",
-      "textSpan": {
-        "start": 10,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 124
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations6.ts ===
+  // <|interface [|Foo|] { }|>
+  // /*FIND ALL REFS*/module Foo {
+  //     export interface Bar { }
+  //     export module Bar { export interface Baz { } }
+  //     export function Bar() { }
+  // --- (line: 6) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "namespace Foo",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations6.ts ===
 // interface Foo { }
-// module /*FIND ALL REFS*/[|Foo|] {
+// <|module /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Foo|] {
 //     export interface Bar { }
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
-// }
+// }|>
 // 
 // // module
 // import a1 = [|Foo|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-      "kind": "interface",
-      "name": "namespace Foo",
-      "textSpan": {
-        "start": 10,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 124
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations6.ts ===
+  // <|interface [|Foo|] { }|>
+  // module /*FIND ALL REFS*/Foo {
+  //     export interface Bar { }
+  //     export module Bar { export interface Baz { } }
+  //     export function Bar() { }
+  // --- (line: 6) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "namespace Foo",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/referencesForMergedDeclarations6.ts ===
 // interface Foo { }
-// module [|Foo|] {
+// <|module [|{| isWriteAccess: true |}Foo|] {
 //     export interface Bar { }
 //     export module Bar { export interface Baz { } }
 //     export function Bar() { }
-// }
+// }|>
 // 
 // // module
 // import a1 = /*FIND ALL REFS*/[|Foo|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-      "kind": "interface",
-      "name": "namespace Foo",
-      "textSpan": {
-        "start": 10,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Foo",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 25,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-        "contextSpan": {
-          "start": 18,
-          "length": 124
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 166,
-          "length": 3
-        },
-        "fileName": "/tests/cases/fourslash/referencesForMergedDeclarations6.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/referencesForMergedDeclarations6.ts ===
+  // <|interface [|Foo|] { }|>
+  // module Foo {
+  //     export interface Bar { }
+  //     export module Bar { export interface Baz { } }
+  //     export function Bar() { }
+  // }
+  // 
+  // // module
+  // import a1 = /*FIND ALL REFS*/Foo;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "interface",
+    "name": "namespace Foo",
+    "displayParts": [
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Foo",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedDestructuring.ts] ////
+
 //// [unusedDestructuring.ts]
 export {};
 declare const o: any;

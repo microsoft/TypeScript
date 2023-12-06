@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/plainJSGrammarErrors.js ===
+//// [tests/cases/conformance/salsa/plainJSGrammarErrors.ts] ////
+
+=== plainJSGrammarErrors.js ===
 class C {
 >C : C
 
@@ -604,7 +606,7 @@ export let noMeta = import.metal
 function foo() { new.targe }
 >foo : () => void
 >new.targe : () => void
->targe : any
+>targe : () => void
 
 const nullaryDynamicImport = import()
 >nullaryDynamicImport : Promise<any>
@@ -621,7 +623,7 @@ const spreadDynamicImport = import(...[])
 >spreadDynamicImport : Promise<any>
 >import(...[]) : Promise<any>
 >...[] : never
->[] : readonly []
+>[] : []
 
 return
 

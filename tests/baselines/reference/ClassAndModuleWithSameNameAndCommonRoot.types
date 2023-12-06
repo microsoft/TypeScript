@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/class.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleWithSameNameAndCommonRoot.ts] ////
+
+=== class.ts ===
 module X.Y {
 >X : typeof X
 >Y : typeof Y
@@ -32,7 +34,7 @@ module X.Y {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+=== module.ts ===
 module X.Y {
 >X : typeof X
 >Y : typeof Y
@@ -49,7 +51,7 @@ module X.Y {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/test.ts ===
+=== test.ts ===
 //var cl: { x: number; y: number; }
 var cl = new X.Y.Point(1,1);
 >cl : X.Y.Point
@@ -73,7 +75,7 @@ var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
 >Origin : X.Y.Point
 
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts ===
+=== simple.ts ===
 class A {
 >A : A
 

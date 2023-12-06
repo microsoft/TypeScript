@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericFunctionInference2.ts] ////
+
 //// [genericFunctionInference2.ts]
 // Repro from #30685
 

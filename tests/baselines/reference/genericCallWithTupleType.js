@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts] ////
+
 //// [genericCallWithTupleType.ts]
 interface I<T, U> {
     tuple1: [T, U];

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.js ===
+//// [tests/cases/compiler/thisAssignmentInNamespaceDeclaration1.ts] ////
+
+=== a.js ===
 module foo {
 >foo : typeof foo
 
@@ -10,7 +12,7 @@ module foo {
 >4 : 4
 }
 
-=== tests/cases/compiler/b.js ===
+=== b.js ===
 namespace blah {
 >blah : typeof blah
 

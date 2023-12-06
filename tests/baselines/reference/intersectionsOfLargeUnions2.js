@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/intersectionsOfLargeUnions2.ts] ////
+
 //// [intersectionsOfLargeUnions2.ts]
 // Repro from #24233
 

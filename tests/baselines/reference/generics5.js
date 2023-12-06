@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generics5.ts] ////
+
 //// [generics5.ts]
 interface A { a: string; }
 interface B extends A { b: string; }

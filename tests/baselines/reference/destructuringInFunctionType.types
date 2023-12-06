@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts ===
+//// [tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts] ////
+
+=== destructuringInFunctionType.ts ===
 interface a { a }
 >a : any
 

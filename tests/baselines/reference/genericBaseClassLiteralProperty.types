@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericBaseClassLiteralProperty.ts ===
+//// [tests/cases/compiler/genericBaseClassLiteralProperty.ts] ////
+
+=== genericBaseClassLiteralProperty.ts ===
 class BaseClass<T> {
 >BaseClass : BaseClass<T>
 

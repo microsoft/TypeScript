@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedPrivateMethodInClass4.ts ===
+//// [tests/cases/compiler/unusedPrivateMethodInClass4.ts] ////
+
+=== unusedPrivateMethodInClass4.ts ===
 class greeter {
 >greeter : Symbol(greeter, Decl(unusedPrivateMethodInClass4.ts, 0, 0))
 

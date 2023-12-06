@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ImportNamedImportInEs5_0.ts ===
+//// [tests/cases/compiler/es6ImportNamedImportInEs5.ts] ////
+
+=== es6ImportNamedImportInEs5_0.ts ===
 export var a = 10;
 >a : number
 >10 : 10
@@ -31,7 +33,7 @@ export var aaaa = 10;
 >aaaa : number
 >10 : 10
 
-=== tests/cases/compiler/es6ImportNamedImportInEs5_1.ts ===
+=== es6ImportNamedImportInEs5_1.ts ===
 import { } from "./es6ImportNamedImportInEs5_0";
 import { a } from "./es6ImportNamedImportInEs5_0";
 >a : number

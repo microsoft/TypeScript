@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxCorrectlyParseLessThanComparison1.tsx] ////
+
 //// [tsxCorrectlyParseLessThanComparison1.tsx]
 declare module JSX {
     interface Element {

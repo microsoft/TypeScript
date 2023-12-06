@@ -1,13 +1,13 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(3,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(9,5): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(10,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(14,13): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(15,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts(18,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(2,5): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(3,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(9,5): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(10,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(14,13): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(15,9): error TS2300: Duplicate identifier 'x'.
+propertyAndAccessorWithSameName.ts(18,9): error TS2300: Duplicate identifier 'x'.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyAndAccessorWithSameName.ts (7 errors) ====
+==== propertyAndAccessorWithSameName.ts (7 errors) ====
     class C {
         x: number;
         ~

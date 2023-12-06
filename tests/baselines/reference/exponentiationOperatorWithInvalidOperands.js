@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithInvalidOperands.ts] ////
+
 //// [exponentiationOperatorWithInvalidOperands.ts]
 // these operators require their operands to be of type Any, the Number primitive type, or
 // an enum type

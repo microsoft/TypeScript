@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts] ////
+
 //// [assignmentToParenthesizedIdentifiers.ts]
 var x: number;
 x = 3; // OK

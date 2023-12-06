@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a.ts]
 export class C {}
@@ -6,7 +7,11 @@ export class C {}
 import {C} from './a'; import * as A from './A';
 
 //// [/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":false}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": false
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -31,40 +36,6 @@ Output::
 
 
 
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"forceConsistentCasingInFileNames":false,"watch":true,"configFilePath":"/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a.ts
-/b.ts
-/a/lib/lib.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a.ts
-/b.ts
-/a/lib/lib.d.ts
-
-Shape signatures in builder refreshed for::
-/a.ts (used version)
-/b.ts (used version)
-/a/lib/lib.d.ts (used version)
-
-FsWatches::
-/tsconfig.json: *new*
-  {}
-/a.ts: *new*
-  {}
-/b.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -83,13 +54,66 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/b.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": false,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a.ts
+/b.ts
+/a/lib/lib.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a.ts
+/b.ts
+/a/lib/lib.d.ts
+
+Shape signatures in builder refreshed for::
+/a.ts (used version)
+/b.ts (used version)
+/a/lib/lib.d.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Enable forceConsistentCasingInFileNames
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
@@ -112,8 +136,18 @@ Output::
 
 
 
-Program root files: ["/a.ts","/b.ts","/a/lib/lib.d.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"configFilePath":"/tsconfig.json"}
+
+
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a.ts
@@ -125,4 +159,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

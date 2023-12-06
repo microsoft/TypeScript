@@ -1,11 +1,11 @@
-tests/cases/compiler/innerModExport2.ts(5,5): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/innerModExport2.ts(5,12): error TS1437: Namespace must be given a name.
-tests/cases/compiler/innerModExport2.ts(7,20): error TS2395: Individual declarations in merged declaration 'export_var' must be all exported or all local.
-tests/cases/compiler/innerModExport2.ts(13,9): error TS2395: Individual declarations in merged declaration 'export_var' must be all exported or all local.
-tests/cases/compiler/innerModExport2.ts(20,7): error TS2551: Property 'NonExportFunc' does not exist on type 'typeof Outer'. Did you mean 'ExportFunc'?
+innerModExport2.ts(5,5): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+innerModExport2.ts(5,12): error TS1437: Namespace must be given a name.
+innerModExport2.ts(7,20): error TS2395: Individual declarations in merged declaration 'export_var' must be all exported or all local.
+innerModExport2.ts(13,9): error TS2395: Individual declarations in merged declaration 'export_var' must be all exported or all local.
+innerModExport2.ts(20,7): error TS2551: Property 'NonExportFunc' does not exist on type 'typeof Outer'. Did you mean 'ExportFunc'?
 
 
-==== tests/cases/compiler/innerModExport2.ts (5 errors) ====
+==== innerModExport2.ts (5 errors) ====
     module Outer {
     
         // inner mod 1
@@ -36,4 +36,4 @@ tests/cases/compiler/innerModExport2.ts(20,7): error TS2551: Property 'NonExport
     Outer.NonExportFunc();
           ~~~~~~~~~~~~~
 !!! error TS2551: Property 'NonExportFunc' does not exist on type 'typeof Outer'. Did you mean 'ExportFunc'?
-!!! related TS2728 tests/cases/compiler/innerModExport2.ts:11:25: 'ExportFunc' is declared here.
+!!! related TS2728 innerModExport2.ts:11:25: 'ExportFunc' is declared here.

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionOverloads8.ts] ////
+
 //// [functionOverloads8.ts]
 function foo();
 function foo(foo:string);

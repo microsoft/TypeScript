@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedPrivateMethodInClass3.ts] ////
+
 //// [unusedPrivateMethodInClass3.ts]
 class greeter {
     private function1() {

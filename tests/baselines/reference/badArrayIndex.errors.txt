@@ -1,8 +1,8 @@
-tests/cases/compiler/badArrayIndex.ts(1,15): error TS2693: 'number' only refers to a type, but is being used as a value here.
-tests/cases/compiler/badArrayIndex.ts(1,22): error TS1011: An element access expression should take an argument.
+badArrayIndex.ts(1,15): error TS2693: 'number' only refers to a type, but is being used as a value here.
+badArrayIndex.ts(1,22): error TS1011: An element access expression should take an argument.
 
 
-==== tests/cases/compiler/badArrayIndex.ts (2 errors) ====
+==== badArrayIndex.ts (2 errors) ====
     var results = number[];
                   ~~~~~~
 !!! error TS2693: 'number' only refers to a type, but is being used as a value here.

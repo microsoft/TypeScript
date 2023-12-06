@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts] ////
+
 //// [classStaticBlock23.ts]
 const nums = [1, 2, 3].map(n => Promise.resolve(n))
 

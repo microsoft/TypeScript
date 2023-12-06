@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classExpressions.ts ===
+//// [tests/cases/compiler/classExpressions.ts] ////
+
+=== classExpressions.ts ===
 interface A {}
 let x = class B implements A {
 >x : typeof B

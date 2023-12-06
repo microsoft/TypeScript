@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentOnStaticMember1.ts ===
+//// [tests/cases/compiler/commentOnStaticMember1.ts] ////
+
+=== commentOnStaticMember1.ts ===
 class Greeter {
 >Greeter : Greeter
 

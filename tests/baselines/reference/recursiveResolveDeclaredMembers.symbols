@@ -1,4 +1,6 @@
-=== tests/cases/compiler/types.ts ===
+//// [tests/cases/compiler/recursiveResolveDeclaredMembers.ts] ////
+
+=== types.ts ===
 // #23025
 export interface F {
 >F : Symbol(F, Decl(types.ts, 0, 0))
@@ -12,7 +14,7 @@ export interface D<T extends F = F> {}
 >F : Symbol(F, Decl(types.ts, 0, 0))
 >F : Symbol(F, Decl(types.ts, 0, 0))
 
-=== tests/cases/compiler/other.js ===
+=== other.js ===
 
 /** @typedef {import("./types").D} E */
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression1.ts] ////
+
 //// [typeArgumentInferenceWithClassExpression1.ts]
 function foo<T>(x = class { static prop: T }): T {
     return undefined;

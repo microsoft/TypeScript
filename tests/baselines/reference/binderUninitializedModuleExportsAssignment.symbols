@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/loop.js ===
+//// [tests/cases/conformance/salsa/binderUninitializedModuleExportsAssignment.ts] ////
+
+=== loop.js ===
 var loop1 = loop2;
 >loop1 : Symbol(loop1, Decl(loop.js, 0, 3))
 >loop2 : Symbol(loop2, Decl(loop.js, 1, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate2.ts] ////
+
 //// [taggedTemplatesWithIncompleteNoSubstitutionTemplate2.ts]
 function f(x: TemplateStringsArray, y: string, z: string) {
 }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeOfThisInStatics.ts] ////
+
 //// [typeOfThisInStatics.ts]
 class C {
     static foo() {

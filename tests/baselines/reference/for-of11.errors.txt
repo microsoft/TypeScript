@@ -1,8 +1,8 @@
-tests/cases/conformance/es6/for-ofStatements/for-of11.ts(2,6): error TS2322: Type 'string | number' is not assignable to type 'string'.
+for-of11.ts(2,6): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/es6/for-ofStatements/for-of11.ts (1 errors) ====
+==== for-of11.ts (1 errors) ====
     var v: string;
     for (v of [0, ""]) { }
          ~

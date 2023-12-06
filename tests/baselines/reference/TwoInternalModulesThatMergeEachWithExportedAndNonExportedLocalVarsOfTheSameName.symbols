@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedLocalVarsOfTheSameName.ts] ////
+
+=== part1.ts ===
 module A {
 >A : Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
 
@@ -40,7 +42,7 @@ module A {
 >y : Symbol(y, Decl(part1.ts, 11, 38))
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
+=== part2.ts ===
 module A {
 >A : Symbol(A, Decl(part1.ts, 0, 0), Decl(part2.ts, 0, 0))
 
@@ -63,7 +65,7 @@ module A {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/part3.ts ===
+=== part3.ts ===
 // test the merging actually worked
 
 var o: { x: number; y: number };

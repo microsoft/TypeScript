@@ -1,7 +1,7 @@
-tests/cases/compiler/memberScope.ts(4,11): error TS2708: Cannot use namespace 'Basil' as a value.
+memberScope.ts(4,11): error TS2708: Cannot use namespace 'Basil' as a value.
 
 
-==== tests/cases/compiler/memberScope.ts (1 errors) ====
+==== memberScope.ts (1 errors) ====
     module Salt {
       export class Pepper {}
       export module Basil { }

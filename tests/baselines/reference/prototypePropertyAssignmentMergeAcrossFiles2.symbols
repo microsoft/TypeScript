@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.js ===
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeAcrossFiles2.ts] ////
+
+=== prototypePropertyAssignmentMergeAcrossFiles2.js ===
 var Ns = {}
 >Ns : Symbol(Ns, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 3), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 0, 11), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 1, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 2, 23), Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
 
@@ -31,7 +33,7 @@ Ns.Two.prototype = {
 >prototype : Symbol(Ns.Two.prototype, Decl(prototypePropertyAssignmentMergeAcrossFiles2.js, 6, 2))
 }
 
-=== tests/cases/conformance/salsa/other.js ===
+=== other.js ===
 /**
  * @type {Ns.One}
  */

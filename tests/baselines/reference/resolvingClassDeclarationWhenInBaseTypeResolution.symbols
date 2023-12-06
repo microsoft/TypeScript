@@ -1,4 +1,6 @@
-=== tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts ===
+//// [tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts] ////
+
+=== resolvingClassDeclarationWhenInBaseTypeResolution.ts ===
 module rionegrensis {
 >rionegrensis : Symbol(rionegrensis, Decl(resolvingClassDeclarationWhenInBaseTypeResolution.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/es6ModuleWithModuleGenTargetCommonjs.ts] ////
+
 //// [es6ModuleWithModuleGenTargetCommonjs.ts]
 export class A
 {

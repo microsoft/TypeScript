@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts ===
+//// [tests/cases/compiler/collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts] ////
+
+=== collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts ===
 module mOfGloalFile {
 >mOfGloalFile : Symbol(mOfGloalFile, Decl(collisionExportsRequireAndInternalModuleAliasInGlobalFile.ts, 0, 0))
 

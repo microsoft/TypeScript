@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsShadowedConstructorFunction.ts(5,21): error TS2507: Type 'number' is not a constructor function type.
+classExtendsShadowedConstructorFunction.ts(5,21): error TS2507: Type 'number' is not a constructor function type.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsShadowedConstructorFunction.ts (1 errors) ====
+==== classExtendsShadowedConstructorFunction.ts (1 errors) ====
     class C { foo: string; }
     
     module M {

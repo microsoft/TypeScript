@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArgumentLists/parserErrorRecovery_ArgumentList1.ts] ////
+
 //// [parserErrorRecovery_ArgumentList1.ts]
 function foo() {
    bar(

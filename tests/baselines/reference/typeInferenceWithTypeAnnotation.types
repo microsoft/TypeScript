@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceWithTypeAnnotation.ts ===
+//// [tests/cases/compiler/typeInferenceWithTypeAnnotation.ts] ////
+
+=== typeInferenceWithTypeAnnotation.ts ===
 declare function f<T>(p: (t: T) => T): T;
 >f : <T>(p: (t: T) => T) => T
 >p : (t: T) => T

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/downlevelLetConst16.ts ===
+//// [tests/cases/compiler/downlevelLetConst16.ts] ////
+
+=== downlevelLetConst16.ts ===
 'use strict'
 
 declare function use(a: any);

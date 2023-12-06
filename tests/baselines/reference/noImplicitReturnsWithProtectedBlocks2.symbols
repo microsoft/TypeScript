@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitReturnsWithProtectedBlocks2.ts ===
+//// [tests/cases/compiler/noImplicitReturnsWithProtectedBlocks2.ts] ////
+
+=== noImplicitReturnsWithProtectedBlocks2.ts ===
 declare function log(s: string): void;
 >log : Symbol(log, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 0, 0))
 >s : Symbol(s, Decl(noImplicitReturnsWithProtectedBlocks2.ts, 0, 21))

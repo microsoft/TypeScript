@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/github17339.js ===
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag2.ts] ////
+
+=== github17339.js ===
 var obj = {
 >obj : { x: <T>(a: T) => T; }
 >{	/**	 * @template T	 * @param {T} a	 * @returns {T}	 */	x: function (a) {		return a;	},} : { x: <T>(a: T) => T; }

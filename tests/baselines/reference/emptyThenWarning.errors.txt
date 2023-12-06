@@ -1,8 +1,8 @@
-tests/cases/compiler/emptyThenWarning.ts(1,6): error TS1313: The body of an 'if' statement cannot be the empty statement.
-tests/cases/compiler/emptyThenWarning.ts(4,19): error TS1313: The body of an 'if' statement cannot be the empty statement.
+emptyThenWarning.ts(1,6): error TS1313: The body of an 'if' statement cannot be the empty statement.
+emptyThenWarning.ts(4,19): error TS1313: The body of an 'if' statement cannot be the empty statement.
 
 
-==== tests/cases/compiler/emptyThenWarning.ts (2 errors) ====
+==== emptyThenWarning.ts (2 errors) ====
     if(1);
          ~
 !!! error TS1313: The body of an 'if' statement cannot be the empty statement.

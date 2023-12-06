@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonNullParameterExtendingStringAssignableToString.ts ===
+//// [tests/cases/compiler/nonNullParameterExtendingStringAssignableToString.ts] ////
+
+=== nonNullParameterExtendingStringAssignableToString.ts ===
 declare function foo(p: string): void;
 >foo : (p: string) => void
 >p : string

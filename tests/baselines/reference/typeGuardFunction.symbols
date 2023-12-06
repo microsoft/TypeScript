@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeGuards/typeGuardFunction.ts ===
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardFunction.ts] ////
+
+=== typeGuardFunction.ts ===
 class A {
 >A : Symbol(A, Decl(typeGuardFunction.ts, 0, 0))
 

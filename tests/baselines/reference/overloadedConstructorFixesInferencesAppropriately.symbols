@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadedConstructorFixesInferencesAppropriately.ts ===
+//// [tests/cases/compiler/overloadedConstructorFixesInferencesAppropriately.ts] ////
+
+=== overloadedConstructorFixesInferencesAppropriately.ts ===
 interface Box<T> {
 >Box : Symbol(Box, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 0))
 >T : Symbol(T, Decl(overloadedConstructorFixesInferencesAppropriately.ts, 0, 14))

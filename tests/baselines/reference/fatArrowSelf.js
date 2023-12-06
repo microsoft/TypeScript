@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/fatArrowSelf.ts] ////
+
 //// [fatArrowSelf.ts]
 module Events {
     export interface ListenerCallback {

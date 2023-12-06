@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/deprecatedCompilerOptions1.ts] ////
+
 //// [a.ts]
 const a = 1;
 

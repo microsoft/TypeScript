@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames2_ES5.ts] ////
+
 //// [computedPropertyNames2_ES5.ts]
 var methodName = "method";
 var accessorName = "accessor";

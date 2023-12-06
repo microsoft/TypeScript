@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restParameters.ts ===
+//// [tests/cases/compiler/restParameters.ts] ////
+
+=== restParameters.ts ===
 function f18(a?:string, ...b:number[]){}
 >f18 : Symbol(f18, Decl(restParameters.ts, 0, 0))
 >a : Symbol(a, Decl(restParameters.ts, 0, 13))

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts] ////
+
+=== recursiveTypesWithTypeof.ts ===
 // The following are errors because of circular references
 var c: typeof c;
 >c : Symbol(c, Decl(recursiveTypesWithTypeof.ts, 1, 3), Decl(recursiveTypesWithTypeof.ts, 2, 3))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultInterfaceAndTwoFunctions.ts] ////
+
 //// [exportDefaultInterfaceAndTwoFunctions.ts]
 export default interface A { a: string; }
 export default function() { return 1; }

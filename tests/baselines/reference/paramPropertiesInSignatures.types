@@ -1,4 +1,6 @@
-=== tests/cases/compiler/paramPropertiesInSignatures.ts ===
+//// [tests/cases/compiler/paramPropertiesInSignatures.ts] ////
+
+=== paramPropertiesInSignatures.ts ===
 class C1 {
 >C1 : C1
 

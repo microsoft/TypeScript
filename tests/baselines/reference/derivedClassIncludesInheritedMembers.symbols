@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassIncludesInheritedMembers.ts ===
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassIncludesInheritedMembers.ts] ////
+
+=== derivedClassIncludesInheritedMembers.ts ===
 class Base {
 >Base : Symbol(Base, Decl(derivedClassIncludesInheritedMembers.ts, 0, 0))
 

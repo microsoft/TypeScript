@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeArgInferenceWithNull.ts ===
+//// [tests/cases/compiler/typeArgInferenceWithNull.ts] ////
+
+=== typeArgInferenceWithNull.ts ===
 // All legal
 
 function fn4<T extends string>(n: T) { }

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/uncaughtCompilerError2.ts] ////
+
 //// [uncaughtCompilerError2.ts]
 function getObj() {
    ().toString();

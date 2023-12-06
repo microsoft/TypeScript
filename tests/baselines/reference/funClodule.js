@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/funClodule.ts] ////
+
 //// [funClodule.ts]
 declare function foo();
 declare module foo {

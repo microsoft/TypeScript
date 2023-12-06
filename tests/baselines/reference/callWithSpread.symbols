@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/callWithSpread.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread.ts] ////
+
+=== callWithSpread.ts ===
 interface X {
 >X : Symbol(X, Decl(callWithSpread.ts, 0, 0))
 

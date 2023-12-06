@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mixinOverMappedTypeNoCrash.ts ===
+//// [tests/cases/compiler/mixinOverMappedTypeNoCrash.ts] ////
+
+=== mixinOverMappedTypeNoCrash.ts ===
 export type ClassInterface<C> = {
 >ClassInterface : Symbol(ClassInterface, Decl(mixinOverMappedTypeNoCrash.ts, 0, 0))
 >C : Symbol(C, Decl(mixinOverMappedTypeNoCrash.ts, 0, 27))

@@ -1,2 +1,4 @@
-=== tests/cases/compiler/emptyFile.ts ===
+//// [tests/cases/compiler/emptyFile.ts] ////
+
+=== emptyFile.ts ===
 

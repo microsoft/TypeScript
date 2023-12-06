@@ -1,4 +1,6 @@
-=== tests/cases/compiler/auxiliry.ts ===
+//// [tests/cases/compiler/metadataOfClassFromAlias.ts] ////
+
+=== auxiliry.ts ===
 export class SomeClass {
 >SomeClass : SomeClass
 
@@ -6,7 +8,7 @@ export class SomeClass {
 >field : string
 }
 
-=== tests/cases/compiler/test.ts ===
+=== test.ts ===
 import { SomeClass } from './auxiliry';
 >SomeClass : typeof SomeClass
 

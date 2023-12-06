@@ -1,4 +1,6 @@
-=== tests/cases/compiler/expandoFunctionContextualTypes.ts ===
+//// [tests/cases/compiler/expandoFunctionContextualTypes.ts] ////
+
+=== expandoFunctionContextualTypes.ts ===
 interface MyComponentProps {
 >MyComponentProps : Symbol(MyComponentProps, Decl(expandoFunctionContextualTypes.ts, 0, 0))
 

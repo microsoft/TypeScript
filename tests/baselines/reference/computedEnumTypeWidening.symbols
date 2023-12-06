@@ -1,4 +1,6 @@
-=== tests/cases/compiler/computedEnumTypeWidening.ts ===
+//// [tests/cases/compiler/computedEnumTypeWidening.ts] ////
+
+=== computedEnumTypeWidening.ts ===
 declare function computed(x: number): number;
 >computed : Symbol(computed, Decl(computedEnumTypeWidening.ts, 0, 0))
 >x : Symbol(x, Decl(computedEnumTypeWidening.ts, 0, 26))

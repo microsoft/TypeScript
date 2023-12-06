@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignToFn.ts] ////
+
 //// [assignToFn.ts]
 module M {
     interface I {

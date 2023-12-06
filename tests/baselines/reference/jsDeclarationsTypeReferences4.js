@@ -34,7 +34,7 @@ var A;
         var Something = require("fs").Something;
         var thing = new Something();
     })(B = A.B || (A.B = {}));
-})(A = exports.A || (exports.A = {}));
+})(A || (exports.A = A = {}));
 
 
 //// [index.d.ts]
@@ -43,6 +43,6 @@ export const Something: 2;
 export namespace A {
     namespace B {
         export { thing };
-        export const thing: import("fs").Something;
+        export let thing: import("fs").Something;
     }
 }

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromJSInitializer.ts] ////
+
+=== a.js ===
 function A () {
 >A : typeof A
 

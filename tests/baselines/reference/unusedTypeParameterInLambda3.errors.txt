@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedTypeParameterInLambda3.ts(5,15): error TS6133: 'U' is declared but its value is never read.
+unusedTypeParameterInLambda3.ts(5,15): error TS6133: 'U' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedTypeParameterInLambda3.ts (1 errors) ====
+==== unusedTypeParameterInLambda3.ts (1 errors) ====
     class A<T> {
         public x: T;
     }

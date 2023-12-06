@@ -1,512 +1,381 @@
-// === /tests/cases/fourslash/b.ts ===
-// import { [|a|] } from './a';
-// export { [|a|] };
-
+// === findAllReferences ===
 // === /tests/cases/fourslash/a.ts ===
-// export var /*FIND ALL REFS*/[|a|];
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "var",
-      "name": "var a: any",
-      "textSpan": {
-        "start": 11,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 11,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 13
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/b.ts",
-      "kind": "alias",
-      "name": "(alias) var a: any\nimport a",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "contextSpan": {
-          "start": 25,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// <|export var /*FIND ALL REFS*/[|{| defId: 0, isDefinition: true |}a|];|>
 
 // === /tests/cases/fourslash/b.ts ===
-// import { /*FIND ALL REFS*/[|a|] } from './a';
-// export { [|a|] };
+// <|import { [|{| defId: 1, isWriteAccess: true |}a|] } from './a';|>
+// <|export { [|{| defId: 1, isWriteAccess: true |}a|] };|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/a.ts ===
+  // <|export var /*FIND ALL REFS*/[|{| defId: 0 |}a|];|>
+
+  // === /tests/cases/fourslash/b.ts ===
+  // <|import { [|{| defId: 1 |}a|] } from './a';|>
+  // export { a };
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var a: any",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) var a: any\nimport a",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/b.ts ===
+// <|import { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|] } from './a';|>
+// <|export { [|{| defId: 0, isWriteAccess: true |}a|] };|>
 
 // === /tests/cases/fourslash/a.ts ===
-// export var [|a|];
+// <|export var [|{| defId: 1 |}a|];|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/b.ts",
-      "kind": "alias",
-      "name": "(alias) var a: any\nimport a",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "contextSpan": {
-          "start": 25,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/b.ts ===
+  // <|import { /*FIND ALL REFS*/[|{| defId: 0 |}a|] } from './a';|>
+  // export { a };
+
+  // === /tests/cases/fourslash/a.ts ===
+  // <|export var [|{| defId: 1 |}a|];|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) var a: any\nimport a",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
     ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "var",
-      "name": "var a: any",
-      "textSpan": {
-        "start": 11,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 11,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 13
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var a: any",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/b.ts ===
+// <|import { [|{| defId: 0, isWriteAccess: true |}a|] } from './a';|>
+// <|export { /*FIND ALL REFS*/[|{| defId: 0, isWriteAccess: true, isDefinition: true |}a|] };|>
+
+// === /tests/cases/fourslash/a.ts ===
+// <|export var [|{| defId: 1 |}a|];|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/b.ts ===
+  // <|import { [|{| defId: 0 |}a|] } from './a';|>
+  // export { /*FIND ALL REFS*/a };
+
+  // === /tests/cases/fourslash/a.ts ===
+  // <|export var [|{| defId: 1 |}a|];|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) var a: any\nimport a",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var a: any",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "a",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// <|export var /*RENAME*/[|aRENAME|];|>
 
 // === /tests/cases/fourslash/b.ts ===
-// import { [|a|] } from './a';
-// export { /*FIND ALL REFS*/[|a|] };
+// <|import { [|aRENAME|] } from './a';|>
+// <|export { [|aRENAME|] as a/*END SUFFIX*/ };|>
 
-// === /tests/cases/fourslash/a.ts ===
-// export var [|a|];
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/b.ts",
-      "kind": "alias",
-      "name": "(alias) var a: any\nimport a",
-      "textSpan": {
-        "start": 9,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 24
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 9,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 24
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 34,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/b.ts",
-        "contextSpan": {
-          "start": 25,
-          "length": 13
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/a.ts",
-      "kind": "var",
-      "name": "var a: any",
-      "textSpan": {
-        "start": 11,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "a",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 11,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/a.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 13
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// <|import { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] } from './a';|>
+// <|export { [|aRENAME|] as a/*END SUFFIX*/ };|>
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/b.ts ===
+// import { a } from './a';
+// <|export { /*START PREFIX*/a as /*RENAME*/[|aRENAME|] };|>

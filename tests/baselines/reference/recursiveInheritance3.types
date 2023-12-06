@@ -1,4 +1,6 @@
-=== tests/cases/compiler/recursiveInheritance3.ts ===
+//// [tests/cases/compiler/recursiveInheritance3.ts] ////
+
+=== recursiveInheritance3.ts ===
 class C implements I {
 >C : C
 

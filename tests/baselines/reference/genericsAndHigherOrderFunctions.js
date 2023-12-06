@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericsAndHigherOrderFunctions.ts] ////
+
 //// [genericsAndHigherOrderFunctions.ts]
 // no errors expected
 

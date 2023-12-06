@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/methods/esDecorators-classDeclaration-methods-nonStatic.ts] ////
+
 //// [esDecorators-classDeclaration-methods-nonStatic.ts]
 declare let dec: any;
 

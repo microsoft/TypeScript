@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/structural1.ts] ////
+
 //// [structural1.ts]
 module M {
     export interface I {

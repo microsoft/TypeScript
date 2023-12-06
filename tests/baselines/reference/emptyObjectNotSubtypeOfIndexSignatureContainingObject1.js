@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts] ////
+
 //// [emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts]
 // This should behave the same as emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts
 // Begin types from Lodash.

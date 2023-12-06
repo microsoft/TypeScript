@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveFieldSetting.ts] ////
+
 //// [recursiveFieldSetting.ts]
 // #32721
 

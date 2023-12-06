@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/wrappedRecursiveGenericType.ts] ////
+
 //// [wrappedRecursiveGenericType.ts]
 interface X<T> { e: T; }
 interface A<T> {

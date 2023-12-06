@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/typeGuards/typeGuardEnums.ts] ////
+
 //// [typeGuardEnums.ts]
 enum E {}
 enum V {}

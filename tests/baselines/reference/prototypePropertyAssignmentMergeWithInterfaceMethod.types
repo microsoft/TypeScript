@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/lovefield-ts.d.ts ===
+//// [tests/cases/conformance/salsa/prototypePropertyAssignmentMergeWithInterfaceMethod.ts] ////
+
+=== lovefield-ts.d.ts ===
 // bug #27352, crashes from github.com/google/lovefield
 declare namespace lf {
   export interface Transaction {
@@ -27,7 +29,7 @@ declare namespace lf {
 >stats : () => TransactionStats
   }
 }
-=== tests/cases/conformance/salsa/lovefield.js ===
+=== lovefield.js ===
 lf.Transaction = function() {};
 >lf.Transaction = function() {} : typeof Transaction
 >lf.Transaction : typeof Transaction

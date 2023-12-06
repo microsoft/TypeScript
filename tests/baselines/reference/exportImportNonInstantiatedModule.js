@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportImportNonInstantiatedModule.ts] ////
+
 //// [exportImportNonInstantiatedModule.ts]
 module A {
     export interface I { x: number }

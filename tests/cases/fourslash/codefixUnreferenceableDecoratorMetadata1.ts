@@ -40,7 +40,7 @@ class HelloWorld {
 
 verify.codeFix({
   index: 1,
-  description: ts.Diagnostics.Convert_to_type_only_import.message,
+  description: ts.Diagnostics.Use_import_type.message,
   errorCode: diag.code,
   newRangeContent: `import type { I2 } from "./mod";`,
 });

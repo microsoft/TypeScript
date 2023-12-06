@@ -1,7 +1,7 @@
-tests/cases/compiler/sourceMapValidationStatements.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+sourceMapValidationStatements.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== tests/cases/compiler/sourceMapValidationStatements.ts (1 errors) ====
+==== sourceMapValidationStatements.ts (1 errors) ====
     function f() {
         var y;
         var x = 0;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/castingTuple.ts ===
+//// [tests/cases/conformance/types/tuple/castingTuple.ts] ////
+
+=== castingTuple.ts ===
 interface I { }
 >I : Symbol(I, Decl(castingTuple.ts, 0, 0))
 

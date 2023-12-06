@@ -1,11 +1,8 @@
-tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild2.tsx(28,2): error TS2322: Type '{ __children__: never[]; }' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
-  Type '{ __children__: never[]; }' is not assignable to type '{ __children__: () => number; }'.
-    Types of property '__children__' are incompatible.
-      Type 'never[]' is not assignable to type '() => number'.
-        Type 'never[]' provides no match for the signature '(): number'.
+jsxEmptyExpressionNotCountedAsChild2.tsx(28,2): error TS2322: Type '{}' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
+  Property '__children__' is missing in type '{}' but required in type '{ __children__: () => number; }'.
 
 
-==== tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild2.tsx (1 errors) ====
+==== jsxEmptyExpressionNotCountedAsChild2.tsx (1 errors) ====
     // repro from #38108
     
     export {}
@@ -35,9 +32,7 @@ tests/cases/compiler/jsxEmptyExpressionNotCountedAsChild2.tsx(28,2): error TS232
     
     <MockComponent>{}</MockComponent>; // error
      ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ __children__: never[]; }' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
-!!! error TS2322:   Type '{ __children__: never[]; }' is not assignable to type '{ __children__: () => number; }'.
-!!! error TS2322:     Types of property '__children__' are incompatible.
-!!! error TS2322:       Type 'never[]' is not assignable to type '() => number'.
-!!! error TS2322:         Type 'never[]' provides no match for the signature '(): number'.
+!!! error TS2322: Type '{}' is not assignable to type '{ bar?: number | undefined; } & { __children__: () => number; }'.
+!!! error TS2322:   Property '__children__' is missing in type '{}' but required in type '{ __children__: () => number; }'.
+!!! related TS2728 jsxEmptyExpressionNotCountedAsChild2.tsx:22:46: '__children__' is declared here.
     

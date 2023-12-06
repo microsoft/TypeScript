@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file2.ts ===
+//// [tests/cases/compiler/typeCheckObjectCreationExpressionWithUndefinedCallResolutionData.ts] ////
+
+=== file2.ts ===
 import f = require('./file1');
 >f : typeof f
 
@@ -8,7 +10,7 @@ f.foo();
 >f : typeof f
 >foo : () => any
 
-=== tests/cases/compiler/file1.ts ===
+=== file1.ts ===
 export function foo() {
 >foo : () => any
 

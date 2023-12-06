@@ -55,17 +55,17 @@ const refactorName = "Convert import";
 const actions = {
     [ImportKind.Named]: {
         name: "Convert namespace import to named imports",
-        description: Diagnostics.Convert_namespace_import_to_named_imports.message,
+        description: getLocaleSpecificMessage(Diagnostics.Convert_namespace_import_to_named_imports),
         kind: "refactor.rewrite.import.named",
     },
     [ImportKind.Namespace]: {
         name: "Convert named imports to namespace import",
-        description: Diagnostics.Convert_named_imports_to_namespace_import.message,
+        description: getLocaleSpecificMessage(Diagnostics.Convert_named_imports_to_namespace_import),
         kind: "refactor.rewrite.import.namespace",
     },
     [ImportKind.Default]: {
         name: "Convert named imports to default import",
-        description: Diagnostics.Convert_named_imports_to_default_import.message,
+        description: getLocaleSpecificMessage(Diagnostics.Convert_named_imports_to_default_import),
         kind: "refactor.rewrite.import.default",
     },
 };
@@ -85,7 +85,7 @@ registerRefactor(refactorName, {
             return getOwnValues(actions).map(action => ({
                 name: refactorName,
                 description: action.description,
-                actions: [{ ...action, notApplicableReason: info.error }]
+                actions: [{ ...action, notApplicableReason: info.error }],
             }));
         }
 
@@ -97,14 +97,14 @@ registerRefactor(refactorName, {
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
         const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, info));
         return { edits, renameFilename: undefined, renameLocation: undefined };
-    }
+    },
 });
 
 // Can convert imports of the form `import * as m from "m";` or `import d, { x, y } from "m";`.
 type ImportConversionInfo =
-    | { convertTo: ImportKind.Default, import: NamedImports }
-    | { convertTo: ImportKind.Namespace, import: NamedImports }
-    | { convertTo: ImportKind.Named, import: NamespaceImport };
+    | { convertTo: ImportKind.Default; import: NamedImports; }
+    | { convertTo: ImportKind.Namespace; import: NamedImports; }
+    | { convertTo: ImportKind.Named; import: NamespaceImport; };
 
 function getImportConversionInfo(context: RefactorContext, considerPartialSpans = true): ImportConversionInfo | RefactorErrorInfo | undefined {
     const { file } = context;
@@ -212,7 +212,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
     const importDecl = toConvert.parent.parent;
     const { moduleSpecifier } = importDecl;
 
-    const toConvertSymbols: Set<Symbol> = new Set();
+    const toConvertSymbols = new Set<Symbol>();
     toConvert.elements.forEach(namedImport => {
         const symbol = checker.getSymbolAtLocation(namedImport.name);
         if (symbol) {
@@ -241,7 +241,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
 
     // Imports that need to be kept as named imports in the refactored code, to avoid changing the semantics.
     // More specifically, those are named imports that appear in named exports in the original code, e.g. `a` in `import { a } from "m"; export { a }`.
-    const neededNamedImports: Set<ImportSpecifier> = new Set();
+    const neededNamedImports = new Set<ImportSpecifier>();
 
     for (const element of toConvert.elements) {
         const propertyName = (element.propertyName || element.name).text;
@@ -259,12 +259,15 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
         });
     }
 
-    changes.replaceNode(sourceFile, toConvert, shouldUseDefault
-        ? factory.createIdentifier(namespaceImportName)
-        : factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)));
+    changes.replaceNode(
+        sourceFile,
+        toConvert,
+        shouldUseDefault
+            ? factory.createIdentifier(namespaceImportName)
+            : factory.createNamespaceImport(factory.createIdentifier(namespaceImportName)),
+    );
     if (neededNamedImports.size) {
-        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element =>
-            factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
+        const newNamedImports: ImportSpecifier[] = arrayFrom(neededNamedImports.values(), element => factory.createImportSpecifier(element.isTypeOnly, element.propertyName && factory.createIdentifier(element.propertyName.text), factory.createIdentifier(element.name.text)));
         changes.insertNodeAfter(sourceFile, toConvert.parent.parent, updateImport(importDecl, /*defaultImportName*/ undefined, newNamedImports));
     }
 }
@@ -277,6 +280,5 @@ function isExportEqualsModule(moduleSpecifier: Expression, checker: TypeChecker)
 }
 
 function updateImport(old: ImportDeclaration, defaultImportName: Identifier | undefined, elements: readonly ImportSpecifier[] | undefined): ImportDeclaration {
-    return factory.createImportDeclaration(/*modifiers*/ undefined,
-        factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*assertClause*/ undefined);
+    return factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, defaultImportName, elements && elements.length ? factory.createNamedImports(elements) : undefined), old.moduleSpecifier, /*attributes*/ undefined);
 }

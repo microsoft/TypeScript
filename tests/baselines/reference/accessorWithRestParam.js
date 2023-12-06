@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/accessorWithRestParam.ts] ////
+
 //// [accessorWithRestParam.ts]
 class C {
     set X(...v) { }

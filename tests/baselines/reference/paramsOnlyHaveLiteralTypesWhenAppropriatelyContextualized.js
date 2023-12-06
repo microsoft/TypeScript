@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts] ////
+
 //// [paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.ts]
 // Using a homomorphic mapped type over `T`
 // Produces a lower-priority inference for `T` than other

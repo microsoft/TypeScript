@@ -1,0 +1,19 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 9) skipped ---
+//     size?: number;
+// }
+// 
+// <|var /*RENAME*/[|nnRENAME|]: string;|>
+// var x = <MyClass name={[|nnRENAME|]}></MyClass>;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// --- (line: 9) skipped ---
+//     size?: number;
+// }
+// 
+// <|var [|nnRENAME|]: string;|>
+// var x = <MyClass name={/*RENAME*/[|nnRENAME|]}></MyClass>;

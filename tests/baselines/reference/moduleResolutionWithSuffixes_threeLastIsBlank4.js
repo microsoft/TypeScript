@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleResolutionWithSuffixes_threeLastIsBlank4.ts] ////
+
 //// [index.ts]
 import { base } from "./foo";
 

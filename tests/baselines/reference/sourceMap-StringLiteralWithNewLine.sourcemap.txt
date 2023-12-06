@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMap-StringLiteralWithNewLine.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-StringLiteralWithNewLine.js
+emittedFile:sourceMap-StringLiteralWithNewLine.js
 sourceFile:sourceMap-StringLiteralWithNewLine.ts
 -------------------------------------------------------------------
 >>>var Foo;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/correlatedUnions.ts] ////
+
 //// [correlatedUnions.ts]
 // Various repros from #30581
 
@@ -600,7 +602,7 @@ type SameKeys<T> = {
     };
 };
 type MappedFromOriginal = SameKeys<Original>;
-declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]];
+declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]];
 interface Config {
     string: string;
     number: number;

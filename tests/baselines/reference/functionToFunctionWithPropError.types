@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionToFunctionWithPropError.ts ===
+//// [tests/cases/compiler/functionToFunctionWithPropError.ts] ////
+
+=== functionToFunctionWithPropError.ts ===
 declare let x: { (): string; prop: number };
 >x : { (): string; prop: number; }
 >prop : number

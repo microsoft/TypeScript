@@ -1,20 +1,22 @@
-=== tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts ===
-export type Segment1 = [length: number, number]; // partially named, disallowed
+//// [tests/cases/conformance/types/tuple/named/namedTupleMembersErrors.ts] ////
+
+=== namedTupleMembersErrors.ts ===
+export type Segment1 = [length: number, number];
 >Segment1 : Symbol(Segment1, Decl(namedTupleMembersErrors.ts, 0, 0))
 
-export type Segment2 = [number, size: number]; // partially named, disallowed
+export type Segment2 = [number, size: number];
 >Segment2 : Symbol(Segment2, Decl(namedTupleMembersErrors.ts, 0, 48))
 
-export type List = [item: any, ...any];  // partially named, disallowed
+export type List = [item: any, ...any]; 
 >List : Symbol(List, Decl(namedTupleMembersErrors.ts, 1, 46))
 
-export type List2 = [any, ...remainder: any];  // partially named, disallowed
+export type List2 = [any, ...remainder: any]; 
 >List2 : Symbol(List2, Decl(namedTupleMembersErrors.ts, 3, 39))
 
-export type Pair = [item: any, any?];  // partially named, disallowed
+export type Pair = [item: any, any?]; 
 >Pair : Symbol(Pair, Decl(namedTupleMembersErrors.ts, 4, 45))
 
-export type Pair2 = [any, last?: any];  // partially named, disallowed
+export type Pair2 = [any, last?: any]; 
 >Pair2 : Symbol(Pair2, Decl(namedTupleMembersErrors.ts, 6, 37))
 
 export type Opt = [element: string?]; // question mark on element disallowed

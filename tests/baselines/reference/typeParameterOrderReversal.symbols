@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeParameterOrderReversal.ts ===
+//// [tests/cases/compiler/typeParameterOrderReversal.ts] ////
+
+=== typeParameterOrderReversal.ts ===
 interface X<T> {
 >X : Symbol(X, Decl(typeParameterOrderReversal.ts, 0, 0))
 >T : Symbol(T, Decl(typeParameterOrderReversal.ts, 0, 12))

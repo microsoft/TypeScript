@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/enumTag.ts] ////
+
+=== a.js ===
 /** @enum {string} */
 const Target = {
 >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }

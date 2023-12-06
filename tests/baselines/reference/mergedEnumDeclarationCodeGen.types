@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mergedEnumDeclarationCodeGen.ts ===
+//// [tests/cases/compiler/mergedEnumDeclarationCodeGen.ts] ////
+
+=== mergedEnumDeclarationCodeGen.ts ===
 enum E {
 >E : E
 

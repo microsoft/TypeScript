@@ -1,8 +1,8 @@
-tests/cases/conformance/es2019/globalThisAmbientModules.ts(8,39): error TS2339: Property '"ambientModule"' does not exist on type 'typeof globalThis'.
-tests/cases/conformance/es2019/globalThisAmbientModules.ts(11,33): error TS2339: Property '"ambientModule"' does not exist on type 'typeof globalThis'.
+globalThisAmbientModules.ts(8,39): error TS2339: Property '"ambientModule"' does not exist on type 'typeof globalThis'.
+globalThisAmbientModules.ts(11,33): error TS2339: Property '"ambientModule"' does not exist on type 'typeof globalThis'.
 
 
-==== tests/cases/conformance/es2019/globalThisAmbientModules.ts (2 errors) ====
+==== globalThisAmbientModules.ts (2 errors) ====
     declare module "ambientModule" {
         export type typ = 1
         export var val: typ

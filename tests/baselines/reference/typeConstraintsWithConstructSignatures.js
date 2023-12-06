@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeConstraintsWithConstructSignatures.ts] ////
+
 //// [typeConstraintsWithConstructSignatures.ts]
 interface Constructable {
     new (): any;

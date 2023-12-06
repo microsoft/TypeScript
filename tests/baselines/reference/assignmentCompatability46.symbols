@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatability46.ts ===
+//// [tests/cases/compiler/assignmentCompatability46.ts] ////
+
+=== assignmentCompatability46.ts ===
 declare function fn(x: never): void;
 >fn : Symbol(fn, Decl(assignmentCompatability46.ts, 0, 0))
 >x : Symbol(x, Decl(assignmentCompatability46.ts, 0, 20))

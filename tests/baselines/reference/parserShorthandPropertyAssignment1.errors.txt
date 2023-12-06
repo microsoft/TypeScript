@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment1.ts(3,11): error TS1162: An object member cannot be declared optional.
-tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment1.ts(3,16): error TS1162: An object member cannot be declared optional.
+parserShorthandPropertyAssignment1.ts(3,11): error TS1162: An object member cannot be declared optional.
+parserShorthandPropertyAssignment1.ts(3,16): error TS1162: An object member cannot be declared optional.
 
 
-==== tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment1.ts (2 errors) ====
+==== parserShorthandPropertyAssignment1.ts (2 errors) ====
     function foo(obj: { name?: string; id: number }) { }
     var name:any, id: any;
     foo({ name?, id? });

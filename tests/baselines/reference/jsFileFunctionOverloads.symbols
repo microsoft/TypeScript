@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsFileFunctionOverloads.js ===
+//// [tests/cases/compiler/jsFileFunctionOverloads.ts] ////
+
+=== jsFileFunctionOverloads.js ===
 /**
  * @overload
  * @param {number} x

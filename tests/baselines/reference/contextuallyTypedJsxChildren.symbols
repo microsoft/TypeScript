@@ -1,0 +1,116 @@
+//// [tests/cases/compiler/contextuallyTypedJsxChildren.tsx] ////
+
+=== contextuallyTypedJsxChildren.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : Symbol(React, Decl(contextuallyTypedJsxChildren.tsx, 2, 6))
+
+// repro from https://github.com/microsoft/TypeScript/issues/53941
+declare namespace DropdownMenu {
+>DropdownMenu : Symbol(DropdownMenu, Decl(contextuallyTypedJsxChildren.tsx, 2, 26), Decl(contextuallyTypedJsxChildren.tsx, 23, 13))
+
+  interface BaseProps {
+>BaseProps : Symbol(BaseProps, Decl(contextuallyTypedJsxChildren.tsx, 5, 32))
+
+    icon: string;
+>icon : Symbol(BaseProps.icon, Decl(contextuallyTypedJsxChildren.tsx, 6, 23))
+
+    label: string;
+>label : Symbol(BaseProps.label, Decl(contextuallyTypedJsxChildren.tsx, 7, 17))
+  }
+  interface PropsWithChildren extends BaseProps {
+>PropsWithChildren : Symbol(PropsWithChildren, Decl(contextuallyTypedJsxChildren.tsx, 9, 3))
+>BaseProps : Symbol(BaseProps, Decl(contextuallyTypedJsxChildren.tsx, 5, 32))
+
+    children(props: { onClose: () => void }): JSX.Element;
+>children : Symbol(PropsWithChildren.children, Decl(contextuallyTypedJsxChildren.tsx, 10, 49))
+>props : Symbol(props, Decl(contextuallyTypedJsxChildren.tsx, 11, 13))
+>onClose : Symbol(onClose, Decl(contextuallyTypedJsxChildren.tsx, 11, 21))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
+
+    controls?: never | undefined;
+>controls : Symbol(PropsWithChildren.controls, Decl(contextuallyTypedJsxChildren.tsx, 11, 58))
+  }
+  interface PropsWithControls extends BaseProps {
+>PropsWithControls : Symbol(PropsWithControls, Decl(contextuallyTypedJsxChildren.tsx, 13, 3))
+>BaseProps : Symbol(BaseProps, Decl(contextuallyTypedJsxChildren.tsx, 5, 32))
+
+    controls: Control[];
+>controls : Symbol(PropsWithControls.controls, Decl(contextuallyTypedJsxChildren.tsx, 14, 49))
+>Control : Symbol(Control, Decl(contextuallyTypedJsxChildren.tsx, 17, 3))
+
+    children?: never | undefined;
+>children : Symbol(PropsWithControls.children, Decl(contextuallyTypedJsxChildren.tsx, 15, 24))
+  }
+  interface Control {
+>Control : Symbol(Control, Decl(contextuallyTypedJsxChildren.tsx, 17, 3))
+
+    title: string;
+>title : Symbol(Control.title, Decl(contextuallyTypedJsxChildren.tsx, 18, 21))
+  }
+  type Props = PropsWithChildren | PropsWithControls;
+>Props : Symbol(Props, Decl(contextuallyTypedJsxChildren.tsx, 20, 3))
+>PropsWithChildren : Symbol(PropsWithChildren, Decl(contextuallyTypedJsxChildren.tsx, 9, 3))
+>PropsWithControls : Symbol(PropsWithControls, Decl(contextuallyTypedJsxChildren.tsx, 13, 3))
+}
+declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
+>DropdownMenu : Symbol(DropdownMenu, Decl(contextuallyTypedJsxChildren.tsx, 2, 26), Decl(contextuallyTypedJsxChildren.tsx, 23, 13))
+>React : Symbol(React, Decl(contextuallyTypedJsxChildren.tsx, 2, 6))
+>ComponentType : Symbol(React.ComponentType, Decl(react16.d.ts, 117, 60))
+>DropdownMenu : Symbol(DropdownMenu, Decl(contextuallyTypedJsxChildren.tsx, 2, 26), Decl(contextuallyTypedJsxChildren.tsx, 23, 13))
+>Props : Symbol(DropdownMenu.Props, Decl(contextuallyTypedJsxChildren.tsx, 20, 3))
+
+<DropdownMenu icon="move" label="Select a direction">
+>DropdownMenu : Symbol(DropdownMenu, Decl(contextuallyTypedJsxChildren.tsx, 2, 26), Decl(contextuallyTypedJsxChildren.tsx, 23, 13))
+>icon : Symbol(icon, Decl(contextuallyTypedJsxChildren.tsx, 25, 13))
+>label : Symbol(label, Decl(contextuallyTypedJsxChildren.tsx, 25, 25))
+
+  {({ onClose }) => (
+>onClose : Symbol(onClose, Decl(contextuallyTypedJsxChildren.tsx, 26, 5))
+
+    <div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+      <button onClick={onClose}>Click me</button>
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
+>onClick : Symbol(onClick, Decl(contextuallyTypedJsxChildren.tsx, 28, 13))
+>onClose : Symbol(onClose, Decl(contextuallyTypedJsxChildren.tsx, 26, 5))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
+
+    </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+  )}
+</DropdownMenu>;
+>DropdownMenu : Symbol(DropdownMenu, Decl(contextuallyTypedJsxChildren.tsx, 2, 26), Decl(contextuallyTypedJsxChildren.tsx, 23, 13))
+
+<DropdownMenu
+>DropdownMenu : Symbol(DropdownMenu, Decl(contextuallyTypedJsxChildren.tsx, 2, 26), Decl(contextuallyTypedJsxChildren.tsx, 23, 13))
+
+  icon="move"
+>icon : Symbol(icon, Decl(contextuallyTypedJsxChildren.tsx, 33, 13))
+
+  label="Select a direction"
+>label : Symbol(label, Decl(contextuallyTypedJsxChildren.tsx, 34, 13))
+
+  children={({ onClose }) => (
+>children : Symbol(children, Decl(contextuallyTypedJsxChildren.tsx, 35, 28))
+>onClose : Symbol(onClose, Decl(contextuallyTypedJsxChildren.tsx, 36, 14))
+
+    <div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+      <button onClick={onClose}>Click me</button>
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
+>onClick : Symbol(onClick, Decl(contextuallyTypedJsxChildren.tsx, 38, 13))
+>onClose : Symbol(onClose, Decl(contextuallyTypedJsxChildren.tsx, 36, 14))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react16.d.ts, 2532, 96))
+
+    </div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+  )}
+/>;
+

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts ===
+//// [tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts] ////
+
+=== staticPropertyNotInClassType.ts ===
 module NonGeneric {
 >NonGeneric : Symbol(NonGeneric, Decl(staticPropertyNotInClassType.ts, 0, 0))
 

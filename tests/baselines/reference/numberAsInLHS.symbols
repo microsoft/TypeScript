@@ -1,3 +1,5 @@
-=== tests/cases/compiler/numberAsInLHS.ts ===
+//// [tests/cases/compiler/numberAsInLHS.ts] ////
+
+=== numberAsInLHS.ts ===
 
 3 in [0, 1]

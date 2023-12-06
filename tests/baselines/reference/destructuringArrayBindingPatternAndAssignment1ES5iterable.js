@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES5iterable.ts] ////
+
 //// [destructuringArrayBindingPatternAndAssignment1ES5iterable.ts]
 /* AssignmentPattern:
  *      ObjectAssignmentPattern

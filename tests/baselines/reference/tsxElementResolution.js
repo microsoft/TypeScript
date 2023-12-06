@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxElementResolution.tsx] ////
+
 //// [tsxElementResolution.tsx]
 declare namespace JSX {
 	interface IntrinsicElements {

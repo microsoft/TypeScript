@@ -1,5 +1,7 @@
 //// [tests/cases/compiler/pathMappingBasedModuleResolution4_classic.ts] ////
 
+//// [file4.ts]
+export var y = 100;
 //// [file1.ts]
 import {x} from "folder2/file2"
 declare function use(a: any): void;
@@ -13,8 +15,6 @@ export var x = a + b;
 //// [file3.ts]
 export var x = 1;
 
-//// [file4.ts]
-export var y = 100;
 
 //// [file3.js]
 define(["require", "exports"], function (require, exports) {

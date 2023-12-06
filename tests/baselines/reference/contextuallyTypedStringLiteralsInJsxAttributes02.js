@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes02.tsx] ////
+
 //// [file.tsx]
 import React = require('react')
 

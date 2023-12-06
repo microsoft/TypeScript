@@ -1,15 +1,17 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/legacyNodeModulesExportsSpecifierGenerationConditions.ts] ////
+
+=== index.ts ===
 export const a = async () => (await import("inner")).x();
 >a : Symbol(a, Decl(index.ts, 0, 12))
 >(await import("inner")).x : Symbol(x, Decl(index.d.ts, 0, 8))
->"inner" : Symbol("tests/cases/conformance/node/node_modules/inner/index", Decl(index.d.ts, 0, 0))
+>"inner" : Symbol("node_modules/inner/index", Decl(index.d.ts, 0, 0))
 >x : Symbol(x, Decl(index.d.ts, 0, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/index.d.ts ===
+=== node_modules/inner/index.d.ts ===
 export { x } from "./other.js";
 >x : Symbol(x, Decl(index.d.ts, 0, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/other.d.ts ===
+=== node_modules/inner/other.d.ts ===
 import { Thing } from "./private.js"
 >Thing : Symbol(Thing, Decl(other.d.ts, 0, 8))
 
@@ -17,7 +19,7 @@ export const x: () => Thing;
 >x : Symbol(x, Decl(other.d.ts, 1, 12))
 >Thing : Symbol(Thing, Decl(other.d.ts, 0, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/private.d.ts ===
+=== node_modules/inner/private.d.ts ===
 export interface Thing {} // not exported in export map, inaccessible under new module modes
 >Thing : Symbol(Thing, Decl(private.d.ts, 0, 0))
 

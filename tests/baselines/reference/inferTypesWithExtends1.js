@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/conditional/inferTypesWithExtends1.ts] ////
+
 //// [inferTypesWithExtends1.ts]
 // infer to tuple element
 type X1<T extends any[]> =

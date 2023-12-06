@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeReferenceDirectiveWithTypeAsFile.ts] ////
+
 === /a.ts ===
 a;
 >a : number

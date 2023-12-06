@@ -1,9 +1,9 @@
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(5,12): error TS2503: Cannot find namespace 'V'.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(11,12): error TS2702: 'C' only refers to a type, but is being used as a namespace here.
-tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts(23,12): error TS2702: 'I' only refers to a type, but is being used as a namespace here.
+invalidImportAliasIdentifiers.ts(5,12): error TS2503: Cannot find namespace 'V'.
+invalidImportAliasIdentifiers.ts(11,12): error TS2702: 'C' only refers to a type, but is being used as a namespace here.
+invalidImportAliasIdentifiers.ts(23,12): error TS2702: 'I' only refers to a type, but is being used as a namespace here.
 
 
-==== tests/cases/conformance/internalModules/importDeclarations/invalidImportAliasIdentifiers.ts (3 errors) ====
+==== invalidImportAliasIdentifiers.ts (3 errors) ====
     // none of these should work, since non are actually modules
     
     var V = 12;

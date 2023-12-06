@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/moduleExportWithExportPropertyAssignment2.ts] ////
+
+=== a.js ===
 /// <reference path='./requires.d.ts' />
 var mod1 = require('./mod1')
 >mod1 : number
@@ -19,7 +21,7 @@ mod1.f() // error, 'f' is not a property on 'number'
 >mod1 : number
 >f : any
 
-=== tests/cases/conformance/salsa/requires.d.ts ===
+=== requires.d.ts ===
 declare var module: { exports: any };
 >module : { exports: any; }
 >exports : any
@@ -28,7 +30,7 @@ declare function require(name: string): any;
 >require : (name: string) => any
 >name : string
 
-=== tests/cases/conformance/salsa/mod1.js ===
+=== mod1.js ===
 /// <reference path='./requires.d.ts' />
 module.exports = 1
 >module.exports = 1 : number

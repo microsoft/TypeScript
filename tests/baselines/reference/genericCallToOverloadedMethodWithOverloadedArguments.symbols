@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts ===
+//// [tests/cases/conformance/types/typeRelationships/typeInference/genericCallToOverloadedMethodWithOverloadedArguments.ts] ////
+
+=== genericCallToOverloadedMethodWithOverloadedArguments.ts ===
 module m1 {
 >m1 : Symbol(m1, Decl(genericCallToOverloadedMethodWithOverloadedArguments.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts] ////
+
 //// [requiredMappedTypeModifierTrumpsVariance.ts]
 const a: Required<{ a?: 1; x: 1 }> = { a: 1, x: 1 };
 const b: Required<{ b?: 1; x: 1 }> = { b: 1, x: 1 };

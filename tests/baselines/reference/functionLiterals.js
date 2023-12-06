@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/objectTypeLiteral/methodSignatures/functionLiterals.ts] ////
+
 //// [functionLiterals.ts]
 // PropName<TypeParamList>(ParamList):ReturnType is equivalent to PropName: { <TypeParamList>(ParamList): ReturnType }
 

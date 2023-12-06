@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive2.ts] ////
+
 //// [classExtendingPrimitive2.ts]
 // classes cannot extend primitives
 

@@ -1,0 +1,31 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightInKeyword.ts ===
+// export type Foo<T> = {
+//     [K /*HIGHLIGHTS*/in keyof T]: any;
+// }
+// 
+// "a" in {};
+// 
+// for (let a in {}) {}
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightInKeyword.ts ===
+// export type Foo<T> = {
+//     [K in keyof T]: any;
+// }
+// 
+// "a" /*HIGHLIGHTS*/in {};
+// 
+// for (let a in {}) {}
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightInKeyword.ts ===
+// --- (line: 3) skipped ---
+// 
+// "a" in {};
+// 
+// for (let a /*HIGHLIGHTS*/in {}) {}

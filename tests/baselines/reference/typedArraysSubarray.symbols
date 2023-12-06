@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typedArraysSubarray.ts ===
+//// [tests/cases/compiler/typedArraysSubarray.ts] ////
+
+=== typedArraysSubarray.ts ===
 function int8ArraySubarray() {
 >int8ArraySubarray : Symbol(int8ArraySubarray, Decl(typedArraysSubarray.ts, 0, 0))
 

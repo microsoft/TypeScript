@@ -1,4 +1,6 @@
-=== tests/cases/compiler/jsxMultilineAttributeStringValues.tsx ===
+//// [tests/cases/compiler/jsxMultilineAttributeStringValues.tsx] ////
+
+=== jsxMultilineAttributeStringValues.tsx ===
 const a = <input value="
 >a : Symbol(a, Decl(jsxMultilineAttributeStringValues.tsx, 0, 5))
 >value : Symbol(value, Decl(jsxMultilineAttributeStringValues.tsx, 0, 16))

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts ===
+//// [tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts] ////
+
+=== chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts ===
 class Chain<T extends A> {
 >Chain : Chain<T>
 

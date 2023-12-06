@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.ts ===
+//// [tests/cases/compiler/destructuredDeclarationEmit.ts] ////
+
+=== foo.ts ===
 const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } };
 >foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
 >{ bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } } : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
@@ -39,7 +41,7 @@ export { foo, arr };
 >foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
 >arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import { foo, arr } from './foo';
 >foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
 >arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]

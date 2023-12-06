@@ -1,4 +1,6 @@
-=== tests/cases/compiler/consumer.ts ===
+//// [tests/cases/compiler/externalModuleResolution2.ts] ////
+
+=== consumer.ts ===
 import x = require('./foo');
 >x : typeof x
 
@@ -7,7 +9,7 @@ x.X // .ts should be picked
 >x : typeof x
 >X : number
 
-=== tests/cases/compiler/foo.ts ===
+=== foo.ts ===
 module M2 {
 >M2 : typeof M2
 

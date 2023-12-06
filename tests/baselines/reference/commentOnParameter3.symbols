@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentOnParameter3.ts ===
+//// [tests/cases/compiler/commentOnParameter3.ts] ////
+
+=== commentOnParameter3.ts ===
 function commentedParameters(
 >commentedParameters : Symbol(commentedParameters, Decl(commentOnParameter3.ts, 0, 0))
 

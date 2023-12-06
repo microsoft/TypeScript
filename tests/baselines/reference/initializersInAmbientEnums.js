@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/initializersInAmbientEnums.ts] ////
+
 //// [initializersInAmbientEnums.ts]
 declare enum E {
     a = 10,

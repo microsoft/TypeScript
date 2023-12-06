@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts] ////
+
 //// [contextualSignatureInstantiationWithTypeParameterConstrainedToOuterTypeParameter.ts]
 function f<T>() {
     function g<U extends T>(u: U): U { return null }

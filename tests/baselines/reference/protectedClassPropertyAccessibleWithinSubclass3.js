@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/accessibility/protectedClassPropertyAccessibleWithinSubclass3.ts] ////
+
 //// [protectedClassPropertyAccessibleWithinSubclass3.ts]
 class Base {
     protected x: string;

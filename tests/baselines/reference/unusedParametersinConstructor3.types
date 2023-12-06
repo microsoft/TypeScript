@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedParametersinConstructor3.ts ===
+//// [tests/cases/compiler/unusedParametersinConstructor3.ts] ////
+
+=== unusedParametersinConstructor3.ts ===
 class greeter {
 >greeter : greeter
 

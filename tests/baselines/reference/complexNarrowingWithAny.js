@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/complexNarrowingWithAny.ts] ////
+
 //// [complexNarrowingWithAny.ts]
 // Repro from #10869
 

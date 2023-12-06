@@ -1,7 +1,7 @@
-tests/cases/compiler/unusedParametersinConstructor2.ts(2,17): error TS6133: 'param1' is declared but its value is never read.
+unusedParametersinConstructor2.ts(2,17): error TS6133: 'param1' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedParametersinConstructor2.ts (1 errors) ====
+==== unusedParametersinConstructor2.ts (1 errors) ====
     class greeter {
         constructor(param1: string, param2: string) {
                     ~~~~~~

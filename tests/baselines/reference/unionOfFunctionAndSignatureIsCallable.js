@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionOfFunctionAndSignatureIsCallable.ts] ////
+
 //// [unionOfFunctionAndSignatureIsCallable.ts]
 function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
     const a = c1();

@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -25,7 +26,11 @@ export default 1;
 export { default as ConstantNumber } from "./constants"
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/src/project/types.d.ts]
 type MagicNumber = typeof import('./reexport').ConstantNumber

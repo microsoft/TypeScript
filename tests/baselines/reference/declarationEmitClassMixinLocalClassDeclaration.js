@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitClassMixinLocalClassDeclaration.ts] ////
+
 //// [declarationEmitClassMixinLocalClassDeclaration.ts]
 export type AnyFunction<Result = any> = (...input: any[]) => Result
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commentsFormatting.ts ===
+//// [tests/cases/compiler/commentsFormatting.ts] ////
+
+=== commentsFormatting.ts ===
 module m {
 >m : Symbol(m, Decl(commentsFormatting.ts, 0, 0))
 

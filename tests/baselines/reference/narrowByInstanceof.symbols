@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowByInstanceof.ts ===
+//// [tests/cases/compiler/narrowByInstanceof.ts] ////
+
+=== narrowByInstanceof.ts ===
 interface A { a: string }
 >A : Symbol(A, Decl(narrowByInstanceof.ts, 0, 0))
 >a : Symbol(A.a, Decl(narrowByInstanceof.ts, 0, 13))

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/duplicateLocalVariable3.ts] ////
+
 //// [duplicateLocalVariable3.ts]
 var x = 1;
 var x = 2; 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letDeclarations-scopes.ts ===
+//// [tests/cases/compiler/letDeclarations-scopes.ts] ////
+
+=== letDeclarations-scopes.ts ===
 // global
 let l = "string";
 >l : Symbol(l, Decl(letDeclarations-scopes.ts, 1, 3))

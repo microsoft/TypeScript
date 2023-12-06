@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es2022/es2022SharedMemory.ts ===
+//// [tests/cases/conformance/es2022/es2022SharedMemory.ts] ////
+
+=== es2022SharedMemory.ts ===
 const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
 >sab : Symbol(sab, Decl(es2022SharedMemory.ts, 0, 5))
 >SharedArrayBuffer : Symbol(SharedArrayBuffer, Decl(lib.es2017.sharedmemory.d.ts, --, --), Decl(lib.es2017.sharedmemory.d.ts, --, --))

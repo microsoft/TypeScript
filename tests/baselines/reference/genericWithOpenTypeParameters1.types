@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericWithOpenTypeParameters1.ts ===
+//// [tests/cases/compiler/genericWithOpenTypeParameters1.ts] ////
+
+=== genericWithOpenTypeParameters1.ts ===
 class B<T> {
 >B : B<T>
 

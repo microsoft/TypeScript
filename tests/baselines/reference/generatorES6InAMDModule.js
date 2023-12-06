@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/generatorES6InAMDModule.ts] ////
+
 //// [generatorES6InAMDModule.ts]
 export function* foo() {
     yield

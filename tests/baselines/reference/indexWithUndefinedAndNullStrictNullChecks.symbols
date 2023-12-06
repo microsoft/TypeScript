@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts ===
+//// [tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts] ////
+
+=== indexWithUndefinedAndNullStrictNullChecks.ts ===
 interface N {
 >N : Symbol(N, Decl(indexWithUndefinedAndNullStrictNullChecks.ts, 0, 0))
 

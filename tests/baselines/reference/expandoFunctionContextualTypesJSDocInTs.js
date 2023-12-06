@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/expandoFunctionContextualTypesJSDocInTs.ts] ////
+
 //// [expandoFunctionContextualTypesJSDocInTs.ts]
 export function Foo() { }
 

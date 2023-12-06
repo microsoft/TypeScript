@@ -1,4 +1,6 @@
-=== tests/cases/compiler/identifierStartAfterNumericLiteral.ts ===
+//// [tests/cases/compiler/identifierStartAfterNumericLiteral.ts] ////
+
+=== identifierStartAfterNumericLiteral.ts ===
 let valueIn = 3in[null];
 >valueIn : boolean
 >3in[null] : boolean

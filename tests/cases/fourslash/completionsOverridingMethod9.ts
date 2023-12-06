@@ -22,13 +22,15 @@ verify.completions({
     includes: [
         {
             name: "a",
-            sortText: completion.SortText.ClassMemberSnippets,
-            insertText: "a?: number;"
+            sortText: completion.SortText.LocationPriority,
+            insertText: "a?: number;",
+            filterText: "a",
         },
         {
             name: "b",
-            sortText: completion.SortText.ClassMemberSnippets,
-            insertText: "b(x: number): void {\n}"
+            sortText: completion.SortText.LocationPriority,
+            insertText: "b(x: number): void {\n}",
+            filterText: "b",
         },
     ],
 });

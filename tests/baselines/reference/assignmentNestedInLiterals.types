@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentNestedInLiterals.ts ===
+//// [tests/cases/compiler/assignmentNestedInLiterals.ts] ////
+
+=== assignmentNestedInLiterals.ts ===
 var target, x, y;
 >target : any
 >x : any

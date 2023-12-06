@@ -1,0 +1,11 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightDefaultInKeyword.ts ===
+// /*HIGHLIGHTS*/case
+// default
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/documentHighlightDefaultInKeyword.ts ===
+// case
+// /*HIGHLIGHTS*/default

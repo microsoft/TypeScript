@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/typeRelationships/recursiveTypes/nominalSubtypeCheckOfTypeParameter.ts ===
+//// [tests/cases/conformance/types/typeRelationships/recursiveTypes/nominalSubtypeCheckOfTypeParameter.ts] ////
+
+=== nominalSubtypeCheckOfTypeParameter.ts ===
 interface BinaryTuple<T, S> {
 >BinaryTuple : Symbol(BinaryTuple, Decl(nominalSubtypeCheckOfTypeParameter.ts, 0, 0))
 >T : Symbol(T, Decl(nominalSubtypeCheckOfTypeParameter.ts, 0, 22))

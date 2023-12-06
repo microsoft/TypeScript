@@ -1,9 +1,11 @@
-=== tests/cases/compiler/b.ts ===
+//// [tests/cases/compiler/commentOnElidedModule1.ts] ////
+
+=== b.ts ===
 
 ///<reference path="a.ts"/>
 module ElidedModule3 {
 }
-=== tests/cases/compiler/a.ts ===
+=== a.ts ===
 
 /*!=================
     Keep this pinned

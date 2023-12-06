@@ -1,8 +1,8 @@
-tests/cases/conformance/node/index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
-tests/cases/conformance/node/index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
+index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
+index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
 
 
-==== tests/cases/conformance/node/index.ts (0 errors) ====
+==== index.ts (0 errors) ====
     // esm format file
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
@@ -10,7 +10,7 @@ tests/cases/conformance/node/index.cts(4,23): error TS1479: The current file is 
     cjs;
     mjs;
     type;
-==== tests/cases/conformance/node/index.mts (0 errors) ====
+==== index.mts (0 errors) ====
     // esm format file
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
@@ -18,7 +18,7 @@ tests/cases/conformance/node/index.cts(4,23): error TS1479: The current file is 
     cjs;
     mjs;
     type;
-==== tests/cases/conformance/node/index.cts (2 errors) ====
+==== index.cts (2 errors) ====
     // esm format file
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
@@ -30,7 +30,7 @@ tests/cases/conformance/node/index.cts(4,23): error TS1479: The current file is 
     cjs;
     mjs;
     type;
-==== tests/cases/conformance/node/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,

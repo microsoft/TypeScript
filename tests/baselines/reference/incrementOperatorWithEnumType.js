@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumType.ts] ////
+
 //// [incrementOperatorWithEnumType.ts]
 // ++ operator on enum type
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/localImportNameVsGlobalName.ts ===
+//// [tests/cases/compiler/localImportNameVsGlobalName.ts] ////
+
+=== localImportNameVsGlobalName.ts ===
 module Keyboard {
 >Keyboard : Symbol(Keyboard, Decl(localImportNameVsGlobalName.ts, 0, 0))
 

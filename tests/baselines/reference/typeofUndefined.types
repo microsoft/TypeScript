@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofUndefined.ts ===
+//// [tests/cases/compiler/typeofUndefined.ts] ////
+
+=== typeofUndefined.ts ===
 var x: typeof undefined;
 >x : any
 >undefined : undefined

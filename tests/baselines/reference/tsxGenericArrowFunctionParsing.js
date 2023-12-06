@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxGenericArrowFunctionParsing.tsx] ////
+
 //// [file.tsx]
 declare module JSX {
 	interface Element { isElement; }

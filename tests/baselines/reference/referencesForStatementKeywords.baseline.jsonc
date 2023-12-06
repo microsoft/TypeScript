@@ -1,3144 +1,2175 @@
+// === findAllReferences ===
 // === /main.ts ===
 // // import ... = ...
-// /*FIND ALL REFS*/import [|A|] = require("./a");
+// /*FIND ALL REFS*/<|import [|{| isWriteAccess: true, isDefinition: true |}A|] = require("./a");|>
 // namespace N { }
 // import N2 = N;
 // 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 6) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "import A = require(\"./a\")",
-      "textSpan": {
-        "start": 27,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "A",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "require",
-          "kind": "keyword"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\"./a\"",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 20,
-        "length": 26
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 20,
-          "length": 26
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /main.ts ===
+  // // import ... = ...
+  // /*FIND ALL REFS*/<|import [|A|] = require("./a");|>
+  // namespace N { }
+  // import N2 = N;
+  // 
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import A = require(\"./a\")",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "A",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "require",
+      "kind": "keyword"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "\"./a\"",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /main.ts ===
 // // import ... = ...
-// import A = /*FIND ALL REFS*/require("[|./a|]");
+// <|import A = /*FIND ALL REFS*/require("[|./a|]");|>
 // namespace N { }
 // import N2 = N;
 // 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 6) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.ts",
-      "kind": "module",
-      "name": "module \"/a\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/a\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 40,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 20,
-          "length": 26
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.ts ===
+  // [|export const a = 1;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/a\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/a\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /main.ts ===
 // // import ... = ...
 // import A = require("./a");
 // namespace N { }
-// /*FIND ALL REFS*/import [|N2|] = N;
+// /*FIND ALL REFS*/<|import [|{| isWriteAccess: true, isDefinition: true |}N2|] = N;|>
 // 
 // // import ... from ...
 // import type B from "./b";
+// --- (line: 8) skipped ---
+
+  // === Definitions ===
+  // === /main.ts ===
+  // // import ... = ...
+  // import A = require("./a");
+  // namespace N { }
+  // /*FIND ALL REFS*/<|import [|N2|] = N;|>
+  // 
+  // // import ... from ...
+  // import type B from "./b";
+  // --- (line: 8) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) namespace N2\nimport N2 = N",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "namespace",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N2",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N2",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "N",
+      "kind": "moduleName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 3) skipped ---
+// import N2 = N;
+// 
+// // import ... from ...
+// /*FIND ALL REFS*/<|import type [|{| defId: 0, isWriteAccess: true, isDefinition: true |}B|] from "./b";|>
 // import type * as C from "./c";
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "(alias) namespace N2\nimport N2 = N",
-      "textSpan": {
-        "start": 70,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "namespace",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N2",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N2",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "N",
-          "kind": "moduleName"
-        }
-      ],
-      "contextSpan": {
-        "start": 63,
-        "length": 14
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 70,
-          "length": 2
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 63,
-          "length": 14
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
+// --- (line: 11) skipped ---
 
 // === /b.ts ===
-// export default class [|B|] {}
+// <|export default class [|{| defId: 1, isWriteAccess: true |}B|] {}|>
 
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 3) skipped ---
+  // import N2 = N;
+  // 
+  // // import ... from ...
+  // /*FIND ALL REFS*/<|import type [|{| defId: 0 |}B|] from "./b";|>
+  // import type * as C from "./c";
+  // import type { D } from "./d";
+  // import type { e1, e2 as e3 } from "./e";
+  // --- (line: 11) skipped ---
+
+  // === /b.ts ===
+  // <|export default class [|{| defId: 1 |}B|] {}|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class B\nimport B",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class B",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
+// --- (line: 3) skipped ---
 // import N2 = N;
 // 
 // // import ... from ...
-// /*FIND ALL REFS*/import type [|B|] from "./b";
+// <|import /*FIND ALL REFS*/type [|{| defId: 0, isWriteAccess: true, isDefinition: true |}B|] from "./b";|>
 // import type * as C from "./c";
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "(alias) class B\nimport B",
-      "textSpan": {
-        "start": 114,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 102,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 102,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "class",
-      "name": "class B",
-      "textSpan": {
-        "start": 21,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// --- (line: 11) skipped ---
 
 // === /b.ts ===
-// export default class [|B|] {}
+// <|export default class [|{| defId: 1, isWriteAccess: true |}B|] {}|>
 
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 3) skipped ---
+  // import N2 = N;
+  // 
+  // // import ... from ...
+  // <|import /*FIND ALL REFS*/type [|{| defId: 0 |}B|] from "./b";|>
+  // import type * as C from "./c";
+  // import type { D } from "./d";
+  // import type { e1, e2 as e3 } from "./e";
+  // --- (line: 11) skipped ---
+
+  // === /b.ts ===
+  // <|export default class [|{| defId: 1 |}B|] {}|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class B\nimport B",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class B",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "B",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
+// --- (line: 3) skipped ---
 // import N2 = N;
 // 
 // // import ... from ...
-// import /*FIND ALL REFS*/type [|B|] from "./b";
+// <|import type B /*FIND ALL REFS*/from "[|./b|]";|>
 // import type * as C from "./c";
 // import type { D } from "./d";
 // import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 11) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "(alias) class B\nimport B",
-      "textSpan": {
-        "start": 114,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 102,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 114,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 102,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "class",
-      "name": "class B",
-      "textSpan": {
-        "start": 21,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "B",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 25
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 21,
-          "length": 1
-        },
-        "fileName": "/b.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 25
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /b.ts ===
+  // [|export default class B {}|]
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/b\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/b\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
+// --- (line: 4) skipped ---
 // 
 // // import ... from ...
-// import type B /*FIND ALL REFS*/from "[|./b|]";
+// import type B from "./b";
+// /*FIND ALL REFS*/<|import type * as [|{| isWriteAccess: true, isDefinition: true |}C|] from "./c";|>
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// --- (line: 12) skipped ---
+
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 4) skipped ---
+  // 
+  // // import ... from ...
+  // import type B from "./b";
+  // /*FIND ALL REFS*/<|import type * as [|C|] from "./c";|>
+  // import type { D } from "./d";
+  // import type { e1, e2 as e3 } from "./e";
+  // 
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import C",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 4) skipped ---
+// 
+// // import ... from ...
+// import type B from "./b";
+// <|import /*FIND ALL REFS*/type * as [|{| isWriteAccess: true, isDefinition: true |}C|] from "./c";|>
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// --- (line: 12) skipped ---
+
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 4) skipped ---
+  // 
+  // // import ... from ...
+  // import type B from "./b";
+  // <|import /*FIND ALL REFS*/type * as [|C|] from "./c";|>
+  // import type { D } from "./d";
+  // import type { e1, e2 as e3 } from "./e";
+  // 
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import C",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 4) skipped ---
+// 
+// // import ... from ...
+// import type B from "./b";
+// <|import type * /*FIND ALL REFS*/as [|{| isWriteAccess: true, isDefinition: true |}C|] from "./c";|>
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// --- (line: 12) skipped ---
+
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 4) skipped ---
+  // 
+  // // import ... from ...
+  // import type B from "./b";
+  // <|import type * /*FIND ALL REFS*/as [|C|] from "./c";|>
+  // import type { D } from "./d";
+  // import type { e1, e2 as e3 } from "./e";
+  // 
+  // --- (line: 12) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import C",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "C",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 4) skipped ---
+// 
+// // import ... from ...
+// import type B from "./b";
+// <|import type * as C /*FIND ALL REFS*/from "[|./c|]";|>
+// import type { D } from "./d";
+// import type { e1, e2 as e3 } from "./e";
+// 
+// --- (line: 12) skipped ---
+
+  // === Definitions ===
+  // === /c.ts ===
+  // [|export const c = 1;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/c\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/c\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 5) skipped ---
+// // import ... from ...
+// import type B from "./b";
 // import type * as C from "./c";
-// import type { D } from "./d";
+// /*FIND ALL REFS*/<|import type { [|{| defId: 0, isWriteAccess: true, isDefinition: true |}D|] } from "./d";|>
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/b.ts",
-      "kind": "module",
-      "name": "module \"/b\"",
-      "textSpan": {
-        "start": 0,
-        "length": 25
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/b\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 122,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 102,
-          "length": 25
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// /*FIND ALL REFS*/import type * as [|C|] from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "import C",
-      "textSpan": {
-        "start": 145,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 128,
-        "length": 30
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 128,
-          "length": 30
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import /*FIND ALL REFS*/type * as [|C|] from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "import C",
-      "textSpan": {
-        "start": 145,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 128,
-        "length": 30
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 128,
-          "length": 30
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * /*FIND ALL REFS*/as [|C|] from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "import C",
-      "textSpan": {
-        "start": 145,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "C",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 128,
-        "length": 30
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 128,
-          "length": 30
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C /*FIND ALL REFS*/from "[|./c|]";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/c.ts",
-      "kind": "module",
-      "name": "module \"/c\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/c\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 153,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 128,
-          "length": 30
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+// --- (line: 13) skipped ---
 
 // === /d.ts ===
-// export class [|D|] {}
+// <|export class [|{| defId: 1, isWriteAccess: true |}D|] {}|>
 
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 5) skipped ---
+  // // import ... from ...
+  // import type B from "./b";
+  // import type * as C from "./c";
+  // /*FIND ALL REFS*/<|import type { [|{| defId: 0 |}D|] } from "./d";|>
+  // import type { e1, e2 as e3 } from "./e";
+  // 
+  // // import "module"
+  // --- (line: 13) skipped ---
+
+  // === /d.ts ===
+  // <|export class [|{| defId: 1 |}D|] {}|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class D\nimport D",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "D",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "D",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class D",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "D",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
+// --- (line: 5) skipped ---
 // // import ... from ...
 // import type B from "./b";
 // import type * as C from "./c";
-// /*FIND ALL REFS*/import type { [|D|] } from "./d";
+// <|import /*FIND ALL REFS*/type { [|{| defId: 0, isWriteAccess: true, isDefinition: true |}D|] } from "./d";|>
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "(alias) class D\nimport D",
-      "textSpan": {
-        "start": 173,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "D",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "D",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 159,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 159,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/d.ts",
-      "kind": "class",
-      "name": "class D",
-      "textSpan": {
-        "start": 13,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "D",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 1
-        },
-        "fileName": "/d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// --- (line: 13) skipped ---
 
 // === /d.ts ===
-// export class [|D|] {}
+// <|export class [|{| defId: 1, isWriteAccess: true |}D|] {}|>
 
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 5) skipped ---
+  // // import ... from ...
+  // import type B from "./b";
+  // import type * as C from "./c";
+  // <|import /*FIND ALL REFS*/type { [|{| defId: 0 |}D|] } from "./d";|>
+  // import type { e1, e2 as e3 } from "./e";
+  // 
+  // // import "module"
+  // --- (line: 13) skipped ---
+
+  // === /d.ts ===
+  // <|export class [|{| defId: 1 |}D|] {}|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class D\nimport D",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "D",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "D",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class D",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "D",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
+// --- (line: 5) skipped ---
 // // import ... from ...
 // import type B from "./b";
 // import type * as C from "./c";
-// import /*FIND ALL REFS*/type { [|D|] } from "./d";
+// <|import type { D } /*FIND ALL REFS*/from "[|./d|]";|>
 // import type { e1, e2 as e3 } from "./e";
 // 
 // // import "module"
+// --- (line: 13) skipped ---
+
+  // === Definitions ===
+  // === /d.ts ===
+  // [|export class D {}|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/d\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/d\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 6) skipped ---
+// import type B from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// /*FIND ALL REFS*/import type { e1, e2 as e3 } from "./e";
+// 
+// // import "module"
 // import "./f";
+// --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 6) skipped ---
+// import type B from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// import /*FIND ALL REFS*/type { e1, e2 as e3 } from "./e";
+// 
+// // import "module"
+// import "./f";
+// --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 6) skipped ---
+// import type B from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// <|import type { e1, e2 as e3 } /*FIND ALL REFS*/from "[|./e|]";|>
+// 
+// // import "module"
+// import "./f";
+// --- (line: 14) skipped ---
+
+  // === Definitions ===
+  // === /e.ts ===
+  // [|export const e1 = 1;
+  // export const e2 = 2;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/e\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/e\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 6) skipped ---
+// import type B from "./b";
+// import type * as C from "./c";
+// import type { D } from "./d";
+// <|import type { e1, e2 /*FIND ALL REFS*/as [|{| isWriteAccess: true, isDefinition: true |}e3|] } from "./e";|>
+// 
+// // import "module"
+// import "./f";
+// --- (line: 14) skipped ---
+
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 6) skipped ---
+  // import type B from "./b";
+  // import type * as C from "./c";
+  // import type { D } from "./d";
+  // <|import type { e1, e2 /*FIND ALL REFS*/as [|e3|] } from "./e";|>
+  // 
+  // // import "module"
+  // import "./f";
+  // --- (line: 14) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const e3: 2\nimport e3",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "e3",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "2",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "e3",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 9) skipped ---
+// import type { e1, e2 as e3 } from "./e";
+// 
+// // import "module"
+// /*FIND ALL REFS*/<|import "[|./f|]";|>
 // 
 // // export ... from ...
 // export type * from "./g";
+// --- (line: 17) skipped ---
+
+  // === Definitions ===
+  // === /f.ts ===
+  // [|export const f = 1;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/f\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/f\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 12) skipped ---
+// import "./f";
+// 
+// // export ... from ...
+// /*FIND ALL REFS*/<|export type * from "[|./g|]";|>
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 20) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "(alias) class D\nimport D",
-      "textSpan": {
-        "start": 173,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "D",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "D",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 159,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 173,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 159,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/d.ts",
-      "kind": "class",
-      "name": "class D",
-      "textSpan": {
-        "start": 13,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "D",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 1
-        },
-        "fileName": "/d.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /g.ts ===
+  // [|export const g = 1;|]
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/g\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/g\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } /*FIND ALL REFS*/from "[|./d|]";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
+// --- (line: 12) skipped ---
 // import "./f";
 // 
 // // export ... from ...
-// export type * from "./g";
+// <|export /*FIND ALL REFS*/type * from "[|./g|]";|>
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 20) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/d.ts",
-      "kind": "module",
-      "name": "module \"/d\"",
-      "textSpan": {
-        "start": 0,
-        "length": 17
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/d\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 183,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 159,
-          "length": 29
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /g.ts ===
+  // [|export const g = 1;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/g\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/g\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
-undefined
 
-undefined
 
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } /*FIND ALL REFS*/from "[|./e|]";
-// 
-// // import "module"
+// --- (line: 12) skipped ---
 // import "./f";
 // 
 // // export ... from ...
-// export type * from "./g";
+// <|export type * /*FIND ALL REFS*/from "[|./g|]";|>
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
+// --- (line: 20) skipped ---
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/e.ts",
-      "kind": "module",
-      "name": "module \"/e\"",
-      "textSpan": {
-        "start": 0,
-        "length": 41
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/e\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 224,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 189,
-          "length": 40
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /g.ts ===
+  // [|export const g = 1;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/g\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/g\"",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
+// --- (line: 13) skipped ---
 // 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 /*FIND ALL REFS*/as [|e3|] } from "./e";
+// // export ... from ...
+// export type * from "./g";
+// /*FIND ALL REFS*/<|export type * as [|{| isWriteAccess: true, isDefinition: true |}H|] from "./h";|>
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// --- (line: 21) skipped ---
+
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 13) skipped ---
+  // 
+  // // export ... from ...
+  // export type * from "./g";
+  // /*FIND ALL REFS*/<|export type * as [|H|] from "./h";|>
+  // export type { I } from "./i";
+  // export type { j1, j2 as j3 } from "./j";
+  // type Z1 = 1;
+  // --- (line: 21) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import H",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "H",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 13) skipped ---
 // 
-// // import "module"
-// import "./f";
+// // export ... from ...
+// export type * from "./g";
+// <|export /*FIND ALL REFS*/type * as [|{| isWriteAccess: true, isDefinition: true |}H|] from "./h";|>
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// --- (line: 21) skipped ---
+
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 13) skipped ---
+  // 
+  // // export ... from ...
+  // export type * from "./g";
+  // <|export /*FIND ALL REFS*/type * as [|H|] from "./h";|>
+  // export type { I } from "./i";
+  // export type { j1, j2 as j3 } from "./j";
+  // type Z1 = 1;
+  // --- (line: 21) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import H",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "H",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 13) skipped ---
 // 
+// // export ... from ...
+// export type * from "./g";
+// <|export type * /*FIND ALL REFS*/as [|{| isWriteAccess: true, isDefinition: true |}H|] from "./h";|>
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// --- (line: 21) skipped ---
+
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 13) skipped ---
+  // 
+  // // export ... from ...
+  // export type * from "./g";
+  // <|export type * /*FIND ALL REFS*/as [|H|] from "./h";|>
+  // export type { I } from "./i";
+  // export type { j1, j2 as j3 } from "./j";
+  // type Z1 = 1;
+  // --- (line: 21) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import H",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "H",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 13) skipped ---
+// 
+// // export ... from ...
+// export type * from "./g";
+// <|export type * as H /*FIND ALL REFS*/from "[|./h|]";|>
+// export type { I } from "./i";
+// export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// --- (line: 21) skipped ---
+
+  // === Definitions ===
+  // === /h.ts ===
+  // [|export const h = 1;|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/h\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/h\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 14) skipped ---
 // // export ... from ...
 // export type * from "./g";
 // export type * as H from "./h";
-// export type { I } from "./i";
+// /*FIND ALL REFS*/<|export type { [|{| defId: 0, isWriteAccess: true, isDefinition: true |}I|] } from "./i";|>
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "(alias) const e3: 2\nimport e3",
-      "textSpan": {
-        "start": 213,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "e3",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "2",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "e3",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 189,
-        "length": 40
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 213,
-          "length": 2
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 189,
-          "length": 40
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// /*FIND ALL REFS*/import "[|./f|]";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/f.ts",
-      "kind": "module",
-      "name": "module \"/f\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/f\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 258,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 250,
-          "length": 13
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// /*FIND ALL REFS*/export type * from "[|./g|]";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/g.ts",
-      "kind": "module",
-      "name": "module \"/g\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/g\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 308,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 288,
-          "length": 25
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export /*FIND ALL REFS*/type * from "[|./g|]";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/g.ts",
-      "kind": "module",
-      "name": "module \"/g\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/g\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 308,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 288,
-          "length": 25
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * /*FIND ALL REFS*/from "[|./g|]";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/g.ts",
-      "kind": "module",
-      "name": "module \"/g\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/g\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 308,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 288,
-          "length": 25
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// /*FIND ALL REFS*/export type * as [|H|] from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "import H",
-      "textSpan": {
-        "start": 331,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "H",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 314,
-        "length": 30
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 331,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 314,
-          "length": 30
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export /*FIND ALL REFS*/type * as [|H|] from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "import H",
-      "textSpan": {
-        "start": 331,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "H",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 314,
-        "length": 30
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 331,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 314,
-          "length": 30
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * /*FIND ALL REFS*/as [|H|] from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "import H",
-      "textSpan": {
-        "start": 331,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "import",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "H",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 314,
-        "length": 30
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 331,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 314,
-          "length": 30
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
-
-// === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H /*FIND ALL REFS*/from "[|./h|]";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
-// export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/h.ts",
-      "kind": "module",
-      "name": "module \"/h\"",
-      "textSpan": {
-        "start": 0,
-        "length": 19
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/h\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 339,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 314,
-          "length": 30
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+// --- (line: 22) skipped ---
 
 // === /i.ts ===
-// export class [|I|] {}
+// <|export class [|{| defId: 1, isWriteAccess: true |}I|] {}|>
 
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 14) skipped ---
+  // // export ... from ...
+  // export type * from "./g";
+  // export type * as H from "./h";
+  // /*FIND ALL REFS*/<|export type { [|{| defId: 0 |}I|] } from "./i";|>
+  // export type { j1, j2 as j3 } from "./j";
+  // type Z1 = 1;
+  // export type { Z1 };
+  // --- (line: 22) skipped ---
+
+  // === /i.ts ===
+  // <|export class [|{| defId: 1 |}I|] {}|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class I\nexport I",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class I",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
+// --- (line: 14) skipped ---
 // // export ... from ...
 // export type * from "./g";
 // export type * as H from "./h";
-// /*FIND ALL REFS*/export type { [|I|] } from "./i";
+// <|export /*FIND ALL REFS*/type { [|{| defId: 0, isWriteAccess: true, isDefinition: true |}I|] } from "./i";|>
 // export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
-// type Z2 = 2;
-// type Z3 = 3;
-// export type { z2, z3 as z4 };
-
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "(alias) class I\nexport I",
-      "textSpan": {
-        "start": 359,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 345,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 359,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 345,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/i.ts",
-      "kind": "class",
-      "name": "class I",
-      "textSpan": {
-        "start": 13,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 1
-        },
-        "fileName": "/i.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+// --- (line: 22) skipped ---
 
 // === /i.ts ===
-// export class [|I|] {}
+// <|export class [|{| defId: 1, isWriteAccess: true |}I|] {}|>
 
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 14) skipped ---
+  // // export ... from ...
+  // export type * from "./g";
+  // export type * as H from "./h";
+  // <|export /*FIND ALL REFS*/type { [|{| defId: 0 |}I|] } from "./i";|>
+  // export type { j1, j2 as j3 } from "./j";
+  // type Z1 = 1;
+  // export type { Z1 };
+  // --- (line: 22) skipped ---
+
+  // === /i.ts ===
+  // <|export class [|{| defId: 1 |}I|] {}|>
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) class I\nexport I",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "aliasName"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "aliasName"
+     }
+    ]
+   },
+   {
+    "defId": 1,
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class I",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "I",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
+// --- (line: 14) skipped ---
 // // export ... from ...
 // export type * from "./g";
 // export type * as H from "./h";
-// export /*FIND ALL REFS*/type { [|I|] } from "./i";
+// <|export type { I } /*FIND ALL REFS*/from "[|./i|]";|>
 // export type { j1, j2 as j3 } from "./j";
+// type Z1 = 1;
+// export type { Z1 };
+// --- (line: 22) skipped ---
+
+  // === Definitions ===
+  // === /i.ts ===
+  // [|export class I {}|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/i\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/i\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 15) skipped ---
+// export type * from "./g";
+// export type * as H from "./h";
+// export type { I } from "./i";
+// /*FIND ALL REFS*/export type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
 // type Z2 = 2;
 // type Z3 = 3;
 // export type { z2, z3 as z4 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "(alias) class I\nexport I",
-      "textSpan": {
-        "start": 359,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "aliasName"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 345,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 359,
-          "length": 1
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 345,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  },
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/i.ts",
-      "kind": "class",
-      "name": "class I",
-      "textSpan": {
-        "start": 13,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "className"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 17
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 13,
-          "length": 1
-        },
-        "fileName": "/i.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 17
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      }
-    ]
-  }
-]
 
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
+// --- (line: 15) skipped ---
 // export type * from "./g";
 // export type * as H from "./h";
-// export type { I } /*FIND ALL REFS*/from "[|./i|]";
-// export type { j1, j2 as j3 } from "./j";
+// export type { I } from "./i";
+// export /*FIND ALL REFS*/type { j1, j2 as j3 } from "./j";
 // type Z1 = 1;
 // export type { Z1 };
 // type Z2 = 2;
 // type Z3 = 3;
 // export type { z2, z3 as z4 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/i.ts",
-      "kind": "module",
-      "name": "module \"/i\"",
-      "textSpan": {
-        "start": 0,
-        "length": 17
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/i\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 369,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 345,
-          "length": 29
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
 
-undefined
 
-undefined
-
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
+// --- (line: 15) skipped ---
 // export type * from "./g";
 // export type * as H from "./h";
 // export type { I } from "./i";
-// export type { j1, j2 as j3 } /*FIND ALL REFS*/from "[|./j|]";
+// <|export type { j1, j2 as j3 } /*FIND ALL REFS*/from "[|./j|]";|>
 // type Z1 = 1;
 // export type { Z1 };
 // type Z2 = 2;
 // type Z3 = 3;
 // export type { z2, z3 as z4 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/j.ts",
-      "kind": "module",
-      "name": "module \"/j\"",
-      "textSpan": {
-        "start": 0,
-        "length": 41
-      },
-      "displayParts": [
-        {
-          "text": "module",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "\"/j\"",
-          "kind": "stringLiteral"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 410,
-          "length": 3
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 375,
-          "length": 40
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /j.ts ===
+  // [|export const j1 = 1;
+  // export const j2 = 2;|]
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "module",
+    "name": "module \"/j\"",
+    "displayParts": [
+     {
+      "text": "module",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "\"/j\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
+// --- (line: 15) skipped ---
 // export type * from "./g";
 // export type * as H from "./h";
 // export type { I } from "./i";
-// export type { j1, j2 /*FIND ALL REFS*/as [|j3|] } from "./j";
+// <|export type { j1, j2 /*FIND ALL REFS*/as [|{| isWriteAccess: true, isDefinition: true |}j3|] } from "./j";|>
 // type Z1 = 1;
 // export type { Z1 };
 // type Z2 = 2;
 // type Z3 = 3;
 // export type { z2, z3 as z4 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "(alias) const j3: 2\nexport j3",
-      "textSpan": {
-        "start": 399,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "alias",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "j3",
-          "kind": "aliasName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "2",
-          "kind": "stringLiteral"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "j3",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 375,
-        "length": 40
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 399,
-          "length": 2
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 375,
-          "length": 40
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 15) skipped ---
+  // export type * from "./g";
+  // export type * as H from "./h";
+  // export type { I } from "./i";
+  // <|export type { j1, j2 /*FIND ALL REFS*/as [|j3|] } from "./j";|>
+  // type Z1 = 1;
+  // export type { Z1 };
+  // type Z2 = 2;
+  // type Z3 = 3;
+  // export type { z2, z3 as z4 };
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "(alias) const j3: 2\nexport j3",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "alias",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j3",
+      "kind": "aliasName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "2",
+      "kind": "stringLiteral"
+     },
+     {
+      "text": "\n",
+      "kind": "lineBreak"
+     },
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "j3",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
+// --- (line: 16) skipped ---
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// type [|Z1|] = 1;
-// /*FIND ALL REFS*/export type { [|Z1|] };
+// <|type [|{| isWriteAccess: true |}Z1|] = 1;|>
+// /*FIND ALL REFS*/<|export type { [|{| isWriteAccess: true, isDefinition: true |}Z1|] };|>
 // type Z2 = 2;
 // type Z3 = 3;
 // export type { z2, z3 as z4 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "type",
-      "name": "type Z1 = 1",
-      "textSpan": {
-        "start": 421,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Z1",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "1",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 416,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 421,
-          "length": 2
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 416,
-          "length": 12
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 443,
-          "length": 2
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 429,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 16) skipped ---
+  // export type * as H from "./h";
+  // export type { I } from "./i";
+  // export type { j1, j2 as j3 } from "./j";
+  // <|type [|Z1|] = 1;|>
+  // /*FIND ALL REFS*/export type { Z1 };
+  // type Z2 = 2;
+  // type Z3 = 3;
+  // export type { z2, z3 as z4 };
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Z1 = 1",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Z1",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
+// --- (line: 16) skipped ---
 // export type * as H from "./h";
 // export type { I } from "./i";
 // export type { j1, j2 as j3 } from "./j";
-// type [|Z1|] = 1;
-// export /*FIND ALL REFS*/type { [|Z1|] };
+// <|type [|{| isWriteAccess: true |}Z1|] = 1;|>
+// <|export /*FIND ALL REFS*/type { [|{| isWriteAccess: true, isDefinition: true |}Z1|] };|>
 // type Z2 = 2;
 // type Z3 = 3;
 // export type { z2, z3 as z4 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "type",
-      "name": "type Z1 = 1",
-      "textSpan": {
-        "start": 421,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Z1",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "1",
-          "kind": "stringLiteral"
-        }
-      ],
-      "contextSpan": {
-        "start": 416,
-        "length": 12
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 421,
-          "length": 2
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 416,
-          "length": 12
-        },
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 443,
-          "length": 2
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 429,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 16) skipped ---
+  // export type * as H from "./h";
+  // export type { I } from "./i";
+  // export type { j1, j2 as j3 } from "./j";
+  // <|type [|Z1|] = 1;|>
+  // export /*FIND ALL REFS*/type { Z1 };
+  // type Z2 = 2;
+  // type Z3 = 3;
+  // export type { z2, z3 as z4 };
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type Z1 = 1",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Z1",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "1",
+      "kind": "stringLiteral"
+     }
     ]
-  }
-]
+   }
+  ]
 
-undefined
 
-undefined
 
+// === findAllReferences ===
 // === /main.ts ===
-// // import ... = ...
-// import A = require("./a");
-// namespace N { }
-// import N2 = N;
-// 
-// // import ... from ...
-// import type B from "./b";
-// import type * as C from "./c";
-// import type { D } from "./d";
-// import type { e1, e2 as e3 } from "./e";
-// 
-// // import "module"
-// import "./f";
-// 
-// // export ... from ...
-// export type * from "./g";
-// export type * as H from "./h";
-// export type { I } from "./i";
-// export type { j1, j2 as j3 } from "./j";
-// type Z1 = 1;
+// --- (line: 20) skipped ---
 // export type { Z1 };
 // type Z2 = 2;
 // type Z3 = 3;
-// export type { z2, z3 /*FIND ALL REFS*/as [|z4|] };
+// /*FIND ALL REFS*/export type { z2, z3 as z4 };
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main.ts",
-      "kind": "alias",
-      "name": "export z4",
-      "textSpan": {
-        "start": 499,
-        "length": 2
-      },
-      "displayParts": [
-        {
-          "text": "export",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "z4",
-          "kind": "aliasName"
-        }
-      ],
-      "contextSpan": {
-        "start": 475,
-        "length": 29
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 499,
-          "length": 2
-        },
-        "fileName": "/main.ts",
-        "contextSpan": {
-          "start": 475,
-          "length": 29
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      }
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 20) skipped ---
+// export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// export /*FIND ALL REFS*/type { z2, z3 as z4 };
+
+
+
+// === findAllReferences ===
+// === /main.ts ===
+// --- (line: 20) skipped ---
+// export type { Z1 };
+// type Z2 = 2;
+// type Z3 = 3;
+// <|export type { z2, z3 /*FIND ALL REFS*/as [|{| isWriteAccess: true, isDefinition: true |}z4|] };|>
+
+  // === Definitions ===
+  // === /main.ts ===
+  // --- (line: 20) skipped ---
+  // export type { Z1 };
+  // type Z2 = 2;
+  // type Z3 = 3;
+  // <|export type { z2, z3 /*FIND ALL REFS*/as [|z4|] };|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "export z4",
+    "displayParts": [
+     {
+      "text": "export",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "z4",
+      "kind": "aliasName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /main2.ts ===
-// const [|x|] = {};
-// /*FIND ALL REFS*/export = [|x|];
+// <|const [|{| isWriteAccess: true |}x|] = {};|>
+// /*FIND ALL REFS*/<|export = [|x|];|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main2.ts",
-      "kind": "const",
-      "name": "const x: {}",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/main2.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 13
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 23,
-          "length": 1
-        },
-        "fileName": "/main2.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 11
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /main2.ts ===
+  // <|const [|x|] = {};|>
+  // /*FIND ALL REFS*/export = x;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const x: {}",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /main3.ts ===
-// const [|y|] = {};
-// /*FIND ALL REFS*/export default [|y|];
+// <|const [|{| isWriteAccess: true |}y|] = {};|>
+// /*FIND ALL REFS*/<|export default [|y|];|>
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/main3.ts",
-      "kind": "const",
-      "name": "const y: {}",
-      "textSpan": {
-        "start": 6,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "y",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "{",
-          "kind": "punctuation"
-        },
-        {
-          "text": "}",
-          "kind": "punctuation"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 13
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 6,
-          "length": 1
-        },
-        "fileName": "/main3.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 13
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 29,
-          "length": 1
-        },
-        "fileName": "/main3.ts",
-        "contextSpan": {
-          "start": 14,
-          "length": 17
-        },
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /main3.ts ===
+  // <|const [|y|] = {};|>
+  // /*FIND ALL REFS*/export default y;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const y: {}",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "y",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "{",
+      "kind": "punctuation"
+     },
+     {
+      "text": "}",
+      "kind": "punctuation"
+     }
     ]
-  }
-]
+   }
+  ]

@@ -1,10 +1,10 @@
-tests/cases/conformance/types/intersection/intersectionReduction.ts(38,4): error TS2339: Property 'kind' does not exist on type 'never'.
+intersectionReduction.ts(38,4): error TS2339: Property 'kind' does not exist on type 'never'.
   The intersection 'A & B' was reduced to 'never' because property 'kind' has conflicting types in some constituents.
-tests/cases/conformance/types/intersection/intersectionReduction.ts(80,1): error TS2322: Type 'any' is not assignable to type 'never'.
-tests/cases/conformance/types/intersection/intersectionReduction.ts(81,1): error TS2322: Type 'any' is not assignable to type 'never'.
+intersectionReduction.ts(80,1): error TS2322: Type 'any' is not assignable to type 'never'.
+intersectionReduction.ts(81,1): error TS2322: Type 'any' is not assignable to type 'never'.
 
 
-==== tests/cases/conformance/types/intersection/intersectionReduction.ts (3 errors) ====
+==== intersectionReduction.ts (3 errors) ====
     declare const sym1: unique symbol;
     declare const sym2: unique symbol;
     

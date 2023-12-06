@@ -1,4 +1,6 @@
-=== tests/cases/compiler/foo.tsx ===
+//// [tests/cases/compiler/unusedImports14.ts] ////
+
+=== foo.tsx ===
 import React = require("react");
 >React : typeof React
 
@@ -8,7 +10,7 @@ export const FooComponent = <div></div>
 >div : any
 >div : any
 
-=== tests/cases/compiler/node_modules/@types/react/index.d.ts ===
+=== node_modules/@types/react/index.d.ts ===
 export = React;
 >React : typeof React
 

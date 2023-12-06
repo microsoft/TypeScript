@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts ===
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts] ////
+
+=== privateNamesInGenericClasses.ts ===
 class C<T> {
 >C : C<T>
 

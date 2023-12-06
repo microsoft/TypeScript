@@ -4,7 +4,7 @@ error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript
 
 !!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 !!! error TS5101:   Use 'outFile' instead.
-==== tests/cases/compiler/incrementalOut.ts (0 errors) ====
+==== incrementalOut.ts (0 errors) ====
     const x = 10;
     
     

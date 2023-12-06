@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxFragmentFactoryNoUnusedLocals.tsx] ////
+
 //// [jsxFragmentFactoryNoUnusedLocals.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 import { Fragment, createElement } from "react"

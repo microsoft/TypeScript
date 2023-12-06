@@ -1,4 +1,6 @@
-=== tests/cases/compiler/innerExtern.ts ===
+//// [tests/cases/compiler/innerExtern.ts] ////
+
+=== innerExtern.ts ===
 module A {
 >A : Symbol(A, Decl(innerExtern.ts, 0, 0))
 

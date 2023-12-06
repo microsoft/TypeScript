@@ -1,4 +1,6 @@
-=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport_0.ts ===
+//// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport.ts] ////
+
+=== es6ImportDefaultBindingFollowedWithNamedImport_0.ts ===
 export var a = 10;
 >a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 0, 10))
 
@@ -12,7 +14,7 @@ export var m = a;
 
 export default {};
 
-=== tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport_1.ts ===
+=== es6ImportDefaultBindingFollowedWithNamedImport_1.ts ===
 import defaultBinding1, { } from "./es6ImportDefaultBindingFollowedWithNamedImport_0";
 >defaultBinding1 : Symbol(defaultBinding1, Decl(es6ImportDefaultBindingFollowedWithNamedImport_1.ts, 0, 6))
 

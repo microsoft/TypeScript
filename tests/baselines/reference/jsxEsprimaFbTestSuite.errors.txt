@@ -1,7 +1,7 @@
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(40,41): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+jsxEsprimaFbTestSuite.tsx(40,41): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
 
 
-==== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx (1 errors) ====
+==== jsxEsprimaFbTestSuite.tsx (1 errors) ====
     declare var React: any;
     declare var 日本語;
     declare var AbC_def;

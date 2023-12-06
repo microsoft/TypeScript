@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexClassByNumber.ts] ////
+
 //// [indexClassByNumber.ts]
 // Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
 

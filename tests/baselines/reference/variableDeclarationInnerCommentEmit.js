@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/variableDeclarationInnerCommentEmit.ts] ////
+
 //// [variableDeclarationInnerCommentEmit.ts]
 var a = /*some comment*/ null;
 var b /*some comment*/ = null;

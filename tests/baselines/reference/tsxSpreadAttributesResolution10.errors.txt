@@ -1,10 +1,10 @@
-tests/cases/conformance/jsx/file.tsx(19,23): error TS2322: Type '3' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(20,25): error TS2322: Type 'string' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(21,25): error TS2322: Type '3' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type 'true' is not assignable to type '2'.
+file.tsx(19,23): error TS2322: Type '3' is not assignable to type '2'.
+file.tsx(20,25): error TS2322: Type 'string' is not assignable to type '2'.
+file.tsx(21,25): error TS2322: Type '3' is not assignable to type '2'.
+file.tsx(22,15): error TS2322: Type 'true' is not assignable to type '2'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+==== file.tsx (4 errors) ====
     import React = require('react');
     
     interface OptionProp {
@@ -26,17 +26,17 @@ tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type 'true' is not as
     let y = <Opt {...obj} x={3}/>;
                           ~
 !!! error TS2322: Type '3' is not assignable to type '2'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
     let y1 = <Opt {...obj1} x="Hi"/>;
                             ~
 !!! error TS2322: Type 'string' is not assignable to type '2'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
     let y2 = <Opt {...obj1} x={3}/>;
                             ~
 !!! error TS2322: Type '3' is not assignable to type '2'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
     let y3 = <Opt x />;
                   ~
 !!! error TS2322: Type 'true' is not assignable to type '2'.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'
     

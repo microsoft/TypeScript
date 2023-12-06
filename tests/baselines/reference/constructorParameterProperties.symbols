@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts ===
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorParameterProperties.ts] ////
+
+=== constructorParameterProperties.ts ===
 class C {
 >C : Symbol(C, Decl(constructorParameterProperties.ts, 0, 0))
 

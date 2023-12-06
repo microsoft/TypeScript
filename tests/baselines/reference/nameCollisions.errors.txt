@@ -1,19 +1,19 @@
-tests/cases/compiler/nameCollisions.ts(2,9): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/nameCollisions.ts(4,12): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/nameCollisions.ts(10,12): error TS2300: Duplicate identifier 'z'.
-tests/cases/compiler/nameCollisions.ts(13,9): error TS2300: Duplicate identifier 'z'.
-tests/cases/compiler/nameCollisions.ts(15,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
-tests/cases/compiler/nameCollisions.ts(24,9): error TS2300: Duplicate identifier 'f'.
-tests/cases/compiler/nameCollisions.ts(25,14): error TS2300: Duplicate identifier 'f'.
-tests/cases/compiler/nameCollisions.ts(27,14): error TS2300: Duplicate identifier 'f2'.
-tests/cases/compiler/nameCollisions.ts(28,9): error TS2300: Duplicate identifier 'f2'.
-tests/cases/compiler/nameCollisions.ts(33,11): error TS2813: Class declaration cannot implement overload list for 'C'.
-tests/cases/compiler/nameCollisions.ts(34,14): error TS2814: Function with bodies can only merge with classes that are ambient.
-tests/cases/compiler/nameCollisions.ts(36,14): error TS2814: Function with bodies can only merge with classes that are ambient.
-tests/cases/compiler/nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overload list for 'C2'.
+nameCollisions.ts(2,9): error TS2300: Duplicate identifier 'x'.
+nameCollisions.ts(4,12): error TS2300: Duplicate identifier 'x'.
+nameCollisions.ts(10,12): error TS2300: Duplicate identifier 'z'.
+nameCollisions.ts(13,9): error TS2300: Duplicate identifier 'z'.
+nameCollisions.ts(15,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+nameCollisions.ts(24,9): error TS2300: Duplicate identifier 'f'.
+nameCollisions.ts(25,14): error TS2300: Duplicate identifier 'f'.
+nameCollisions.ts(27,14): error TS2300: Duplicate identifier 'f2'.
+nameCollisions.ts(28,9): error TS2300: Duplicate identifier 'f2'.
+nameCollisions.ts(33,11): error TS2813: Class declaration cannot implement overload list for 'C'.
+nameCollisions.ts(34,14): error TS2814: Function with bodies can only merge with classes that are ambient.
+nameCollisions.ts(36,14): error TS2814: Function with bodies can only merge with classes that are ambient.
+nameCollisions.ts(37,11): error TS2813: Class declaration cannot implement overload list for 'C2'.
 
 
-==== tests/cases/compiler/nameCollisions.ts (13 errors) ====
+==== nameCollisions.ts (13 errors) ====
     module T {
         var x = 2;
             ~
@@ -67,20 +67,20 @@ tests/cases/compiler/nameCollisions.ts(37,11): error TS2813: Class declaration c
         class C { }
               ~
 !!! error TS2813: Class declaration cannot implement overload list for 'C'.
-!!! related TS6506 tests/cases/compiler/nameCollisions.ts:33:11: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 nameCollisions.ts:33:11: Consider adding a 'declare' modifier to this class.
         function C() { } // error
                  ~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
-!!! related TS6506 tests/cases/compiler/nameCollisions.ts:33:11: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 nameCollisions.ts:33:11: Consider adding a 'declare' modifier to this class.
     
         function C2() { }
                  ~~
 !!! error TS2814: Function with bodies can only merge with classes that are ambient.
-!!! related TS6506 tests/cases/compiler/nameCollisions.ts:37:11: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 nameCollisions.ts:37:11: Consider adding a 'declare' modifier to this class.
         class C2 { } // error
               ~~
 !!! error TS2813: Class declaration cannot implement overload list for 'C2'.
-!!! related TS6506 tests/cases/compiler/nameCollisions.ts:37:11: Consider adding a 'declare' modifier to this class.
+!!! related TS6506 nameCollisions.ts:37:11: Consider adding a 'declare' modifier to this class.
     
         function fi() { }
         interface fi { } // ok

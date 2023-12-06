@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectFromEntries.ts] ////
+
 //// [objectFromEntries.ts]
 const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
 const o2 = Object.fromEntries(new URLSearchParams());

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.d.ts ===
+//// [tests/cases/compiler/ambientClassDeclaredBeforeBase.ts] ////
+
+=== a.d.ts ===
 declare namespace ns {
 >ns : Symbol(ns, Decl(a.d.ts, 0, 0))
 

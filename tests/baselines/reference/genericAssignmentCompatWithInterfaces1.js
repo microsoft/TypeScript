@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts] ////
+
 //// [genericAssignmentCompatWithInterfaces1.ts]
 interface Comparable<T> {
    compareTo(other: T): number;

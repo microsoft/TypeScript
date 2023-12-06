@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentToObjectAndFunction.ts] ////
+
 //// [assignmentToObjectAndFunction.ts]
 var errObj: Object = { toString: 0 }; // Error, incompatible toString
 var goodObj: Object = {

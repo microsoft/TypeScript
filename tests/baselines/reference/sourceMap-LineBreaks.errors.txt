@@ -2,7 +2,7 @@ error TS5107: Option 'target=ES3' is deprecated and will stop functioning in Typ
 
 
 !!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/compiler/sourceMap-LineBreaks.ts (0 errors) ====
+==== sourceMap-LineBreaks.ts (0 errors) ====
     var endsWithlineSeparator = 10;  var endsWithParagraphSeparator = 10;  var endsWithNextLine = 1;var endsWithLineFeed = 1;
     var endsWithCarriageReturnLineFeed = 1;
     var endsWithCarriageReturn = 1;var endsWithLineFeedCarriageReturn = 1;

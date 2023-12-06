@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts(2,4): error TS1127: Invalid character.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts(6,4): error TS1109: Expression expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts(7,4): error TS1127: Invalid character.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts(7,5): error TS1005: '}' expected.
+parserErrorRecovery_ClassElement3.ts(2,4): error TS1127: Invalid character.
+parserErrorRecovery_ClassElement3.ts(6,4): error TS1109: Expression expected.
+parserErrorRecovery_ClassElement3.ts(7,4): error TS1127: Invalid character.
+parserErrorRecovery_ClassElement3.ts(7,5): error TS1005: '}' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement3.ts (4 errors) ====
+==== parserErrorRecovery_ClassElement3.ts (4 errors) ====
     module M {
        ¬
        ~

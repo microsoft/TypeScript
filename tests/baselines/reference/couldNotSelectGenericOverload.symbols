@@ -1,4 +1,6 @@
-=== tests/cases/compiler/couldNotSelectGenericOverload.ts ===
+//// [tests/cases/compiler/couldNotSelectGenericOverload.ts] ////
+
+=== couldNotSelectGenericOverload.ts ===
 function makeArray<T>(items: T[]): T[] { return items; }
 >makeArray : Symbol(makeArray, Decl(couldNotSelectGenericOverload.ts, 0, 0))
 >T : Symbol(T, Decl(couldNotSelectGenericOverload.ts, 0, 19))

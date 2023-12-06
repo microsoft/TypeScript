@@ -1,11 +1,13 @@
-=== tests/cases/conformance/externalModules/a.ts ===
+//// [tests/cases/conformance/externalModules/typeOnlyMerge2.ts] ////
+
+=== a.ts ===
 const A = {}
 >A : Symbol(A, Decl(a.ts, 0, 5))
 
 export { A };
 >A : Symbol(A, Decl(a.ts, 1, 8))
 
-=== tests/cases/conformance/externalModules/b.ts ===
+=== b.ts ===
 import { A } from "./a";
 >A : Symbol(A, Decl(b.ts, 0, 8), Decl(b.ts, 0, 24))
 
@@ -15,7 +17,7 @@ type A = any;
 export type { A };
 >A : Symbol(A, Decl(b.ts, 2, 13))
 
-=== tests/cases/conformance/externalModules/c.ts ===
+=== c.ts ===
 import { A } from "./b";
 >A : Symbol(A, Decl(c.ts, 0, 8), Decl(c.ts, 0, 24))
 
@@ -25,7 +27,7 @@ namespace A {}
 export { A };
 >A : Symbol(A, Decl(c.ts, 2, 8))
 
-=== tests/cases/conformance/externalModules/d.ts ===
+=== d.ts ===
 import { A } from "./c";
 >A : Symbol(A, Decl(d.ts, 0, 8))
 

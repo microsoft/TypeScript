@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitSymbolToString.ts] ////
+
 //// [noImplicitSymbolToString.ts]
 // Fix #19666
 

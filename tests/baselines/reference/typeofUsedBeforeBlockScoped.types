@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeofUsedBeforeBlockScoped.ts ===
+//// [tests/cases/compiler/typeofUsedBeforeBlockScoped.ts] ////
+
+=== typeofUsedBeforeBlockScoped.ts ===
 type T = typeof C & typeof C.s & typeof o & typeof o.n;
 >T : typeof C & number & { n: number; }
 >C : typeof C

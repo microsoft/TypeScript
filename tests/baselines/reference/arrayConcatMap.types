@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayConcatMap.ts ===
+//// [tests/cases/compiler/arrayConcatMap.ts] ////
+
+=== arrayConcatMap.ts ===
 var x = [].concat([{ a: 1 }], [{ a: 2 }])
 >x : any[]
 >[].concat([{ a: 1 }], [{ a: 2 }])          .map(b => b.a) : any[]

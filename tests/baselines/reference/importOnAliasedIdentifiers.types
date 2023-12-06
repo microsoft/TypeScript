@@ -1,4 +1,6 @@
-=== tests/cases/compiler/importOnAliasedIdentifiers.ts ===
+//// [tests/cases/compiler/importOnAliasedIdentifiers.ts] ////
+
+=== importOnAliasedIdentifiers.ts ===
 module A {
 >A : typeof A
 

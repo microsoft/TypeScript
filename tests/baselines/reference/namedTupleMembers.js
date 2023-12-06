@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/tuple/named/namedTupleMembers.ts] ////
+
 //// [namedTupleMembers.ts]
 export type Segment = [length: number, count: number];
 

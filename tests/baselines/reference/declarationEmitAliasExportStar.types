@@ -1,10 +1,12 @@
-=== tests/cases/compiler/thingB.ts ===
+//// [tests/cases/compiler/declarationEmitAliasExportStar.ts] ////
+
+=== thingB.ts ===
 
 export interface ThingB { }
-=== tests/cases/compiler/things.ts ===
+=== things.ts ===
 
 export * from "./thingB";
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 import * as things from "./things";
 >things : typeof things
 

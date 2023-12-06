@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indexedAccessRelation.ts] ////
+
 //// [indexedAccessRelation.ts]
 // Repro from #14723
 

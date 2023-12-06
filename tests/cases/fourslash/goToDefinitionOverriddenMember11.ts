@@ -14,10 +14,10 @@
 ////    m() {}
 ////}
 
-verify.goToDefinition({
-    1: "Foo_m",
-    2: [],
-    3: [],
-    4: [],
-    5: []
-});
+verify.baselineGoToDefinition(
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+);

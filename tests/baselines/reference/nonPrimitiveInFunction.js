@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveInFunction.ts] ////
+
 //// [nonPrimitiveInFunction.ts]
 function takeObject(o: object) {}
 function returnObject(): object {

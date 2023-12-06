@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment2.ts] ////
+
+=== a.js ===
 function Outer() {
 >Outer : Symbol(Outer, Decl(a.js, 0, 0), Decl(a.js, 2, 1))
 

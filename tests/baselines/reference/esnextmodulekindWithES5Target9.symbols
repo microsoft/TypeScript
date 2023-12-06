@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts ===
+//// [tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts] ////
+
+=== esnextmodulekindWithES5Target9.ts ===
 import d from "mod";
 >d : Symbol(d, Decl(esnextmodulekindWithES5Target9.ts, 0, 6))
 

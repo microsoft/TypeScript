@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.tsx ===
+//// [tests/cases/compiler/jsxElementsAsIdentifierNames.tsx] ////
+
+=== a.tsx ===
 declare const React: any;
 >React : Symbol(React, Decl(a.tsx, 0, 13))
 

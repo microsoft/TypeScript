@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/overloadOnConstInheritance4.ts] ////
+
 //// [overloadOnConstInheritance4.ts]
 interface I {
     x1(a: number, callback: (x: 'hi') => number);

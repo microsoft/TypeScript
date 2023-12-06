@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/a.js ===
+//// [tests/cases/conformance/jsdoc/jsdocPostfixEqualsAddsOptionality.ts] ////
+
+=== a.js ===
 /** @param {number=} a */
 function f(a) {
 >f : Symbol(f, Decl(a.js, 0, 0))

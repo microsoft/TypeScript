@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationClasses.ts ===
+//// [tests/cases/compiler/sourceMapValidationClasses.ts] ////
+
+=== sourceMapValidationClasses.ts ===
 module Foo.Bar {
 >Foo : Symbol(Foo, Decl(sourceMapValidationClasses.ts, 0, 0))
 >Bar : Symbol(Bar, Decl(sourceMapValidationClasses.ts, 0, 11))

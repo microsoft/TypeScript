@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/noUsedBeforeDefinedErrorInTypeContext.ts] ////
+
+=== noUsedBeforeDefinedErrorInTypeContext.ts ===
+// https://github.com/microsoft/TypeScript/issues/8775
+
+interface IThing<T> {
+>IThing : Symbol(IThing, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 0, 0))
+>T : Symbol(T, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 17))
+
+    owner: T;
+>owner : Symbol(IThing.owner, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 21))
+>T : Symbol(T, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 2, 17))
+}
+
+var foo = {
+>foo : Symbol(foo, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 6, 3))
+
+    one: {} as IThing<typeof foo>,
+>one : Symbol(one, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 6, 11))
+>IThing : Symbol(IThing, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 0, 0))
+>foo : Symbol(foo, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 6, 3))
+}
+
+let baz = {
+>baz : Symbol(baz, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 10, 3))
+
+    two: {} as IThing<typeof bar>,
+>two : Symbol(two, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 10, 11))
+>IThing : Symbol(IThing, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 0, 0))
+>bar : Symbol(bar, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 14, 3))
+}
+
+let bar = {
+>bar : Symbol(bar, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 14, 3))
+
+    three: {} as IThing<typeof bar>,
+>three : Symbol(three, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 14, 11))
+>IThing : Symbol(IThing, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 0, 0))
+>bar : Symbol(bar, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 14, 3))
+}
+
+const qwe = {
+>qwe : Symbol(qwe, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 18, 5))
+
+    four: {} as IThing<typeof qwe>,
+>four : Symbol(four, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 18, 13))
+>IThing : Symbol(IThing, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 0, 0))
+>qwe : Symbol(qwe, Decl(noUsedBeforeDefinedErrorInTypeContext.ts, 18, 5))
+}
+

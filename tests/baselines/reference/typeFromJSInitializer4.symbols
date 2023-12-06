@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromJSInitializer4.ts] ////
+
+=== a.js ===
 /** @type {number | undefined} */
 var n;
 >n : Symbol(n, Decl(a.js, 1, 3))

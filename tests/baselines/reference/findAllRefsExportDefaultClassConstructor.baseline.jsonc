@@ -1,49 +1,35 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsExportDefaultClassConstructor.ts ===
 // export default class {
-//     /*FIND ALL REFS*/[|constructor|]() {}
+//     /*FIND ALL REFS*/<|[|{| isDefinition: true |}constructor|]() {}|>
 // }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsExportDefaultClassConstructor.ts",
-      "kind": "class",
-      "name": "class default",
-      "textSpan": {
-        "start": 0,
-        "length": 45
-      },
-      "displayParts": [
-        {
-          "text": "class",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "default",
-          "kind": "className"
-        }
-      ]
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 27,
-          "length": 11
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsExportDefaultClassConstructor.ts",
-        "contextSpan": {
-          "start": 27,
-          "length": 16
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsExportDefaultClassConstructor.ts ===
+  // [|export default class {
+  //     /*FIND ALL REFS*/constructor() {}
+  // }|]
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class default",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "default",
+      "kind": "className"
+     }
     ]
-  }
-]
+   }
+  ]

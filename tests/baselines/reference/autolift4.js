@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/autolift4.ts] ////
+
 //// [autolift4.ts]
 class Point {
 

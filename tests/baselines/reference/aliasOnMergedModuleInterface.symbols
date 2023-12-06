@@ -1,4 +1,6 @@
-=== tests/cases/compiler/aliasOnMergedModuleInterface_1.ts ===
+//// [tests/cases/compiler/aliasOnMergedModuleInterface.ts] ////
+
+=== aliasOnMergedModuleInterface_1.ts ===
 ///<reference path='aliasOnMergedModuleInterface_0.ts' />
 import foo = require("foo")
 >foo : Symbol(foo, Decl(aliasOnMergedModuleInterface_1.ts, 0, 0))
@@ -17,7 +19,7 @@ var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be err
 >foo : Symbol(foo, Decl(aliasOnMergedModuleInterface_1.ts, 0, 0))
 >A : Symbol(foo.A, Decl(aliasOnMergedModuleInterface_0.ts, 2, 14))
 
-=== tests/cases/compiler/aliasOnMergedModuleInterface_0.ts ===
+=== aliasOnMergedModuleInterface_0.ts ===
 declare module "foo"
 >"foo" : Symbol("foo", Decl(aliasOnMergedModuleInterface_0.ts, 0, 0))
 {

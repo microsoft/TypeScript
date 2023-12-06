@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocReadonlyDeclarations.ts] ////
+
 //// [jsdocReadonlyDeclarations.js]
 class C {
     /** @readonly */

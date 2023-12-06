@@ -1,4 +1,6 @@
-=== tests/cases/compiler/letConstMatchingParameterNames.ts ===
+//// [tests/cases/compiler/letConstMatchingParameterNames.ts] ////
+
+=== letConstMatchingParameterNames.ts ===
 let parent = true;
 >parent : boolean
 >true : true

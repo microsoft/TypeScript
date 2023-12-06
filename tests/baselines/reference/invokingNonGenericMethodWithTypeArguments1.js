@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/invokingNonGenericMethodWithTypeArguments1.ts] ////
+
 //// [invokingNonGenericMethodWithTypeArguments1.ts]
 class Foo {
     constructor() {

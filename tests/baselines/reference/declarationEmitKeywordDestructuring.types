@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitKeywordDestructuring.ts ===
+//// [tests/cases/compiler/declarationEmitKeywordDestructuring.ts] ////
+
+=== declarationEmitKeywordDestructuring.ts ===
 type P = {
 >P : { enum: boolean; function: boolean; abstract: boolean; async: boolean; await: boolean; one: boolean; }
 

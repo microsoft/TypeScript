@@ -1,4 +1,6 @@
-=== tests/cases/compiler/gettersAndSettersTypesAgree.ts ===
+//// [tests/cases/compiler/gettersAndSettersTypesAgree.ts] ////
+
+=== gettersAndSettersTypesAgree.ts ===
 class C {
 >C : Symbol(C, Decl(gettersAndSettersTypesAgree.ts, 0, 0))
 

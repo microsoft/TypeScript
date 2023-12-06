@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/unknown/unknownControlFlow.ts] ////
+
 //// [unknownControlFlow.ts]
 type T01 = {} & string;  // {} & string
 type T02 = {} & 'a';  // 'a'

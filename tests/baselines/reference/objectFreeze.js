@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/objectFreeze.ts] ////
+
 //// [objectFreeze.ts]
 const f = Object.freeze(function foo(a: number, b: string) { return false; });
 f(1, "") === false;

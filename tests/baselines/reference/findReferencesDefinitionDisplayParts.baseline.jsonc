@@ -1,0 +1,169 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
+// <|class [|{| isWriteAccess: true, isDefinition: true |}Gre/*FIND ALL REFS*/eter|] {
+//     someFunction() { this;  }
+// }|>
+// 
+// type Options = "option 1" | "option 2";
+// let myOption: Options = "option 1";
+// --- (line: 7) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
+  // <|class [|Gre/*FIND ALL REFS*/eter|] {
+  //     someFunction() { this;  }
+  // }|>
+  // 
+  // type Options = "option 1" | "option 2";
+  // let myOption: Options = "option 1";
+  // --- (line: 7) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "class",
+    "name": "class Greeter",
+    "displayParts": [
+     {
+      "text": "class",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Greeter",
+      "kind": "className"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
+// class Greeter {
+//     someFunction() { [|th/*FIND ALL REFS*/is|];  }
+// }
+// 
+// type Options = "option 1" | "option 2";
+// --- (line: 6) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
+  // class Greeter {
+  //     someFunction() { [|th/*FIND ALL REFS*/is|];  }
+  // }
+  // 
+  // type Options = "option 1" | "option 2";
+  // --- (line: 6) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "this",
+    "displayParts": [
+     {
+      "text": "this",
+      "kind": "keyword"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "this",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
+// class Greeter {
+//     someFunction() { this;  }
+// }
+// 
+// type Options = "[|{| isInString: true |}opt/*FIND ALL REFS*/ion 1|]" | "option 2";
+// let myOption: Options = "[|{| isInString: true |}option 1|]";
+// 
+// someLabel:
+// break someLabel;
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
+  // class Greeter {
+  //     someFunction() { this;  }
+  // }
+  // 
+  // type Options = "[|opt/*FIND ALL REFS*/ion 1|]" | "option 2";
+  // let myOption: Options = "option 1";
+  // 
+  // someLabel:
+  // break someLabel;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "option 1",
+    "displayParts": [
+     {
+      "text": "\"option 1\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
+// --- (line: 4) skipped ---
+// type Options = "option 1" | "option 2";
+// let myOption: Options = "option 1";
+// 
+// <|[|some/*FIND ALL REFS*/Label|]:
+// <|break [|someLabel|];|>|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findReferencesDefinitionDisplayParts.ts ===
+  // --- (line: 4) skipped ---
+  // type Options = "option 1" | "option 2";
+  // let myOption: Options = "option 1";
+  // 
+  // [|some/*FIND ALL REFS*/Label|]:
+  // break someLabel;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "label",
+    "name": "someLabel",
+    "displayParts": [
+     {
+      "text": "someLabel",
+      "kind": "text"
+     }
+    ]
+   }
+  ]

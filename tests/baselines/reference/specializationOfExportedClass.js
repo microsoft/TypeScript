@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/specializationOfExportedClass.ts] ////
+
 //// [specializationOfExportedClass.ts]
 module M {
 

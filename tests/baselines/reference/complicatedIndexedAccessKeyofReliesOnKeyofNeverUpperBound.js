@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts] ////
+
 //// [complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts]
 interface TextChannel {
     id: string;

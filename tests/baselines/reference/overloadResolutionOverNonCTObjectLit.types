@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts ===
+//// [tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts] ////
+
+=== overloadResolutionOverNonCTObjectLit.ts ===
 module Bugs {
 >Bugs : typeof Bugs
 

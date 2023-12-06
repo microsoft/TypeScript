@@ -1,8 +1,8 @@
-tests/cases/compiler/unusedPrivateMethodInClass1.ts(2,13): error TS6133: 'function1' is declared but its value is never read.
-tests/cases/compiler/unusedPrivateMethodInClass1.ts(3,13): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateMethodInClass1.ts(2,13): error TS6133: 'function1' is declared but its value is never read.
+unusedPrivateMethodInClass1.ts(3,13): error TS6133: 'y' is declared but its value is never read.
 
 
-==== tests/cases/compiler/unusedPrivateMethodInClass1.ts (2 errors) ====
+==== unusedPrivateMethodInClass1.ts (2 errors) ====
     class greeter {
         private function1() {
                 ~~~~~~~~~

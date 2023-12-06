@@ -1,0 +1,25 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/a.ts ===
+// [|export module Module {
+// }
+// export class Class {
+//     private f;
+// }
+// export interface Interface {
+//     x;
+// }|]
+
+// === /tests/cases/fourslash/b.ts ===
+// import /*GOTO DEF*/[|alias|] = require("./a");
+
+  // === Details ===
+  [
+   {
+    "kind": "module",
+    "name": "\"/tests/cases/fourslash/a\"",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

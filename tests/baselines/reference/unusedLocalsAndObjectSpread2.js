@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsAndObjectSpread2.ts] ////
+
 //// [unusedLocalsAndObjectSpread2.ts]
 declare let props: any;
 const {

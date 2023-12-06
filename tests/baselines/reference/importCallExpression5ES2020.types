@@ -1,4 +1,6 @@
-=== tests/cases/conformance/dynamicImport/0.ts ===
+//// [tests/cases/conformance/dynamicImport/importCallExpression5ES2020.ts] ////
+
+=== 0.ts ===
 export class B {
 >B : B
 
@@ -11,12 +13,12 @@ export function foo() { return "foo" }
 >foo : () => string
 >"foo" : "foo"
 
-=== tests/cases/conformance/dynamicImport/1.ts ===
+=== 1.ts ===
 export function backup() { return "backup"; }
 >backup : () => string
 >"backup" : "backup"
 
-=== tests/cases/conformance/dynamicImport/2.ts ===
+=== 2.ts ===
 declare function bar(): boolean;
 >bar : () => boolean
 

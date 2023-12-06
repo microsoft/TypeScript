@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -35,7 +36,14 @@ export {}
 export const App = () => <div propA={true}></div>;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","jsx":"react-jsx","incremental":true,"jsxImportSource":"react"}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "jsx": "react-jsx",
+    "incremental": true,
+    "jsxImportSource": "react"
+  }
+}
 
 
 

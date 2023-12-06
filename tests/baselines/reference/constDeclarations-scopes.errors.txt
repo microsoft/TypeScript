@@ -1,7 +1,7 @@
-tests/cases/compiler/constDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+constDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== tests/cases/compiler/constDeclarations-scopes.ts (1 errors) ====
+==== constDeclarations-scopes.ts (1 errors) ====
     // global
     const c = "string";
     

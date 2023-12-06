@@ -1,4 +1,6 @@
-=== tests/cases/compiler/consumer.ts ===
+//// [tests/cases/compiler/enumDeclarationEmitInitializerHasImport.ts] ////
+
+=== consumer.ts ===
 import provider = require('./provider');
 >provider : typeof provider
 
@@ -10,7 +12,7 @@ export const value = provider.Enum.Value1;
 >Enum : typeof provider.Enum
 >Value1 : provider.Enum.Value1
 
-=== tests/cases/compiler/provider.ts ===
+=== provider.ts ===
 export enum Enum {
 >Enum : Enum
 

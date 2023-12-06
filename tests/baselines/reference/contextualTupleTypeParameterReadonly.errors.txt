@@ -1,0 +1,33 @@
+contextualTupleTypeParameterReadonly.ts(10,8): error TS2345: Argument of type '(a: 1 | 2, b: "1" | "2") => void' is not assignable to parameter of type '(...args: readonly [1, "1"] | readonly [2, "2"]) => any'.
+  Types of parameters 'a' and 'args' are incompatible.
+    Type 'readonly [1, "1"] | readonly [2, "2"]' is not assignable to type '[a: 1 | 2, b: "1" | "2"]'.
+      The type 'readonly [1, "1"]' is 'readonly' and cannot be assigned to the mutable type '[a: 1 | 2, b: "1" | "2"]'.
+
+
+==== contextualTupleTypeParameterReadonly.ts (1 errors) ====
+    declare function each<T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>): (fn: (...args: T) => any) => void;
+    
+    const cases = [
+        [1, '1'],
+        [2, '2'],
+    ] as const;
+    
+    const eacher = each(cases);
+    
+    eacher((a, b) => {
+           ~~~~~~~~~~~
+!!! error TS2345: Argument of type '(a: 1 | 2, b: "1" | "2") => void' is not assignable to parameter of type '(...args: readonly [1, "1"] | readonly [2, "2"]) => any'.
+!!! error TS2345:   Types of parameters 'a' and 'args' are incompatible.
+!!! error TS2345:     Type 'readonly [1, "1"] | readonly [2, "2"]' is not assignable to type '[a: 1 | 2, b: "1" | "2"]'.
+!!! error TS2345:       The type 'readonly [1, "1"]' is 'readonly' and cannot be assigned to the mutable type '[a: 1 | 2, b: "1" | "2"]'.
+        a;
+        b;
+    });
+    
+    // TODO: https://github.com/microsoft/TypeScript/issues/53255
+    eacher((...args) => {
+        const [a, b] = args;
+        a;
+        b;
+    });
+    

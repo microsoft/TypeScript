@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/indirectUniqueSymbolDeclarationEmit.ts] ////
+
 //// [indirectUniqueSymbolDeclarationEmit.ts]
 export const x = Symbol();
 export const y = Symbol();

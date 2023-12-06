@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exhaustiveSwitchCheckCircularity.ts ===
+//// [tests/cases/compiler/exhaustiveSwitchCheckCircularity.ts] ////
+
+=== exhaustiveSwitchCheckCircularity.ts ===
 // Repro from #47539
 
 declare function isNever(n: never): boolean;

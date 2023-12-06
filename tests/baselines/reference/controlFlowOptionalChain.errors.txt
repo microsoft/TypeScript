@@ -1,67 +1,67 @@
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(10,1): error TS2454: Variable 'a' is used before being assigned.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(14,1): error TS2454: Variable 'b' is used before being assigned.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(18,1): error TS2454: Variable 'c' is used before being assigned.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(22,1): error TS2454: Variable 'd' is used before being assigned.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(35,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(39,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(52,5): error TS18048: 'o2' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(57,1): error TS18048: 'o2' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(68,5): error TS18048: 'o3' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(72,1): error TS18048: 'o3' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(83,5): error TS18048: 'o4.x' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(87,1): error TS18048: 'o4.x' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(104,5): error TS18048: 'o5.x' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(105,5): error TS18048: 'o5.x' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(105,5): error TS18048: 'o5.x.y.z' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(111,1): error TS18048: 'o5.x' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS18048: 'o5.x' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(112,1): error TS18048: 'o5.x.y.z' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(130,5): error TS18048: 'o6' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(134,1): error TS18048: 'o6' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(208,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(211,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(214,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(217,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(220,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(223,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(238,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(241,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(244,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(271,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(274,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(277,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(307,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(310,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(319,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(322,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(331,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(334,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(337,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(340,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(343,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(346,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(349,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(352,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(358,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(367,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(370,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(379,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(418,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(421,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(430,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(433,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(442,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(451,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(454,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(463,9): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(498,13): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(501,13): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(515,13): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(518,13): error TS18048: 'o' is possibly 'undefined'.
-tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts(567,21): error TS18048: 'someOptionalObject' is possibly 'undefined'.
+controlFlowOptionalChain.ts(10,1): error TS2454: Variable 'a' is used before being assigned.
+controlFlowOptionalChain.ts(14,1): error TS2454: Variable 'b' is used before being assigned.
+controlFlowOptionalChain.ts(18,1): error TS2454: Variable 'c' is used before being assigned.
+controlFlowOptionalChain.ts(22,1): error TS2454: Variable 'd' is used before being assigned.
+controlFlowOptionalChain.ts(35,5): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+controlFlowOptionalChain.ts(39,1): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+controlFlowOptionalChain.ts(52,5): error TS18048: 'o2' is possibly 'undefined'.
+controlFlowOptionalChain.ts(57,1): error TS18048: 'o2' is possibly 'undefined'.
+controlFlowOptionalChain.ts(68,5): error TS18048: 'o3' is possibly 'undefined'.
+controlFlowOptionalChain.ts(72,1): error TS18048: 'o3' is possibly 'undefined'.
+controlFlowOptionalChain.ts(83,5): error TS18048: 'o4.x' is possibly 'undefined'.
+controlFlowOptionalChain.ts(87,1): error TS18048: 'o4.x' is possibly 'undefined'.
+controlFlowOptionalChain.ts(104,5): error TS18048: 'o5.x' is possibly 'undefined'.
+controlFlowOptionalChain.ts(105,5): error TS18048: 'o5.x' is possibly 'undefined'.
+controlFlowOptionalChain.ts(105,5): error TS18048: 'o5.x.y.z' is possibly 'undefined'.
+controlFlowOptionalChain.ts(111,1): error TS18048: 'o5.x' is possibly 'undefined'.
+controlFlowOptionalChain.ts(112,1): error TS18048: 'o5.x' is possibly 'undefined'.
+controlFlowOptionalChain.ts(112,1): error TS18048: 'o5.x.y.z' is possibly 'undefined'.
+controlFlowOptionalChain.ts(130,5): error TS18048: 'o6' is possibly 'undefined'.
+controlFlowOptionalChain.ts(134,1): error TS18048: 'o6' is possibly 'undefined'.
+controlFlowOptionalChain.ts(208,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(211,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(214,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(217,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(220,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(223,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(238,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(241,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(244,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(271,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(274,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(277,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(307,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(310,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(319,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(322,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(331,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(334,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(337,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(340,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(343,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(346,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(349,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(352,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(358,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(367,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(370,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(379,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(418,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(421,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(430,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(433,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(442,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(451,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(454,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(463,9): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(498,13): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(501,13): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(515,13): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(518,13): error TS18048: 'o' is possibly 'undefined'.
+controlFlowOptionalChain.ts(567,21): error TS18048: 'someOptionalObject' is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowOptionalChain.ts (61 errors) ====
+==== controlFlowOptionalChain.ts (61 errors) ====
     // assignments in shortcutting chain
     declare const o: undefined | {
         [key: string]: any;

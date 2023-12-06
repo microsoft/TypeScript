@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleExportsUnaryExpression.ts] ////
+
 //// [moduleExportsUnaryExpression.ts]
 let x = 1;
 

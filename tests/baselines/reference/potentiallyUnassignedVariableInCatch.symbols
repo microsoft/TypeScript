@@ -1,4 +1,6 @@
-=== tests/cases/compiler/potentiallyUnassignedVariableInCatch.ts ===
+//// [tests/cases/compiler/potentiallyUnassignedVariableInCatch.ts] ////
+
+=== potentiallyUnassignedVariableInCatch.ts ===
 let foo;
 >foo : Symbol(foo, Decl(potentiallyUnassignedVariableInCatch.ts, 0, 3))
 

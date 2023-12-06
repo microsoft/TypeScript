@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/excessPropertyCheckIntersectionWithIndexSignature.ts] ////
+
 //// [excessPropertyCheckIntersectionWithIndexSignature.ts]
 // Repro from #51875
 

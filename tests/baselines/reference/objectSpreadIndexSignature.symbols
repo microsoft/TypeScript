@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadIndexSignature.ts] ////
+
+=== objectSpreadIndexSignature.ts ===
 declare let indexed1: { [n: string]: number; a: number; };
 >indexed1 : Symbol(indexed1, Decl(objectSpreadIndexSignature.ts, 0, 11))
 >n : Symbol(n, Decl(objectSpreadIndexSignature.ts, 0, 25))

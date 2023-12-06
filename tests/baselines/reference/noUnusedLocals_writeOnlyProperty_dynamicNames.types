@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noUnusedLocals_writeOnlyProperty_dynamicNames.ts ===
+//// [tests/cases/compiler/noUnusedLocals_writeOnlyProperty_dynamicNames.ts] ////
+
+=== noUnusedLocals_writeOnlyProperty_dynamicNames.ts ===
 const x = Symbol("x");
 >x : unique symbol
 >Symbol("x") : unique symbol

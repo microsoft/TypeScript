@@ -1,4 +1,5 @@
 System.register(["./comp1"], function (exports_1, context_1) {
+    "use strict";
     var i0;
     var __moduleName = context_1 && context_1.id;
     return {

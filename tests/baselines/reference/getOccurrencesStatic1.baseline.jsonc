@@ -1,0 +1,45 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesStatic1.ts ===
+// --- (line: 19) skipped ---
+//         public get x() { return 10; }
+//         public set x(value) { }
+// 
+//         public /*HIGHLIGHTS*/[|{| kind: "none" |}static|] statPub;
+//         private [|{| kind: "none" |}static|] statPriv;
+//         protected [|{| kind: "none" |}static|] statProt;
+//     }
+// 
+//     export interface I1 {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesStatic1.ts ===
+// --- (line: 19) skipped ---
+//         public get x() { return 10; }
+//         public set x(value) { }
+// 
+//         public [|{| kind: "none" |}static|] statPub;
+//         private /*HIGHLIGHTS*/[|{| kind: "none" |}static|] statPriv;
+//         protected [|{| kind: "none" |}static|] statProt;
+//     }
+// 
+//     export interface I1 {
+// --- (line: 29) skipped ---
+
+
+
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesStatic1.ts ===
+// --- (line: 19) skipped ---
+//         public get x() { return 10; }
+//         public set x(value) { }
+// 
+//         public [|{| kind: "none" |}static|] statPub;
+//         private [|{| kind: "none" |}static|] statPriv;
+//         protected /*HIGHLIGHTS*/[|{| kind: "none" |}static|] statProt;
+//     }
+// 
+//     export interface I1 {
+// --- (line: 29) skipped ---

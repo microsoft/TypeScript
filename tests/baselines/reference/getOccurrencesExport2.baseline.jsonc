@@ -1,0 +1,11 @@
+// === documentHighlights ===
+// === /tests/cases/fourslash/getOccurrencesExport2.ts ===
+// --- (line: 35) skipped ---
+//     export module mb.m1.m2.m3 {
+//         declare var foo;
+// 
+//         /*HIGHLIGHTS*/[|{| kind: "none" |}export|] class C2 {
+//             public pub1;
+//             private priv1;
+//             protected prot1;
+// --- (line: 43) skipped ---

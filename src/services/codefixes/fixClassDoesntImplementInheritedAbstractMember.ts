@@ -26,16 +26,14 @@ import {
 } from "../_namespaces/ts.codefix";
 
 const errorCodes = [
-    Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
-    Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1.code,
+    Diagnostics.Non_abstract_class_0_does_not_implement_all_abstract_members_of_1.code,
 ];
 const fixId = "fixClassDoesntImplementInheritedAbstractMember";
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixClassNotImplementingInheritedMembers(context) {
         const { sourceFile, span } = context;
-        const changes = textChanges.ChangeTracker.with(context, t =>
-            addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));
+        const changes = textChanges.ChangeTracker.with(context, t => addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));
         return changes.length === 0 ? undefined : [createCodeFixAction(fixId, changes, Diagnostics.Implement_inherited_abstract_class, fixId, Diagnostics.Implement_all_inherited_abstract_classes)];
     },
     fixIds: [fixId],

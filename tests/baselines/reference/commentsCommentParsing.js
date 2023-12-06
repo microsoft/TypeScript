@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/commentsCommentParsing.ts] ////
+
 //// [commentsCommentParsing.ts]
 /// This is simple /// comments
 function simple() {

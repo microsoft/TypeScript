@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty7.ts ===
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty7.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfKnownProperty7.ts ===
 export namespace Foo {
 >Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorDefaultValuesReferencingThis.ts] ////
+
 //// [constructorDefaultValuesReferencingThis.ts]
 class C {
     constructor(x = this) { }

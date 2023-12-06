@@ -1,1147 +1,907 @@
+// === findAllReferences ===
 // === /a.tsx ===
 // namespace JSX {
 //     export interface Element { }
 //     export interface IntrinsicElements {
-//         /*FIND ALL REFS*/[|div|]: any;
+//         /*FIND ALL REFS*/<|[|{| isDefinition: true |}div|]: any;|>
 //     }
 // }
 // 
 // const Comp = () =>
-//     <[|div|]>
+//     <|<|<[|{| contextId: 1 |}div|]>
 //         Some content
-//         <[|div|]>More content</[|div|]>
-//     </[|div|]>;
+//         <|<|<[|{| contextId: 3 |}div|]>More content</[|{| contextId: 4 |}div|]>|>|>
+//     </[|{| contextId: 2 |}div|]>|>|>;
 // 
 // const x = <Comp>
 //     Content
 // </Comp>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.tsx",
-      "kind": "property",
-      "name": "(property) JSX.IntrinsicElements.div: any",
-      "textSpan": {
-        "start": 98,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "JSX",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IntrinsicElements",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "div",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 98,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 98,
-          "length": 9
-        },
-        "isWriteAccess": false,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 141,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 176,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 194,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 205,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.tsx ===
+  // namespace JSX {
+  //     export interface Element { }
+  //     export interface IntrinsicElements {
+  //         /*FIND ALL REFS*/<|[|div|]: any;|>
+  //     }
+  // }
+  // 
+  // --- (line: 8) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) JSX.IntrinsicElements.div: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "JSX",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IntrinsicElements",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "div",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.tsx ===
 // namespace JSX {
 //     export interface Element { }
 //     export interface IntrinsicElements {
-//         [|div|]: any;
+//         <|[|div|]: any;|>
 //     }
 // }
 // 
 // const Comp = () =>
-//     </*FIND ALL REFS*/[|div|]>
+//     <|<|</*FIND ALL REFS*/[|{| contextId: 1 |}div|]>
 //         Some content
-//         <[|div|]>More content</[|div|]>
-//     </[|div|]>;
+//         <|<|<[|{| contextId: 3 |}div|]>More content</[|{| contextId: 4 |}div|]>|>|>
+//     </[|{| contextId: 2 |}div|]>|>|>;
 // 
 // const x = <Comp>
 //     Content
 // </Comp>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.tsx",
-      "kind": "property",
-      "name": "(property) JSX.IntrinsicElements.div: any",
-      "textSpan": {
-        "start": 98,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "JSX",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IntrinsicElements",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "div",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 98,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 98,
-          "length": 9
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 141,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 176,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 194,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 205,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.tsx ===
+  // namespace JSX {
+  //     export interface Element { }
+  //     export interface IntrinsicElements {
+  //         <|[|div|]: any;|>
+  //     }
+  // }
+  // 
+  // const Comp = () =>
+  //     </*FIND ALL REFS*/div>
+  //         Some content
+  //         <div>More content</div>
+  //     </div>;
+  // --- (line: 13) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) JSX.IntrinsicElements.div: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "JSX",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IntrinsicElements",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "div",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.tsx ===
 // namespace JSX {
 //     export interface Element { }
 //     export interface IntrinsicElements {
-//         [|div|]: any;
+//         <|[|div|]: any;|>
 //     }
 // }
 // 
 // const Comp = () =>
-//     <[|div|]>
+//     <|<|<[|{| contextId: 1 |}div|]>
 //         Some content
-//         </*FIND ALL REFS*/[|div|]>More content</[|div|]>
-//     </[|div|]>;
+//         <|<|</*FIND ALL REFS*/[|{| contextId: 3 |}div|]>More content</[|{| contextId: 4 |}div|]>|>|>
+//     </[|{| contextId: 2 |}div|]>|>|>;
 // 
 // const x = <Comp>
 //     Content
 // </Comp>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.tsx",
-      "kind": "property",
-      "name": "(property) JSX.IntrinsicElements.div: any",
-      "textSpan": {
-        "start": 98,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "JSX",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IntrinsicElements",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "div",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 98,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 98,
-          "length": 9
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 141,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 176,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 194,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 205,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.tsx ===
+  // namespace JSX {
+  //     export interface Element { }
+  //     export interface IntrinsicElements {
+  //         <|[|div|]: any;|>
+  //     }
+  // }
+  // 
+  // const Comp = () =>
+  //     <div>
+  //         Some content
+  //         </*FIND ALL REFS*/div>More content</div>
+  //     </div>;
+  // 
+  // const x = <Comp>
+  //     Content
+  // </Comp>;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) JSX.IntrinsicElements.div: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "JSX",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IntrinsicElements",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "div",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.tsx ===
 // namespace JSX {
 //     export interface Element { }
 //     export interface IntrinsicElements {
-//         [|div|]: any;
+//         <|[|div|]: any;|>
 //     }
 // }
 // 
 // const Comp = () =>
-//     <[|div|]>
+//     <|<|<[|{| contextId: 1 |}div|]>
 //         Some content
-//         <[|div|]>More content<//*FIND ALL REFS*/[|div|]>
-//     </[|div|]>;
+//         <|<|<[|{| contextId: 3 |}div|]>More content<//*FIND ALL REFS*/[|{| contextId: 4 |}div|]>|>|>
+//     </[|{| contextId: 2 |}div|]>|>|>;
 // 
 // const x = <Comp>
 //     Content
 // </Comp>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.tsx",
-      "kind": "property",
-      "name": "(property) JSX.IntrinsicElements.div: any",
-      "textSpan": {
-        "start": 98,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "JSX",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IntrinsicElements",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "div",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 98,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 98,
-          "length": 9
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 141,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 176,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 194,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 205,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.tsx ===
+  // namespace JSX {
+  //     export interface Element { }
+  //     export interface IntrinsicElements {
+  //         <|[|div|]: any;|>
+  //     }
+  // }
+  // 
+  // const Comp = () =>
+  //     <div>
+  //         Some content
+  //         <div>More content<//*FIND ALL REFS*/div>
+  //     </div>;
+  // 
+  // const x = <Comp>
+  //     Content
+  // </Comp>;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) JSX.IntrinsicElements.div: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "JSX",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IntrinsicElements",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "div",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.tsx ===
 // namespace JSX {
 //     export interface Element { }
 //     export interface IntrinsicElements {
-//         [|div|]: any;
+//         <|[|div|]: any;|>
 //     }
 // }
 // 
 // const Comp = () =>
-//     <[|div|]>
+//     <|<|<[|{| contextId: 1 |}div|]>
 //         Some content
-//         <[|div|]>More content</[|div|]>
-//     <//*FIND ALL REFS*/[|div|]>;
+//         <|<|<[|{| contextId: 3 |}div|]>More content</[|{| contextId: 4 |}div|]>|>|>
+//     <//*FIND ALL REFS*/[|{| contextId: 2 |}div|]>|>|>;
 // 
 // const x = <Comp>
 //     Content
 // </Comp>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.tsx",
-      "kind": "property",
-      "name": "(property) JSX.IntrinsicElements.div: any",
-      "textSpan": {
-        "start": 98,
-        "length": 3
-      },
-      "displayParts": [
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "property",
-          "kind": "text"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "JSX",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "IntrinsicElements",
-          "kind": "interfaceName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "div",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "any",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 98,
-        "length": 9
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 98,
-          "length": 9
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 141,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 176,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 194,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 175,
-          "length": 23
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 205,
-          "length": 3
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 140,
-          "length": 69
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.tsx ===
+  // namespace JSX {
+  //     export interface Element { }
+  //     export interface IntrinsicElements {
+  //         <|[|div|]: any;|>
+  //     }
+  // }
+  // 
+  // const Comp = () =>
+  //     <div>
+  //         Some content
+  //         <div>More content</div>
+  //     <//*FIND ALL REFS*/div>;
+  // 
+  // const x = <Comp>
+  //     Content
+  // </Comp>;
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "property",
+    "name": "(property) JSX.IntrinsicElements.div: any",
+    "displayParts": [
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": "property",
+      "kind": "text"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "JSX",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "IntrinsicElements",
+      "kind": "interfaceName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "div",
+      "kind": "propertyName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "any",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
+// --- (line: 4) skipped ---
 //     }
 // }
 // 
-// const /*FIND ALL REFS*/[|Comp|] = () =>
+// <|const /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}Comp|] = () =>
 //     <div>
 //         Some content
 //         <div>More content</div>
-//     </div>;
+//     </div>;|>
 // 
-// const x = <[|Comp|]>
+// const x = <|<|<[|{| contextId: 1 |}Comp|]>
 //     Content
-// </[|Comp|]>;
+// </[|{| contextId: 2 |}Comp|]>|>|>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.tsx",
-      "kind": "const",
-      "name": "const Comp: () => JSX.Element",
-      "textSpan": {
-        "start": 123,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Comp",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "JSX",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Element",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 117,
-        "length": 93
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 123,
-          "length": 4
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 117,
-          "length": 93
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 223,
-          "length": 4
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 222,
-          "length": 26
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 243,
-          "length": 4
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 222,
-          "length": 26
-        },
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /a.tsx ===
+  // --- (line: 4) skipped ---
+  //     }
+  // }
+  // 
+  // <|const /*FIND ALL REFS*/[|Comp|] = () =>
+  //     <div>
+  //         Some content
+  //         <div>More content</div>
+  //     </div>;|>
+  // 
+  // const x = <Comp>
+  //     Content
+  // </Comp>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const Comp: () => JSX.Element",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Comp",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "JSX",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Element",
+      "kind": "interfaceName"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
+// === /a.tsx ===
+// --- (line: 4) skipped ---
+//     }
+// }
+// 
+// <|const [|{| isWriteAccess: true |}Comp|] = () =>
+//     <div>
+//         Some content
+//         <div>More content</div>
+//     </div>;|>
+// 
+// const x = <|<|</*FIND ALL REFS*/[|{| contextId: 1 |}Comp|]>
+//     Content
+// </[|{| contextId: 2 |}Comp|]>|>|>;
+
+  // === Definitions ===
+  // === /a.tsx ===
+  // --- (line: 4) skipped ---
+  //     }
+  // }
+  // 
+  // <|const [|Comp|] = () =>
+  //     <div>
+  //         Some content
+  //         <div>More content</div>
+  //     </div>;|>
+  // 
+  // const x = </*FIND ALL REFS*/Comp>
+  //     Content
+  // </Comp>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const Comp: () => JSX.Element",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Comp",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "JSX",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Element",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
+// === /a.tsx ===
+// --- (line: 4) skipped ---
+//     }
+// }
+// 
+// <|const [|{| isWriteAccess: true |}Comp|] = () =>
+//     <div>
+//         Some content
+//         <div>More content</div>
+//     </div>;|>
+// 
+// const x = <|<|<[|{| contextId: 1 |}Comp|]>
+//     Content
+// <//*FIND ALL REFS*/[|{| contextId: 2 |}Comp|]>|>|>;
+
+  // === Definitions ===
+  // === /a.tsx ===
+  // --- (line: 4) skipped ---
+  //     }
+  // }
+  // 
+  // <|const [|Comp|] = () =>
+  //     <div>
+  //         Some content
+  //         <div>More content</div>
+  //     </div>;|>
+  // 
+  // const x = <Comp>
+  //     Content
+  // <//*FIND ALL REFS*/Comp>;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "const",
+    "name": "const Comp: () => JSX.Element",
+    "displayParts": [
+     {
+      "text": "const",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "Comp",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "(",
+      "kind": "punctuation"
+     },
+     {
+      "text": ")",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=>",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "JSX",
+      "kind": "moduleName"
+     },
+     {
+      "text": ".",
+      "kind": "punctuation"
+     },
+     {
+      "text": "Element",
+      "kind": "interfaceName"
+     }
+    ]
+   }
+  ]
+
+
+
+// === documentHighlights ===
 // === /a.tsx ===
 // namespace JSX {
 //     export interface Element { }
 //     export interface IntrinsicElements {
-//         div: any;
+//         /*HIGHLIGHTS*/<|[|{| kind: "reference" |}div|]: any;|>
 //     }
 // }
 // 
-// const [|Comp|] = () =>
-//     <div>
+// const Comp = () =>
+//     <|<|<[|{| contextId: 1, kind: "reference" |}div|]>
 //         Some content
-//         <div>More content</div>
-//     </div>;
+//         <|<|<[|{| contextId: 3, kind: "reference" |}div|]>More content</[|{| contextId: 4, kind: "reference" |}div|]>|>|>
+//     </[|{| contextId: 2, kind: "reference" |}div|]>|>|>;
 // 
-// const x = </*FIND ALL REFS*/[|Comp|]>
+// const x = <Comp>
 //     Content
-// </[|Comp|]>;
+// </Comp>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.tsx",
-      "kind": "const",
-      "name": "const Comp: () => JSX.Element",
-      "textSpan": {
-        "start": 123,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Comp",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "JSX",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Element",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 117,
-        "length": 93
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 123,
-          "length": 4
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 117,
-          "length": 93
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 223,
-          "length": 4
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 222,
-          "length": 26
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 243,
-          "length": 4
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 222,
-          "length": 26
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
 
+
+// === documentHighlights ===
 // === /a.tsx ===
-// namespace JSX {
-//     export interface Element { }
-//     export interface IntrinsicElements {
-//         div: any;
+// --- (line: 5) skipped ---
+// }
+// 
+// const Comp = () =>
+//     </*HIGHLIGHTS*/[|{| kind: "none" |}div|]>
+//         Some content
+//         <div>More content</div>
+//     </[|{| kind: "none" |}div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 7) skipped ---
+// const Comp = () =>
+//     <div>
+//         Some content
+//         </*HIGHLIGHTS*/[|{| kind: "none" |}div|]>More content</[|{| kind: "none" |}div|]>
+//     </div>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 7) skipped ---
+// const Comp = () =>
+//     <div>
+//         Some content
+//         <[|{| kind: "none" |}div|]>More content<//*HIGHLIGHTS*/[|{| kind: "none" |}div|]>
+//     </div>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 5) skipped ---
+// }
+// 
+// const Comp = () =>
+//     <[|{| kind: "none" |}div|]>
+//         Some content
+//         <div>More content</div>
+//     <//*HIGHLIGHTS*/[|{| kind: "none" |}div|]>;
+// 
+// const x = <Comp>
+//     Content
+// </Comp>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 4) skipped ---
 //     }
 // }
 // 
-// const [|Comp|] = () =>
+// <|const /*HIGHLIGHTS*/[|{| kind: "writtenReference" |}Comp|] = () =>
 //     <div>
 //         Some content
 //         <div>More content</div>
+//     </div>;|>
+// 
+// const x = <|<|<[|{| contextId: 1, kind: "reference" |}Comp|]>
+//     Content
+// </[|{| contextId: 2, kind: "reference" |}Comp|]>|>|>;
+
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 10) skipped ---
+//         <div>More content</div>
 //     </div>;
 // 
-// const x = <[|Comp|]>
+// const x = </*HIGHLIGHTS*/[|{| kind: "none" |}Comp|]>
 //     Content
-// <//*FIND ALL REFS*/[|Comp|]>;
+// </[|{| kind: "none" |}Comp|]>;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.tsx",
-      "kind": "const",
-      "name": "const Comp: () => JSX.Element",
-      "textSpan": {
-        "start": 123,
-        "length": 4
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "Comp",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "JSX",
-          "kind": "moduleName"
-        },
-        {
-          "text": ".",
-          "kind": "punctuation"
-        },
-        {
-          "text": "Element",
-          "kind": "interfaceName"
-        }
-      ],
-      "contextSpan": {
-        "start": 117,
-        "length": 93
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 123,
-          "length": 4
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 117,
-          "length": 93
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 223,
-          "length": 4
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 222,
-          "length": 26
-        },
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 243,
-          "length": 4
-        },
-        "fileName": "/a.tsx",
-        "contextSpan": {
-          "start": 222,
-          "length": 26
-        },
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+
+
+// === documentHighlights ===
+// === /a.tsx ===
+// --- (line: 10) skipped ---
+//         <div>More content</div>
+//     </div>;
+// 
+// const x = <[|{| kind: "none" |}Comp|]>
+//     Content
+// <//*HIGHLIGHTS*/[|{| kind: "none" |}Comp|]>;

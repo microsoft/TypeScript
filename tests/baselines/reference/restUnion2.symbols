@@ -1,4 +1,6 @@
-=== tests/cases/compiler/restUnion2.ts ===
+//// [tests/cases/compiler/restUnion2.ts] ////
+
+=== restUnion2.ts ===
 declare const undefinedUnion: { n: number } | undefined;
 >undefinedUnion : Symbol(undefinedUnion, Decl(restUnion2.ts, 0, 13))
 >n : Symbol(n, Decl(restUnion2.ts, 0, 31))

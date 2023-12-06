@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/use.js ===
+//// [tests/cases/conformance/jsdoc/typedefCrossModule2.ts] ////
+
+=== use.js ===
 var mod = require('./mod1.js');
 >mod : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; }
 >require('./mod1.js') : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; }
@@ -20,7 +22,7 @@ var bbb = new mod.Baz();
 >mod : { Baz: typeof Baz; Bar: typeof mod.Bar; Quid: 2; } | { Quack: number; Bar: typeof mod.Bar; Quid: 2; }
 >Baz : any
 
-=== tests/cases/conformance/jsdoc/mod1.js ===
+=== mod1.js ===
 // error
 
 /** @typedef {number} Foo */

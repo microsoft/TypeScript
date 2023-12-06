@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indexer3.ts ===
+//// [tests/cases/compiler/indexer3.ts] ////
+
+=== indexer3.ts ===
 var dateMap: { [x: string]: Date; } = {}
 >dateMap : Symbol(dateMap, Decl(indexer3.ts, 0, 3))
 >x : Symbol(x, Decl(indexer3.ts, 0, 16))

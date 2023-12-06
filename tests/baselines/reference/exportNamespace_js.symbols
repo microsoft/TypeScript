@@ -1,12 +1,14 @@
-=== tests/cases/conformance/externalModules/typeOnly/a.js ===
+//// [tests/cases/conformance/externalModules/typeOnly/exportNamespace_js.ts] ////
+
+=== a.js ===
 export class A {}
 >A : Symbol(A, Decl(a.js, 0, 0))
 
-=== tests/cases/conformance/externalModules/typeOnly/b.js ===
+=== b.js ===
 
 export type * from './a';
 
-=== tests/cases/conformance/externalModules/typeOnly/c.js ===
+=== c.js ===
 import { A } from './b';
 >A : Symbol(A, Decl(c.js, 0, 8))
 

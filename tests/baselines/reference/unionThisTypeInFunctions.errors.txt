@@ -1,4 +1,4 @@
-tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts(10,5): error TS2684: The 'this' context of type 'Real | Fake' is not assignable to method's 'this' of type 'Real & Fake'.
+unionThisTypeInFunctions.ts(10,5): error TS2684: The 'this' context of type 'Real | Fake' is not assignable to method's 'this' of type 'Real & Fake'.
   Type 'Real' is not assignable to type 'Real & Fake'.
     Type 'Real' is not assignable to type 'Fake'.
       Types of property 'method' are incompatible.
@@ -9,7 +9,7 @@ tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts(10,5): error 
                 Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/thisType/unionThisTypeInFunctions.ts (1 errors) ====
+==== unionThisTypeInFunctions.ts (1 errors) ====
     interface Real {
         method(this: this, n: number): void;
         data: string;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/collisionExportsRequireAndUninstantiatedModule.ts] ////
+
 //// [collisionExportsRequireAndUninstantiatedModule.ts]
 export module require { // no error 
     export interface I {

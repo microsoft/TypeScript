@@ -1,4 +1,6 @@
-=== tests/cases/compiler/tsxUnionMemberChecksFilterDataProps.tsx ===
+//// [tests/cases/compiler/tsxUnionMemberChecksFilterDataProps.tsx] ////
+
+=== tsxUnionMemberChecksFilterDataProps.tsx ===
 /// <reference path="react16.d.ts" />
 import React, { ReactElement } from "react";
 >React : Symbol(React, Decl(tsxUnionMemberChecksFilterDataProps.tsx, 1, 6))

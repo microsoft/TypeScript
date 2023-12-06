@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {}
@@ -31,8 +32,35 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.ts"]
-Program options: {"noEmit":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/main.ts: *new*
+  {}
+/user/username/projects/myproject/other.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.ts"
+]
+Program options: {
+  "noEmit": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -49,26 +77,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main.ts (used version)
 /user/username/projects/myproject/other.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/main.ts: *new*
-  {}
-/user/username/projects/myproject/other.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: Modify a file
 
@@ -78,6 +87,13 @@ export const x = 10;
 // SomeComment
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
@@ -86,8 +102,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main.ts","/user/username/projects/myproject/other.ts"]
-Program options: {"noEmit":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/main.ts",
+  "/user/username/projects/myproject/other.ts"
+]
+Program options: {
+  "noEmit": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -101,4 +125,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inheritanceStaticMembersIncompatible.ts] ////
+
 //// [inheritanceStaticMembersIncompatible.ts]
 class a {
     static x: string;

@@ -1,3 +1,4 @@
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -21,7 +22,12 @@ declare const console: { log(msg: any): void; };
 
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"allowJs":true,"noEmit":true}}
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmit": true
+  }
+}
 
 
 /a/lib/tsc.js -b -w -verbose
@@ -40,8 +46,29 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.js","/user/username/projects/myproject/b.ts"]
-Program options: {"allowJs":true,"noEmit":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+FsWatches::
+/user/username/projects/myproject/a.js: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/a.js",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "allowJs": true,
+  "noEmit": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -58,26 +85,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.js (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-FsWatches::
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/a.js: *new*
-  {}
-/user/username/projects/myproject/b.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: No change
 
 Input::
 //// [/user/username/projects/myproject/a.js] file written with same contents
 
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
@@ -90,8 +111,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.js","/user/username/projects/myproject/b.ts"]
-Program options: {"allowJs":true,"noEmit":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.js",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "allowJs": true,
+  "noEmit": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -104,7 +135,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: change
 
 Input::
@@ -112,6 +142,13 @@ Input::
 const x = 10;
 
 
+Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:38 AM[0m] File change detected. Starting incremental compilation...
@@ -124,8 +161,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.js","/user/username/projects/myproject/b.ts"]
-Program options: {"allowJs":true,"noEmit":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.js",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "allowJs": true,
+  "noEmit": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -142,4 +189,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (used version)
 
 exitCode:: ExitStatus.undefined
-

@@ -1,50 +1,50 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(5,5): error TS2322: Type 'T' is not assignable to type 'U'.
+typeParameterAssignability2.ts(5,5): error TS2322: Type 'T' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(9,5): error TS2322: Type 'U' is not assignable to type 'T'.
+typeParameterAssignability2.ts(9,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(14,5): error TS2322: Type 'U' is not assignable to type 'T'.
+typeParameterAssignability2.ts(14,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(17,5): error TS2322: Type 'V' is not assignable to type 'T'.
+typeParameterAssignability2.ts(17,5): error TS2322: Type 'V' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(20,5): error TS2322: Type 'V' is not assignable to type 'U'.
+typeParameterAssignability2.ts(20,5): error TS2322: Type 'V' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(25,5): error TS2322: Type 'U' is not assignable to type 'T'.
+typeParameterAssignability2.ts(25,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(26,5): error TS2322: Type 'V' is not assignable to type 'T'.
+typeParameterAssignability2.ts(26,5): error TS2322: Type 'V' is not assignable to type 'T'.
   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(27,5): error TS2322: Type 'Date' is not assignable to type 'T'.
+typeParameterAssignability2.ts(27,5): error TS2322: Type 'Date' is not assignable to type 'T'.
   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(30,5): error TS2322: Type 'V' is not assignable to type 'U'.
+typeParameterAssignability2.ts(30,5): error TS2322: Type 'V' is not assignable to type 'U'.
   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(31,5): error TS2322: Type 'Date' is not assignable to type 'U'.
+typeParameterAssignability2.ts(31,5): error TS2322: Type 'Date' is not assignable to type 'U'.
   'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(35,5): error TS2322: Type 'Date' is not assignable to type 'V'.
+typeParameterAssignability2.ts(35,5): error TS2322: Type 'Date' is not assignable to type 'V'.
   'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(45,5): error TS2322: Type 'U' is not assignable to type 'T'.
+typeParameterAssignability2.ts(45,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(46,5): error TS2322: Type 'V' is not assignable to type 'T'.
+typeParameterAssignability2.ts(46,5): error TS2322: Type 'V' is not assignable to type 'T'.
   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(47,5): error TS2322: Type 'Date' is not assignable to type 'T'.
+typeParameterAssignability2.ts(47,5): error TS2322: Type 'Date' is not assignable to type 'T'.
   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(50,5): error TS2322: Type 'V' is not assignable to type 'U'.
+typeParameterAssignability2.ts(50,5): error TS2322: Type 'V' is not assignable to type 'U'.
   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(51,5): error TS2322: Type 'Date' is not assignable to type 'U'.
+typeParameterAssignability2.ts(51,5): error TS2322: Type 'Date' is not assignable to type 'U'.
   'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(55,5): error TS2322: Type 'Date' is not assignable to type 'V'.
+typeParameterAssignability2.ts(55,5): error TS2322: Type 'Date' is not assignable to type 'V'.
   'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(64,5): error TS2322: Type 'U' is not assignable to type 'T'.
+typeParameterAssignability2.ts(64,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(65,5): error TS2322: Type 'V' is not assignable to type 'T'.
+typeParameterAssignability2.ts(65,5): error TS2322: Type 'V' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(68,5): error TS2322: Type 'V' is not assignable to type 'U'.
+typeParameterAssignability2.ts(68,5): error TS2322: Type 'V' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(70,5): error TS2322: Type 'T' is not assignable to type 'V'.
+typeParameterAssignability2.ts(70,5): error TS2322: Type 'T' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(71,5): error TS2322: Type 'U' is not assignable to type 'V'.
+typeParameterAssignability2.ts(71,5): error TS2322: Type 'U' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts (22 errors) ====
+==== typeParameterAssignability2.ts (22 errors) ====
     // type parameters are not assignable to one another unless directly or indirectly constrained to one another
     
     function foo<T, U extends T>(t: T, u: U) {
@@ -53,7 +53,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:3:14: This type parameter might need an `extends U` constraint.
+!!! related TS2208 typeParameterAssignability2.ts:3:14: This type parameter might need an `extends U` constraint.
     }
     
     function foo2<T extends U, U>(t: T, u: U) {
@@ -61,7 +61,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:8:28: This type parameter might need an `extends T` constraint.
+!!! related TS2208 typeParameterAssignability2.ts:8:28: This type parameter might need an `extends T` constraint.
         u = t; // ok
     }
     
@@ -76,14 +76,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41: This type parameter might need an `extends T` constraint.
+!!! related TS2208 typeParameterAssignability2.ts:13:41: This type parameter might need an `extends T` constraint.
         v = t; // ok
     
         u = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41: This type parameter might need an `extends U` constraint.
+!!! related TS2208 typeParameterAssignability2.ts:13:41: This type parameter might need an `extends U` constraint.
         v = u; // ok
     }
     
@@ -167,19 +167,19 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28: This type parameter might need an `extends T` constraint.
+!!! related TS2208 typeParameterAssignability2.ts:63:28: This type parameter might need an `extends T` constraint.
         t = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31: This type parameter might need an `extends T` constraint.
+!!! related TS2208 typeParameterAssignability2.ts:63:31: This type parameter might need an `extends T` constraint.
     
         u = t; // ok
         u = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31: This type parameter might need an `extends U` constraint.
+!!! related TS2208 typeParameterAssignability2.ts:63:31: This type parameter might need an `extends U` constraint.
     
         v = t; // error
         ~
@@ -189,5 +189,5 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'V'.
 !!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28: This type parameter might need an `extends V` constraint.
+!!! related TS2208 typeParameterAssignability2.ts:63:28: This type parameter might need an `extends V` constraint.
     }

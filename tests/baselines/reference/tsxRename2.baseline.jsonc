@@ -1,0 +1,29 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//         div: {
+//             /*RENAME*/<|[|nameRENAME|]?: string;|>
+//             isOpen?: boolean;
+//         };
+//         span: { n: string; };
+//     }
+// }
+// var x = <div <|[|nameRENAME|]="hello"|> />;
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/file.tsx ===
+// declare module JSX {
+//     interface Element { }
+//     interface IntrinsicElements {
+//         div: {
+//             <|[|nameRENAME|]?: string;|>
+//             isOpen?: boolean;
+//         };
+//         span: { n: string; };
+//     }
+// }
+// var x = <div /*RENAME*/<|[|nameRENAME|]="hello"|> />;

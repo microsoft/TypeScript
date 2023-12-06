@@ -1,4 +1,6 @@
-=== tests/cases/conformance/externalModules/exportClassNameWithObjectSystem.ts ===
+//// [tests/cases/conformance/externalModules/exportClassNameWithObjectSystem.ts] ////
+
+=== exportClassNameWithObjectSystem.ts ===
 export class Object {}
 >Object : Object
 

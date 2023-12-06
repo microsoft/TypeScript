@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/parser/ecmascript5/RegularExpressions/parseRegularExpressionMixedWithComments.ts] ////
+
 //// [parseRegularExpressionMixedWithComments.ts]
 var regex1 = / asdf /;
 var regex2 = /**// asdf /;

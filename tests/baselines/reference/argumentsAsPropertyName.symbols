@@ -1,4 +1,6 @@
-=== tests/cases/compiler/argumentsAsPropertyName.ts ===
+//// [tests/cases/compiler/argumentsAsPropertyName.ts] ////
+
+=== argumentsAsPropertyName.ts ===
 // target: es5
 type MyType = {
 >MyType : Symbol(MyType, Decl(argumentsAsPropertyName.ts, 0, 0))

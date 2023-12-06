@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mod.d.ts ===
+//// [tests/cases/compiler/esModuleIntersectionCrash.ts] ////
+
+=== mod.d.ts ===
 export = modObj;
 >modObj : modObj.A & modObj.B
 
@@ -15,7 +17,7 @@ declare namespace modObj {
 >x : string
 >b : string
 }
-=== tests/cases/compiler/idx.ts ===
+=== idx.ts ===
 import * as mod from "./mod";
 >mod : { default: mod.A & mod.B; a: string; b: string; }
 

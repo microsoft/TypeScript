@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts ===
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts] ////
+
+=== computedPropertyNames12_ES5.ts ===
 var s: string;
 >s : Symbol(s, Decl(computedPropertyNames12_ES5.ts, 0, 3))
 

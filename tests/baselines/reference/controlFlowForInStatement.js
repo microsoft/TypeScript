@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowForInStatement.ts] ////
+
 //// [controlFlowForInStatement.ts]
 let x: string | number | boolean | RegExp | Function;
 let obj: any;

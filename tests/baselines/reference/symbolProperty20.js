@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty20.ts] ////
+
 //// [symbolProperty20.ts]
 interface I {
     [Symbol.iterator]: (s: string) => string;

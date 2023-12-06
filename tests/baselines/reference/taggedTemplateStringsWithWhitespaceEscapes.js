@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/taggedTemplateStringsWithWhitespaceEscapes.ts] ////
+
 //// [taggedTemplateStringsWithWhitespaceEscapes.ts]
 function f(...args: any[]) {
 }

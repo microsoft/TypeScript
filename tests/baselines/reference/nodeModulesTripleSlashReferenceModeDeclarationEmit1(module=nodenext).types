@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeDeclarationEmit1.ts] ////
+
 === /index.ts ===
 
 /// <reference types="pkg" />

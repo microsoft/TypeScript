@@ -1,4 +1,6 @@
-=== tests/cases/compiler/external.ts ===
+//// [tests/cases/compiler/importHelpersNoHelpers.ts] ////
+
+=== external.ts ===
 export * from "./other";
 export class A { }
 >A : A
@@ -38,12 +40,12 @@ const { ...x } = y;
 >x : { a: number; }
 >y : { a: number; }
 
-=== tests/cases/compiler/other.ts ===
+=== other.ts ===
 export const x = 1;
 >x : 1
 >1 : 1
 
-=== tests/cases/compiler/script.ts ===
+=== script.ts ===
 class A { }
 >A : A
 
@@ -67,7 +69,7 @@ class C {
     }
 }
 
-=== tests/cases/compiler/tslib.d.ts ===
+=== tslib.d.ts ===
 
 export {}
 

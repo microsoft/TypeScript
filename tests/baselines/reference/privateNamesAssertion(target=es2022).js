@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNamesAssertion.ts] ////
+
 //// [privateNamesAssertion.ts]
 class Foo {
     #p1: (v: any) => asserts v is string = (v) => {

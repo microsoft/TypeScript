@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/jsxElementTypeLiteral.tsx] ////
+
+=== jsxElementTypeLiteral.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(jsxElementTypeLiteral.tsx, 1, 6))
+
+declare global {
+>global : Symbol(global, Decl(jsxElementTypeLiteral.tsx, 1, 31))
+
+  namespace JSX {
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteral.tsx, 3, 16))
+
+    // This should only use keys of JSX.IntrinsicElements.
+    // Diverging here to illustrate different error messages.
+    type ElementType = "div";
+>ElementType : Symbol(ElementType, Decl(jsxElementTypeLiteral.tsx, 4, 17))
+  }
+}
+
+// should be fine - `ElementType` accepts `div`
+let a = <div />;
+>a : Symbol(a, Decl(jsxElementTypeLiteral.tsx, 12, 3))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+// should be an error - `ElementType` does not accept `span`
+let b = <span />;
+>b : Symbol(b, Decl(jsxElementTypeLiteral.tsx, 15, 3))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
+
+// Should be an error.
+// `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
+let c = <ruhroh />;
+>c : Symbol(c, Decl(jsxElementTypeLiteral.tsx, 19, 3))
+

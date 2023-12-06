@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxPartialSpread.tsx] ////
+
 //// [jsxPartialSpread.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 const Select = (p: {value?: unknown}) => <p></p>;

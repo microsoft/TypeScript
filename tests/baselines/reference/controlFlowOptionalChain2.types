@@ -1,4 +1,6 @@
-=== tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts ===
+//// [tests/cases/conformance/controlFlow/controlFlowOptionalChain2.ts] ////
+
+=== controlFlowOptionalChain2.ts ===
 type A = {
 >A : { type: 'A'; name: string; }
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/checkJsdocSatisfiesTag7.ts] ////
+
 === /a.js ===
 /** @typedef {"a" | "b" | "c" | "d"} Keys */
 

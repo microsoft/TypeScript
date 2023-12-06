@@ -1,4 +1,6 @@
-=== tests/cases/compiler/checkSuperCallBeforeThisAccessing5.ts ===
+//// [tests/cases/compiler/checkSuperCallBeforeThisAccessing5.ts] ////
+
+=== checkSuperCallBeforeThisAccessing5.ts ===
 class Based { constructor(...arg) { } }
 >Based : Based
 >arg : any[]

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/a.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignment.ts] ////
+
+=== a.js ===
 var Outer = class O {
 >Outer : typeof O
 >class O {    m(x, y) { }} : typeof O

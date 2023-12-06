@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMap-FileWithComments.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMap-FileWithComments.js
+emittedFile:sourceMap-FileWithComments.js
 sourceFile:sourceMap-FileWithComments.ts
 -------------------------------------------------------------------
 >>>// Module

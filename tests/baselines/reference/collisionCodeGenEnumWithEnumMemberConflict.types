@@ -1,4 +1,6 @@
-=== tests/cases/compiler/collisionCodeGenEnumWithEnumMemberConflict.ts ===
+//// [tests/cases/compiler/collisionCodeGenEnumWithEnumMemberConflict.ts] ////
+
+=== collisionCodeGenEnumWithEnumMemberConflict.ts ===
 enum Color {
 >Color : Color
 

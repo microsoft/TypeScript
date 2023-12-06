@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitTypeofThisInClass.ts ===
+//// [tests/cases/compiler/declarationEmitTypeofThisInClass.ts] ////
+
+=== declarationEmitTypeofThisInClass.ts ===
 class Foo {
 >Foo : Symbol(Foo, Decl(declarationEmitTypeofThisInClass.ts, 0, 0))
 

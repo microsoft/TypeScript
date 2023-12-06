@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyOfEveryType.ts] ////
+
 //// [interfaceWithPropertyOfEveryType.ts]
 class C { foo: string; }
 function f1() { }

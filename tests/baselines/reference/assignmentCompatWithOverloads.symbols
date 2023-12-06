@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assignmentCompatWithOverloads.ts ===
+//// [tests/cases/compiler/assignmentCompatWithOverloads.ts] ////
+
+=== assignmentCompatWithOverloads.ts ===
 function f1(x: string): number { return null; }
 >f1 : Symbol(f1, Decl(assignmentCompatWithOverloads.ts, 0, 0))
 >x : Symbol(x, Decl(assignmentCompatWithOverloads.ts, 0, 12))

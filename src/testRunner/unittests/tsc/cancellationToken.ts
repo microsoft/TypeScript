@@ -2,19 +2,22 @@ import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineBuildInfo,
     CommandLineProgram,
-} from "../tsc/helpers";
+} from "../helpers/baseline";
 import {
     applyEdit,
     createBaseline,
     watchBaseline,
-} from "../tscWatch/helpers";
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");
@@ -27,7 +30,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     import {B} from './b';
                     declare var console: any;
                     let b = new B();
-                    console.log(b.c.d);`
+                    console.log(b.c.d);`,
             };
             const bFile: File = {
                 path: `/user/username/projects/myproject/b.ts`,
@@ -35,42 +38,41 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     import {C} from './c';
                     export class B {
                         c = new C();
-                    }`
+                    }`,
             };
             const cFile: File = {
                 path: `/user/username/projects/myproject/c.ts`,
                 content: Utils.dedent`
                     export class C {
                         d = 1;
-                    }`
+                    }`,
             };
             const dFile: File = {
                 path: `/user/username/projects/myproject/d.ts`,
-                content: "export class D { }"
+                content: "export class D { }",
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } })
+                content: jsonToReadableText({ compilerOptions: { incremental: true, declaration: true } }),
             };
-            const { sys, baseline, oldSnap: originalSnap } = createBaseline(createWatchedSystem(
+            const { sys, baseline } = createBaseline(createWatchedSystem(
                 [aFile, bFile, cFile, dFile, config, libFile],
-                { currentDirectory: "/user/username/projects/myproject" }
+                { currentDirectory: "/user/username/projects/myproject" },
             ));
             sys.exit = exitCode => sys.exitCode = exitCode;
             const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
             const parsedConfig = ts.parseConfigFileWithSystem(
                 "tsconfig.json",
                 {},
-             /*extendedConfigCache*/ undefined,
-              /*watchOptionsToExtend*/ undefined,
+                /*extendedConfigCache*/ undefined,
+                /*watchOptionsToExtend*/ undefined,
                 sys,
-                reportDiagnostic
+                reportDiagnostic,
             )!;
             const host = ts.createIncrementalCompilerHost(parsedConfig.options, sys);
             let programs: CommandLineProgram[] = ts.emptyArray;
             let oldPrograms: CommandLineProgram[] = ts.emptyArray;
             let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram = undefined!;
-            let oldSnap = originalSnap;
             let cancel = false;
             const cancellationToken: ts.CancellationToken = {
                 isCancellationRequested: () => cancel,
@@ -87,11 +89,11 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
 
             // Cancel on first semantic operation
             // Change
-            oldSnap = applyEdit(
+            applyEdit(
                 sys,
                 baseline,
                 sys => sys.appendFile(cFile.path, "export function foo() {}"),
-                "Add change that affects d.ts"
+                "Add change that affects d.ts",
             );
             createIncrementalProgram();
 
@@ -111,7 +113,6 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                 getPrograms: () => programs,
                 oldPrograms,
                 sys,
-                oldSnap,
             });
 
             // Normal emit again
@@ -125,7 +126,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 
             function noChange(caption: string) {
-                oldSnap = applyEdit(sys, baseline, ts.noop, caption);
+                applyEdit(sys, baseline, ts.noop, caption);
             }
 
             function updatePrograms() {
@@ -145,8 +146,8 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                         parsedConfig.options,
                         host,
                         builderProgram,
-                    /* configFileParsingDiagnostics*/ undefined,
-                    /*projectReferences*/ undefined,
+                        /*configFileParsingDiagnostics*/ undefined,
+                        /*projectReferences*/ undefined,
                     );
                 updatePrograms();
             }
@@ -159,7 +160,6 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     getPrograms: () => programs,
                     oldPrograms,
                     sys,
-                    oldSnap,
                 });
             }
 
@@ -173,9 +173,9 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     parsedConfig.fileNames,
                     parsedConfig.options,
                     host,
-                /*oldProgram*/ undefined,
-                /* configFileParsingDiagnostics*/ undefined,
-                /*projectReferences*/ undefined,
+                    /*oldProgram*/ undefined,
+                    /*configFileParsingDiagnostics*/ undefined,
+                    /*projectReferences*/ undefined,
                 );
                 updatePrograms();
                 emitAndBaseline();

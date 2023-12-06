@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentCompatability14.ts] ////
+
 //// [assignmentCompatability14.ts]
 module __test1__ {
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;

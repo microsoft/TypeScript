@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParameterLeak.ts] ////
+
 //// [typeParameterLeak.ts]
 // Repro from #35655
 

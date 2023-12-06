@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/privacyTypeParameterOfFunctionDeclFile.ts] ////
+
 //// [privacyTypeParameterOfFunctionDeclFile.ts]
 class privateClass {
 }
@@ -706,7 +708,7 @@ var publicModule;
     }());
     function privateFunctionWithPrivateMopduleTypeParameters() {
     }
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
+})(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
     var privateClass = /** @class */ (function () {
@@ -870,7 +872,7 @@ export declare class publicClassWithWithPrivateModuleTypeParameters {
     myPublicMethod<T extends privateModule.publicClass>(): void;
 }
 export declare function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>(): void;
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClass {
     }
     export class publicClass {
@@ -923,7 +925,7 @@ export declare module publicModule {
     export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>(): void;
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClass {
     }
     export class publicClass {

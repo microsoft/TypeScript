@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/tuple/named/namedTupleMembers.ts ===
+//// [tests/cases/conformance/types/tuple/named/namedTupleMembers.ts] ////
+
+=== namedTupleMembers.ts ===
 export type Segment = [length: number, count: number];
 >Segment : Symbol(Segment, Decl(namedTupleMembers.ts, 0, 0))
 

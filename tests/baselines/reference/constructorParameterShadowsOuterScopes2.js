@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/propertyMemberDeclarations/constructorParameterShadowsOuterScopes2.ts] ////
+
 //// [constructorParameterShadowsOuterScopes2.ts]
 // With useDefineForClassFields: true and ESNext target, initializer
 // expressions for property declarations are evaluated in the scope of

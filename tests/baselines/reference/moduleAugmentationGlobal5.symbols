@@ -1,4 +1,6 @@
-=== tests/cases/compiler/f3.ts ===
+//// [tests/cases/compiler/moduleAugmentationGlobal5.ts] ////
+
+=== f3.ts ===
 
 /// <reference path="f1.d.ts"/>
 /// <reference path="f2.d.ts"/>
@@ -6,7 +8,7 @@ import "A";
 import "B";
 
 
-=== tests/cases/compiler/f1.d.ts ===
+=== f1.d.ts ===
 declare module "A" {
 >"A" : Symbol("A", Decl(f1.d.ts, 0, 0))
 
@@ -18,7 +20,7 @@ declare module "A" {
 >x : Symbol(Something.x, Decl(f1.d.ts, 2, 29))
     }
 }
-=== tests/cases/compiler/f2.d.ts ===
+=== f2.d.ts ===
 declare module "B" {
 >"B" : Symbol("B", Decl(f2.d.ts, 0, 0))
 

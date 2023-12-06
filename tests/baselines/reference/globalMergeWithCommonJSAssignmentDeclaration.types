@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/bug27099.js ===
+//// [tests/cases/conformance/salsa/globalMergeWithCommonJSAssignmentDeclaration.ts] ////
+
+=== bug27099.js ===
 window.name = 1;
 >window.name = 1 : 1
 >window.name : string

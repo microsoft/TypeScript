@@ -1,4 +1,6 @@
-=== tests/cases/compiler/sourceMapValidationVarInDownLevelGenerator.ts ===
+//// [tests/cases/compiler/sourceMapValidationVarInDownLevelGenerator.ts] ////
+
+=== sourceMapValidationVarInDownLevelGenerator.ts ===
 function * f() {
 >f : Symbol(f, Decl(sourceMapValidationVarInDownLevelGenerator.ts, 0, 0))
 

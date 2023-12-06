@@ -1,9 +1,9 @@
-tests/cases/conformance/jsx/file.tsx(9,2): error TS2322: Type '{ "data-foo": number; }' is not assignable to type '{ "data-foo"?: string; }'.
+file.tsx(9,2): error TS2322: Type '{ "data-foo": number; }' is not assignable to type '{ "data-foo"?: string; }'.
   Types of property '"data-foo"' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+==== file.tsx (1 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts] ////
+
 //// [arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts]
 // operator *
 var ra1 = null * null;

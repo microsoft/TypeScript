@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts ===
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts] ////
+
+=== nonPrimitiveNarrow.ts ===
 class Narrow {
 >Narrow : Symbol(Narrow, Decl(nonPrimitiveNarrow.ts, 0, 0))
 

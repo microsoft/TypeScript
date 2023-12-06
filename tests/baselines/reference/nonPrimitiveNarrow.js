@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts] ////
+
 //// [nonPrimitiveNarrow.ts]
 class Narrow {
     narrowed: boolean

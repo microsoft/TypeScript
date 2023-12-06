@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsdoc/jsdocLinkTag6.ts] ////
+
 //// [a.ts]
 class A {
     foo() {}

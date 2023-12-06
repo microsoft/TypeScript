@@ -27,20 +27,21 @@ exports.x = "x";
 //// [t2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.from = exports.x = void 0;
-"./t1";
+exports.x = void 0;
+var t1_1 = require("./t1");
+Object.defineProperty(exports, "x", { enumerable: true, get: function () { return t1_1.x; } });
 //// [t3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.from = void 0;
-"./t1";
 //// [t4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.from = exports.a = void 0;
-"./t1";
+exports.a = void 0;
+var t1_1 = require("./t1");
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.x; } });
 //// [t5.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.from = exports.a = void 0;
-"./t1";
+exports.a = void 0;
+var t1_1 = require("./t1");
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.x; } });

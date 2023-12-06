@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/constantOverloadFunctionNoSubtypeError.ts] ////
+
 //// [constantOverloadFunctionNoSubtypeError.ts]
 class Base { foo() { } }
 class Derived1 extends Base { bar() { } }

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/mod.d.ts ===
+//// [tests/cases/compiler/esModuleIntersectionCrash.ts] ////
+
+=== mod.d.ts ===
 export = modObj;
 >modObj : Symbol(modObj, Decl(mod.d.ts, 1, 13), Decl(mod.d.ts, 1, 42))
 
@@ -21,7 +23,7 @@ declare namespace modObj {
 >x : Symbol(x, Decl(mod.d.ts, 4, 19))
 >b : Symbol(B.b, Decl(mod.d.ts, 4, 36))
 }
-=== tests/cases/compiler/idx.ts ===
+=== idx.ts ===
 import * as mod from "./mod";
 >mod : Symbol(mod, Decl(idx.ts, 0, 6))
 

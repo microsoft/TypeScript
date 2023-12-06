@@ -1,3 +1,4 @@
+// === SignatureHelp ===
 === /tests/cases/fourslash/Foo.js ===
 // /**
 //  * Filters a path based on a regexp or glob pattern.

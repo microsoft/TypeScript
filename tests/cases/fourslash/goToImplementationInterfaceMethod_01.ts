@@ -18,5 +18,4 @@
 ////
 //// whatever(new Bar());
 
-verify.allRangesAppearInImplementationList("function_call");
-verify.allRangesAppearInImplementationList("declaration");
+verify.baselineGoToImplementation("function_call", "declaration");

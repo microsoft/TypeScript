@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadOnConstConstraintChecks3.ts ===
+//// [tests/cases/compiler/overloadOnConstConstraintChecks3.ts] ////
+
+=== overloadOnConstConstraintChecks3.ts ===
 class A { private x = 1} 
 >A : A
 >x : number

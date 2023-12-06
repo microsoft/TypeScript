@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inferTypeParameterConstraints.ts ===
+//// [tests/cases/compiler/inferTypeParameterConstraints.ts] ////
+
+=== inferTypeParameterConstraints.ts ===
 // Repro from #42636
 
 type SubGuard<A, X extends [A]> = X;

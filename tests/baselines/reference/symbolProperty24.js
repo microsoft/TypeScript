@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolProperty24.ts] ////
+
 //// [symbolProperty24.ts]
 interface I {
     [Symbol.toPrimitive]: () => boolean;

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declareAlreadySeen.ts ===
+//// [tests/cases/compiler/declareAlreadySeen.ts] ////
+
+=== declareAlreadySeen.ts ===
 module M {
 >M : typeof M
 

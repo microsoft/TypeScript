@@ -1,9 +1,9 @@
-tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts(12,9): error TS2322: Type 'T2' is not assignable to type 'T1'.
+commaOperatorOtherInvalidOperation.ts(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
+commaOperatorOtherInvalidOperation.ts(12,9): error TS2322: Type 'T2' is not assignable to type 'T1'.
   'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
 
 
-==== tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts (2 errors) ====
+==== commaOperatorOtherInvalidOperation.ts (2 errors) ====
     //Expect to have compiler errors
     //Comma operator in function arguments and return
     function foo(x: number, y: string) {
@@ -21,5 +21,5 @@ tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOpera
             ~~~~~~
 !!! error TS2322: Type 'T2' is not assignable to type 'T1'.
 !!! error TS2322:   'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
-!!! related TS2208 tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts:9:19: This type parameter might need an `extends T1` constraint.
+!!! related TS2208 commaOperatorOtherInvalidOperation.ts:9:19: This type parameter might need an `extends T1` constraint.
     }

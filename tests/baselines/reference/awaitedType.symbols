@@ -1,4 +1,6 @@
-=== tests/cases/compiler/awaitedType.ts ===
+//// [tests/cases/compiler/awaitedType.ts] ////
+
+=== awaitedType.ts ===
 type T1 = Awaited<number>;
 >T1 : Symbol(T1, Decl(awaitedType.ts, 0, 0))
 >Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))

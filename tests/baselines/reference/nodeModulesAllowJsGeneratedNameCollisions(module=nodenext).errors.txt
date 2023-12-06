@@ -1,10 +1,10 @@
-tests/cases/conformance/node/allowJs/subfolder/index.js(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-tests/cases/conformance/node/allowJs/subfolder/index.js(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
-tests/cases/conformance/node/allowJs/subfolder/index.js(4,7): error TS2725: Class name cannot be 'Object' when targeting ES5 with module NodeNext.
-tests/cases/conformance/node/allowJs/subfolder/index.js(5,14): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
+subfolder/index.js(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+subfolder/index.js(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
+subfolder/index.js(4,7): error TS2725: Class name cannot be 'Object' when targeting ES5 with module NodeNext.
+subfolder/index.js(5,14): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
 
 
-==== tests/cases/conformance/node/allowJs/subfolder/index.js (4 errors) ====
+==== subfolder/index.js (4 errors) ====
     // cjs format file
     function require() {}
              ~~~~~~~
@@ -19,20 +19,20 @@ tests/cases/conformance/node/allowJs/subfolder/index.js(5,14): error TS1216: Ide
                  ~~~~~~~~~~
 !!! error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
     export {require, exports, Object};
-==== tests/cases/conformance/node/allowJs/index.js (0 errors) ====
+==== index.js (0 errors) ====
     // esm format file
     function require() {}
     const exports = {};
     class Object {}
     export const __esModule = false;
     export {require, exports, Object};
-==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+==== package.json (0 errors) ====
     {
         "name": "package",
         "private": true,
         "type": "module"
     }
-==== tests/cases/conformance/node/allowJs/subfolder/package.json (0 errors) ====
+==== subfolder/package.json (0 errors) ====
     {
         "type": "commonjs"
     }

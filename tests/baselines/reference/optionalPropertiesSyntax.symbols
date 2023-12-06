@@ -1,4 +1,6 @@
-=== tests/cases/compiler/optionalPropertiesSyntax.ts ===
+//// [tests/cases/compiler/optionalPropertiesSyntax.ts] ////
+
+=== optionalPropertiesSyntax.ts ===
 interface fnSigs {
 >fnSigs : Symbol(fnSigs, Decl(optionalPropertiesSyntax.ts, 0, 0))
 

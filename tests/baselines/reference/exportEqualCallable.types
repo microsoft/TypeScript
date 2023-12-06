@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportEqualCallable_1.ts ===
+//// [tests/cases/compiler/exportEqualCallable.ts] ////
+
+=== exportEqualCallable_1.ts ===
 ///<reference path='exportEqualCallable_0.ts'/>
 import connect = require('exportEqualCallable_0');
 >connect : () => any
@@ -7,7 +9,7 @@ connect();
 >connect() : any
 >connect : () => any
 
-=== tests/cases/compiler/exportEqualCallable_0.ts ===
+=== exportEqualCallable_0.ts ===
 var server: {
 >server : () => any
 

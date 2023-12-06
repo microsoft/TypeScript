@@ -1,9 +1,9 @@
-tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts(41,3): error TS2322: Type 'Dictionary<string>' is not assignable to type 'Record<string, Bar>'.
+emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts(41,3): error TS2322: Type 'Dictionary<string>' is not assignable to type 'Record<string, Bar>'.
   'string' index signatures are incompatible.
     Type 'string' is not assignable to type 'Bar'.
 
 
-==== tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts (1 errors) ====
+==== emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts (1 errors) ====
     // This should behave the same as emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts
     // Begin types from Lodash.
     interface Dictionary<T> {

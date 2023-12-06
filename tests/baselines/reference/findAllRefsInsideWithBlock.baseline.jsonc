@@ -1,349 +1,231 @@
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInsideWithBlock.ts ===
-// /*FIND ALL REFS*/var [|x|] = 0;
+// /*FIND ALL REFS*/<|var [|{| isWriteAccess: true, isDefinition: true |}x|] = 0;|>
 // 
 // with ({}) {
 //     var y = x;  // Reference of x here should not be picked
 //     y++;        // also reference for y should be ignored
 // }
 // 
-// [|x|] = [|x|] + 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 149,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideWithBlock.ts ===
+  // /*FIND ALL REFS*/<|var [|x|] = 0;|>
+  // 
+  // with ({}) {
+  //     var y = x;  // Reference of x here should not be picked
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInsideWithBlock.ts ===
-// var /*FIND ALL REFS*/[|x|] = 0;
+// <|var /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}x|] = 0;|>
 // 
 // with ({}) {
 //     var y = x;  // Reference of x here should not be picked
 //     y++;        // also reference for y should be ignored
 // }
 // 
-// [|x|] = [|x|] + 1;
+// [|{| isWriteAccess: true |}x|] = [|x|] + 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "isWriteAccess": true,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 149,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideWithBlock.ts ===
+  // <|var /*FIND ALL REFS*/[|x|] = 0;|>
+  // 
+  // with ({}) {
+  //     var y = x;  // Reference of x here should not be picked
+  // --- (line: 5) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInsideWithBlock.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // 
 // with ({}) {
 //     var y = x;  // Reference of x here should not be picked
 //     y++;        // also reference for y should be ignored
 // }
 // 
-// /*FIND ALL REFS*/[|x|] = [|x|] + 1;
+// /*FIND ALL REFS*/[|{| isWriteAccess: true |}x|] = [|x|] + 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 149,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideWithBlock.ts ===
+  // <|var [|x|] = 0;|>
+  // 
+  // with ({}) {
+  //     var y = x;  // Reference of x here should not be picked
+  //     y++;        // also reference for y should be ignored
+  // }
+  // 
+  // /*FIND ALL REFS*/x = x + 1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]
 
+
+
+// === findAllReferences ===
 // === /tests/cases/fourslash/findAllRefsInsideWithBlock.ts ===
-// var [|x|] = 0;
+// <|var [|{| isWriteAccess: true |}x|] = 0;|>
 // 
 // with ({}) {
 //     var y = x;  // Reference of x here should not be picked
 //     y++;        // also reference for y should be ignored
 // }
 // 
-// [|x|] = /*FIND ALL REFS*/[|x|] + 1;
+// [|{| isWriteAccess: true |}x|] = /*FIND ALL REFS*/[|x|] + 1;
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-      "kind": "var",
-      "name": "var x: number",
-      "textSpan": {
-        "start": 4,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "var",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "x",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 0,
-        "length": 10
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 4,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "contextSpan": {
-          "start": 0,
-          "length": 10
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 145,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 149,
-          "length": 1
-        },
-        "fileName": "/tests/cases/fourslash/findAllRefsInsideWithBlock.ts",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsInsideWithBlock.ts ===
+  // <|var [|x|] = 0;|>
+  // 
+  // with ({}) {
+  //     var y = x;  // Reference of x here should not be picked
+  //     y++;        // also reference for y should be ignored
+  // }
+  // 
+  // x = /*FIND ALL REFS*/x + 1;
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "var x: number",
+    "displayParts": [
+     {
+      "text": "var",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "x",
+      "kind": "localName"
+     },
+     {
+      "text": ":",
+      "kind": "punctuation"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

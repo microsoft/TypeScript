@@ -2,7 +2,7 @@ error TS5107: Option 'target=ES3' is deprecated and will stop functioning in Typ
 
 
 !!! error TS5107: Option 'target=ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-==== tests/cases/conformance/es6/modules/m1.ts (0 errors) ====
+==== m1.ts (0 errors) ====
     declare var console: any;
     export function _() {
         console.log("_");
@@ -26,7 +26,7 @@ error TS5107: Option 'target=ES3' is deprecated and will stop functioning in Typ
         console.log("___hello");
     }
     
-==== tests/cases/conformance/es6/modules/m2.ts (0 errors) ====
+==== m2.ts (0 errors) ====
     import {_, __, ___hello, __esmodule, __proto, _hi}  from "./m1";
     _();
     __();

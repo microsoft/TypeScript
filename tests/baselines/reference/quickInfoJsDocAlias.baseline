@@ -1,0 +1,92 @@
+// === QuickInfo ===
+=== /b.ts ===
+// import { A } from "./a";
+// A()
+// ^
+// | ----------------------------------------------------------------------
+// | (alias) A(): void
+// | import A
+// | docs - const A: T
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/b.ts",
+      "position": 26,
+      "name": ""
+    },
+    "item": {
+      "kind": "alias",
+      "kindModifiers": "export,declare",
+      "textSpan": {
+        "start": 25,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "aliasName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "A",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "docs - const A: T",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

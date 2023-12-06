@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/numericIndexerConstraint1.ts] ////
+
 //// [numericIndexerConstraint1.ts]
 class Foo { foo() { } }
 var x: { [index: string]: number; };

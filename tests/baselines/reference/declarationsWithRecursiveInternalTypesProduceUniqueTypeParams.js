@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts] ////
+
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts]
 // Note that both of the following have an `any` in their return type from where we bottom out the type printout
 // for having too many instances of the same symbol nesting.

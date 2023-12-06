@@ -1,4 +1,6 @@
-=== tests/cases/compiler/unusedVariablesinNamespaces2.ts ===
+//// [tests/cases/compiler/unusedVariablesinNamespaces2.ts] ////
+
+=== unusedVariablesinNamespaces2.ts ===
 namespace Validation {
 >Validation : typeof Validation
 

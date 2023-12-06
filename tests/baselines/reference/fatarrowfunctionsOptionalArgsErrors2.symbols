@@ -1,4 +1,6 @@
-=== tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts ===
+//// [tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts] ////
+
+=== fatarrowfunctionsOptionalArgsErrors2.ts ===
 var tt1 = (a, (b, c)) => a+b+c;
 >tt1 : Symbol(tt1, Decl(fatarrowfunctionsOptionalArgsErrors2.ts, 0, 3))
 

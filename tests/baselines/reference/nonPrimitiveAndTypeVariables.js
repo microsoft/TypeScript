@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts] ////
+
 //// [nonPrimitiveAndTypeVariables.ts]
 // Repros from #23800
 

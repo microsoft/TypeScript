@@ -1,4 +1,6 @@
-=== tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts ===
+//// [tests/cases/compiler/overloadResolutionOverNonCTLambdas.ts] ////
+
+=== overloadResolutionOverNonCTLambdas.ts ===
 module Bugs {
 >Bugs : Symbol(Bugs, Decl(overloadResolutionOverNonCTLambdas.ts, 0, 0))
 

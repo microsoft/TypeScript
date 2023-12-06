@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classDeclarationCheckUsedBeforeDefinitionInItself.ts ===
+//// [tests/cases/compiler/classDeclarationCheckUsedBeforeDefinitionInItself.ts] ////
+
+=== classDeclarationCheckUsedBeforeDefinitionInItself.ts ===
 class C3 { 
 >C3 : Symbol(C3, Decl(classDeclarationCheckUsedBeforeDefinitionInItself.ts, 0, 0))
 

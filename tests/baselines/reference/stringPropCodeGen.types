@@ -1,4 +1,6 @@
-=== tests/cases/compiler/stringPropCodeGen.ts ===
+//// [tests/cases/compiler/stringPropCodeGen.ts] ////
+
+=== stringPropCodeGen.ts ===
 var a = {
 >a : { foo: () => void; bar: number; }
 >{  "foo" : function() { },  "bar" : 5} : { foo: () => void; bar: number; }

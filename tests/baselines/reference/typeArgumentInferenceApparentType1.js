@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeArgumentInferenceApparentType1.ts] ////
+
 //// [typeArgumentInferenceApparentType1.ts]
 function method<T>(iterable: Iterable<T>): T {
     return;

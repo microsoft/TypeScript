@@ -1,4 +1,6 @@
-=== tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType.ts ===
+//// [tests/cases/compiler/implicitAnyDeclareFunctionWithoutFormalType.ts] ////
+
+=== implicitAnyDeclareFunctionWithoutFormalType.ts ===
 // these should be errors
 function foo(x) { };
 >foo : (x: any) => void

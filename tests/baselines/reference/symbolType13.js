@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/Symbols/symbolType13.ts] ////
+
 //// [symbolType13.ts]
 var s = Symbol();
 var x: any;

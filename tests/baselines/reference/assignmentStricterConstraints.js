@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/assignmentStricterConstraints.ts] ////
+
 //// [assignmentStricterConstraints.ts]
 var f = function <T, S extends T>(x: T, y: S): void {
     x = y

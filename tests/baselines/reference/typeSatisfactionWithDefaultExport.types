@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/typeSatisfaction/a.ts ===
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfactionWithDefaultExport.ts] ////
+
+=== ./a.ts ===
 interface Foo {
     a: number;
 >a : number
@@ -7,7 +9,7 @@ export default {} satisfies Foo;
 >{} satisfies Foo : {}
 >{} : {}
 
-=== tests/cases/conformance/expressions/typeSatisfaction/b.ts ===
+=== ./b.ts ===
 interface Foo {
     a: number;
 >a : number

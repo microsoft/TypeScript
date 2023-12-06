@@ -1,4 +1,6 @@
-=== tests/cases/compiler/duplicateVarAndImport2.ts ===
+//// [tests/cases/compiler/duplicateVarAndImport2.ts] ////
+
+=== duplicateVarAndImport2.ts ===
 // error since module is instantiated
 var a;
 >a : Symbol(a, Decl(duplicateVarAndImport2.ts, 1, 3), Decl(duplicateVarAndImport2.ts, 2, 30))

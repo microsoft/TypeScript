@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingTypeofUndefined2.ts ===
+//// [tests/cases/compiler/narrowingTypeofUndefined2.ts] ////
+
+=== narrowingTypeofUndefined2.ts ===
 declare function takeArray(arr: Array<unknown>): void;
 >takeArray : Symbol(takeArray, Decl(narrowingTypeofUndefined2.ts, 0, 0))
 >arr : Symbol(arr, Decl(narrowingTypeofUndefined2.ts, 0, 27))

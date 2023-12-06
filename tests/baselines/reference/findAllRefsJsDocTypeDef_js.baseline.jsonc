@@ -1,7 +1,16 @@
-undefined
-
+// === findAllReferences ===
 // === /a.js ===
-// /** @typedef {number} /*FIND ALL REFS*/[|T|] */
+// /** /*FIND ALL REFS*/@typedef {number} T */
+// 
+// /**
+//  * @return {T}
+// --- (line: 5) skipped ---
+
+
+
+// === findAllReferences ===
+// === /a.js ===
+// /** <|@typedef {number} /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}T|]|> */
 // 
 // /**
 //  * @return {[|T|]}
@@ -13,91 +22,59 @@ undefined
 //  */
 // function f2(obj) { return 0; }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "type",
-      "name": "type T = number",
-      "textSpan": {
-        "start": 22,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 4,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 4,
-          "length": 19
-        },
-        "isWriteAccess": true,
-        "isDefinition": true
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false,
-        "isDefinition": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.js ===
+  // /** <|@typedef {number} /*FIND ALL REFS*/[|T|]|> */
+  // 
+  // /**
+  //  * @return {T}
+  // --- (line: 5) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.js ===
-// /** @typedef {number} [|T|] */
+// /** <|@typedef {number} [|{| isWriteAccess: true |}T|]|> */
 // 
 // /**
 //  * @return {/*FIND ALL REFS*/[|T|]}
@@ -109,88 +86,62 @@ undefined
 //  */
 // function f2(obj) { return 0; }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "type",
-      "name": "type T = number",
-      "textSpan": {
-        "start": 22,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 4,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 4,
-          "length": 19
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false
-      }
-    ]
-  }
-]
+  // === Definitions ===
+  // === /a.js ===
+  // /** <|@typedef {number} [|T|]|> */
+  // 
+  // /**
+  //  * @return {/*FIND ALL REFS*/T}
+  //  */
+  // function f(obj) { return 0; }
+  // 
+  // --- (line: 8) skipped ---
 
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
+    ]
+   }
+  ]
+
+
+
+// === findAllReferences ===
 // === /a.js ===
-// /** @typedef {number} [|T|] */
+// /** <|@typedef {number} [|{| isWriteAccess: true |}T|]|> */
 // 
 // /**
 //  * @return {[|T|]}
@@ -202,82 +153,56 @@ undefined
 //  */
 // function f2(obj) { return 0; }
 
-[
-  {
-    "definition": {
-      "containerKind": "",
-      "containerName": "",
-      "fileName": "/a.js",
-      "kind": "type",
-      "name": "type T = number",
-      "textSpan": {
-        "start": 22,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "type",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "T",
-          "kind": "aliasName"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=",
-          "kind": "operator"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "contextSpan": {
-        "start": 4,
-        "length": 19
-      }
-    },
-    "references": [
-      {
-        "textSpan": {
-          "start": 22,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "contextSpan": {
-          "start": 4,
-          "length": 19
-        },
-        "isWriteAccess": true
-      },
-      {
-        "textSpan": {
-          "start": 44,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false
-      },
-      {
-        "textSpan": {
-          "start": 98,
-          "length": 1
-        },
-        "fileName": "/a.js",
-        "isWriteAccess": false
-      }
+  // === Definitions ===
+  // === /a.js ===
+  // /** <|@typedef {number} [|T|]|> */
+  // 
+  // /**
+  //  * @return {T}
+  //  */
+  // function f(obj) { return 0; }
+  // 
+  // /**
+  //  * @return {/*FIND ALL REFS*/T}
+  //  */
+  // function f2(obj) { return 0; }
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "type",
+    "name": "type T = number",
+    "displayParts": [
+     {
+      "text": "type",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "T",
+      "kind": "aliasName"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "=",
+      "kind": "operator"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "number",
+      "kind": "keyword"
+     }
     ]
-  }
-]
+   }
+  ]

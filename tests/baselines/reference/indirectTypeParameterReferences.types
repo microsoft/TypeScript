@@ -1,4 +1,6 @@
-=== tests/cases/compiler/indirectTypeParameterReferences.ts ===
+//// [tests/cases/compiler/indirectTypeParameterReferences.ts] ////
+
+=== indirectTypeParameterReferences.ts ===
 // Repro from #19043
 
 type B = {b: string}

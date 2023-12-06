@@ -1,4 +1,6 @@
-=== tests/cases/compiler/commalist.ts ===
+//// [tests/cases/compiler/exportDefaultParenthesize.ts] ////
+
+=== commalist.ts ===
 export default {
     ['foo'+'']: 42,
 >['foo'+''] : Symbol(['foo'+''], Decl(commalist.ts, 0, 16))
@@ -71,7 +73,7 @@ export default {
 
 };
 
-=== tests/cases/compiler/comma.ts ===
+=== comma.ts ===
 export default {
     ['foo']: 42
 >['foo'] : Symbol(['foo'], Decl(comma.ts, 0, 16))
@@ -79,7 +81,7 @@ export default {
 
 };
 
-=== tests/cases/compiler/functionexpression.ts ===
+=== functionexpression.ts ===
 
 export default () => 42;
 

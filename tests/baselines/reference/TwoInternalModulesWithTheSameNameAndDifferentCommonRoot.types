@@ -1,4 +1,6 @@
-=== tests/cases/conformance/internalModules/DeclarationMerging/part1.ts ===
+//// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesWithTheSameNameAndDifferentCommonRoot.ts] ////
+
+=== part1.ts ===
 module Root {
 >Root : typeof Root
 
@@ -35,7 +37,7 @@ module Root {
     }
 }
 
-=== tests/cases/conformance/internalModules/DeclarationMerging/part2.ts ===
+=== part2.ts ===
 module otherRoot {
 >otherRoot : typeof otherRoot
 

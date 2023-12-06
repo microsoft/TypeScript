@@ -1,12 +1,12 @@
-tests/cases/compiler/gettersAndSettersErrors.ts(5,12): error TS2300: Duplicate identifier 'Foo'.
-tests/cases/compiler/gettersAndSettersErrors.ts(5,12): error TS2717: Subsequent property declarations must have the same type.  Property 'Foo' must be of type 'string', but here has type 'number'.
-tests/cases/compiler/gettersAndSettersErrors.ts(6,16): error TS1054: A 'get' accessor cannot have parameters.
-tests/cases/compiler/gettersAndSettersErrors.ts(7,16): error TS1095: A 'set' accessor cannot have a return type annotation.
-tests/cases/compiler/gettersAndSettersErrors.ts(11,17): error TS2808: A get accessor must be at least as accessible as the setter
-tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS2808: A get accessor must be at least as accessible as the setter
+gettersAndSettersErrors.ts(5,12): error TS2300: Duplicate identifier 'Foo'.
+gettersAndSettersErrors.ts(5,12): error TS2717: Subsequent property declarations must have the same type.  Property 'Foo' must be of type 'string', but here has type 'number'.
+gettersAndSettersErrors.ts(6,16): error TS1054: A 'get' accessor cannot have parameters.
+gettersAndSettersErrors.ts(7,16): error TS1095: A 'set' accessor cannot have a return type annotation.
+gettersAndSettersErrors.ts(11,17): error TS2808: A get accessor must be at least as accessible as the setter
+gettersAndSettersErrors.ts(12,16): error TS2808: A get accessor must be at least as accessible as the setter
 
 
-==== tests/cases/compiler/gettersAndSettersErrors.ts (6 errors) ====
+==== gettersAndSettersErrors.ts (6 errors) ====
     class C {
         public get Foo() { return "foo";} // ok
         public set Foo(foo:string) {} // ok
@@ -16,7 +16,7 @@ tests/cases/compiler/gettersAndSettersErrors.ts(12,16): error TS2808: A get acce
 !!! error TS2300: Duplicate identifier 'Foo'.
                ~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property 'Foo' must be of type 'string', but here has type 'number'.
-!!! related TS6203 tests/cases/compiler/gettersAndSettersErrors.ts:2:16: 'Foo' was also declared here.
+!!! related TS6203 gettersAndSettersErrors.ts:2:16: 'Foo' was also declared here.
         public get Goo(v:string):string {return null;} // error - getters must not have a parameter
                    ~~~
 !!! error TS1054: A 'get' accessor cannot have parameters.

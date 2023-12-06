@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts] ////
+
 //// [declarationsAndAssignments.ts]
 function f0() {
     var [] = [1, "hello"];

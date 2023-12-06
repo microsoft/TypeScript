@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/esDecorators/classDeclaration/methods/esDecorators-classDeclaration-methods-nonStatic.ts] ////
+
 //// [esDecorators-classDeclaration-methods-nonStatic.ts]
 declare let dec: any;
 
@@ -28,9 +30,11 @@ let C = (() => {
             }
         },
         (() => {
-            __esDecorate(_a, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, get: obj => obj.method1 } }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false, access: { has: obj => "method2" in obj, get: obj => obj["method2"] } }, null, _instanceExtraInitializers);
-            __esDecorate(_a, null, _member_decorators_1, { kind: "method", name: _b, static: false, private: false, access: { has: obj => _b in obj, get: obj => obj[_b] } }, null, _instanceExtraInitializers);
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            __esDecorate(_a, null, _method1_decorators, { kind: "method", name: "method1", static: false, private: false, access: { has: obj => "method1" in obj, get: obj => obj.method1 }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators, { kind: "method", name: "method2", static: false, private: false, access: { has: obj => "method2" in obj, get: obj => obj["method2"] }, metadata: _metadata }, null, _instanceExtraInitializers);
+            __esDecorate(_a, null, _member_decorators_1, { kind: "method", name: _b, static: false, private: false, access: { has: obj => _b in obj, get: obj => obj[_b] }, metadata: _metadata }, null, _instanceExtraInitializers);
+            if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         })(),
         _a;
 })();

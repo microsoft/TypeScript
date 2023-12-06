@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/expressions/assignmentOperator/compoundAdditionAssignmentLHSCannotBeAssigned.ts] ////
+
 //// [compoundAdditionAssignmentLHSCannotBeAssigned.ts]
 // string can add every type, and result string cannot be assigned to below types
 enum E { a, b, c }

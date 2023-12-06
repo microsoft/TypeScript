@@ -1,4 +1,6 @@
-=== tests/cases/compiler/exportImportAndClodule.ts ===
+//// [tests/cases/compiler/exportImportAndClodule.ts] ////
+
+=== exportImportAndClodule.ts ===
 module K {
 >K : Symbol(K, Decl(exportImportAndClodule.ts, 0, 0))
 

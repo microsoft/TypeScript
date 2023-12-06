@@ -1,22 +1,22 @@
-tests/cases/compiler/unionPropertyExistence.ts(27,3): error TS2339: Property 'nope' does not exist on type '"foo" | "bar"'.
+unionPropertyExistence.ts(27,3): error TS2339: Property 'nope' does not exist on type '"foo" | "bar"'.
   Property 'nope' does not exist on type '"foo"'.
-tests/cases/compiler/unionPropertyExistence.ts(28,6): error TS2339: Property 'onlyInB' does not exist on type 'B | "foo"'.
+unionPropertyExistence.ts(28,6): error TS2339: Property 'onlyInB' does not exist on type 'B | "foo"'.
   Property 'onlyInB' does not exist on type '"foo"'.
-tests/cases/compiler/unionPropertyExistence.ts(30,6): error TS2339: Property 'length' does not exist on type 'B | "foo"'.
+unionPropertyExistence.ts(30,6): error TS2339: Property 'length' does not exist on type 'B | "foo"'.
   Property 'length' does not exist on type 'B'.
-tests/cases/compiler/unionPropertyExistence.ts(32,4): error TS2339: Property 'onlyInB' does not exist on type 'AB'.
+unionPropertyExistence.ts(32,4): error TS2339: Property 'onlyInB' does not exist on type 'AB'.
   Property 'onlyInB' does not exist on type 'A'.
-tests/cases/compiler/unionPropertyExistence.ts(35,5): error TS2339: Property 'notInC' does not exist on type 'ABC'.
+unionPropertyExistence.ts(35,5): error TS2339: Property 'notInC' does not exist on type 'ABC'.
   Property 'notInC' does not exist on type 'C'.
-tests/cases/compiler/unionPropertyExistence.ts(36,4): error TS2551: Property 'notInB' does not exist on type 'AB'. Did you mean 'notInC'?
+unionPropertyExistence.ts(36,4): error TS2551: Property 'notInB' does not exist on type 'AB'. Did you mean 'notInC'?
   Property 'notInB' does not exist on type 'B'.
-tests/cases/compiler/unionPropertyExistence.ts(37,5): error TS2339: Property 'notInB' does not exist on type 'ABC'.
+unionPropertyExistence.ts(37,5): error TS2339: Property 'notInB' does not exist on type 'ABC'.
   Property 'notInB' does not exist on type 'B'.
-tests/cases/compiler/unionPropertyExistence.ts(40,5): error TS2339: Property 'inNone' does not exist on type 'ABC'.
+unionPropertyExistence.ts(40,5): error TS2339: Property 'inNone' does not exist on type 'ABC'.
   Property 'inNone' does not exist on type 'A'.
 
 
-==== tests/cases/compiler/unionPropertyExistence.ts (8 errors) ====
+==== unionPropertyExistence.ts (8 errors) ====
     interface A {
         inAll: string;
         notInB: string;

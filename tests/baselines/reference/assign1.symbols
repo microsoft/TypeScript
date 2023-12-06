@@ -1,4 +1,6 @@
-=== tests/cases/compiler/assign1.ts ===
+//// [tests/cases/compiler/assign1.ts] ////
+
+=== assign1.ts ===
 module M {
 >M : Symbol(M, Decl(assign1.ts, 0, 0))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportingContainingVisibleType.ts] ////
+
 //// [exportingContainingVisibleType.ts]
 class Foo {
     public get foo() {

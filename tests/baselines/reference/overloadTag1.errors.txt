@@ -1,17 +1,17 @@
-tests/cases/conformance/jsdoc/overloadTag1.js(7,5): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/conformance/jsdoc/overloadTag1.js(25,10): error TS2769: No overload matches this call.
+overloadTag1.js(7,5): error TS2394: This overload signature is not compatible with its implementation signature.
+overloadTag1.js(25,10): error TS2769: No overload matches this call.
   Overload 1 of 2, '(a: number, b: number): number', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'number'.
   Overload 2 of 2, '(a: string, b: boolean): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/jsdoc/overloadTag1.js(43,1): error TS2769: No overload matches this call.
+overloadTag1.js(43,1): error TS2769: No overload matches this call.
   Overload 1 of 2, '(a: number, b: number): number', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'number'.
   Overload 2 of 2, '(a: string, b: boolean): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'boolean'.
 
 
-==== tests/cases/conformance/jsdoc/overloadTag1.js (3 errors) ====
+==== overloadTag1.js (3 errors) ====
     /**
      * @overload
      * @param {number} a 
@@ -21,7 +21,7 @@ tests/cases/conformance/jsdoc/overloadTag1.js(43,1): error TS2769: No overload m
      * @overload
         ~~~~~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/conformance/jsdoc/overloadTag1.js:16:17: The implementation signature is declared here.
+!!! related TS2750 overloadTag1.js:16:17: The implementation signature is declared here.
      * @param {string} a
      * @param {boolean} b
      * @returns {string}
@@ -40,7 +40,7 @@ tests/cases/conformance/jsdoc/overloadTag1.js(43,1): error TS2769: No overload m
     }
     var o1 = overloaded(1,2)
     var o2 = overloaded("zero", "one")
-             ~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(a: number, b: number): number', gave the following error.
 !!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
@@ -64,7 +64,7 @@ tests/cases/conformance/jsdoc/overloadTag1.js(43,1): error TS2769: No overload m
     }
     uncheckedInternally(1,2)
     uncheckedInternally("zero", "one")
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(a: number, b: number): number', gave the following error.
 !!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.

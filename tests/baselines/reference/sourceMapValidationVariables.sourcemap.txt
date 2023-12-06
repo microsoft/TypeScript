@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationVariables.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationVariables.js
+emittedFile:sourceMapValidationVariables.js
 sourceFile:sourceMapValidationVariables.ts
 -------------------------------------------------------------------
 >>>var a = 10;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/classes/classDeclarations/mergedInheritedClassInterface.ts ===
+//// [tests/cases/conformance/classes/classDeclarations/mergedInheritedClassInterface.ts] ////
+
+=== mergedInheritedClassInterface.ts ===
 interface BaseInterface {
     required: number;
 >required : number

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/modules/t1.ts ===
+//// [tests/cases/conformance/es6/modules/exportStar-amd.ts] ////
+
+=== t1.ts ===
 export var x = 1;
 >x : number
 >1 : 1
@@ -7,12 +9,12 @@ export var y = 2;
 >y : number
 >2 : 2
 
-=== tests/cases/conformance/es6/modules/t2.ts ===
+=== t2.ts ===
 export default "hello";
 export function foo() { }
 >foo : () => void
 
-=== tests/cases/conformance/es6/modules/t3.ts ===
+=== t3.ts ===
 var x = "x";
 >x : string
 >"x" : "x"
@@ -30,13 +32,13 @@ export { x, y, z };
 >y : string
 >z : string
 
-=== tests/cases/conformance/es6/modules/t4.ts ===
+=== t4.ts ===
 
 export * from "./t1";
 export * from "./t2";
 export * from "./t3";
 
-=== tests/cases/conformance/es6/modules/main.ts ===
+=== main.ts ===
 import hello, { x, y, z, foo } from "./t4";
 >hello : any
 >x : number

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorsInGenericTypeReference.ts ===
+//// [tests/cases/compiler/errorsInGenericTypeReference.ts] ////
+
+=== errorsInGenericTypeReference.ts ===
 interface IFoo<T> { }
 
 class Foo<T> { }

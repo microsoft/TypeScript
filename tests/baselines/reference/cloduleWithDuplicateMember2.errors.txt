@@ -1,8 +1,8 @@
-tests/cases/compiler/cloduleWithDuplicateMember2.ts(7,16): error TS2300: Duplicate identifier 'x'.
-tests/cases/compiler/cloduleWithDuplicateMember2.ts(10,21): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember2.ts(7,16): error TS2300: Duplicate identifier 'x'.
+cloduleWithDuplicateMember2.ts(10,21): error TS2300: Duplicate identifier 'x'.
 
 
-==== tests/cases/compiler/cloduleWithDuplicateMember2.ts (2 errors) ====
+==== cloduleWithDuplicateMember2.ts (2 errors) ====
     class C {
         set x(y) { }
         static set y(z) { }

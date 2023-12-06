@@ -1,4 +1,6 @@
-=== tests/cases/conformance/jsdoc/mod1.js ===
+//// [tests/cases/conformance/jsdoc/typedefTagWrapping.ts] ////
+
+=== mod1.js ===
 /** 
  * @typedef {function(string): boolean}
  * Type1
@@ -21,7 +23,7 @@ function callIt(func, arg) {
 >arg : Symbol(arg, Decl(mod1.js, 12, 21))
 }
 
-=== tests/cases/conformance/jsdoc/mod2.js ===
+=== mod2.js ===
 /** 
  * @typedef {{
  *   num: number,
@@ -51,7 +53,7 @@ function check(obj) {
 >str : Symbol(str, Decl(mod2.js, 2, 17))
 }
 
-=== tests/cases/conformance/jsdoc/mod3.js ===
+=== mod3.js ===
 /**
  * A function whose signature is very long.
  *
@@ -81,7 +83,7 @@ function use1(func, bool, str, num) {
 >num : Symbol(num, Decl(mod3.js, 15, 30))
 }
 
-=== tests/cases/conformance/jsdoc/mod4.js ===
+=== mod4.js ===
 /**
  * A function whose signature is very long.
  *
@@ -112,7 +114,7 @@ function use2(func, bool, str, num) {
 >num : Symbol(num, Decl(mod4.js, 16, 30))
 }
 
-=== tests/cases/conformance/jsdoc/mod5.js ===
+=== mod5.js ===
 /** 
  * @typedef {{
  *   num:
@@ -145,7 +147,7 @@ function check5(obj) {
 >str : Symbol(str, Decl(mod5.js, 3, 12))
 }
 
-=== tests/cases/conformance/jsdoc/mod6.js ===
+=== mod6.js ===
 /** 
  * @typedef {{
  *   foo:
@@ -171,7 +173,7 @@ function check6(obj) {
 }
 
 
-=== tests/cases/conformance/jsdoc/mod7.js ===
+=== mod7.js ===
 
 /** 
    Multiline type expressions in comments without leading * are not supported.

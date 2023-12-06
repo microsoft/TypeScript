@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringTypeGuardFlow.ts ===
+//// [tests/cases/compiler/destructuringTypeGuardFlow.ts] ////
+
+=== destructuringTypeGuardFlow.ts ===
 type foo = {
 >foo : { bar: number | null; baz: string; nested: {    a: number;    b: string | null;}; }
 

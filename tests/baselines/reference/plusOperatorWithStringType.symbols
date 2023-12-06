@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithStringType.ts ===
+//// [tests/cases/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithStringType.ts] ////
+
+=== plusOperatorWithStringType.ts ===
 // + operator on string type
 var STRING: string;
 >STRING : Symbol(STRING, Decl(plusOperatorWithStringType.ts, 1, 3))

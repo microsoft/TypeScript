@@ -1,16 +1,16 @@
-tests/cases/compiler/missingTypeArguments1.ts(4,15): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments1.ts(9,26): error TS2314: Generic type 'X2<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments1.ts(14,9): error TS2314: Generic type 'X3<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments1.ts(19,11): error TS2314: Generic type 'X4<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments1.ts(24,9): error TS2314: Generic type 'X5<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments1.ts(29,15): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments1.ts(34,26): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments1.ts(39,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments1.ts(44,11): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
-tests/cases/compiler/missingTypeArguments1.ts(49,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(4,15): error TS2314: Generic type 'X<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(9,26): error TS2314: Generic type 'X2<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(14,9): error TS2314: Generic type 'X3<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(19,11): error TS2314: Generic type 'X4<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(24,9): error TS2314: Generic type 'X5<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(29,15): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(34,26): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(39,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(44,11): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
+missingTypeArguments1.ts(49,9): error TS2314: Generic type 'Y<T>' requires 1 type argument(s).
 
 
-==== tests/cases/compiler/missingTypeArguments1.ts (10 errors) ====
+==== missingTypeArguments1.ts (10 errors) ====
     interface I<T> { }
     class Y<T> {}
     class X<T> {

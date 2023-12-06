@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unionOfEnumInference.ts] ////
+
 //// [unionOfEnumInference.ts]
 // Repro from #42932
 

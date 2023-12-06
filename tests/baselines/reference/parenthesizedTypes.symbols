@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/specifyingTypes/typeLiterals/parenthesizedTypes.ts ===
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/parenthesizedTypes.ts] ////
+
+=== parenthesizedTypes.ts ===
 var a: string;
 >a : Symbol(a, Decl(parenthesizedTypes.ts, 0, 3), Decl(parenthesizedTypes.ts, 1, 3), Decl(parenthesizedTypes.ts, 2, 3), Decl(parenthesizedTypes.ts, 3, 3))
 

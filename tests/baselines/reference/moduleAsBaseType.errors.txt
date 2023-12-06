@@ -1,9 +1,9 @@
-tests/cases/compiler/moduleAsBaseType.ts(2,17): error TS2708: Cannot use namespace 'M' as a value.
-tests/cases/compiler/moduleAsBaseType.ts(3,21): error TS2709: Cannot use namespace 'M' as a type.
-tests/cases/compiler/moduleAsBaseType.ts(4,21): error TS2709: Cannot use namespace 'M' as a type.
+moduleAsBaseType.ts(2,17): error TS2708: Cannot use namespace 'M' as a value.
+moduleAsBaseType.ts(3,21): error TS2709: Cannot use namespace 'M' as a type.
+moduleAsBaseType.ts(4,21): error TS2709: Cannot use namespace 'M' as a type.
 
 
-==== tests/cases/compiler/moduleAsBaseType.ts (3 errors) ====
+==== moduleAsBaseType.ts (3 errors) ====
     module M {}
     class C extends M {}
                     ~

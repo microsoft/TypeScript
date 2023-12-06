@@ -1,4 +1,6 @@
-=== tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate.ts ===
+//// [tests/cases/compiler/errorOnUnionVsObjectShouldDeeplyDisambiguate.ts] ////
+
+=== errorOnUnionVsObjectShouldDeeplyDisambiguate.ts ===
 interface Stuff {
     a?: () => Promise<number[]>;
 >a : () => Promise<number[]>

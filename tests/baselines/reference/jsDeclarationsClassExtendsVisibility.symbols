@@ -1,8 +1,10 @@
-=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassExtendsVisibility.ts] ////
+
+=== cls.js ===
 const Bar = require("./bar");
 >Bar : Symbol(Bar, Decl(cls.js, 0, 5))
 >require : Symbol(require)
->"./bar" : Symbol("tests/cases/conformance/jsdoc/declarations/bar", Decl(bar.js, 0, 0))
+>"./bar" : Symbol("bar", Decl(bar.js, 0, 0))
 
 const Strings = {
 >Strings : Symbol(Strings, Decl(cls.js, 1, 5))
@@ -32,7 +34,7 @@ module.exports.Strings = Strings;
 >Strings : Symbol(Strings, Decl(cls.js, 6, 21))
 >Strings : Symbol(Strings, Decl(cls.js, 1, 5))
 
-=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+=== bar.js ===
 class Bar {}
 >Bar : Symbol(Bar, Decl(bar.js, 0, 0))
 

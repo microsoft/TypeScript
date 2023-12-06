@@ -1,4 +1,6 @@
-=== tests/cases/compiler/resolveInterfaceNameWithSameLetDeclarationName2.ts ===
+//// [tests/cases/compiler/resolveInterfaceNameWithSameLetDeclarationName2.ts] ////
+
+=== resolveInterfaceNameWithSameLetDeclarationName2.ts ===
 interface foo { }
 interface bar { }
 let bar: bar | foo;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/comparabilityTypeParametersRelatedByUnion.ts] ////
+
 //// [comparabilityTypeParametersRelatedByUnion.ts]
 class C<T> {
   constructor(readonly x: T) {}

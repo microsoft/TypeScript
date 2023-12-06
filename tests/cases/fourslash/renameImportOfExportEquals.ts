@@ -21,10 +21,9 @@ const aRanges = [a0, a1];
 const bRanges = [b0, b1];
 const xRanges = [x0, x1];
 
-verify.baselineFindAllReferences('N', 'a', 'b', 'x')
-
-verify.renameLocations(nRanges, [N0, N1, a0, { range: a1, suffixText: " as N" }]);
-verify.renameLocations(a0, [a0, { range: a1, suffixText: " as N" }]);
-verify.renameLocations(a1, [{ range: a1, prefixText: "N as " }, ...bRanges]);
-verify.renameLocations(bRanges, [{ range: b0, prefixText: "N as " }, b1]);
-verify.rangesAreRenameLocations(xRanges);
+verify.baselineFindAllReferences('N', 'a', 'b', 'x');
+verify.baselineRename(nRanges);
+verify.baselineRename(a0);
+verify.baselineRename(a1);
+verify.baselineRename(bRanges);
+verify.baselineRename(xRanges);

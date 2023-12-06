@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt5.ts] ////
+
 //// [moduleSharesNameWithImportDeclarationInsideIt5.ts]
 module Z {
     export module M {

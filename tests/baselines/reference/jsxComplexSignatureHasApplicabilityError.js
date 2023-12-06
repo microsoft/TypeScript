@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx] ////
+
 //// [jsxComplexSignatureHasApplicabilityError.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/functionLikeInParameterInitializer.ts] ////
+
 //// [functionLikeInParameterInitializer.ts]
 // error
 export function bar(func = () => foo) {

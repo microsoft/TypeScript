@@ -1,4 +1,6 @@
-=== tests/cases/compiler/destructuringInVariableDeclarations4.ts ===
+//// [tests/cases/compiler/destructuringInVariableDeclarations4.ts] ////
+
+=== destructuringInVariableDeclarations4.ts ===
 let { toString } = 1;
 >toString : Symbol(toString, Decl(destructuringInVariableDeclarations4.ts, 0, 5))
 {

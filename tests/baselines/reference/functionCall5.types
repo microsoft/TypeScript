@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionCall5.ts ===
+//// [tests/cases/compiler/functionCall5.ts] ////
+
+=== functionCall5.ts ===
 module m1 { export class c1 { public a; }} 
 >m1 : typeof m1
 >c1 : c1

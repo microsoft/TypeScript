@@ -1,74 +1,74 @@
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(8,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(8,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(9,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(9,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(10,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(11,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(11,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(12,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(13,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(13,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(14,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(14,7): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(15,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(15,7): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(18,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(19,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(19,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(20,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(20,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(21,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(22,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(22,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(23,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(24,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(24,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(25,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(25,7): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(26,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(26,7): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(29,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(30,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(30,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(31,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(31,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(32,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(33,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(33,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(34,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(35,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(35,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(36,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(36,7): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(37,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(37,7): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(40,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(41,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(41,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(42,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(42,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(43,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(44,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(44,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(45,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(46,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(46,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(47,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(47,7): error TS18050: The value 'null' cannot be used here.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(48,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(48,7): error TS18050: The value 'undefined' cannot be used here.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(51,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(52,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(53,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(54,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(57,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(58,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(59,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts(60,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(7,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(8,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(8,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(9,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(9,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(10,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(11,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(11,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(12,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(13,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(13,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(14,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(14,7): error TS18050: The value 'null' cannot be used here.
+compoundArithmeticAssignmentWithInvalidOperands.ts(15,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(15,7): error TS18050: The value 'undefined' cannot be used here.
+compoundArithmeticAssignmentWithInvalidOperands.ts(18,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(19,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(19,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(20,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(20,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(21,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(22,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(22,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(23,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(24,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(24,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(25,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(25,7): error TS18050: The value 'null' cannot be used here.
+compoundArithmeticAssignmentWithInvalidOperands.ts(26,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(26,7): error TS18050: The value 'undefined' cannot be used here.
+compoundArithmeticAssignmentWithInvalidOperands.ts(29,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(30,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(30,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(31,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(31,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(32,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(33,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(33,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(34,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(35,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(35,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(36,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(36,7): error TS18050: The value 'null' cannot be used here.
+compoundArithmeticAssignmentWithInvalidOperands.ts(37,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(37,7): error TS18050: The value 'undefined' cannot be used here.
+compoundArithmeticAssignmentWithInvalidOperands.ts(40,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(41,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(41,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(42,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(42,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(43,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(44,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(44,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(45,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(46,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(46,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(47,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(47,7): error TS18050: The value 'null' cannot be used here.
+compoundArithmeticAssignmentWithInvalidOperands.ts(48,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(48,7): error TS18050: The value 'undefined' cannot be used here.
+compoundArithmeticAssignmentWithInvalidOperands.ts(51,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(52,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(53,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(54,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(57,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(58,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(59,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+compoundArithmeticAssignmentWithInvalidOperands.ts(60,7): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentWithInvalidOperands.ts (68 errors) ====
+==== compoundArithmeticAssignmentWithInvalidOperands.ts (68 errors) ====
     enum E { a, b }
     
     var a: any;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/strictFunctionTypesErrors.ts] ////
+
 //// [strictFunctionTypesErrors.ts]
 export {}
 

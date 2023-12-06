@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -21,7 +22,12 @@ export class  C { }
 export class D { }
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"outDir"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "outDir"
+  }
+}
 
 
 

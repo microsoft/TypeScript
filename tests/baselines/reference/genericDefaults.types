@@ -1,4 +1,6 @@
-=== tests/cases/compiler/genericDefaults.ts ===
+//// [tests/cases/compiler/genericDefaults.ts] ////
+
+=== genericDefaults.ts ===
 interface A { a: number; }
 >a : number
 

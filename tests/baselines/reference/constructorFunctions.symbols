@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/index.js ===
+//// [tests/cases/conformance/salsa/constructorFunctions.ts] ////
+
+=== index.js ===
 function C1() {
 >C1 : Symbol(C1, Decl(index.js, 0, 0))
 

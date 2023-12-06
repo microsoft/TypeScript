@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeParametersShouldNotBeEqual3.ts] ////
+
 //// [typeParametersShouldNotBeEqual3.ts]
 function ff<T extends Object, U extends Object>(x: T, y: U) {
     var z: Object;

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/types/spread/objectSpreadNegative.ts ===
+//// [tests/cases/conformance/types/spread/objectSpreadNegative.ts] ////
+
+=== objectSpreadNegative.ts ===
 let o = { a: 1, b: 'no' }
 >o : { a: number; b: string; }
 >{ a: 1, b: 'no' } : { a: number; b: string; }

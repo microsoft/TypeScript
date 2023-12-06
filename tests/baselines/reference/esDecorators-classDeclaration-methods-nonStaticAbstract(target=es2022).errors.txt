@@ -1,9 +1,9 @@
-tests/cases/conformance/esDecorators/classDeclaration/methods/esDecorators-classDeclaration-methods-nonStaticAbstract.ts(6,5): error TS1249: A decorator can only decorate a method implementation, not an overload.
-tests/cases/conformance/esDecorators/classDeclaration/methods/esDecorators-classDeclaration-methods-nonStaticAbstract.ts(7,5): error TS1249: A decorator can only decorate a method implementation, not an overload.
-tests/cases/conformance/esDecorators/classDeclaration/methods/esDecorators-classDeclaration-methods-nonStaticAbstract.ts(8,5): error TS1249: A decorator can only decorate a method implementation, not an overload.
+esDecorators-classDeclaration-methods-nonStaticAbstract.ts(6,5): error TS1249: A decorator can only decorate a method implementation, not an overload.
+esDecorators-classDeclaration-methods-nonStaticAbstract.ts(7,5): error TS1249: A decorator can only decorate a method implementation, not an overload.
+esDecorators-classDeclaration-methods-nonStaticAbstract.ts(8,5): error TS1249: A decorator can only decorate a method implementation, not an overload.
 
 
-==== tests/cases/conformance/esDecorators/classDeclaration/methods/esDecorators-classDeclaration-methods-nonStaticAbstract.ts (3 errors) ====
+==== esDecorators-classDeclaration-methods-nonStaticAbstract.ts (3 errors) ====
     declare let dec: any;
     
     const method3 = "method3";

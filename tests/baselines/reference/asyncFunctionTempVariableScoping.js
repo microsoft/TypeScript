@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/asyncFunctionTempVariableScoping.ts] ////
+
 //// [asyncFunctionTempVariableScoping.ts]
 // https://github.com/Microsoft/TypeScript/issues/19187
 

@@ -1,4 +1,6 @@
-=== tests/cases/conformance/salsa/index.js ===
+//// [tests/cases/conformance/salsa/typeFromPropertyAssignmentOutOfOrder.ts] ////
+
+=== index.js ===
 First.Item = class I {}
 >First.Item = class I {} : typeof I
 >First.Item : typeof I
@@ -31,7 +33,7 @@ Workspace.Object = class extends Common.Object {}
 var am;
 >am : Object
 
-=== tests/cases/conformance/salsa/roots.js ===
+=== roots.js ===
 var First = {};
 >First : typeof First
 >{} : {}

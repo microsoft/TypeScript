@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts] ////
+
 //// [genericCallbackInvokedInsideItsContainingFunction1.ts]
 function foo<T, U>(x:T, y:U, f: (v: T) => U) {
     var r1 = f<number>(1);

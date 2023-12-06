@@ -1,3 +1,5 @@
-=== tests/cases/conformance/salsa/myFile02.js ===
+//// [tests/cases/conformance/salsa/exportDefaultInJsFile02.ts] ////
+
+=== myFile02.js ===
 
 export default "hello";

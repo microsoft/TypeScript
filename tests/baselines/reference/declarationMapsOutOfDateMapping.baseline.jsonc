@@ -1,0 +1,18 @@
+// === getDefinitionAtPosition ===
+// === /node_modules/a/src/index.ts ===
+// export class [|Foo|] {
+// }
+// 
+
+// === /index.ts ===
+// import { Foo/*GOTO DEF POS*/ } from "a";
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "",
+    "name": ""
+   }
+  ]

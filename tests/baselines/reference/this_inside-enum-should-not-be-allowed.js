@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/this_inside-enum-should-not-be-allowed.ts] ////
+
 //// [this_inside-enum-should-not-be-allowed.ts]
 enum TopLevelEnum {
     ThisWasAllowedButShouldNotBe = this // Should not be allowed

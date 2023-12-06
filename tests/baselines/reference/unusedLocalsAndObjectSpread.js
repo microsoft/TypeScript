@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedLocalsAndObjectSpread.ts] ////
+
 //// [unusedLocalsAndObjectSpread.ts]
 declare var console: { log(a: any): void };
 

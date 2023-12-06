@@ -1,4 +1,6 @@
-=== tests/cases/compiler/staticOffOfInstance2.ts ===
+//// [tests/cases/compiler/staticOffOfInstance2.ts] ////
+
+=== staticOffOfInstance2.ts ===
 class List<T> {
 >List : List<T>
 

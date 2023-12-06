@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noCatchBlock.ts ===
+//// [tests/cases/compiler/noCatchBlock.ts] ////
+
+=== noCatchBlock.ts ===
 
 try {
  // ...

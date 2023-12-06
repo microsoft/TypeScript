@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases2.ts ===
+//// [tests/cases/compiler/inheritedMembersAndIndexSignaturesFromDifferentBases2.ts] ////
+
+=== inheritedMembersAndIndexSignaturesFromDifferentBases2.ts ===
 interface A<T> {
 >A : Symbol(A, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases2.ts, 0, 0))
 >T : Symbol(T, Decl(inheritedMembersAndIndexSignaturesFromDifferentBases2.ts, 0, 12))

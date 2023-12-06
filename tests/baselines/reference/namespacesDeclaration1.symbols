@@ -1,4 +1,6 @@
-=== tests/cases/compiler/namespacesDeclaration1.ts ===
+//// [tests/cases/compiler/namespacesDeclaration1.ts] ////
+
+=== namespacesDeclaration1.ts ===
 module M {
 >M : Symbol(M, Decl(namespacesDeclaration1.ts, 0, 0))
 

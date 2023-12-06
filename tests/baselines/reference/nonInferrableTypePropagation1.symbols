@@ -1,4 +1,6 @@
-=== tests/cases/compiler/nonInferrableTypePropagation1.ts ===
+//// [tests/cases/compiler/nonInferrableTypePropagation1.ts] ////
+
+=== nonInferrableTypePropagation1.ts ===
 type Op<I, O> = (thing: Thing<I>) => Thing<O>;
 >Op : Symbol(Op, Decl(nonInferrableTypePropagation1.ts, 0, 0))
 >I : Symbol(I, Decl(nonInferrableTypePropagation1.ts, 0, 8))

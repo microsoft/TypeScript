@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayBestCommonTypes.ts ===
+//// [tests/cases/compiler/arrayBestCommonTypes.ts] ////
+
+=== arrayBestCommonTypes.ts ===
 module EmptyTypes {
 >EmptyTypes : Symbol(EmptyTypes, Decl(arrayBestCommonTypes.ts, 0, 0))
 

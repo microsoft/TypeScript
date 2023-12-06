@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleReopenedTypeOtherBlock.ts ===
+//// [tests/cases/compiler/moduleReopenedTypeOtherBlock.ts] ////
+
+=== moduleReopenedTypeOtherBlock.ts ===
 module M {
 >M : typeof M
 

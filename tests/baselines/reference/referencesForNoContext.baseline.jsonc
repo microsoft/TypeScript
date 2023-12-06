@@ -1,7 +1,51 @@
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForNoContext.ts ===
+// module modTest {
+//     //Declare
+//     export var modVar:number;
+//     /*FIND ALL REFS*/
+// 
+//     //Increments
+//     modVar++;
+// --- (line: 8) skipped ---
 
-undefined
 
-undefined
 
-undefined
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForNoContext.ts ===
+// --- (line: 6) skipped ---
+//     modVar++;
+// 
+//     class testCls{
+//         /*FIND ALL REFS*/
+//     }
+// 
+//     function testFn(){
+// --- (line: 14) skipped ---
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForNoContext.ts ===
+// --- (line: 12) skipped ---
+//     function testFn(){
+//         //Increments
+//         modVar++;
+//     }  /*FIND ALL REFS*/
+// 
+//     module testMod {
+//     }
+// }
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/referencesForNoContext.ts ===
+// --- (line: 13) skipped ---
+//         //Increments
+//         modVar++;
+//     }  
+// /*FIND ALL REFS*/
+//     module testMod {
+//     }
+// }

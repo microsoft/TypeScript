@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/recursiveBaseCheck.ts] ////
+
 //// [recursiveBaseCheck.ts]
 declare module Module {
     class C extends D {

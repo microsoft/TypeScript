@@ -1,4 +1,6 @@
-=== tests/cases/compiler/file1.ts ===
+//// [tests/cases/compiler/declarationMerging1.ts] ////
+
+=== file1.ts ===
 class A {
 >A : A
 
@@ -12,7 +14,7 @@ class A {
 >_f : number
 }
 
-=== tests/cases/compiler/file2.ts ===
+=== file2.ts ===
 interface A {
     run();
 >run : () => any

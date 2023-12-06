@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -42,7 +43,11 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 }
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"incremental":true}}
+{
+  "compilerOptions": {
+    "incremental": true
+  }
+}
 
 
 

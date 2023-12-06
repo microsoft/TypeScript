@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typeInferenceTypePredicate2.ts ===
+//// [tests/cases/compiler/typeInferenceTypePredicate2.ts] ////
+
+=== typeInferenceTypePredicate2.ts ===
 [true, true, false, null]
 >[true, true, false, null]    .filter((thing): thing is boolean => thing !== null)    .map(thing => thing.toString()) : string[]
 >[true, true, false, null]    .filter((thing): thing is boolean => thing !== null)    .map : <U>(callbackfn: (value: boolean, index: number, array: boolean[]) => U, thisArg?: any) => U[]

@@ -4,7 +4,7 @@ error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript
 
 !!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 !!! error TS5101:   Use 'outFile' instead.
-==== tests/cases/compiler/_apply.js (0 errors) ====
+==== _apply.js (0 errors) ====
     /**
      * A faster alternative to `Function#apply`, this function invokes `func`
      * with the `this` binding of `thisArg` and the arguments of `args`.

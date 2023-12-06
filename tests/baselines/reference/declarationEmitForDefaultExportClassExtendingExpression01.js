@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitForDefaultExportClassExtendingExpression01.ts] ////
+
 //// [declarationEmitForDefaultExportClassExtendingExpression01.ts]
 interface Greeter {
     getGreeting(): string;

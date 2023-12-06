@@ -1,116 +1,116 @@
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(16,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/io.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(17,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(18,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(19,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(21,21): error TS2749: 'Harness.Assert' refers to a value, but is being used as a type here. Did you mean 'typeof Harness.Assert'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(341,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(347,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(351,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(354,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(354,35): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(691,50): error TS2304: Cannot find name 'ITextWriter'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(716,47): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(721,62): error TS2304: Cannot find name 'ITextWriter'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(724,29): error TS2304: Cannot find name 'ITextWriter'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(754,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(764,56): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(765,37): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(767,47): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(776,13): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(776,42): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(781,23): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(794,49): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(795,49): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,53): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,89): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,115): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(987,145): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(988,43): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(999,40): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1041,43): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1044,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1045,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1046,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1047,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1048,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1049,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1050,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1051,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1052,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1053,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1055,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1058,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1059,34): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1061,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1064,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1065,34): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1067,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1070,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1071,34): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1073,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1074,34): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1076,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1077,34): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1079,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1080,35): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1080,74): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1107,173): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1176,132): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1193,29): error TS2304: Cannot find name 'WScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1256,126): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1257,25): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1263,31): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1280,45): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1286,124): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1286,209): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1294,142): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1294,227): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1302,43): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1304,39): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1307,38): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1311,45): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1321,21): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1340,38): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1344,165): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1345,26): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1426,25): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1430,9): error TS1128: Declaration or statement expected.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1430,17): error TS2304: Cannot find name 'optionRegex'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1440,29): error TS2304: Cannot find name 'optionRegex'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1461,23): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1466,36): error TS2304: Cannot find name 'optionRegex'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1484,21): error TS2304: Cannot find name 'optionRegex'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1548,57): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1571,32): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1582,59): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1591,24): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1600,24): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1604,42): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1605,21): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1705,38): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1706,26): error TS2304: Cannot find name 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1713,62): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1713,87): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1714,30): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1724,34): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1739,20): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1746,80): error TS2503: Cannot find namespace 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1750,26): error TS2304: Cannot find name 'TypeScript'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1758,84): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1769,51): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1784,39): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1784,61): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1785,25): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1787,38): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(1787,68): error TS2503: Cannot find namespace 'Services'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
+parserharness.ts(16,21): error TS6053: File '../compiler/io.ts' not found.
+parserharness.ts(17,21): error TS6053: File '../compiler/typescript.ts' not found.
+parserharness.ts(18,21): error TS6053: File '../services/typescriptServices.ts' not found.
+parserharness.ts(19,21): error TS6053: File 'diff.ts' not found.
+parserharness.ts(21,21): error TS2749: 'Harness.Assert' refers to a value, but is being used as a type here. Did you mean 'typeof Harness.Assert'?
+parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
+parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
+parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+parserharness.ts(341,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+parserharness.ts(347,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+parserharness.ts(351,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+parserharness.ts(354,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+parserharness.ts(354,35): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
+parserharness.ts(691,50): error TS2304: Cannot find name 'ITextWriter'.
+parserharness.ts(716,47): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(721,62): error TS2304: Cannot find name 'ITextWriter'.
+parserharness.ts(724,29): error TS2304: Cannot find name 'ITextWriter'.
+parserharness.ts(754,53): error TS2552: Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?
+parserharness.ts(764,56): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(765,37): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(767,47): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(776,13): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(776,42): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(781,23): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(794,49): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(795,49): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(987,53): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(987,89): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(987,115): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(987,145): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(988,43): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(999,40): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1041,43): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1044,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1045,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1046,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1047,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1048,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1049,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1050,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1051,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1052,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1053,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1055,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1058,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1059,34): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1061,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1064,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1065,34): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1067,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1070,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1071,34): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1073,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1074,34): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1076,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1077,34): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1079,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1080,35): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1080,74): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1107,173): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1176,132): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1193,29): error TS2304: Cannot find name 'WScript'.
+parserharness.ts(1256,126): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1257,25): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1263,31): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1280,45): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1286,124): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1286,209): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1294,142): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1294,227): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1302,43): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1304,39): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1307,38): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1311,45): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1321,21): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1340,38): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1344,165): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1345,26): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1426,25): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1430,9): error TS1128: Declaration or statement expected.
+parserharness.ts(1430,17): error TS2304: Cannot find name 'optionRegex'.
+parserharness.ts(1440,29): error TS2304: Cannot find name 'optionRegex'.
+parserharness.ts(1461,23): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1466,36): error TS2304: Cannot find name 'optionRegex'.
+parserharness.ts(1484,21): error TS2304: Cannot find name 'optionRegex'.
+parserharness.ts(1548,57): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1571,32): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1582,59): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1591,24): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1600,24): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1604,42): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1605,21): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1705,38): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1706,26): error TS2304: Cannot find name 'Services'.
+parserharness.ts(1713,62): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1713,87): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1714,30): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1724,34): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1739,20): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1746,80): error TS2503: Cannot find namespace 'TypeScript'.
+parserharness.ts(1750,26): error TS2304: Cannot find name 'TypeScript'.
+parserharness.ts(1758,84): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1769,51): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1784,39): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1784,61): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1785,25): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1787,38): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(1787,68): error TS2503: Cannot find namespace 'Services'.
+parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts (110 errors) ====
+==== parserharness.ts (110 errors) ====
     //﻿
     // Copyright (c) Microsoft Corporation.  All rights reserved.
     // 
@@ -128,16 +128,16 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
     
     ///<reference path='..\compiler\io.ts'/>
                         ~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/io.ts' not found.
+!!! error TS6053: File '../compiler/io.ts' not found.
     ///<reference path='..\compiler\typescript.ts'/>
                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/typescript.ts' not found.
+!!! error TS6053: File '../compiler/typescript.ts' not found.
     ///<reference path='..\services\typescriptServices.ts' />
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found.
+!!! error TS6053: File '../services/typescriptServices.ts' not found.
     ///<reference path='diff.ts'/>
                         ~~~~~~~
-!!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
+!!! error TS6053: File 'diff.ts' not found.
     
     declare var assert: Harness.Assert;
                         ~~~~~~~~~~~~~~

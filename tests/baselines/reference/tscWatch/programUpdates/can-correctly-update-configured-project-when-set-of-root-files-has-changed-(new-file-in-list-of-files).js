@@ -1,3 +1,4 @@
+currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
 //// [/a/b/f1.ts]
 let x = 1
@@ -19,7 +20,12 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["f1.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f1.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
@@ -31,8 +37,27 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/f1.js]
+var x = 1;
+
+
+
+FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -46,32 +71,28 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/f1.ts (used version)
 
-PolledWatches::
-/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json: *new*
-  {}
-/a/b/f1.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js]
-var x = 1;
-
-
 
 Change:: Modify config to make f2 as root too
 
 Input::
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{},"files":["f1.ts","f2.ts"]}
+{
+  "compilerOptions": {},
+  "files": [
+    "f1.ts",
+    "f2.ts"
+  ]
+}
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
@@ -80,8 +101,32 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts","/a/b/f2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/f1.js] file written with same contents
+//// [/a/b/f2.js]
+var y = 1;
+
+
+
+FsWatches::
+/a/b/f1.ts:
+  {}
+/a/b/f2.ts: *new*
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+
+Program root files: [
+  "/a/b/f1.ts",
+  "/a/b/f2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -97,24 +142,4 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (computed .d.ts)
 /a/b/f1.ts (computed .d.ts)
 
-PolledWatches::
-/a/b/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-/a/b/f1.ts:
-  {}
-/a/lib/lib.d.ts:
-  {}
-/a/b/f2.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js] file written with same contents
-//// [/a/b/f2.js]
-var y = 1;
-
-

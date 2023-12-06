@@ -1,12 +1,12 @@
-tests/cases/compiler/constDeclarations-ambient-errors.ts(2,29): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/constDeclarations-ambient-errors.ts(3,28): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/constDeclarations-ambient-errors.ts(4,20): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
-tests/cases/compiler/constDeclarations-ambient-errors.ts(4,39): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/constDeclarations-ambient-errors.ts(4,53): error TS1039: Initializers are not allowed in ambient contexts.
-tests/cases/compiler/constDeclarations-ambient-errors.ts(8,24): error TS1039: Initializers are not allowed in ambient contexts.
+constDeclarations-ambient-errors.ts(2,29): error TS1039: Initializers are not allowed in ambient contexts.
+constDeclarations-ambient-errors.ts(3,28): error TS1039: Initializers are not allowed in ambient contexts.
+constDeclarations-ambient-errors.ts(4,20): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
+constDeclarations-ambient-errors.ts(4,39): error TS1039: Initializers are not allowed in ambient contexts.
+constDeclarations-ambient-errors.ts(4,53): error TS1039: Initializers are not allowed in ambient contexts.
+constDeclarations-ambient-errors.ts(8,24): error TS1039: Initializers are not allowed in ambient contexts.
 
 
-==== tests/cases/compiler/constDeclarations-ambient-errors.ts (6 errors) ====
+==== constDeclarations-ambient-errors.ts (6 errors) ====
     // error: no intialization expected in ambient declarations
     declare const c1: boolean = true;
                                 ~~~~

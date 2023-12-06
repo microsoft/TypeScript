@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/classIndexer5.ts] ////
+
 //// [classIndexer5.ts]
 class Foo {
     [key: string]: number;

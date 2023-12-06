@@ -1,4 +1,6 @@
-=== tests/cases/compiler/declarationEmitDestructuringArrayPattern2.ts ===
+//// [tests/cases/compiler/declarationEmitDestructuringArrayPattern2.ts] ////
+
+=== declarationEmitDestructuringArrayPattern2.ts ===
 var [x10, [y10, [z10]]] = [1, ["hello", [true]]];
 >x10 : Symbol(x10, Decl(declarationEmitDestructuringArrayPattern2.ts, 0, 5))
 >y10 : Symbol(y10, Decl(declarationEmitDestructuringArrayPattern2.ts, 0, 11))

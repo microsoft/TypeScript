@@ -1,3 +1,5 @@
-=== tests/cases/conformance/scanner/ecmascript3/scannerES3NumericLiteral2.ts ===
+//// [tests/cases/conformance/scanner/ecmascript3/scannerES3NumericLiteral2.ts] ////
+
+=== scannerES3NumericLiteral2.ts ===
 
 01

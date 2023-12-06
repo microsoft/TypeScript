@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/spreadParameterTupleType.ts] ////
+
 //// [spreadParameterTupleType.ts]
 function f1() {
     type A = [s: string];

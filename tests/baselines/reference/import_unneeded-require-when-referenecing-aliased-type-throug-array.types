@@ -1,4 +1,6 @@
-=== tests/cases/compiler/a.ts ===
+//// [tests/cases/compiler/import_unneeded-require-when-referenecing-aliased-type-throug-array.ts] ////
+
+=== a.ts ===
 /// <reference path="b.ts" />
 import ITest = require('ITest');
 >ITest : any
@@ -14,7 +16,7 @@ var p = testData[0].name;
 >0 : 0
 >name : string
  
-=== tests/cases/compiler/b.ts ===
+=== b.ts ===
 declare module "ITest" {
 >"ITest" : typeof import("ITest")
 

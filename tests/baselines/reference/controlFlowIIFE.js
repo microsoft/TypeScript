@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/controlFlow/controlFlowIIFE.ts] ////
+
 //// [controlFlowIIFE.ts]
 declare function getStringOrNumber(): string | number;
 

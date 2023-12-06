@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/continueTarget2.ts] ////
+
 //// [continueTarget2.ts]
 target:
 while (true) {

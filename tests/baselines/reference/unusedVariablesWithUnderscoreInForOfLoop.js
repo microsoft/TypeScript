@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts] ////
+
 //// [unusedVariablesWithUnderscoreInForOfLoop.ts]
 function t1() {
     for (const [_a, b] of [['key', 1]]) {

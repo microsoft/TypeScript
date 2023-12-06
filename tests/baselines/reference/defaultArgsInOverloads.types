@@ -1,4 +1,6 @@
-=== tests/cases/compiler/defaultArgsInOverloads.ts ===
+//// [tests/cases/compiler/defaultArgsInOverloads.ts] ////
+
+=== defaultArgsInOverloads.ts ===
 function fun(a: string);
 >fun : { (a: string): any; (a?: number): any; }
 >a : string

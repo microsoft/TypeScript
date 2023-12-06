@@ -1,4 +1,6 @@
-=== tests/cases/conformance/node/index.ts ===
+//// [tests/cases/conformance/node/nodeModulesExportsSourceTs.ts] ////
+
+=== index.ts ===
 // esm format file
 import { Thing } from "inner/other";
 >Thing : Symbol(Thing, Decl(index.ts, 1, 8))
@@ -6,19 +8,19 @@ import { Thing } from "inner/other";
 export const a = (await import("inner")).x();
 >a : Symbol(a, Decl(index.ts, 2, 12))
 >(await import("inner")).x : Symbol(x, Decl(index.ts, 1, 8))
->"inner" : Symbol("tests/cases/conformance/node/node_modules/inner/index", Decl(index.ts, 0, 0))
+>"inner" : Symbol("node_modules/inner/index", Decl(index.ts, 0, 0))
 >x : Symbol(x, Decl(index.ts, 1, 8))
 
 import {a as a2} from "package";
 >a : Symbol(a, Decl(index.ts, 2, 12))
 >a2 : Symbol(a2, Decl(index.ts, 3, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/index.ts ===
+=== node_modules/inner/index.ts ===
 // esm format file
 export { x } from "./other.js";
 >x : Symbol(x, Decl(index.ts, 1, 8))
 
-=== tests/cases/conformance/node/node_modules/inner/other.ts ===
+=== node_modules/inner/other.ts ===
 // esm format file
 export interface Thing {}
 >Thing : Symbol(Thing, Decl(other.ts, 0, 0))

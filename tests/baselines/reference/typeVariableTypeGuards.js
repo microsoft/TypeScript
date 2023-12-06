@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/typeVariableTypeGuards.ts] ////
+
 //// [typeVariableTypeGuards.ts]
 // Repro from #14091
 

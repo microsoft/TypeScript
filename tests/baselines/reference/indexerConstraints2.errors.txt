@@ -1,15 +1,15 @@
-tests/cases/compiler/indexerConstraints2.ts(9,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
-tests/cases/compiler/indexerConstraints2.ts(17,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
-tests/cases/compiler/indexerConstraints2.ts(26,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
-tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-tests/cases/compiler/indexerConstraints2.ts(52,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
-tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
-tests/cases/compiler/indexerConstraints2.ts(70,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
-tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
-tests/cases/compiler/indexerConstraints2.ts(79,5): error TS1021: An index signature must have a type annotation.
+indexerConstraints2.ts(9,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+indexerConstraints2.ts(17,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+indexerConstraints2.ts(26,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+indexerConstraints2.ts(46,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+indexerConstraints2.ts(52,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+indexerConstraints2.ts(58,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+indexerConstraints2.ts(70,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+indexerConstraints2.ts(74,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+indexerConstraints2.ts(79,5): error TS1021: An index signature must have a type annotation.
 
 
-==== tests/cases/compiler/indexerConstraints2.ts (9 errors) ====
+==== indexerConstraints2.ts (9 errors) ====
     class A { a: number; }
     class B extends A { b: number; }
     

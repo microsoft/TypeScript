@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxUnionElementType3.tsx] ////
+
 //// [file.tsx]
 import React = require('react');
 

@@ -1,4 +1,6 @@
-=== tests/cases/compiler/decoratorsOnComputedProperties.ts ===
+//// [tests/cases/compiler/decoratorsOnComputedProperties.ts] ////
+
+=== decoratorsOnComputedProperties.ts ===
 function x(o: object, k: PropertyKey) { }
 >x : (o: object, k: PropertyKey) => void
 >o : object

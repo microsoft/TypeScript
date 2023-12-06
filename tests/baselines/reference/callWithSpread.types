@@ -1,4 +1,6 @@
-=== tests/cases/conformance/expressions/functionCalls/callWithSpread.ts ===
+//// [tests/cases/conformance/expressions/functionCalls/callWithSpread.ts] ////
+
+=== callWithSpread.ts ===
 interface X {
     foo(x: number, y: number, ...z: string[]): X;
 >foo : (x: number, y: number, ...z: string[]) => X
@@ -267,7 +269,7 @@ xa[1].foo(1, 2, ...a, "abc");
 >1 : 1
 >foo : (x: number, y: number, ...z: string[]) => X
 >...[1, 2, "abc"] : string | number
->[1, 2, "abc"] : readonly [number, number, string]
+>[1, 2, "abc"] : [number, number, string]
 >1 : 1
 >2 : 2
 >"abc" : "abc"

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringSpread.ts] ////
+
 //// [destructuringSpread.ts]
 const { x } = {
   ...{},

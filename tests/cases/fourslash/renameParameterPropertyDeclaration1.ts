@@ -7,4 +7,4 @@
 ////     }
 //// }
 
-verify.rangesWithSameTextAreRenameLocations("privateParam");
+verify.baselineRenameAtRangesWithText("privateParam");

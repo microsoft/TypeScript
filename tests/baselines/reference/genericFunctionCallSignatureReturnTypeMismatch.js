@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts] ////
+
 //// [genericFunctionCallSignatureReturnTypeMismatch.ts]
 interface Array<T> {}
 

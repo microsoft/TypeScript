@@ -1,4 +1,6 @@
-=== tests/cases/compiler/narrowingUnionWithBang.ts ===
+//// [tests/cases/compiler/narrowingUnionWithBang.ts] ////
+
+=== narrowingUnionWithBang.ts ===
 type WorkingType = {
 >WorkingType : { thing?: { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Error9'; message: string; } | { name: 'Correct'; id: string; } | undefined; }
 

@@ -1,7 +1,7 @@
-tests/cases/compiler/prototypes.ts(2,14): error TS2339: Property 'prototype' does not exist on type 'Object'.
+prototypes.ts(2,14): error TS2339: Property 'prototype' does not exist on type 'Object'.
 
 
-==== tests/cases/compiler/prototypes.ts (1 errors) ====
+==== prototypes.ts (1 errors) ====
     Object.prototype; // ok
     new Object().prototype; // error
                  ~~~~~~~~~

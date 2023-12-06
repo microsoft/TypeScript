@@ -1,4 +1,6 @@
-=== tests/cases/compiler/functionAssignment.ts ===
+//// [tests/cases/compiler/functionAssignment.ts] ////
+
+=== functionAssignment.ts ===
 function f(n: Function) { }
 >f : (n: Function) => void
 >n : Function

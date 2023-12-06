@@ -1,8 +1,8 @@
-tests/cases/conformance/enums/enumConstantMemberWithString.ts(5,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-tests/cases/conformance/enums/enumConstantMemberWithString.ts(5,15): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+enumConstantMemberWithString.ts(5,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+enumConstantMemberWithString.ts(5,15): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
-==== tests/cases/conformance/enums/enumConstantMemberWithString.ts (2 errors) ====
+==== enumConstantMemberWithString.ts (2 errors) ====
     enum T1 {
         a = "1",
         b = "1" + "2",

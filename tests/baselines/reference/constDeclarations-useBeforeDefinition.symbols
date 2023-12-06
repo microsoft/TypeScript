@@ -1,4 +1,6 @@
-=== tests/cases/compiler/constDeclarations-useBeforeDefinition.ts ===
+//// [tests/cases/compiler/constDeclarations-useBeforeDefinition.ts] ////
+
+=== constDeclarations-useBeforeDefinition.ts ===
 {
     c1;
 >c1 : Symbol(c1, Decl(constDeclarations-useBeforeDefinition.ts, 2, 9))

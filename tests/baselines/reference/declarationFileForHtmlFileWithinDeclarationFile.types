@@ -1,4 +1,6 @@
-=== tests/cases/conformance/nonjsExtensions/component.d.html.ts ===
+//// [tests/cases/conformance/nonjsExtensions/declarationFileForHtmlFileWithinDeclarationFile.ts] ////
+
+=== component.d.html.ts ===
 // html modules were proposed at https://github.com/WICG/webcomponents/blob/gh-pages/proposals/html-modules-explainer.md
 
 // per proposal, `default` is user-defined, but if not present, will be the document of the imported module
@@ -20,11 +22,11 @@ export class HTML5Element extends HTMLElement {
 >connectedCallback : () => void
 }
 
-=== tests/cases/conformance/nonjsExtensions/file.d.ts ===
+=== file.d.ts ===
 export * as mod from "./component.html";
->mod : typeof import("tests/cases/conformance/nonjsExtensions/component.d.html")
+>mod : typeof import("component.d.html")
 
-=== tests/cases/conformance/nonjsExtensions/main.ts ===
+=== main.ts ===
 import { mod } from "./file.js";
 >mod : typeof mod
 

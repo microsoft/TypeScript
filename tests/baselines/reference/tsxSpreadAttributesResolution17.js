@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution17.tsx] ////
+
 //// [file.tsx]
 declare global {
     namespace JSX {

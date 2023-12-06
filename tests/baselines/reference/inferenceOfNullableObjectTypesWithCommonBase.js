@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/inferenceOfNullableObjectTypesWithCommonBase.ts] ////
+
 //// [inferenceOfNullableObjectTypesWithCommonBase.ts]
 function equal<T>(a: T, b: T) { }
 

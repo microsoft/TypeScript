@@ -1,4 +1,6 @@
-=== tests/cases/compiler/moduleOuterQualification.ts ===
+//// [tests/cases/compiler/moduleOuterQualification.ts] ////
+
+=== moduleOuterQualification.ts ===
 declare module outer {
   interface Beta { }
   module inner {

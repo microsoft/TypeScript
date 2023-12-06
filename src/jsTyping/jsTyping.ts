@@ -30,8 +30,10 @@ import {
     Version,
     versionMajorMinor,
 } from "./_namespaces/ts";
+import {
+    stringifyIndented,
+} from "./_namespaces/ts.server";
 
-/** @internal */
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;
     fileExists(fileName: string): boolean;
@@ -108,7 +110,7 @@ const unprefixedNodeCoreModuleList = [
     "vm",
     "wasi",
     "worker_threads",
-    "zlib"
+    "zlib",
 ];
 
 /** @internal */
@@ -168,15 +170,14 @@ export function discoverTypings(
     typeAcquisition: TypeAcquisition,
     unresolvedImports: readonly string[],
     typesRegistry: ReadonlyMap<string, MapLike<string>>,
-    compilerOptions: CompilerOptions):
-    { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
-
+    compilerOptions: CompilerOptions,
+): { cachedTypingPaths: string[]; newTypingNames: string[]; filesToWatch: string[]; } {
     if (!typeAcquisition || !typeAcquisition.enable) {
         return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
     }
 
     // A typing name to typing file path mapping
-    const inferredTypings = new Map<string, string>();
+    const inferredTypings = new Map<string, string | false>();
 
     // Only infer typings for .js and .jsx files
     fileNames = mapDefined(fileNames, fileName => {
@@ -195,13 +196,13 @@ export function discoverTypings(
     if (!compilerOptions.types) {
         const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
         possibleSearchDirs.add(projectRootPath);
-        possibleSearchDirs.forEach((searchDir) => {
+        possibleSearchDirs.forEach(searchDir => {
             getTypingNames(searchDir, "bower.json", "bower_components", filesToWatch);
             getTypingNames(searchDir, "package.json", "node_modules", filesToWatch);
         });
     }
 
-    if(!typeAcquisition.disableFilenameBasedTypeAcquisition) {
+    if (!typeAcquisition.disableFilenameBasedTypeAcquisition) {
         getTypingNamesFromSourceFileNames(fileNames);
     }
     // add typings for unresolved imports
@@ -209,27 +210,28 @@ export function discoverTypings(
         const module = deduplicate<string>(
             unresolvedImports.map(nonRelativeModuleNameForTypingCache),
             equateStringsCaseSensitive,
-            compareStringsCaseSensitive);
+            compareStringsCaseSensitive,
+        );
         addInferredTypings(module, "Inferred typings from unresolved imports");
     }
-    // Add the cached typing locations for inferred typings that are already installed
-    packageNameToTypingLocation.forEach((typing, name) => {
-        const registryEntry = typesRegistry.get(name);
-        if (inferredTypings.has(name) && inferredTypings.get(name) === undefined && registryEntry !== undefined && isTypingUpToDate(typing, registryEntry)) {
-            inferredTypings.set(name, typing.typingLocation);
-        }
-    });
-
     // Remove typings that the user has added to the exclude list
     for (const excludeTypingName of exclude) {
         const didDelete = inferredTypings.delete(excludeTypingName);
         if (didDelete && log) log(`Typing for ${excludeTypingName} is in exclude list, will be ignored.`);
     }
 
+    // Add the cached typing locations for inferred typings that are already installed
+    packageNameToTypingLocation.forEach((typing, name) => {
+        const registryEntry = typesRegistry.get(name);
+        if (inferredTypings.get(name) === false && registryEntry !== undefined && isTypingUpToDate(typing, registryEntry)) {
+            inferredTypings.set(name, typing.typingLocation);
+        }
+    });
+
     const newTypingNames: string[] = [];
     const cachedTypingPaths: string[] = [];
     inferredTypings.forEach((inferred, typing) => {
-        if (inferred !== undefined) {
+        if (inferred) {
             cachedTypingPaths.push(inferred);
         }
         else {
@@ -237,12 +239,12 @@ export function discoverTypings(
         }
     });
     const result = { cachedTypingPaths, newTypingNames, filesToWatch };
-    if (log) log(`Result: ${JSON.stringify(result)}`);
+    if (log) log(`Finished typings discovery:${stringifyIndented(result)}`);
     return result;
 
     function addInferredTyping(typingName: string) {
         if (!inferredTypings.has(typingName)) {
-            inferredTypings.set(typingName, undefined!); // TODO: GH#18217
+            inferredTypings.set(typingName, false);
         }
     }
     function addInferredTypings(typingNames: readonly string[], message: string) {
@@ -384,7 +386,7 @@ export const enum NameValidationResult {
     NameTooLong,
     NameStartsWithDot,
     NameStartsWithUnderscore,
-    NameContainsNonURISafeCharacters
+    NameContainsNonURISafeCharacters,
 }
 
 const maxPackageNameLength = 214;
@@ -467,6 +469,6 @@ function renderPackageNameValidationFailureWorker(typing: string, result: NameVa
         case NameValidationResult.Ok:
             return Debug.fail(); // Shouldn't have called this.
         default:
-            throw Debug.assertNever(result);
+            Debug.assertNever(result);
     }
 }

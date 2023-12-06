@@ -1,11 +1,11 @@
-tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(5,8): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
-tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(6,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
-tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(7,19): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean | "defaulPath"'.
-tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(12,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'string[]'.
-tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts(13,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type '() => string'.
+importCallExpressionSpecifierNotStringTypeError.ts(5,8): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
+importCallExpressionSpecifierNotStringTypeError.ts(6,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean'.
+importCallExpressionSpecifierNotStringTypeError.ts(7,19): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'boolean | "defaulPath"'.
+importCallExpressionSpecifierNotStringTypeError.ts(12,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'string[]'.
+importCallExpressionSpecifierNotStringTypeError.ts(13,17): error TS7036: Dynamic import's specifier must be of type 'string', but here has type '() => string'.
 
 
-==== tests/cases/conformance/dynamicImport/importCallExpressionSpecifierNotStringTypeError.ts (5 errors) ====
+==== importCallExpressionSpecifierNotStringTypeError.ts (5 errors) ====
     declare function getSpecifier(): boolean;
     declare var whatToLoad: boolean;
     

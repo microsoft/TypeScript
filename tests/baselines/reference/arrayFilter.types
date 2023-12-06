@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayFilter.ts ===
+//// [tests/cases/compiler/arrayFilter.ts] ////
+
+=== arrayFilter.ts ===
 var foo = [
 >foo : { name: string; }[]
 >[    { name: 'bar' },    { name: null },    { name: 'baz' }] : { name: string; }[]

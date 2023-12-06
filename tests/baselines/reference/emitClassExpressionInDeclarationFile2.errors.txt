@@ -1,10 +1,10 @@
-tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'p' of exported class expression may not be private or protected.
-tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'ps' of exported class expression may not be private or protected.
-tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(16,17): error TS4094: Property 'property' of exported class expression may not be private or protected.
-tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts(23,14): error TS4094: Property 'property' of exported class expression may not be private or protected.
+emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'p' of exported class expression may not be private or protected.
+emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'ps' of exported class expression may not be private or protected.
+emitClassExpressionInDeclarationFile2.ts(16,17): error TS4094: Property 'property' of exported class expression may not be private or protected.
+emitClassExpressionInDeclarationFile2.ts(23,14): error TS4094: Property 'property' of exported class expression may not be private or protected.
 
 
-==== tests/cases/compiler/emitClassExpressionInDeclarationFile2.ts (4 errors) ====
+==== emitClassExpressionInDeclarationFile2.ts (4 errors) ====
     export var noPrivates = class {
                ~~~~~~~~~~
 !!! error TS4094: Property 'p' of exported class expression may not be private or protected.

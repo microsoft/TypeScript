@@ -1,4 +1,6 @@
-=== tests/cases/conformance/es6/destructuring/iterableArrayPattern1.ts ===
+//// [tests/cases/conformance/es6/destructuring/iterableArrayPattern1.ts] ////
+
+=== iterableArrayPattern1.ts ===
 class SymbolIterator {
 >SymbolIterator : Symbol(SymbolIterator, Decl(iterableArrayPattern1.ts, 0, 0))
 

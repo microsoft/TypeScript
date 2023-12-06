@@ -1,76 +1,76 @@
-tests/cases/conformance/esDecorators/classDeclaration/file13.ts(2,1): error TS1434: Unexpected keyword or identifier.
-tests/cases/conformance/esDecorators/classDeclaration/file13.ts(2,1): error TS2304: Cannot find name 'abstract'.
-tests/cases/conformance/esDecorators/classDeclaration/file14.ts(2,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/esDecorators/classDeclaration/file14.ts(2,8): error TS1434: Unexpected keyword or identifier.
-tests/cases/conformance/esDecorators/classDeclaration/file14.ts(2,8): error TS2304: Cannot find name 'abstract'.
-tests/cases/conformance/esDecorators/classDeclaration/file15.ts(2,16): error TS2304: Cannot find name 'abstract'.
-tests/cases/conformance/esDecorators/classDeclaration/file15.ts(2,25): error TS1005: ';' expected.
-tests/cases/conformance/esDecorators/classDeclaration/file3.ts(2,8): error TS1206: Decorators are not valid here.
-tests/cases/conformance/esDecorators/classDeclaration/file6.ts(2,13): error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
-tests/cases/conformance/esDecorators/classDeclaration/file7.ts(2,21): error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
+file13.ts(2,1): error TS1434: Unexpected keyword or identifier.
+file13.ts(2,1): error TS2304: Cannot find name 'abstract'.
+file14.ts(2,1): error TS1128: Declaration or statement expected.
+file14.ts(2,8): error TS1434: Unexpected keyword or identifier.
+file14.ts(2,8): error TS2304: Cannot find name 'abstract'.
+file15.ts(2,16): error TS2304: Cannot find name 'abstract'.
+file15.ts(2,25): error TS1005: ';' expected.
+file3.ts(2,8): error TS1206: Decorators are not valid here.
+file6.ts(2,13): error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
+file7.ts(2,21): error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
 
 
-==== tests/cases/conformance/esDecorators/classDeclaration/global.ts (0 errors) ====
+==== global.ts (0 errors) ====
     /** @type {*} */
     var dec;
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file1.ts (0 errors) ====
+==== file1.ts (0 errors) ====
     // ok
     @dec export class C1 { }
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file2.ts (0 errors) ====
+==== file2.ts (0 errors) ====
     // ok
     @dec export default class C2 {}
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file3.ts (1 errors) ====
+==== file3.ts (1 errors) ====
     // error
     export @dec default class C3 {}
            ~~~~
 !!! error TS1206: Decorators are not valid here.
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file4.ts (0 errors) ====
+==== file4.ts (0 errors) ====
     // ok
     export @dec class C4 {}
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file5.ts (0 errors) ====
+==== file5.ts (0 errors) ====
     // ok
     export default @dec class C5 {}
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file6.ts (1 errors) ====
+==== file6.ts (1 errors) ====
     // error
     @dec export @dec class C6 {}
                 ~~~~
 !!! error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
-!!! related TS1486 tests/cases/conformance/esDecorators/classDeclaration/file6.ts:2:1: Decorator used before 'export' here.
+!!! related TS1486 file6.ts:2:1: Decorator used before 'export' here.
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file7.ts (1 errors) ====
+==== file7.ts (1 errors) ====
     // error
     @dec export default @dec class C7 {}
                         ~~~~
 !!! error TS8038: Decorators may not appear after 'export' or 'export default' if they also appear before 'export'.
-!!! related TS1486 tests/cases/conformance/esDecorators/classDeclaration/file7.ts:2:1: Decorator used before 'export' here.
+!!! related TS1486 file7.ts:2:1: Decorator used before 'export' here.
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file8.ts (0 errors) ====
+==== file8.ts (0 errors) ====
     // ok
     @dec abstract class C8 {}
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file9.ts (0 errors) ====
+==== file9.ts (0 errors) ====
     // ok
     @dec export abstract class C9 {}
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file10.ts (0 errors) ====
+==== file10.ts (0 errors) ====
     // ok
     @dec export default abstract class C10 {}
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file11.ts (0 errors) ====
+==== file11.ts (0 errors) ====
     // ok
     export @dec abstract class C11 {}
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file12.ts (0 errors) ====
+==== file12.ts (0 errors) ====
     // ok
     export default @dec abstract class C12 {}
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file13.ts (2 errors) ====
+==== file13.ts (2 errors) ====
     // error
     abstract @dec class C13 {}
     ~~~~~~~~
@@ -78,7 +78,7 @@ tests/cases/conformance/esDecorators/classDeclaration/file7.ts(2,21): error TS80
     ~~~~~~~~
 !!! error TS2304: Cannot find name 'abstract'.
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file14.ts (3 errors) ====
+==== file14.ts (3 errors) ====
     // error
     export abstract @dec class C14 {}
     ~~~~~~
@@ -88,7 +88,7 @@ tests/cases/conformance/esDecorators/classDeclaration/file7.ts(2,21): error TS80
            ~~~~~~~~
 !!! error TS2304: Cannot find name 'abstract'.
     
-==== tests/cases/conformance/esDecorators/classDeclaration/file15.ts (2 errors) ====
+==== file15.ts (2 errors) ====
     // error
     export default abstract @dec class C15 {}
                    ~~~~~~~~

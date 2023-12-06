@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/declarationEmitKeywordDestructuring.ts] ////
+
 //// [declarationEmitKeywordDestructuring.ts]
 type P = {
     enum: boolean;

@@ -1,0 +1,19 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignment.ts ===
+// interface I {
+//     /*RENAME*/<|[|xRENAME|]: number;|>
+// }
+// var a: I;
+// var x;
+// (<|{ [|xRENAME|]: x } = a|>);
+
+
+
+// === findRenameLocations ===
+// === /tests/cases/fourslash/renameDestructuringAssignment.ts ===
+// interface I {
+//     <|[|xRENAME|]: number;|>
+// }
+// var a: I;
+// var x;
+// (<|{ /*RENAME*/[|xRENAME|]: x } = a|>);

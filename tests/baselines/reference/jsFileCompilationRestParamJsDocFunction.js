@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/jsFileCompilationRestParamJsDocFunction.ts] ////
+
 //// [_apply.js]
 /**
  * A faster alternative to `Function#apply`, this function invokes `func`

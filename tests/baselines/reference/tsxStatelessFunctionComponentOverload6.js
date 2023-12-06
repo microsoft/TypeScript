@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/jsx/tsxStatelessFunctionComponentOverload6.tsx] ////
+
 //// [file.tsx]
 import React = require('react')
 

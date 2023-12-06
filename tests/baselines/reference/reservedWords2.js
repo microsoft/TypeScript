@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/reservedWords2.ts] ////
+
 //// [reservedWords2.ts]
 import while = require("dfdf");
 import * as  while from "foo"

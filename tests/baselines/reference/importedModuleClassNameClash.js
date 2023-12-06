@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/importedModuleClassNameClash.ts] ////
+
 //// [importedModuleClassNameClash.ts]
 import foo = m1;
  

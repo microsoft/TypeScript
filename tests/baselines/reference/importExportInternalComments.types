@@ -1,12 +1,14 @@
-=== tests/cases/compiler/include.d.ts ===
+//// [tests/cases/compiler/importExportInternalComments.ts] ////
+
+=== include.d.ts ===
 declare module "foo";
 >"foo" : any
 
-=== tests/cases/compiler/default.ts ===
+=== default.ts ===
 /*1*/ export /*2*/ default /*3*/ Array /*4*/;
 >Array : T[]
 
-=== tests/cases/compiler/index.ts ===
+=== index.ts ===
 /*1*/ import /*2*/ D /*3*/, /*4*/ { /*5*/ A /*6*/, /*7*/ B /*8*/ as /*9*/ C /*10*/ } /*11*/ from /*12*/ "foo";
 >D : any
 >A : any

@@ -5,7 +5,7 @@ sourceRoot:
 sources: sourceMapValidationDecorators.ts
 ===================================================================
 -------------------------------------------------------------------
-emittedFile:tests/cases/compiler/sourceMapValidationDecorators.js
+emittedFile:sourceMapValidationDecorators.js
 sourceFile:sourceMapValidationDecorators.ts
 -------------------------------------------------------------------
 >>>var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

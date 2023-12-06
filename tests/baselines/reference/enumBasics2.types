@@ -1,4 +1,6 @@
-=== tests/cases/compiler/enumBasics2.ts ===
+//// [tests/cases/compiler/enumBasics2.ts] ////
+
+=== enumBasics2.ts ===
 enum Foo {
 >Foo : Foo
 

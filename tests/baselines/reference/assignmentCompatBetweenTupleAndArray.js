@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatBetweenTupleAndArray.ts] ////
+
 //// [assignmentCompatBetweenTupleAndArray.ts]
 var numStrTuple: [number, string];
 var numNumTuple: [number, number];

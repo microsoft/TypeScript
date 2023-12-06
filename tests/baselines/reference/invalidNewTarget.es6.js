@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/newTarget/invalidNewTarget.es6.ts] ////
+
 //// [invalidNewTarget.es6.ts]
 const a = new.target;
 const b = () => new.target;

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/noImplicitUseStrict_amd.ts] ////
+
 //// [noImplicitUseStrict_amd.ts]
 export var x = 0;
 

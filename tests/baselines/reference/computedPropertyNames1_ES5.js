@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyNames1_ES5.ts] ////
+
 //// [computedPropertyNames1_ES5.ts]
 var v = {
     get [0 + 1]() { return 0 },

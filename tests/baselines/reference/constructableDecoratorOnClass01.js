@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/decorators/class/constructableDecoratorOnClass01.ts] ////
+
 //// [constructableDecoratorOnClass01.ts]
 class CtorDtor {}
 

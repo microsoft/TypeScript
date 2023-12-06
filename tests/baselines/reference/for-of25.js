@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/es6/for-ofStatements/for-of25.ts] ////
+
 //// [for-of25.ts]
 class StringIterator {
     [Symbol.iterator]() {

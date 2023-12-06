@@ -1,4 +1,6 @@
-=== tests/cases/compiler/inheritedConstructorPropertyContextualType.ts ===
+//// [tests/cases/compiler/inheritedConstructorPropertyContextualType.ts] ////
+
+=== inheritedConstructorPropertyContextualType.ts ===
 interface State {
     version: 2
 >version : 2

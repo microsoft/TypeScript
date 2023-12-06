@@ -1,4 +1,6 @@
-=== tests/cases/compiler/classImplementingInterfaceIndexer.ts ===
+//// [tests/cases/compiler/classImplementingInterfaceIndexer.ts] ////
+
+=== classImplementingInterfaceIndexer.ts ===
 interface I {
 >I : Symbol(I, Decl(classImplementingInterfaceIndexer.ts, 0, 0))
 

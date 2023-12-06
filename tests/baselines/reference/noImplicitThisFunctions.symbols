@@ -1,4 +1,6 @@
-=== tests/cases/compiler/noImplicitThisFunctions.ts ===
+//// [tests/cases/compiler/noImplicitThisFunctions.ts] ////
+
+=== noImplicitThisFunctions.ts ===
 function f1(x) {
 >f1 : Symbol(f1, Decl(noImplicitThisFunctions.ts, 0, 0))
 >x : Symbol(x, Decl(noImplicitThisFunctions.ts, 0, 12))

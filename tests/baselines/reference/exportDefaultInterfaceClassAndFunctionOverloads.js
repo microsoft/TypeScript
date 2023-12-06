@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/exportDefaultInterfaceClassAndFunctionOverloads.ts] ////
+
 //// [exportDefaultInterfaceClassAndFunctionOverloads.ts]
 export default function foo(value: number): number
 export default function foo(value: string): string

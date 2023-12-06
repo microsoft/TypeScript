@@ -1,4 +1,6 @@
-=== tests/cases/compiler/arrayFlatMap.ts ===
+//// [tests/cases/compiler/arrayFlatMap.ts] ////
+
+=== arrayFlatMap.ts ===
 const array: number[] = [];
 >array : Symbol(array, Decl(arrayFlatMap.ts, 0, 5))
 

@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameNestedClassAccessorsShadowing.ts] ////
+
 //// [privateNameNestedClassAccessorsShadowing.ts]
 class Base {
     get #x() { return 1; };

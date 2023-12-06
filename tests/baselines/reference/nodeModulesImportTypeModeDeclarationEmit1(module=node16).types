@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/node/nodeModulesImportTypeModeDeclarationEmit1.ts] ////
+
 === /index.ts ===
 export type LocalInterface =
 >LocalInterface : import("/node_modules/pkg/require").RequireInterface & import("/node_modules/pkg/import").ImportInterface

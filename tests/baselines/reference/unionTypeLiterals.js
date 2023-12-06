@@ -1,3 +1,5 @@
+//// [tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts] ////
+
 //// [unionTypeLiterals.ts]
 // basic valid forms of union literals
 

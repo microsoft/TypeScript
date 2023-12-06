@@ -1,4 +1,6 @@
-=== tests/cases/compiler/typePredicateAcceptingPartialOfRefinedType.ts ===
+//// [tests/cases/compiler/typePredicateAcceptingPartialOfRefinedType.ts] ////
+
+=== typePredicateAcceptingPartialOfRefinedType.ts ===
 // repro #51953
 
 interface Test {

@@ -1,3 +1,5 @@
+//// [tests/cases/compiler/genericWithNoConstraintComparableWithCurlyCurly.ts] ////
+
 //// [genericWithNoConstraintComparableWithCurlyCurly.ts]
 function foo<T>() {
     let x = {};

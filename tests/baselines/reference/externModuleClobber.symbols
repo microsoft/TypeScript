@@ -1,4 +1,6 @@
-=== tests/cases/compiler/externModuleClobber.ts ===
+//// [tests/cases/compiler/externModuleClobber.ts] ////
+
+=== externModuleClobber.ts ===
 declare module EM {
 >EM : Symbol(EM, Decl(externModuleClobber.ts, 0, 0))
 
