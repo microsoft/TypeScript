@@ -8589,6 +8589,9 @@ export function getEmitModuleKind(compilerOptions: { module?: CompilerOptions["m
     if (typeof compilerOptions.module === "object" && compilerOptions.module.emit !== undefined) {
         return compilerOptions.module.emit;
     }
+    if (typeof compilerOptions.module === "object" && compilerOptions.module.preset !== undefined) {
+        return compilerOptions.module.preset;
+    }
     return typeof compilerOptions.module === "number" ?
         compilerOptions.module :
         getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
