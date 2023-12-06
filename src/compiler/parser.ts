@@ -3845,8 +3845,7 @@ namespace Parser {
     function parseJSDocFunctionType(): JSDocFunctionType | TypeReferenceNode {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
-        if (lookAhead(nextTokenIsOpenParen)) {
-            nextToken();
+        if (tryParse(nextTokenIsOpenParen)) {
             const parameters = parseParameters(SignatureFlags.Type | SignatureFlags.JSDoc);
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             return withJSDoc(finishNode(factory.createJSDocFunctionType(parameters, type), pos), hasJSDoc);
