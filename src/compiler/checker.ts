@@ -28668,6 +28668,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node.kind === SyntaxKind.PropertyDeclaration)!;
     }
 
+    // Check if a parameter or catch variable (or their bindings elements) is assigned anywhere
     function isSomeSymbolAssigned(rootDeclaration: Node) {
         const parent = rootDeclaration.parent;
         const links = getNodeLinks(parent);
