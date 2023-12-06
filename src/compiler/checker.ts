@@ -13062,7 +13062,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const symbolTable = createSymbolTable();
                 // copy all symbols (except type parameters), including the ones with internal names like `InternalSymbolName.Index`
                 for (const symbol of members.values()) {
-                    if (!(symbol.flags & SymbolFlags.TypeParameter)) {
+                    // include declared properties that share a name with a type parameter by checking for multiple declarations
+                    if (!(symbol.flags & SymbolFlags.TypeParameter) || symbol.declarations?.some(declaration => declaration.kind !== SyntaxKind.TypeParameter)) {
                         symbolTable.set(symbol.escapedName, symbol);
                     }
                 }

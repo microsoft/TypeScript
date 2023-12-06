@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/classPropertySharingNameWithTypeParameter.ts] ////
+
+=== classPropertySharingNameWithTypeParameter.ts ===
+class Leg {}
+>Leg : Leg
+
+class Foo<t> extends Leg {
+>Foo : Foo<t>
+>Leg : Leg
+
+    t = {} as t
+>t : t
+>{} as t : t
+>{} : {}
+
+    // should allow this access since t was declared as a property on Foo
+    foo = this.t 
+>foo : t
+>this.t : t
+>this : this
+>t : t
+}
