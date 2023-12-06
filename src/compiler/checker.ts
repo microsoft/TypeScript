@@ -21340,8 +21340,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             reportError(message, generalizedSourceType, targetType);
             if (errorInfo?.next && errorInfo.next[0].code === Diagnostics.Properties_not_assignable_with_exactOptionalPropertyTypes_Colon_0.code && errorInfo.next[0].next) {
-                errorInfo.next.push(...errorInfo.next[0].next)
-                errorInfo.next[0].next=undefined;
+                errorInfo.next.push(...errorInfo.next[0].next);
+                errorInfo.next[0].next = undefined;
             }
         }
 
@@ -23483,7 +23483,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (unassignable.length > 0) {
                 const list = unassignable.map(s => symbolToString(s)).join(", ");
                 (incompatibleStack ||= []).push([Diagnostics.Properties_not_assignable_with_exactOptionalPropertyTypes_Colon_0, list]);
-                return false; // Do not change the head message. instead inject the unassignable properties
+                return true; // TODO: should we remove the EOPT flavors of the head messages?
             }
             return false;
         }
