@@ -4309,7 +4309,7 @@ export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): read
 
 function filterOwnedJSDocTags(hostNode: Node, comments: JSDocArray) {
     const lastJsDoc = last(comments);
-    return flatMap<JSDoc, JSDoc | JSDocTag>(comments, (jsDoc) => {
+    return flatMap<JSDoc, JSDoc | JSDocTag>(comments, jsDoc => {
         if (jsDoc === lastJsDoc) {
             const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag));
             return jsDoc.tags === ownedTags ? [jsDoc] : ownedTags;
