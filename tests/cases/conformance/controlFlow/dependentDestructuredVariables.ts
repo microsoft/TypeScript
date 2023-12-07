@@ -456,3 +456,14 @@ function parameterReassigned2([x, y]: [1, 2] | [3, 4]) {
     x; // 1 | 3
   }
 }
+
+// https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
+
+const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (x, y) => {
+  if (Math.random()) {
+    y = 2;
+  }
+  if (y === 2) {
+    x; // 1 | 3
+  }
+}
