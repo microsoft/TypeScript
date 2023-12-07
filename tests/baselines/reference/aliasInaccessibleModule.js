@@ -14,8 +14,8 @@ var M;
 
 
 //// [aliasInaccessibleModule.d.ts]
-declare module M {
-    module N {
+declare namespace M {
+    namespace N {
     }
     export import X = N;
     export {};

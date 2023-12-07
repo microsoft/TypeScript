@@ -100,5 +100,5 @@ declare class E {
 declare var c: C;
 declare var d: any;
 declare var e: any;
-declare module Generic {
+declare namespace Generic {
 }

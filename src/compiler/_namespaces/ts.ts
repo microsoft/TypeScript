@@ -33,6 +33,8 @@ export * from "../visitorPublic";
 export * from "../sourcemap";
 export * from "../transformers/utilities";
 export * from "../transformers/destructuring";
+export * from "../transformers/classThis";
+export * from "../transformers/namedEvaluation";
 export * from "../transformers/taggedTemplate";
 export * from "../transformers/ts";
 export * from "../transformers/classFields";

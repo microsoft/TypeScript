@@ -22,10 +22,24 @@ export enum e { }
 export function f2() { } // trailing
 
 //// [/src/shared/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/src/tsconfig.json]
-{"references":[{"path":"./shared/tsconfig.json"},{"path":"./webpack/tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./shared/tsconfig.json"
+    },
+    {
+      "path": "./webpack/tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 //// [/src/webpack/index.ts]
 export function f2() { }
@@ -35,7 +49,16 @@ export enum e2 { }
 export function f22() { } // trailing
 
 //// [/src/webpack/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../shared/tsconfig.json"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
+}
 
 
 
@@ -55,8 +78,13 @@ Output::
 [[90m12:00:22 AM[0m] Building project '/src/webpack/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/shared/index.ts"]
-Program options: {"composite":true,"configFilePath":"/src/shared/tsconfig.json"}
+Program root files: [
+  "/src/shared/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/src/shared/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -70,8 +98,13 @@ Shape signatures in builder refreshed for::
 /lib/lib.d.ts (used version)
 /src/shared/index.ts (used version)
 
-Program root files: ["/src/webpack/index.ts"]
-Program options: {"composite":true,"configFilePath":"/src/webpack/tsconfig.json"}
+Program root files: [
+  "/src/webpack/index.ts"
+]
+Program options: {
+  "composite": true,
+  "configFilePath": "/src/webpack/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

@@ -1,0 +1,135 @@
+//// [tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiersReverseMappedTypes.ts] ////
+
+=== typeParameterConstModifiersReverseMappedTypes.ts ===
+declare function test1<const T>(obj: {
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 0, 23))
+>obj : Symbol(obj, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 0, 32))
+
+  [K in keyof T]: T[K];
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 1, 3))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 0, 23))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 0, 23))
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 1, 3))
+
+}): [T, typeof obj];
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 0, 23))
+>obj : Symbol(obj, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 0, 32))
+
+const result1 = test1({
+>result1 : Symbol(result1, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 4, 5))
+>test1 : Symbol(test1, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 0, 0))
+
+  prop: "foo",
+>prop : Symbol(prop, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 4, 23))
+
+  nested: {
+>nested : Symbol(nested, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 5, 14))
+
+    nestedProp: "bar",
+>nestedProp : Symbol(nestedProp, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 6, 11))
+
+  },
+});
+
+declare function test2<const T>(obj: {
+>test2 : Symbol(test2, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 9, 3))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 11, 23))
+>obj : Symbol(obj, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 11, 32))
+
+  readonly [K in keyof T]: T[K];
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 12, 12))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 11, 23))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 11, 23))
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 12, 12))
+
+}): [T, typeof obj];
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 11, 23))
+>obj : Symbol(obj, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 11, 32))
+
+const result2 = test2({
+>result2 : Symbol(result2, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 15, 5))
+>test2 : Symbol(test2, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 9, 3))
+
+  prop: "foo",
+>prop : Symbol(prop, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 15, 23))
+
+  nested: {
+>nested : Symbol(nested, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 16, 14))
+
+    nestedProp: "bar",
+>nestedProp : Symbol(nestedProp, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 17, 11))
+
+  },
+});
+
+declare function test3<const T>(obj: {
+>test3 : Symbol(test3, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 20, 3))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 22, 23))
+>obj : Symbol(obj, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 22, 32))
+
+  -readonly [K in keyof T]: T[K];
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 23, 13))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 22, 23))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 22, 23))
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 23, 13))
+
+}): [T, typeof obj];
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 22, 23))
+>obj : Symbol(obj, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 22, 32))
+
+const result3 = test3({
+>result3 : Symbol(result3, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 26, 5))
+>test3 : Symbol(test3, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 20, 3))
+
+  prop: "foo",
+>prop : Symbol(prop, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 26, 23))
+
+  nested: {
+>nested : Symbol(nested, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 27, 14))
+
+    nestedProp: "bar",
+>nestedProp : Symbol(nestedProp, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 28, 11))
+
+  },
+});
+
+declare function test4<const T extends readonly unknown[]>(arr: {
+>test4 : Symbol(test4, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 31, 3))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 33, 23))
+>arr : Symbol(arr, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 33, 59))
+
+  [K in keyof T]: T[K];
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 34, 3))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 33, 23))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 33, 23))
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 34, 3))
+
+}): T;
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 33, 23))
+
+const result4 = test4(["1", 2]);
+>result4 : Symbol(result4, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 37, 5))
+>test4 : Symbol(test4, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 31, 3))
+
+declare function test5<const T extends readonly unknown[]>(
+>test5 : Symbol(test5, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 37, 32))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 23))
+
+  ...args: {
+>args : Symbol(args, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 59))
+
+    [K in keyof T]: T[K];
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 41, 5))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 23))
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 23))
+>K : Symbol(K, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 41, 5))
+  }
+): T;
+>T : Symbol(T, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 39, 23))
+
+const result5 = test5({ a: "foo" });
+>result5 : Symbol(result5, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 45, 5))
+>test5 : Symbol(test5, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 37, 32))
+>a : Symbol(a, Decl(typeParameterConstModifiersReverseMappedTypes.ts, 45, 23))
+

@@ -71,7 +71,7 @@ async function checkSourceFiles() {
     let count = 0;
     console.log("== List of errors not used in source ==");
     for (const errName of errorNames) {
-        if (allSrc.indexOf(errName) < 0) {
+        if (!allSrc.includes(errName)) {
             console.log(errName);
             count++;
         }

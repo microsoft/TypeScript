@@ -114,7 +114,7 @@ exports.j = C.F6;
 
 
 //// [declFileGenericType.d.ts]
-export declare module C {
+export declare namespace C {
     class A<T> {
     }
     class B {

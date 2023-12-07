@@ -1,0 +1,44 @@
+error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+
+
+!!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+==== node_modules/lit/package.json (0 errors) ====
+    {
+        "name": "lit",
+        "version": "0.0.1",
+        "type": "module",
+        "exports": {
+          ".": {
+            "types": "./development/index.d.ts"
+          }
+        }
+    }
+==== node_modules/lit/development/index.d.ts (0 errors) ====
+    export * from "lit-element/lit-element.js";
+==== node_modules/lit-element/package.json (0 errors) ====
+    {
+        "name": "lit-element",
+        "version": "0.0.1",
+        "type": "module",
+        "exports": {
+          ".": {
+            "types": "./development/index.d.ts"
+          },
+          "./lit-element.js": {
+            "types": "./development/lit-element.d.ts"
+          }
+        }
+    }
+==== node_modules/lit-element/development/index.d.ts (0 errors) ====
+    export * from "./lit-element.js";
+==== node_modules/lit-element/development//lit-element.d.ts (0 errors) ====
+    export class LitElement {}
+==== package.json (0 errors) ====
+    {
+        "type": "module",
+        "private": true
+    }
+==== index.js (0 errors) ====
+    import { LitElement, LitElement as LitElement2 } from "lit";
+    export class ElementB extends LitElement {}
+    export class ElementC extends LitElement2 {}

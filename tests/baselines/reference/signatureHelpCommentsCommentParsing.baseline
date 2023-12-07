@@ -1,3 +1,4 @@
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpCommentsCommentParsing.ts ===
 // /// This is simple /// comments
 // function simple() {

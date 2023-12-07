@@ -70,14 +70,17 @@ function getRenameInfoForNode(
     typeChecker: TypeChecker,
     sourceFile: SourceFile,
     program: Program,
-    preferences: UserPreferences): RenameInfo | undefined {
+    preferences: UserPreferences,
+): RenameInfo | undefined {
     const symbol = typeChecker.getSymbolAtLocation(node);
     if (!symbol) {
         if (isStringLiteralLike(node)) {
             const type = getContextualTypeFromParentOrAncestorTypeNode(node, typeChecker);
-            if (type && ((type.flags & TypeFlags.StringLiteral) || (
-                (type.flags & TypeFlags.Union) && every((type as UnionType).types, type => !!(type.flags & TypeFlags.StringLiteral))
-            ))) {
+            if (
+                type && ((type.flags & TypeFlags.StringLiteral) || (
+                    (type.flags & TypeFlags.Union) && every((type as UnionType).types, type => !!(type.flags & TypeFlags.StringLiteral))
+                ))
+            ) {
                 return getRenameInfoSuccess(node.text, node.text, ScriptElementKind.string, "", node, sourceFile);
             }
         }
@@ -117,7 +120,7 @@ function getRenameInfoForNode(
         : undefined;
     const displayName = specifierName || typeChecker.symbolToString(symbol);
     const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
-    return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker,symbol), node, sourceFile);
+    return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker, symbol), node, sourceFile);
 }
 
 function isDefinedInLibraryFile(program: Program, declaration: Node) {
@@ -129,7 +132,7 @@ function wouldRenameInOtherNodeModules(
     originalFile: SourceFile,
     symbol: Symbol,
     checker: TypeChecker,
-    preferences: UserPreferences
+    preferences: UserPreferences,
 ): DiagnosticMessage | undefined {
     if (!preferences.providePrefixAndSuffixTextForRename && symbol.flags & SymbolFlags.Alias) {
         const importSpecifier = symbol.declarations && find(symbol.declarations, decl => isImportSpecifier(decl));
@@ -206,7 +209,7 @@ function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind
         displayName,
         fullDisplayName,
         kindModifiers,
-        triggerSpan: createTriggerSpanForNode(node, sourceFile)
+        triggerSpan: createTriggerSpanForNode(node, sourceFile),
     };
 }
 

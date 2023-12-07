@@ -48,7 +48,7 @@ var _a, _Foo_test;
 import { __classPrivateFieldGet } from "tslib";
 export class Foo {
     constructor() {
-        console.log(__classPrivateFieldGet(Foo, _a, "m", _Foo_test).call(Foo));
+        console.log(__classPrivateFieldGet(_a, _a, "m", _Foo_test).call(_a));
     }
 }
 _a = Foo, _Foo_test = function _Foo_test() {

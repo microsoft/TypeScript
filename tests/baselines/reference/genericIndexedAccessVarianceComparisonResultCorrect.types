@@ -46,7 +46,7 @@ type PickA_extends_PickB = Pick<A, 'x'> extends Pick<B, 'x'> ? true : false;    
 >false : false
 
 type TA_extends_TB = T<A> extends T<B> ? true : false;                          // should be true
->TA_extends_TB : true
+>TA_extends_TB : false
 >true : true
 >false : false
 

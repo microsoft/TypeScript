@@ -49,7 +49,7 @@ import {
     SupportedImportStatement,
     ToMove,
     updateImportsInOtherFiles,
-    UsageInfo
+    UsageInfo,
 } from "../_namespaces/ts.refactor";
 
 const refactorName = "Move to a new file";
@@ -68,9 +68,7 @@ registerRefactor(refactorName, {
             return [{ name: refactorName, description, actions: [moveToNewFileAction] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
-            return [{ name: refactorName, description, actions:
-                [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }]
-            }];
+            return [{ name: refactorName, description, actions: [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];
         }
         return emptyArray;
     },
@@ -79,7 +77,7 @@ registerRefactor(refactorName, {
         const statements = Debug.checkDefined(getStatementsToMove(context));
         const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences, context));
         return { edits, renameFilename: undefined, renameLocation: undefined };
-    }
+    },
 });
 
 function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences, context: RefactorContext): void {
@@ -95,7 +93,14 @@ function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences,
+    oldFile: SourceFile,
+    usage: UsageInfo,
+    changes: textChanges.ChangeTracker,
+    toMove: ToMove,
+    program: Program,
+    host: LanguageServiceHost,
+    newFilename: string,
+    preferences: UserPreferences,
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -122,7 +127,7 @@ function getNewStatementsAndRemoveFromOldFile(
             ...prologueDirectives,
             ...imports,
             SyntaxKind.NewLineTrivia as const,
-            ...body
+            ...body,
         ];
     }
 

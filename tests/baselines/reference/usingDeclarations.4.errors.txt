@@ -1,0 +1,12 @@
+usingDeclarations.4.ts(2,5): error TS2304: Cannot find name 'using'.
+usingDeclarations.4.ts(2,12): error TS2304: Cannot find name 'a'.
+
+
+==== usingDeclarations.4.ts (2 errors) ====
+    {
+        using [a] = null;
+        ~~~~~
+!!! error TS2304: Cannot find name 'using'.
+               ~
+!!! error TS2304: Cannot find name 'a'.
+    }

@@ -16,25 +16,56 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 //// [/src/project1/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": []
+}
 
 //// [/src/project2/src/b.ts]
 export const b = 10;
 
 //// [/src/project2/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": []
+}
 
 //// [/src/project3/src/c.ts]
 export const c = 10;
 
 //// [/src/project3/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../project1"},{"path":"../project2"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../project1"
+    },
+    {
+      "path": "../project2"
+    }
+  ]
+}
 
 //// [/src/project4/src/d.ts]
 export const d = 10;
 
 //// [/src/project4/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../project3"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../project3"
+    }
+  ]
+}
 
 
 

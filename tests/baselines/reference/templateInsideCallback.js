@@ -114,7 +114,21 @@ function flatMap(array, iterable) {
 
 
 //// [templateInsideCallback.d.ts]
+/**
+ * @overload
+ * @template T
+ * @template U
+ * @param {T[]} array
+ * @param {(x: T) => U[]} iterable
+ * @returns {U[]}
+ */
 declare function flatMap<U>(): any;
+/**
+ * @overload
+ * @template T
+ * @param {T[][]} array
+ * @returns {T[]}
+ */
 declare function flatMap(): any;
 /**
  * @typedef Oops

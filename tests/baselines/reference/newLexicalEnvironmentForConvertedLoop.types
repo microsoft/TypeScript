@@ -42,6 +42,6 @@ function foo(set: any) {
 >values : any
 >push : any
 >...[] : never
->[] : readonly []
+>[] : []
   }
 };

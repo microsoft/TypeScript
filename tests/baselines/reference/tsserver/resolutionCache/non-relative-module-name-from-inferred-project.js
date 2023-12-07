@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/user/username/projects/myproject/product/node_modules/module1/index.ts]
 export function module1() {}
 
@@ -33,6 +33,35 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "compilerOptionsForInferredProjects",
+      "arguments": {
+        "options": {
+          "traceResolution": true
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/product/src/file1.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/product/src
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/product/src/file1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -196,33 +225,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/product/src/feature/file2.ts 1:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/src/feature/file2.ts 1:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/product/test/src/file3.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/src/file3.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
-Before running Timeout callback:: count: 2
-5: /dev/null/inferredProject1*
-6: *ensureProjectForOpenFiles*
-//// [/user/username/projects/myproject/product/src/file1.ts]
-import "./feature/file2"; import "../test/file4"; import "../test/src/file3"; import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
-
-//// [/user/username/projects/myproject/product/src/feature/file2.ts]
-import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
-
-//// [/user/username/projects/myproject/product/test/src/file3.ts]
-import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
-
-//// [/user/username/projects/myproject/product/test/file4.ts]
-import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
-
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
 
 PolledWatches::
 /user/username/projects/myproject/jsconfig.json: *new*
@@ -270,6 +277,35 @@ FsWatchesRecursive::
 /user/username/projects/myproject/product/src/feature: *new*
   {}
 
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/product/src/feature/file2.ts 1:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/src/feature/file2.ts 1:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/product/test/src/file3.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/src/file3.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
+Before running Timeout callback:: count: 2
+5: /dev/null/inferredProject1*
+6: *ensureProjectForOpenFiles*
+//// [/user/username/projects/myproject/product/src/feature/file2.ts]
+import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/product/test/src/file3.ts]
+import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/product/test/file4.ts]
+import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
+
+
+Timeout callback:: count: 2
+5: /dev/null/inferredProject1* *new*
+6: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Reusing resolution of module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'.
@@ -312,4 +348,16 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/product/src/file1.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/user/username/projects/myproject/product/src/file1.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0

@@ -11,8 +11,8 @@ type UpdatedClient<C> = C & {foo: number}
 >foo : number
 
 export const createClient = <
->createClient : <D extends Record<string, new (...args: any[]) => Client> | (new (...args: any[]) => Client)>(clientDef: D) => D extends new (...args: any[]) => infer C ? UpdatedClient<C> : { [K in keyof D]: D[K] extends new (...args: any[]) => infer C ? UpdatedClient<C> : never; }
-><  D extends    | (new (...args: any[]) => Client) // accept class    | Record<string, new (...args: any[]) => Client> // or map of classes>(  clientDef: D): D extends new (...args: any[]) => infer C  ? UpdatedClient<C> // return instance  : {      [K in keyof D]: D[K] extends new (...args: any[]) => infer C // or map of instances respectively        ? UpdatedClient<C>        : never    } => {  return null as any} : <D extends Record<string, new (...args: any[]) => Client> | (new (...args: any[]) => Client)>(clientDef: D) => D extends new (...args: any[]) => infer C ? UpdatedClient<C> : { [K in keyof D]: D[K] extends new (...args: any[]) => infer C ? UpdatedClient<C> : never; }
+>createClient : <D extends Record<string, new (...args: any[]) => Client> | (new (...args: any[]) => Client)>(clientDef: D) => D extends new (...args: any[]) => infer C ? UpdatedClient<C> : { [K in keyof D]: D[K] extends new (...args: any[]) => infer C_1 ? UpdatedClient<C_1> : never; }
+><  D extends    | (new (...args: any[]) => Client) // accept class    | Record<string, new (...args: any[]) => Client> // or map of classes>(  clientDef: D): D extends new (...args: any[]) => infer C  ? UpdatedClient<C> // return instance  : {      [K in keyof D]: D[K] extends new (...args: any[]) => infer C // or map of instances respectively        ? UpdatedClient<C>        : never    } => {  return null as any} : <D extends Record<string, new (...args: any[]) => Client> | (new (...args: any[]) => Client)>(clientDef: D) => D extends new (...args: any[]) => infer C ? UpdatedClient<C> : { [K in keyof D]: D[K] extends new (...args: any[]) => infer C_1 ? UpdatedClient<C_1> : never; }
 
   D extends
     | (new (...args: any[]) => Client) // accept class

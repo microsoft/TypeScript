@@ -29,8 +29,8 @@ module.exports = m;
 
 
 //// [declarationEmitImportInExportAssignmentModule.d.ts]
-declare module m {
-    module c {
+declare namespace m {
+    namespace c {
         class c {
         }
     }

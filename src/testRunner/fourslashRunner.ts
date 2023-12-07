@@ -17,14 +17,6 @@ export class FourSlashRunner extends RunnerBase {
                 this.basePath = "tests/cases/fourslash";
                 this.testSuiteName = "fourslash";
                 break;
-            case FourSlash.FourSlashTestType.Shims:
-                this.basePath = "tests/cases/fourslash/shims";
-                this.testSuiteName = "fourslash-shims";
-                break;
-            case FourSlash.FourSlashTestType.ShimsWithPreprocess:
-                this.basePath = "tests/cases/fourslash/shims-pp";
-                this.testSuiteName = "fourslash-shims-pp";
-                break;
             case FourSlash.FourSlashTestType.Server:
                 this.basePath = "tests/cases/fourslash/server";
                 this.testSuiteName = "fourslash-server";
@@ -53,16 +45,25 @@ export class FourSlashRunner extends RunnerBase {
                 const file = typeof test === "string" ? test : test.file;
                 describe(file, () => {
                     let fn = ts.normalizeSlashes(file);
-                    const justName = fn.replace(/^.*[\\\/]/, "");
+                    const justName = fn.replace(/^.*[\\/]/, "");
 
                     // Convert to relative path
                     const testIndex = fn.indexOf("tests/");
                     if (testIndex >= 0) fn = fn.substr(testIndex);
 
                     if (justName !== "fourslash.ts") {
-                        it(this.testSuiteName + " test " + justName + " runs correctly", () => {
-                            FourSlash.runFourSlashTest(this.basePath, this.testType, fn);
+                        let serverLogBaseliner: FourSlash.FourSlashServerLogBaseliner = {};
+                        after(() => {
+                            serverLogBaseliner = undefined!;
                         });
+                        it(this.testSuiteName + " test " + justName + " runs correctly", () => {
+                            FourSlash.runFourSlashTest(this.basePath, this.testType, fn, serverLogBaseliner);
+                        });
+                        if (this.testType === FourSlash.FourSlashTestType.Server) {
+                            it(this.testSuiteName + " test " + justName + " tsserver log", () => {
+                                serverLogBaseliner.baseline?.();
+                            });
+                        }
                     }
                 });
             });

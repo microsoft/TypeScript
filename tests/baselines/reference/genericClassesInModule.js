@@ -30,7 +30,7 @@ var a = new Foo.B();
 
 
 //// [genericClassesInModule.d.ts]
-declare module Foo {
+declare namespace Foo {
     class B<T> {
     }
     class A {
