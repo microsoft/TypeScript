@@ -1,5 +1,5 @@
 // @filename a.ts
-namespace a {
+namespace numerics {
     export enum DiagnosticCategory {
         Warning,
         Error,
@@ -15,7 +15,7 @@ namespace a {
     }
 }
 
-namespace b {
+namespace strings {
     export enum DiagnosticCategory {
         Warning = "Warning",
         Error = "Error",
@@ -24,16 +24,34 @@ namespace b {
     }
 }
 
-function f(x: a.DiagnosticCategory, y: b.DiagnosticCategory) {
+declare namespace ambients {
+    export enum DiagnosticCategory {
+        Warning,
+        Error,
+        Suggestion,
+        Message,
+    }
+}
+
+function f(x: numerics.DiagnosticCategory, y: strings.DiagnosticCategory) {
     x = y;
     y = x;
 }
 
-function g(x: a.DiagnosticCategory2, y: b.DiagnosticCategory) {
+function g(x: numerics.DiagnosticCategory2, y: strings.DiagnosticCategory) {
     x = y;
     y = x;
 }
 
+function h(x: numerics.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+    x = y;
+    y = x;
+}
+
+function i(x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+    x = y;
+    y = x;
+}
 
 // @filename: f.ts
 export enum DiagnosticCategory {
