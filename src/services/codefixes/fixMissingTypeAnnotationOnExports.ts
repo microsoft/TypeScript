@@ -2,6 +2,7 @@ import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     AssertionExpression,
+    BinaryExpression,
     BindingElement,
     BindingPattern,
     ClassDeclaration,
@@ -10,10 +11,12 @@ import {
     CodeFixContext,
     createPrinter,
     Debug,
+    Declaration,
     defaultMaximumTruncationLength,
     DiagnosticAndArguments,
     DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
+    ElementAccessExpression,
     EmitFlags,
     EmitHint,
     EntityName,
@@ -34,6 +37,7 @@ import {
     isArrayBindingPattern,
     isArrayLiteralExpression,
     isAssertionExpression,
+    isBinaryExpression,
     isBindingPattern,
     isCallExpression,
     isComputedPropertyName,
@@ -42,7 +46,9 @@ import {
     isDeclaration,
     isEntityNameExpression,
     isEnumMember,
+    isExpandoPropertyDeclaration,
     isExpression,
+    isFunctionExpressionOrArrowFunction,
     isHeritageClause,
     isIdentifier,
     isIdentifierText,
@@ -69,10 +75,12 @@ import {
     ObjectBindingPattern,
     ObjectLiteralExpression,
     ParameterDeclaration,
+    PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
     setEmitFlags,
     SignatureDeclaration,
+    some,
     SourceFile,
     SpreadAssignment,
     SpreadElement,
@@ -209,7 +217,7 @@ function withChanges<T>(
 
     function addFullAnnotation(span: TextSpan) {
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
-        const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag);
+        const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag) ?? findExpandoFunction(nodeWithDiag);
         if (nodeWithNoType) {
             return fixupForIsolatedDeclarations(nodeWithNoType);
         }
@@ -231,6 +239,9 @@ function withChanges<T>(
 
     function addInlineAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
+        const expandoFunction = findExpandoFunction(nodeWithDiag);
+        // No inline assertions for expando members
+        if (expandoFunction) return;
         const targetNode = findTargetErrorNode(nodeWithDiag, span) as Expression;
         if (!targetNode || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.parent)) return;
         const isExpressionTarget = isExpression(targetNode);
@@ -458,14 +469,35 @@ function withChanges<T>(
     // If this is coming from an ill-formed AST with syntax errors, you cannot assume that it'll find a node
     // to annotate types, this will return undefined - meaning that it couldn't find the node to annotate types.
     function findNearestParentWithTypeAnnotation(node: Node): Node | undefined {
-        while (
-            node &&
-            (((isObjectBindingPattern(node) || isArrayBindingPattern(node)) &&
-                !isVariableDeclaration(node.parent)) || !canHaveExplicitTypeAnnotation.has(node.kind))
-        ) {
-            node = node.parent;
+        return findAncestor(node, n =>
+            canHaveExplicitTypeAnnotation.has(n.kind)
+            && ((!isObjectBindingPattern(n) && !isArrayBindingPattern(n)) || isVariableDeclaration(n.parent)));
+    }
+
+    function findExpandoFunction(node: Node) {
+        // Expando property
+        const expandoDeclaration = findAncestor(node, n => isStatement(n) ? "quit" : isExpandoPropertyDeclaration(n as Declaration)) as PropertyAccessExpression | ElementAccessExpression | BinaryExpression;
+
+        if (expandoDeclaration && isExpandoPropertyDeclaration(expandoDeclaration)) {
+            let assignmentTarget = expandoDeclaration;
+
+            // Some late bound expando members use thw whole expression as the declaration.
+            if (isBinaryExpression(assignmentTarget)) {
+                assignmentTarget = assignmentTarget.left as PropertyAccessExpression | ElementAccessExpression;
+                if (!isExpandoPropertyDeclaration(assignmentTarget)) return undefined;
+            }
+            const targetType = typeChecker.getTypeAtLocation(assignmentTarget.expression);
+            if (!targetType) return;
+
+            const properties = typeChecker.getPropertiesOfType(targetType);
+            if (some(properties, p => p.valueDeclaration === expandoDeclaration || p.valueDeclaration === expandoDeclaration.parent)) {
+                const fn = targetType.symbol.valueDeclaration;
+                if (fn && isFunctionExpressionOrArrowFunction(fn) && isVariableDeclaration(fn.parent)) {
+                    return fn.parent;
+                }
+            }
         }
-        return node;
+        return undefined;
     }
 
     /**

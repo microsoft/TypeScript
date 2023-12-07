@@ -34,7 +34,7 @@ export function start() {
     const readline = require("readline") as typeof import("readline");
     const os = require("os") as typeof import("os");
     const tty = require("tty") as typeof import("tty");
-    const isatty = tty.isatty(1) && tty.isatty(2);
+    const isatty = (tty.isatty(1) && tty.isatty(2)) || !process.env.IS_TTY;
     const path = require("path") as typeof import("path");
     const { fork } = require("child_process") as typeof import("child_process");
     const { statSync } = require("fs") as typeof import("fs");

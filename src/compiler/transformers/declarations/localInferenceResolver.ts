@@ -7,6 +7,7 @@ import {
     Debug,
     DiagnosticMessage,
     Diagnostics,
+    DiagnosticWithLocation,
     EntityNameOrEntityNameExpression,
     ExportAssignment,
     FunctionExpression,
@@ -18,10 +19,12 @@ import {
     HasInferredType,
     hasSyntacticModifier,
     Identifier,
+    isBinaryExpression,
     isClassExpression,
     isComputedPropertyName,
     isConstTypeReference,
     isEntityNameExpression,
+    isExpandoPropertyDeclaration,
     isExportAssignment,
     isGetAccessor,
     isIdentifier,
@@ -158,17 +161,21 @@ export function createLocalInferenceResolver({
     function hasParseError(node: Node) {
         return !!(node.flags & NodeFlags.ThisNodeHasError);
     }
-    function reportIsolatedDeclarationError(node: Node, diagMessage: DiagnosticMessage = Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit) {
+    function reportError(node: Node, message: DiagnosticWithLocation) {
         if (inferenceContext) {
             inferenceContext.isInvalid = true;
         }
         // Do not report errors on nodes with other errors.
         if (hasParseError(node) || inferenceContext.disableErrors) return;
+
+        context.addDiagnostic(message);
+    }
+    function reportIsolatedDeclarationError(node: Node, diagMessage: DiagnosticMessage = Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit) {
         const message = createDiagnosticForNode(
             node,
             diagMessage,
         );
-        context.addDiagnostic(message);
+        reportError(node, message);
     }
 
     function makeInvalidType() {
@@ -659,17 +666,28 @@ export function createLocalInferenceResolver({
                 localType = visitNode(type, visitDeclarationSubtree, isTypeNode)!;
             }
             else if (node.initializer) {
-                if (resolver.isExpandoFunction(node)) {
-                    context.addDiagnostic(createDiagnosticForNode(
-                        node,
-                        Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
-                    ));
-                    localType = invalid(node);
-                }
-                else if (isClassExpression(node.initializer)) {
+                if (isClassExpression(node.initializer)) {
                     localType = invalid(node.initializer, Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations);
                 }
                 else {
+                    if (resolver.isExpandoFunction(node)) {
+                        resolver.getPropertiesOfContainerFunction(node)
+                            .forEach(p => {
+                                if (isExpandoPropertyDeclaration(p.valueDeclaration)) {
+                                    const errorTarget = isBinaryExpression(p.valueDeclaration) ?
+                                        p.valueDeclaration.left :
+                                        p.valueDeclaration;
+
+                                    reportError(
+                                        errorTarget,
+                                        createDiagnosticForNode(
+                                            errorTarget,
+                                            Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+                                        ),
+                                    );
+                                }
+                            });
+                    }
                     localType = localInference(node.initializer, node.parent.flags & NodeFlags.Const ? NarrowBehavior.KeepLiterals : NarrowBehavior.None);
                 }
             }

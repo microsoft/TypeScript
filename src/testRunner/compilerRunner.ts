@@ -693,7 +693,7 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         const fixedTest = existingTransformedTest && TestCaseParser.makeUnitsFromTest(existingTransformedTest, compilerEnvironment.fileName);
         let transformSucceeded = true;
         let hasReferenceDirectiveErrors = false;
-        if (fixedTest && fixedTest.settings.hash === hash) {
+        if (fixedTest && fixedTest.settings.hash === hash + "!") {
             transformSucceeded = fixedTest.settings.succeeded !== "false";
             hasReferenceDirectiveErrors = fixedTest.settings.hasReferenceDirectiveErrors !== "false";
             if (transformSucceeded) {
