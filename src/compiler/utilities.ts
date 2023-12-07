@@ -8587,140 +8587,233 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
     }
 }
 
-/** @internal */
-export interface ComputedCompilerOption<N extends keyof CompilerOptions, K extends keyof CompilerOptions, R extends CompilerOptions[N]> {
-    name: N;
-    dependencies: readonly K[];
-    computeValue: (compilerOptions: Pick<CompilerOptions, N | K>) => R;
+type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
+function createComputedCompilerOptions<T extends Record<string, CompilerOptionKeys[]>>(
+    options: {
+        [K in keyof T & CompilerOptionKeys]: {
+            dependencies: T[K];
+            computeValue: (compilerOptions: Pick<CompilerOptions, K | T[K][number]>) => Exclude<CompilerOptions[K], undefined>;
+        };
+    },
+) {
+    return options;
 }
 
 /** @internal */
-function computedCompilerOption<N extends keyof CompilerOptions, K extends keyof CompilerOptions, R extends CompilerOptions[N]>(
-    name: N,
-    dependencies: readonly K[],
-    computeValue: (compilerOptions: Pick<CompilerOptions, N | K>) => R,
-): ComputedCompilerOption<N, K, R> {
-    return { name, dependencies, computeValue };
-}
-
-/** @internal */
-export const computedOptions = {
-    target: computedCompilerOption("target", ["module"], compilerOptions => {
-        return compilerOptions.target ??
-            ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
-                (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
-                ScriptTarget.ES5);
-    }),
-    module: computedCompilerOption("module", ["target"], (compilerOptions): ModuleKind => {
-        return typeof compilerOptions.module === "number" ?
-            compilerOptions.module :
-            computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
-    }),
-    moduleResolution: computedCompilerOption("moduleResolution", ["module", "target"], (compilerOptions): ModuleResolutionKind => {
-        let moduleResolution = compilerOptions.moduleResolution;
-        if (moduleResolution === undefined) {
-            switch (computedOptions.module.computeValue(compilerOptions)) {
-                case ModuleKind.CommonJS:
-                    moduleResolution = ModuleResolutionKind.Node10;
-                    break;
-                case ModuleKind.Node16:
-                    moduleResolution = ModuleResolutionKind.Node16;
-                    break;
-                case ModuleKind.NodeNext:
-                    moduleResolution = ModuleResolutionKind.NodeNext;
-                    break;
-                default:
-                    moduleResolution = ModuleResolutionKind.Classic;
-                    break;
+export const computedOptions = createComputedCompilerOptions({
+    target: {
+        dependencies: ["module"],
+        computeValue: compilerOptions => {
+            return compilerOptions.target ??
+                ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
+                    (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
+                    ScriptTarget.ES5);
+        },
+    },
+    module: {
+        dependencies: ["target"],
+        computeValue: (compilerOptions): ModuleKind => {
+            return typeof compilerOptions.module === "number" ?
+                compilerOptions.module :
+                computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
+        },
+    },
+    moduleResolution: {
+        dependencies: ["module", "target"],
+        computeValue: (compilerOptions): ModuleResolutionKind => {
+            let moduleResolution = compilerOptions.moduleResolution;
+            if (moduleResolution === undefined) {
+                switch (computedOptions.module.computeValue(compilerOptions)) {
+                    case ModuleKind.CommonJS:
+                        moduleResolution = ModuleResolutionKind.Node10;
+                        break;
+                    case ModuleKind.Node16:
+                        moduleResolution = ModuleResolutionKind.Node16;
+                        break;
+                    case ModuleKind.NodeNext:
+                        moduleResolution = ModuleResolutionKind.NodeNext;
+                        break;
+                    default:
+                        moduleResolution = ModuleResolutionKind.Classic;
+                        break;
+                }
             }
-        }
-        return moduleResolution;
-    }),
-    moduleDetection: computedCompilerOption("moduleDetection", ["module", "target"], (compilerOptions): ModuleDetectionKind => {
-        return compilerOptions.moduleDetection ||
-            (computedOptions.module.computeValue(compilerOptions) === ModuleKind.Node16 ||
-                    computedOptions.module.computeValue(compilerOptions) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
-    }),
-    isolatedModules: computedCompilerOption("isolatedModules", ["verbatimModuleSyntax"], compilerOptions => {
-        return !!(compilerOptions.isolatedModules || compilerOptions.verbatimModuleSyntax);
-    }),
-    esModuleInterop: computedCompilerOption("esModuleInterop", ["module", "target"], (compilerOptions): boolean | undefined => {
-        if (compilerOptions.esModuleInterop !== undefined) {
-            return compilerOptions.esModuleInterop;
-        }
-        switch (computedOptions.module.computeValue(compilerOptions)) {
-            case ModuleKind.Node16:
-            case ModuleKind.NodeNext:
-                return true;
-        }
-    }),
-    allowSyntheticDefaultImports: computedCompilerOption("allowSyntheticDefaultImports", ["module", "target", "moduleResolution"], (compilerOptions): boolean => {
-        if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
-            return compilerOptions.allowSyntheticDefaultImports;
-        }
-        return computedOptions.esModuleInterop.computeValue(compilerOptions)
-            || computedOptions.module.computeValue(compilerOptions) === ModuleKind.System
-            || computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
-    }),
-    resolvePackageJsonExports: computedCompilerOption("resolvePackageJsonExports", ["moduleResolution"], (compilerOptions): boolean => {
-        const moduleResolution = computedOptions.moduleResolution.computeValue(compilerOptions);
-        if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+            return moduleResolution;
+        },
+    },
+    moduleDetection: {
+        dependencies: ["module", "target"],
+        computeValue: (compilerOptions): ModuleDetectionKind => {
+            return compilerOptions.moduleDetection ||
+                (computedOptions.module.computeValue(compilerOptions) === ModuleKind.Node16 ||
+                        computedOptions.module.computeValue(compilerOptions) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
+        },
+    },
+    isolatedModules: {
+        dependencies: ["verbatimModuleSyntax"],
+        computeValue: compilerOptions => {
+            return !!(compilerOptions.isolatedModules || compilerOptions.verbatimModuleSyntax);
+        },
+    },
+    esModuleInterop: {
+        dependencies: ["module", "target"],
+        computeValue: (compilerOptions): boolean => {
+            if (compilerOptions.esModuleInterop !== undefined) {
+                return compilerOptions.esModuleInterop;
+            }
+            switch (computedOptions.module.computeValue(compilerOptions)) {
+                case ModuleKind.Node16:
+                case ModuleKind.NodeNext:
+                    return true;
+            }
             return false;
-        }
-        if (compilerOptions.resolvePackageJsonExports !== undefined) {
-            return compilerOptions.resolvePackageJsonExports;
-        }
-        switch (moduleResolution) {
-            case ModuleResolutionKind.Node16:
-            case ModuleResolutionKind.NodeNext:
-            case ModuleResolutionKind.Bundler:
-                return true;
-        }
-        return false;
-    }),
-    resolvePackageJsonImports: computedCompilerOption("resolvePackageJsonImports", ["moduleResolution", "resolvePackageJsonExports"], (compilerOptions): boolean => {
-        const moduleResolution = computedOptions.moduleResolution.computeValue(compilerOptions);
-        if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+        },
+    },
+    allowSyntheticDefaultImports: {
+        dependencies: ["module", "target", "moduleResolution"],
+        computeValue: (compilerOptions): boolean => {
+            if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
+                return compilerOptions.allowSyntheticDefaultImports;
+            }
+            return computedOptions.esModuleInterop.computeValue(compilerOptions)
+                || computedOptions.module.computeValue(compilerOptions) === ModuleKind.System
+                || computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
+        },
+    },
+    resolvePackageJsonExports: {
+        dependencies: ["moduleResolution"],
+        computeValue: (compilerOptions): boolean => {
+            const moduleResolution = computedOptions.moduleResolution.computeValue(compilerOptions);
+            if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+                return false;
+            }
+            if (compilerOptions.resolvePackageJsonExports !== undefined) {
+                return compilerOptions.resolvePackageJsonExports;
+            }
+            switch (moduleResolution) {
+                case ModuleResolutionKind.Node16:
+                case ModuleResolutionKind.NodeNext:
+                case ModuleResolutionKind.Bundler:
+                    return true;
+            }
             return false;
-        }
-        if (compilerOptions.resolvePackageJsonExports !== undefined) {
-            return compilerOptions.resolvePackageJsonExports;
-        }
-        switch (moduleResolution) {
-            case ModuleResolutionKind.Node16:
-            case ModuleResolutionKind.NodeNext:
-            case ModuleResolutionKind.Bundler:
-                return true;
-        }
-        return false;
-    }),
-    resolveJsonModule: computedCompilerOption("resolveJsonModule", ["moduleResolution", "module", "target"], (compilerOptions): boolean | undefined => {
-        if (compilerOptions.resolveJsonModule !== undefined) {
-            return compilerOptions.resolveJsonModule;
-        }
-        return computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
-    }),
-    declaration: computedCompilerOption("declaration", ["composite"], compilerOptions => {
-        return !!(compilerOptions.declaration || compilerOptions.composite);
-    }),
-    preserveConstEnums: computedCompilerOption("preserveConstEnums", ["isolatedModules", "verbatimModuleSyntax"], (compilerOptions): boolean => {
-        return !!(compilerOptions.preserveConstEnums || computedOptions.isolatedModules.computeValue(compilerOptions));
-    }),
-    incremental: computedCompilerOption("incremental", ["composite"], compilerOptions => {
-        return !!(compilerOptions.incremental || compilerOptions.composite);
-    }),
-    declarationMap: computedCompilerOption("declarationMap", ["declaration", "composite"], (compilerOptions): boolean => {
-        return !!(compilerOptions.declarationMap && computedOptions.declaration.computeValue(compilerOptions));
-    }),
-    allowJs: computedCompilerOption("allowJs", ["checkJs"], compilerOptions => {
-        return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
-    }),
-    useDefineForClassFields: computedCompilerOption("useDefineForClassFields", ["target", "module"], (compilerOptions): boolean => {
-        return compilerOptions.useDefineForClassFields === undefined
-            ? computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2022
-            : compilerOptions.useDefineForClassFields;
-    }),
-};
+        },
+    },
+    resolvePackageJsonImports: {
+        dependencies: ["moduleResolution", "resolvePackageJsonExports"],
+        computeValue: (compilerOptions): boolean => {
+            const moduleResolution = computedOptions.moduleResolution.computeValue(compilerOptions);
+            if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+                return false;
+            }
+            if (compilerOptions.resolvePackageJsonExports !== undefined) {
+                return compilerOptions.resolvePackageJsonExports;
+            }
+            switch (moduleResolution) {
+                case ModuleResolutionKind.Node16:
+                case ModuleResolutionKind.NodeNext:
+                case ModuleResolutionKind.Bundler:
+                    return true;
+            }
+            return false;
+        },
+    },
+    resolveJsonModule: {
+        dependencies: ["moduleResolution", "module", "target"],
+        computeValue: (compilerOptions): boolean => {
+            if (compilerOptions.resolveJsonModule !== undefined) {
+                return compilerOptions.resolveJsonModule;
+            }
+            return computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
+        },
+    },
+    declaration: {
+        dependencies: ["composite"],
+        computeValue: compilerOptions => {
+            return !!(compilerOptions.declaration || compilerOptions.composite);
+        },
+    },
+    preserveConstEnums: {
+        dependencies: ["isolatedModules", "verbatimModuleSyntax"],
+        computeValue: (compilerOptions): boolean => {
+            return !!(compilerOptions.preserveConstEnums || computedOptions.isolatedModules.computeValue(compilerOptions));
+        },
+    },
+    incremental: {
+        dependencies: ["composite"],
+        computeValue: compilerOptions => {
+            return !!(compilerOptions.incremental || compilerOptions.composite);
+        },
+    },
+    declarationMap: {
+        dependencies: ["declaration", "composite"],
+        computeValue: (compilerOptions): boolean => {
+            return !!(compilerOptions.declarationMap && computedOptions.declaration.computeValue(compilerOptions));
+        },
+    },
+    allowJs: {
+        dependencies: ["checkJs"],
+        computeValue: compilerOptions => {
+            return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
+        },
+    },
+    useDefineForClassFields: {
+        dependencies: ["target", "module"],
+        computeValue: (compilerOptions): boolean => {
+            return compilerOptions.useDefineForClassFields === undefined
+                ? computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2022
+                : compilerOptions.useDefineForClassFields;
+        },
+    },
+    noImplicitAny: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "noImplicitAny");
+        },
+    },
+    noImplicitThis: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "noImplicitThis");
+        },
+    },
+    strictNullChecks: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictNullChecks");
+        },
+    },
+    strictFunctionTypes: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictFunctionTypes");
+        },
+    },
+    strictBindCallApply: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictBindCallApply");
+        },
+    },
+    strictPropertyInitialization: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
+        },
+    },
+    alwaysStrict: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "alwaysStrict");
+        },
+    },
+    useUnknownInCatchVariables: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
+        },
+    },
+}) satisfies Record<StrictOptionName, any>;
 
 /** @internal */
 export const getEmitScriptTarget = computedOptions.target.computeValue;
