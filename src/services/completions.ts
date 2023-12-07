@@ -3122,7 +3122,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
         case SyntaxKind.OpenBraceToken:
             return isJsxExpression(parent) && !isJsxElement(parent.parent) && !isJsxFragment(parent.parent) ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
         default:
-            const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile);
+            const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile, checker);
             return argInfo ?
                 // At `,`, treat this as the next argument after the comma.
                 checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (previousToken.kind === SyntaxKind.CommaToken ? 1 : 0)) :
