@@ -20619,14 +20619,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (sourceValue !== targetValue) {
                     const sourceIsString = typeof sourceValue === "string";
                     const targetIsString = typeof targetValue === "string";
-                    let errorFlags: RelationComparisonResult = errorReporter ? RelationComparisonResult.Reported : RelationComparisonResult.None;
 
                     if (sourceValue !== undefined && targetValue !== undefined) {
-                        // If we have 2 *known* values that differ, we should report an error.
-                        const escapedSource = sourceIsString ? `"${escapeString(sourceValue)}"` : sourceValue;
-                        const escapedTarget = targetIsString ? `"${escapeString(targetValue)}"` : targetValue;
-                        errorReporter?.(Diagnostics.Each_declaration_of_0_1_differs_in_its_value_where_2_was_expected_but_3_was_given, symbolName(targetSymbol), symbolName(targetProperty), escapedTarget, escapedSource);
-                        errorFlags |= RelationComparisonResult.Failed;
+                        // If we have 2 enums with *known* values that differ, they are incompatible.
+                        if (!errorReporter) {
+                            enumRelation.set(id, RelationComparisonResult.Failed);
+                        }
+                        else {
+                            const escapedSource = sourceIsString ? `"${escapeString(sourceValue)}"` : sourceValue;
+                            const escapedTarget = targetIsString ? `"${escapeString(targetValue)}"` : targetValue;
+                            errorReporter(Diagnostics.Each_declaration_of_0_1_differs_in_its_value_where_2_was_expected_but_3_was_given, symbolName(targetSymbol), symbolName(targetProperty), escapedTarget, escapedSource);
+                            enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
+                        }
+                        return false;
                     }
                     else if (sourceIsString || targetIsString) {
                         // At this point we know that at least one of the values is 'undefined'.
@@ -20634,15 +20639,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // or that we were not able to calculate it (which is basically an error).
                         //
                         // Either way, we can assume that it's numeric.
-                        // If we have a string, we report a mismatch in the types.
-                        const knownStringValue = (sourceValue ?? targetValue) as string;
-                        const escapedValue = `"${escapeString(knownStringValue)}"`;
-                        errorReporter?.(Diagnostics.One_value_of_0_1_is_the_string_2_and_the_other_is_assumed_to_be_an_unknown_numeric_value, symbolName(targetSymbol), symbolName(targetProperty), escapedValue);
-                        errorFlags |= RelationComparisonResult.Failed;
-                    }
-
-                    if (errorFlags & RelationComparisonResult.Failed) {
-                        enumRelation.set(id, errorFlags);
+                        // If the other is a string, we have a mismatch in types.
+                        if (!errorReporter) {
+                            enumRelation.set(id, RelationComparisonResult.Failed);
+                        }
+                        else {
+                            const knownStringValue = sourceValue ?? targetValue;
+                            Debug.assert(typeof knownStringValue === "string");
+                            const escapedValue = `"${escapeString(knownStringValue)}"`;
+                            errorReporter(Diagnostics.One_value_of_0_1_is_the_string_2_and_the_other_is_assumed_to_be_an_unknown_numeric_value, symbolName(targetSymbol), symbolName(targetProperty), escapedValue);
+                            enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
+                        }
                         return false;
                     }
                 }
