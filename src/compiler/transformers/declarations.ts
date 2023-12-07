@@ -1803,7 +1803,7 @@ export function transformDeclarations(context: TransformationContext) {
                             : typeof constValue === "string"
                             ? factory.createStringLiteral(constValue)
                             : constValue < 0
-                            ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(constValue)))
+                            ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constValue))
                             : factory.createNumericLiteral(constValue);
                         return preserveJsDoc(factory.updateEnumMember(m, m.name, newInitializer), m);
                     })),
