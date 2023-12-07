@@ -48149,8 +48149,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (enumResult) return enumResult;
         const literalValue = (type as LiteralType).value;
         return typeof literalValue === "object" ? factory.createBigIntLiteral(literalValue) :
-            typeof literalValue === "number" ? factory.createNumericLiteral(literalValue) :
-            factory.createStringLiteral(literalValue);
+            typeof literalValue === "string" ? factory.createStringLiteral(literalValue) :
+            literalValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-literalValue)) :
+            factory.createNumericLiteral(literalValue);
     }
 
     function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker) {
