@@ -1,18 +1,26 @@
-f.ts(28,5): error TS2322: Type 'b.DiagnosticCategory' is not assignable to type 'a.DiagnosticCategory'.
+f.ts(37,5): error TS2322: Type 'strings.DiagnosticCategory' is not assignable to type 'numerics.DiagnosticCategory'.
   Each declaration of 'DiagnosticCategory.Warning' differs in its value, where '0' was expected but '"Warning"' was given.
-f.ts(29,5): error TS2322: Type 'a.DiagnosticCategory' is not assignable to type 'b.DiagnosticCategory'.
+f.ts(38,5): error TS2322: Type 'numerics.DiagnosticCategory' is not assignable to type 'strings.DiagnosticCategory'.
   Each declaration of 'DiagnosticCategory.Warning' differs in its value, where '"Warning"' was expected but '0' was given.
-f.ts(33,5): error TS2322: Type 'DiagnosticCategory' is not assignable to type 'DiagnosticCategory2'.
-f.ts(34,5): error TS2322: Type 'DiagnosticCategory2' is not assignable to type 'DiagnosticCategory'.
-f.ts(55,9): error TS2322: Type 'DiagnosticCategory' is not assignable to type 'import("f").DiagnosticCategory'.
+f.ts(42,5): error TS2322: Type 'DiagnosticCategory' is not assignable to type 'DiagnosticCategory2'.
+f.ts(43,5): error TS2322: Type 'DiagnosticCategory2' is not assignable to type 'DiagnosticCategory'.
+f.ts(47,5): error TS2322: Type 'ambients.DiagnosticCategory' is not assignable to type 'numerics.DiagnosticCategory'.
+  Values of 'DiagnosticCategory.Warning' are not sufficiently known.
+f.ts(48,5): error TS2322: Type 'numerics.DiagnosticCategory' is not assignable to type 'ambients.DiagnosticCategory'.
+  Values of 'DiagnosticCategory.Warning' are not sufficiently known.
+f.ts(52,5): error TS2322: Type 'ambients.DiagnosticCategory' is not assignable to type 'strings.DiagnosticCategory'.
+  Values of 'DiagnosticCategory.Warning' are not sufficiently known.
+f.ts(53,5): error TS2322: Type 'strings.DiagnosticCategory' is not assignable to type 'ambients.DiagnosticCategory'.
+  Values of 'DiagnosticCategory.Warning' are not sufficiently known.
+f.ts(73,9): error TS2322: Type 'DiagnosticCategory' is not assignable to type 'import("f").DiagnosticCategory'.
   Each declaration of 'DiagnosticCategory.Warning' differs in its value, where '0' was expected but '"Warning"' was given.
-f.ts(56,9): error TS2322: Type 'import("f").DiagnosticCategory' is not assignable to type 'DiagnosticCategory'.
+f.ts(74,9): error TS2322: Type 'import("f").DiagnosticCategory' is not assignable to type 'DiagnosticCategory'.
   Each declaration of 'DiagnosticCategory.Warning' differs in its value, where '"Warning"' was expected but '0' was given.
 
 
-==== f.ts (6 errors) ====
+==== f.ts (10 errors) ====
     // @filename a.ts
-    namespace a {
+    namespace numerics {
         export enum DiagnosticCategory {
             Warning,
             Error,
@@ -28,7 +36,7 @@ f.ts(56,9): error TS2322: Type 'import("f").DiagnosticCategory' is not assignabl
         }
     }
     
-    namespace b {
+    namespace strings {
         export enum DiagnosticCategory {
             Warning = "Warning",
             Error = "Error",
@@ -37,18 +45,27 @@ f.ts(56,9): error TS2322: Type 'import("f").DiagnosticCategory' is not assignabl
         }
     }
     
-    function f(x: a.DiagnosticCategory, y: b.DiagnosticCategory) {
+    declare namespace ambients {
+        export enum DiagnosticCategory {
+            Warning,
+            Error,
+            Suggestion,
+            Message,
+        }
+    }
+    
+    function f(x: numerics.DiagnosticCategory, y: strings.DiagnosticCategory) {
         x = y;
         ~
-!!! error TS2322: Type 'b.DiagnosticCategory' is not assignable to type 'a.DiagnosticCategory'.
+!!! error TS2322: Type 'strings.DiagnosticCategory' is not assignable to type 'numerics.DiagnosticCategory'.
 !!! error TS2322:   Each declaration of 'DiagnosticCategory.Warning' differs in its value, where '0' was expected but '"Warning"' was given.
         y = x;
         ~
-!!! error TS2322: Type 'a.DiagnosticCategory' is not assignable to type 'b.DiagnosticCategory'.
+!!! error TS2322: Type 'numerics.DiagnosticCategory' is not assignable to type 'strings.DiagnosticCategory'.
 !!! error TS2322:   Each declaration of 'DiagnosticCategory.Warning' differs in its value, where '"Warning"' was expected but '0' was given.
     }
     
-    function g(x: a.DiagnosticCategory2, y: b.DiagnosticCategory) {
+    function g(x: numerics.DiagnosticCategory2, y: strings.DiagnosticCategory) {
         x = y;
         ~
 !!! error TS2322: Type 'DiagnosticCategory' is not assignable to type 'DiagnosticCategory2'.
@@ -57,6 +74,27 @@ f.ts(56,9): error TS2322: Type 'import("f").DiagnosticCategory' is not assignabl
 !!! error TS2322: Type 'DiagnosticCategory2' is not assignable to type 'DiagnosticCategory'.
     }
     
+    function h(x: numerics.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+        x = y;
+        ~
+!!! error TS2322: Type 'ambients.DiagnosticCategory' is not assignable to type 'numerics.DiagnosticCategory'.
+!!! error TS2322:   Values of 'DiagnosticCategory.Warning' are not sufficiently known.
+        y = x;
+        ~
+!!! error TS2322: Type 'numerics.DiagnosticCategory' is not assignable to type 'ambients.DiagnosticCategory'.
+!!! error TS2322:   Values of 'DiagnosticCategory.Warning' are not sufficiently known.
+    }
+    
+    function i(x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+        x = y;
+        ~
+!!! error TS2322: Type 'ambients.DiagnosticCategory' is not assignable to type 'strings.DiagnosticCategory'.
+!!! error TS2322:   Values of 'DiagnosticCategory.Warning' are not sufficiently known.
+        y = x;
+        ~
+!!! error TS2322: Type 'strings.DiagnosticCategory' is not assignable to type 'ambients.DiagnosticCategory'.
+!!! error TS2322:   Values of 'DiagnosticCategory.Warning' are not sufficiently known.
+    }
     
     export enum DiagnosticCategory {
         Warning,

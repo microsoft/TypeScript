@@ -2,8 +2,8 @@
 
 === f.ts ===
 // @filename a.ts
-namespace a {
->a : typeof a
+namespace numerics {
+>numerics : typeof numerics
 
     export enum DiagnosticCategory {
 >DiagnosticCategory : DiagnosticCategory
@@ -38,8 +38,8 @@ namespace a {
     }
 }
 
-namespace b {
->b : typeof b
+namespace strings {
+>strings : typeof strings
 
     export enum DiagnosticCategory {
 >DiagnosticCategory : DiagnosticCategory
@@ -62,42 +62,97 @@ namespace b {
     }
 }
 
-function f(x: a.DiagnosticCategory, y: b.DiagnosticCategory) {
->f : (x: a.DiagnosticCategory, y: b.DiagnosticCategory) => void
->x : a.DiagnosticCategory
->a : any
->y : b.DiagnosticCategory
->b : any
+declare namespace ambients {
+>ambients : typeof ambients
 
-    x = y;
->x = y : b.DiagnosticCategory
->x : a.DiagnosticCategory
->y : b.DiagnosticCategory
+    export enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
 
-    y = x;
->y = x : a.DiagnosticCategory
->y : b.DiagnosticCategory
->x : a.DiagnosticCategory
+        Warning,
+>Warning : DiagnosticCategory.Warning
+
+        Error,
+>Error : DiagnosticCategory.Error
+
+        Suggestion,
+>Suggestion : DiagnosticCategory.Suggestion
+
+        Message,
+>Message : DiagnosticCategory.Message
+    }
 }
 
-function g(x: a.DiagnosticCategory2, y: b.DiagnosticCategory) {
->g : (x: a.DiagnosticCategory2, y: b.DiagnosticCategory) => void
->x : a.DiagnosticCategory2
->a : any
->y : b.DiagnosticCategory
->b : any
+function f(x: numerics.DiagnosticCategory, y: strings.DiagnosticCategory) {
+>f : (x: numerics.DiagnosticCategory, y: strings.DiagnosticCategory) => void
+>x : numerics.DiagnosticCategory
+>numerics : any
+>y : strings.DiagnosticCategory
+>strings : any
 
     x = y;
->x = y : b.DiagnosticCategory
->x : a.DiagnosticCategory2
->y : b.DiagnosticCategory
+>x = y : strings.DiagnosticCategory
+>x : numerics.DiagnosticCategory
+>y : strings.DiagnosticCategory
 
     y = x;
->y = x : a.DiagnosticCategory2
->y : b.DiagnosticCategory
->x : a.DiagnosticCategory2
+>y = x : numerics.DiagnosticCategory
+>y : strings.DiagnosticCategory
+>x : numerics.DiagnosticCategory
 }
 
+function g(x: numerics.DiagnosticCategory2, y: strings.DiagnosticCategory) {
+>g : (x: numerics.DiagnosticCategory2, y: strings.DiagnosticCategory) => void
+>x : numerics.DiagnosticCategory2
+>numerics : any
+>y : strings.DiagnosticCategory
+>strings : any
+
+    x = y;
+>x = y : strings.DiagnosticCategory
+>x : numerics.DiagnosticCategory2
+>y : strings.DiagnosticCategory
+
+    y = x;
+>y = x : numerics.DiagnosticCategory2
+>y : strings.DiagnosticCategory
+>x : numerics.DiagnosticCategory2
+}
+
+function h(x: numerics.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+>h : (x: numerics.DiagnosticCategory, y: ambients.DiagnosticCategory) => void
+>x : numerics.DiagnosticCategory
+>numerics : any
+>y : ambients.DiagnosticCategory
+>ambients : any
+
+    x = y;
+>x = y : ambients.DiagnosticCategory
+>x : numerics.DiagnosticCategory
+>y : ambients.DiagnosticCategory
+
+    y = x;
+>y = x : numerics.DiagnosticCategory
+>y : ambients.DiagnosticCategory
+>x : numerics.DiagnosticCategory
+}
+
+function i(x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+>i : (x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) => void
+>x : strings.DiagnosticCategory
+>strings : any
+>y : ambients.DiagnosticCategory
+>ambients : any
+
+    x = y;
+>x = y : ambients.DiagnosticCategory
+>x : strings.DiagnosticCategory
+>y : ambients.DiagnosticCategory
+
+    y = x;
+>y = x : strings.DiagnosticCategory
+>y : ambients.DiagnosticCategory
+>x : strings.DiagnosticCategory
+}
 
 export enum DiagnosticCategory {
 >DiagnosticCategory : DiagnosticCategory

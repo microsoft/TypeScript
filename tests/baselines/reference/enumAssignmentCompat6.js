@@ -2,7 +2,7 @@
 
 //// [f.ts]
 // @filename a.ts
-namespace a {
+namespace numerics {
     export enum DiagnosticCategory {
         Warning,
         Error,
@@ -18,7 +18,7 @@ namespace a {
     }
 }
 
-namespace b {
+namespace strings {
     export enum DiagnosticCategory {
         Warning = "Warning",
         Error = "Error",
@@ -27,16 +27,34 @@ namespace b {
     }
 }
 
-function f(x: a.DiagnosticCategory, y: b.DiagnosticCategory) {
+declare namespace ambients {
+    export enum DiagnosticCategory {
+        Warning,
+        Error,
+        Suggestion,
+        Message,
+    }
+}
+
+function f(x: numerics.DiagnosticCategory, y: strings.DiagnosticCategory) {
     x = y;
     y = x;
 }
 
-function g(x: a.DiagnosticCategory2, y: b.DiagnosticCategory) {
+function g(x: numerics.DiagnosticCategory2, y: strings.DiagnosticCategory) {
     x = y;
     y = x;
 }
 
+function h(x: numerics.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+    x = y;
+    y = x;
+}
+
+function i(x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+    x = y;
+    y = x;
+}
 
 export enum DiagnosticCategory {
     Warning,
@@ -65,38 +83,46 @@ export let x: DiagnosticCategory;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.DiagnosticCategory = void 0;
 // @filename a.ts
-var a;
-(function (a) {
+var numerics;
+(function (numerics) {
     var DiagnosticCategory;
     (function (DiagnosticCategory) {
         DiagnosticCategory[DiagnosticCategory["Warning"] = 0] = "Warning";
         DiagnosticCategory[DiagnosticCategory["Error"] = 1] = "Error";
         DiagnosticCategory[DiagnosticCategory["Suggestion"] = 2] = "Suggestion";
         DiagnosticCategory[DiagnosticCategory["Message"] = 3] = "Message";
-    })(DiagnosticCategory = a.DiagnosticCategory || (a.DiagnosticCategory = {}));
+    })(DiagnosticCategory = numerics.DiagnosticCategory || (numerics.DiagnosticCategory = {}));
     var DiagnosticCategory2;
     (function (DiagnosticCategory2) {
         DiagnosticCategory2[DiagnosticCategory2["Warning"] = 0] = "Warning";
         DiagnosticCategory2[DiagnosticCategory2["Error"] = 1] = "Error";
         DiagnosticCategory2[DiagnosticCategory2["Suggestion"] = 2] = "Suggestion";
         DiagnosticCategory2[DiagnosticCategory2["Message"] = 3] = "Message";
-    })(DiagnosticCategory2 = a.DiagnosticCategory2 || (a.DiagnosticCategory2 = {}));
-})(a || (a = {}));
-var b;
-(function (b) {
+    })(DiagnosticCategory2 = numerics.DiagnosticCategory2 || (numerics.DiagnosticCategory2 = {}));
+})(numerics || (numerics = {}));
+var strings;
+(function (strings) {
     var DiagnosticCategory;
     (function (DiagnosticCategory) {
         DiagnosticCategory["Warning"] = "Warning";
         DiagnosticCategory["Error"] = "Error";
         DiagnosticCategory["Suggestion"] = "Suggestion";
         DiagnosticCategory["Message"] = "Message";
-    })(DiagnosticCategory = b.DiagnosticCategory || (b.DiagnosticCategory = {}));
-})(b || (b = {}));
+    })(DiagnosticCategory = strings.DiagnosticCategory || (strings.DiagnosticCategory = {}));
+})(strings || (strings = {}));
 function f(x, y) {
     x = y;
     y = x;
 }
 function g(x, y) {
+    x = y;
+    y = x;
+}
+function h(x, y) {
+    x = y;
+    y = x;
+}
+function i(x, y) {
     x = y;
     y = x;
 }
