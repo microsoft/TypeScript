@@ -43432,13 +43432,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             : node;
                         const narrowed: [TypeParameter, Type][] = mapDefined(queryTypeParameters, tp => {
                             const narrowReference = factory.cloneNode(tp.exprName); // Construct a reference that can be narrowed.
+                            // Set the symbol of the synthetic reference.
+                            // This allows us to get the type of the reference at a location where the reference is possibly shadowed.
+                            getNodeLinks(narrowReference).resolvedSymbol = getResolvedSymbol(tp.exprName);
                             setParent(narrowReference, narrowParent.parent);
                             setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
                             narrowReference.flowNode = (narrowParent as HasFlowNode).flowNode;
                             // >> TODO: this call to checkExpression might report errors,
                             // >> and so might throw when trying to get span for fakeName.
                             // >> TODO: also, it shouldn't throw errors. Maybe we can reuse `CheckMode.TypeOnly`?
-                            const exprType = checkExpression(narrowReference);
+                            // const exprType = checkExpression(narrowReference);
+                            // We don't want to emit errors when getting the type.
+                            const exprType = getTypeOfExpression(narrowReference); // >> TODO: that doesn't work for qualified names
                             // >> TODO: is there a better way of detecting that narrowing will be useless?
                             if (getConstraintOfTypeParameter(tp)) {
                                 const narrowableConstraintType = mapType(tp.constraint!, getBaseConstraintOrType);
@@ -43493,7 +43498,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function isQueryTypeParameter(typeParameter: TypeParameter): typeParameter is TypeParameter & { exprName: EntityName } {
+    function isQueryTypeParameter(typeParameter: TypeParameter): typeParameter is TypeParameter & { exprName: Identifier } {
         if (isThisTypeParameter(typeParameter)) {
             return false;
         }
@@ -43509,7 +43514,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         typeParameter.exprName = null;
-        // It should have a type parameter declaration because it is not a `this` type parameter, and it has a symbol
+        // Type parameter should have a type parameter declaration because it is not a `this` type parameter, and it has a symbol.
         const declaration = getDeclarationOfKind(typeParameter.symbol, SyntaxKind.TypeParameter)!;
         const owner = getTypeParameterOwner(declaration);
         if (!owner || !isFunctionLikeDeclaration(owner)) {
@@ -43524,6 +43529,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 reference.parent.parent === owner &&
                 (exprName = getNameOfDeclaration(reference.parent)) &&
                 isIdentifier(exprName)) {
+                // If the parameter is optional, and its type is a type parameter whose constraint doesn't allow for `undefined`, then we can't narrow, because the type parameter doesn't reflect the full type of the parameter.
+                // For instance, if we have:
+                // `function f<T extends string>(x?: T): ReturnType<T> {
+                //      if (typeof x === "undefined") {
+                //          ...
+                //      }    
+                // }`,
+                // The type of `x` is really `T | undefined`,
+                // and we can't narrow type parameter `T` with type `undefined` inside the `if` statement, because
+                // `undefined` does not satisfy `T`'s constraint, `string`.
+                // >> TODO: if we allow the type parameter to be the type of a *property*, we need to update this code because the property could be optional and it could also contain the missing type instead of simply the undefined type.
+                let constraint;
+                if (isOptionalParameter(reference.parent) &&
+                    (constraint = getConstraintOfTypeParameter(typeParameter)) &&
+                    !containsUndefinedType(constraint)) {
+                    return false;
+                }
                 typeParameter.exprName = exprName;
                 return true;
             }

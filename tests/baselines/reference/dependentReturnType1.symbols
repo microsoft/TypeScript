@@ -932,3 +932,75 @@ T extends string
     return undefined as any;
 >undefined : Symbol(undefined)
 }
+
+// We won't narrow `T` because it refers to the type of an optional parameter but doesn't allow for narrowing with `undefined`
+function opt<T extends string>(x?: T): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
+>opt : Symbol(opt, Decl(dependentReturnType1.ts, 326, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 329, 13))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 329, 31))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 329, 13))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 329, 13))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 329, 13))
+
+    if (typeof x === "undefined") {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 329, 31))
+
+        x;
+>x : Symbol(x, Decl(dependentReturnType1.ts, 329, 31))
+
+        return 2;
+    }
+    return 1;
+}
+
+// Shadowing of the narrowed reference
+function g<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+>g : Symbol(g, Decl(dependentReturnType1.ts, 335, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 338, 11))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 338, 28))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 338, 11))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 338, 11))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 338, 11))
+
+    if (true) {
+        let x: number = Math.random() ? 1 : 2;
+>x : Symbol(x, Decl(dependentReturnType1.ts, 340, 11))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+        if (x === 1) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 340, 11))
+
+            return 1; // Error
+        }
+        return ""; // Error
+    }
+}
+
+function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+>h : Symbol(h, Decl(dependentReturnType1.ts, 346, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 348, 11))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 348, 28))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 348, 11))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 348, 11))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 348, 11))
+
+    if (x === 2) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 348, 28))
+
+        let x: number = Math.random() ? 1 : 2;
+>x : Symbol(x, Decl(dependentReturnType1.ts, 350, 11))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+        if (x === 1) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 350, 11))
+
+            return 1; // Error
+        }
+        return ""; // Ok
+    }
+    return 0; // Ok
+}

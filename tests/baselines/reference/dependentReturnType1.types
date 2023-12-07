@@ -905,3 +905,89 @@ T extends string
 >undefined as any : any
 >undefined : undefined
 }
+
+// We won't narrow `T` because it refers to the type of an optional parameter but doesn't allow for narrowing with `undefined`
+function opt<T extends string>(x?: T): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
+>opt : <T extends string>(x?: T) => T extends string ? 1 : T extends undefined ? 2 : 1 | 2
+>x : T | undefined
+
+    if (typeof x === "undefined") {
+>typeof x === "undefined" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : T | undefined
+>"undefined" : "undefined"
+
+        x;
+>x : undefined
+
+        return 2;
+>2 : 2
+    }
+    return 1;
+>1 : 1
+}
+
+// Shadowing of the narrowed reference
+function g<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+>g : <T extends 1 | 2>(x: T) => T extends 1 ? number : T extends 2 ? string : 1 | 2
+>x : T
+
+    if (true) {
+>true : true
+
+        let x: number = Math.random() ? 1 : 2;
+>x : number
+>Math.random() ? 1 : 2 : 1 | 2
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>1 : 1
+>2 : 2
+
+        if (x === 1) {
+>x === 1 : boolean
+>x : number
+>1 : 1
+
+            return 1; // Error
+>1 : 1
+        }
+        return ""; // Error
+>"" : ""
+    }
+}
+
+function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+>h : <T extends 1 | 2>(x: T) => T extends 1 ? number : T extends 2 ? string : 1 | 2
+>x : T
+
+    if (x === 2) {
+>x === 2 : boolean
+>x : T
+>2 : 2
+
+        let x: number = Math.random() ? 1 : 2;
+>x : number
+>Math.random() ? 1 : 2 : 1 | 2
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>1 : 1
+>2 : 2
+
+        if (x === 1) {
+>x === 1 : boolean
+>x : number
+>1 : 1
+
+            return 1; // Error
+>1 : 1
+        }
+        return ""; // Ok
+>"" : ""
+    }
+    return 0; // Ok
+>0 : 0
+}

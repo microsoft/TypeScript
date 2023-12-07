@@ -328,3 +328,34 @@ T extends string
     
     return undefined as any;
 }
+
+// We won't narrow `T` because it refers to the type of an optional parameter but doesn't allow for narrowing with `undefined`
+function opt<T extends string>(x?: T): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
+    if (typeof x === "undefined") {
+        x;
+        return 2;
+    }
+    return 1;
+}
+
+// Shadowing of the narrowed reference
+function g<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+    if (true) {
+        let x: number = Math.random() ? 1 : 2;
+        if (x === 1) {
+            return 1; // Error
+        }
+        return ""; // Error
+    }
+}
+
+function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+    if (x === 2) {
+        let x: number = Math.random() ? 1 : 2;
+        if (x === 1) {
+            return 1; // Error
+        }
+        return ""; // Ok
+    }
+    return 0; // Ok
+}

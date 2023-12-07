@@ -11,11 +11,8 @@ dependentReturnType1.ts(118,5): error TS2322: Type 'string' is not assignable to
 dependentReturnType1.ts(153,13): error TS2322: Type 'string' is not assignable to type 'T extends string ? this : string'.
 dependentReturnType1.ts(155,9): error TS2322: Type 'this' is not assignable to type 'T extends string ? this : string'.
   Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
-dependentReturnType1.ts(159,9): error TS2322: Type 'this' is not assignable to type '(T extends string ? this : string) & (T extends string ? this : string)'.
-  Type 'Unnamed' is not assignable to type '(T extends string ? this : string) & (T extends string ? this : string)'.
-    Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
-      Type 'this' is not assignable to type 'T extends string ? this : string'.
-        Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
+dependentReturnType1.ts(159,9): error TS2322: Type 'this' is not assignable to type 'T extends string ? this : string'.
+  Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
 dependentReturnType1.ts(174,13): error TS2322: Type 'this' is not assignable to type 'string'.
   Type 'Unnamed' is not assignable to type 'string'.
 dependentReturnType1.ts(177,9): error TS2322: Type 'T & {}' is not assignable to type 'this'.
@@ -31,9 +28,14 @@ dependentReturnType1.ts(271,9): error TS2322: Type '2' is not assignable to type
 dependentReturnType1.ts(273,5): error TS2322: Type '0' is not assignable to type 'HelperCond<{ x: U; y: V; }, { x: string; y: true; }, 1, { x: number; y: false; }, 2>'.
 dependentReturnType1.ts(291,9): error TS2322: Type 'string' is not assignable to type 'string[]'.
 dependentReturnType1.ts(307,9): error TS2322: Type '1' is not assignable to type 'T extends string ? U extends string ? 1 : 2 : U extends number ? 3 : 4'.
+dependentReturnType1.ts(333,9): error TS2322: Type '2' is not assignable to type 'T extends string ? 1 : T extends undefined ? 2 : 1 | 2'.
+dependentReturnType1.ts(335,5): error TS2322: Type '1' is not assignable to type 'T extends string ? 1 : T extends undefined ? 2 : 1 | 2'.
+dependentReturnType1.ts(343,13): error TS2322: Type 'number' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : 1 | 2'.
+dependentReturnType1.ts(345,9): error TS2322: Type 'string' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : 1 | 2'.
+dependentReturnType1.ts(353,13): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== dependentReturnType1.ts (25 errors) ====
+==== dependentReturnType1.ts (30 errors) ====
     interface A {
         1: number;
         2: string;
@@ -218,11 +220,8 @@ dependentReturnType1.ts(307,9): error TS2322: Type '1' is not assignable to type
         nameWithError<T extends string>(name?: T): T extends string ? this : string {
             return this; // Error: Investigate error message
             ~~~~~~
-!!! error TS2322: Type 'this' is not assignable to type '(T extends string ? this : string) & (T extends string ? this : string)'.
-!!! error TS2322:   Type 'Unnamed' is not assignable to type '(T extends string ? this : string) & (T extends string ? this : string)'.
-!!! error TS2322:     Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
-!!! error TS2322:       Type 'this' is not assignable to type 'T extends string ? this : string'.
-!!! error TS2322:         Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
+!!! error TS2322: Type 'this' is not assignable to type 'T extends string ? this : string'.
+!!! error TS2322:   Type 'Unnamed' is not assignable to type 'T extends string ? this : string'.
         }
     
         // Good conditional
@@ -418,4 +417,45 @@ dependentReturnType1.ts(307,9): error TS2322: Type '1' is not assignable to type
         }
         
         return undefined as any;
+    }
+    
+    // We won't narrow `T` because it refers to the type of an optional parameter but doesn't allow for narrowing with `undefined`
+    function opt<T extends string>(x?: T): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
+        if (typeof x === "undefined") {
+            x;
+            return 2;
+            ~~~~~~
+!!! error TS2322: Type '2' is not assignable to type 'T extends string ? 1 : T extends undefined ? 2 : 1 | 2'.
+        }
+        return 1;
+        ~~~~~~
+!!! error TS2322: Type '1' is not assignable to type 'T extends string ? 1 : T extends undefined ? 2 : 1 | 2'.
+    }
+    
+    // Shadowing of the narrowed reference
+    function g<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+        if (true) {
+            let x: number = Math.random() ? 1 : 2;
+            if (x === 1) {
+                return 1; // Error
+                ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : 1 | 2'.
+            }
+            return ""; // Error
+            ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : 1 | 2'.
+        }
+    }
+    
+    function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
+        if (x === 2) {
+            let x: number = Math.random() ? 1 : 2;
+            if (x === 1) {
+                return 1; // Error
+                ~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+            }
+            return ""; // Ok
+        }
+        return 0; // Ok
     }
