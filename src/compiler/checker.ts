@@ -27393,7 +27393,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.Identifier:
                 if (!isThisInTypeQuery(node)) {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    return isConstantVariable(symbol) || isParameterOrCatchClauseVariable(symbol) && !isSomeSymbolAssigned(getRootDeclaration(symbol.valueDeclaration!));
+                    return isConstantVariable(symbol) || isParameterOrCatchClauseVariable(symbol) && !isSymbolAssigned(symbol);
                 }
                 break;
             case SyntaxKind.PropertyAccessExpression:
@@ -28668,9 +28668,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node.kind === SyntaxKind.PropertyDeclaration)!;
     }
 
-    // Check if a parameter or catch variable (or their bindings elements) is assigned anywhere
-    function isSomeSymbolAssigned(rootDeclaration: Node) {
-        const parent = rootDeclaration.parent;
+    // Check if a parameter or catch variable is assigned anywhere
+    function isSymbolAssigned(symbol: Symbol) {
+        if (!symbol.valueDeclaration) {
+            return false;
+        }
+        const parent = getRootDeclaration(symbol.valueDeclaration).parent;
         const links = getNodeLinks(parent);
         if (!(links.flags & NodeCheckFlags.AssignmentsMarked)) {
             links.flags |= NodeCheckFlags.AssignmentsMarked;
@@ -28678,24 +28681,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 markNodeAssignments(parent);
             }
         }
-        return !!getNodeLinks(rootDeclaration).someSymbolAssigned;
+        return symbol.isAssigned || false;
+    }
+
+    // Check if a parameter or catch variable (or their bindings elements) is assigned anywhere
+    function isSomeSymbolAssigned(rootDeclaration: Node) {
+        Debug.assert(isVariableDeclaration(rootDeclaration) || isParameter(rootDeclaration));
+        return isSomeSymbolAssignedWorker(rootDeclaration.name);
+    }
+
+    function isSomeSymbolAssignedWorker(node: BindingName): boolean {
+        if (node.kind === SyntaxKind.Identifier) {
+            return isSymbolAssigned(getSymbolOfDeclaration(node.parent as Declaration));
+        }
+
+        return some(node.elements, e => e.kind !== SyntaxKind.OmittedExpression && isSomeSymbolAssignedWorker(e.name));
     }
 
     function hasParentWithAssignmentsMarked(node: Node) {
         return !!findAncestor(node.parent, node => (isFunctionLike(node) || isCatchClause(node)) && !!(getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked));
     }
 
-    function markNodeAssignments(node: Node): true | undefined {
+    function markNodeAssignments(node: Node) {
         if (node.kind === SyntaxKind.Identifier) {
             if (isAssignmentTarget(node)) {
                 const symbol = getResolvedSymbol(node as Identifier);
                 if (isParameterOrCatchClauseVariable(symbol)) {
-                    return getNodeLinks(getRootDeclaration(symbol.valueDeclaration!)).someSymbolAssigned = true;
+                    symbol.isAssigned = true;
                 }
             }
         }
         else {
-            return forEachChild(node, markNodeAssignments);
+            forEachChild(node, markNodeAssignments);
         }
     }
 
@@ -29045,8 +29062,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // The declaration container is the innermost function that encloses the declaration of the variable
         // or parameter. The flow container is the innermost function starting with which we analyze the control
         // flow graph to determine the control flow based type.
-        const rootDeclaration = getRootDeclaration(declaration);
-        const isParameter = rootDeclaration.kind === SyntaxKind.Parameter;
+        const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
         const declarationContainer = getControlFlowContainer(declaration);
         let flowContainer = getControlFlowContainer(node);
         const isOuterVariable = flowContainer !== declarationContainer;
@@ -29060,7 +29076,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         while (
             flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
                 flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethodOrAccessor(flowContainer)) &&
-            (isConstantVariable(localOrExportSymbol) && type !== autoArrayType || isParameter && !isSomeSymbolAssigned(rootDeclaration))
+            (isConstantVariable(localOrExportSymbol) && type !== autoArrayType || isParameter && !isSymbolAssigned(localOrExportSymbol))
         ) {
             flowContainer = getControlFlowContainer(flowContainer);
         }

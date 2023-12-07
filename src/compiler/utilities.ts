@@ -5278,7 +5278,7 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
  *
  * @internal
  */
-export function isParameterDeclaration(node: Declaration): boolean {
+export function isParameterDeclaration(node: Declaration): node is ParameterDeclaration {
     const root = getRootDeclaration(node);
     return root.kind === SyntaxKind.Parameter;
 }
@@ -8155,6 +8155,7 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     this.exportSymbol = undefined;
     this.constEnumOnlyModule = undefined;
     this.isReferenced = undefined;
+    this.isAssigned = undefined;
     (this as any).links = undefined; // used by TransientSymbol
 }
 
