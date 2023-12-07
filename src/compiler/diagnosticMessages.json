@@ -4136,7 +4136,7 @@
         "category": "Error",
         "code": 4125
     },
-    "Values of '{0}.{1}' are not sufficiently known.": {
+    "One value of '{0}.{1}' is the string '{2}', and the other is assumed to be an unknown numeric value.": {
         "category": "Error",
         "code": 4126
     },
