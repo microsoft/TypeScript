@@ -89,7 +89,7 @@ genericTypeReferenceWithoutTypeArgument.ts(11,18): error TS2314: Generic type 'C
 genericTypeReferenceWithoutTypeArgument.ts(12,11): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 genericTypeReferenceWithoutTypeArgument.ts(12,14): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(12,18): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-genericTypeReferenceWithoutTypeArgument.ts(14,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+genericTypeReferenceWithoutTypeArgument.ts(14,9): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 genericTypeReferenceWithoutTypeArgument.ts(14,13): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(14,28): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument.ts(16,15): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
@@ -141,7 +141,9 @@ genericTypeReferenceWithoutTypeArgument.ts(37,10): error TS2314: Generic type 'E
     
     var e = (x: C) => { var y: C; return y; }
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 genericTypeReferenceWithoutTypeArgument.ts:14:5: Add a type annotation to the variable e
+!!! related TS9603 genericTypeReferenceWithoutTypeArgument.ts:14:9: Add a return type to the function expression
                 ~
 !!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
                                ~

@@ -6726,6 +6726,26 @@
         "category": "Error",
         "code": 9006
     },
+    "Function must have an explicit type annotation with with --isolatedDeclarations": {
+        "category": "Error",
+        "code": 9507
+    },
+    "Add a type annotation to the variable {0}": {
+        "category": "Error",
+        "code": 9600
+    },
+    "Add a type annotation to the parameter {0}": {
+        "category": "Error",
+        "code": 9601
+    },
+    "Add a type annotation to the property {0}": {
+        "category": "Error",
+        "code": 9602
+    },
+    "Add a return type to the function expression": {
+        "category": "Error",
+        "code": 9603
+    },
     "Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9007

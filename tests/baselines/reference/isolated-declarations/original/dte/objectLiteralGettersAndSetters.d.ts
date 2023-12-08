@@ -164,8 +164,8 @@ objectLiteralGettersAndSetters.ts(5,24): error TS9007: Declaration emit for this
 objectLiteralGettersAndSetters.ts(6,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 objectLiteralGettersAndSetters.ts(7,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 objectLiteralGettersAndSetters.ts(10,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(12,23): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(14,23): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+objectLiteralGettersAndSetters.ts(12,23): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(14,23): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 objectLiteralGettersAndSetters.ts(22,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 objectLiteralGettersAndSetters.ts(30,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 objectLiteralGettersAndSetters.ts(60,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -201,11 +201,15 @@ objectLiteralGettersAndSetters.ts(76,9): error TS9007: Declaration emit for this
     var callSig1: { num: (n: number) => string; };
     var callSig2 = { num: function (n: number) { return '' } };
                           ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 objectLiteralGettersAndSetters.ts:12:5: Add a type annotation to the variable callSig2
+!!! related TS9603 objectLiteralGettersAndSetters.ts:12:23: Add a return type to the function expression
     var callSig2: { num: (n: number) => string; };
     var callSig3 = { num: (n: number) => '' };
                           ~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 objectLiteralGettersAndSetters.ts:14:5: Add a type annotation to the variable callSig3
+!!! related TS9603 objectLiteralGettersAndSetters.ts:14:23: Add a return type to the function expression
     var callSig3: { num: (n: number) => string; };
     
     // Get accessor only, type of the property is the annotated return type of the get accessor

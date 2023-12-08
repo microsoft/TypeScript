@@ -65,7 +65,7 @@ declare function foo9(y?: invalid, z?: number): invalid;
 capturedParametersInInitializers1.ts(2,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 capturedParametersInInitializers1.ts(2,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 capturedParametersInInitializers1.ts(7,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-capturedParametersInInitializers1.ts(7,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+capturedParametersInInitializers1.ts(7,19): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 capturedParametersInInitializers1.ts(12,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 capturedParametersInInitializers1.ts(13,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 capturedParametersInInitializers1.ts(18,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -75,7 +75,7 @@ capturedParametersInInitializers1.ts(22,10): error TS9007: Declaration emit for 
 capturedParametersInInitializers1.ts(22,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 capturedParametersInInitializers1.ts(22,26): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
 capturedParametersInInitializers1.ts(26,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-capturedParametersInInitializers1.ts(26,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+capturedParametersInInitializers1.ts(26,19): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 capturedParametersInInitializers1.ts(30,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 capturedParametersInInitializers1.ts(30,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 capturedParametersInInitializers1.ts(34,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -100,7 +100,9 @@ capturedParametersInInitializers1.ts(38,21): error TS2373: Parameter 'y' cannot 
              ~~~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
                       ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9601 capturedParametersInInitializers1.ts:7:15: Add a type annotation to the parameter y
+!!! related TS9603 capturedParametersInInitializers1.ts:7:19: Add a return type to the function expression
         
     }
     
@@ -139,7 +141,9 @@ capturedParametersInInitializers1.ts(38,21): error TS2373: Parameter 'y' cannot 
              ~~~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
                       ~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9601 capturedParametersInInitializers1.ts:26:15: Add a type annotation to the parameter y
+!!! related TS9603 capturedParametersInInitializers1.ts:26:19: Add a return type to the function expression
     }
     
     // ok - used inside immediately invoked generator function

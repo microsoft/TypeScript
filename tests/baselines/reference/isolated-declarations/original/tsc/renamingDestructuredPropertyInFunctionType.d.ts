@@ -170,19 +170,19 @@ renamingDestructuredPropertyInFunctionType.ts(40,9): error TS2842: 'string' is a
 renamingDestructuredPropertyInFunctionType.ts(43,8): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 renamingDestructuredPropertyInFunctionType.ts(43,13): error TS2842: 'string' is an unused renaming of 'a'. Did you intend to use it as a type annotation?
 renamingDestructuredPropertyInFunctionType.ts(47,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-renamingDestructuredPropertyInFunctionType.ts(48,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-renamingDestructuredPropertyInFunctionType.ts(49,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+renamingDestructuredPropertyInFunctionType.ts(48,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+renamingDestructuredPropertyInFunctionType.ts(49,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 renamingDestructuredPropertyInFunctionType.ts(50,47): error TS4025: Exported variable 'f4' has or is using private name 'string'.
 renamingDestructuredPropertyInFunctionType.ts(51,45): error TS4025: Exported variable 'f5' has or is using private name 'string'.
 renamingDestructuredPropertyInFunctionType.ts(53,3): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 renamingDestructuredPropertyInFunctionType.ts(56,36): error TS4025: Exported variable 'obj2' has or is using private name 'string'.
 renamingDestructuredPropertyInFunctionType.ts(58,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-renamingDestructuredPropertyInFunctionType.ts(59,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-renamingDestructuredPropertyInFunctionType.ts(60,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+renamingDestructuredPropertyInFunctionType.ts(59,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+renamingDestructuredPropertyInFunctionType.ts(60,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 renamingDestructuredPropertyInFunctionType.ts(61,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 renamingDestructuredPropertyInFunctionType.ts(61,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 renamingDestructuredPropertyInFunctionType.ts(62,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-renamingDestructuredPropertyInFunctionType.ts(63,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+renamingDestructuredPropertyInFunctionType.ts(63,14): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 renamingDestructuredPropertyInFunctionType.ts(63,15): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 
 
@@ -325,10 +325,14 @@ renamingDestructuredPropertyInFunctionType.ts(63,15): error TS9007: Declaration 
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     const f2 = function({ a: string }: O) { };
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 renamingDestructuredPropertyInFunctionType.ts:48:7: Add a type annotation to the variable f2
+!!! related TS9603 renamingDestructuredPropertyInFunctionType.ts:48:12: Add a return type to the function expression
     const f3 = ({ a: string, b, c }: O) => { };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 renamingDestructuredPropertyInFunctionType.ts:49:7: Add a type annotation to the variable f3
+!!! related TS9603 renamingDestructuredPropertyInFunctionType.ts:49:12: Add a return type to the function expression
     const f4 = function({ a: string }: O): typeof string { return string; };
                                                   ~~~~~~
 !!! error TS4025: Exported variable 'f4' has or is using private name 'string'.
@@ -350,10 +354,14 @@ renamingDestructuredPropertyInFunctionType.ts(63,15): error TS9007: Declaration 
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     const f7 = ({ a: string = "", b, c }: O) => { };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 renamingDestructuredPropertyInFunctionType.ts:59:7: Add a type annotation to the variable f7
+!!! related TS9603 renamingDestructuredPropertyInFunctionType.ts:59:12: Add a return type to the function expression
     const f8 = ({ "a": string }: O) => { };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 renamingDestructuredPropertyInFunctionType.ts:60:7: Add a type annotation to the variable f8
+!!! related TS9603 renamingDestructuredPropertyInFunctionType.ts:60:12: Add a return type to the function expression
     function f9 ({ 2: string }) { };
              ~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
@@ -364,7 +372,9 @@ renamingDestructuredPropertyInFunctionType.ts(63,15): error TS9007: Declaration 
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     const f11 =  ({ [2]: string }) => { };
                  ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 renamingDestructuredPropertyInFunctionType.ts:63:7: Add a type annotation to the variable f11
+!!! related TS9603 renamingDestructuredPropertyInFunctionType.ts:63:14: Add a return type to the function expression
                   ~~~~~~~~~~~~~~~
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     

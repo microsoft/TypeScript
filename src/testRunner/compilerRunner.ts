@@ -495,7 +495,9 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         }
         delete clonedOptions.outFile;
         delete clonedOptions.out;
-        delete clonedOptions.declarationMap;
+        if (clonedOptions.declarationMap !== false) {
+            delete clonedOptions.declarationMap;
+        }
 
         const clonedSettings: TestCaseParser.CompilerSettings = {
             ...compilerEnvironment.testCaseContent.settings,
@@ -507,7 +509,9 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             skipLibCheck: "true",
         };
         delete clonedSettings.outFile;
-        delete clonedSettings.declarationMap;
+        if (clonedSettings.declarationMap !== "false") {
+            delete clonedSettings.declarationMap;
+        }
         delete clonedSettings.outfile;
         delete clonedSettings.out;
 
@@ -574,12 +578,13 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             });
     }
     private static dteDiagnosticErrors = new Set([
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
-        ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
-        ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
-        ts.Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations.code,
-    ]);
+        ts.Diagnostics.Function_must_have_an_explicit_type_annotation_with_with_isolatedDeclarations,
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit,
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit,
+        ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+        ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+        ts.Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations,
+    ].map(d => d.code));
     protected get baselinePath() {
         return "isolated-declarations/original";
     }
@@ -684,7 +689,9 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         }
 
         env.compilerOptions.isolatedDeclarations = false;
-        env.compilerOptions.declarationMap = true;
+        if (env.compilerOptions.declarationMap === undefined) {
+            env.compilerOptions.declarationMap = true;
+        }
         env.compilerOptions.forceDtsEmit = false;
 
         const autoFixCacheTest = ts.combinePaths("tests/auto-fixed", compilerEnvironment.configuredName);

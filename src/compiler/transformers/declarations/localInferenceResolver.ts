@@ -1,4 +1,5 @@
 import {
+    addRelatedInfo,
     ArrayLiteralExpression,
     ArrowFunction,
     AsExpression,
@@ -10,12 +11,14 @@ import {
     DiagnosticWithLocation,
     EntityNameOrEntityNameExpression,
     ExportAssignment,
+    findAncestor,
     FunctionExpression,
     GetAccessorDeclaration,
     getCommentRange,
     getEmitScriptTarget,
     getMemberKeyFromElement,
     getNameOfDeclaration,
+    getTextOfNode,
     HasInferredType,
     hasSyntacticModifier,
     Identifier,
@@ -69,6 +72,7 @@ import {
     ParameterDeclaration,
     ParenthesizedExpression,
     PrefixUnaryExpression,
+    PropertyDeclaration,
     PropertyName,
     SetAccessorDeclaration,
     setCommentRange,
@@ -81,6 +85,7 @@ import {
     TypeElement,
     TypeNode,
     unescapeLeadingUnderscores,
+    VariableDeclaration,
     visitEachChild,
     visitNode,
     visitNodes,
@@ -95,6 +100,12 @@ enum NarrowBehavior {
     AsConstOrKeepLiterals = AsConst | KeepLiterals,
     NotKeepLiterals = ~KeepLiterals,
 }
+
+const errorByDeclarationKind = {
+    [SyntaxKind.Parameter]: Diagnostics.Add_a_type_annotation_to_the_parameter_0,
+    [SyntaxKind.VariableDeclaration]: Diagnostics.Add_a_type_annotation_to_the_variable_0,
+    [SyntaxKind.PropertyDeclaration]: Diagnostics.Add_a_type_annotation_to_the_property_0,
+} satisfies Partial<Record<SyntaxKind, DiagnosticMessage>>;
 
 /**
  * @internal
@@ -199,6 +210,17 @@ export function createLocalInferenceResolver({
 
         return { getAccessorType, setAccessorType };
     }
+
+    function createReturnTypeError(node: FunctionExpression | ArrowFunction) {
+        const diag = createDiagnosticForNode(node, Diagnostics.Function_must_have_an_explicit_type_annotation_with_with_isolatedDeclarations);
+        const parentDeclaration = findAncestor(node, (n): n is VariableDeclaration | PropertyDeclaration | ParameterDeclaration => isVariableDeclaration(n) || isPropertyDeclaration(n) || isParameter(n));
+        if (parentDeclaration) {
+            const targetStr = getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, errorByDeclarationKind[parentDeclaration.kind], targetStr));
+        }
+        addRelatedInfo(diag, createDiagnosticForNode(node, Diagnostics.Add_a_return_type_to_the_function_expression));
+        return diag;
+    }
     function localInference(node: Node, inferenceFlags: NarrowBehavior = NarrowBehavior.None): TypeNode {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
@@ -221,7 +243,8 @@ export function createLocalInferenceResolver({
                 const fnNode = node as FunctionExpression | ArrowFunction;
                 const oldEnclosingDeclaration = setEnclosingDeclarations(node);
                 try {
-                    const returnType = visitTypeAndClone(fnNode.type, fnNode);
+                    const returnType = !fnNode.type ? invalid(fnNode, createReturnTypeError(fnNode)) :
+                        visitTypeAndClone(fnNode.type, fnNode);
                     const fnTypeNode = factory.createFunctionTypeNode(
                         visitNodes(fnNode.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration)?.map(deepClone),
                         fnNode.parameters.map(p => deepClone(ensureParameter(p))),
@@ -330,8 +353,8 @@ export function createLocalInferenceResolver({
 
         return invalid(node);
     }
-    function invalid(sourceNode: Node, diagMessage = Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit): TypeNode {
-        reportIsolatedDeclarationError(sourceNode, diagMessage);
+    function invalid(sourceNode: Node, diagMessage: DiagnosticWithLocation = createDiagnosticForNode(sourceNode, Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit)): TypeNode {
+        reportError(sourceNode, diagMessage);
         return makeInvalidType();
     }
     function getTypeForObjectLiteralExpression(objectLiteral: ObjectLiteralExpression, inferenceFlags: NarrowBehavior) {
@@ -667,7 +690,7 @@ export function createLocalInferenceResolver({
             }
             else if (node.initializer) {
                 if (isClassExpression(node.initializer)) {
-                    localType = invalid(node.initializer, Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations);
+                    localType = invalid(node.initializer, createDiagnosticForNode(node.initializer, Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations));
                 }
                 else {
                     if (resolver.isExpandoFunction(node)) {

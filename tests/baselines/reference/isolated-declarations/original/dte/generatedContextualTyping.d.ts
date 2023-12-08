@@ -1321,30 +1321,30 @@ generatedContextualTyping.ts(327,10): error TS9007: Declaration emit for this fi
 generatedContextualTyping.ts(328,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 generatedContextualTyping.ts(329,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 generatedContextualTyping.ts(330,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(331,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(332,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(333,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(334,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(335,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(336,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(337,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(338,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(339,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(340,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(341,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(342,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(343,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(344,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(345,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(346,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(347,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(348,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(349,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(350,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(351,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(352,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(353,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(354,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+generatedContextualTyping.ts(331,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(332,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(333,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(334,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(335,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(336,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(337,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(338,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(339,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(340,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(341,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(342,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(343,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(344,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(345,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(346,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(347,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(348,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(349,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(350,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(351,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(352,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(353,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(354,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 
 
 ==== generatedContextualTyping.ts (59 errors) ====
@@ -1750,73 +1750,121 @@ generatedContextualTyping.ts(354,12): error TS9007: Declaration emit for this fi
 !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     var x333 = (n: () => Base[]) => n; x333(() => [d1, d2]);
                ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:331:5: Add a type annotation to the variable x333
+!!! related TS9603 generatedContextualTyping.ts:331:12: Add a return type to the function expression
     var x334 = (n: () => Base[]) => n; x334(function() { return [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:332:5: Add a type annotation to the variable x334
+!!! related TS9603 generatedContextualTyping.ts:332:12: Add a return type to the function expression
     var x335 = (n: () => Base[]) => n; x335(function named() { return [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:333:5: Add a type annotation to the variable x335
+!!! related TS9603 generatedContextualTyping.ts:333:12: Add a return type to the function expression
     var x336 = (n: { (): Base[]; }) => n; x336(() => [d1, d2]);
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:334:5: Add a type annotation to the variable x336
+!!! related TS9603 generatedContextualTyping.ts:334:12: Add a return type to the function expression
     var x337 = (n: { (): Base[]; }) => n; x337(function() { return [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:335:5: Add a type annotation to the variable x337
+!!! related TS9603 generatedContextualTyping.ts:335:12: Add a return type to the function expression
     var x338 = (n: { (): Base[]; }) => n; x338(function named() { return [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:336:5: Add a type annotation to the variable x338
+!!! related TS9603 generatedContextualTyping.ts:336:12: Add a return type to the function expression
     var x339 = (n: Base[]) => n; x339([d1, d2]);
                ~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:337:5: Add a type annotation to the variable x339
+!!! related TS9603 generatedContextualTyping.ts:337:12: Add a return type to the function expression
     var x340 = (n: Array<Base>) => n; x340([d1, d2]);
                ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:338:5: Add a type annotation to the variable x340
+!!! related TS9603 generatedContextualTyping.ts:338:12: Add a return type to the function expression
     var x341 = (n: { [n: number]: Base; }) => n; x341([d1, d2]);
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:339:5: Add a type annotation to the variable x341
+!!! related TS9603 generatedContextualTyping.ts:339:12: Add a return type to the function expression
     var x342 = (n: {n: Base[]; } ) => n; x342({ n: [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:340:5: Add a type annotation to the variable x342
+!!! related TS9603 generatedContextualTyping.ts:340:12: Add a return type to the function expression
     var x343 = (n: (s: Base[]) => any) => n; x343(n => { var n: Base[]; return null; });
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:341:5: Add a type annotation to the variable x343
+!!! related TS9603 generatedContextualTyping.ts:341:12: Add a return type to the function expression
     var x344 = (n: Genric<Base>) => n; x344({ func: n => { return [d1, d2]; } });
                ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:342:5: Add a type annotation to the variable x344
+!!! related TS9603 generatedContextualTyping.ts:342:12: Add a return type to the function expression
     var x345 = function(n: () => Base[]) { }; x345(() => [d1, d2]);
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:343:5: Add a type annotation to the variable x345
+!!! related TS9603 generatedContextualTyping.ts:343:12: Add a return type to the function expression
     var x346 = function(n: () => Base[]) { }; x346(function() { return [d1, d2] });
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:344:5: Add a type annotation to the variable x346
+!!! related TS9603 generatedContextualTyping.ts:344:12: Add a return type to the function expression
     var x347 = function(n: () => Base[]) { }; x347(function named() { return [d1, d2] });
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:345:5: Add a type annotation to the variable x347
+!!! related TS9603 generatedContextualTyping.ts:345:12: Add a return type to the function expression
     var x348 = function(n: { (): Base[]; }) { }; x348(() => [d1, d2]);
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:346:5: Add a type annotation to the variable x348
+!!! related TS9603 generatedContextualTyping.ts:346:12: Add a return type to the function expression
     var x349 = function(n: { (): Base[]; }) { }; x349(function() { return [d1, d2] });
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:347:5: Add a type annotation to the variable x349
+!!! related TS9603 generatedContextualTyping.ts:347:12: Add a return type to the function expression
     var x350 = function(n: { (): Base[]; }) { }; x350(function named() { return [d1, d2] });
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:348:5: Add a type annotation to the variable x350
+!!! related TS9603 generatedContextualTyping.ts:348:12: Add a return type to the function expression
     var x351 = function(n: Base[]) { }; x351([d1, d2]);
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:349:5: Add a type annotation to the variable x351
+!!! related TS9603 generatedContextualTyping.ts:349:12: Add a return type to the function expression
     var x352 = function(n: Array<Base>) { }; x352([d1, d2]);
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:350:5: Add a type annotation to the variable x352
+!!! related TS9603 generatedContextualTyping.ts:350:12: Add a return type to the function expression
     var x353 = function(n: { [n: number]: Base; }) { }; x353([d1, d2]);
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:351:5: Add a type annotation to the variable x353
+!!! related TS9603 generatedContextualTyping.ts:351:12: Add a return type to the function expression
     var x354 = function(n: {n: Base[]; } ) { }; x354({ n: [d1, d2] });
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:352:5: Add a type annotation to the variable x354
+!!! related TS9603 generatedContextualTyping.ts:352:12: Add a return type to the function expression
     var x355 = function(n: (s: Base[]) => any) { }; x355(n => { var n: Base[]; return null; });
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:353:5: Add a type annotation to the variable x355
+!!! related TS9603 generatedContextualTyping.ts:353:12: Add a return type to the function expression
     var x356 = function(n: Genric<Base>) { }; x356({ func: n => { return [d1, d2]; } });
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 generatedContextualTyping.ts:354:5: Add a type annotation to the variable x356
+!!! related TS9603 generatedContextualTyping.ts:354:12: Add a return type to the function expression

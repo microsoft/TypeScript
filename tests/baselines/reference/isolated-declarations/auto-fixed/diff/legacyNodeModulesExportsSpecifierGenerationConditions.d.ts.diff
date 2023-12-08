@@ -5,7 +5,7 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -1,5 +1,42 @@
+@@ -1,5 +1,44 @@
  
  
  //// [index.d.ts]
@@ -16,13 +16,15 @@
 +//# sourceMappingURL=index.d.ts.map
 +/// [Errors] ////
 +
-+index.ts(1,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++index.ts(1,18): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 +
 +
 +==== index.ts (1 errors) ====
 +    export const a = async () => (await import("inner")).x();
 +                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
++!!! related TS9600 index.ts:1:14: Add a type annotation to the variable a
++!!! related TS9603 index.ts:1:18: Add a return type to the function expression
 +==== node_modules/inner/index.d.ts (0 errors) ====
 +    export { x } from "./other.js";
 +==== node_modules/inner/other.d.ts (0 errors) ====

@@ -234,7 +234,7 @@ noUncheckedIndexedAccess.ts(79,7): error TS2322: Type 'number | boolean | undefi
 noUncheckedIndexedAccess.ts(85,1): error TS2322: Type 'undefined' is not assignable to type 'string'.
 noUncheckedIndexedAccess.ts(90,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-noUncheckedIndexedAccess.ts(97,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+noUncheckedIndexedAccess.ts(97,13): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
 noUncheckedIndexedAccess.ts(98,5): error TS2322: Type 'undefined' is not assignable to type '{ [key: string]: string; a: string; b: string; }[Key]'.
   Type 'undefined' is not assignable to type 'string'.
 noUncheckedIndexedAccess.ts(99,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
@@ -402,7 +402,9 @@ noUncheckedIndexedAccess.ts(99,11): error TS2322: Type 'string | undefined' is n
     const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key]; // Should OK
     const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+!!! related TS9600 noUncheckedIndexedAccess.ts:97:7: Add a type annotation to the variable fn3
+!!! related TS9603 noUncheckedIndexedAccess.ts:97:13: Add a return type to the function expression
         myRecord2[key] = undefined; // Should error
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'undefined' is not assignable to type '{ [key: string]: string; a: string; b: string; }[Key]'.
