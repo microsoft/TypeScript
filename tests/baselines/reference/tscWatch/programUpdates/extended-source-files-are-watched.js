@@ -60,9 +60,9 @@ var y = 1;
 
 
 FsWatches::
-/a/b/commonfile1.ts: *new*
+/a/b/commonFile1.ts: *new*
   {}
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -137,9 +137,9 @@ var y = 1;
 
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {}
 /a/b/first.tsconfig.json: *new*
   {}
@@ -322,9 +322,9 @@ Output::
 
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {}
 /a/b/tsconfig.json:
   {}

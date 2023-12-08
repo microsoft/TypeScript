@@ -1087,6 +1087,7 @@ declare namespace ts {
                 displayName: string;
                 /**
                  * Full display name of item to be renamed.
+                 * If item to be renamed is a file, then this is the original text of the module specifer
                  */
                 fullDisplayName: string;
                 /**
@@ -6020,9 +6021,11 @@ declare namespace ts {
     /** @deprecated */
     type AssertionKey = ImportAttributeName;
     /** @deprecated */
-    type AssertEntry = ImportAttribute;
+    interface AssertEntry extends ImportAttribute {
+    }
     /** @deprecated */
-    type AssertClause = ImportAttributes;
+    interface AssertClause extends ImportAttributes {
+    }
     type ImportAttributeName = Identifier | StringLiteral;
     interface ImportAttribute extends Node {
         readonly kind: SyntaxKind.ImportAttribute;
@@ -7908,6 +7911,7 @@ declare namespace ts {
         Unspecified = 4,
         EmbeddedStatement = 5,
         JsxAttributeValue = 6,
+        ImportTypeNodeAttributes = 7,
     }
     enum OuterExpressionKinds {
         Parentheses = 1,
@@ -10434,7 +10438,7 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-        jsDocParsingMode?: JSDocParsingMode;
+        jsDocParsingMode?: JSDocParsingMode | undefined;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;
@@ -11103,6 +11107,10 @@ declare namespace ts {
          */
         fileToRename?: string;
         displayName: string;
+        /**
+         * Full display name of item to be renamed.
+         * If item to be renamed is a file, then this is the original text of the module specifer
+         */
         fullDisplayName: string;
         kind: ScriptElementKind;
         kindModifiers: string;
@@ -11630,6 +11638,7 @@ declare namespace ts {
         moduleName?: string;
         renamedDependencies?: MapLike<string>;
         transformers?: CustomTransformers;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface TranspileOutput {
         outputText: string;

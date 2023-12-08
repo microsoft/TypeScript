@@ -44,6 +44,7 @@ import {
     CaseOrDefaultClause,
     cast,
     CatchClause,
+    CharacterCodes,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
@@ -133,6 +134,7 @@ import {
     hasSyntacticModifier,
     HeritageClause,
     Identifier,
+    identity,
     idText,
     IfStatement,
     ImmediatelyInvokedArrowFunction,
@@ -509,7 +511,7 @@ export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
  * @internal
  */
 export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNodeFactory): NodeFactory {
-    const update = flags & NodeFactoryFlags.NoOriginalNode ? updateWithoutOriginal : updateWithOriginal;
+    const setOriginal = flags & NodeFactoryFlags.NoOriginalNode ? identity : setOriginalNode;
 
     // Lazily load the parenthesizer, node converters, and some factory methods until they are used.
     const parenthesizerRules = memoize(() => flags & NodeFactoryFlags.NoParenthesizerRules ? nullParenthesizerRules : createParenthesizerRules(factory));
@@ -1253,8 +1255,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createNumericLiteral(value: string | number, numericLiteralFlags: TokenFlags = TokenFlags.None): NumericLiteral {
+        const text = typeof value === "number" ? value + "" : value;
+        Debug.assert(text.charCodeAt(0) !== CharacterCodes.minus, "Negative numbers should be created in combination with createPrefixUnaryExpression");
         const node = createBaseDeclaration<NumericLiteral>(SyntaxKind.NumericLiteral);
-        node.text = typeof value === "number" ? value + "" : value;
+        node.text = text;
         node.numericLiteralFlags = numericLiteralFlags;
         if (numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) node.transformFlags |= TransformFlags.ContainsES2015;
         return node;
@@ -6135,7 +6139,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function cloneSourceFile(source: SourceFile) {
         const node = source.redirectInfo ? cloneRedirectedSourceFile(source) : cloneSourceFileWorker(source);
-        setOriginalNode(node, source);
+        setOriginal(node, source);
         return node;
     }
 
@@ -6365,7 +6369,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const clone = createBaseIdentifier(node.escapedText) as Mutable<GeneratedIdentifier>;
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
         clone.transformFlags = node.transformFlags;
-        setOriginalNode(clone, node);
+        setOriginal(clone, node);
         setIdentifierAutoGenerate(clone, { ...node.emitNode.autoGenerate });
         return clone;
     }
@@ -6377,7 +6381,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         clone.flowNode = node.flowNode;
         clone.symbol = node.symbol;
         clone.transformFlags = node.transformFlags;
-        setOriginalNode(clone, node);
+        setOriginal(clone, node);
 
         // clone type arguments for emitter/typeWriter
         const typeArguments = getIdentifierTypeArguments(node);
@@ -6389,7 +6393,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const clone = createBasePrivateIdentifier(node.escapedText) as Mutable<GeneratedPrivateIdentifier>;
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
         clone.transformFlags = node.transformFlags;
-        setOriginalNode(clone, node);
+        setOriginal(clone, node);
         setIdentifierAutoGenerate(clone, { ...node.emitNode.autoGenerate });
         return clone;
     }
@@ -6398,7 +6402,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const clone = createBasePrivateIdentifier(node.escapedText);
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
         clone.transformFlags = node.transformFlags;
-        setOriginalNode(clone, node);
+        setOriginal(clone, node);
         return clone;
     }
 
@@ -6432,7 +6436,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
         (clone as Mutable<T>).flags |= node.flags & ~NodeFlags.Synthesized;
         (clone as Mutable<T>).transformFlags = node.transformFlags;
-        setOriginalNode(clone, node);
+        setOriginal(clone, node);
 
         for (const key in node) {
             if (hasProperty(clone, key) || !hasProperty(node, key)) {
@@ -7197,7 +7201,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function asEmbeddedStatement<T extends Node>(statement: T): T | EmptyStatement;
     function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined;
     function asEmbeddedStatement<T extends Node>(statement: T | undefined): T | EmptyStatement | undefined {
-        return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginalNode(createEmptyStatement(), statement), statement) : statement;
+        return statement && isNotEmittedStatement(statement) ? setTextRange(setOriginal(createEmptyStatement(), statement), statement) : statement;
     }
 
     function asVariableDeclaration(variableDeclaration: string | BindingName | VariableDeclaration | undefined) {
@@ -7211,21 +7215,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
         return variableDeclaration;
     }
-}
 
-function updateWithoutOriginal<T extends Node>(updated: Mutable<T>, original: T): T {
-    if (updated !== original) {
-        setTextRange(updated, original);
+    function update<T extends Node>(updated: Mutable<T>, original: T): T {
+        if (updated !== original) {
+            setOriginal(updated, original);
+            setTextRange(updated, original);
+        }
+        return updated;
     }
-    return updated;
-}
-
-function updateWithOriginal<T extends Node>(updated: Mutable<T>, original: T): T {
-    if (updated !== original) {
-        setOriginalNode(updated, original);
-        setTextRange(updated, original);
-    }
-    return updated;
 }
 
 function getDefaultTagNameForKind(kind: JSDocTag["kind"]): string {

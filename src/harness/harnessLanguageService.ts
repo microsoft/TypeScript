@@ -391,7 +391,11 @@ class SessionServerHost implements ts.server.ServerHost {
     args: string[] = [];
     newLine: string;
     useCaseSensitiveFileNames = false;
-    watchUtils = createWatchUtils<ServerHostFileWatcher, ServerHostDirectoryWatcher>("watchedFiles", "watchedDirectories");
+    watchUtils = createWatchUtils<ServerHostFileWatcher, ServerHostDirectoryWatcher>(
+        "watchedFiles",
+        "watchedDirectories",
+        ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames),
+    );
 
     constructor(private host: NativeLanguageServiceHost) {
         this.newLine = this.host.getNewLine();

@@ -7,7 +7,7 @@ on:
   schedule:
     - cron: '0 8 * * *'
   repository_dispatch:
-    types: run-twoslash-repros
+    types: [run-twoslash-repros]
   workflow_dispatch:
     inputs:
       issue:

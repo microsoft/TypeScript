@@ -261,7 +261,7 @@ type Invalid<T extends string> = {
 >key : Error
 
     [key: T & string]: string;  // Error
->key : T & string
+>key : T
 }
 
 // Intersections in index signatures
