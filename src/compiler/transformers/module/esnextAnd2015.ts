@@ -245,7 +245,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
 
     function visitExportDeclaration(node: ExportDeclaration) {
         // `export * as ns` only needs to be transformed in ES2015
-        if (compilerOptions.module !== undefined && compilerOptions.module > ModuleKind.ES2015) {
+        if (getEmitModuleKind(compilerOptions) > ModuleKind.ES2015) {
             return node;
         }
 

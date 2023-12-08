@@ -368,8 +368,10 @@ export interface SafeList {
 function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<string, Map<string, number>> {
     const map = new Map<string, Map<string, number>>();
     for (const option of commandLineOptions) {
-        if (typeof option.type === "object") {
-            const optionMap = option.type as Map<string, number>;
+        const optionMap = (typeof option.type === "object" ? option.type :
+            option.type === "objectOrShorthand" && typeof option.shorthandType === "object" ? option.shorthandType :
+            undefined) as Map<string, number> | undefined;
+        if (optionMap) {
             // verify that map contains only numbers
             optionMap.forEach(value => {
                 Debug.assert(typeof value === "number");

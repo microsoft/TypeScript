@@ -291,7 +291,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         return {
             original: ts.isString(original) ? undefined : original,
             ...info,
-            impliedFormat: info.impliedFormat && ts.getNameOfCompilerOptionValue(info.impliedFormat, ts.moduleOptionDeclaration.type),
+            impliedFormat: info.impliedFormat && ts.getNameOfCompilerOptionValue(info.impliedFormat, ts.moduleOptionDeclaration.shorthandType),
         };
     }
 

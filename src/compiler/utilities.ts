@@ -402,6 +402,8 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleDetectionKind,
+    ModuleFormatDetectionKind,
+    ModuleFormatInteropKind,
     ModuleKind,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
@@ -8596,7 +8598,13 @@ export function getEmitScriptTarget(compilerOptions: { module?: CompilerOptions[
 }
 
 /** @internal */
-export function getEmitModuleKind(compilerOptions: { module?: CompilerOptions["module"]; target?: CompilerOptions["target"]; }) {
+export function getEmitModuleKind(compilerOptions: { module?: CompilerOptions["module"]; target?: CompilerOptions["target"]; }): ModuleKind {
+    if (typeof compilerOptions.module === "object" && compilerOptions.module.emit !== undefined) {
+        return compilerOptions.module.emit;
+    }
+    if (typeof compilerOptions.module === "object" && compilerOptions.module.preset !== undefined) {
+        return compilerOptions.module.preset;
+    }
     return typeof compilerOptions.module === "number" ?
         compilerOptions.module :
         getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
@@ -8605,6 +8613,44 @@ export function getEmitModuleKind(compilerOptions: { module?: CompilerOptions["m
 /** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
     return moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext;
+}
+
+/** @internal */
+export function getModulePreset(compilerOptions: CompilerOptions): ModuleKind | undefined {
+    if (typeof compilerOptions.module === "object") {
+        return compilerOptions.module.preset;
+    }
+    return compilerOptions.module;
+}
+
+/** @internal */
+export function getModuleFormatDetectionKind(compilerOptions: CompilerOptions): ModuleFormatDetectionKind {
+    if (typeof compilerOptions.module === "object" && compilerOptions.module.formatDetection !== undefined) {
+        return compilerOptions.module.formatDetection;
+    }
+    switch (getModulePreset(compilerOptions)) {
+        case ModuleKind.Node16:
+            return ModuleFormatDetectionKind.Node16;
+        case ModuleKind.NodeNext:
+            return ModuleFormatDetectionKind.NodeNext;
+        default:
+            return ModuleFormatDetectionKind.None;
+    }
+}
+
+/** @internal */
+export function getModuleFormatInteropKind(compilerOptions: CompilerOptions): ModuleFormatInteropKind {
+    if (typeof compilerOptions.module === "object" && compilerOptions.module.formatInterop !== undefined) {
+        return compilerOptions.module.formatInterop;
+    }
+    switch (getModulePreset(compilerOptions)) {
+        case ModuleKind.Node16:
+            return ModuleFormatInteropKind.Node16;
+        case ModuleKind.NodeNext:
+            return ModuleFormatInteropKind.NodeNext;
+        default:
+            return ModuleFormatInteropKind.Babel;
+    }
 }
 
 /** @internal */

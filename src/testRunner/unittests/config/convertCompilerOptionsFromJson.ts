@@ -307,4 +307,17 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
     baselineCompilerOptionsJsonText("Don't crash when root expression is not object at all", `42`, "tsconfig.json");
 
     baselineCompilerOptionsJsonText("Allow trailing comments", `{} // no options`, "tsconfig.json");
+
+    baselineCompilerOptionsJsonText(
+        "module as object",
+        `{
+            "compilerOptions": {
+                "module": {
+                    "preset": "nodenext",
+                    "formatDetection": "defaultmodule"
+                }
+            }
+        }`,
+        "tsconfig.json",
+    );
 });

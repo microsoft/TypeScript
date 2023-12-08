@@ -324,6 +324,7 @@ import {
     getMembersOfDeclaration,
     getModeForUsageLocation,
     getModifiers,
+    getModuleFormatInteropKind,
     getModuleInstanceState,
     getNameFromIndexInfo,
     getNameOfDeclaration,
@@ -840,6 +841,7 @@ import {
     modifierToFlag,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleFormatInteropKind,
     ModuleInstanceState,
     ModuleKind,
     ModuleResolutionKind,
@@ -4043,7 +4045,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isESMFormatImportImportingCommonjsFormatFile(usageMode: ResolutionMode, targetMode: ResolutionMode) {
-        return usageMode === ModuleKind.ESNext && targetMode === ModuleKind.CommonJS;
+        return usageMode === ModuleKind.ESNext && targetMode !== ModuleKind.ESNext;
     }
 
     function isOnlyImportedAsDefault(usage: Expression) {
@@ -4052,13 +4054,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
-        const usageMode = file && getUsageModeForExpression(usage);
-        if (file && usageMode !== undefined) {
-            const result = isESMFormatImportImportingCommonjsFormatFile(usageMode, file.impliedNodeFormat);
-            if (usageMode === ModuleKind.ESNext || result) {
-                return result;
-            }
-            // fallthrough on cjs usages so we imply defaults for interop'd imports, too
+        const usageMode = file && getModuleFormatInteropKind(compilerOptions) !== ModuleFormatInteropKind.Babel && getUsageModeForExpression(usage);
+        // fallthrough on cjs usages so we imply defaults for interop'd imports, too
+        if (usageMode === ModuleKind.ESNext) {
+            return isESMFormatImportImportingCommonjsFormatFile(usageMode, file!.impliedNodeFormat);
         }
         if (!allowSyntheticDefaultImports) {
             return false;
@@ -4993,6 +4992,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
+        const moduleFormatInterop = getModuleFormatInteropKind(compilerOptions);
         const resolvedModule = host.getResolvedModule(currentSourceFile, moduleReference, mode)?.resolvedModule;
         const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
         const sourceFile = resolvedModule
@@ -5028,7 +5028,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
-                if (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext) {
+                if (moduleFormatInterop === ModuleFormatInteropKind.Node16 || moduleFormatInterop === ModuleFormatInteropKind.NodeNext) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
                     const overrideHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l)) as ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined;
                     // An override clause will take effect for type-only imports and import types, and allows importing the types across formats, regardless of

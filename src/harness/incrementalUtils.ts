@@ -128,7 +128,7 @@ function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookup
             addedCacheType = true;
             baseline.push(`${indent}${cacheType}:`);
         }
-        baseline.push(`${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ":" : ""}${getResolvedFileName(resolved)}`);
+        baseline.push(`${indent}  ${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.shorthandType) + ":" : ""}${getResolvedFileName(resolved)}`);
     }, file);
 }
 

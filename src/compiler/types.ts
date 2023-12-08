@@ -7092,7 +7092,8 @@ export enum PollingWatchKind {
     FixedChunkSize,
 }
 
-export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+export type NestedCompilerOption = ModuleOptions;
+export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | NestedCompilerOption | PluginImport[] | ProjectReference[] | null | undefined;
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
@@ -7158,7 +7159,7 @@ export interface CompilerOptions {
     locale?: string;
     mapRoot?: string;
     maxNodeModuleJsDepth?: number;
-    module?: ModuleKind;
+    module?: ModuleKind | ModuleOptions;
     moduleResolution?: ModuleResolutionKind;
     moduleSuffixes?: string[];
     moduleDetection?: ModuleDetectionKind;
@@ -7282,6 +7283,33 @@ export enum ModuleKind {
     NodeNext = 199,
 }
 
+export enum ModuleFormatDetectionKind {
+    None = 0,
+    Bundler = 1,
+    DefaultModule = 2,
+    DefaultCommonJS = 3,
+    LocalModule = 4,
+    LocalCommonJS = 5,
+    Node16 = 100,
+    NodeNext = 199,
+}
+
+export enum ModuleFormatInteropKind {
+    Babel = 1,
+    BundlerNode = 2,
+
+    Node16 = 100,
+    NodeNext = 199,
+}
+
+export interface ModuleOptions {
+    preset?: ModuleKind;
+    formatDetection?: ModuleFormatDetectionKind;
+    formatInterop?: ModuleFormatInteropKind;
+    emit?: ModuleKind;
+    [option: string]: CompilerOptionsValue | undefined;
+}
+
 export const enum JsxEmit {
     None = 0,
     Preserve = 1,
@@ -7403,7 +7431,7 @@ export interface CreateProgramOptions {
 /** @internal */
 export interface CommandLineOptionBase {
     name: string;
-    type: "string" | "number" | "boolean" | "object" | "list" | "listOrElement" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+    type: "string" | "number" | "boolean" | "object" | "objectOrShorthand" | "list" | "listOrElement" | Map<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
     isFilePath?: boolean;                                   // True if option value is a path or fileName
     shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
     description?: DiagnosticMessage;                        // The message describing what the command line switch does.
@@ -7426,6 +7454,7 @@ export interface CommandLineOptionBase {
     transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
     extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     disallowNullOrUndefined?: true;                                    // If set option does not allow setting null
+    getParentOption?: () => CommandLineOptionOfObjectOrShorthandType;
 }
 
 /** @internal */
@@ -7475,6 +7504,16 @@ export interface TsConfigOnlyOption extends CommandLineOptionBase {
 }
 
 /** @internal */
+export interface CommandLineOptionOfObjectOrShorthandType extends CommandLineOptionBase {
+    type: "objectOrShorthand";
+    shorthandType: "string" | "number" | "boolean" | Map<string, number | string>;
+    defaultValueDescription?: string | number | boolean | DiagnosticMessage;
+    elementOptions: Map<string, CommandLineOption>;
+    extraKeyDiagnostics?: DidYouMeanOptionsDiagnostics;
+    deprecatedKeys?: Set<string>;
+}
+
+/** @internal */
 export interface CommandLineOptionOfListType extends CommandLineOptionBase {
     type: "list" | "listOrElement";
     element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
@@ -7482,7 +7521,14 @@ export interface CommandLineOptionOfListType extends CommandLineOptionBase {
 }
 
 /** @internal */
-export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
+export type CommandLineOption =
+    | CommandLineOptionOfCustomType
+    | CommandLineOptionOfStringType
+    | CommandLineOptionOfNumberType
+    | CommandLineOptionOfBooleanType
+    | CommandLineOptionOfObjectOrShorthandType
+    | TsConfigOnlyOption
+    | CommandLineOptionOfListType;
 
 // dprint-ignore
 /** @internal */

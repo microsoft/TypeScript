@@ -144,6 +144,15 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         }`,
     ]);
 
+    baselineParseResult("module as object", () => [`{
+        "compilerOptions": {
+            "module": {
+                "preset": "nodenext",
+                "formatDetection": "defaultmodule",
+            },
+        },
+    }`]);
+
     baselinedParsed("returns error when tsconfig have excludes", () => [{
         jsonText: `{
                     "compilerOptions": {

@@ -1,5 +1,5 @@
 // @target: ESNext
-// @module: ESNext
+// @module: NodeNext
 // @moduleResolution: NodeNext
 // @strict: true
 
