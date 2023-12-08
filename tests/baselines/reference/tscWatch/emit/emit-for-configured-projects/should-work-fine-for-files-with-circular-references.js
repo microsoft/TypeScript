@@ -34,6 +34,37 @@ Output::
 
 
 
+//// [/a/b/file2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.t2 = void 0;
+/// <reference path="./file1.ts" />
+exports.t2 = 10;
+
+
+//// [/a/b/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.t1 = void 0;
+/// <reference path="./file2.ts" />
+exports.t1 = 10;
+
+
+
+FsWatches::
+/a/b/file1.ts: *new*
+  {}
+/a/b/file2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
 Program root files: [
   "/a/b/file1.ts",
   "/a/b/file2.ts"
@@ -59,38 +90,7 @@ Shape signatures in builder refreshed for::
 /a/b/file2.ts (used version)
 /a/b/file1.ts (used version)
 
-FsWatches::
-/a/b/file1.ts: *new*
-  {}
-/a/b/file2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.t2 = void 0;
-/// <reference path="./file1.ts" />
-exports.t2 = 10;
-
-
-//// [/a/b/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.t1 = void 0;
-/// <reference path="./file2.ts" />
-exports.t1 = 10;
-
-
 
 Change:: change file1
 
@@ -100,14 +100,30 @@ Input::
 export var t1 = 10;export var t3 = 10;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/a/b/file2.js] file written with same contents
+//// [/a/b/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.t3 = exports.t1 = void 0;
+/// <reference path="./file2.ts" />
+exports.t1 = 10;
+exports.t3 = 10;
+
 
 
 
@@ -135,14 +151,3 @@ Shape signatures in builder refreshed for::
 /a/b/file2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/file2.js] file written with same contents
-//// [/a/b/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.t3 = exports.t1 = void 0;
-/// <reference path="./file2.ts" />
-exports.t1 = 10;
-exports.t3 = 10;
-
-

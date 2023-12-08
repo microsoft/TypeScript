@@ -44,30 +44,6 @@ interface Array<T> { length: number; [n: number]: T; }
 Output::
 
 
-Program root files: [
-  "/users/user/projects/myproject/src/index.ts"
-]
-Program options: {
-  "composite": true,
-  "removeComments": true,
-  "extendedDiagnostics": true,
-  "configFilePath": "/users/user/projects/myproject/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/user/projects/myproject/src/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/user/projects/myproject/src/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/user/projects/myproject/src/index.ts (computed .d.ts during emit)
-
-exitCode:: ExitStatus.Success
-
 //// [/users/user/projects/myproject/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -130,3 +106,27 @@ export declare const x = 10;
   "size": 811
 }
 
+
+Program root files: [
+  "/users/user/projects/myproject/src/index.ts"
+]
+Program options: {
+  "composite": true,
+  "removeComments": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/user/projects/myproject/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/user/projects/myproject/src/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/user/projects/myproject/src/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/user/projects/myproject/src/index.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.Success

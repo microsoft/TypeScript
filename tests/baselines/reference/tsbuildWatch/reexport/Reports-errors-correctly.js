@@ -99,87 +99,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/reexport/src/pure/index.ts",
-  "/user/username/projects/reexport/src/pure/session.ts"
-]
-Program options: {
-  "composite": true,
-  "outDir": "/user/username/projects/reexport/out",
-  "rootDir": "/user/username/projects/reexport/src",
-  "watch": true,
-  "configFilePath": "/user/username/projects/reexport/src/pure/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/reexport/src/pure/session.ts
-/user/username/projects/reexport/src/pure/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/reexport/src/pure/session.ts
-/user/username/projects/reexport/src/pure/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/reexport/src/pure/session.ts (computed .d.ts during emit)
-/user/username/projects/reexport/src/pure/index.ts (used version)
-
-Program root files: [
-  "/user/username/projects/reexport/src/main/index.ts"
-]
-Program options: {
-  "outDir": "/user/username/projects/reexport/out",
-  "rootDir": "/user/username/projects/reexport/src",
-  "watch": true,
-  "configFilePath": "/user/username/projects/reexport/src/main/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/reexport/out/pure/session.d.ts
-/user/username/projects/reexport/out/pure/index.d.ts
-/user/username/projects/reexport/src/main/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/reexport/out/pure/session.d.ts
-/user/username/projects/reexport/out/pure/index.d.ts
-/user/username/projects/reexport/src/main/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/reexport/out/pure/session.d.ts (used version)
-/user/username/projects/reexport/out/pure/index.d.ts (used version)
-/user/username/projects/reexport/src/main/index.ts (used version)
-
-PolledWatches::
-/user/username/projects/reexport/src/pure/package.json: *new*
-  {"pollingInterval":2000}
-
-FsWatches::
-/user/username/projects/reexport/src/main/index.ts: *new*
-  {}
-/user/username/projects/reexport/src/main/tsconfig.json: *new*
-  {}
-/user/username/projects/reexport/src/pure/index.ts: *new*
-  {}
-/user/username/projects/reexport/src/pure/session.ts: *new*
-  {}
-/user/username/projects/reexport/src/pure/tsconfig.json: *new*
-  {}
-/user/username/projects/reexport/src/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/reexport/src/main: *new*
-  {}
-/user/username/projects/reexport/src/pure: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/reexport/out/pure/session.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -300,49 +219,29 @@ exports.session = {
 
 
 
-Change:: Introduce error
+PolledWatches::
+/user/username/projects/reexport/src/pure/package.json: *new*
+  {"pollingInterval":2000}
 
-Input::
-//// [/user/username/projects/reexport/src/pure/session.ts]
-export interface Session {
-    foo: number;
-    bar: number;
-}
+FsWatches::
+/user/username/projects/reexport/src/main/index.ts: *new*
+  {}
+/user/username/projects/reexport/src/main/tsconfig.json: *new*
+  {}
+/user/username/projects/reexport/src/pure/index.ts: *new*
+  {}
+/user/username/projects/reexport/src/pure/session.ts: *new*
+  {}
+/user/username/projects/reexport/src/pure/tsconfig.json: *new*
+  {}
+/user/username/projects/reexport/src/tsconfig.json: *new*
+  {}
 
-
-
-Before running Timeout callback:: count: 1
-1: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 1
-2: timerToBuildInvalidatedProject
-Before running Timeout callback:: count: 1
-2: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:10 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
-
-[[90m12:01:11 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
-
-[[90m12:01:28 AM[0m] Project 'src/main/tsconfig.json' is out of date because output 'out/main/index.js' is older than input 'src/pure/tsconfig.json'
-
-[[90m12:01:29 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
-
-[96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2741: [0mProperty 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
-
-[7m3[0m export const session: Session = {
-[7m [0m [91m             ~~~~~~~[0m
-
-  [96mout/pure/session.d.ts[0m:[93m3[0m:[93m5[0m
-    [7m3[0m     bar: number;
-    [7m [0m [96m    ~~~[0m
-    'bar' is declared here.
-
-[[90m12:01:30 AM[0m] Found 1 error. Watching for file changes.
-
-
+FsWatchesRecursive::
+/user/username/projects/reexport/src/main: *new*
+  {}
+/user/username/projects/reexport/src/pure: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/reexport/src/pure/index.ts",
@@ -362,11 +261,13 @@ Program files::
 /user/username/projects/reexport/src/pure/index.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /user/username/projects/reexport/src/pure/session.ts
 /user/username/projects/reexport/src/pure/index.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/reexport/src/pure/session.ts (used version)
+/a/lib/lib.d.ts (used version)
+/user/username/projects/reexport/src/pure/session.ts (computed .d.ts during emit)
 /user/username/projects/reexport/src/pure/index.ts (used version)
 
 Program root files: [
@@ -386,16 +287,46 @@ Program files::
 /user/username/projects/reexport/src/main/index.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /user/username/projects/reexport/out/pure/session.d.ts
 /user/username/projects/reexport/out/pure/index.d.ts
 /user/username/projects/reexport/src/main/index.ts
 
 Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
 /user/username/projects/reexport/out/pure/session.d.ts (used version)
 /user/username/projects/reexport/out/pure/index.d.ts (used version)
 /user/username/projects/reexport/src/main/index.ts (used version)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Introduce error
+
+Input::
+//// [/user/username/projects/reexport/src/pure/session.ts]
+export interface Session {
+    foo: number;
+    bar: number;
+}
+
+
+
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 1
+Output::
+>> Screen clear
+[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:10 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
+
+[[90m12:01:11 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+
+
 
 //// [/user/username/projects/reexport/out/pure/session.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/session.d.ts]
@@ -478,39 +409,31 @@ export interface Session {
 }
 
 
-Change:: Fix error
-
-Input::
-//// [/user/username/projects/reexport/src/pure/session.ts]
-export interface Session {
-    foo: number;
-    // bar: number;
-}
-
-
+Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject *new*
 
 Before running Timeout callback:: count: 1
-3: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 1
-4: timerToBuildInvalidatedProject
-Before running Timeout callback:: count: 1
-4: timerToBuildInvalidatedProject
+2: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
->> Screen clear
-[[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:28 AM[0m] Project 'src/main/tsconfig.json' is out of date because output 'out/main/index.js' is older than input 'src/pure/tsconfig.json'
 
-[[90m12:01:35 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
+[[90m12:01:29 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
 
-[[90m12:01:36 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+[96msrc/main/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2741: [0mProperty 'bar' is missing in type '{ foo: number; }' but required in type 'Session'.
 
-[[90m12:01:53 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
+[7m3[0m export const session: Session = {
+[7m [0m [91m             ~~~~~~~[0m
 
-[[90m12:01:54 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+  [96mout/pure/session.d.ts[0m:[93m3[0m:[93m5[0m
+    [7m3[0m     bar: number;
+    [7m [0m [96m    ~~~[0m
+    'bar' is declared here.
 
-[[90m12:01:55 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
+[[90m12:01:30 AM[0m] Found 1 error. Watching for file changes.
 
-[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
+
 
 
 
@@ -536,7 +459,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/src/pure/index.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/reexport/src/pure/session.ts (computed .d.ts)
+/user/username/projects/reexport/src/pure/session.ts (used version)
 /user/username/projects/reexport/src/pure/index.ts (used version)
 
 Program root files: [
@@ -566,6 +489,34 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/main/index.ts (used version)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Fix error
+
+Input::
+//// [/user/username/projects/reexport/src/pure/session.ts]
+export interface Session {
+    foo: number;
+    // bar: number;
+}
+
+
+
+Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+3: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 1
+Output::
+>> Screen clear
+[[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:35 AM[0m] Project 'src/pure/tsconfig.json' is out of date because output 'out/pure/tsconfig.tsbuildinfo' is older than input 'src/pure/session.ts'
+
+[[90m12:01:36 AM[0m] Building project '/user/username/projects/reexport/src/pure/tsconfig.json'...
+
+
 
 //// [/user/username/projects/reexport/out/pure/session.js] file written with same contents
 //// [/user/username/projects/reexport/out/pure/session.d.ts]
@@ -650,4 +601,77 @@ export interface Session {
   "size": 1080
 }
 
+
+Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
+Output::
+[[90m12:01:53 AM[0m] Failed to parse file 'src/main/tsconfig.json': Semantic errors.
+
+[[90m12:01:54 AM[0m] Building project '/user/username/projects/reexport/src/main/tsconfig.json'...
+
+[[90m12:01:55 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/reexport/src/main/tsconfig.json'...
+
+[[90m12:01:57 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
 //// [/user/username/projects/reexport/out/main/index.js] file changed its modified time
+
+
+Program root files: [
+  "/user/username/projects/reexport/src/pure/index.ts",
+  "/user/username/projects/reexport/src/pure/session.ts"
+]
+Program options: {
+  "composite": true,
+  "outDir": "/user/username/projects/reexport/out",
+  "rootDir": "/user/username/projects/reexport/src",
+  "watch": true,
+  "configFilePath": "/user/username/projects/reexport/src/pure/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/reexport/src/pure/session.ts
+/user/username/projects/reexport/src/pure/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/reexport/src/pure/session.ts
+/user/username/projects/reexport/src/pure/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/reexport/src/pure/session.ts (computed .d.ts)
+/user/username/projects/reexport/src/pure/index.ts (used version)
+
+Program root files: [
+  "/user/username/projects/reexport/src/main/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/reexport/out",
+  "rootDir": "/user/username/projects/reexport/src",
+  "watch": true,
+  "configFilePath": "/user/username/projects/reexport/src/main/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/reexport/out/pure/session.d.ts
+/user/username/projects/reexport/out/pure/index.d.ts
+/user/username/projects/reexport/src/main/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/reexport/out/pure/session.d.ts
+/user/username/projects/reexport/out/pure/index.d.ts
+/user/username/projects/reexport/src/main/index.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/reexport/out/pure/session.d.ts (used version)
+/user/username/projects/reexport/out/pure/index.d.ts (used version)
+/user/username/projects/reexport/src/main/index.ts (used version)
+
+exitCode:: ExitStatus.undefined

@@ -858,7 +858,7 @@ export const enum ModifierFlags {
     Protected =          1 << 2,  // Property/Method
     Readonly =           1 << 3,  // Property/Method
     Override =           1 << 4,  // Override method.
-    
+
     // Syntactic-only modifiers
     Export =             1 << 5,  // Declarations
     Abstract =           1 << 6,  // Class/Method/ConstructSignature
@@ -3663,10 +3663,10 @@ export interface ImportClause extends NamedDeclaration {
 export type AssertionKey = ImportAttributeName;
 
 /** @deprecated */
-export type AssertEntry = ImportAttribute;
+export interface AssertEntry extends ImportAttribute {}
 
 /** @deprecated */
-export type AssertClause = ImportAttributes;
+export interface AssertClause extends ImportAttributes {}
 
 export type ImportAttributeName = Identifier | StringLiteral;
 
@@ -4684,11 +4684,11 @@ export interface Program extends ScriptReferenceHost {
      *
      * @internal
      */
-    getMissingFilePaths(): readonly Path[];
+    getMissingFilePaths(): Map<Path, string>;
     /** @internal */
     getModuleResolutionCache(): ModuleResolutionCache | undefined;
     /** @internal */
-    getFilesByNameMap(): Map<string, SourceFile | false | undefined>;
+    getFilesByNameMap(): Map<Path, SourceFile | false | undefined>;
 
     /** @internal */
     resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
@@ -5357,7 +5357,7 @@ export const enum TypeFormatFlags {
     None                                    = 0,
     NoTruncation                            = 1 << 0,  // Don't truncate typeToString result
     WriteArrayAsGenericType                 = 1 << 1,  // Write Array<T> instead T[]
-    // hole because there's a hole in node builder flags
+    GenerateNamesForShadowedTypeParams      = 1 << 2,   // When a type parameter T is shadowing another T, generate a name for it so it can still be referenced
     UseStructuralFallback                   = 1 << 3,   // When an alias cannot be named by its symbol, rather than report an error, fallback to a structural printout if possible
     // hole because there's a hole in node builder flags
     WriteTypeArgumentsOfSignature           = 1 << 5,  // Write the type arguments instead of type parameters of the signature
@@ -5388,7 +5388,7 @@ export const enum TypeFormatFlags {
     InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
     InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
 
-    NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
+    NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | GenerateNamesForShadowedTypeParams | UseStructuralFallback | WriteTypeArgumentsOfSignature |
         UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
         UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
         UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter,
@@ -5955,6 +5955,7 @@ export const enum InternalSymbolName {
     ExportEquals = "export=", // Export assignment symbol
     Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
     This = "this",
+    InstantiationExpression = "__instantiationExpression", // Instantiation expressions
 }
 
 /**
@@ -6047,7 +6048,7 @@ export interface NodeLinks {
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
     spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
-    fakeScopeForSignatureDeclaration?: boolean; // True if this is a fake scope injected into an enclosing declaration chain.
+    fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
 }
 
@@ -6129,7 +6130,7 @@ export const enum TypeFlags {
     Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
     StructuredOrInstantiable = StructuredType | Instantiable,
     /** @internal */
-    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection | TemplateLiteral,
+    ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
     /** @internal */
     Simplifiable = IndexedAccess | Conditional,
     /** @internal */
@@ -6151,6 +6152,8 @@ export const enum TypeFlags {
     IncludesEmptyObject = Conditional,
     /** @internal */
     IncludesInstantiable = Substitution,
+    /** @internal */
+    IncludesConstrainedTypeVariable = StringMapping,
     /** @internal */
     NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
 }
@@ -6288,7 +6291,7 @@ export const enum ObjectFlags {
     /** @internal */
     IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
-    // Flags that require TypeFlags.UnionOrIntersection, TypeFlags.Substitution, or TypeFlags.TemplateLiteral
+    // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
     /** @internal */
     IsGenericTypeComputed = 1 << 21, // IsGenericObjectType flag has been computed
     /** @internal */
@@ -6312,10 +6315,12 @@ export const enum ObjectFlags {
     IsNeverIntersectionComputed = 1 << 24, // IsNeverLike flag has been computed
     /** @internal */
     IsNeverIntersection = 1 << 25, // Intersection reduces to never
+    /** @internal */
+    IsConstrainedTypeVariable = 1 << 26, // T & C, where T's constraint and C are primitives, object, or {}
 }
 
 /** @internal */
-export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType | TemplateLiteralType;
+export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType;
 
 // Object types (TypeFlags.ObjectType)
 // dprint-ignore
@@ -6674,8 +6679,6 @@ export interface ConditionalType extends InstantiableType {
 }
 
 export interface TemplateLiteralType extends InstantiableType {
-    /** @internal */
-    objectFlags: ObjectFlags;
     texts: readonly string[]; // Always one element longer than types
     types: readonly Type[]; // Always at least one element
 }
@@ -7404,7 +7407,7 @@ export interface CommandLineOptionBase {
     isFilePath?: boolean;                                   // True if option value is a path or fileName
     shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
     description?: DiagnosticMessage;                        // The message describing what the command line switch does.
-    defaultValueDescription?: string | number | boolean | DiagnosticMessage;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
+    defaultValueDescription?: string | number | boolean | DiagnosticMessage | undefined;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
     paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
     isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
     isCommandLineOnly?: boolean;
@@ -8140,13 +8143,14 @@ export const enum ExternalEmitHelpers {
 
 // dprint-ignore
 export const enum EmitHint {
-    SourceFile,          // Emitting a SourceFile
-    Expression,          // Emitting an Expression
-    IdentifierName,      // Emitting an IdentifierName
-    MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
-    Unspecified,         // Emitting an otherwise unspecified node
-    EmbeddedStatement,   // Emitting an embedded statement
-    JsxAttributeValue,   // Emitting a JSX attribute value
+    SourceFile,              // Emitting a SourceFile
+    Expression,              // Emitting an Expression
+    IdentifierName,          // Emitting an IdentifierName
+    MappedTypeParameter,     // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
+    Unspecified,             // Emitting an otherwise unspecified node
+    EmbeddedStatement,       // Emitting an embedded statement
+    JsxAttributeValue,       // Emitting a JSX attribute value
+    ImportTypeNodeAttributes,// Emitting attributes as part of an ImportTypeNode
 }
 
 /** @internal */

@@ -35,6 +35,47 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+exports.C = C;
+
+
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = void 0;
+function f(p) { return p; }
+exports.f = f;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/a.ts",
   "/user/username/projects/myproject/b.ts"
@@ -59,48 +100,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/a.ts: *new*
-  {}
-/user/username/projects/myproject/b.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
-
-
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-function f(p) { return p; }
-exports.f = f;
-
-
 
 Change:: Set to "remove"
 
@@ -113,8 +113,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -122,6 +126,10 @@ Output::
 
 [[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js] file written with same contents
 
 
 Program root files: [
@@ -148,9 +156,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents
-
 Change:: Set to "error"
 
 Input::
@@ -162,8 +167,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -176,6 +185,18 @@ Output::
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = void 0;
+require("./a");
+function f(p) { return p; }
+exports.f = f;
+
 
 
 
@@ -200,17 +221,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
-require("./a");
-function f(p) { return p; }
-exports.f = f;
-
-
-
 Change:: Set to "preserve"
 
 Input::
@@ -222,8 +232,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -237,6 +251,10 @@ Output::
 
 [[90m12:01:01 AM[0m] Found 1 error. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js] file written with same contents
 
 
 Program root files: [
@@ -259,6 +277,3 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents

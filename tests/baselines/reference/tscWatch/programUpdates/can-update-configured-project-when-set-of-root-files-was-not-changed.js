@@ -38,6 +38,25 @@ Output::
 
 
 
+//// [/a/b/f1.js]
+var x = 1;
+
+
+//// [/a/b/f2.js]
+var y = 1;
+
+
+
+FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/b/f2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/a/b/f1.ts",
   "/a/b/f2.ts"
@@ -63,26 +82,7 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (used version)
 /a/b/f2.ts (used version)
 
-FsWatches::
-/a/b/f1.ts: *new*
-  {}
-/a/b/f2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js]
-var x = 1;
-
-
-//// [/a/b/f2.js]
-var y = 1;
-
-
 
 Change:: Modify config to set outFile option
 
@@ -99,14 +99,25 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/a/b/out.js]
+var x = 1;
+var y = 1;
+
 
 
 
@@ -131,9 +142,3 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/out.js]
-var x = 1;
-var y = 1;
-
-

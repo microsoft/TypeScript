@@ -26,6 +26,17 @@ Output::
 
 
 
+//// [/a/compile.js]
+var x = 1;
+
+
+
+FsWatches::
+/a/compile: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
 Program root files: [
   "/a/compile"
 ]
@@ -45,15 +56,4 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/compile (used version)
 
-FsWatches::
-/a/compile: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/compile.js]
-var x = 1;
-
-

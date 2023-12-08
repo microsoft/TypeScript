@@ -42,6 +42,28 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
+//// [/user/username/projects/myproject/index.js]
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/index.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/index.ts"
 ]
@@ -64,29 +86,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/index.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/index.js]
-
-
 
 Change:: Create foo in project root
 
@@ -95,16 +95,24 @@ Input::
 
 
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/foo :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
 
 
-exitCode:: ExitStatus.undefined
 
+
+exitCode:: ExitStatus.undefined

@@ -1,6 +1,3 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     dedent,
@@ -14,11 +11,10 @@ import {
 import {
     baselineTsserverLogs,
     createHostWithSolutionBuild,
-    createProjectService,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     protocolLocationFromSubstring,
+    TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
@@ -119,7 +115,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             const files = [libFile, containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
             if (tempFile) files.push(tempFile);
             const host = createHostWithSolutionBuild(files, [containerConfig.path]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             return { files, session, containerConfig, containerCompositeExecIndex };
         }
 
@@ -260,7 +256,7 @@ function foo() {
                 [commonConfig, keyboardTs, keyboardTestTs, srcConfig, terminalTs, libFile],
                 [srcConfig.path],
             );
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([keyboardTs, terminalTs], session);
 
             const searchStr = "evaluateKeyboardEvent";
@@ -331,23 +327,23 @@ function foo() {
         };
         const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
         const host = createServerHost(files);
-        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(aTs.path);
+        const session = new TestSession(host);
+        openFilesForSession([aTs], session);
 
         // project A referencing b.d.ts without project reference
-        const projectA = service.configuredProjects.get(configA.path)!;
+        const projectA = session.getProjectService().configuredProjects.get(configA.path)!;
         assert.isDefined(projectA);
 
         // reuses b.d.ts but sets the path and resolved path since projectC has project references
         // as the real resolution was to b.ts
-        service.openClientFile(cTs.path);
+        openFilesForSession([cTs], session);
 
         // Now new project for project A tries to reuse b but there is no filesByName mapping for b's source location
         host.writeFile(a2Ts.path, `${a2Ts.content}export const y = 30;`);
-        service.testhost.baselineHost("a2Ts modified");
+        session.host.baselineHost("a2Ts modified");
         assert.isTrue(projectA.dirty);
         projectA.updateGraph();
-        baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", service);
+        baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", session);
     });
 
     describe("when references are monorepo like with symlinks", () => {
@@ -389,7 +385,7 @@ function foo() {
                 createServerHost(files);
 
             // Create symlink in node module
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([aTest], session);
             verifyGetErrRequest({ session, files: [aTest] });
             session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
@@ -548,7 +544,7 @@ testCompositeFunction('why hello there', 42);`,
             symLink: `/user/username/projects/myproject/packages/emit-composite`,
         };
         const host = createServerHost([libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([consumerIndex], session);
         verifyGetErrRequest({ session, files: [consumerIndex] });
         baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
@@ -618,7 +614,7 @@ testCompositeFunction('why hello there', 42);`,
 
         const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([programFile], session);
 
         // Find all references for getSourceFile
@@ -738,7 +734,7 @@ testCompositeFunction('why hello there', 42);`,
 
         const files = [libFile, solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile, libFile];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([bFile], session);
 
         // The first search will trigger project loads
@@ -812,7 +808,7 @@ ${usage}`,
                     content: definition,
                 };
                 const host = createServerHost([libFile, solution, libFile, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const session = new TestSession(host);
                 openFilesForSession([apiFile], session);
 
                 // Find all references
@@ -929,7 +925,7 @@ export const foo = local;`,
 
         const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([programFile], session);
 
         // Find all references
@@ -1047,7 +1043,7 @@ export function bar() {}`,
                 fileResolvingToMainDts,
                 ...additionalFiles,
             ]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             const service = session.getProjectService();
             service.openClientFile(main.path);
             return { session, service, host };
@@ -1324,7 +1320,7 @@ bar;`,
                 content: `class class2 {}`,
             };
             const host = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([class2], session);
             return { host, session, class1 };
         }
@@ -1479,7 +1475,7 @@ bar;`,
                 solutionBuildWithBaseline(host, [solnConfig.path]);
                 host.clearOutput();
             }
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([appIndex], session);
             session.executeCommandSeq<ts.server.protocol.CodeFixRequest>({
                 command: ts.server.protocol.CommandTypes.GetCodeFixes,
@@ -1561,7 +1557,7 @@ bar;`,
             noCoreRef2File,
             noCoreRef2Config,
         ], { useCaseSensitiveFileNames: true });
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([mainFile, coreFile], session);
 
         // Find all refs in coreFile
@@ -1652,7 +1648,7 @@ const b: B = new B();`,
                 };
 
                 const host = createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const session = new TestSession(host);
                 openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
 
                 session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({

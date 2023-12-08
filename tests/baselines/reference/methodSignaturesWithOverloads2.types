@@ -47,18 +47,18 @@ c.func5 = c.func4;
 
 
 var c2: {
->c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
+>c2 : { func4?<T>(x: T): number; func4?<T_1>(s: T_1): string; func5?: { <T_2>(x: T_2): number; <T_3>(s: T_3): string; }; }
 
     func4?<T>(x: T): number;
->func4 : { <T>(x: T): number; <T>(s: T): string; }
+>func4 : { <T>(x: T): number; <T_1>(s: T_1): string; }
 >x : T
 
     func4? <T>(s: T): string;
->func4 : { <T>(x: T): number; <T>(s: T): string; }
+>func4 : { <T_1>(x: T_1): number; <T>(s: T): string; }
 >s : T
 
     func5?: {
->func5 : { <T>(x: T): number; <T>(s: T): string; }
+>func5 : { <T>(x: T): number; <T_1>(s: T_1): string; }
 
         <T>(x: T): number;
 >x : T
@@ -71,20 +71,20 @@ var c2: {
 
 // no errors
 c2.func4 = c2.func5;
->c2.func4 = c2.func5 : { <T>(x: T): number; <T>(s: T): string; }
->c2.func4 : { <T>(x: T): number; <T>(s: T): string; }
->c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
->func4 : { <T>(x: T): number; <T>(s: T): string; }
->c2.func5 : { <T>(x: T): number; <T>(s: T): string; }
->c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
->func5 : { <T>(x: T): number; <T>(s: T): string; }
+>c2.func4 = c2.func5 : { <T>(x: T): number; <T_1>(s: T_1): string; }
+>c2.func4 : { <T>(x: T): number; <T_1>(s: T_1): string; }
+>c2 : { func4?<T>(x: T): number; func4?<T_1>(s: T_1): string; func5?: { <T_2>(x: T_2): number; <T_3>(s: T_3): string; }; }
+>func4 : { <T>(x: T): number; <T_1>(s: T_1): string; }
+>c2.func5 : { <T>(x: T): number; <T_1>(s: T_1): string; }
+>c2 : { func4?<T>(x: T): number; func4?<T_1>(s: T_1): string; func5?: { <T_2>(x: T_2): number; <T_3>(s: T_3): string; }; }
+>func5 : { <T>(x: T): number; <T_1>(s: T_1): string; }
 
 c2.func5 = c2.func4;
->c2.func5 = c2.func4 : { <T>(x: T): number; <T>(s: T): string; }
->c2.func5 : { <T>(x: T): number; <T>(s: T): string; }
->c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
->func5 : { <T>(x: T): number; <T>(s: T): string; }
->c2.func4 : { <T>(x: T): number; <T>(s: T): string; }
->c2 : { func4?<T>(x: T): number; func4?<T>(s: T): string; func5?: { <T>(x: T): number; <T>(s: T): string; }; }
->func4 : { <T>(x: T): number; <T>(s: T): string; }
+>c2.func5 = c2.func4 : { <T>(x: T): number; <T_1>(s: T_1): string; }
+>c2.func5 : { <T>(x: T): number; <T_1>(s: T_1): string; }
+>c2 : { func4?<T>(x: T): number; func4?<T_1>(s: T_1): string; func5?: { <T_2>(x: T_2): number; <T_3>(s: T_3): string; }; }
+>func5 : { <T>(x: T): number; <T_1>(s: T_1): string; }
+>c2.func4 : { <T>(x: T): number; <T_1>(s: T_1): string; }
+>c2 : { func4?<T>(x: T): number; func4?<T_1>(s: T_1): string; func5?: { <T_2>(x: T_2): number; <T_3>(s: T_3): string; }; }
+>func4 : { <T>(x: T): number; <T_1>(s: T_1): string; }
 

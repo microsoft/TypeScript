@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/User/userName/Projects/I/foo.ts]
 import { foo } from "bar"
@@ -69,17 +69,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/i/jsconfig.json: *new*
+/User/userName/Projects/I/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/i/node_modules: *new*
+/User/userName/Projects/I/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/i/node_modules/@types: *new*
+/User/userName/Projects/I/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/i/tsconfig.json: *new*
+/User/userName/Projects/I/tsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules: *new*
+/User/userName/Projects/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
+/User/userName/Projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::

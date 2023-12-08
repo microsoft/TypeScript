@@ -42,6 +42,23 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/a.js]
+var y;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/a.ts"
 ]
@@ -61,24 +78,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/a.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-var y;
-
-
 
 Change:: Remove document declaration from file
 
@@ -88,14 +88,25 @@ var x: string;
 var y: number;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/user/username/projects/myproject/a.js]
+var x;
+var y;
+
 
 
 
@@ -119,12 +130,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/a.js]
-var x;
-var y;
-
-
-
 Change:: Rever the file to contain document declaration
 
 Input::
@@ -135,8 +140,12 @@ interface Document {
 var y: number;
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -156,6 +165,12 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/a.js]
+var y;
+
+
+
+
 Program root files: [
   "/user/username/projects/myproject/a.ts"
 ]
@@ -175,8 +190,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-var y;
-
-

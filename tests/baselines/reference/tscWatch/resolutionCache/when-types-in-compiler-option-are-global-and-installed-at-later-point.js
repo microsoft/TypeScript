@@ -45,6 +45,29 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/lib/app.js]
+myapp.component("hello");
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/lib/app.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/lib/app.ts"
 ]
@@ -68,30 +91,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/lib/app.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/lib/app.js]
-myapp.component("hello");
-
-
 
 Change:: npm install ts-types
 
@@ -107,6 +107,10 @@ Input::
 declare namespace myapp {
     function component(str: string): number;
 }
+
+
+Output::
+sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
 
 
 PolledWatches::
@@ -131,22 +135,55 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
+Timeout callback:: count: 2
+11: timerToInvalidateFailedLookupResolutions *new*
+12: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 2
 11: timerToInvalidateFailedLookupResolutions
 12: timerToUpdateProgram
+
 After running Timeout callback:: count: 1
-13: timerToUpdateProgram
+
+Timeout callback:: count: 1
+12: timerToUpdateProgram *deleted*
+13: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 13: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
-sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
-
 >> Screen clear
 [[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/lib/app.js] file written with same contents
+
+PolledWatches::
+/user/username/projects/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/lib/app.ts:
+  {}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
+  {}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
 
 
 Program root files: [
@@ -176,39 +213,11 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/lib/app.ts:
-  {}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json: *new*
-  {}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/node_modules:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/lib/app.js] file written with same contents
 
 Change:: No change, just check program
 
 Input::
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-

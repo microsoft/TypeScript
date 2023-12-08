@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "5.3.0",
+    "version": "5.4.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -78,7 +78,7 @@
         "playwright": "^1.38.0",
         "source-map-support": "^0.5.21",
         "tslib": "^2.5.0",
-        "typescript": "^5.0.2",
+        "typescript": "5.4.0-dev.20231206",
         "which": "^2.0.2"
     },
     "overrides": {

@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a.ts]
 export const a = 0;
@@ -132,7 +132,7 @@ Info seq  [hh:mm:ss:mss] response:
           "canRename": true,
           "fileToRename": "/a.ts",
           "displayName": "/a.ts",
-          "fullDisplayName": "/a.ts",
+          "fullDisplayName": "./a",
           "kind": "module",
           "kindModifiers": "",
           "triggerSpan": {
@@ -259,7 +259,7 @@ Info seq  [hh:mm:ss:mss] response:
           "canRename": true,
           "fileToRename": "/a.ts",
           "displayName": "/a.ts",
-          "fullDisplayName": "/a.ts",
+          "fullDisplayName": "./a",
           "kind": "module",
           "kindModifiers": "",
           "triggerSpan": {

@@ -70,7 +70,6 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             cancellationToken: ts.server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger(),
