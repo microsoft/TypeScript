@@ -3731,6 +3731,10 @@
         "category": "Error",
         "code": 2865
     },
+    "Import '{0}' conflicts with global value used in this file, so must be declared with a type-only import when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 2866
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -1,0 +1,29 @@
+bad.ts(1,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+bad.ts(1,10): error TS1484: 'Date' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+
+
+==== ./types.ts (0 errors) ====
+    export interface Date {
+        day: number;
+        month: number;
+        year: number;
+    }
+    
+==== ./bad.ts (2 errors) ====
+    import { Date } from './types';
+             ~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+             ~~~~
+!!! error TS1484: 'Date' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+    function foo(a: Date) {
+        const b = new Date(a.year, a.month, a.day);
+        return b.getTime();
+    }
+    
+==== ./good.ts (0 errors) ====
+    import type { Date } from './types';
+    function foo(a: Date) {
+        const b = new Date(a.year, a.month, a.day);
+        return b.getTime();
+    }
+    

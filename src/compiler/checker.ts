@@ -735,6 +735,7 @@ import {
     isTypeNode,
     isTypeNodeKind,
     isTypeOfExpression,
+    isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeOperatorNode,
     isTypeParameterDeclaration,
@@ -3601,6 +3602,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             typeOnlyDeclaration,
                             unescapedName,
                         );
+                    }
+                }
+
+                // Look at 'compilerOptions.isolatedModules' and not 'getIsolatedModules(...)' (which considers 'verbatimModuleSyntax')
+                // here because 'verbatimModuleSyntax' will already have an error for importing a type without 'import type'.
+                if (compilerOptions.isolatedModules && result && isInExternalModule && meaning & SymbolFlags.Value) {
+                    const isGlobal = lookup(globals, name, meaning) === result;
+                    const typeSymbol = isSourceFile(lastLocation!) && lastLocation.locals && lookup(lastLocation.locals, name, SymbolFlags.Type);
+                    if (isGlobal && typeSymbol) {
+                        const importDecl = typeSymbol.declarations?.find(d => d.kind === SyntaxKind.ImportSpecifier || d.kind === SyntaxKind.ImportClause || d.kind === SyntaxKind.NamespaceImport || d.kind === SyntaxKind.ImportEqualsDeclaration);
+                        if (importDecl && !isTypeOnlyImportDeclaration(importDecl)) {
+                            error(importDecl, Diagnostics.Import_0_conflicts_with_global_value_used_in_this_file_so_must_be_declared_with_a_type_only_import_when_isolatedModules_is_enabled, unescapeLeadingUnderscores(name));
+                        }
                     }
                 }
             });
