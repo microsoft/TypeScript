@@ -166,7 +166,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: a/data/package.json
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: /a/data/package.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project: /tsconfig.json Detected file add/remove of non supported extension: a/data/package.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
@@ -360,7 +360,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with src :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with src/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: src/package.json
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: /src/package.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project: /tsconfig.json Detected file add/remove of non supported extension: src/package.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with src/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
@@ -409,3 +409,37 @@ Timeout callback:: count: 2
 8: *ensureProjectForOpenFiles* *deleted*
 9: /tsconfig.json *new*
 10: *ensureProjectForOpenFiles* *new*
+
+getPackageJsonsVisibleToFile:: /a.ts undefined
+
+getPackageJsonsVisibleToFile:: /a.ts undefined:: Result:: [
+  {
+    "dependencies": {},
+    "devDependencies": {},
+    "optionalDependencies": {},
+    "peerDependencies": {},
+    "parseable": true,
+    "fileName": "/package.json"
+  }
+]
+
+getPackageJsonsVisibleToFile:: /src/b.ts undefined
+
+getPackageJsonsVisibleToFile:: /src/b.ts undefined:: Result:: [
+  {
+    "dependencies": {},
+    "devDependencies": {},
+    "optionalDependencies": {},
+    "peerDependencies": {},
+    "parseable": true,
+    "fileName": "/src/package.json"
+  },
+  {
+    "dependencies": {},
+    "devDependencies": {},
+    "optionalDependencies": {},
+    "peerDependencies": {},
+    "parseable": true,
+    "fileName": "/package.json"
+  }
+]

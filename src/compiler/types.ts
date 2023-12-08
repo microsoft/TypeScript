@@ -4684,11 +4684,11 @@ export interface Program extends ScriptReferenceHost {
      *
      * @internal
      */
-    getMissingFilePaths(): readonly Path[];
+    getMissingFilePaths(): Map<Path, string>;
     /** @internal */
     getModuleResolutionCache(): ModuleResolutionCache | undefined;
     /** @internal */
-    getFilesByNameMap(): Map<string, SourceFile | false | undefined>;
+    getFilesByNameMap(): Map<Path, SourceFile | false | undefined>;
 
     /** @internal */
     resolvedModules: Map<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
@@ -6153,6 +6153,8 @@ export const enum TypeFlags {
     /** @internal */
     IncludesInstantiable = Substitution,
     /** @internal */
+    IncludesConstrainedTypeVariable = StringMapping,
+    /** @internal */
     NotPrimitiveUnion = Any | Unknown | Void | Never | Object | Intersection | IncludesInstantiable,
 }
 
@@ -6313,6 +6315,8 @@ export const enum ObjectFlags {
     IsNeverIntersectionComputed = 1 << 24, // IsNeverLike flag has been computed
     /** @internal */
     IsNeverIntersection = 1 << 25, // Intersection reduces to never
+    /** @internal */
+    IsConstrainedTypeVariable = 1 << 26, // T & C, where T's constraint and C are primitives, object, or {}
 }
 
 /** @internal */
@@ -8139,13 +8143,14 @@ export const enum ExternalEmitHelpers {
 
 // dprint-ignore
 export const enum EmitHint {
-    SourceFile,          // Emitting a SourceFile
-    Expression,          // Emitting an Expression
-    IdentifierName,      // Emitting an IdentifierName
-    MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
-    Unspecified,         // Emitting an otherwise unspecified node
-    EmbeddedStatement,   // Emitting an embedded statement
-    JsxAttributeValue,   // Emitting a JSX attribute value
+    SourceFile,              // Emitting a SourceFile
+    Expression,              // Emitting an Expression
+    IdentifierName,          // Emitting an IdentifierName
+    MappedTypeParameter,     // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
+    Unspecified,             // Emitting an otherwise unspecified node
+    EmbeddedStatement,       // Emitting an embedded statement
+    JsxAttributeValue,       // Emitting a JSX attribute value
+    ImportTypeNodeAttributes,// Emitting attributes as part of an ImportTypeNode
 }
 
 /** @internal */

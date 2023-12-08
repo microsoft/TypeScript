@@ -144,6 +144,7 @@ import {
     ModuleImportResult,
     Msg,
     NormalizedPath,
+    PackageJsonWatcher,
     projectContainsInfoDirectly,
     ProjectOptions,
     ProjectReferenceProjectLoadKind,
@@ -398,7 +399,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     originalConfiguredProjects: Set<NormalizedPath> | undefined;
 
     /** @internal */
-    private packageJsonsForAutoImport: Set<string> | undefined;
+    packageJsonWatches: Set<PackageJsonWatcher> | undefined;
 
     /** @internal */
     noDtsResolutionProject?: AuxiliaryProject | undefined;
@@ -1080,6 +1081,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.resolutionCache.clear();
         this.resolutionCache = undefined!;
         this.cachedUnresolvedImportsPerFile = undefined!;
+        this.packageJsonWatches?.forEach(watcher => {
+            watcher.projects.delete(this);
+            watcher.close();
+        });
+        this.packageJsonWatches = undefined;
+        this.moduleSpecifierCache.clear();
         this.moduleSpecifierCache = undefined!;
         this.directoryStructureHost = undefined!;
         this.exportMapCache = undefined;
@@ -1308,12 +1315,10 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    onPackageJsonChange(packageJsonPath: Path) {
-        if (this.packageJsonsForAutoImport?.has(packageJsonPath)) {
-            this.moduleSpecifierCache.clear();
-            if (this.autoImportProviderHost) {
-                this.autoImportProviderHost.markAsDirty();
-            }
+    onPackageJsonChange() {
+        this.moduleSpecifierCache.clear();
+        if (this.autoImportProviderHost) {
+            this.autoImportProviderHost.markAsDirty();
         }
     }
 
@@ -1569,7 +1574,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.program,
                 this.missingFilesMap || (this.missingFilesMap = new Map()),
                 // Watch the missing files
-                missingFilePath => this.addMissingFileWatcher(missingFilePath),
+                (missingFilePath, missingFileName) => this.addMissingFileWatcher(missingFilePath, missingFileName),
             );
 
             if (this.generatedFilesMap) {
@@ -1694,14 +1699,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
-    private addMissingFileWatcher(missingFilePath: Path): FileWatcher {
+    private addMissingFileWatcher(missingFilePath: Path, missingFileName: string): FileWatcher {
         if (isConfiguredProject(this)) {
             // If this file is referenced config file, we are already watching it, no need to watch again
             const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(missingFilePath as string as NormalizedPath);
             if (configFileExistenceInfo?.config?.projects.has(this.canonicalConfigFilePath)) return noopFileWatcher;
         }
         const fileWatcher = this.projectService.watchFactory.watchFile(
-            missingFilePath,
+            getNormalizedAbsolutePath(missingFileName, this.currentDirectory),
             (fileName, eventKind) => {
                 if (isConfiguredProject(this)) {
                     this.getCachedDirectoryStructureHost().addOrDeleteFile(fileName, missingFilePath, eventKind);
@@ -2078,7 +2083,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
         if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return emptyArray;
-        return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
+        return this.projectService.getPackageJsonsVisibleToFile(fileName, this, rootDir);
     }
 
     /** @internal */
@@ -2088,9 +2093,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     getPackageJsonsForAutoImport(rootDir?: string): readonly ProjectPackageJsonInfo[] {
-        const packageJsons = this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
-        this.packageJsonsForAutoImport = new Set(packageJsons.map(p => p.fileName));
-        return packageJsons;
+        return this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
     }
 
     /** @internal */
@@ -2188,7 +2191,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     watchNodeModulesForPackageJsonChanges(directoryPath: string) {
-        return this.projectService.watchPackageJsonsInNodeModules(this.toPath(directoryPath), this);
+        return this.projectService.watchPackageJsonsInNodeModules(directoryPath, this);
     }
 
     /** @internal */
