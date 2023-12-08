@@ -1,4 +1,4 @@
-// [[Reason: TODO: Investigte. Fixer prints more levels of the type.]] ////
+// [[Reason: Type expansion of infinite type becomes different, but both are technically the same type]] ////
 
 //// [tests/cases/compiler/declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.ts] ////
 
