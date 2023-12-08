@@ -1341,6 +1341,21 @@ export function getImpliedNodeFormatForFileWorker(
                 fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
                 fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson(defaultFormat) :
                 undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
+        case ModuleFormatDetectionKind.LocalModule:
+        case ModuleFormatDetectionKind.LocalCommonJS:
+            if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs])) {
+                return ModuleKind.ESNext;
+            }
+            if (fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs])) {
+                return ModuleKind.CommonJS;
+            }
+            if (!isDeclarationFileName(fileName) && fileExtensionIsOneOf(fileName, [Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx])) {
+                // TODO: replace with more reliable check for "is this an emittable source file of this program"
+                // TODO: what about nested package.json directories? Should special behavior be restricted to the
+                //       one in scope of the tsconfig?
+                return formatDetection === ModuleFormatDetectionKind.LocalModule ? ModuleKind.ESNext : ModuleKind.CommonJS;
+            }
+            return lookupFromPackageJson(/*defaultFormat*/ ModuleKind.CommonJS);
         default:
             return undefined;
     }

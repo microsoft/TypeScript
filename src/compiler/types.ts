@@ -7288,6 +7288,8 @@ export enum ModuleFormatDetectionKind {
     Bundler = 1,
     DefaultModule = 2,
     DefaultCommonJS = 3,
+    LocalModule = 4,
+    LocalCommonJS = 5,
     Node16 = 100,
     NodeNext = 199,
 }

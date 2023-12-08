@@ -580,6 +580,8 @@ const moduleSubOptionDeclarations: readonly CommandLineOption[] = [
             nodenext: ModuleFormatDetectionKind.NodeNext,
             defaultmodule: ModuleFormatDetectionKind.DefaultModule,
             defaultcommonjs: ModuleFormatDetectionKind.DefaultCommonJS,
+            localmodule: ModuleFormatDetectionKind.LocalModule,
+            localcommonjs: ModuleFormatDetectionKind.LocalCommonJS,
         })),
         affectsModuleResolution: true,
         affectsSemanticDiagnostics: true,
