@@ -8590,7 +8590,7 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
 type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
 function createComputedCompilerOptions<T extends Record<string, CompilerOptionKeys[]>>(
     options: {
-        [K in keyof T & CompilerOptionKeys]: {
+        [K in keyof T & CompilerOptionKeys | StrictOptionName]: {
             dependencies: T[K];
             computeValue: (compilerOptions: Pick<CompilerOptions, K | T[K][number]>) => Exclude<CompilerOptions[K], undefined>;
         };
@@ -8813,7 +8813,7 @@ export const computedOptions = createComputedCompilerOptions({
             return getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
         },
     },
-}) satisfies Record<StrictOptionName, any>;
+});
 
 /** @internal */
 export const getEmitScriptTarget = computedOptions.target.computeValue;
