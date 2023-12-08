@@ -967,6 +967,7 @@ import {
     skipParentheses,
     skipTrivia,
     skipTypeChecking,
+    skipTypeParentheses,
     some,
     SourceFile,
     SpreadAssignment,
@@ -18490,7 +18491,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return constraint && (isGenericObjectType(constraint) || isGenericIndexType(constraint)) ? cloneTypeParameter(p) : p;
     }
 
-    function isSimpleTupleType(node: TypeNode) {
+    function isSimpleTupleType(node: TypeNode): boolean {
         return isTupleTypeNode(node) && length(node.elements) > 0 &&
             !some(node.elements, e => isOptionalTypeNode(e) || isRestTypeNode(e) || isNamedTupleMember(e) && !!(e.questionToken || e.dotDotDotToken));
     }
@@ -18521,11 +18522,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (checkType === wildcardType || extendsType === wildcardType) {
                 return wildcardType;
             }
+            const checkTypeNode = skipTypeParentheses(root.node.checkType);
+            const extendsTypeNode = skipTypeParentheses(root.node.extendsType);
             // When the check and extends types are simple tuple types of the same arity, we defer resolution of the
             // conditional type when any tuple elements are generic. This is such that non-distributable conditional
             // types can be written `[X] extends [Y] ? ...` and be deferred similarly to `X extends Y ? ...`.
-            const checkTuples = isSimpleTupleType(root.node.checkType) && isSimpleTupleType(root.node.extendsType) &&
-                length((root.node.checkType as TupleTypeNode).elements) === length((root.node.extendsType as TupleTypeNode).elements);
+            const checkTuples = isSimpleTupleType(checkTypeNode) && isSimpleTupleType(extendsTypeNode) &&
+                length((checkTypeNode as TupleTypeNode).elements) === length((extendsTypeNode as TupleTypeNode).elements);
             const checkTypeDeferred = isDeferredType(checkType, checkTuples);
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
