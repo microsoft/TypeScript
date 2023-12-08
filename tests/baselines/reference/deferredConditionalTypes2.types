@@ -4,12 +4,12 @@
 // https://github.com/microsoft/TypeScript/issues/56270
 
 type PositiveInfinity = 1e999;
->PositiveInfinity : number
+>PositiveInfinity : Infinity
 
 type NegativeInfinity = -1e999;
 >NegativeInfinity : -Infinity
 >-1e999 : -Infinity
->1e999 : number
+>1e999 : Infinity
 
 export type IsEqual<A, B> = (<G>() => G extends A ? 1 : 2) extends <
 >IsEqual : IsEqual<A, B>
@@ -23,7 +23,7 @@ export type IsEqual<A, B> = (<G>() => G extends A ? 1 : 2) extends <
 >false : false
 
 export type Add<A extends number, B extends number> = [
->Add : [true, false] extends [IsEqual<A, number>, IsEqual<B, -Infinity>] ? number : "failed"
+>Add : [true, false] extends [IsEqual<A, Infinity>, IsEqual<B, -Infinity>] ? Infinity : "failed"
 
   IsEqual<A, PositiveInfinity>,
   IsEqual<A, NegativeInfinity>,
@@ -39,7 +39,7 @@ export type Add<A extends number, B extends number> = [
   : never;
 
 export type AddWithoutParentheses<A extends number, B extends number> = [
->AddWithoutParentheses : [true, false] extends [IsEqual<A, number>, IsEqual<B, -Infinity>] ? number : "failed"
+>AddWithoutParentheses : [true, false] extends [IsEqual<A, Infinity>, IsEqual<B, -Infinity>] ? Infinity : "failed"
 
   IsEqual<A, PositiveInfinity>,
   IsEqual<A, NegativeInfinity>,
@@ -55,8 +55,8 @@ export type AddWithoutParentheses<A extends number, B extends number> = [
   : never;
 
 type AddTest0 = Add<PositiveInfinity, PositiveInfinity>;
->AddTest0 : number
+>AddTest0 : Infinity
 
 type AddTest1 = AddWithoutParentheses<PositiveInfinity, PositiveInfinity>;
->AddTest1 : number
+>AddTest1 : Infinity
 
