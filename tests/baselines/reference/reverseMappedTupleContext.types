@@ -73,3 +73,58 @@ const created2 = create({
 
 });
 
+interface CompilerOptions {
+  allowUnreachableCode?: boolean;
+>allowUnreachableCode : boolean | undefined
+
+  allowUnusedLabels?: boolean;
+>allowUnusedLabels : boolean | undefined
+
+  alwaysStrict?: boolean;
+>alwaysStrict : boolean | undefined
+}
+type KeepLiteralStrings<T extends string[]> = {
+>KeepLiteralStrings : KeepLiteralStrings<T>
+
+  [K in keyof T]: T[K];
+};
+declare function test4<T extends Record<string, string[]>>(obj: {
+>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
+>obj : { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }
+
+  [K in keyof T & keyof CompilerOptions]: {
+    dependencies: KeepLiteralStrings<T[K]>;
+>dependencies : KeepLiteralStrings<T[K]>
+
+  };
+}): T;
+const result4 = test4({
+>result4 : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
+>test4({  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },}) : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
+>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
+>{  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },} : { alwaysStrict: { dependencies: ["foo", "bar"]; }; allowUnusedLabels: { dependencies: ["baz", "qwe"]; }; }
+
+  alwaysStrict: {
+>alwaysStrict : { dependencies: ["foo", "bar"]; }
+>{    dependencies: ["foo", "bar"],  } : { dependencies: ["foo", "bar"]; }
+
+    dependencies: ["foo", "bar"],
+>dependencies : ["foo", "bar"]
+>["foo", "bar"] : ["foo", "bar"]
+>"foo" : "foo"
+>"bar" : "bar"
+
+  },
+  allowUnusedLabels: {
+>allowUnusedLabels : { dependencies: ["baz", "qwe"]; }
+>{    dependencies: ["baz", "qwe"],  } : { dependencies: ["baz", "qwe"]; }
+
+    dependencies: ["baz", "qwe"],
+>dependencies : ["baz", "qwe"]
+>["baz", "qwe"] : ["baz", "qwe"]
+>"baz" : "baz"
+>"qwe" : "qwe"
+
+  },
+});
+

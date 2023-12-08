@@ -23,3 +23,25 @@ const created2 = create({
   a: () => 1,
   b: [() => ""],
 });
+
+interface CompilerOptions {
+  allowUnreachableCode?: boolean;
+  allowUnusedLabels?: boolean;
+  alwaysStrict?: boolean;
+}
+type KeepLiteralStrings<T extends string[]> = {
+  [K in keyof T]: T[K];
+};
+declare function test4<T extends Record<string, string[]>>(obj: {
+  [K in keyof T & keyof CompilerOptions]: {
+    dependencies: KeepLiteralStrings<T[K]>;
+  };
+}): T;
+const result4 = test4({
+  alwaysStrict: {
+    dependencies: ["foo", "bar"],
+  },
+  allowUnusedLabels: {
+    dependencies: ["baz", "qwe"],
+  },
+});
