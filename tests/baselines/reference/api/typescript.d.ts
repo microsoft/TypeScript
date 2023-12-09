@@ -11511,6 +11511,7 @@ declare namespace ts {
         span: TextSpan;
         preferences: UserPreferences;
     }
+    function mapLongExpressionToResult(value: string, x: any, mappings: Record<string, number>): number;
     type ExportMapInfoKey = string & {
         __exportInfoKey: void;
     };
