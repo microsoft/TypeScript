@@ -7130,6 +7130,7 @@ export interface CompilerOptions {
     /** @internal */ extendedDiagnostics?: boolean;
     disableSizeLimit?: boolean;
     disableSourceOfProjectReferenceRedirect?: boolean;
+    disableRedirectedSourceFile?: boolean;
     disableSolutionSearching?: boolean;
     disableReferencedProjectLoad?: boolean;
     downlevelIteration?: boolean;

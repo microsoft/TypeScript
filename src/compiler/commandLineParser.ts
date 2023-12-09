@@ -1362,6 +1362,14 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
+        name: "disableRedirectedSourceFile",
+        type: "boolean",
+        isTSConfigOnly: true,
+        category: Diagnostics.Projects,
+        description: Diagnostics.Disable_redirected_source_file,
+        defaultValueDescription: false,
+    },
+    {
         name: "disableSolutionSearching",
         type: "boolean",
         isTSConfigOnly: true,

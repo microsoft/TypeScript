@@ -3668,7 +3668,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (packageId) {
             const packageIdKey = packageIdToString(packageId);
             const fileFromPackageId = packageIdToSourceFile.get(packageIdKey);
-            if (fileFromPackageId) {
+            if (fileFromPackageId && !options.disableRedirectedSourceFile) {
                 // Some other SourceFile already exists with this package name and version.
                 // Instead of creating a duplicate, just redirect to the existing one.
                 const dupFile = createRedirectedSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
