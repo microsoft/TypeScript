@@ -4281,6 +4281,7 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     }
     return preferRequire;
 }
+
 //function to map log expression to produce appropriate result
 export function mapLongExpressionToResult(value: string, x:any, mappings: Record<string, number>): number {
     return mappings[value] || x ;
