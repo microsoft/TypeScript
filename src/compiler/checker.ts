@@ -2047,6 +2047,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noConstraintType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var circularConstraintType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var resolvingDefaultType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
+    var resolvingApparentMappedType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
 
     var markerSuperType = createTypeParameter();
     var markerSubType = createTypeParameter();
@@ -2126,7 +2127,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var amalgamatedDuplicates: Map<string, DuplicateInfoForFiles> | undefined;
     var reverseMappedCache = new Map<string, Type | undefined>();
     var homomorphicMappedTypeInferenceStack: string[] = [];
-    var homomorphicMappedTypeApparentTypeStack: Type[] = [];
     var ambientModulesCache: Symbol[] | undefined;
     /**
      * List of every ambient module with a "*" wildcard.
@@ -14438,13 +14438,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getApparentTypeOfMappedType(type: MappedType) {
-        return type.resolvedApparentType || (type.resolvedApparentType = getResolvedApparentTypeOfMappedType(type));
+        if (type.resolvedApparentType) {
+            if (type.resolvedApparentType === resolvingApparentMappedType) {
+                return type.resolvedApparentType = type;
+            }
+            return type.resolvedApparentType;
+        }
+        type.resolvedApparentType = resolvingApparentMappedType;
+        return type.resolvedApparentType = getResolvedApparentTypeOfMappedType(type);
     }
 
     function getResolvedApparentTypeOfMappedType(type: MappedType) {
-        if (contains(homomorphicMappedTypeApparentTypeStack, type)) {
-            return type;
-        }
         const mappedType = type.target as MappedType || type;
         const typeVariable = getHomomorphicTypeVariable(mappedType);
         if (typeVariable && !mappedType.declaration.nameType) {
@@ -14455,9 +14459,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 const modifiersConstraint = getConstraintOfType(getModifiersTypeFromMappedType(type));
                 if (modifiersConstraint) {
-                    homomorphicMappedTypeApparentTypeStack.push(type);
                     constraint = getApparentType(modifiersConstraint);
-                    homomorphicMappedTypeApparentTypeStack.pop();
                 }
             }
             if (constraint && everyType(constraint, isArrayOrTupleType)) {
