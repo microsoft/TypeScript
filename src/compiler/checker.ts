@@ -22255,7 +22255,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // This is a carve-out in comparability to essentially forbid comparing a type parameter
                     // with another type parameter unless one extends the other. (Remember: comparability is mostly bidirectional!)
                     let constraint = getConstraintOfTypeParameter(source);
-                    if (constraint && hasNonCircularBaseConstraint(source)) {
+                    if (constraint) {
                         while (constraint && someType(constraint, c => !!(c.flags & TypeFlags.TypeParameter))) {
                             if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false)) {
                                 return result;
