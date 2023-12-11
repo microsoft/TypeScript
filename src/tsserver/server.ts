@@ -12,9 +12,7 @@ function findArgumentStringArray(argName: string): readonly string[] {
     return arg.split(",").filter(name => name !== "");
 }
 
-
 function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
-
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${ts.version}`);
     logger.info(`Arguments: ${args.join(" ")}`);
@@ -48,10 +46,11 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
             useInferredProjectPerProjectRoot: ts.server.hasArgument("--useInferredProjectPerProjectRoot"),
             suppressDiagnosticEvents: ts.server.hasArgument("--suppressDiagnosticEvents"),
             noGetErrOnBackgroundUpdate: ts.server.hasArgument("--noGetErrOnBackgroundUpdate"),
-            serverMode
+            canUseWatchEvents: ts.server.hasArgument("--canUseWatchEvents"),
+            serverMode,
         },
         logger,
-        cancellationToken
+        cancellationToken,
     );
 }
 

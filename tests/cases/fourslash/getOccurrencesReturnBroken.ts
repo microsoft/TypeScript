@@ -30,7 +30,5 @@
 //       where if an arrow function starts with a statement, we try to parse a body
 //       as if it was missing curly braces. If the behavior changes in the future,
 //       a change to this test is very much welcome.
-verify.baselineCommands(
-    { type: "documentHighlights" },
-    { type: "documentHighlights", markerOrRange: test.markers() },
-);
+verify.baselineDocumentHighlights();
+verify.baselineDocumentHighlights(test.markers());

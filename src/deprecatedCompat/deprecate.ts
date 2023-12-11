@@ -45,7 +45,7 @@ function createWarningDeprecation(name: string, errorAfter: Version | undefined,
     };
 }
 
-export function createDeprecation(name: string, options: DeprecationOptions & { error: true }): () => never;
+export function createDeprecation(name: string, options: DeprecationOptions & { error: true; }): () => never;
 export function createDeprecation(name: string, options?: DeprecationOptions): () => void;
 export function createDeprecation(name: string, options: DeprecationOptions = {}) {
     const version = typeof options.typeScriptVersion === "string" ? new Version(options.typeScriptVersion) : options.typeScriptVersion ?? getTypeScriptVersion();

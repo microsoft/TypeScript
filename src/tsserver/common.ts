@@ -22,6 +22,7 @@ export interface StartSessionOptions {
     useInferredProjectPerProjectRoot: ts.server.SessionOptions["useInferredProjectPerProjectRoot"];
     suppressDiagnosticEvents: ts.server.SessionOptions["suppressDiagnosticEvents"];
     noGetErrOnBackgroundUpdate: ts.server.SessionOptions["noGetErrOnBackgroundUpdate"];
+    canUseWatchEvents: ts.server.SessionOptions["canUseWatchEvents"];
     serverMode: ts.server.SessionOptions["serverMode"];
 }
 

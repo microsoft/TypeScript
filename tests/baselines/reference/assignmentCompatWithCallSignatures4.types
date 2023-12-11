@@ -105,10 +105,10 @@ module Errors {
                 }): boolean[];
             };
         var a17: {
->a17 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
+>a17 : { (x: { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }): any[]; (x: { <T_2 extends Derived2>(a: T_2): T_2; <T_3 extends Base>(a: T_3): T_3; }): any[]; }
 
                 (x: {
->x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
+>x : { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
 
                     <T extends Derived>(a: T): T;
 >a : T
@@ -118,7 +118,7 @@ module Errors {
 
                 }): any[];
                 (x: {
->x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
+>x : { <T extends Derived2>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
 
                     <T extends Derived2>(a: T): T;
 >a : T
@@ -224,7 +224,7 @@ module Errors {
 >a12 : (x: Base[], y: Derived2[]) => Derived[]
 
         var b15: <T>(x: { a: T; b: T }) => T; 
->b15 : <T>(x: { a: T; b: T; }) => T
+>b15 : <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -240,7 +240,7 @@ module Errors {
 >a15 : (x: { a: string; b: number; }) => number
 
         var b15a: <T extends Base>(x: { a: T; b: T }) => number; 
->b15a : <T extends Base>(x: { a: T; b: T; }) => number
+>b15a : <T extends Base>(x: {    a: T;    b: T;}) => number
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -277,13 +277,13 @@ module Errors {
 
         a17 = b17;
 >a17 = b17 : <T>(x: (a: T) => T) => any[]
->a17 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
+>a17 : { (x: { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }): any[]; (x: { <T_2 extends Derived2>(a: T_2): T_2; <T_3 extends Base>(a: T_3): T_3; }): any[]; }
 >b17 : <T>(x: (a: T) => T) => any[]
 
         b17 = a17;
->b17 = a17 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
+>b17 = a17 : { (x: { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }): any[]; (x: { <T_2 extends Derived2>(a: T_2): T_2; <T_3 extends Base>(a: T_3): T_3; }): any[]; }
 >b17 : <T>(x: (a: T) => T) => any[]
->a17 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
+>a17 : { (x: { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }): any[]; (x: { <T_2 extends Derived2>(a: T_2): T_2; <T_3 extends Base>(a: T_3): T_3; }): any[]; }
     }
 
     module WithGenericSignaturesInBaseType {

@@ -1,21 +1,45 @@
 // @ts-check
-import { CancelToken } from "@esfx/canceltoken";
+import {
+    CancelToken,
+} from "@esfx/canceltoken";
 import chalk from "chalk";
 import chokidar from "chokidar";
-import del from "del";
 import esbuild from "esbuild";
-import { EventEmitter } from "events";
+import {
+    EventEmitter,
+} from "events";
 import fs from "fs";
 import _glob from "glob";
-import { task } from "hereby";
+import {
+    task,
+} from "hereby";
 import path from "path";
 import util from "util";
 
-import { localizationDirectories } from "./scripts/build/localization.mjs";
+import {
+    localizationDirectories,
+} from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
-import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
-import { localBaseline, refBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
-import { Debouncer, Deferred, exec, getDiffTool, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
+import {
+    buildProject,
+    cleanProject,
+    watchProject,
+} from "./scripts/build/projects.mjs";
+import {
+    localBaseline,
+    refBaseline,
+    runConsoleTests,
+} from "./scripts/build/tests.mjs";
+import {
+    Debouncer,
+    Deferred,
+    exec,
+    getDiffTool,
+    memoize,
+    needsUpdate,
+    readJson,
+    rimraf,
+} from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
 
@@ -28,11 +52,10 @@ const copyright = memoize(async () => {
     return contents.replace(/\r\n/g, "\n");
 });
 
-
 export const buildScripts = task({
     name: "scripts",
     description: "Builds files in the 'scripts' folder.",
-    run: () => buildProject("scripts")
+    run: () => buildProject("scripts"),
 });
 
 const libs = memoize(() => {
@@ -47,7 +70,6 @@ const libs = memoize(() => {
     });
     return libs;
 });
-
 
 export const generateLibs = task({
     name: "lib",
@@ -67,7 +89,6 @@ export const generateLibs = task({
     },
 });
 
-
 const diagnosticInformationMapTs = "src/compiler/diagnosticInformationMap.generated.ts";
 const diagnosticMessagesJson = "src/compiler/diagnosticMessages.json";
 const diagnosticMessagesGeneratedJson = "src/compiler/diagnosticMessages.generated.json";
@@ -77,16 +98,18 @@ export const generateDiagnostics = task({
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     run: async () => {
         await exec(process.execPath, ["scripts/processDiagnosticMessages.mjs", diagnosticMessagesJson]);
-    }
+    },
 });
 
 const cleanDiagnostics = task({
     name: "clean-diagnostics",
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     hiddenFromTaskList: true,
-    run: () => del([diagnosticInformationMapTs, diagnosticMessagesGeneratedJson]),
+    run: async () => {
+        await rimraf(diagnosticInformationMapTs);
+        await rimraf(diagnosticMessagesGeneratedJson);
+    },
 });
-
 
 // Localize diagnostics
 /**
@@ -113,7 +136,7 @@ const localize = task({
         if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
             await exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
         }
-    }
+    },
 });
 
 export const buildSrc = task({
@@ -150,7 +173,6 @@ async function runDtsBundler(entrypoint, output) {
         output,
     ]);
 }
-
 
 /**
  * @param {string} entrypoint
@@ -199,22 +221,26 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // to be consumable by other bundlers, we need to convert these calls back to
             // require so our imports are visible again.
             //
-            // The leading spaces are to keep the offsets the same within the files to keep
-            // source maps working (though this only really matters for the line the require is on).
+            // To fix this, we redefine "require" to a name we're unlikely to use with the
+            // same length as "require", then replace it back to "require" after bundling,
+            // ensuring that source maps still work.
             //
             // See: https://github.com/evanw/esbuild/issues/1905
-            options.define = { require: "$$require" };
+            const require = "require";
+            const fakeName = "Q".repeat(require.length);
+            const fakeNameRegExp = new RegExp(fakeName, "g");
+            options.define = { [require]: fakeName };
             options.plugins = [
                 {
                     name: "fix-require",
-                    setup: (build) => {
+                    setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(/\$\$require/g, "  require");
+                            contents = contents.replace(fakeNameRegExp, require);
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },
-                }
+                },
             ];
         }
 
@@ -230,7 +256,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                 const onRebuild = taskOptions.onWatchRebuild;
                 options.plugins = (options.plugins?.slice(0) ?? []).concat([{
                     name: "watch",
-                    setup: (build) => {
+                    setup: build => {
                         let firstBuild = true;
                         build.onEnd(() => {
                             if (firstBuild) {
@@ -240,7 +266,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                                 onRebuild();
                             }
                         });
-                    }
+                    },
                 }]);
             }
 
@@ -335,12 +361,11 @@ function entrypointBuildTask(options) {
                 return watchProject(options.project);
             }
             return bundler.watch();
-        }
+        },
     });
 
     return { build, bundle, shim, main, watch };
 }
-
 
 const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     name: "tsc",
@@ -353,7 +378,6 @@ const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     mainDeps: [generateLibs],
 });
 export { tsc, watchTsc };
-
 
 const { main: services, build: buildServices, watch: watchServices } = entrypointBuildTask({
     name: "services",
@@ -379,7 +403,6 @@ export const dtsServices = task({
     },
 });
 
-
 const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     name: "tsserver",
     description: "Builds the language server",
@@ -391,7 +414,6 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     mainDeps: [generateLibs, services],
 });
 export { tsserver, watchTsserver };
-
 
 export const min = task({
     name: "min",
@@ -405,8 +427,6 @@ export const watchMin = task({
     hiddenFromTaskList: true,
     dependencies: [watchTsc, watchTsserver],
 });
-
-
 
 // This is technically not enough to make tsserverlibrary loadable in the
 // browser, but it's unlikely that anyone has actually been doing that.
@@ -442,7 +462,7 @@ const lssl = task({
     dependencies: [services],
     run: async () => {
         await fs.promises.writeFile("./built/local/tsserverlibrary.js", await fileContentsWithCopyright(lsslJs));
-    }
+    },
 });
 
 export const dtsLssl = task({
@@ -452,14 +472,13 @@ export const dtsLssl = task({
     run: async () => {
         await fs.promises.writeFile("./built/local/tsserverlibrary.d.ts", await fileContentsWithCopyright(lsslDts));
         await fs.promises.writeFile("./built/local/tsserverlibrary.internal.d.ts", await fileContentsWithCopyright(lsslDtsInternal));
-    }
+    },
 });
 
 export const dts = task({
     name: "dts",
     dependencies: [dtsServices, dtsLssl],
 });
-
 
 const testRunner = "./built/local/run.js";
 const watchTestsEmitter = new EventEmitter();
@@ -477,11 +496,10 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
         treeShaking: false,
         onWatchRebuild() {
             watchTestsEmitter.emit("rebuild");
-        }
+        },
     },
 });
 export { tests, watchTests };
-
 
 export const runEslintRulesTests = task({
     name: "run-eslint-rules-tests",
@@ -498,8 +516,10 @@ export const lint = task({
         const args = [
             "node_modules/eslint/bin/eslint",
             "--cache",
-            "--cache-location", `${folder}/.eslintcache`,
-            "--format", formatter,
+            "--cache-location",
+            `${folder}/.eslintcache`,
+            "--format",
+            formatter,
         ];
 
         if (cmdLineOptions.fix) {
@@ -510,7 +530,19 @@ export const lint = task({
 
         console.log(`Linting: ${args.join(" ")}`);
         return exec(process.execPath, args);
-    }
+    },
+});
+
+export const format = task({
+    name: "format",
+    description: "Formats the codebase.",
+    run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "fmt"]),
+});
+
+export const checkFormat = task({
+    name: "check-format",
+    description: "Checks that the codebase is formatted.",
+    run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "check"], { ignoreStdout: true }),
 });
 
 const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({
@@ -547,9 +579,8 @@ export const generateTypesMap = task({
         const contents = await fs.promises.readFile(source, "utf-8");
         JSON.parse(contents); // Validates that the JSON parses.
         await fs.promises.writeFile(target, contents);
-    }
+    },
 });
-
 
 // Drop a copy of diagnosticMessages.generated.json into the built/local folder. This allows
 // it to be synced to the Azure DevOps repo, so that it can get picked up by the build
@@ -562,9 +593,8 @@ const copyBuiltLocalDiagnosticMessages = task({
         const contents = await fs.promises.readFile(diagnosticMessagesGeneratedJson, "utf-8");
         JSON.parse(contents); // Validates that the JSON parses.
         await fs.promises.writeFile(builtLocalDiagnosticMessagesGeneratedJson, contents);
-    }
+    },
 });
-
 
 export const otherOutputs = task({
     name: "other-outputs",
@@ -630,7 +660,7 @@ export const runTestsAndWatch = task({
         let watching = true;
         let running = true;
         let lastTestChangeTimeMs = Date.now();
-        let testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        let testsChangedDeferred = /** @type {Deferred<void>} */ (new Deferred());
         let testsChangedCancelSource = CancelToken.source();
 
         const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
@@ -640,7 +670,7 @@ export const runTestsAndWatch = task({
             "tests/projects/**/*.*",
         ], {
             ignorePermissionErrors: true,
-            alwaysStat: true
+            alwaysStat: true,
         });
 
         process.on("SIGINT", endWatchMode);
@@ -713,7 +743,7 @@ export const runTestsAndWatch = task({
         function endRunTests() {
             lastTestChangeTimeMs = Date.now();
             testsChangedDeferred.resolve();
-            testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+            testsChangedDeferred = /** @type {Deferred<void>} */ (new Deferred());
         }
 
         function endWatchMode() {
@@ -790,7 +820,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
             const out = localPathToRefPath(p).replace(/\.delete$/, "");
-            await fs.promises.rm(out);
+            await rimraf(out);
         }
     };
 }
@@ -811,9 +841,8 @@ export const updateSublime = task({
         for (const file of ["built/local/tsserver.js", "built/local/tsserver.js.map"]) {
             await fs.promises.copyFile(file, path.resolve("../TypeScript-Sublime-Plugin/tsserver/", path.basename(file)));
         }
-    }
+    },
 });
-
 
 export const produceLKG = task({
     name: "LKG",
@@ -843,7 +872,7 @@ export const produceLKG = task({
         }
 
         await exec(process.execPath, ["scripts/produceLKG.mjs"]);
-    }
+    },
 });
 
 export const lkg = task({
@@ -855,7 +884,7 @@ export const lkg = task({
 export const cleanBuilt = task({
     name: "clean-built",
     hiddenFromTaskList: true,
-    run: () => del("built"),
+    run: () => fs.promises.rm("built", { recursive: true, force: true }),
 });
 
 export const clean = task({

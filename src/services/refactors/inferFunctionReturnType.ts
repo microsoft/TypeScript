@@ -10,7 +10,7 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     getLocaleSpecificMessage,
-    getTokenAtPosition,
+    getTouchingPropertyName,
     isArrowFunction,
     isBlock,
     isInJSFile,
@@ -40,12 +40,12 @@ const refactorDescription = getLocaleSpecificMessage(Diagnostics.Infer_function_
 const inferReturnTypeAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.rewrite.function.returnType"
+    kind: "refactor.rewrite.function.returnType",
 };
 registerRefactor(refactorName, {
     kinds: [inferReturnTypeAction.kind],
     getEditsForAction: getRefactorEditsToInferReturnType,
-    getAvailableActions: getRefactorActionsToInferReturnType
+    getAvailableActions: getRefactorActionsToInferReturnType,
 });
 
 function getRefactorEditsToInferReturnType(context: RefactorContext): RefactorEditInfo | undefined {
@@ -64,14 +64,14 @@ function getRefactorActionsToInferReturnType(context: RefactorContext): readonly
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: [inferReturnTypeAction]
+            actions: [inferReturnTypeAction],
         }];
     }
     if (context.preferences.provideRefactorNotApplicableReason) {
         return [{
             name: refactorName,
             description: refactorDescription,
-            actions: [{ ...inferReturnTypeAction, notApplicableReason: info.error }]
+            actions: [{ ...inferReturnTypeAction, notApplicableReason: info.error }],
         }];
     }
     return emptyArray;
@@ -104,7 +104,7 @@ function doChange(sourceFile: SourceFile, changes: textChanges.ChangeTracker, de
 function getInfo(context: RefactorContext): FunctionInfo | RefactorErrorInfo | undefined {
     if (isInJSFile(context.file) || !refactorKindBeginsWith(inferReturnTypeAction.kind, context.kind)) return;
 
-    const token = getTokenAtPosition(context.file, context.startPosition);
+    const token = getTouchingPropertyName(context.file, context.startPosition);
     const declaration = findAncestor(token, n =>
         isBlock(n) || n.parent && isArrowFunction(n.parent) && (n.kind === SyntaxKind.EqualsGreaterThanToken || n.parent.body === n) ? "quit" :
             isConvertibleDeclaration(n)) as ConvertibleDeclaration | undefined;

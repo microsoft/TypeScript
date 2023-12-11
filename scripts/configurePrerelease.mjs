@@ -1,7 +1,15 @@
 import assert from "assert";
-import { execFileSync } from "child_process";
-import { readFileSync, writeFileSync } from "fs";
-import { normalize, relative } from "path";
+import {
+    execFileSync,
+} from "child_process";
+import {
+    readFileSync,
+    writeFileSync,
+} from "fs";
+import {
+    normalize,
+    relative,
+} from "path";
 import url from "url";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));

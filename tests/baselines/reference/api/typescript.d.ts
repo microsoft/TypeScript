@@ -49,9 +49,11 @@ declare namespace ts {
             readonly fileName: Path;
             readonly packageName: string;
             readonly projectRootPath: Path;
+            readonly id: number;
         }
         interface PackageInstalledResponse extends ProjectResponse {
             readonly kind: ActionPackageInstalled;
+            readonly id: number;
             readonly success: boolean;
             readonly message: string;
         }
@@ -170,7 +172,8 @@ declare namespace ts {
                 PrepareCallHierarchy = "prepareCallHierarchy",
                 ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
                 ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-                ProvideInlayHints = "provideInlayHints"
+                ProvideInlayHints = "provideInlayHints",
+                WatchChange = "watchChange",
             }
             /**
              * A TypeScript Server message
@@ -635,7 +638,7 @@ declare namespace ts {
             enum OrganizeImportsMode {
                 All = "All",
                 SortAndCombine = "SortAndCombine",
-                RemoveUnused = "RemoveUnused"
+                RemoveUnused = "RemoveUnused",
             }
             interface OrganizeImportsRequestArgs {
                 scope: OrganizeImportsScope;
@@ -1084,6 +1087,7 @@ declare namespace ts {
                 displayName: string;
                 /**
                  * Full display name of item to be renamed.
+                 * If item to be renamed is a file, then this is the original text of the module specifer
                  */
                 fullDisplayName: string;
                 /**
@@ -1254,19 +1258,19 @@ declare namespace ts {
                 DynamicPriorityPolling = "DynamicPriorityPolling",
                 FixedChunkSizePolling = "FixedChunkSizePolling",
                 UseFsEvents = "UseFsEvents",
-                UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory"
+                UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory",
             }
             enum WatchDirectoryKind {
                 UseFsEvents = "UseFsEvents",
                 FixedPollingInterval = "FixedPollingInterval",
                 DynamicPriorityPolling = "DynamicPriorityPolling",
-                FixedChunkSizePolling = "FixedChunkSizePolling"
+                FixedChunkSizePolling = "FixedChunkSizePolling",
             }
             enum PollingWatchKind {
                 FixedInterval = "FixedInterval",
                 PriorityInterval = "PriorityInterval",
                 DynamicPriority = "DynamicPriority",
-                FixedChunkSize = "FixedChunkSize"
+                FixedChunkSize = "FixedChunkSize",
             }
             interface WatchOptions {
                 watchFile?: WatchFileKind | ts.WatchFileKind;
@@ -1504,6 +1508,15 @@ declare namespace ts {
             interface CloseRequest extends FileRequest {
                 command: CommandTypes.Close;
             }
+            interface WatchChangeRequest extends Request {
+                command: CommandTypes.WatchChange;
+                arguments: WatchChangeRequestArgs;
+            }
+            interface WatchChangeRequestArgs {
+                id: number;
+                path: string;
+                eventType: "create" | "delete" | "update";
+            }
             /**
              * Request to obtain the list of files that should be regenerated if target file is recompiled.
              * NOTE: this us query-only operation and does not generate any output on disk.
@@ -1726,7 +1739,7 @@ declare namespace ts {
                 /** Completion was triggered by a trigger character. */
                 TriggerCharacter = 2,
                 /** Completion was re-triggered as the current completion list is incomplete. */
-                TriggerForIncompleteCompletions = 3
+                TriggerForIncompleteCompletions = 3,
             }
             /**
              * Arguments for completions messages.
@@ -2421,6 +2434,33 @@ declare namespace ts {
                  */
                 maxFileSize: number;
             }
+            type CreateFileWatcherEventName = "createFileWatcher";
+            interface CreateFileWatcherEvent extends Event {
+                readonly event: CreateFileWatcherEventName;
+                readonly body: CreateFileWatcherEventBody;
+            }
+            interface CreateFileWatcherEventBody {
+                readonly id: number;
+                readonly path: string;
+            }
+            type CreateDirectoryWatcherEventName = "createDirectoryWatcher";
+            interface CreateDirectoryWatcherEvent extends Event {
+                readonly event: CreateDirectoryWatcherEventName;
+                readonly body: CreateDirectoryWatcherEventBody;
+            }
+            interface CreateDirectoryWatcherEventBody {
+                readonly id: number;
+                readonly path: string;
+                readonly recursive: boolean;
+            }
+            type CloseFileWatcherEventName = "closeFileWatcher";
+            interface CloseFileWatcherEvent extends Event {
+                readonly event: CloseFileWatcherEventName;
+                readonly body: CloseFileWatcherEventBody;
+            }
+            interface CloseFileWatcherEventBody {
+                readonly id: number;
+            }
             /**
              * Arguments for reload request.
              */
@@ -2733,12 +2773,12 @@ declare namespace ts {
             enum IndentStyle {
                 None = "None",
                 Block = "Block",
-                Smart = "Smart"
+                Smart = "Smart",
             }
             enum SemicolonPreference {
                 Ignore = "ignore",
                 Insert = "insert",
-                Remove = "remove"
+                Remove = "remove",
             }
             interface EditorSettings {
                 baseIndentSize?: number;
@@ -2897,6 +2937,10 @@ declare namespace ts {
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */
                 readonly disableLineTextInReferences?: boolean;
+                /**
+                 * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
+                 */
+                readonly excludeLibrarySymbolsInNavTo?: boolean;
             }
             interface CompilerOptions {
                 allowJs?: boolean;
@@ -2974,7 +3018,7 @@ declare namespace ts {
                 None = "None",
                 Preserve = "Preserve",
                 ReactNative = "ReactNative",
-                React = "React"
+                React = "React",
             }
             enum ModuleKind {
                 None = "None",
@@ -2984,15 +3028,15 @@ declare namespace ts {
                 System = "System",
                 ES6 = "ES6",
                 ES2015 = "ES2015",
-                ESNext = "ESNext"
+                ESNext = "ESNext",
             }
             enum ModuleResolutionKind {
                 Classic = "Classic",
-                Node = "Node"
+                Node = "Node",
             }
             enum NewLineKind {
                 Crlf = "Crlf",
-                Lf = "Lf"
+                Lf = "Lf",
             }
             enum ScriptTarget {
                 ES3 = "ES3",
@@ -3006,7 +3050,7 @@ declare namespace ts {
                 ES2020 = "ES2020",
                 ES2021 = "ES2021",
                 ES2022 = "ES2022",
-                ESNext = "ESNext"
+                ESNext = "ESNext",
             }
             enum ClassificationType {
                 comment = 1,
@@ -3033,7 +3077,7 @@ declare namespace ts {
                 jsxAttribute = 22,
                 jsxText = 23,
                 jsxAttributeStringLiteralValue = 24,
-                bigintLiteral = 25
+                bigintLiteral = 25,
             }
         }
         namespace typingsInstaller {
@@ -3122,7 +3166,7 @@ declare namespace ts {
             terse = 0,
             normal = 1,
             requestTime = 2,
-            verbose = 3
+            verbose = 3,
         }
         const emptyArray: SortedReadonlyArray<never>;
         interface Logger {
@@ -3139,7 +3183,7 @@ declare namespace ts {
         enum Msg {
             Err = "Err",
             Info = "Info",
-            Perf = "Perf"
+            Perf = "Perf",
         }
         namespace Errors {
             function ThrowNoProject(): never;
@@ -3221,7 +3265,7 @@ declare namespace ts {
             Configured = 1,
             External = 2,
             AutoImportProvider = 3,
-            Auxiliary = 4
+            Auxiliary = 4,
         }
         interface PluginCreateInfo {
             project: Project;
@@ -3233,7 +3277,7 @@ declare namespace ts {
         }
         interface PluginModule {
             create(createInfo: PluginCreateInfo): LanguageService;
-            getExternalFiles?(proj: Project): string[];
+            getExternalFiles?(proj: Project, updateLevel: ProgramUpdateLevel): string[];
             onConfigurationChanged?(config: any): void;
         }
         interface PluginModuleWithName {
@@ -3291,6 +3335,7 @@ declare namespace ts {
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
             static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
+            readonly jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
             private get typingsCache();
@@ -3312,7 +3357,6 @@ declare namespace ts {
             readFile(fileName: string): string | undefined;
             writeFile(fileName: string, content: string): void;
             fileExists(file: string): boolean;
-            getModuleResolutionCache(): ModuleResolutionCache | undefined;
             directoryExists(path: string): boolean;
             getDirectories(path: string): string[];
             log(s: string): void;
@@ -3337,7 +3381,7 @@ declare namespace ts {
             disableLanguageService(lastFileExceededProgramSize?: string): void;
             getProjectName(): string;
             protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
-            getExternalFiles(): SortedReadonlyArray<string>;
+            getExternalFiles(updateLevel?: ProgramUpdateLevel): SortedReadonlyArray<string>;
             getSourceFile(path: Path): ts.SourceFile | undefined;
             close(): void;
             private detachScriptInfoIfNotRoot;
@@ -3409,7 +3453,6 @@ declare namespace ts {
             getLanguageService(): never;
             getHostForAutoImportProvider(): never;
             getProjectReferences(): readonly ts.ProjectReference[] | undefined;
-            getTypeAcquisition(): TypeAcquisition;
         }
         /**
          * If a file is opened, the server will look for a tsconfig (or jsconfig)
@@ -3523,6 +3566,21 @@ declare namespace ts {
             readonly eventName: typeof OpenFileInfoTelemetryEvent;
             readonly data: OpenFileInfoTelemetryEventData;
         }
+        const CreateFileWatcherEvent: protocol.CreateFileWatcherEventName;
+        interface CreateFileWatcherEvent {
+            readonly eventName: protocol.CreateFileWatcherEventName;
+            readonly data: protocol.CreateFileWatcherEventBody;
+        }
+        const CreateDirectoryWatcherEvent: protocol.CreateDirectoryWatcherEventName;
+        interface CreateDirectoryWatcherEvent {
+            readonly eventName: protocol.CreateDirectoryWatcherEventName;
+            readonly data: protocol.CreateDirectoryWatcherEventBody;
+        }
+        const CloseFileWatcherEvent: protocol.CloseFileWatcherEventName;
+        interface CloseFileWatcherEvent {
+            readonly eventName: protocol.CloseFileWatcherEventName;
+            readonly data: protocol.CloseFileWatcherEventBody;
+        }
         interface ProjectInfoTelemetryEventData {
             /** Cryptographically secure hash of project file location. */
             readonly projectId: string;
@@ -3570,7 +3628,7 @@ declare namespace ts {
         interface OpenFileInfo {
             readonly checkJs: boolean;
         }
-        type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+        type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent | CreateFileWatcherEvent | CreateDirectoryWatcherEvent | CloseFileWatcherEvent;
         type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
         interface SafeList {
             [name: string]: {
@@ -3604,6 +3662,7 @@ declare namespace ts {
             useInferredProjectPerProjectRoot: boolean;
             typingsInstaller?: ITypingsInstaller;
             eventHandler?: ProjectServiceEventHandler;
+            canUseWatchEvents?: boolean;
             suppressDiagnosticEvents?: boolean;
             throttleWaitMilliseconds?: number;
             globalPlugins?: readonly string[];
@@ -3612,6 +3671,7 @@ declare namespace ts {
             typesMapLocation?: string;
             serverMode?: LanguageServiceMode;
             session: Session<unknown> | undefined;
+            jsDocParsingMode?: JSDocParsingMode;
         }
         interface WatchOptionsAndErrors {
             watchOptions: WatchOptions;
@@ -3674,7 +3734,6 @@ declare namespace ts {
             readonly typingsInstaller: ITypingsInstaller;
             private readonly globalCacheLocationDirectoryPath;
             readonly throttleWaitMilliseconds?: number;
-            private readonly eventHandler?;
             private readonly suppressDiagnosticEvents?;
             readonly globalPlugins: readonly string[];
             readonly pluginProbeLocations: readonly string[];
@@ -3686,6 +3745,7 @@ declare namespace ts {
             private performanceEventHandler?;
             private pendingPluginEnablements?;
             private currentPluginEnablementPromise?;
+            readonly jsDocParsingMode: JSDocParsingMode | undefined;
             constructor(opts: ProjectServiceOptions);
             toPath(fileName: string): Path;
             private loadTypesMap;
@@ -3877,16 +3937,17 @@ declare namespace ts {
             byteLength: (buf: string, encoding?: BufferEncoding) => number;
             hrtime: (start?: [
                 number,
-                number
+                number,
             ]) => [
                 number,
-                number
+                number,
             ];
             logger: Logger;
             /**
              * If falsy, all events are suppressed.
              */
             canUseEvents: boolean;
+            canUseWatchEvents?: boolean;
             eventHandler?: ProjectServiceEventHandler;
             /** Has no effect if eventHandler is also specified. */
             suppressDiagnosticEvents?: boolean;
@@ -4074,7 +4135,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.3";
+    const versionMajorMinor = "5.4";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -4404,9 +4465,11 @@ declare namespace ts {
         DefaultClause = 297,
         HeritageClause = 298,
         CatchClause = 299,
-        AssertClause = 300,
-        AssertEntry = 301,
-        ImportTypeAssertionContainer = 302,
+        ImportAttributes = 300,
+        ImportAttribute = 301,
+        /** @deprecated */ AssertClause = 300,
+        /** @deprecated */ AssertEntry = 301,
+        /** @deprecated */ ImportTypeAssertionContainer = 302,
         PropertyAssignment = 303,
         ShorthandPropertyAssignment = 304,
         SpreadAssignment = 305,
@@ -4500,13 +4563,157 @@ declare namespace ts {
         FirstJSDocNode = 316,
         LastJSDocNode = 357,
         FirstJSDocTagNode = 334,
-        LastJSDocTagNode = 357
+        LastJSDocTagNode = 357,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
     type PseudoLiteralSyntaxKind = SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail;
-    type PunctuationSyntaxKind = SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.DotToken | SyntaxKind.DotDotDotToken | SyntaxKind.SemicolonToken | SyntaxKind.CommaToken | SyntaxKind.QuestionDotToken | SyntaxKind.LessThanToken | SyntaxKind.LessThanSlashToken | SyntaxKind.GreaterThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.EqualsEqualsToken | SyntaxKind.ExclamationEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.EqualsGreaterThanToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.AsteriskToken | SyntaxKind.AsteriskAsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken | SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken | SyntaxKind.ExclamationToken | SyntaxKind.TildeToken | SyntaxKind.AmpersandAmpersandToken | SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionToken | SyntaxKind.QuestionQuestionEqualsToken | SyntaxKind.QuestionToken | SyntaxKind.ColonToken | SyntaxKind.AtToken | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.EqualsToken | SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken;
-    type KeywordSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.AssertsKeyword | SyntaxKind.AssertKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InferKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.OfKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.RequireKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SatisfiesKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.UsingKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword;
+    type PunctuationSyntaxKind =
+        | SyntaxKind.OpenBraceToken
+        | SyntaxKind.CloseBraceToken
+        | SyntaxKind.OpenParenToken
+        | SyntaxKind.CloseParenToken
+        | SyntaxKind.OpenBracketToken
+        | SyntaxKind.CloseBracketToken
+        | SyntaxKind.DotToken
+        | SyntaxKind.DotDotDotToken
+        | SyntaxKind.SemicolonToken
+        | SyntaxKind.CommaToken
+        | SyntaxKind.QuestionDotToken
+        | SyntaxKind.LessThanToken
+        | SyntaxKind.LessThanSlashToken
+        | SyntaxKind.GreaterThanToken
+        | SyntaxKind.LessThanEqualsToken
+        | SyntaxKind.GreaterThanEqualsToken
+        | SyntaxKind.EqualsEqualsToken
+        | SyntaxKind.ExclamationEqualsToken
+        | SyntaxKind.EqualsEqualsEqualsToken
+        | SyntaxKind.ExclamationEqualsEqualsToken
+        | SyntaxKind.EqualsGreaterThanToken
+        | SyntaxKind.PlusToken
+        | SyntaxKind.MinusToken
+        | SyntaxKind.AsteriskToken
+        | SyntaxKind.AsteriskAsteriskToken
+        | SyntaxKind.SlashToken
+        | SyntaxKind.PercentToken
+        | SyntaxKind.PlusPlusToken
+        | SyntaxKind.MinusMinusToken
+        | SyntaxKind.LessThanLessThanToken
+        | SyntaxKind.GreaterThanGreaterThanToken
+        | SyntaxKind.GreaterThanGreaterThanGreaterThanToken
+        | SyntaxKind.AmpersandToken
+        | SyntaxKind.BarToken
+        | SyntaxKind.CaretToken
+        | SyntaxKind.ExclamationToken
+        | SyntaxKind.TildeToken
+        | SyntaxKind.AmpersandAmpersandToken
+        | SyntaxKind.AmpersandAmpersandEqualsToken
+        | SyntaxKind.BarBarToken
+        | SyntaxKind.BarBarEqualsToken
+        | SyntaxKind.QuestionQuestionToken
+        | SyntaxKind.QuestionQuestionEqualsToken
+        | SyntaxKind.QuestionToken
+        | SyntaxKind.ColonToken
+        | SyntaxKind.AtToken
+        | SyntaxKind.BacktickToken
+        | SyntaxKind.HashToken
+        | SyntaxKind.EqualsToken
+        | SyntaxKind.PlusEqualsToken
+        | SyntaxKind.MinusEqualsToken
+        | SyntaxKind.AsteriskEqualsToken
+        | SyntaxKind.AsteriskAsteriskEqualsToken
+        | SyntaxKind.SlashEqualsToken
+        | SyntaxKind.PercentEqualsToken
+        | SyntaxKind.LessThanLessThanEqualsToken
+        | SyntaxKind.GreaterThanGreaterThanEqualsToken
+        | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
+        | SyntaxKind.AmpersandEqualsToken
+        | SyntaxKind.BarEqualsToken
+        | SyntaxKind.CaretEqualsToken;
+    type KeywordSyntaxKind =
+        | SyntaxKind.AbstractKeyword
+        | SyntaxKind.AccessorKeyword
+        | SyntaxKind.AnyKeyword
+        | SyntaxKind.AsKeyword
+        | SyntaxKind.AssertsKeyword
+        | SyntaxKind.AssertKeyword
+        | SyntaxKind.AsyncKeyword
+        | SyntaxKind.AwaitKeyword
+        | SyntaxKind.BigIntKeyword
+        | SyntaxKind.BooleanKeyword
+        | SyntaxKind.BreakKeyword
+        | SyntaxKind.CaseKeyword
+        | SyntaxKind.CatchKeyword
+        | SyntaxKind.ClassKeyword
+        | SyntaxKind.ConstKeyword
+        | SyntaxKind.ConstructorKeyword
+        | SyntaxKind.ContinueKeyword
+        | SyntaxKind.DebuggerKeyword
+        | SyntaxKind.DeclareKeyword
+        | SyntaxKind.DefaultKeyword
+        | SyntaxKind.DeleteKeyword
+        | SyntaxKind.DoKeyword
+        | SyntaxKind.ElseKeyword
+        | SyntaxKind.EnumKeyword
+        | SyntaxKind.ExportKeyword
+        | SyntaxKind.ExtendsKeyword
+        | SyntaxKind.FalseKeyword
+        | SyntaxKind.FinallyKeyword
+        | SyntaxKind.ForKeyword
+        | SyntaxKind.FromKeyword
+        | SyntaxKind.FunctionKeyword
+        | SyntaxKind.GetKeyword
+        | SyntaxKind.GlobalKeyword
+        | SyntaxKind.IfKeyword
+        | SyntaxKind.ImplementsKeyword
+        | SyntaxKind.ImportKeyword
+        | SyntaxKind.InferKeyword
+        | SyntaxKind.InKeyword
+        | SyntaxKind.InstanceOfKeyword
+        | SyntaxKind.InterfaceKeyword
+        | SyntaxKind.IntrinsicKeyword
+        | SyntaxKind.IsKeyword
+        | SyntaxKind.KeyOfKeyword
+        | SyntaxKind.LetKeyword
+        | SyntaxKind.ModuleKeyword
+        | SyntaxKind.NamespaceKeyword
+        | SyntaxKind.NeverKeyword
+        | SyntaxKind.NewKeyword
+        | SyntaxKind.NullKeyword
+        | SyntaxKind.NumberKeyword
+        | SyntaxKind.ObjectKeyword
+        | SyntaxKind.OfKeyword
+        | SyntaxKind.PackageKeyword
+        | SyntaxKind.PrivateKeyword
+        | SyntaxKind.ProtectedKeyword
+        | SyntaxKind.PublicKeyword
+        | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OutKeyword
+        | SyntaxKind.OverrideKeyword
+        | SyntaxKind.RequireKeyword
+        | SyntaxKind.ReturnKeyword
+        | SyntaxKind.SatisfiesKeyword
+        | SyntaxKind.SetKeyword
+        | SyntaxKind.StaticKeyword
+        | SyntaxKind.StringKeyword
+        | SyntaxKind.SuperKeyword
+        | SyntaxKind.SwitchKeyword
+        | SyntaxKind.SymbolKeyword
+        | SyntaxKind.ThisKeyword
+        | SyntaxKind.ThrowKeyword
+        | SyntaxKind.TrueKeyword
+        | SyntaxKind.TryKeyword
+        | SyntaxKind.TypeKeyword
+        | SyntaxKind.TypeOfKeyword
+        | SyntaxKind.UndefinedKeyword
+        | SyntaxKind.UniqueKeyword
+        | SyntaxKind.UnknownKeyword
+        | SyntaxKind.UsingKeyword
+        | SyntaxKind.VarKeyword
+        | SyntaxKind.VoidKeyword
+        | SyntaxKind.WhileKeyword
+        | SyntaxKind.WithKeyword
+        | SyntaxKind.YieldKeyword;
     type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
     type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
     type TokenSyntaxKind = SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind;
@@ -4544,36 +4751,36 @@ declare namespace ts {
         ReachabilityCheckFlags = 1536,
         ReachabilityAndEmitFlags = 5632,
         ContextFlags = 101441536,
-        TypeExcludesFlags = 81920
+        TypeExcludesFlags = 81920,
     }
     enum ModifierFlags {
         None = 0,
-        Export = 1,
-        Ambient = 2,
-        Public = 4,
-        Private = 8,
-        Protected = 16,
-        Static = 32,
-        Readonly = 64,
-        Accessor = 128,
-        Abstract = 256,
-        Async = 512,
-        Default = 1024,
-        Const = 2048,
-        HasComputedJSDocModifiers = 4096,
-        Deprecated = 8192,
-        Override = 16384,
-        In = 32768,
-        Out = 65536,
-        Decorator = 131072,
+        Public = 1,
+        Private = 2,
+        Protected = 4,
+        Readonly = 8,
+        Override = 16,
+        Export = 32,
+        Abstract = 64,
+        Ambient = 128,
+        Static = 256,
+        Accessor = 512,
+        Async = 1024,
+        Default = 2048,
+        Const = 4096,
+        In = 8192,
+        Out = 16384,
+        Decorator = 32768,
+        Deprecated = 65536,
+        HasComputedJSDocModifiers = 268435456,
         HasComputedFlags = 536870912,
-        AccessibilityModifier = 28,
-        ParameterPropertyModifier = 16476,
-        NonPublicAccessibilityModifier = 24,
-        TypeScriptModifier = 117086,
-        ExportDefault = 1025,
-        All = 258047,
-        Modifier = 126975
+        AccessibilityModifier = 7,
+        ParameterPropertyModifier = 31,
+        NonPublicAccessibilityModifier = 6,
+        TypeScriptModifier = 28895,
+        ExportDefault = 2080,
+        All = 131071,
+        Modifier = 98303,
     }
     enum JsxFlags {
         None = 0,
@@ -4581,7 +4788,7 @@ declare namespace ts {
         IntrinsicNamedElement = 1,
         /** An element inferred from the string index signature of the JSX.IntrinsicElements interface */
         IntrinsicIndexedElement = 2,
-        IntrinsicElement = 3
+        IntrinsicElement = 3,
     }
     interface Node extends ReadonlyTextRange {
         readonly kind: SyntaxKind;
@@ -4614,7 +4821,71 @@ declare namespace ts {
     interface FlowContainer extends Node {
         _flowContainerBrand: any;
     }
-    type HasJSDoc = AccessorDeclaration | ArrowFunction | BinaryExpression | Block | BreakStatement | CallSignatureDeclaration | CaseClause | ClassLikeDeclaration | ClassStaticBlockDeclaration | ConstructorDeclaration | ConstructorTypeNode | ConstructSignatureDeclaration | ContinueStatement | DebuggerStatement | DoStatement | ElementAccessExpression | EmptyStatement | EndOfFileToken | EnumDeclaration | EnumMember | ExportAssignment | ExportDeclaration | ExportSpecifier | ExpressionStatement | ForInStatement | ForOfStatement | ForStatement | FunctionDeclaration | FunctionExpression | FunctionTypeNode | Identifier | IfStatement | ImportDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | InterfaceDeclaration | JSDocFunctionType | JSDocSignature | LabeledStatement | MethodDeclaration | MethodSignature | ModuleDeclaration | NamedTupleMember | NamespaceExportDeclaration | ObjectLiteralExpression | ParameterDeclaration | ParenthesizedExpression | PropertyAccessExpression | PropertyAssignment | PropertyDeclaration | PropertySignature | ReturnStatement | SemicolonClassElement | ShorthandPropertyAssignment | SpreadAssignment | SwitchStatement | ThrowStatement | TryStatement | TypeAliasDeclaration | TypeParameterDeclaration | VariableDeclaration | VariableStatement | WhileStatement | WithStatement;
+    type HasJSDoc =
+        | AccessorDeclaration
+        | ArrowFunction
+        | BinaryExpression
+        | Block
+        | BreakStatement
+        | CallSignatureDeclaration
+        | CaseClause
+        | ClassLikeDeclaration
+        | ClassStaticBlockDeclaration
+        | ConstructorDeclaration
+        | ConstructorTypeNode
+        | ConstructSignatureDeclaration
+        | ContinueStatement
+        | DebuggerStatement
+        | DoStatement
+        | ElementAccessExpression
+        | EmptyStatement
+        | EndOfFileToken
+        | EnumDeclaration
+        | EnumMember
+        | ExportAssignment
+        | ExportDeclaration
+        | ExportSpecifier
+        | ExpressionStatement
+        | ForInStatement
+        | ForOfStatement
+        | ForStatement
+        | FunctionDeclaration
+        | FunctionExpression
+        | FunctionTypeNode
+        | Identifier
+        | IfStatement
+        | ImportDeclaration
+        | ImportEqualsDeclaration
+        | IndexSignatureDeclaration
+        | InterfaceDeclaration
+        | JSDocFunctionType
+        | JSDocSignature
+        | LabeledStatement
+        | MethodDeclaration
+        | MethodSignature
+        | ModuleDeclaration
+        | NamedTupleMember
+        | NamespaceExportDeclaration
+        | ObjectLiteralExpression
+        | ParameterDeclaration
+        | ParenthesizedExpression
+        | PropertyAccessExpression
+        | PropertyAssignment
+        | PropertyDeclaration
+        | PropertySignature
+        | ReturnStatement
+        | SemicolonClassElement
+        | ShorthandPropertyAssignment
+        | SpreadAssignment
+        | SwitchStatement
+        | ThrowStatement
+        | TryStatement
+        | TypeAliasDeclaration
+        | TypeParameterDeclaration
+        | VariableDeclaration
+        | VariableStatement
+        | WhileStatement
+        | WithStatement;
     type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
@@ -4678,7 +4949,7 @@ declare namespace ts {
         ReservedInNestedScopes = 8,
         Optimistic = 16,
         FileLevel = 32,
-        AllowNameSubstitution = 64
+        AllowNameSubstitution = 64,
     }
     interface Identifier extends PrimaryExpression, Declaration, JSDocContainer, FlowContainer {
         readonly kind: SyntaxKind.Identifier;
@@ -4706,7 +4977,7 @@ declare namespace ts {
         readonly right: Identifier;
     }
     type EntityName = Identifier | QualifiedName;
-    type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+    type PropertyName = Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
     type MemberName = Identifier | PrivateIdentifier;
     type DeclarationName = PropertyName | JsxAttributeName | StringLiteralLike | ElementAccessExpression | BindingPattern | EntityNameExpression;
     interface Declaration extends Node {
@@ -4929,17 +5200,19 @@ declare namespace ts {
     interface KeywordTypeNode<TKind extends KeywordTypeSyntaxKind = KeywordTypeSyntaxKind> extends KeywordToken<TKind>, TypeNode {
         readonly kind: TKind;
     }
+    /** @deprecated */
     interface ImportTypeAssertionContainer extends Node {
         readonly kind: SyntaxKind.ImportTypeAssertionContainer;
         readonly parent: ImportTypeNode;
-        readonly assertClause: AssertClause;
+        /** @deprecated */ readonly assertClause: AssertClause;
         readonly multiLine?: boolean;
     }
     interface ImportTypeNode extends NodeWithTypeArguments {
         readonly kind: SyntaxKind.ImportType;
         readonly isTypeOf: boolean;
         readonly argument: TypeNode;
-        readonly assertions?: ImportTypeAssertionContainer;
+        /** @deprecated */ readonly assertions?: ImportTypeAssertionContainer;
+        readonly attributes?: ImportAttributes;
         readonly qualifier?: EntityName;
     }
     interface ThisTypeNode extends TypeNode {
@@ -5246,7 +5519,7 @@ declare namespace ts {
         Octal = 32,
         HexSpecifier = 64,
         BinarySpecifier = 128,
-        OctalSpecifier = 256
+        OctalSpecifier = 256,
     }
     interface NumericLiteral extends LiteralExpression, Declaration {
         readonly kind: SyntaxKind.NumericLiteral;
@@ -5374,7 +5647,10 @@ declare namespace ts {
         readonly typeArguments?: NodeArray<TypeNode>;
         readonly template: TemplateLiteral;
     }
-    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement;
+    interface InstanceofExpression extends BinaryExpression {
+        readonly operatorToken: Token<SyntaxKind.InstanceOfKeyword>;
+    }
+    type CallLikeExpression = CallExpression | NewExpression | TaggedTemplateExpression | Decorator | JsxOpeningLikeElement | InstanceofExpression;
     interface AsExpression extends Expression {
         readonly kind: SyntaxKind.AsExpression;
         readonly expression: Expression;
@@ -5730,7 +6006,8 @@ declare namespace ts {
         readonly importClause?: ImportClause;
         /** If this is not a StringLiteral it will be a grammar error. */
         readonly moduleSpecifier: Expression;
-        readonly assertClause?: AssertClause;
+        /** @deprecated */ readonly assertClause?: AssertClause;
+        readonly attributes?: ImportAttributes;
     }
     type NamedImportBindings = NamespaceImport | NamedImports;
     type NamedExportBindings = NamespaceExport | NamedExports;
@@ -5741,17 +6018,26 @@ declare namespace ts {
         readonly name?: Identifier;
         readonly namedBindings?: NamedImportBindings;
     }
-    type AssertionKey = Identifier | StringLiteral;
-    interface AssertEntry extends Node {
-        readonly kind: SyntaxKind.AssertEntry;
-        readonly parent: AssertClause;
-        readonly name: AssertionKey;
+    /** @deprecated */
+    type AssertionKey = ImportAttributeName;
+    /** @deprecated */
+    interface AssertEntry extends ImportAttribute {
+    }
+    /** @deprecated */
+    interface AssertClause extends ImportAttributes {
+    }
+    type ImportAttributeName = Identifier | StringLiteral;
+    interface ImportAttribute extends Node {
+        readonly kind: SyntaxKind.ImportAttribute;
+        readonly parent: ImportAttributes;
+        readonly name: ImportAttributeName;
         readonly value: Expression;
     }
-    interface AssertClause extends Node {
-        readonly kind: SyntaxKind.AssertClause;
+    interface ImportAttributes extends Node {
+        readonly token: SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword;
+        readonly kind: SyntaxKind.ImportAttributes;
         readonly parent: ImportDeclaration | ExportDeclaration;
-        readonly elements: NodeArray<AssertEntry>;
+        readonly elements: NodeArray<ImportAttribute>;
         readonly multiLine?: boolean;
     }
     interface NamespaceImport extends NamedDeclaration {
@@ -5777,7 +6063,8 @@ declare namespace ts {
         readonly exportClause?: NamedExportBindings;
         /** If this is not a StringLiteral it will be a grammar error. */
         readonly moduleSpecifier?: Expression;
-        readonly assertClause?: AssertClause;
+        /** @deprecated */ readonly assertClause?: AssertClause;
+        readonly attributes?: ImportAttributes;
     }
     interface NamedImports extends Node {
         readonly kind: SyntaxKind.NamedImports;
@@ -5806,41 +6093,50 @@ declare namespace ts {
     }
     type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
     type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier | ExportDeclaration | NamespaceExport;
-    type TypeOnlyImportDeclaration = ImportClause & {
-        readonly isTypeOnly: true;
-        readonly name: Identifier;
-    } | ImportEqualsDeclaration & {
-        readonly isTypeOnly: true;
-    } | NamespaceImport & {
-        readonly parent: ImportClause & {
+    type TypeOnlyImportDeclaration =
+        | ImportClause & {
             readonly isTypeOnly: true;
-        };
-    } | ImportSpecifier & ({
-        readonly isTypeOnly: true;
-    } | {
-        readonly parent: NamedImports & {
+            readonly name: Identifier;
+        }
+        | ImportEqualsDeclaration & {
+            readonly isTypeOnly: true;
+        }
+        | NamespaceImport & {
             readonly parent: ImportClause & {
                 readonly isTypeOnly: true;
             };
-        };
-    });
-    type TypeOnlyExportDeclaration = ExportSpecifier & ({
-        readonly isTypeOnly: true;
-    } | {
-        readonly parent: NamedExports & {
-            readonly parent: ExportDeclaration & {
+        }
+        | ImportSpecifier
+            & ({
                 readonly isTypeOnly: true;
-            };
-        };
-    }) | ExportDeclaration & {
-        readonly isTypeOnly: true;
-        readonly moduleSpecifier: Expression;
-    } | NamespaceExport & {
-        readonly parent: ExportDeclaration & {
+            } | {
+                readonly parent: NamedImports & {
+                    readonly parent: ImportClause & {
+                        readonly isTypeOnly: true;
+                    };
+                };
+            });
+    type TypeOnlyExportDeclaration =
+        | ExportSpecifier
+            & ({
+                readonly isTypeOnly: true;
+            } | {
+                readonly parent: NamedExports & {
+                    readonly parent: ExportDeclaration & {
+                        readonly isTypeOnly: true;
+                    };
+                };
+            })
+        | ExportDeclaration & {
             readonly isTypeOnly: true;
             readonly moduleSpecifier: Expression;
+        }
+        | NamespaceExport & {
+            readonly parent: ExportDeclaration & {
+                readonly isTypeOnly: true;
+                readonly moduleSpecifier: Expression;
+            };
         };
-    };
     type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
     /**
      * This is either an `export =` or an `export default` declaration.
@@ -6088,7 +6384,7 @@ declare namespace ts {
         Referenced = 2048,
         Shared = 4096,
         Label = 12,
-        Condition = 96
+        Condition = 96,
     }
     type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
     interface FlowNodeBase {
@@ -6398,7 +6694,7 @@ declare namespace ts {
         DiagnosticsPresent_OutputsSkipped = 1,
         DiagnosticsPresent_OutputsGenerated = 2,
         InvalidProject_OutputsSkipped = 3,
-        ProjectReferenceCycle_OutputsSkipped = 4
+        ProjectReferenceCycle_OutputsSkipped = 4,
     }
     interface EmitResult {
         emitSkipped: boolean;
@@ -6428,9 +6724,11 @@ declare namespace ts {
         /** Note that the resulting nodes cannot be checked. */
         typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeNode | undefined;
         /** Note that the resulting nodes cannot be checked. */
-        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): SignatureDeclaration & {
-            typeArguments?: NodeArray<TypeNode>;
-        } | undefined;
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined):
+            | SignatureDeclaration & {
+                typeArguments?: NodeArray<TypeNode>;
+            }
+            | undefined;
         /** Note that the resulting nodes cannot be checked. */
         indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): IndexSignatureDeclaration | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -6485,6 +6783,7 @@ declare namespace ts {
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
+        getMergedSymbol(symbol: Symbol): Symbol;
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
         /** Follow all aliases to get the original symbol. */
@@ -6533,6 +6832,20 @@ declare namespace ts {
          * is `never`. Instead, use `type.flags & TypeFlags.Never`.
          */
         getNeverType(): Type;
+        /**
+         * Returns true if the "source" type is assignable to the "target" type.
+         *
+         * ```ts
+         * declare const abcLiteral: ts.Type; // Type of "abc"
+         * declare const stringType: ts.Type; // Type of string
+         *
+         * isTypeAssignableTo(abcLiteral, abcLiteral); // true; "abc" is assignable to "abc"
+         * isTypeAssignableTo(abcLiteral, stringType); // true; "abc" is assignable to string
+         * isTypeAssignableTo(stringType, abcLiteral); // false; string is not assignable to "abc"
+         * isTypeAssignableTo(stringType, stringType); // true; string is assignable to string
+         * ```
+         */
+        isTypeAssignableTo(source: Type, target: Type): boolean;
         /**
          * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
          * This function will _not_ return true if passed a type which
@@ -6587,12 +6900,13 @@ declare namespace ts {
         IgnoreErrors = 70221824,
         InObjectTypeLiteral = 4194304,
         InTypeAlias = 8388608,
-        InInitialEntityName = 16777216
+        InInitialEntityName = 16777216,
     }
     enum TypeFormatFlags {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
+        GenerateNamesForShadowedTypeParams = 4,
         UseStructuralFallback = 8,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
@@ -6612,20 +6926,20 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        NodeBuilderFlagsMask = 848330091
+        NodeBuilderFlagsMask = 848330095,
     }
     enum SymbolFormatFlags {
         None = 0,
         WriteTypeParametersOrArguments = 1,
         UseOnlyExternalAliasing = 2,
         AllowAnyNodeKind = 4,
-        UseAliasDefinedOutsideCurrentScope = 8
+        UseAliasDefinedOutsideCurrentScope = 8,
     }
     enum TypePredicateKind {
         This = 0,
         Identifier = 1,
         AssertsThis = 2,
-        AssertsIdentifier = 3
+        AssertsIdentifier = 3,
     }
     interface TypePredicateBase {
         kind: TypePredicateKind;
@@ -6716,7 +7030,7 @@ declare namespace ts {
         ExportHasLocal = 944,
         BlockScoped = 418,
         PropertyOrAccessor = 98308,
-        ClassMember = 106500
+        ClassMember = 106500,
     }
     interface Symbol {
         flags: SymbolFlags;
@@ -6753,7 +7067,8 @@ declare namespace ts {
         Resolving = "__resolving__",
         ExportEquals = "export=",
         Default = "default",
-        This = "this"
+        This = "this",
+        InstantiationExpression = "__instantiationExpression",
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
@@ -6763,11 +7078,14 @@ declare namespace ts {
      * with a normal string (which is good, it cannot be misused on assignment or on usage),
      * while still being comparable with a normal string via === (also good) and castable from a string.
      */
-    type __String = (string & {
-        __escapedIdentifier: void;
-    }) | (void & {
-        __escapedIdentifier: void;
-    }) | InternalSymbolName;
+    type __String =
+        | (string & {
+            __escapedIdentifier: void;
+        })
+        | (void & {
+            __escapedIdentifier: void;
+        })
+        | InternalSymbolName;
     /** @deprecated Use ReadonlyMap<__String, T> instead. */
     type ReadonlyUnderscoreEscapedMap<T> = ReadonlyMap<__String, T>;
     /** @deprecated Use Map<__String, T> instead. */
@@ -6823,7 +7141,7 @@ declare namespace ts {
         InstantiablePrimitive = 406847488,
         Instantiable = 465829888,
         StructuredOrInstantiable = 469499904,
-        Narrowable = 536624127
+        Narrowable = 536624127,
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {
@@ -6900,7 +7218,7 @@ declare namespace ts {
         ClassOrInterface = 3,
         ContainsSpread = 2097152,
         ObjectRestType = 4194304,
-        InstantiationExpressionType = 8388608
+        InstantiationExpressionType = 8388608,
     }
     interface ObjectType extends Type {
         objectFlags: ObjectFlags;
@@ -6948,7 +7266,7 @@ declare namespace ts {
         Fixed = 3,
         Variable = 12,
         NonRequired = 14,
-        NonRest = 11
+        NonRest = 11,
     }
     interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
@@ -7025,12 +7343,13 @@ declare namespace ts {
     }
     enum SignatureKind {
         Call = 0,
-        Construct = 1
+        Construct = 1,
     }
     interface Signature {
         declaration?: SignatureDeclaration | JSDocSignature;
         typeParameters?: readonly TypeParameter[];
         parameters: readonly Symbol[];
+        thisParameter?: Symbol;
     }
     interface Signature {
         getDeclaration(): SignatureDeclaration;
@@ -7043,7 +7362,7 @@ declare namespace ts {
     }
     enum IndexKind {
         String = 0,
-        Number = 1
+        Number = 1,
     }
     interface IndexInfo {
         keyType: Type;
@@ -7066,7 +7385,7 @@ declare namespace ts {
         AlwaysStrict = 1024,
         MaxValue = 2048,
         PriorityImpliesCombination = 416,
-        Circularity = -1
+        Circularity = -1,
     }
     interface FileExtensionInfo {
         extension: string;
@@ -7117,7 +7436,7 @@ declare namespace ts {
         Warning = 0,
         Error = 1,
         Suggestion = 2,
-        Message = 3
+        Message = 3,
     }
     enum ModuleResolutionKind {
         Classic = 1,
@@ -7130,7 +7449,7 @@ declare namespace ts {
         Node10 = 2,
         Node16 = 3,
         NodeNext = 99,
-        Bundler = 100
+        Bundler = 100,
     }
     enum ModuleDetectionKind {
         /**
@@ -7144,7 +7463,7 @@ declare namespace ts {
         /**
          * Consider all non-declaration files modules, regardless of present syntax
          */
-        Force = 3
+        Force = 3,
     }
     interface PluginImport {
         name: string;
@@ -7165,19 +7484,19 @@ declare namespace ts {
         DynamicPriorityPolling = 2,
         FixedChunkSizePolling = 3,
         UseFsEvents = 4,
-        UseFsEventsOnParentDirectory = 5
+        UseFsEventsOnParentDirectory = 5,
     }
     enum WatchDirectoryKind {
         UseFsEvents = 0,
         FixedPollingInterval = 1,
         DynamicPriorityPolling = 2,
-        FixedChunkSizePolling = 3
+        FixedChunkSizePolling = 3,
     }
     enum PollingWatchKind {
         FixedInterval = 0,
         PriorityInterval = 1,
         DynamicPriority = 2,
-        FixedChunkSize = 3
+        FixedChunkSize = 3,
     }
     type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
     interface CompilerOptions {
@@ -7313,7 +7632,7 @@ declare namespace ts {
         ES2022 = 7,
         ESNext = 99,
         Node16 = 100,
-        NodeNext = 199
+        NodeNext = 199,
     }
     enum JsxEmit {
         None = 0,
@@ -7321,16 +7640,16 @@ declare namespace ts {
         React = 2,
         ReactNative = 3,
         ReactJSX = 4,
-        ReactJSXDev = 5
+        ReactJSXDev = 5,
     }
     enum ImportsNotUsedAsValues {
         Remove = 0,
         Preserve = 1,
-        Error = 2
+        Error = 2,
     }
     enum NewLineKind {
         CarriageReturnLineFeed = 0,
-        LineFeed = 1
+        LineFeed = 1,
     }
     interface LineAndCharacter {
         /** 0-based. */
@@ -7349,7 +7668,7 @@ declare namespace ts {
          * Used on extensions that doesn't define the ScriptKind but the content defines it.
          * Deferred extensions are going to be included in all project contexts.
          */
-        Deferred = 7
+        Deferred = 7,
     }
     enum ScriptTarget {
         ES3 = 0,
@@ -7364,11 +7683,11 @@ declare namespace ts {
         ES2022 = 9,
         ESNext = 99,
         JSON = 100,
-        Latest = 99
+        Latest = 99,
     }
     enum LanguageVariant {
         Standard = 0,
-        JSX = 1
+        JSX = 1,
     }
     /** Either a parsed command line or a parsed tsconfig.json */
     interface ParsedCommandLine {
@@ -7384,7 +7703,7 @@ declare namespace ts {
     }
     enum WatchDirectoryFlags {
         None = 0,
-        Recursive = 1
+        Recursive = 1,
     }
     interface CreateProgramOptions {
         rootNames: readonly string[];
@@ -7478,7 +7797,7 @@ declare namespace ts {
         Dmts = ".d.mts",
         Cjs = ".cjs",
         Cts = ".cts",
-        Dcts = ".d.cts"
+        Dcts = ".d.cts",
     }
     interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
@@ -7524,6 +7843,7 @@ declare namespace ts {
         hasInvalidatedResolutions?(filePath: Path): boolean;
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface SourceMapRange extends TextRange {
         source?: SourceMapSource;
@@ -7565,7 +7885,7 @@ declare namespace ts {
         CustomPrologue = 2097152,
         NoHoisting = 4194304,
         Iterator = 8388608,
-        NoAsciiEscaping = 16777216
+        NoAsciiEscaping = 16777216,
     }
     interface EmitHelperBase {
         readonly name: string;
@@ -7590,7 +7910,8 @@ declare namespace ts {
         MappedTypeParameter = 3,
         Unspecified = 4,
         EmbeddedStatement = 5,
-        JsxAttributeValue = 6
+        JsxAttributeValue = 6,
+        ImportTypeNodeAttributes = 7,
     }
     enum OuterExpressionKinds {
         Parentheses = 1,
@@ -7599,7 +7920,7 @@ declare namespace ts {
         PartiallyEmittedExpressions = 8,
         Assertions = 6,
         All = 15,
-        ExcludeJSDocTypeAssertion = 16
+        ExcludeJSDocTypeAssertion = 16,
     }
     type ImmediatelyInvokedFunctionExpression = CallExpression & {
         readonly expression: FunctionExpression;
@@ -7724,8 +8045,8 @@ declare namespace ts {
         updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
         createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
         updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-        createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
-        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
+        createImportTypeNode(argument: TypeNode, attributes?: ImportAttributes, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
+        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, attributes: ImportAttributes | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
         updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
         createThisTypeNode(): ThisTypeNode;
@@ -7882,16 +8203,20 @@ declare namespace ts {
         updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
         createImportEqualsDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
         updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-        createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
-        updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+        createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes?: ImportAttributes): ImportDeclaration;
+        updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, attributes: ImportAttributes | undefined): ImportDeclaration;
         createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
         updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
-        createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
-        updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
-        createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
-        updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
-        createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
-        updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+        /** @deprecated */ createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
+        /** @deprecated */ updateAssertClause(node: AssertClause, elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
+        /** @deprecated */ createAssertEntry(name: AssertionKey, value: Expression): AssertEntry;
+        /** @deprecated */ updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry;
+        /** @deprecated */ createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+        /** @deprecated */ updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
+        createImportAttributes(elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
+        updateImportAttributes(node: ImportAttributes, elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
+        createImportAttribute(name: ImportAttributeName, value: Expression): ImportAttribute;
+        updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute;
         createNamespaceImport(name: Identifier): NamespaceImport;
         updateNamespaceImport(node: NamespaceImport, name: Identifier): NamespaceImport;
         createNamespaceExport(name: Identifier): NamespaceExport;
@@ -7902,8 +8227,8 @@ declare namespace ts {
         updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
         createExportAssignment(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
         updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment;
-        createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
-        updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
+        createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, attributes?: ImportAttributes): ExportDeclaration;
+        updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, attributes: ImportAttributes | undefined): ExportDeclaration;
         createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
         updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
         createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
@@ -8084,6 +8409,18 @@ declare namespace ts {
         createExportDefault(expression: Expression): ExportAssignment;
         createExternalModuleExport(exportName: Identifier): ExportDeclaration;
         restoreOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds?: OuterExpressionKinds): Expression;
+        /**
+         * Updates a node that may contain modifiers, replacing only the modifiers of the node.
+         */
+        replaceModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
+        /**
+         * Updates a node that may contain decorators or modifiers, replacing only the decorators and modifiers of the node.
+         */
+        replaceDecoratorsAndModifiers<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[] | undefined): T;
+        /**
+         * Updates a node that contains a property name, replacing only the name of the node.
+         */
+        replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
     }
     interface CoreTransformationContext {
         readonly factory: NodeFactory;
@@ -8352,7 +8689,8 @@ declare namespace ts {
         ObjectBindingPatternElements = 525136,
         ArrayBindingPatternElements = 524880,
         ObjectLiteralExpressionProperties = 526226,
-        ImportClauseEntries = 526226,
+        ImportAttributes = 526226,
+        /** @deprecated */ ImportClauseEntries = 526226,
         ArrayLiteralExpressionElements = 8914,
         CommaListElements = 528,
         CallExpressionArguments = 2576,
@@ -8379,7 +8717,34 @@ declare namespace ts {
         TypeParameters = 53776,
         Parameters = 2576,
         IndexSignatureParameters = 8848,
-        JSDocComment = 33
+        JSDocComment = 33,
+    }
+    enum JSDocParsingMode {
+        /**
+         * Always parse JSDoc comments and include them in the AST.
+         *
+         * This is the default if no mode is provided.
+         */
+        ParseAll = 0,
+        /**
+         * Never parse JSDoc comments, mo matter the file type.
+         */
+        ParseNone = 1,
+        /**
+         * Parse only JSDoc comments which are needed to provide correct type errors.
+         *
+         * This will always parse JSDoc in non-TS files, but only parse JSDoc comments
+         * containing `@see` and `@link` in TS files.
+         */
+        ParseForTypeErrors = 2,
+        /**
+         * Parse only JSDoc comments which are needed to provide correct type info.
+         *
+         * This will always parse JSDoc in non-TS files, but never in TS files.
+         *
+         * Note: Do not use this mode if you require accurate type errors; use {@link ParseForTypeErrors} instead.
+         */
+        ParseForTypeInfo = 3,
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
@@ -8412,12 +8777,14 @@ declare namespace ts {
         readonly interactiveInlayHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        readonly preferTypeOnlyAutoImports?: boolean;
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
         readonly organizeImportsCollation?: "ordinal" | "unicode";
         readonly organizeImportsLocale?: string;
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+        readonly excludeLibrarySymbolsInNavTo?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
@@ -8427,7 +8794,7 @@ declare namespace ts {
     enum FileWatcherEventKind {
         Created = 0,
         Changed = 1,
-        Deleted = 2
+        Deleted = 2,
     }
     type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
     type DirectoryWatcherCallback = (fileName: string) => void;
@@ -8541,6 +8908,8 @@ declare namespace ts {
         setOnError(onError: ErrorCallback | undefined): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
+        setScriptKind(scriptKind: ScriptKind): void;
+        setJSDocParsingMode(kind: JSDocParsingMode): void;
         /** @deprecated use {@link resetTokenState} */
         setTextPos(textPos: number): void;
         resetTokenState(pos: number): void;
@@ -8780,8 +9149,8 @@ declare namespace ts {
     function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration;
     function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration;
     function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
-    function isAssertionKey(node: Node): node is AssertionKey;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
+    function isImportAttributeName(node: Node): node is ImportAttributeName;
     function isModifier(node: Node): node is Modifier;
     function isEntityName(node: Node): node is EntityName;
     function isPropertyName(node: Node): node is PropertyName;
@@ -8839,7 +9208,7 @@ declare namespace ts {
     function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
     function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
     function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
-    let unchangedTextChangeRange: TextChangeRange;
+    const unchangedTextChangeRange: TextChangeRange;
     type ParameterPropertyDeclaration = ParameterDeclaration & {
         parent: ConstructorDeclaration;
         name: Identifier;
@@ -9083,8 +9452,12 @@ declare namespace ts {
     function isImportDeclaration(node: Node): node is ImportDeclaration;
     function isImportClause(node: Node): node is ImportClause;
     function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer;
+    /** @deprecated */
     function isAssertClause(node: Node): node is AssertClause;
+    /** @deprecated */
     function isAssertEntry(node: Node): node is AssertEntry;
+    function isImportAttributes(node: Node): node is ImportAttributes;
+    function isImportAttribute(node: Node): node is ImportAttribute;
     function isNamespaceImport(node: Node): node is NamespaceImport;
     function isNamespaceExport(node: Node): node is NamespaceExport;
     function isNamedImports(node: Node): node is NamedImports;
@@ -9210,6 +9583,7 @@ declare namespace ts {
          * check specified by `isFileProbablyExternalModule` will be used to set the field.
          */
         setExternalModuleIndicator?: (file: SourceFile) => void;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine;
     /**
@@ -9489,6 +9863,19 @@ declare namespace ts {
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
     function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
+    enum ProgramUpdateLevel {
+        /** Program is updated with same root file names and options */
+        Update = 0,
+        /** Loads program after updating root file names from the disk */
+        RootNamesAndUpdate = 1,
+        /**
+         * Loads program completely, including:
+         *  - re-reading contents of config file from disk
+         *  - calculating root file names for the program
+         *  - Updating the program
+         */
+        Full = 2,
+    }
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string | undefined;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
@@ -9800,6 +10187,7 @@ declare namespace ts {
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
         getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
         /** Instead of using output d.ts file from project reference, use its source file */
@@ -9913,7 +10301,7 @@ declare namespace ts {
     enum InvalidatedProjectKind {
         Build = 0,
         /** @deprecated */ UpdateBundle = 1,
-        UpdateOutputFileStamps = 2
+        UpdateOutputFileStamps = 2,
     }
     interface InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind;
@@ -10005,7 +10393,7 @@ declare namespace ts {
     enum LanguageServiceMode {
         Semantic = 0,
         PartialSemantic = 1,
-        Syntactic = 2
+        Syntactic = 2,
     }
     interface IncompleteCompletionsCache {
         get(): CompletionInfo | undefined;
@@ -10050,13 +10438,14 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        jsDocParsingMode?: JSDocParsingMode | undefined;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;
     };
     enum SemanticClassificationFormat {
         Original = "original",
-        TwentyTwenty = "2020"
+        TwentyTwenty = "2020",
     }
     interface LanguageService {
         /** This is used as a part of restarting the language service. */
@@ -10174,7 +10563,7 @@ declare namespace ts {
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         getFileReferences(fileName: string): ReferenceEntry[];
-        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
+        getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean, excludeLibFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
@@ -10246,7 +10635,7 @@ declare namespace ts {
     enum OrganizeImportsMode {
         All = "All",
         SortAndCombine = "SortAndCombine",
-        RemoveUnused = "RemoveUnused"
+        RemoveUnused = "RemoveUnused",
     }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {
         /** @deprecated Use `mode` instead */
@@ -10260,7 +10649,7 @@ declare namespace ts {
         /** Completion was triggered by a trigger character. */
         TriggerCharacter = 2,
         /** Completion was re-triggered as the current completion list is incomplete. */
-        TriggerForIncompleteCompletions = 3
+        TriggerForIncompleteCompletions = 3,
     }
     interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
@@ -10389,7 +10778,7 @@ declare namespace ts {
     enum InlayHintKind {
         Type = "Type",
         Parameter = "Parameter",
-        Enum = "Enum"
+        Enum = "Enum",
     }
     interface InlayHint {
         /** This property will be the empty string when displayParts is set. */
@@ -10553,7 +10942,7 @@ declare namespace ts {
         none = "none",
         definition = "definition",
         reference = "reference",
-        writtenReference = "writtenReference"
+        writtenReference = "writtenReference",
     }
     interface HighlightSpan {
         fileName?: string;
@@ -10576,12 +10965,12 @@ declare namespace ts {
     enum IndentStyle {
         None = 0,
         Block = 1,
-        Smart = 2
+        Smart = 2,
     }
     enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
-        Remove = "remove"
+        Remove = "remove",
     }
     /** @deprecated - consider using EditorSettings instead */
     interface EditorOptions {
@@ -10688,7 +11077,7 @@ declare namespace ts {
         regularExpressionLiteral = 21,
         link = 22,
         linkName = 23,
-        linkText = 24
+        linkText = 24,
     }
     interface SymbolDisplayPart {
         text: string;
@@ -10718,6 +11107,10 @@ declare namespace ts {
          */
         fileToRename?: string;
         displayName: string;
+        /**
+         * Full display name of item to be renamed.
+         * If item to be renamed is a file, then this is the original text of the module specifer
+         */
         fullDisplayName: string;
         kind: ScriptElementKind;
         kindModifiers: string;
@@ -10783,7 +11176,7 @@ declare namespace ts {
         IsContinuation = 4,
         ResolvedModuleSpecifiers = 8,
         ResolvedModuleSpecifiersBeyondLimit = 16,
-        MayIncludeMethodSnippets = 32
+        MayIncludeMethodSnippets = 32,
     }
     interface CompletionInfo {
         /** For performance telemetry. */
@@ -10813,7 +11206,7 @@ declare namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
-        exportMapKey?: string;
+        exportMapKey?: ExportMapInfoKey;
         moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
@@ -10823,7 +11216,7 @@ declare namespace ts {
         isPackageJsonImport?: true;
     }
     interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
-        exportMapKey: string;
+        exportMapKey: ExportMapInfoKey;
     }
     interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
         moduleSpecifier: string;
@@ -10908,12 +11301,12 @@ declare namespace ts {
         /** Declarations and expressions */
         Code = "code",
         /** Contiguous blocks of import declarations */
-        Imports = "imports"
+        Imports = "imports",
     }
     enum OutputFileType {
         JavaScript = 0,
         SourceMap = 1,
-        Declaration = 2
+        Declaration = 2,
     }
     enum EndOfLineState {
         None = 0,
@@ -10922,7 +11315,7 @@ declare namespace ts {
         InDoubleQuoteStringLiteral = 3,
         InTemplateHeadOrNoSubstitutionTemplate = 4,
         InTemplateMiddleOrTail = 5,
-        InTemplateSubstitutionPosition = 6
+        InTemplateSubstitutionPosition = 6,
     }
     enum TokenClass {
         Punctuation = 0,
@@ -10934,7 +11327,7 @@ declare namespace ts {
         NumberLiteral = 6,
         BigIntLiteral = 7,
         StringLiteral = 8,
-        RegExpLiteral = 9
+        RegExpLiteral = 9,
     }
     interface ClassificationResult {
         finalLexState: EndOfLineState;
@@ -11051,7 +11444,7 @@ declare namespace ts {
         /** Jsdoc @link: in `{@link C link text}`, the entity name "C" */
         linkName = "link name",
         /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
-        linkText = "link text"
+        linkText = "link text",
     }
     enum ScriptElementKindModifier {
         none = "",
@@ -11075,7 +11468,7 @@ declare namespace ts {
         mjsModifier = ".mjs",
         dctsModifier = ".d.cts",
         ctsModifier = ".cts",
-        cjsModifier = ".cjs"
+        cjsModifier = ".cjs",
     }
     enum ClassificationTypeNames {
         comment = "comment",
@@ -11101,7 +11494,7 @@ declare namespace ts {
         jsxSelfClosingTagName = "jsx self closing tag name",
         jsxAttribute = "jsx attribute",
         jsxText = "jsx text",
-        jsxAttributeStringLiteralValue = "jsx attribute string literal value"
+        jsxAttributeStringLiteralValue = "jsx attribute string literal value",
     }
     enum ClassificationType {
         comment = 1,
@@ -11128,7 +11521,7 @@ declare namespace ts {
         jsxAttribute = 22,
         jsxText = 23,
         jsxAttributeStringLiteralValue = 24,
-        bigintLiteral = 25
+        bigintLiteral = 25,
     }
     interface InlayHintsContext {
         file: SourceFile;
@@ -11138,13 +11531,16 @@ declare namespace ts {
         span: TextSpan;
         preferences: UserPreferences;
     }
+    type ExportMapInfoKey = string & {
+        __exportInfoKey: void;
+    };
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
     function createClassifier(): Classifier;
     interface DocumentHighlights {
         fileName: string;
         highlightSpans: HighlightSpan[];
     }
-    function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry;
+    function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string, jsDocParsingMode?: JSDocParsingMode): DocumentRegistry;
     /**
      * The document registry represents a store of SourceFile objects that can be shared between
      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
@@ -11242,6 +11638,7 @@ declare namespace ts {
         moduleName?: string;
         renamedDependencies?: MapLike<string>;
         transformers?: CustomTransformers;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface TranspileOutput {
         outputText: string;

@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/ambient/ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts] ////
+
+=== ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts ===
+declare namespace chrome.debugger {
+>chrome : Symbol(chrome, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 0, 0))
+>debugger : Symbol(debugger, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 0, 25))
+
+    declare var tabId: number;
+>tabId : Symbol(tabId, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 1, 15))
+}
+
+export const tabId = chrome.debugger.tabId;
+>tabId : Symbol(tabId, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 4, 12))
+>chrome.debugger.tabId : Symbol(chrome.debugger.tabId, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 1, 15))
+>chrome.debugger : Symbol(chrome.debugger, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 0, 25))
+>chrome : Symbol(chrome, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 0, 0))
+>debugger : Symbol(chrome.debugger, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 0, 25))
+>tabId : Symbol(chrome.debugger.tabId, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 1, 15))
+
+declare namespace test.class {}
+>test : Symbol(test, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 4, 43))
+>class : Symbol(class, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath2.ts, 6, 23))
+
+declare namespace debugger {} // still an error
+

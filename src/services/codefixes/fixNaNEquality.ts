@@ -46,7 +46,7 @@ registerCodeFix({
                 doChange(changes, diag.file, info.arg, info.expression);
             }
         });
-    }
+    },
 });
 
 interface Info {
@@ -73,11 +73,17 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, arg: Expression, expression: BinaryExpression) {
     const callExpression = factory.createCallExpression(
-        factory.createPropertyAccessExpression(factory.createIdentifier("Number"), factory.createIdentifier("isNaN")), /*typeArguments*/ undefined, [arg]);
-    const operator = expression.operatorToken.kind ;
-    changes.replaceNode(sourceFile, expression,
+        factory.createPropertyAccessExpression(factory.createIdentifier("Number"), factory.createIdentifier("isNaN")),
+        /*typeArguments*/ undefined,
+        [arg],
+    );
+    const operator = expression.operatorToken.kind;
+    changes.replaceNode(
+        sourceFile,
+        expression,
         operator === SyntaxKind.ExclamationEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken
-            ? factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, callExpression) : callExpression);
+            ? factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, callExpression) : callExpression,
+    );
 }
 
 function getSuggestion(messageText: string | DiagnosticMessageChain) {

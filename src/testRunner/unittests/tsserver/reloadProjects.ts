@@ -1,8 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openExternalProjectForSession,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
@@ -18,24 +19,24 @@ import {
 describe("unittests:: tsserver:: reloadProjects", () => {
     const configFile: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
-        content: JSON.stringify({
-            watchOptions: { excludeDirectories: ["node_modules"] }
-        })
+        content: jsonToReadableText({
+            watchOptions: { excludeDirectories: ["node_modules"] },
+        }),
     };
     const file1: File = {
         path: `/user/username/projects/myproject/file1.ts`,
         content: `import { foo } from "module1";
                 foo();
                 import { bar } from "./file2";
-                bar();`
+                bar();`,
     };
     const file2: File = {
         path: `/user/username/projects/myproject/file2.ts`,
-        content: `export function bar(){}`
+        content: `export function bar(){}`,
     };
     const moduleFile: File = {
         path: `/user/username/projects/myproject/node_modules/module1/index.d.ts`,
-        content: `export function foo(): string;`
+        content: `export function foo(): string;`,
     };
 
     function verifyFileUpdates(host: TestServerHost, session: TestSession) {
@@ -43,34 +44,31 @@ describe("unittests:: tsserver:: reloadProjects", () => {
         const updatedText = `${file2.content}
             bar();`;
         host.writeFile(file2.path, updatedText);
-        session.testhost.logTimeoutQueueLength();
         session.executeCommandSeq({
-            command: ts.server.protocol.CommandTypes.ReloadProjects
+            command: ts.server.protocol.CommandTypes.ReloadProjects,
         });
 
         // delete file
         host.deleteFile(file2.path);
-        session.testhost.logTimeoutQueueLength();
         session.executeCommandSeq({
-            command: ts.server.protocol.CommandTypes.ReloadProjects
+            command: ts.server.protocol.CommandTypes.ReloadProjects,
         });
     }
 
     it("configured project", () => {
         const host = createServerHost([configFile, libFile, file1, file2]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { watchOptions: { excludeFiles: [file2.path] } }
+            arguments: { watchOptions: { excludeFiles: [file2.path] } },
         });
         openFilesForSession([file1], session);
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        session.testhost.logTimeoutQueueLength();
 
         session.executeCommandSeq({
-            command: ts.server.protocol.CommandTypes.ReloadProjects
+            command: ts.server.protocol.CommandTypes.ReloadProjects,
         });
 
         verifyFileUpdates(host, session);
@@ -79,10 +77,10 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
     it("inferred project", () => {
         const host = createServerHost([libFile, file1, file2]);
-        const session = createSession(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, useInferredProjectPerProjectRoot: true });
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { watchOptions: { excludeFiles: [file2.path] } }
+            arguments: { watchOptions: { excludeFiles: [file2.path] } },
         });
         const timeoutId = host.getNextTimeoutId();
         setCompilerOptionsForInferredProjectsRequestForSession({
@@ -94,10 +92,9 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        session.testhost.logTimeoutQueueLength();
 
         session.executeCommandSeq({
-            command: ts.server.protocol.CommandTypes.ReloadProjects
+            command: ts.server.protocol.CommandTypes.ReloadProjects,
         });
 
         verifyFileUpdates(host, session);
@@ -106,24 +103,23 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
     it("external project", () => {
         const host = createServerHost([libFile, file1, file2]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { watchOptions: { excludeFiles: [file2.path] } }
+            arguments: { watchOptions: { excludeFiles: [file2.path] } },
         });
         openExternalProjectForSession({
             projectFileName: `/user/username/projects/myproject/project.sln`,
             options: { excludeDirectories: ["node_modules"] },
-            rootFiles: [{ fileName: file1.path }, { fileName: file2.path }]
+            rootFiles: [{ fileName: file1.path }, { fileName: file2.path }],
         }, session);
         openFilesForSession([file1], session);
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        session.testhost.logTimeoutQueueLength();
 
         session.executeCommandSeq({
-            command: ts.server.protocol.CommandTypes.ReloadProjects
+            command: ts.server.protocol.CommandTypes.ReloadProjects,
         });
 
         verifyFileUpdates(host, session);
@@ -132,24 +128,23 @@ describe("unittests:: tsserver:: reloadProjects", () => {
 
     it("external project with config file", () => {
         const host = createServerHost([libFile, file1, file2, configFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
-            arguments: { watchOptions: { excludeFiles: [file2.path] } }
+            arguments: { watchOptions: { excludeFiles: [file2.path] } },
         });
         openExternalProjectForSession({
             projectFileName: `/user/username/projects/myproject/project.sln`,
             options: { excludeDirectories: ["node_modules"] },
-            rootFiles: [{ fileName: file1.path }, { fileName: file2.path }, { fileName: configFile.path }]
+            rootFiles: [{ fileName: file1.path }, { fileName: file2.path }, { fileName: configFile.path }],
         }, session);
         openFilesForSession([file1], session);
 
         // Install module1
         host.ensureFileOrFolder(moduleFile);
-        session.testhost.logTimeoutQueueLength();
 
         session.executeCommandSeq({
-            command: ts.server.protocol.CommandTypes.ReloadProjects
+            command: ts.server.protocol.CommandTypes.ReloadProjects,
         });
 
         verifyFileUpdates(host, session);

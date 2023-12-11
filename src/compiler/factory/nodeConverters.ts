@@ -69,7 +69,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
             node.typeParameters,
             node.parameters,
             node.type,
-            node.body
+            node.body,
         );
         setOriginalNode(updated, node);
         setTextRange(updated, node);
@@ -85,7 +85,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
             node.name,
             node.typeParameters,
             node.heritageClauses,
-            node.members
+            node.members,
         );
         setOriginalNode(updated, node);
         setTextRange(updated, node);
@@ -106,9 +106,9 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
                 ? setOriginalNode(
                     setTextRange(
                         factory.createAssignment(expression, element.initializer),
-                        element
+                        element,
                     ),
-                    element
+                    element,
                 )
                 : expression;
         }
@@ -149,9 +149,9 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
             return setOriginalNode(
                 setTextRange(
                     factory.createObjectLiteralExpression(map(node.elements, convertToObjectAssignmentElement)),
-                    node
+                    node,
                 ),
-                node
+                node,
             );
         }
         return cast(node, isObjectLiteralExpression);
@@ -162,9 +162,9 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
             return setOriginalNode(
                 setTextRange(
                     factory.createArrayLiteralExpression(map(node.elements, convertToArrayAssignmentElement)),
-                    node
+                    node,
                 ),
-                node
+                node,
             );
         }
         return cast(node, isArrayLiteralExpression);

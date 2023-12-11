@@ -1,5 +1,9 @@
-import { getSymlinkedExtendsSys } from "../helpers/extends";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import {
+    getSymlinkedExtendsSys,
+} from "../helpers/extends";
+import {
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 
 describe("unittests:: tsc-watch:: extends::", () => {
     verifyTscWatch({
