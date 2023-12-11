@@ -22518,7 +22518,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (isDeferredMappedIndex) {
                     const mappedType = (source as IndexType).type as MappedType;
-                    const nameType = getNameTypeFromMappedType(mappedType)
+                    const nameType = getNameTypeFromMappedType(mappedType);
                     // Unlike on the target side, on the source side we do *not* include the generic part of the `nameType`, since that comes from a
                     // (potentially anonymous) mapped type local type parameter, so that'd never assign outside the mapped type body, but we still want to
                     // allow assignments of index types of identical (or similar enough) mapped types.
