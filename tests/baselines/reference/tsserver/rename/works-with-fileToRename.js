@@ -132,7 +132,7 @@ Info seq  [hh:mm:ss:mss] response:
           "canRename": true,
           "fileToRename": "/a.ts",
           "displayName": "/a.ts",
-          "fullDisplayName": "/a.ts",
+          "fullDisplayName": "./a",
           "kind": "module",
           "kindModifiers": "",
           "triggerSpan": {
@@ -259,7 +259,7 @@ Info seq  [hh:mm:ss:mss] response:
           "canRename": true,
           "fileToRename": "/a.ts",
           "displayName": "/a.ts",
-          "fullDisplayName": "/a.ts",
+          "fullDisplayName": "./a",
           "kind": "module",
           "kindModifiers": "",
           "triggerSpan": {

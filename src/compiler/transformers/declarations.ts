@@ -2051,7 +2051,11 @@ export function transformDeclarations(context: TransformationContext, _useTscEmi
                         ) {
                             reportIsolatedDeclarationError(m);
                         }
-                        return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
+                        const newInitializer = constValue === undefined ? undefined
+                            : typeof constValue === "string" ? factory.createStringLiteral(constValue)
+                            : constValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constValue))
+                            : factory.createNumericLiteral(constValue);
+                        return preserveJsDoc(factory.updateEnumMember(m, m.name, newInitializer), m);
                     })),
                 ));
             }

@@ -93,6 +93,7 @@ import {
     removeFileExtension,
     removeSuffix,
     removeTrailingDirectorySeparator,
+    replaceFirstStar,
     ResolutionMode,
     resolvePath,
     ScriptKind,
@@ -810,7 +811,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                     ) {
                         const matchedStar = value.substring(prefix.length, value.length - suffix.length);
                         if (!pathIsRelative(matchedStar)) {
-                            return key.replace("*", matchedStar);
+                            return replaceFirstStar(key, matchedStar);
                         }
                     }
                 }
@@ -864,11 +865,11 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
                 const trailingSlice = pathOrPattern.slice(starPos + 1);
                 if (startsWith(targetFilePath, leadingSlice) && endsWith(targetFilePath, trailingSlice)) {
                     const starReplacement = targetFilePath.slice(leadingSlice.length, targetFilePath.length - trailingSlice.length);
-                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                    return { moduleFileToTry: replaceFirstStar(packageName, starReplacement) };
                 }
                 if (extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice) && endsWith(extensionSwappedTarget, trailingSlice)) {
                     const starReplacement = extensionSwappedTarget.slice(leadingSlice.length, extensionSwappedTarget.length - trailingSlice.length);
-                    return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                    return { moduleFileToTry: replaceFirstStar(packageName, starReplacement) };
                 }
                 break;
         }
