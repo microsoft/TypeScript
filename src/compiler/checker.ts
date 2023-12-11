@@ -17006,7 +17006,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeVariables: TypeVariable[] = [];
         // First collect a list of the type variables occurring in constraining intersections.
         for (const type of types) {
-            if (getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
+            if (type.flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
                 const index = (type as IntersectionType).types[0].flags & TypeFlags.TypeVariable ? 0 : 1;
                 pushIfUnique(typeVariables, (type as IntersectionType).types[index]);
             }
@@ -17018,7 +17018,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const primitives: Type[] = [];
             // First collect the primitive types from the constraining intersections.
             for (const type of types) {
-                if (getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
+                if (type.flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
                     const index = (type as IntersectionType).types[0].flags & TypeFlags.TypeVariable ? 0 : 1;
                     if ((type as IntersectionType).types[index] === typeVariable) {
                         insertType(primitives, (type as IntersectionType).types[1 - index]);
@@ -17033,7 +17033,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 while (i > 0) {
                     i--;
                     const type = types[i];
-                    if (getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
+                    if (type.flags & TypeFlags.Intersection && getObjectFlags(type) & ObjectFlags.IsConstrainedTypeVariable) {
                         const index = (type as IntersectionType).types[0].flags & TypeFlags.TypeVariable ? 0 : 1;
                         if ((type as IntersectionType).types[index] === typeVariable && containsType(primitives, (type as IntersectionType).types[1 - index])) {
                             orderedRemoveItemAt(types, i);
