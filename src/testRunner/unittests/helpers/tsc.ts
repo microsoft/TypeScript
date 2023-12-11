@@ -368,10 +368,10 @@ function verifyTscEditDiscrepancies({
                     incrementalReadableBuildInfo.program.emitDiagnosticsPerFile.forEach(([actualFileOrArray]) => {
                         const actualFile = ts.isString(actualFileOrArray) ? actualFileOrArray : actualFileOrArray[0];
                         if (
-                            !ts.find(
+                            !ts.some(
                                 (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile,
                                 ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
-                            ) && !ts.find(
+                            ) && !ts.some(
                                 (cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit,
                                 ([expectedFileOrArray]) => actualFile === (ts.isString(expectedFileOrArray) ? expectedFileOrArray : expectedFileOrArray[0]),
                             )
