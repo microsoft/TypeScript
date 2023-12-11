@@ -49,7 +49,6 @@ import {
     SourceFile,
     startsWith,
     Statement,
-    stringContains,
     stripQuotes,
     Symbol,
     SymbolFlags,
@@ -113,8 +112,8 @@ export interface ExportInfoMap {
     isUsableByFile(importingFile: Path): boolean;
     clear(): void;
     add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
-    get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-    search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => T | undefined): T | undefined;
+    get(importingFile: Path, key: ExportMapInfoKey): readonly SymbolExportInfo[] | undefined;
+    search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: ExportMapInfoKey) => T | undefined): T | undefined;
     releaseSymbols(): void;
     isEmpty(): boolean;
     /** @returns Whether the change resulted in the cache being cleared */
@@ -128,10 +127,11 @@ export interface CacheableExportInfoMapHost {
     getGlobalTypingsCacheLocation(): string | undefined;
 }
 
+export type ExportMapInfoKey = string & { __exportInfoKey: void; };
 /** @internal */
 export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): ExportInfoMap {
     let exportInfoId = 1;
-    const exportInfo = createMultiMap<string, CachedSymbolExportInfo>();
+    const exportInfo = createMultiMap<ExportMapInfoKey, CachedSymbolExportInfo>();
     const symbols = new Map<number, [symbol: Symbol, moduleSymbol: Symbol]>();
     /**
      * Key: node_modules package name (no @types).
@@ -267,7 +267,7 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         },
     };
     if (Debug.isDebugging) {
-        Object.defineProperty(cache, "__cache", { get: () => exportInfo });
+        Object.defineProperty(cache, "__cache", { value: exportInfo });
     }
     return cache;
 
@@ -310,14 +310,19 @@ export function createCacheableExportInfoMap(host: CacheableExportInfoMapHost): 
         };
     }
 
-    function key(importedName: string, symbol: Symbol, ambientModuleName: string | undefined, checker: TypeChecker): string {
+    function key(importedName: string, symbol: Symbol, ambientModuleName: string | undefined, checker: TypeChecker) {
         const moduleKey = ambientModuleName || "";
-        return `${importedName}|${getSymbolId(skipAlias(symbol, checker))}|${moduleKey}`;
+        return `${importedName.length} ${getSymbolId(skipAlias(symbol, checker))} ${importedName} ${moduleKey}` as ExportMapInfoKey;
     }
 
-    function parseKey(key: string) {
-        const symbolName = key.substring(0, key.indexOf("|"));
-        const moduleKey = key.substring(key.lastIndexOf("|") + 1);
+    function parseKey(key: ExportMapInfoKey) {
+        const firstSpace = key.indexOf(" ");
+        const secondSpace = key.indexOf(" ", firstSpace + 1);
+        const symbolNameLength = parseInt(key.substring(0, firstSpace), 10);
+
+        const data = key.substring(secondSpace + 1);
+        const symbolName = data.substring(0, symbolNameLength);
+        const moduleKey = data.substring(symbolNameLength + 1);
         const ambientModuleName = moduleKey === "" ? undefined : moduleKey;
         return { symbolName, ambientModuleName };
     }
@@ -443,7 +448,7 @@ export function forEachExternalModuleToImportFrom(
 function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
     const isExcluded = excludePatterns && ((fileName: string) => excludePatterns.some(p => p.test(fileName)));
     for (const ambient of checker.getAmbientModules()) {
-        if (!stringContains(ambient.name, "*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile().fileName)))) {
+        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile().fileName)))) {
             cb(ambient, /*sourceFile*/ undefined);
         }
     }

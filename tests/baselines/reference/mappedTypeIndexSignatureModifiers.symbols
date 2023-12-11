@@ -1,0 +1,210 @@
+//// [tests/cases/conformance/types/mapped/mappedTypeIndexSignatureModifiers.ts] ////
+
+=== mappedTypeIndexSignatureModifiers.ts ===
+// https://github.com/microsoft/TypeScript/issues/14295
+
+interface Obj1 {
+>Obj1 : Symbol(Obj1, Decl(mappedTypeIndexSignatureModifiers.ts, 0, 0))
+
+    readonly [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 3, 14))
+}
+type Res1 = Pick<Obj1, keyof Obj1>
+>Res1 : Symbol(Res1, Decl(mappedTypeIndexSignatureModifiers.ts, 4, 1))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Obj1 : Symbol(Obj1, Decl(mappedTypeIndexSignatureModifiers.ts, 0, 0))
+>Obj1 : Symbol(Obj1, Decl(mappedTypeIndexSignatureModifiers.ts, 0, 0))
+
+interface Obj2 {
+>Obj2 : Symbol(Obj2, Decl(mappedTypeIndexSignatureModifiers.ts, 5, 34))
+
+    concreteProp: 'hello';
+>concreteProp : Symbol(Obj2.concreteProp, Decl(mappedTypeIndexSignatureModifiers.ts, 7, 16))
+
+    readonly [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 9, 14))
+}
+type Res2 = Pick<Obj2, keyof Obj2>
+>Res2 : Symbol(Res2, Decl(mappedTypeIndexSignatureModifiers.ts, 10, 1))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Obj2 : Symbol(Obj2, Decl(mappedTypeIndexSignatureModifiers.ts, 5, 34))
+>Obj2 : Symbol(Obj2, Decl(mappedTypeIndexSignatureModifiers.ts, 5, 34))
+
+interface Obj3 {
+>Obj3 : Symbol(Obj3, Decl(mappedTypeIndexSignatureModifiers.ts, 11, 34))
+
+    readonly [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 14, 14))
+
+    readonly [key: number]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 15, 14))
+}
+type Res3 = Pick<Obj3, keyof Obj3>
+>Res3 : Symbol(Res3, Decl(mappedTypeIndexSignatureModifiers.ts, 16, 1))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Obj3 : Symbol(Obj3, Decl(mappedTypeIndexSignatureModifiers.ts, 11, 34))
+>Obj3 : Symbol(Obj3, Decl(mappedTypeIndexSignatureModifiers.ts, 11, 34))
+
+interface Obj4 {
+>Obj4 : Symbol(Obj4, Decl(mappedTypeIndexSignatureModifiers.ts, 17, 34))
+
+    [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 20, 5))
+
+    readonly [key: number]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 21, 14))
+}
+type Res4 = Pick<Obj4, keyof Obj4>
+>Res4 : Symbol(Res4, Decl(mappedTypeIndexSignatureModifiers.ts, 22, 1))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Obj4 : Symbol(Obj4, Decl(mappedTypeIndexSignatureModifiers.ts, 17, 34))
+>Obj4 : Symbol(Obj4, Decl(mappedTypeIndexSignatureModifiers.ts, 17, 34))
+
+interface Obj5 {
+>Obj5 : Symbol(Obj5, Decl(mappedTypeIndexSignatureModifiers.ts, 23, 34))
+
+    readonly [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 26, 14))
+
+    [key: number]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 27, 5))
+}
+type Res5 = Pick<Obj5, keyof Obj5>
+>Res5 : Symbol(Res5, Decl(mappedTypeIndexSignatureModifiers.ts, 28, 1))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Obj5 : Symbol(Obj5, Decl(mappedTypeIndexSignatureModifiers.ts, 23, 34))
+>Obj5 : Symbol(Obj5, Decl(mappedTypeIndexSignatureModifiers.ts, 23, 34))
+
+type Identity<T> = { [P in keyof T]: T[P]; }
+>Identity : Symbol(Identity, Decl(mappedTypeIndexSignatureModifiers.ts, 29, 34))
+>T : Symbol(T, Decl(mappedTypeIndexSignatureModifiers.ts, 31, 14))
+>P : Symbol(P, Decl(mappedTypeIndexSignatureModifiers.ts, 31, 22))
+>T : Symbol(T, Decl(mappedTypeIndexSignatureModifiers.ts, 31, 14))
+>T : Symbol(T, Decl(mappedTypeIndexSignatureModifiers.ts, 31, 14))
+>P : Symbol(P, Decl(mappedTypeIndexSignatureModifiers.ts, 31, 22))
+
+interface Obj6 {
+>Obj6 : Symbol(Obj6, Decl(mappedTypeIndexSignatureModifiers.ts, 31, 44))
+
+    readonly [key: `wow${string}`]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 34, 14))
+}
+type Res6 = Identity<Obj6>
+>Res6 : Symbol(Res6, Decl(mappedTypeIndexSignatureModifiers.ts, 35, 1))
+>Identity : Symbol(Identity, Decl(mappedTypeIndexSignatureModifiers.ts, 29, 34))
+>Obj6 : Symbol(Obj6, Decl(mappedTypeIndexSignatureModifiers.ts, 31, 44))
+
+interface Obj7 {
+>Obj7 : Symbol(Obj7, Decl(mappedTypeIndexSignatureModifiers.ts, 36, 26))
+
+    [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 39, 5))
+
+    readonly [key: `wow${string}`]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 40, 14))
+}
+type Res7 = Identity<Obj7>
+>Res7 : Symbol(Res7, Decl(mappedTypeIndexSignatureModifiers.ts, 41, 1))
+>Identity : Symbol(Identity, Decl(mappedTypeIndexSignatureModifiers.ts, 29, 34))
+>Obj7 : Symbol(Obj7, Decl(mappedTypeIndexSignatureModifiers.ts, 36, 26))
+
+interface Obj8 {
+>Obj8 : Symbol(Obj8, Decl(mappedTypeIndexSignatureModifiers.ts, 42, 26))
+
+    readonly [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 45, 14))
+
+    [key: `wow${string}`]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 46, 5))
+}
+type Res8 = Identity<Obj8>
+>Res8 : Symbol(Res8, Decl(mappedTypeIndexSignatureModifiers.ts, 47, 1))
+>Identity : Symbol(Identity, Decl(mappedTypeIndexSignatureModifiers.ts, 29, 34))
+>Obj8 : Symbol(Obj8, Decl(mappedTypeIndexSignatureModifiers.ts, 42, 26))
+
+type StrippingPick<T, K extends keyof T> = { -readonly [P in K]: T[P]; }
+>StrippingPick : Symbol(StrippingPick, Decl(mappedTypeIndexSignatureModifiers.ts, 48, 26))
+>T : Symbol(T, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 19))
+>K : Symbol(K, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 21))
+>T : Symbol(T, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 19))
+>P : Symbol(P, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 56))
+>K : Symbol(K, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 21))
+>T : Symbol(T, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 19))
+>P : Symbol(P, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 56))
+
+interface Obj9 {
+>Obj9 : Symbol(Obj9, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 72))
+
+    readonly [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 53, 14))
+}
+type Res9 = StrippingPick<Obj9, keyof Obj9>
+>Res9 : Symbol(Res9, Decl(mappedTypeIndexSignatureModifiers.ts, 54, 1))
+>StrippingPick : Symbol(StrippingPick, Decl(mappedTypeIndexSignatureModifiers.ts, 48, 26))
+>Obj9 : Symbol(Obj9, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 72))
+>Obj9 : Symbol(Obj9, Decl(mappedTypeIndexSignatureModifiers.ts, 50, 72))
+
+interface Obj10 {
+>Obj10 : Symbol(Obj10, Decl(mappedTypeIndexSignatureModifiers.ts, 55, 43))
+
+    readonly [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 58, 14))
+
+    readonly [key: number]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 59, 14))
+}
+type Res10 = StrippingPick<Obj10, keyof Obj10>
+>Res10 : Symbol(Res10, Decl(mappedTypeIndexSignatureModifiers.ts, 60, 1))
+>StrippingPick : Symbol(StrippingPick, Decl(mappedTypeIndexSignatureModifiers.ts, 48, 26))
+>Obj10 : Symbol(Obj10, Decl(mappedTypeIndexSignatureModifiers.ts, 55, 43))
+>Obj10 : Symbol(Obj10, Decl(mappedTypeIndexSignatureModifiers.ts, 55, 43))
+
+interface Obj11 {
+>Obj11 : Symbol(Obj11, Decl(mappedTypeIndexSignatureModifiers.ts, 61, 46))
+
+    [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 64, 5))
+
+    readonly [key: number]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 65, 14))
+}
+type Res11 = StrippingPick<Obj11, keyof Obj11>
+>Res11 : Symbol(Res11, Decl(mappedTypeIndexSignatureModifiers.ts, 66, 1))
+>StrippingPick : Symbol(StrippingPick, Decl(mappedTypeIndexSignatureModifiers.ts, 48, 26))
+>Obj11 : Symbol(Obj11, Decl(mappedTypeIndexSignatureModifiers.ts, 61, 46))
+>Obj11 : Symbol(Obj11, Decl(mappedTypeIndexSignatureModifiers.ts, 61, 46))
+
+interface Obj12 {
+>Obj12 : Symbol(Obj12, Decl(mappedTypeIndexSignatureModifiers.ts, 67, 46))
+
+    readonly [key: string]: string;
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 70, 14))
+
+    [key: number]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 71, 5))
+}
+type Res12 = StrippingPick<Obj12, keyof Obj12>
+>Res12 : Symbol(Res12, Decl(mappedTypeIndexSignatureModifiers.ts, 72, 1))
+>StrippingPick : Symbol(StrippingPick, Decl(mappedTypeIndexSignatureModifiers.ts, 48, 26))
+>Obj12 : Symbol(Obj12, Decl(mappedTypeIndexSignatureModifiers.ts, 67, 46))
+>Obj12 : Symbol(Obj12, Decl(mappedTypeIndexSignatureModifiers.ts, 67, 46))
+
+type StrippingIdentity<T> = { -readonly [P in keyof T]: T[P]; }
+>StrippingIdentity : Symbol(StrippingIdentity, Decl(mappedTypeIndexSignatureModifiers.ts, 73, 46))
+>T : Symbol(T, Decl(mappedTypeIndexSignatureModifiers.ts, 75, 23))
+>P : Symbol(P, Decl(mappedTypeIndexSignatureModifiers.ts, 75, 41))
+>T : Symbol(T, Decl(mappedTypeIndexSignatureModifiers.ts, 75, 23))
+>T : Symbol(T, Decl(mappedTypeIndexSignatureModifiers.ts, 75, 23))
+>P : Symbol(P, Decl(mappedTypeIndexSignatureModifiers.ts, 75, 41))
+
+interface Obj13 {
+>Obj13 : Symbol(Obj13, Decl(mappedTypeIndexSignatureModifiers.ts, 75, 63))
+
+    readonly [key: `wow${string}`]: 'foo';
+>key : Symbol(key, Decl(mappedTypeIndexSignatureModifiers.ts, 78, 14))
+}
+type Res13 = StrippingIdentity<Obj13>
+>Res13 : Symbol(Res13, Decl(mappedTypeIndexSignatureModifiers.ts, 79, 1))
+>StrippingIdentity : Symbol(StrippingIdentity, Decl(mappedTypeIndexSignatureModifiers.ts, 73, 46))
+>Obj13 : Symbol(Obj13, Decl(mappedTypeIndexSignatureModifiers.ts, 75, 63))
+

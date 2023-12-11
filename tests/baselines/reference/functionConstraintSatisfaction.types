@@ -117,7 +117,7 @@ var b2: { new <T>(x: T): T };
 >x : T
 
 var c2: { <T>(x: T): T; <T>(x: T, y: T): T };
->c2 : { <T>(x: T): T; <T>(x: T, y: T): T; }
+>c2 : { <T>(x: T): T; <T_1>(x: T_1, y: T_1): T_1; }
 >x : T
 >x : T
 >y : T
@@ -174,10 +174,10 @@ var r15 = foo(b2);
 >b2 : new <T>(x: T) => T
 
 var r16 = foo(c2);
->r16 : { <T>(x: T): T; <T>(x: T, y: T): T; }
->foo(c2) : { <T>(x: T): T; <T>(x: T, y: T): T; }
+>r16 : { <T>(x: T): T; <T_1>(x: T_1, y: T_1): T_1; }
+>foo(c2) : { <T>(x: T): T; <T_1>(x: T_1, y: T_1): T_1; }
 >foo : <T extends Function>(x: T) => T
->c2 : { <T>(x: T): T; <T>(x: T, y: T): T; }
+>c2 : { <T>(x: T): T; <T_1>(x: T_1, y: T_1): T_1; }
 
 interface F2 extends Function { foo: string; }
 >foo : string
@@ -198,12 +198,12 @@ function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
 
     foo(x);
 >foo(x) : T
->foo : <T extends Function>(x: T) => T
+>foo : <T_1 extends Function>(x: T_1) => T_1
 >x : T
 
     foo(y);
 >foo(y) : U
->foo : <T extends Function>(x: T) => T
+>foo : <T_1 extends Function>(x: T_1) => T_1
 >y : U
 }
 //function foo2<T extends { (): void }, U extends T>(x: T, y: U) {

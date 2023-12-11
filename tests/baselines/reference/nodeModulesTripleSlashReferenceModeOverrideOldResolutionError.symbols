@@ -1,9 +1,28 @@
 //// [tests/cases/conformance/node/nodeModulesTripleSlashReferenceModeOverrideOldResolutionError.ts] ////
 
 === /index.ts ===
-
 /// <reference types="pkg" resolution-mode="require" />
 /// <reference types="pkg" resolution-mode="import" />
-foo; // `resolution-mode` is an error in old resolution settings, which resolves is arbitrary
+foo;
+>foo : Symbol(foo, Decl(import.d.ts, 2, 7))
+
 bar;
+>bar : Symbol(bar, Decl(require.d.ts, 2, 7))
+
 export {};
+=== /node_modules/pkg/import.d.ts ===
+export {};
+declare global {
+>global : Symbol(global, Decl(import.d.ts, 0, 10))
+
+    var foo: number;
+>foo : Symbol(foo, Decl(import.d.ts, 2, 7))
+}
+=== /node_modules/pkg/require.d.ts ===
+export {};
+declare global {
+>global : Symbol(global, Decl(require.d.ts, 0, 10))
+
+    var bar: number;
+>bar : Symbol(bar, Decl(require.d.ts, 2, 7))
+}

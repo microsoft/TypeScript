@@ -21,14 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'microsoft/TypeScript'
 
-    permissions:
-      contents: write
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
         with:
           node-version: 16
       - run: |
@@ -46,7 +43,7 @@ jobs:
             echo "No change."
           else
             npm test
-            npx hereby lkg
+            npx hereby LKG
             git config user.email "typescriptbot@microsoft.com"
             git config user.name "TypeScript Bot"
             git add -f package-lock.json

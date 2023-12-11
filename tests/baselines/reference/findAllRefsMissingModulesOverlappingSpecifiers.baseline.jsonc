@@ -1,0 +1,43 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsMissingModulesOverlappingSpecifiers.ts ===
+// // https://github.com/microsoft/TypeScript/issues/5551
+// import { resolve/*FIND ALL REFS*/ as resolveUrl } from "idontcare";
+// import { resolve } from "whatever";
+
+
+
+// === findAllReferences ===
+// === /tests/cases/fourslash/findAllRefsMissingModulesOverlappingSpecifiers.ts ===
+// // https://github.com/microsoft/TypeScript/issues/5551
+// import { resolve as resolveUrl } from "idontcare";
+// <|import { [|{| isWriteAccess: true, isDefinition: true |}resolve|]/*FIND ALL REFS*/ } from "whatever";|>
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/findAllRefsMissingModulesOverlappingSpecifiers.ts ===
+  // // https://github.com/microsoft/TypeScript/issues/5551
+  // import { resolve as resolveUrl } from "idontcare";
+  // <|import { [|resolve|]/*FIND ALL REFS*/ } from "whatever";|>
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "alias",
+    "name": "import resolve",
+    "displayParts": [
+     {
+      "text": "import",
+      "kind": "keyword"
+     },
+     {
+      "text": " ",
+      "kind": "space"
+     },
+     {
+      "text": "resolve",
+      "kind": "aliasName"
+     }
+    ]
+   }
+  ]
