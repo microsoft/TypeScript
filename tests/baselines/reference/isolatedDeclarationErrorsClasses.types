@@ -87,6 +87,12 @@ const noParamAnnotationLiteralName = "noParamAnnotationLiteralName";
 export class C {
 >C : C
 
+    // Should not be reported as an isolated declaration error
+    [missing] = 1;
+>[missing] : number
+>missing : any
+>1 : 1
+    
     [noAnnotationLiteralName](): void { }
 >[noAnnotationLiteralName] : () => void
 >noAnnotationLiteralName : "noAnnotationLiteralName"
@@ -114,6 +120,24 @@ export class C {
 >[noParamAnnotationStringName] : any
 >noParamAnnotationStringName : string
 >value : any
+
+    [("A" + "B") as "AB"] =  1;
+>[("A" + "B") as "AB"] : number
+>("A" + "B") as "AB" : "AB"
+>("A" + "B") : string
+>"A" + "B" : string
+>"A" : "A"
+>"B" : "B"
+>1 : 1
+
 }
 
+export interface I {
+    [noAnnotationStringName]: 10;
+>[noAnnotationStringName] : 10
+>noAnnotationStringName : string
 
+    [noAnnotationLiteralName]();
+>[noAnnotationLiteralName] : () => any
+>noAnnotationLiteralName : "noAnnotationLiteralName"
+}

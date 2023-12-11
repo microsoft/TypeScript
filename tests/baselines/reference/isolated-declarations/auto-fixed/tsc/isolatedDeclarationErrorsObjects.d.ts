@@ -74,10 +74,12 @@ export let oWithAccessor = {
 function prop<T>(v: T): T { return v }
 
 const s: unique symbol = Symbol();
+const str: string = "";
 enum E {
     V = 10,
 }
 export const oWithComputedProperties: {
+    [x: string]: number;
     [x: number]: number;
     1: number;
     2: number;
@@ -89,6 +91,7 @@ export const oWithComputedProperties: {
     [prop(2)]: 2,
     [s]: 1,
     [E.V]: 1,
+    [str]: 0,
 }
 
 const part = { a: 1 };
@@ -109,6 +112,9 @@ export const oWithSpread: {
 
 
 export const oWithSpread: {
+    [x: string]: number | {
+        a: number;
+    };
     b: number;
     nested: {
         a: number;
@@ -124,6 +130,7 @@ export const oWithSpread: {
     },
     c: 1,
     part,
+    [str]: 0,
 }
 
 
@@ -177,6 +184,7 @@ declare enum E {
     V = 10
 }
 export declare const oWithComputedProperties: {
+    [x: string]: number;
     [x: number]: number;
     1: number;
     2: number;
@@ -192,6 +200,9 @@ export declare const oWithSpread: {
     b: number;
 };
 export declare const oWithSpread: {
+    [x: string]: number | {
+        a: number;
+    };
     b: number;
     nested: {
         a: number;
@@ -205,8 +216,8 @@ export {};
 
 /// [Errors] ////
 
-isolatedDeclarationErrorsObjects.ts(93,14): error TS2451: Cannot redeclare block-scoped variable 'oWithSpread'.
-isolatedDeclarationErrorsObjects.ts(108,14): error TS2451: Cannot redeclare block-scoped variable 'oWithSpread'.
+isolatedDeclarationErrorsObjects.ts(96,14): error TS2451: Cannot redeclare block-scoped variable 'oWithSpread'.
+isolatedDeclarationErrorsObjects.ts(111,14): error TS2451: Cannot redeclare block-scoped variable 'oWithSpread'.
 
 
 ==== isolatedDeclarationErrorsObjects.ts (2 errors) ====
@@ -283,10 +294,12 @@ isolatedDeclarationErrorsObjects.ts(108,14): error TS2451: Cannot redeclare bloc
     function prop<T>(v: T): T { return v }
     
     const s: unique symbol = Symbol();
+    const str: string = "";
     enum E {
         V = 10,
     }
     export const oWithComputedProperties: {
+        [x: string]: number;
         [x: number]: number;
         1: number;
         2: number;
@@ -298,6 +311,7 @@ isolatedDeclarationErrorsObjects.ts(108,14): error TS2451: Cannot redeclare bloc
         [prop(2)]: 2,
         [s]: 1,
         [E.V]: 1,
+        [str]: 0,
     }
     
     const part = { a: 1 };
@@ -322,6 +336,9 @@ isolatedDeclarationErrorsObjects.ts(108,14): error TS2451: Cannot redeclare bloc
     export const oWithSpread: {
                  ~~~~~~~~~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'oWithSpread'.
+        [x: string]: number | {
+            a: number;
+        };
         b: number;
         nested: {
             a: number;
@@ -337,5 +354,6 @@ isolatedDeclarationErrorsObjects.ts(108,14): error TS2451: Cannot redeclare bloc
         },
         c: 1,
         part,
+        [str]: 0,
     }
     

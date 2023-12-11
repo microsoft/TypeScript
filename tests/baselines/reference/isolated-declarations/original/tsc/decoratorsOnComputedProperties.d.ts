@@ -211,9 +211,6 @@ declare class A {
     [Symbol.isConcatSpreadable]: any;
     ["property4"]: any;
     [Symbol.match]: any;
-    [fieldNameA]: any;
-    [fieldNameB]: any;
-    [fieldNameC]: any;
 }
 declare class C {
     ["property"]: any;
@@ -224,9 +221,6 @@ declare class C {
     [Symbol.isConcatSpreadable]: any;
     ["property4"]: any;
     [Symbol.match]: any;
-    [fieldNameA]: any;
-    [fieldNameB]: any;
-    [fieldNameC]: any;
 }
 declare class E {
     ["property"]: any;
@@ -237,9 +231,6 @@ declare class E {
     [Symbol.isConcatSpreadable]: any;
     ["property4"]: any;
     [Symbol.match]: any;
-    [fieldNameA]: any;
-    [fieldNameB]: any;
-    [fieldNameC]: any;
 }
 declare class G {
     ["property"]: any;
@@ -250,9 +241,6 @@ declare class G {
     [Symbol.isConcatSpreadable]: any;
     ["property4"]: any;
     [Symbol.match]: any;
-    [fieldNameA]: any;
-    [fieldNameB]: any;
-    [fieldNameC]: any;
 }
 declare class I {
     ["property"]: any;
@@ -263,9 +251,6 @@ declare class I {
     [Symbol.isConcatSpreadable]: any;
     ["property4"]: any;
     [Symbol.match]: any;
-    [fieldNameA]: any;
-    [fieldNameB]: any;
-    [fieldNameC]: any;
 }
 
 /// [Errors] ////

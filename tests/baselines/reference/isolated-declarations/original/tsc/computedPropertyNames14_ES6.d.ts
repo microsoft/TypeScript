@@ -18,33 +18,26 @@ class C {
 //// [computedPropertyNames14_ES6.d.ts]
 declare var b: boolean;
 declare class C {
-    [b](): invalid;
-    [undefined](): invalid;
 }
 
 /// [Errors] ////
 
 computedPropertyNames14_ES6.ts(3,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames14_ES6.ts(3,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 computedPropertyNames14_ES6.ts(3,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 computedPropertyNames14_ES6.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames14_ES6.ts(5,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames14_ES6.ts(6,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames14_ES6.ts(7,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames14_ES6.ts(7,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 computedPropertyNames14_ES6.ts(7,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 computedPropertyNames14_ES6.ts(8,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
-==== computedPropertyNames14_ES6.ts (10 errors) ====
+==== computedPropertyNames14_ES6.ts (8 errors) ====
     var b: boolean;
     class C {
         [b]() {}
         ~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-        ~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9034 computedPropertyNames14_ES6.ts:3:5: Add a return type to the method
         ~~~
 !!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
         static [true]() { }
@@ -59,9 +52,6 @@ computedPropertyNames14_ES6.ts(8,12): error TS2464: A computed property name mus
         [undefined]() { }
         ~~~~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-        ~~~~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9034 computedPropertyNames14_ES6.ts:7:5: Add a return type to the method
         ~~~~~~~~~~~
 !!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
         static [null]() { }

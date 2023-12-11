@@ -35,6 +35,9 @@ const noParamAnnotationLiteralName = "noParamAnnotationLiteralName";
 
 export class C {
 
+    // Should not be reported as an isolated declaration error
+    [missing] = 1;
+    
     [noAnnotationLiteralName](): void { }
 
     [noParamAnnotationLiteralName](v: string): void { }
@@ -46,9 +49,15 @@ export class C {
     get [noAnnotationStringName]() { return 0;}
 
     set [noParamAnnotationStringName](value) { }
+
+    [("A" + "B") as "AB"] =  1;
+
 }
 
-
+export interface I {
+    [noAnnotationStringName]: 10;
+    [noAnnotationLiteralName]();
+}
 
 //// [isolatedDeclarationErrorsClasses.js]
 export class Cls {
@@ -73,10 +82,13 @@ let noParamAnnotationStringName = "noParamAnnotationStringName";
 const noAnnotationLiteralName = "noAnnotationLiteralName";
 const noParamAnnotationLiteralName = "noParamAnnotationLiteralName";
 export class C {
+    // Should not be reported as an isolated declaration error
+    [missing] = 1;
     [noAnnotationLiteralName]() { }
     [noParamAnnotationLiteralName](v) { }
     [noAnnotationStringName]() { }
     [noParamAnnotationStringName](v) { }
     get [noAnnotationStringName]() { return 0; }
     set [noParamAnnotationStringName](value) { }
+    [("A" + "B")] = 1;
 }

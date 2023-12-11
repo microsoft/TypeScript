@@ -20,10 +20,9 @@ declare class C {
 parserComputedPropertyName39.ts(3,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 parserComputedPropertyName39.ts(3,6): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 parserComputedPropertyName39.ts(3,6): error TS2304: Cannot find name 'public'.
-parserComputedPropertyName39.ts(3,6): error TS4100: Public method '[public]' of exported class has or is using private name 'public'.
 
 
-==== parserComputedPropertyName39.ts (4 errors) ====
+==== parserComputedPropertyName39.ts (3 errors) ====
     "use strict";
     class C {
         [public]() { }
@@ -34,6 +33,4 @@ parserComputedPropertyName39.ts(3,6): error TS4100: Public method '[public]' of 
 !!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
          ~~~~~~
 !!! error TS2304: Cannot find name 'public'.
-         ~~~~~~
-!!! error TS4100: Public method '[public]' of exported class has or is using private name 'public'.
     }

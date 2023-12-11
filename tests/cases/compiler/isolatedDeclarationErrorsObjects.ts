@@ -1,5 +1,6 @@
 // @declaration: true
-// @isolatedDeclarations: true
+// @isolatedDeclarations: true 
+// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 // @isolatedDeclarationFixedDiffReason: Accessors are not unified in DTE
 // @declarationMap: false
 // @strict: true
@@ -62,6 +63,7 @@ export let oWithAccessor = {
 function prop<T>(v: T): T { return v }
 
 const s: unique symbol = Symbol();
+const str: string = "";
 enum E {
     V = 10,
 }
@@ -71,6 +73,7 @@ export const oWithComputedProperties = {
     [prop(2)]: 2,
     [s]: 1,
     [E.V]: 1,
+    [str]: 0,
 }
 
 const part = { a: 1 };
@@ -90,4 +93,5 @@ export const oWithSpread = {
     },
     c: 1,
     part,
+    [str]: 0,
 }

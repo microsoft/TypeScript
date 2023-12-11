@@ -11,29 +11,22 @@ class C {
 
 //// [parserComputedPropertyName36.d.ts]
 declare class C {
-    [public]: string;
 }
 
 /// [Errors] ////
 
 parserComputedPropertyName36.ts(2,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-parserComputedPropertyName36.ts(2,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 parserComputedPropertyName36.ts(2,6): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 parserComputedPropertyName36.ts(2,6): error TS2304: Cannot find name 'public'.
-parserComputedPropertyName36.ts(2,6): error TS4031: Public property '[public ]' of exported class has or is using private name 'public'.
 
 
-==== parserComputedPropertyName36.ts (5 errors) ====
+==== parserComputedPropertyName36.ts (3 errors) ====
     class C {
         [public ]: string;
         ~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-        ~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
          ~~~~~~
 !!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
          ~~~~~~
 !!! error TS2304: Cannot find name 'public'.
-         ~~~~~~
-!!! error TS4031: Public property '[public ]' of exported class has or is using private name 'public'.
     }

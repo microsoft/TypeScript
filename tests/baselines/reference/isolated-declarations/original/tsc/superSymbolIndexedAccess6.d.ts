@@ -22,28 +22,21 @@ class Bar extends Foo {
 //// [superSymbolIndexedAccess6.d.ts]
 declare var symbol: any;
 declare class Foo {
-    static [symbol](): invalid;
 }
 declare class Bar extends Foo {
-    static [symbol](): invalid;
 }
 
 /// [Errors] ////
 
-superSymbolIndexedAccess6.ts(4,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 superSymbolIndexedAccess6.ts(4,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-superSymbolIndexedAccess6.ts(10,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 superSymbolIndexedAccess6.ts(10,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 
 
-==== superSymbolIndexedAccess6.ts (4 errors) ====
+==== superSymbolIndexedAccess6.ts (2 errors) ====
     var symbol: any;
     
     class Foo {
         static [symbol]() {
-               ~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9034 superSymbolIndexedAccess6.ts:4:12: Add a return type to the method
                ~~~~~~~~
 !!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
             return 0;
@@ -52,9 +45,6 @@ superSymbolIndexedAccess6.ts(10,12): error TS9014: Computed properties must be n
     
     class Bar extends Foo {
         static [symbol]() {
-               ~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9034 superSymbolIndexedAccess6.ts:10:12: Add a return type to the method
                ~~~~~~~~
 !!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
             return super[symbol]();

@@ -58,6 +58,7 @@ export let oWithAccessor = {
 function prop<T>(v: T): T { return v }
 
 const s: unique symbol = Symbol();
+const str: string = "";
 enum E {
     V = 10,
 }
@@ -67,6 +68,7 @@ export const oWithComputedProperties = {
     [prop(2)]: 2,
     [s]: 1,
     [E.V]: 1,
+    [str]: 0,
 }
 
 const part = { a: 1 };
@@ -86,6 +88,7 @@ export const oWithSpread = {
     },
     c: 1,
     part,
+    [str]: 0,
 }
 
 
@@ -136,6 +139,7 @@ export let oWithAccessor = {
 };
 function prop(v) { return v; }
 const s = Symbol();
+const str = "";
 var E;
 (function (E) {
     E[E["V"] = 10] = "V";
@@ -146,6 +150,7 @@ export const oWithComputedProperties = {
     [prop(2)]: 2,
     [s]: 1,
     [E.V]: 1,
+    [str]: 0,
 };
 const part = { a: 1 };
 export const oWithSpread = {
@@ -161,4 +166,5 @@ export const oWithSpread = {
     },
     c: 1,
     part,
+    [str]: 0,
 };

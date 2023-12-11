@@ -155,7 +155,6 @@ import {
     isTupleTypeNode,
     isTypeAliasDeclaration,
     isTypeElement,
-    isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
@@ -1266,16 +1265,19 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
             if (isDeclarationAndNotVisible(input)) return;
             if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
                 if (
-                    isolatedDeclarations && hasIdentifierComputedName(input) &&
-                    // When --noImplicitAny is off, it's automatically 'any' type so we shouldn't complain.
-                    // when it's on, it should be an error on the noImplicitAny side, so we also shouldn't complain.
-                    !isInterfaceDeclaration(input.parent) && !isTypeLiteralNode(input.parent)
+                    isolatedDeclarations
+                    // Classes usually elide properties with computed names that are not of a literal type
+                    // In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
+                    // The
+                    && isClassDeclaration(input.parent)
+                    && isEntityNameExpression(input.name.expression)
+                    // If the symbol is not accessible we get another TS error no need to add to that
+                    && resolver.isEntityNameVisible(input.name.expression, input.parent).accessibility === SymbolAccessibility.Accessible
+                    && !resolver.isLiteralComputedName(input.name)
                 ) {
                     context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
                 }
-                else {
-                    return;
-                }
+                return;
             }
         }
 

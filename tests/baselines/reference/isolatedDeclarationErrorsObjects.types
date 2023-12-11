@@ -160,6 +160,10 @@ const s: unique symbol = Symbol();
 >Symbol() : unique symbol
 >Symbol : SymbolConstructor
 
+const str: string = "";
+>str : string
+>"" : ""
+
 enum E {
 >E : E
 
@@ -168,8 +172,8 @@ enum E {
 >10 : 10
 }
 export const oWithComputedProperties = {
->oWithComputedProperties : { [x: number]: number; 1: number; 2: number; [s]: number; 10: number; }
->{    [1]: 1,    [1 + 3]: 1,    [prop(2)]: 2,    [s]: 1,    [E.V]: 1,} : { [x: number]: number; 1: number; 2: number; [s]: number; 10: number; }
+>oWithComputedProperties : { [x: string]: number; [x: number]: number; 1: number; 2: number; [s]: number; 10: number; }
+>{    [1]: 1,    [1 + 3]: 1,    [prop(2)]: 2,    [s]: 1,    [E.V]: 1,    [str]: 0,} : { [x: string]: number; [x: number]: number; 1: number; 2: number; [s]: number; 10: number; }
 
     [1]: 1,
 >[1] : number
@@ -201,6 +205,11 @@ export const oWithComputedProperties = {
 >E : typeof E
 >V : E
 >1 : 1
+
+    [str]: 0,
+>[str] : number
+>str : string
+>0 : 0
 }
 
 const part = { a: 1 };
@@ -230,8 +239,8 @@ export const oWithSpread = {
 
 
 export const oWithSpread = {
->oWithSpread : { b: number; nested: { a: number; }; c: number; part: { a: number; }; }
->{    b: 1,    nested: {        ...part,    },    c: 1,    part,} : { b: number; nested: { a: number; }; c: number; part: { a: number; }; }
+>oWithSpread : { [x: string]: number | { a: number; }; b: number; nested: { a: number; }; c: number; part: { a: number; }; }
+>{    b: 1,    nested: {        ...part,    },    c: 1,    part,    [str]: 0,} : { [x: string]: number | { a: number; }; b: number; nested: { a: number; }; c: number; part: { a: number; }; }
 
     b: 1,
 >b : number
@@ -251,5 +260,10 @@ export const oWithSpread = {
 
     part,
 >part : { a: number; }
+
+    [str]: 0,
+>[str] : number
+>str : string
+>0 : 0
 }
 

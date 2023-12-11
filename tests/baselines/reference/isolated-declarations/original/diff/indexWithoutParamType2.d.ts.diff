@@ -5,26 +5,13 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -7,21 +7,18 @@
+@@ -1,8 +1,9 @@
+ 
+ 
+ //// [indexWithoutParamType2.d.ts]
+ declare class C {
++    [x]: string;
+ }
  
  /// [Errors] ////
  
- indexWithoutParamType2.ts(3,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
--indexWithoutParamType2.ts(3,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
- indexWithoutParamType2.ts(3,6): error TS2304: Cannot find name 'x'.
- indexWithoutParamType2.ts(3,6): error TS4031: Public property '[x]' of exported class has or is using private name 'x'.
- 
- 
--==== indexWithoutParamType2.ts (4 errors) ====
-+==== indexWithoutParamType2.ts (3 errors) ====
-     class C {
-         // Used to be indexer, now it is a computed property
-         [x]: string
-         ~~~
- !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
--        ~~~
--!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-          ~
- !!! error TS2304: Cannot find name 'x'.
-          ~
- !!! error TS4031: Public property '[x]' of exported class has or is using private name 'x'.

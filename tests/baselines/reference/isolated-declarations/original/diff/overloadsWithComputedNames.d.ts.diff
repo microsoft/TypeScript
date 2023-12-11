@@ -5,7 +5,12 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -19,19 +19,18 @@
+@@ -14,19 +14,23 @@
+ declare const uniqueSym2: unique symbol;
+ declare const sym: symbol;
+ declare const strUnion: 'foo' | 'bar';
+ declare class C1 {
++    [sym](): void;
      [uniqueSym2](): void;
      [uniqueSym](): void;
  }
@@ -16,17 +21,15 @@
      [uniqueSym](): void;
  }
  declare class C2 {
-     [strUnion](): void;
--    [strUnion](): invalid;
++    [strUnion](): void;
  }
  declare class I2 {
-     [strUnion](): void;
--    [strUnion](): invalid;
++    [strUnion](): void;
  }
  declare class C3 {
      [1](): void;
      [2](): void;
-@@ -48,23 +47,16 @@
+@@ -43,21 +47,16 @@
  overloadsWithComputedNames.ts(8,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
  overloadsWithComputedNames.ts(14,5): error TS2391: Function implementation is missing or not immediately following the declaration.
  overloadsWithComputedNames.ts(16,5): error TS2389: Function implementation name must be '["bar"]'.
@@ -36,22 +39,20 @@
  overloadsWithComputedNames.ts(35,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
  overloadsWithComputedNames.ts(42,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
 -overloadsWithComputedNames.ts(42,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--overloadsWithComputedNames.ts(43,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 -overloadsWithComputedNames.ts(43,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
  overloadsWithComputedNames.ts(47,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
 -overloadsWithComputedNames.ts(47,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--overloadsWithComputedNames.ts(48,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 -overloadsWithComputedNames.ts(48,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
  overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is missing or not immediately following the declaration.
  
  
--==== overloadsWithComputedNames.ts (17 errors) ====
+-==== overloadsWithComputedNames.ts (15 errors) ====
 +==== overloadsWithComputedNames.ts (10 errors) ====
      // https://github.com/microsoft/TypeScript/issues/52329
      class Person {
          ["B"](a: number): string;
          ["A"](a: string|number): number | string {
-@@ -102,10 +94,8 @@
+@@ -95,10 +94,8 @@
      class C1 {
          [sym](): void;  // should error
          ~~~~~
@@ -62,7 +63,7 @@
          ~~~~~~~~~~~~
  !!! error TS2391: Function implementation is missing or not immediately following the declaration.
          [uniqueSym](): void;
-@@ -124,30 +114,16 @@
+@@ -117,24 +114,16 @@
      class C2 {
          [strUnion](): void; // should error
          ~~~~~~~~~~
@@ -70,9 +71,6 @@
 -        ~~~~~~~~~~
 -!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
          [strUnion]() { }
--        ~~~~~~~~~~
--!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
--!!! related TS9034 overloadsWithComputedNames.ts:43:5: Add a return type to the method
 -        ~~~~~~~~~~
 -!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
      }
@@ -84,9 +82,6 @@
 -        ~~~~~~~~~~
 -!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
          [strUnion]() { }
--        ~~~~~~~~~~
--!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
--!!! related TS9034 overloadsWithComputedNames.ts:48:5: Add a return type to the method
 -        ~~~~~~~~~~
 -!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
      }

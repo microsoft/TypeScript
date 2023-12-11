@@ -31,11 +31,10 @@ declare class StringIterator {
 ES5For-ofTypeCheck10.ts(3,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 ES5For-ofTypeCheck10.ts(9,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 ES5For-ofTypeCheck10.ts(9,6): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
-ES5For-ofTypeCheck10.ts(9,6): error TS4100: Public method '[Symbol.iterator]' of exported class has or is using private name 'Symbol'.
 ES5For-ofTypeCheck10.ts(14,15): error TS2495: Type 'StringIterator' is not an array type or a string type.
 
 
-==== ES5For-ofTypeCheck10.ts (5 errors) ====
+==== ES5For-ofTypeCheck10.ts (4 errors) ====
     // In ES3/5, you cannot for...of over an arbitrary iterable.
     class StringIterator {
         next() {
@@ -53,8 +52,6 @@ ES5For-ofTypeCheck10.ts(14,15): error TS2495: Type 'StringIterator' is not an ar
 !!! related TS9034 ES5For-ofTypeCheck10.ts:9:5: Add a return type to the method
          ~~~~~~
 !!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
-         ~~~~~~
-!!! error TS4100: Public method '[Symbol.iterator]' of exported class has or is using private name 'Symbol'.
             return this;
         }
     }

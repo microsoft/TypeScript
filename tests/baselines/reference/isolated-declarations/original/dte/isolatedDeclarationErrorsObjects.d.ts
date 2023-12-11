@@ -1,3 +1,124 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsObjects.ts] ////
+
+//// [isolatedDeclarationErrorsObjects.ts]
+export let o = {
+    a: 1,
+    b: ""
+}
+
+export let oBad = {
+    a: Math.random(),
+}
+export const V = 1;
+export let oBad2 = {
+    a: {
+        b: Math.random(),
+    },
+    c: {
+        d: 1,
+        e: V,
+    }
+}
+
+export let oWithMethods = {
+    method() { },
+    okMethod(): void { },
+    a: 1,
+    bad() { },
+    e: V,
+}
+export let oWithMethodsNested = {
+    foo: {
+        method() { },
+        a: 1,
+        okMethod(): void { },
+        bad() { }
+    }
+}
+
+
+
+export let oWithAccessor = {
+    get singleGetterBad() { return 0 },
+    set singleSetterBad(value) { },
+
+    get getSetBad() { return 0 },
+    set getSetBad(value) { },
+
+    get getSetOk(): number { return 0 },
+    set getSetOk(value) { },
+
+    get getSetOk2() { return 0 },
+    set getSetOk2(value: number) { },
+    
+    get getSetOk3(): number { return 0 },
+    set getSetOk3(value: number) { },
+}
+
+function prop<T>(v: T): T { return v }
+
+const s: unique symbol = Symbol();
+const str: string = "";
+enum E {
+    V = 10,
+}
+export const oWithComputedProperties = {
+    [1]: 1,
+    [1 + 3]: 1,
+    [prop(2)]: 2,
+    [s]: 1,
+    [E.V]: 1,
+    [str]: 0,
+}
+
+const part = { a: 1 };
+
+export const oWithSpread = {
+    b: 1,
+    ...part,
+    c: 1,
+    part,
+}
+
+
+export const oWithSpread = {
+    b: 1,
+    nested: {
+        ...part,
+    },
+    c: 1,
+    part,
+    [str]: 0,
+}
+
+
+/// [Declarations] ////
+
+
+
+//// [isolatedDeclarationErrorsObjects.d.ts]
+export declare let o: {
+    a: number;
+    b: string;
+};
+export declare let oBad: invalid;
+export declare const V = 1;
+export declare let oBad2: invalid;
+export declare let oWithMethods: invalid;
+export declare let oWithMethodsNested: invalid;
+export declare let oWithAccessor: invalid;
+declare const s: unique symbol;
+declare const str: string;
+declare enum E {
+    V = 10
+}
+export declare const oWithComputedProperties: invalid;
+export declare const oWithSpread: invalid;
+export declare const oWithSpread: invalid;
+export {};
+
+/// [Errors] ////
+
 isolatedDeclarationErrorsObjects.ts(7,8): error TS9013: Expression type can't be inferred with --isolatedDeclarations
 isolatedDeclarationErrorsObjects.ts(12,12): error TS9013: Expression type can't be inferred with --isolatedDeclarations
 isolatedDeclarationErrorsObjects.ts(16,12): error TS9013: Expression type can't be inferred with --isolatedDeclarations
@@ -13,17 +134,15 @@ isolatedDeclarationErrorsObjects.ts(40,25): error TS9009: At least one accessor 
 isolatedDeclarationErrorsObjects.ts(42,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 isolatedDeclarationErrorsObjects.ts(64,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 isolatedDeclarationErrorsObjects.ts(65,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-isolatedDeclarationErrorsObjects.ts(68,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 isolatedDeclarationErrorsObjects.ts(73,14): error TS2451: Cannot redeclare block-scoped variable 'oWithSpread'.
 isolatedDeclarationErrorsObjects.ts(75,5): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations
 isolatedDeclarationErrorsObjects.ts(77,5): error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations
 isolatedDeclarationErrorsObjects.ts(81,14): error TS2451: Cannot redeclare block-scoped variable 'oWithSpread'.
 isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations
 isolatedDeclarationErrorsObjects.ts(87,5): error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations
-isolatedDeclarationErrorsObjects.ts(88,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 
 
-==== isolatedDeclarationErrorsObjects.ts (23 errors) ====
+==== isolatedDeclarationErrorsObjects.ts (21 errors) ====
     export let o = {
         a: 1,
         b: ""
@@ -144,9 +263,6 @@ isolatedDeclarationErrorsObjects.ts(88,5): error TS9014: Computed properties mus
         [s]: 1,
         [E.V]: 1,
         [str]: 0,
-        ~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties
     }
     
     const part = { a: 1 };
@@ -183,8 +299,5 @@ isolatedDeclarationErrorsObjects.ts(88,5): error TS9014: Computed properties mus
 !!! error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations
 !!! related TS9027 isolatedDeclarationErrorsObjects.ts:81:14: Add a type annotation to the variable oWithSpread
         [str]: 0,
-        ~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-!!! related TS9027 isolatedDeclarationErrorsObjects.ts:81:14: Add a type annotation to the variable oWithSpread
     }
     

@@ -379,7 +379,6 @@ export declare class ExportedStaticLengthFn {
     [FunctionPropertyNames.length](): invalid;
 }
 export declare class ExportedStaticPrototype {
-    static [FunctionPropertyNames.prototype]: number;
     [FunctionPropertyNames.prototype]: string;
 }
 export declare class ExportedStaticPrototypeFn {
@@ -427,7 +426,6 @@ staticPropertyNameConflicts.ts(272,5): error TS9008: Method must have an explici
 staticPropertyNameConflicts.ts(277,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(278,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
 staticPropertyNameConflicts.ts(284,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototype'.
-staticPropertyNameConflicts.ts(284,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 staticPropertyNameConflicts.ts(289,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(290,16): error TS2300: Duplicate identifier 'prototype'.
 staticPropertyNameConflicts.ts(290,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
@@ -445,7 +443,7 @@ staticPropertyNameConflicts.ts(346,12): error TS9008: Method must have an explic
 staticPropertyNameConflicts.ts(347,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 
 
-==== staticPropertyNameConflicts.ts (37 errors) ====
+==== staticPropertyNameConflicts.ts (36 errors) ====
     const FunctionPropertyNames = {
         name: 'name',
         length: 'length',
@@ -776,8 +774,6 @@ staticPropertyNameConflicts.ts(347,5): error TS9008: Method must have an explici
         static [FunctionPropertyNames.prototype]: number; // always an error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototype'.
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
         [FunctionPropertyNames.prototype]: string; // ok
     }
     

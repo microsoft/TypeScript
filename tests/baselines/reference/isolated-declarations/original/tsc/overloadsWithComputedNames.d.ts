@@ -82,7 +82,6 @@ declare const uniqueSym2: unique symbol;
 declare const sym: symbol;
 declare const strUnion: 'foo' | 'bar';
 declare class C1 {
-    [sym](): void;
     [uniqueSym2](): void;
     [uniqueSym](): void;
 }
@@ -92,12 +91,8 @@ interface I1 {
     [uniqueSym](): void;
 }
 declare class C2 {
-    [strUnion](): void;
-    [strUnion](): invalid;
 }
 declare class I2 {
-    [strUnion](): void;
-    [strUnion](): invalid;
 }
 declare class C3 {
     [1](): void;
@@ -121,16 +116,14 @@ overloadsWithComputedNames.ts(29,5): error TS2391: Function implementation is mi
 overloadsWithComputedNames.ts(35,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 overloadsWithComputedNames.ts(42,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
 overloadsWithComputedNames.ts(42,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-overloadsWithComputedNames.ts(43,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 overloadsWithComputedNames.ts(43,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 overloadsWithComputedNames.ts(47,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
 overloadsWithComputedNames.ts(47,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-overloadsWithComputedNames.ts(48,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 overloadsWithComputedNames.ts(48,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
-==== overloadsWithComputedNames.ts (17 errors) ====
+==== overloadsWithComputedNames.ts (15 errors) ====
     // https://github.com/microsoft/TypeScript/issues/52329
     class Person {
         ["B"](a: number): string;
@@ -196,9 +189,6 @@ overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is mi
 !!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
         [strUnion]() { }
         ~~~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9034 overloadsWithComputedNames.ts:43:5: Add a return type to the method
-        ~~~~~~~~~~
 !!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
     }
     
@@ -209,9 +199,6 @@ overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is mi
         ~~~~~~~~~~
 !!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
         [strUnion]() { }
-        ~~~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9034 overloadsWithComputedNames.ts:48:5: Add a return type to the method
         ~~~~~~~~~~
 !!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
     }

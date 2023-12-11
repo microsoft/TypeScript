@@ -19,10 +19,9 @@ declare class C {
 parserES5ComputedPropertyName11.ts(2,4): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
 parserES5ComputedPropertyName11.ts(2,4): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 parserES5ComputedPropertyName11.ts(2,5): error TS2304: Cannot find name 'e'.
-parserES5ComputedPropertyName11.ts(2,5): error TS4100: Public method '[e]' of exported class has or is using private name 'e'.
 
 
-==== parserES5ComputedPropertyName11.ts (4 errors) ====
+==== parserES5ComputedPropertyName11.ts (3 errors) ====
     class C {
        [e]();
        ~~~
@@ -32,6 +31,4 @@ parserES5ComputedPropertyName11.ts(2,5): error TS4100: Public method '[e]' of ex
 !!! related TS9034 parserES5ComputedPropertyName11.ts:2:4: Add a return type to the method
         ~
 !!! error TS2304: Cannot find name 'e'.
-        ~
-!!! error TS4100: Public method '[e]' of exported class has or is using private name 'e'.
     }

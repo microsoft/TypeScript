@@ -140,75 +140,86 @@ const s: unique symbol = Symbol();
 >s : Symbol(s, Decl(isolatedDeclarationErrorsObjects.ts, 56, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
+const str: string = "";
+>str : Symbol(str, Decl(isolatedDeclarationErrorsObjects.ts, 57, 5))
+
 enum E {
->E : Symbol(E, Decl(isolatedDeclarationErrorsObjects.ts, 56, 34))
+>E : Symbol(E, Decl(isolatedDeclarationErrorsObjects.ts, 57, 23))
 
     V = 10,
->V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 57, 8))
+>V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
 }
 export const oWithComputedProperties = {
->oWithComputedProperties : Symbol(oWithComputedProperties, Decl(isolatedDeclarationErrorsObjects.ts, 60, 12))
+>oWithComputedProperties : Symbol(oWithComputedProperties, Decl(isolatedDeclarationErrorsObjects.ts, 61, 12))
 
     [1]: 1,
->[1] : Symbol([1], Decl(isolatedDeclarationErrorsObjects.ts, 60, 40))
->1 : Symbol([1], Decl(isolatedDeclarationErrorsObjects.ts, 60, 40))
+>[1] : Symbol([1], Decl(isolatedDeclarationErrorsObjects.ts, 61, 40))
+>1 : Symbol([1], Decl(isolatedDeclarationErrorsObjects.ts, 61, 40))
 
     [1 + 3]: 1,
->[1 + 3] : Symbol([1 + 3], Decl(isolatedDeclarationErrorsObjects.ts, 61, 11))
+>[1 + 3] : Symbol([1 + 3], Decl(isolatedDeclarationErrorsObjects.ts, 62, 11))
 
     [prop(2)]: 2,
->[prop(2)] : Symbol([prop(2)], Decl(isolatedDeclarationErrorsObjects.ts, 62, 15))
+>[prop(2)] : Symbol([prop(2)], Decl(isolatedDeclarationErrorsObjects.ts, 63, 15))
 >prop : Symbol(prop, Decl(isolatedDeclarationErrorsObjects.ts, 52, 1))
 
     [s]: 1,
->[s] : Symbol([s], Decl(isolatedDeclarationErrorsObjects.ts, 63, 17))
+>[s] : Symbol([s], Decl(isolatedDeclarationErrorsObjects.ts, 64, 17))
 >s : Symbol(s, Decl(isolatedDeclarationErrorsObjects.ts, 56, 5))
 
     [E.V]: 1,
->[E.V] : Symbol([E.V], Decl(isolatedDeclarationErrorsObjects.ts, 64, 11))
->E.V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 57, 8))
->E : Symbol(E, Decl(isolatedDeclarationErrorsObjects.ts, 56, 34))
->V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 57, 8))
+>[E.V] : Symbol([E.V], Decl(isolatedDeclarationErrorsObjects.ts, 65, 11))
+>E.V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
+>E : Symbol(E, Decl(isolatedDeclarationErrorsObjects.ts, 57, 23))
+>V : Symbol(E.V, Decl(isolatedDeclarationErrorsObjects.ts, 58, 8))
+
+    [str]: 0,
+>[str] : Symbol([str], Decl(isolatedDeclarationErrorsObjects.ts, 66, 13))
+>str : Symbol(str, Decl(isolatedDeclarationErrorsObjects.ts, 57, 5))
 }
 
 const part = { a: 1 };
->part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 68, 5))
->a : Symbol(a, Decl(isolatedDeclarationErrorsObjects.ts, 68, 14))
+>part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 70, 5))
+>a : Symbol(a, Decl(isolatedDeclarationErrorsObjects.ts, 70, 14))
 
 export const oWithSpread = {
->oWithSpread : Symbol(oWithSpread, Decl(isolatedDeclarationErrorsObjects.ts, 70, 12))
+>oWithSpread : Symbol(oWithSpread, Decl(isolatedDeclarationErrorsObjects.ts, 72, 12))
 
     b: 1,
->b : Symbol(b, Decl(isolatedDeclarationErrorsObjects.ts, 70, 28))
+>b : Symbol(b, Decl(isolatedDeclarationErrorsObjects.ts, 72, 28))
 
     ...part,
->part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 68, 5))
+>part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 70, 5))
 
     c: 1,
->c : Symbol(c, Decl(isolatedDeclarationErrorsObjects.ts, 72, 12))
+>c : Symbol(c, Decl(isolatedDeclarationErrorsObjects.ts, 74, 12))
 
     part,
->part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 73, 9))
+>part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 75, 9))
 }
 
 
 export const oWithSpread = {
->oWithSpread : Symbol(oWithSpread, Decl(isolatedDeclarationErrorsObjects.ts, 78, 12))
+>oWithSpread : Symbol(oWithSpread, Decl(isolatedDeclarationErrorsObjects.ts, 80, 12))
 
     b: 1,
->b : Symbol(b, Decl(isolatedDeclarationErrorsObjects.ts, 78, 28))
+>b : Symbol(b, Decl(isolatedDeclarationErrorsObjects.ts, 80, 28))
 
     nested: {
->nested : Symbol(nested, Decl(isolatedDeclarationErrorsObjects.ts, 79, 9))
+>nested : Symbol(nested, Decl(isolatedDeclarationErrorsObjects.ts, 81, 9))
 
         ...part,
->part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 68, 5))
+>part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 70, 5))
 
     },
     c: 1,
->c : Symbol(c, Decl(isolatedDeclarationErrorsObjects.ts, 82, 6))
+>c : Symbol(c, Decl(isolatedDeclarationErrorsObjects.ts, 84, 6))
 
     part,
->part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 83, 9))
+>part : Symbol(part, Decl(isolatedDeclarationErrorsObjects.ts, 85, 9))
+
+    [str]: 0,
+>[str] : Symbol([str], Decl(isolatedDeclarationErrorsObjects.ts, 86, 9))
+>str : Symbol(str, Decl(isolatedDeclarationErrorsObjects.ts, 57, 5))
 }
 

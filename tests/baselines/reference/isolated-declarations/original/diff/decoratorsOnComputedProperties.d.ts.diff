@@ -5,7 +5,67 @@
 ===================================================================
 --- TSC	declarations
 +++ DTE	declarations
-@@ -79,13 +79,10 @@
+@@ -15,8 +15,11 @@
+     ["property3"]: any;
+     [Symbol.isConcatSpreadable]: any;
+     ["property4"]: any;
+     [Symbol.match]: any;
++    [fieldNameA]: any;
++    [fieldNameB]: any;
++    [fieldNameC]: any;
+ }
+ declare class C {
+     ["property"]: any;
+     [Symbol.toStringTag]: any;
+@@ -25,8 +28,11 @@
+     ["property3"]: any;
+     [Symbol.isConcatSpreadable]: any;
+     ["property4"]: any;
+     [Symbol.match]: any;
++    [fieldNameA]: any;
++    [fieldNameB]: any;
++    [fieldNameC]: any;
+ }
+ declare class E {
+     ["property"]: any;
+     [Symbol.toStringTag]: any;
+@@ -35,8 +41,11 @@
+     ["property3"]: any;
+     [Symbol.isConcatSpreadable]: any;
+     ["property4"]: any;
+     [Symbol.match]: any;
++    [fieldNameA]: any;
++    [fieldNameB]: any;
++    [fieldNameC]: any;
+ }
+ declare class G {
+     ["property"]: any;
+     [Symbol.toStringTag]: any;
+@@ -45,8 +54,11 @@
+     ["property3"]: any;
+     [Symbol.isConcatSpreadable]: any;
+     ["property4"]: any;
+     [Symbol.match]: any;
++    [fieldNameA]: any;
++    [fieldNameB]: any;
++    [fieldNameC]: any;
+ }
+ declare class I {
+     ["property"]: any;
+     [Symbol.toStringTag]: any;
+@@ -55,8 +67,11 @@
+     ["property3"]: any;
+     [Symbol.isConcatSpreadable]: any;
+     ["property4"]: any;
+     [Symbol.match]: any;
++    [fieldNameA]: any;
++    [fieldNameB]: any;
++    [fieldNameC]: any;
+ }
+ 
+ /// [Errors] ////
+ 
+@@ -64,13 +79,10 @@
  decoratorsOnComputedProperties.ts(18,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(19,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(20,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -19,7 +79,7 @@
  decoratorsOnComputedProperties.ts(28,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(29,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(30,5): error TS1206: Decorators are not valid here.
-@@ -98,13 +95,10 @@
+@@ -83,13 +95,10 @@
  decoratorsOnComputedProperties.ts(52,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(53,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(54,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -33,7 +93,7 @@
  decoratorsOnComputedProperties.ts(63,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(64,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(65,5): error TS1206: Decorators are not valid here.
-@@ -117,13 +111,10 @@
+@@ -102,13 +111,10 @@
  decoratorsOnComputedProperties.ts(88,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(89,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(90,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -47,7 +107,7 @@
  decoratorsOnComputedProperties.ts(99,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(100,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(101,5): error TS1206: Decorators are not valid here.
-@@ -136,13 +127,10 @@
+@@ -121,13 +127,10 @@
  decoratorsOnComputedProperties.ts(124,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(125,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(126,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -61,7 +121,7 @@
  decoratorsOnComputedProperties.ts(136,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(137,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(138,5): error TS1206: Decorators are not valid here.
-@@ -155,13 +143,10 @@
+@@ -140,13 +143,10 @@
  decoratorsOnComputedProperties.ts(162,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(163,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  decoratorsOnComputedProperties.ts(164,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -75,7 +135,7 @@
  decoratorsOnComputedProperties.ts(174,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(175,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(176,5): error TS1206: Decorators are not valid here.
-@@ -173,9 +158,9 @@
+@@ -158,9 +158,9 @@
  decoratorsOnComputedProperties.ts(186,5): error TS1206: Decorators are not valid here.
  decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid here.
  
@@ -86,7 +146,7 @@
               ~
  !!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
  !!! related TS9031 decoratorsOnComputedProperties.ts:1:10: Add a return type to the function declaration
-@@ -206,20 +191,14 @@
+@@ -191,20 +191,14 @@
  !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
          [fieldNameA]: any;
          ~~~~~~~~~~~~
@@ -107,7 +167,7 @@
      
      void class B {
          @x ["property"]: any;
-@@ -278,20 +257,14 @@
+@@ -263,20 +257,14 @@
  !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
          [fieldNameA]: any;
          ~~~~~~~~~~~~
@@ -128,7 +188,7 @@
      }
      
      void class D {
-@@ -353,20 +326,14 @@
+@@ -338,20 +326,14 @@
          ["some" + "method"]() {}
          [fieldNameA]: any;
          ~~~~~~~~~~~~
@@ -149,7 +209,7 @@
      
      void class F {
          @x ["property"]: any;
-@@ -427,21 +394,15 @@
+@@ -412,21 +394,15 @@
          ["some" + "method"]() {}
          [fieldNameA]: any;
          ~~~~~~~~~~~~
@@ -171,7 +231,7 @@
      
      void class H {
          @x ["property"]: any;
-@@ -503,21 +464,15 @@
+@@ -488,21 +464,15 @@
          @x ["some" + "method"]() {}
          [fieldNameA]: any;
          ~~~~~~~~~~~~

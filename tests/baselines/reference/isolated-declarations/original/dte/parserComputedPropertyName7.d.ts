@@ -19,10 +19,9 @@ declare class C {
 parserComputedPropertyName7.ts(2,4): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 parserComputedPropertyName7.ts(2,4): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
 parserComputedPropertyName7.ts(2,5): error TS2304: Cannot find name 'e'.
-parserComputedPropertyName7.ts(2,5): error TS4031: Public property '[e]' of exported class has or is using private name 'e'.
 
 
-==== parserComputedPropertyName7.ts (4 errors) ====
+==== parserComputedPropertyName7.ts (3 errors) ====
     class C {
        [e]
        ~~~
@@ -32,6 +31,4 @@ parserComputedPropertyName7.ts(2,5): error TS4031: Public property '[e]' of expo
 !!! related TS9029 parserComputedPropertyName7.ts:2:4: Add a type annotation to the property [e]
         ~
 !!! error TS2304: Cannot find name 'e'.
-        ~
-!!! error TS4031: Public property '[e]' of exported class has or is using private name 'e'.
     }
