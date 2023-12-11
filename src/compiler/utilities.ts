@@ -5278,7 +5278,7 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
  *
  * @internal
  */
-export function isParameterDeclaration(node: Declaration): node is ParameterDeclaration {
+export function isParameterDeclaration(node: Declaration): boolean {
     const root = getRootDeclaration(node);
     return root.kind === SyntaxKind.Parameter;
 }
