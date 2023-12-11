@@ -5,11 +5,11 @@ export const m: number = 3;
 
 //// [/alpha/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": []
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": []
 }
 
 //// [/beta/b.ts]
@@ -17,21 +17,21 @@ import { m } from '@alpha/a'
 
 //// [/beta/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin",
-  "baseUrl": "./",
-  "paths": {
-   "@alpha/*": [
-    "/alpha/*"
-   ]
-  }
- },
- "references": [
-  {
-   "path": "../alpha"
-  }
- ]
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin",
+    "baseUrl": "./",
+    "paths": {
+      "@alpha/*": [
+        "/alpha/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../alpha"
+    }
+  ]
 }
 
 //// [/lib/lib.d.ts]

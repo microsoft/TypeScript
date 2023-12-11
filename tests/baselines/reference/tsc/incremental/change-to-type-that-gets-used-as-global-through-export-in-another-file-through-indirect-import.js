@@ -26,7 +26,11 @@ export default 1;
 export { default as ConstantNumber } from "./constants"
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/src/project/types.d.ts]
 type MagicNumber = typeof import('./reexport').ConstantNumber

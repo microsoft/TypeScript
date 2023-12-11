@@ -28,14 +28,14 @@ import {dom} from "./renderer";
 >dom : Symbol(dom, Decl(reacty.tsx, 1, 8))
 
 <h></h>
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 
 === index.tsx ===
 import { p } from "./renderer";
 >p : Symbol(p, Decl(index.tsx, 0, 8))
 
 <h></h>
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
->h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
+>h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 

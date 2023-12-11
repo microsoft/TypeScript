@@ -29,18 +29,18 @@ function returnAnyArray(arr) {
 var anyPromise = Promise.resolve(5);
 >anyPromise : Promise<any>
 >Promise.resolve(5) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >5 : 5
 
 /** @type {Promise<number>} */
 var numberPromise = Promise.resolve(5);
 >numberPromise : Promise<number>
 >Promise.resolve(5) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >5 : 5
 
 /**

@@ -1,8 +1,0 @@
-foo(1);
-    ^
-{
-  "text": "Im_very_very_very_very_very...:",
-  "position": 73,
-  "kind": "Parameter",
-  "whitespaceAfter": true
-}

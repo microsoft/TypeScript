@@ -6,7 +6,7 @@ const x = import.meta.url;
 >x : string
 >import.meta.url : string
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >url : string
 
 export {x};
@@ -18,7 +18,7 @@ const x = import.meta.url;
 >x : string
 >import.meta.url : string
 >import.meta : ImportMeta
->meta : any
+>meta : ImportMeta
 >url : string
 
 export {x};

@@ -44,8 +44,8 @@ var prop2: Y<string[], <Tany>() => Tany>; // space after second type argument
 >prop2 : Y<string[], <Tany>() => Tany>
 
 var prop3: Y< <Tany>() => Tany, <Tany>() => Tany>; // space before first type argument
->prop3 : Y<(<Tany>() => Tany), <Tany>() => Tany>
+>prop3 : Y<(<Tany>() => Tany), <Tany_1>() => Tany_1>
 
 var prop4: Y<(<Tany>() => Tany), <Tany>() => Tany>; // parenthesized first type argument
->prop4 : Y<(<Tany>() => Tany), <Tany>() => Tany>
+>prop4 : Y<(<Tany>() => Tany), <Tany_1>() => Tany_1>
 

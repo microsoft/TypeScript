@@ -1,3 +1,4 @@
+// === Syntax and Semantic Diagnostics ===
 Syntactic Diagnostics for file '/tests/cases/fourslash/server/getJavaScriptSyntacticDiagnostics02.ts':
 /tests/cases/fourslash/server/b.js(2,8): error TS8010: Type annotations can only be used in TypeScript files.
 /tests/cases/fourslash/server/b.js(3,17): error TS8010: Type annotations can only be used in TypeScript files.

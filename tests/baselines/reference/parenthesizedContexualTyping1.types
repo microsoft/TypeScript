@@ -2,13 +2,13 @@
 
 === parenthesizedContexualTyping1.ts ===
 function fun<T>(g: (x: T) => T, x: T): T;
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >g : (x: T) => T
 >x : T
 >x : T
 
 function fun<T>(g: (x: T) => T, h: (y: T) => T, x: T): T;
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T_1>(g: (x: T_1) => T_1, x: T_1): T_1; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 >g : (x: T) => T
 >x : T
 >h : (y: T) => T
@@ -16,7 +16,7 @@ function fun<T>(g: (x: T) => T, h: (y: T) => T, x: T): T;
 >x : T
 
 function fun<T>(g: (x: T) => T, x: T): T {
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T_1>(g: (x: T_1) => T_1, x: T_1): T_1; <T_2>(g: (x: T_2) => T_2, h: (y: T_2) => T_2, x: T_2): T_2; }
 >g : (x: T) => T
 >x : T
 >x : T
@@ -30,7 +30,7 @@ function fun<T>(g: (x: T) => T, x: T): T {
 var a = fun(x => x, 10);
 >a : number
 >fun(x => x, 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >x => x : (x: number) => number
 >x : number
 >x : number
@@ -39,7 +39,7 @@ var a = fun(x => x, 10);
 var b = fun((x => x), 10);
 >b : number
 >fun((x => x), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
 >x : number
@@ -49,7 +49,7 @@ var b = fun((x => x), 10);
 var c = fun(((x => x)), 10);
 >c : number
 >fun(((x => x)), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
@@ -60,7 +60,7 @@ var c = fun(((x => x)), 10);
 var d = fun((((x => x))), 10);
 >d : number
 >fun((((x => x))), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >(((x => x))) : (x: number) => number
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
@@ -72,7 +72,7 @@ var d = fun((((x => x))), 10);
 var e = fun(x => x, x => x, 10);
 >e : number
 >fun(x => x, x => x, 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >x => x : (x: number) => number
 >x : number
 >x : number
@@ -84,7 +84,7 @@ var e = fun(x => x, x => x, 10);
 var f = fun((x => x), (x => x), 10);
 >f : number
 >fun((x => x), (x => x), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
 >x : number
@@ -98,7 +98,7 @@ var f = fun((x => x), (x => x), 10);
 var g = fun(((x => x)), ((x => x)), 10);
 >g : number
 >fun(((x => x)), ((x => x)), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
@@ -114,7 +114,7 @@ var g = fun(((x => x)), ((x => x)), 10);
 var h = fun((((x => x))), ((x => x)), 10);
 >h : number
 >fun((((x => x))), ((x => x)), 10) : number
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >(((x => x))) : (x: number) => number
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
@@ -132,7 +132,7 @@ var h = fun((((x => x))), ((x => x)), 10);
 var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
 >i : any
 >fun((Math.random() < 0.5 ? x => x : x => undefined), 10) : any
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >(Math.random() < 0.5 ? x => x : x => undefined) : (x: number) => any
 >Math.random() < 0.5 ? x => x : x => undefined : (x: number) => any
 >Math.random() < 0.5 : boolean
@@ -152,7 +152,7 @@ var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
 var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 >j : any
 >fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10) : any
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >(Math.random() < 0.5 ? (x => x) : (x => undefined)) : (x: number) => any
 >Math.random() < 0.5 ? (x => x) : (x => undefined) : (x: number) => any
 >Math.random() < 0.5 : boolean
@@ -174,7 +174,7 @@ var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >k : any
 >fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10) : any
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >(Math.random() < 0.5 ? (x => x) : (x => undefined)) : (x: number) => any
 >Math.random() < 0.5 ? (x => x) : (x => undefined) : (x: number) => any
 >Math.random() < 0.5 : boolean
@@ -199,7 +199,7 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10);
 >l : any
 >fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10) : any
->fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
+>fun : { <T>(g: (x: T) => T, x: T): T; <T_1>(g: (x: T_1) => T_1, h: (y: T_1) => T_1, x: T_1): T_1; }
 >((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))) : (x: number) => any
 >(Math.random() < 0.5 ? ((x => x)) : ((x => undefined))) : (x: number) => any
 >Math.random() < 0.5 ? ((x => x)) : ((x => undefined)) : (x: number) => any

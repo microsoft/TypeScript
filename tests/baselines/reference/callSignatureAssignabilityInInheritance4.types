@@ -52,7 +52,7 @@ interface A { // T
 >arg : T
 
     a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>a11 : <T>(x: {    foo: T;}, y: {    foo: T;    bar: T;}) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: T; bar: T; }
@@ -60,19 +60,19 @@ interface A { // T
 >bar : T
 
     a15: <T>(x: { a: T; b: T }) => T[];
->a15 : <T>(x: { a: T; b: T; }) => T[]
+>a15 : <T>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
->a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>a16 : <T extends Base>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
 
     a17: {
->a17 : { <T extends Derived>(x: (a: T) => T): T[]; <T extends Base>(x: (a: T) => T): T[]; }
+>a17 : { <T extends Derived>(x: (a: T) => T): T[]; <T_1 extends Base>(x: (a: T_1) => T_1): T_1[]; }
 
         <T extends Derived>(x: (a: T) => T): T[];
 >x : (a: T) => T
@@ -84,10 +84,10 @@ interface A { // T
 
     };
     a18: {
->a18 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
+>a18 : { (x: { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }): any[]; (x: { <T_2 extends Derived2>(a: T_2): T_2; <T_3 extends Base>(a: T_3): T_3; }): any[]; }
 
         (x: {
->x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
+>x : { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
 
             <T extends Derived>(a: T): T;
 >a : T
@@ -97,7 +97,7 @@ interface A { // T
 
         }): any[];
         (x: {
->x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
+>x : { <T extends Derived2>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
 
             <T extends Derived2>(a: T): T;
 >a : T
@@ -140,7 +140,7 @@ interface I extends A {
 >arg : T
 
     a11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; // ok
->a11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>a11 : <T, U>(x: {    foo: T;}, y: {    foo: U;    bar: U;}) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: U; bar: U; }
@@ -148,13 +148,13 @@ interface I extends A {
 >bar : U
 
     a15: <U, V>(x: { a: U; b: V; }) => U[]; // ok, T = U, T = V
->a15 : <U, V>(x: { a: U; b: V; }) => U[]
+>a15 : <U, V>(x: {    a: U;    b: V;}) => U[]
 >x : { a: U; b: V; }
 >a : U
 >b : V
 
     a16: <T>(x: { a: T; b: T }) => T[]; // ok, more general parameter type
->a16 : <T>(x: { a: T; b: T; }) => T[]
+>a16 : <T>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T

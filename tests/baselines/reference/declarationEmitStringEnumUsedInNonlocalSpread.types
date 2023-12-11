@@ -34,7 +34,7 @@ export class A {
 >getA : () => ITest
 
         return {
->{            [TestEnum.Test1]: '123',            [TestEnum.Test2]: '123',        } : { 123123: string; 12312312312: string; }
+>{            [TestEnum.Test1]: '123',            [TestEnum.Test2]: '123',        } : { "123123": string; "12312312312": string; }
 
             [TestEnum.Test1]: '123',
 >[TestEnum.Test1] : string
@@ -62,10 +62,10 @@ export class B extends A {
 >A : A
 
     getA() { // TS4053 error
->getA : () => { a: string; 123123: string; 12312312312: string; }
+>getA : () => { a: string; "123123": string; "12312312312": string; }
 
         return {
->{            ...super.getA(),            a: '123',        } : { a: string; 123123: string; 12312312312: string; }
+>{            ...super.getA(),            a: '123',        } : { a: string; "123123": string; "12312312312": string; }
 
             ...super.getA(),
 >super.getA() : import("class").ITest

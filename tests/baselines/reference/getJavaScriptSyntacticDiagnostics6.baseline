@@ -1,3 +1,4 @@
+// === Syntax Diagnostics ===
 Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics6.ts':
 /tests/cases/fourslash/a.js(1,11): error TS8006: 'interface' declarations can only be used in TypeScript files.
 
