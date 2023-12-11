@@ -154,12 +154,12 @@ error TS2468: Cannot find global value 'Promise'.
 /other3.ts(4,7): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 /other3.ts(4,21): error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
 /other3.ts(4,56): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
-/other3.ts(6,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+/other3.ts(6,18): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 /other3.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other3.ts(6,48): error TS1005: '{' expected.
 /other3.ts(6,50): error TS2538: Type '{ "resolution-mode": "require"; }' cannot be used as an index type.
 /other3.ts(6,100): error TS1005: ',' expected.
-/other3.ts(7,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+/other3.ts(7,18): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 /other3.ts(7,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other3.ts(7,48): error TS1005: '{' expected.
 /other3.ts(7,50): error TS2538: Type '{ "resolution-mode": "import"; }' cannot be used as an index type.
@@ -175,17 +175,17 @@ error TS2468: Cannot find global value 'Promise'.
 /other4.ts(7,33): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 /other4.ts(9,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other4.ts(9,48): error TS1005: '{' expected.
-/other4.ts(9,48): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+/other4.ts(9,48): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 /other4.ts(9,58): error TS1005: ',' expected.
 /other4.ts(9,59): error TS1134: Variable declaration expected.
-/other4.ts(9,60): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+/other4.ts(9,60): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 /other4.ts(9,76): error TS1005: ',' expected.
 /other4.ts(10,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /other4.ts(10,48): error TS1005: '{' expected.
-/other4.ts(10,48): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+/other4.ts(10,48): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 /other4.ts(10,58): error TS1005: ',' expected.
 /other4.ts(10,59): error TS1134: Variable declaration expected.
-/other4.ts(10,60): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+/other4.ts(10,60): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 /other4.ts(10,75): error TS1005: ',' expected.
 /other5.ts(2,29): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
 /other5.ts(3,29): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
@@ -339,7 +339,8 @@ error TS2468: Cannot find global value 'Promise'.
     
     export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 /other3.ts:6:14: Add a type annotation to the variable a
                                      ~~~~~~~~~~~~~
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                    ~
@@ -351,7 +352,8 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1005: ',' expected.
     export const b = (null as any as import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface);
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 /other3.ts:7:14: Add a type annotation to the variable b
                                      ~~~~~~~~~~~~~
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                    ~
@@ -400,13 +402,15 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1005: '{' expected.
 !!! related TS1007 /other4.ts:9:48: The parser expected to find a '}' to match the '{' token here.
                                                    ~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 /other4.ts:9:48: Add a type annotation to the variable Attribute1
                                                              ~
 !!! error TS1005: ',' expected.
                                                               ~
 !!! error TS1134: Variable declaration expected.
                                                                ~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 /other4.ts:9:60: Add a type annotation to the variable RequireInterface
                                                                                ~
 !!! error TS1005: ',' expected.
     export const b = (null as any as import("pkg", Attribute2).ImportInterface);
@@ -416,13 +420,15 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS1005: '{' expected.
 !!! related TS1007 /other4.ts:10:48: The parser expected to find a '}' to match the '{' token here.
                                                    ~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 /other4.ts:10:48: Add a type annotation to the variable Attribute2
                                                              ~
 !!! error TS1005: ',' expected.
                                                               ~
 !!! error TS1134: Variable declaration expected.
                                                                ~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 /other4.ts:10:60: Add a type annotation to the variable ImportInterface
                                                                               ~
 !!! error TS1005: ',' expected.
     

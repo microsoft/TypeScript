@@ -372,20 +372,20 @@ declare var obj87: i8;
 
 /// [Errors] ////
 
-intTypeCheck.ts(9,8): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-intTypeCheck.ts(10,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-intTypeCheck.ts(10,15): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-intTypeCheck.ts(16,6): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+intTypeCheck.ts(9,8): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+intTypeCheck.ts(10,10): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+intTypeCheck.ts(10,15): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+intTypeCheck.ts(16,6): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 intTypeCheck.ts(35,6): error TS2304: Cannot find name 'p'.
-intTypeCheck.ts(46,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-intTypeCheck.ts(52,6): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+intTypeCheck.ts(46,14): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+intTypeCheck.ts(52,6): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 intTypeCheck.ts(71,6): error TS2304: Cannot find name 'p'.
-intTypeCheck.ts(83,8): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-intTypeCheck.ts(84,8): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-intTypeCheck.ts(84,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+intTypeCheck.ts(83,8): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+intTypeCheck.ts(84,8): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+intTypeCheck.ts(84,13): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 intTypeCheck.ts(85,5): error TS2386: Overload signatures must all be optional or required.
-intTypeCheck.ts(85,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-intTypeCheck.ts(85,15): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+intTypeCheck.ts(85,10): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+intTypeCheck.ts(85,15): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 intTypeCheck.ts(99,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
   Type 'Object' is missing the following properties from type 'i1': p, p3, p6
 intTypeCheck.ts(100,20): error TS2351: This expression is not constructable.
@@ -492,12 +492,15 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
         p5? (): void;
         p6(pa1): void;
            ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:9:8: Add a type annotation to the parameter pa1
         p7? (pa1, pa2): void;
              ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:10:10: Add a type annotation to the parameter pa1
                   ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:10:15: Add a type annotation to the parameter pa2
     }
     interface i2 {
         //Call Signatures
@@ -505,7 +508,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
         (): number;
         (p);
          ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:16:6: Add a type annotation to the parameter p
         (p1: string);
         (p2?: string);
         (...p3: any[]);
@@ -539,7 +543,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
     
     class Base { foo() { } }
                  ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 intTypeCheck.ts:46:14: Add a return type to the method
     
     interface i11 {
         //Call Signatures
@@ -547,7 +552,8 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
         (): number;
         (p);
          ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:52:6: Add a type annotation to the parameter p
         (p1: string);
         (p2?: string);
         (...p3: any[]);
@@ -582,19 +588,24 @@ intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
         p5? (): void;
         p6(pa1): void;
            ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:83:8: Add a type annotation to the parameter pa1
         p7(pa1, pa2): void;
            ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:84:8: Add a type annotation to the parameter pa1
                 ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:84:13: Add a type annotation to the parameter pa2
         p7? (pa1, pa2): void;
         ~~
 !!! error TS2386: Overload signatures must all be optional or required.
              ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:85:10: Add a type annotation to the parameter pa1
                   ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 intTypeCheck.ts:85:15: Add a type annotation to the parameter pa2
     }
     
     var anyVar: any;

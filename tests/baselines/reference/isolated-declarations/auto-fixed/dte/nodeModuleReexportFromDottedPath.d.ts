@@ -29,7 +29,7 @@ export default _default;
 //# sourceMappingURL=index.d.ts.map
 /// [Errors] ////
 
-/index.ts(4,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+/index.ts(4,16): error TS9013: Expression type can't be inferred with --isolatedDeclarations
 
 
 ==== /node_modules/.prisma/client/index.d.ts (0 errors) ====
@@ -50,5 +50,5 @@ export default _default;
     const EnhancedPrisma = enhancePrisma(PrismaClient);
     export default new EnhancedPrisma();
                    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations
     

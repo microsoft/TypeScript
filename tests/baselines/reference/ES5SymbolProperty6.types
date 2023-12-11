@@ -1,6 +1,9 @@
 //// [tests/cases/conformance/Symbols/ES5SymbolProperty6.ts] ////
 
 === ES5SymbolProperty6.ts ===
+u//@target: ES5
+>u : any
+
 class C {
 >C : C
 

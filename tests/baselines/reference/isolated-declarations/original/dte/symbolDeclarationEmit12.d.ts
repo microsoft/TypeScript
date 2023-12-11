@@ -34,9 +34,9 @@ declare namespace M {
 
 /// [Errors] ////
 
-symbolDeclarationEmit12.ts(5,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+symbolDeclarationEmit12.ts(5,9): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 symbolDeclarationEmit12.ts(9,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
-symbolDeclarationEmit12.ts(9,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+symbolDeclarationEmit12.ts(9,13): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 
 
@@ -47,7 +47,8 @@ symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.t
             [Symbol.iterator]: I;
             [Symbol.toPrimitive](x: I) { }
             ~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 symbolDeclarationEmit12.ts:5:9: Add a return type to the method
             [Symbol.isConcatSpreadable](): I {
                 return undefined
             }
@@ -55,7 +56,8 @@ symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.t
                 ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
                 ~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 symbolDeclarationEmit12.ts:9:13: Add a return type to the get accessor declaration
             set [Symbol.toPrimitive](x: I) { }
                 ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.

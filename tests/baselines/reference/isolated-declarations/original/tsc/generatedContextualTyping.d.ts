@@ -1282,65 +1282,65 @@ declare var x356: (n: Genric<Base>) => invalid;
 
 /// [Errors] ////
 
-generatedContextualTyping.ts(5,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(5,26): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(5,47): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(126,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(127,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(128,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(129,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(130,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(131,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(132,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(133,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(134,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(135,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(136,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(137,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(219,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(220,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(221,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(222,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(223,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(224,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(225,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(226,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(319,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(320,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(321,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(322,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(323,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(324,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(325,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(326,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(327,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(328,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(329,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(330,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-generatedContextualTyping.ts(331,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(332,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(333,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(334,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(335,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(336,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(337,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(338,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(339,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(340,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(341,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(342,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(343,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(344,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(345,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(346,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(347,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(348,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(349,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(350,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(351,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(352,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(353,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-generatedContextualTyping.ts(354,12): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+generatedContextualTyping.ts(5,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(5,26): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(5,47): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(126,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(127,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(128,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(129,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(130,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(131,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(132,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(133,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(134,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(135,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(136,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(137,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(219,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(220,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(221,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(222,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(223,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(224,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(225,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(226,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(319,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(320,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(321,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(322,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(323,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(324,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(325,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(326,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(327,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(328,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(329,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(330,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(331,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(332,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(333,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(334,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(335,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(336,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(337,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(338,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(339,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(340,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(341,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(342,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(343,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(344,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(345,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(346,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(347,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(348,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(349,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(350,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(351,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(352,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(353,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+generatedContextualTyping.ts(354,12): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 
 
 ==== generatedContextualTyping.ts (59 errors) ====
@@ -1350,11 +1350,14 @@ generatedContextualTyping.ts(354,12): error TS9507: Function must have an explic
     interface Genric<T> { func(n: T[]); }
     var b = new Base(), d1 = new Derived1(), d2 = new Derived2();
             ~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:5:5: Add a type annotation to the variable b
                              ~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:5:21: Add a type annotation to the variable d1
                                                   ~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:5:42: Add a type annotation to the variable d2
     var x1: () => Base[] = () => [d1, d2];
     var x2: () => Base[] = function() { return [d1, d2] };
     var x3: () => Base[] = function named() { return [d1, d2] };
@@ -1477,40 +1480,52 @@ generatedContextualTyping.ts(354,12): error TS9507: Function must have an explic
     class x120 { constructor(private parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { } }
     function x121(parm: () => Base[] = () => [d1, d2]) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:126:10: Add a return type to the function declaration
     function x122(parm: () => Base[] = function() { return [d1, d2] }) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:127:10: Add a return type to the function declaration
     function x123(parm: () => Base[] = function named() { return [d1, d2] }) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:128:10: Add a return type to the function declaration
     function x124(parm: { (): Base[]; } = () => [d1, d2]) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:129:10: Add a return type to the function declaration
     function x125(parm: { (): Base[]; } = function() { return [d1, d2] }) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:130:10: Add a return type to the function declaration
     function x126(parm: { (): Base[]; } = function named() { return [d1, d2] }) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:131:10: Add a return type to the function declaration
     function x127(parm: Base[] = [d1, d2]) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:132:10: Add a return type to the function declaration
     function x128(parm: Array<Base> = [d1, d2]) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:133:10: Add a return type to the function declaration
     function x129(parm: { [n: number]: Base; } = [d1, d2]) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:134:10: Add a return type to the function declaration
     function x130(parm: {n: Base[]; }  = { n: [d1, d2] }) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:135:10: Add a return type to the function declaration
     function x131(parm: (s: Base[]) => any = n => { var n: Base[]; return null; }) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:136:10: Add a return type to the function declaration
     function x132(parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { }
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:137:10: Add a return type to the function declaration
     function x133(): () => Base[] { return () => [d1, d2]; }
     function x134(): () => Base[] { return function() { return [d1, d2] }; }
     function x135(): () => Base[] { return function named() { return [d1, d2] }; }
@@ -1594,28 +1609,36 @@ generatedContextualTyping.ts(354,12): error TS9507: Function must have an explic
     var x216 = <Genric<Base>>{ func: n => { return [d1, d2]; } };
     var x217 = (<() => Base[]>undefined) || function() { return [d1, d2] };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:219:5: Add a type annotation to the variable x217
     var x218 = (<() => Base[]>undefined) || function named() { return [d1, d2] };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:220:5: Add a type annotation to the variable x218
     var x219 = (<{ (): Base[]; }>undefined) || function() { return [d1, d2] };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:221:5: Add a type annotation to the variable x219
     var x220 = (<{ (): Base[]; }>undefined) || function named() { return [d1, d2] };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:222:5: Add a type annotation to the variable x220
     var x221 = (<Base[]>undefined) || [d1, d2];
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:223:5: Add a type annotation to the variable x221
     var x222 = (<Array<Base>>undefined) || [d1, d2];
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:224:5: Add a type annotation to the variable x222
     var x223 = (<{ [n: number]: Base; }>undefined) || [d1, d2];
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:225:5: Add a type annotation to the variable x223
     var x224 = (<{n: Base[]; } >undefined) || { n: [d1, d2] };
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:226:5: Add a type annotation to the variable x224
     var x225: () => Base[]; x225 = () => [d1, d2];
     var x226: () => Base[]; x226 = function() { return [d1, d2] };
     var x227: () => Base[]; x227 = function named() { return [d1, d2] };
@@ -1710,157 +1733,169 @@ generatedContextualTyping.ts(354,12): error TS9507: Function must have an explic
     var x320: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : undefined;
     function x321(n: () => Base[]) { }; x321(() => [d1, d2]);
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:319:10: Add a return type to the function declaration
     function x322(n: () => Base[]) { }; x322(function() { return [d1, d2] });
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:320:10: Add a return type to the function declaration
     function x323(n: () => Base[]) { }; x323(function named() { return [d1, d2] });
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:321:10: Add a return type to the function declaration
     function x324(n: { (): Base[]; }) { }; x324(() => [d1, d2]);
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:322:10: Add a return type to the function declaration
     function x325(n: { (): Base[]; }) { }; x325(function() { return [d1, d2] });
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:323:10: Add a return type to the function declaration
     function x326(n: { (): Base[]; }) { }; x326(function named() { return [d1, d2] });
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:324:10: Add a return type to the function declaration
     function x327(n: Base[]) { }; x327([d1, d2]);
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:325:10: Add a return type to the function declaration
     function x328(n: Array<Base>) { }; x328([d1, d2]);
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:326:10: Add a return type to the function declaration
     function x329(n: { [n: number]: Base; }) { }; x329([d1, d2]);
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:327:10: Add a return type to the function declaration
     function x330(n: {n: Base[]; } ) { }; x330({ n: [d1, d2] });
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:328:10: Add a return type to the function declaration
     function x331(n: (s: Base[]) => any) { }; x331(n => { var n: Base[]; return null; });
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:329:10: Add a return type to the function declaration
     function x332(n: Genric<Base>) { }; x332({ func: n => { return [d1, d2]; } });
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 generatedContextualTyping.ts:330:10: Add a return type to the function declaration
     var x333 = (n: () => Base[]) => n; x333(() => [d1, d2]);
                ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:331:5: Add a type annotation to the variable x333
-!!! related TS9603 generatedContextualTyping.ts:331:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:331:5: Add a type annotation to the variable x333
+!!! related TS9030 generatedContextualTyping.ts:331:12: Add a return type to the function expression
     var x334 = (n: () => Base[]) => n; x334(function() { return [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:332:5: Add a type annotation to the variable x334
-!!! related TS9603 generatedContextualTyping.ts:332:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:332:5: Add a type annotation to the variable x334
+!!! related TS9030 generatedContextualTyping.ts:332:12: Add a return type to the function expression
     var x335 = (n: () => Base[]) => n; x335(function named() { return [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:333:5: Add a type annotation to the variable x335
-!!! related TS9603 generatedContextualTyping.ts:333:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:333:5: Add a type annotation to the variable x335
+!!! related TS9030 generatedContextualTyping.ts:333:12: Add a return type to the function expression
     var x336 = (n: { (): Base[]; }) => n; x336(() => [d1, d2]);
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:334:5: Add a type annotation to the variable x336
-!!! related TS9603 generatedContextualTyping.ts:334:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:334:5: Add a type annotation to the variable x336
+!!! related TS9030 generatedContextualTyping.ts:334:12: Add a return type to the function expression
     var x337 = (n: { (): Base[]; }) => n; x337(function() { return [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:335:5: Add a type annotation to the variable x337
-!!! related TS9603 generatedContextualTyping.ts:335:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:335:5: Add a type annotation to the variable x337
+!!! related TS9030 generatedContextualTyping.ts:335:12: Add a return type to the function expression
     var x338 = (n: { (): Base[]; }) => n; x338(function named() { return [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:336:5: Add a type annotation to the variable x338
-!!! related TS9603 generatedContextualTyping.ts:336:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:336:5: Add a type annotation to the variable x338
+!!! related TS9030 generatedContextualTyping.ts:336:12: Add a return type to the function expression
     var x339 = (n: Base[]) => n; x339([d1, d2]);
                ~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:337:5: Add a type annotation to the variable x339
-!!! related TS9603 generatedContextualTyping.ts:337:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:337:5: Add a type annotation to the variable x339
+!!! related TS9030 generatedContextualTyping.ts:337:12: Add a return type to the function expression
     var x340 = (n: Array<Base>) => n; x340([d1, d2]);
                ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:338:5: Add a type annotation to the variable x340
-!!! related TS9603 generatedContextualTyping.ts:338:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:338:5: Add a type annotation to the variable x340
+!!! related TS9030 generatedContextualTyping.ts:338:12: Add a return type to the function expression
     var x341 = (n: { [n: number]: Base; }) => n; x341([d1, d2]);
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:339:5: Add a type annotation to the variable x341
-!!! related TS9603 generatedContextualTyping.ts:339:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:339:5: Add a type annotation to the variable x341
+!!! related TS9030 generatedContextualTyping.ts:339:12: Add a return type to the function expression
     var x342 = (n: {n: Base[]; } ) => n; x342({ n: [d1, d2] });
                ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:340:5: Add a type annotation to the variable x342
-!!! related TS9603 generatedContextualTyping.ts:340:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:340:5: Add a type annotation to the variable x342
+!!! related TS9030 generatedContextualTyping.ts:340:12: Add a return type to the function expression
     var x343 = (n: (s: Base[]) => any) => n; x343(n => { var n: Base[]; return null; });
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:341:5: Add a type annotation to the variable x343
-!!! related TS9603 generatedContextualTyping.ts:341:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:341:5: Add a type annotation to the variable x343
+!!! related TS9030 generatedContextualTyping.ts:341:12: Add a return type to the function expression
     var x344 = (n: Genric<Base>) => n; x344({ func: n => { return [d1, d2]; } });
                ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:342:5: Add a type annotation to the variable x344
-!!! related TS9603 generatedContextualTyping.ts:342:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:342:5: Add a type annotation to the variable x344
+!!! related TS9030 generatedContextualTyping.ts:342:12: Add a return type to the function expression
     var x345 = function(n: () => Base[]) { }; x345(() => [d1, d2]);
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:343:5: Add a type annotation to the variable x345
-!!! related TS9603 generatedContextualTyping.ts:343:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:343:5: Add a type annotation to the variable x345
+!!! related TS9030 generatedContextualTyping.ts:343:12: Add a return type to the function expression
     var x346 = function(n: () => Base[]) { }; x346(function() { return [d1, d2] });
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:344:5: Add a type annotation to the variable x346
-!!! related TS9603 generatedContextualTyping.ts:344:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:344:5: Add a type annotation to the variable x346
+!!! related TS9030 generatedContextualTyping.ts:344:12: Add a return type to the function expression
     var x347 = function(n: () => Base[]) { }; x347(function named() { return [d1, d2] });
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:345:5: Add a type annotation to the variable x347
-!!! related TS9603 generatedContextualTyping.ts:345:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:345:5: Add a type annotation to the variable x347
+!!! related TS9030 generatedContextualTyping.ts:345:12: Add a return type to the function expression
     var x348 = function(n: { (): Base[]; }) { }; x348(() => [d1, d2]);
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:346:5: Add a type annotation to the variable x348
-!!! related TS9603 generatedContextualTyping.ts:346:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:346:5: Add a type annotation to the variable x348
+!!! related TS9030 generatedContextualTyping.ts:346:12: Add a return type to the function expression
     var x349 = function(n: { (): Base[]; }) { }; x349(function() { return [d1, d2] });
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:347:5: Add a type annotation to the variable x349
-!!! related TS9603 generatedContextualTyping.ts:347:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:347:5: Add a type annotation to the variable x349
+!!! related TS9030 generatedContextualTyping.ts:347:12: Add a return type to the function expression
     var x350 = function(n: { (): Base[]; }) { }; x350(function named() { return [d1, d2] });
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:348:5: Add a type annotation to the variable x350
-!!! related TS9603 generatedContextualTyping.ts:348:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:348:5: Add a type annotation to the variable x350
+!!! related TS9030 generatedContextualTyping.ts:348:12: Add a return type to the function expression
     var x351 = function(n: Base[]) { }; x351([d1, d2]);
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:349:5: Add a type annotation to the variable x351
-!!! related TS9603 generatedContextualTyping.ts:349:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:349:5: Add a type annotation to the variable x351
+!!! related TS9030 generatedContextualTyping.ts:349:12: Add a return type to the function expression
     var x352 = function(n: Array<Base>) { }; x352([d1, d2]);
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:350:5: Add a type annotation to the variable x352
-!!! related TS9603 generatedContextualTyping.ts:350:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:350:5: Add a type annotation to the variable x352
+!!! related TS9030 generatedContextualTyping.ts:350:12: Add a return type to the function expression
     var x353 = function(n: { [n: number]: Base; }) { }; x353([d1, d2]);
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:351:5: Add a type annotation to the variable x353
-!!! related TS9603 generatedContextualTyping.ts:351:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:351:5: Add a type annotation to the variable x353
+!!! related TS9030 generatedContextualTyping.ts:351:12: Add a return type to the function expression
     var x354 = function(n: {n: Base[]; } ) { }; x354({ n: [d1, d2] });
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:352:5: Add a type annotation to the variable x354
-!!! related TS9603 generatedContextualTyping.ts:352:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:352:5: Add a type annotation to the variable x354
+!!! related TS9030 generatedContextualTyping.ts:352:12: Add a return type to the function expression
     var x355 = function(n: (s: Base[]) => any) { }; x355(n => { var n: Base[]; return null; });
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:353:5: Add a type annotation to the variable x355
-!!! related TS9603 generatedContextualTyping.ts:353:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:353:5: Add a type annotation to the variable x355
+!!! related TS9030 generatedContextualTyping.ts:353:12: Add a return type to the function expression
     var x356 = function(n: Genric<Base>) { }; x356({ func: n => { return [d1, d2]; } });
                ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 generatedContextualTyping.ts:354:5: Add a type annotation to the variable x356
-!!! related TS9603 generatedContextualTyping.ts:354:12: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 generatedContextualTyping.ts:354:5: Add a type annotation to the variable x356
+!!! related TS9030 generatedContextualTyping.ts:354:12: Add a return type to the function expression

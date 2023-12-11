@@ -126,10 +126,10 @@ declare let val2: MyDeclaredEnum;
 //# sourceMappingURL=computedEnumTypeWidening.d.ts.map
 /// [Errors] ////
 
-computedEnumTypeWidening.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-computedEnumTypeWidening.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-computedEnumTypeWidening.ts(6,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-computedEnumTypeWidening.ts(7,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedEnumTypeWidening.ts(4,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+computedEnumTypeWidening.ts(5,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+computedEnumTypeWidening.ts(6,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+computedEnumTypeWidening.ts(7,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
 
 
 ==== computedEnumTypeWidening.ts (4 errors) ====
@@ -138,16 +138,16 @@ computedEnumTypeWidening.ts(7,5): error TS9007: Declaration emit for this file r
     enum E {
         A = computed(0),
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
         B = computed(1),
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
         C = computed(2),
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
         D = computed(3),
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
     }
     
     function f1(): void {

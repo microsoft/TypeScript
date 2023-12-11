@@ -1,3 +1,4 @@
+// @isolatedDeclarationDiffReason: TS normalizes types
 var x: { foo: string; }
 var y: { foo: string; bar: string; }
 

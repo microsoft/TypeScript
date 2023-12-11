@@ -73,7 +73,7 @@ declare enum e5 {
 //# sourceMappingURL=declFileEnums.d.ts.map
 /// [Errors] ////
 
-declFileEnums.ts(15,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+declFileEnums.ts(15,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
 
 
 ==== declFileEnums.ts (1 errors) ====
@@ -93,7 +93,7 @@ declFileEnums.ts(15,5): error TS9007: Declaration emit for this file requires ty
         a = 10,
         b = Math.PI,
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
         c = a + 3
     }
     

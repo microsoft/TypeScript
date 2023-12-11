@@ -18,7 +18,7 @@ declare var obj: invalid;
 
 /// [Errors] ////
 
-symbolProperty52.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+symbolProperty52.ts(2,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 symbolProperty52.ts(2,13): error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
 symbolProperty52.ts(7,12): error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
 
@@ -27,7 +27,8 @@ symbolProperty52.ts(7,12): error TS2339: Property 'nonsense' does not exist on t
     var obj = {
         [Symbol.nonsense]: 0
         ~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! related TS9027 symbolProperty52.ts:1:5: Add a type annotation to the variable obj
                 ~~~~~~~~
 !!! error TS2339: Property 'nonsense' does not exist on type 'SymbolConstructor'.
     };

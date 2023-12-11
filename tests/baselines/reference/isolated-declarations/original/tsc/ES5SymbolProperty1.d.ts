@@ -25,7 +25,7 @@ declare var obj: invalid;
 
 /// [Errors] ////
 
-ES5SymbolProperty1.ts(7,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ES5SymbolProperty1.ts(7,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 
 
 ==== ES5SymbolProperty1.ts (1 errors) ====
@@ -37,7 +37,8 @@ ES5SymbolProperty1.ts(7,5): error TS9007: Declaration emit for this file require
     var obj = {
         [Symbol.foo]: 0
         ~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! related TS9027 ES5SymbolProperty1.ts:6:5: Add a type annotation to the variable obj
     }
     
     obj[Symbol.foo];

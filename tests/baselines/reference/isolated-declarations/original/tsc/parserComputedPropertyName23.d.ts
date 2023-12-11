@@ -16,7 +16,7 @@ declare class C {
 
 /// [Errors] ////
 
-parserComputedPropertyName23.ts(2,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parserComputedPropertyName23.ts(2,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 parserComputedPropertyName23.ts(2,10): error TS2304: Cannot find name 'e'.
 parserComputedPropertyName23.ts(2,10): error TS4031: Public property '[e]' of exported class has or is using private name 'e'.
 
@@ -25,7 +25,7 @@ parserComputedPropertyName23.ts(2,10): error TS4031: Public property '[e]' of ex
     declare class C {
         get [e](): number 
             ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
              ~
 !!! error TS2304: Cannot find name 'e'.
              ~

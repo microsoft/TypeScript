@@ -112,10 +112,10 @@ export declare const argumentsOfG: invalid;
 
 /// [Errors] ////
 
-namedTupleMembers.ts(41,62): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-namedTupleMembers.ts(48,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-namedTupleMembers.ts(76,44): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-namedTupleMembers.ts(77,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+namedTupleMembers.ts(41,62): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+namedTupleMembers.ts(48,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+namedTupleMembers.ts(76,44): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+namedTupleMembers.ts(77,29): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 
 
 ==== namedTupleMembers.ts (4 errors) ====
@@ -161,7 +161,8 @@ namedTupleMembers.ts(77,29): error TS9007: Declaration emit for this file requir
     
     export function useState<T>(initial: T): [value: T, setter: (T) => void] {
                                                                  ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 namedTupleMembers.ts:41:62: Add a type annotation to the parameter T
         return null as any;
     }
     
@@ -170,7 +171,8 @@ namedTupleMembers.ts(77,29): error TS9007: Declaration emit for this file requir
     
     export function readSegment([length, count]: [number, number]) {}
                     ~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 namedTupleMembers.ts:48:17: Add a return type to the function declaration
     
     // documenting binding pattern behavior (currently does _not_ generate tuple names)
     export const val = null as any as Parameters<typeof readSegment>[0];
@@ -200,8 +202,10 @@ namedTupleMembers.ts(77,29): error TS9007: Declaration emit for this file requir
     
     export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
                                                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 namedTupleMembers.ts:76:14: Add a type annotation to the variable argumentsOfGAsFirstArgument
     export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread
                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 namedTupleMembers.ts:77:14: Add a type annotation to the variable argumentsOfG
     

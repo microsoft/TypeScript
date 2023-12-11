@@ -22,14 +22,15 @@ export declare const bar: invalid;
 
 /// [Errors] ////
 
-/mod2.ts(2,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+/mod2.ts(2,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 
 
 ==== /mod2.ts (1 errors) ====
     import {foo} from "./mod1";
     export const bar = foo();
                        ~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 /mod2.ts:2:14: Add a type annotation to the variable bar
 ==== /types/lib/index.d.ts (0 errors) ====
     interface Lib { x }
     

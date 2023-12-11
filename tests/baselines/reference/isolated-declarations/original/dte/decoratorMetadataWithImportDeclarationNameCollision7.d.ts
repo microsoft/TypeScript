@@ -42,7 +42,7 @@ export { MyClass };
 
 /// [Errors] ////
 
-db.ts(2,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+db.ts(2,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 service.ts(7,9): error TS2702: 'db' only refers to a type, but is being used as a namespace here.
 service.ts(7,9): error TS4031: Public property 'db' of exported class has or is using private name 'db'.
 service.ts(9,21): error TS2702: 'db' only refers to a type, but is being used as a namespace here.
@@ -53,7 +53,8 @@ service.ts(9,21): error TS4063: Parameter 'db' of constructor from exported clas
     export default class db {
         public doSomething() {
                ~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 db.ts:2:12: Add a return type to the method
         }
     }
     

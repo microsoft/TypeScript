@@ -1,3 +1,4 @@
+// @isolatedDeclarationDiffReason: TS normalizes types
 // @target: ES5
 
 var x: { foo: string; }

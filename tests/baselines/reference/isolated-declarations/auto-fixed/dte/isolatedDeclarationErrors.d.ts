@@ -34,14 +34,14 @@ declare const errorOnMissingReturn: {
 //# sourceMappingURL=isolatedDeclarationErrors.d.ts.map
 /// [Errors] ////
 
-isolatedDeclarationErrors.ts(2,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+isolatedDeclarationErrors.ts(2,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 
 
 ==== isolatedDeclarationErrors.ts (1 errors) ====
     function errorOnAssignmentBelowDecl(): void {}
     errorOnAssignmentBelowDecl.a = "";
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     
     const errorOnAssignmentBelow: {
         (): void;

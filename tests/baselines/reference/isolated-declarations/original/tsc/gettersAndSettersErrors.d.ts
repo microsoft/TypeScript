@@ -24,7 +24,7 @@ class E {
 
 //// [gettersAndSettersErrors.d.ts]
 declare class C {
-    get Foo(): invalid;
+    get Foo(): string;
     set Foo(foo: string);
     Foo: string;
     get Goo(): string;
@@ -37,7 +37,6 @@ declare class E {
 
 /// [Errors] ////
 
-gettersAndSettersErrors.ts(2,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 gettersAndSettersErrors.ts(5,12): error TS2300: Duplicate identifier 'Foo'.
 gettersAndSettersErrors.ts(5,12): error TS2717: Subsequent property declarations must have the same type.  Property 'Foo' must be of type 'string', but here has type 'number'.
 gettersAndSettersErrors.ts(6,16): error TS1054: A 'get' accessor cannot have parameters.
@@ -46,11 +45,9 @@ gettersAndSettersErrors.ts(11,17): error TS2808: A get accessor must be at least
 gettersAndSettersErrors.ts(12,16): error TS2808: A get accessor must be at least as accessible as the setter
 
 
-==== gettersAndSettersErrors.ts (7 errors) ====
+==== gettersAndSettersErrors.ts (6 errors) ====
     class C {
         public get Foo() { return "foo";} // ok
-                   ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         public set Foo(foo:string) {} // ok
     
         public Foo = 0; // error - duplicate identifier Foo - confirmed

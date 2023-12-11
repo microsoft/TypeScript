@@ -1,0 +1,25 @@
+// [[Reason: Invalid computed property can only be detected by TSC]] ////
+
+//// [tests/cases/compiler/isolatedDeclarationErrorsClasses.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -17,11 +17,17 @@
+     set getSetOk2(value: number);
+     get getSetOk3(): number;
+     set getSetOk3(value: number);
+ }
++declare let noAnnotationStringName: string;
++declare let noParamAnnotationStringName: string;
+ declare const noAnnotationLiteralName = "noAnnotationLiteralName";
+ declare const noParamAnnotationLiteralName = "noParamAnnotationLiteralName";
+ export declare class C {
+     [noAnnotationLiteralName](): void;
+     [noParamAnnotationLiteralName](v: string): void;
++    [noAnnotationStringName](): void;
++    [noParamAnnotationStringName](v: any): void;
++    get [noAnnotationStringName](): number;
++    set [noParamAnnotationStringName](value: any);
+ }
+ export {};

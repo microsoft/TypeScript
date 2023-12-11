@@ -19,14 +19,14 @@ interface A {
 
 /// [Errors] ////
 
-/app.ts(2,8): error TS9008: Declaration emit for this file requires adding a type reference directive. Add a type reference directive to lib to unblock declaration emit.
+/app.ts(2,8): error TS9024: Declaration emit for this file requires adding a type reference directive which are not supported with --isolatedDeclarations
 
 
 ==== /app.ts (1 errors) ====
     interface A {
         x: $
            ~
-!!! error TS9008: Declaration emit for this file requires adding a type reference directive. Add a type reference directive to lib to unblock declaration emit.
+!!! error TS9024: Declaration emit for this file requires adding a type reference directive which are not supported with --isolatedDeclarations
     }
 ==== /types/lib/index.d.ts (0 errors) ====
     interface $ { x }

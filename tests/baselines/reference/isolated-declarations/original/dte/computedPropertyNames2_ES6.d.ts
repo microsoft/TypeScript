@@ -30,40 +30,40 @@ declare class C {
 
 /// [Errors] ////
 
-computedPropertyNames2_ES6.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-computedPropertyNames2_ES6.ts(5,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertyNames2_ES6.ts(4,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+computedPropertyNames2_ES6.ts(5,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 computedPropertyNames2_ES6.ts(6,9): error TS2378: A 'get' accessor must return a value.
-computedPropertyNames2_ES6.ts(6,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-computedPropertyNames2_ES6.ts(7,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertyNames2_ES6.ts(6,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 computedPropertyNames2_ES6.ts(8,16): error TS2378: A 'get' accessor must return a value.
-computedPropertyNames2_ES6.ts(8,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-computedPropertyNames2_ES6.ts(9,31): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertyNames2_ES6.ts(8,16): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 
 
-==== computedPropertyNames2_ES6.ts (8 errors) ====
+==== computedPropertyNames2_ES6.ts (6 errors) ====
     var methodName = "method";
     var accessorName = "accessor";
     class C {
         [methodName]() { }
         ~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 computedPropertyNames2_ES6.ts:4:5: Add a return type to the method
         static [methodName]() { }
                ~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 computedPropertyNames2_ES6.ts:5:12: Add a return type to the method
         get [accessorName]() { }
             ~~~~~~~~~~~~~~
 !!! error TS2378: A 'get' accessor must return a value.
             ~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 computedPropertyNames2_ES6.ts:7:9: Add a type to parameter of the set accessor declaration
+!!! related TS9032 computedPropertyNames2_ES6.ts:6:9: Add a return type to the get accessor declaration
         set [accessorName](v) { }
-                           ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         static get [accessorName]() { }
                    ~~~~~~~~~~~~~~
 !!! error TS2378: A 'get' accessor must return a value.
                    ~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 computedPropertyNames2_ES6.ts:9:16: Add a type to parameter of the set accessor declaration
+!!! related TS9032 computedPropertyNames2_ES6.ts:8:16: Add a return type to the get accessor declaration
         static set [accessorName](v) { }
-                                  ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
     }

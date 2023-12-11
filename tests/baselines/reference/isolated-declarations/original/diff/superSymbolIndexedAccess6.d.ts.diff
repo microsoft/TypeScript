@@ -1,0 +1,43 @@
+// [[Reason: Invalid computed property can only be detected by TSC]] ////
+
+//// [tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess6.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -11,23 +11,19 @@
+ 
+ /// [Errors] ////
+ 
+ superSymbolIndexedAccess6.ts(4,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+-superSymbolIndexedAccess6.ts(4,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+ superSymbolIndexedAccess6.ts(10,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+-superSymbolIndexedAccess6.ts(10,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+ 
+ 
+-==== superSymbolIndexedAccess6.ts (4 errors) ====
++==== superSymbolIndexedAccess6.ts (2 errors) ====
+     var symbol: any;
+     
+     class Foo {
+         static [symbol]() {
+                ~~~~~~~~
+ !!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+ !!! related TS9034 superSymbolIndexedAccess6.ts:4:12: Add a return type to the method
+-               ~~~~~~~~
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+             return 0;
+         }
+     }
+     
+@@ -35,9 +31,7 @@
+         static [symbol]() {
+                ~~~~~~~~
+ !!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+ !!! related TS9034 superSymbolIndexedAccess6.ts:10:12: Add a return type to the method
+-               ~~~~~~~~
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+             return super[symbol]();
+         }
+     }
+\ No newline at end of file

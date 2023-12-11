@@ -1083,17 +1083,17 @@ giant.ts(257,20): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(261,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(261,25): error TS1036: Statements are not allowed in ambient contexts.
 giant.ts(266,30): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(272,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(273,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(276,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(278,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(272,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(273,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+giant.ts(276,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(278,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(280,12): error TS2300: Duplicate identifier 'pgF'.
-giant.ts(280,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(280,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(281,16): error TS2300: Duplicate identifier 'pgF'.
-giant.ts(281,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(281,16): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(281,20): error TS1005: '{' expected.
 giant.ts(282,12): error TS2300: Duplicate identifier 'psF'.
-giant.ts(282,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(282,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(283,16): error TS2300: Duplicate identifier 'psF'.
 giant.ts(283,29): error TS1005: '{' expected.
 giant.ts(284,13): error TS2300: Duplicate identifier 'rgF'.
@@ -1102,28 +1102,28 @@ giant.ts(285,21): error TS1005: '{' expected.
 giant.ts(286,13): error TS2300: Duplicate identifier 'rsF'.
 giant.ts(287,17): error TS2300: Duplicate identifier 'rsF'.
 giant.ts(287,30): error TS1005: '{' expected.
-giant.ts(288,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(289,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(288,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(289,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(290,12): error TS2300: Duplicate identifier 'tsF'.
-giant.ts(290,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(290,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(291,16): error TS2300: Duplicate identifier 'tsF'.
 giant.ts(291,29): error TS1005: '{' expected.
 giant.ts(292,12): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(292,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(292,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(293,16): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(293,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(293,16): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(293,20): error TS1005: '{' expected.
-giant.ts(299,6): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(299,6): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 giant.ts(318,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 giant.ts(318,6): error TS2304: Cannot find name 'p'.
 giant.ts(319,5): error TS1021: An index signature must have a type annotation.
 giant.ts(320,6): error TS1096: An index signature must have exactly one parameter.
-giant.ts(331,8): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(332,8): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(332,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(331,8): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(332,8): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(332,13): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 giant.ts(333,5): error TS2386: Overload signatures must all be optional or required.
-giant.ts(333,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(333,15): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(333,10): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(333,15): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 giant.ts(344,16): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(345,20): error TS2300: Duplicate identifier 'pgF'.
 giant.ts(345,24): error TS1005: '{' expected.
@@ -1148,17 +1148,17 @@ giant.ts(383,9): error TS1021: An index signature must have a type annotation.
 giant.ts(384,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(397,9): error TS2386: Overload signatures must all be optional or required.
 giant.ts(411,39): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(415,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(416,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(419,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(421,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(415,16): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(416,21): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+giant.ts(419,16): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(421,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(423,16): error TS2300: Duplicate identifier 'pgF'.
-giant.ts(423,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(423,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(424,20): error TS2300: Duplicate identifier 'pgF'.
-giant.ts(424,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(424,20): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(424,24): error TS1005: '{' expected.
 giant.ts(425,16): error TS2300: Duplicate identifier 'psF'.
-giant.ts(425,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(425,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(426,20): error TS2300: Duplicate identifier 'psF'.
 giant.ts(426,33): error TS1005: '{' expected.
 giant.ts(427,17): error TS2300: Duplicate identifier 'rgF'.
@@ -1167,48 +1167,48 @@ giant.ts(428,25): error TS1005: '{' expected.
 giant.ts(429,17): error TS2300: Duplicate identifier 'rsF'.
 giant.ts(430,21): error TS2300: Duplicate identifier 'rsF'.
 giant.ts(430,34): error TS1005: '{' expected.
-giant.ts(431,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(432,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(431,16): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(432,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(433,16): error TS2300: Duplicate identifier 'tsF'.
-giant.ts(433,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(433,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(434,20): error TS2300: Duplicate identifier 'tsF'.
 giant.ts(434,33): error TS1005: '{' expected.
 giant.ts(435,16): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(435,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(435,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(436,20): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(436,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(436,20): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(436,24): error TS1005: '{' expected.
-giant.ts(442,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(442,10): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 giant.ts(461,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 giant.ts(461,10): error TS2304: Cannot find name 'p'.
 giant.ts(462,9): error TS1021: An index signature must have a type annotation.
 giant.ts(463,10): error TS1096: An index signature must have exactly one parameter.
-giant.ts(474,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(475,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(475,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(474,12): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(475,12): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(475,17): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 giant.ts(476,9): error TS2386: Overload signatures must all be optional or required.
-giant.ts(476,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(476,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(484,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(485,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(489,28): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(490,33): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(476,14): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(476,19): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(484,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(485,25): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+giant.ts(489,28): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(490,33): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(490,39): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(494,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(495,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(494,24): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(495,29): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(495,35): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(497,24): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(498,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(500,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(498,16): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(500,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(500,21): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(501,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(502,16): error TS2300: Duplicate identifier 'pgF'.
-giant.ts(502,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(502,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(502,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(503,20): error TS2300: Duplicate identifier 'pgF'.
-giant.ts(503,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(503,20): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(504,16): error TS2300: Duplicate identifier 'psF'.
-giant.ts(504,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(504,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(504,31): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(505,20): error TS2300: Duplicate identifier 'psF'.
 giant.ts(506,17): error TS2300: Duplicate identifier 'rgF'.
@@ -1217,40 +1217,40 @@ giant.ts(507,21): error TS2300: Duplicate identifier 'rgF'.
 giant.ts(508,17): error TS2300: Duplicate identifier 'rsF'.
 giant.ts(508,32): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(509,21): error TS2300: Duplicate identifier 'rsF'.
-giant.ts(510,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(511,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(510,16): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(511,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(511,21): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(512,16): error TS2300: Duplicate identifier 'tsF'.
-giant.ts(512,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(512,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(512,31): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(513,20): error TS2300: Duplicate identifier 'tsF'.
 giant.ts(514,16): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(514,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(514,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(514,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(515,20): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(515,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(518,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(519,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(515,20): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+giant.ts(518,13): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(519,18): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(519,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(519,25): error TS1036: Statements are not allowed in ambient contexts.
-giant.ts(523,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(524,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(523,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(524,25): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(524,30): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(530,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(531,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(530,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(531,25): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(531,31): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(533,20): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(534,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(536,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(534,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(536,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(536,17): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(537,18): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(538,12): error TS2300: Duplicate identifier 'pgF'.
-giant.ts(538,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(538,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(538,18): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(539,16): error TS2300: Duplicate identifier 'pgF'.
-giant.ts(539,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(539,16): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(540,12): error TS2300: Duplicate identifier 'psF'.
-giant.ts(540,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(540,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(540,27): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(541,16): error TS2300: Duplicate identifier 'psF'.
 giant.ts(542,13): error TS2300: Duplicate identifier 'rgF'.
@@ -1259,80 +1259,80 @@ giant.ts(543,17): error TS2300: Duplicate identifier 'rgF'.
 giant.ts(544,13): error TS2300: Duplicate identifier 'rsF'.
 giant.ts(544,28): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(545,17): error TS2300: Duplicate identifier 'rsF'.
-giant.ts(546,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(547,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(546,12): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(547,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(547,17): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(548,12): error TS2300: Duplicate identifier 'tsF'.
-giant.ts(548,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(548,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(548,27): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(549,16): error TS2300: Duplicate identifier 'tsF'.
 giant.ts(550,12): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(550,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(550,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(550,18): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(551,16): error TS2300: Duplicate identifier 'tgF'.
-giant.ts(551,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(554,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(555,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(551,16): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+giant.ts(554,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(555,14): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(555,18): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(555,21): error TS1036: Statements are not allowed in ambient contexts.
 giant.ts(557,24): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(558,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(560,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(558,16): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(560,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(560,21): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(561,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(562,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(561,16): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(562,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(562,21): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(586,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 giant.ts(586,10): error TS2304: Cannot find name 'p'.
 giant.ts(587,9): error TS1021: An index signature must have a type annotation.
 giant.ts(588,10): error TS1096: An index signature must have exactly one parameter.
-giant.ts(599,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(600,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(600,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(599,12): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(600,12): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(600,17): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 giant.ts(601,9): error TS2386: Overload signatures must all be optional or required.
-giant.ts(601,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(601,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(604,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(605,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(601,14): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(601,19): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(604,13): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(605,18): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(605,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(605,25): error TS1036: Statements are not allowed in ambient contexts.
-giant.ts(609,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(610,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(609,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(610,25): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(610,30): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(614,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-giant.ts(614,28): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(614,28): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 giant.ts(615,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-giant.ts(615,33): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(615,33): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(615,39): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(616,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
 giant.ts(617,16): error TS1038: A 'declare' modifier cannot be used in an already ambient context.
-giant.ts(619,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(620,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(619,16): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(620,21): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(620,26): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(622,24): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(623,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(625,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(623,16): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(625,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(625,21): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(626,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(627,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(626,16): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+giant.ts(627,16): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(627,21): error TS1183: An implementation cannot be declared in ambient contexts.
-giant.ts(633,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(633,10): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 giant.ts(652,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 giant.ts(652,10): error TS2304: Cannot find name 'p'.
 giant.ts(653,9): error TS1021: An index signature must have a type annotation.
 giant.ts(654,10): error TS1096: An index signature must have exactly one parameter.
-giant.ts(665,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(666,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(666,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(665,12): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(666,12): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(666,17): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
 giant.ts(667,9): error TS2386: Overload signatures must all be optional or required.
-giant.ts(667,14): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(667,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(670,13): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(671,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(667,14): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(667,19): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+giant.ts(670,13): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(671,18): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(671,22): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(671,25): error TS1036: Statements are not allowed in ambient contexts.
-giant.ts(674,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-giant.ts(675,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+giant.ts(674,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+giant.ts(675,25): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
@@ -1804,37 +1804,44 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
     }
     export var eV;
                ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:272:12: Add a type annotation to the variable eV
     export function eF() { };
                     ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:273:17: Add a return type to the function declaration
     export class eC {
         constructor () { }
         public pV;
                ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:276:12: Add a type annotation to the property pV
         private rV;
         public pF() { }
                ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:278:12: Add a return type to the method
         private rF() { }
         public pgF() { }
                ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:280:12: Add a return type to the method
         public get pgF()
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 giant.ts:281:16: Add a return type to the get accessor declaration
                        ~
 !!! error TS1005: '{' expected.
         public psF(param:any) { }
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:282:12: Add a return type to the method
         public set psF(param:any)
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -1858,15 +1865,18 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS1005: '{' expected.
         static tV;
                ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:288:12: Add a type annotation to the property tV
         static tF() { }
                ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:289:12: Add a return type to the method
         static tsF(param:any) { }
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:290:12: Add a return type to the method
         static set tsF(param:any)
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
@@ -1876,12 +1886,14 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:292:12: Add a return type to the method
         static get tgF()
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 giant.ts:293:16: Add a return type to the get accessor declaration
                        ~
 !!! error TS1005: '{' expected.
     }
@@ -1891,7 +1903,8 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
         (): number;
         (p);
          ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:299:6: Add a type annotation to the parameter p
         (p1: string);
         (p2?: string);
         (...p3: any[]);
@@ -1933,19 +1946,24 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
         p5? (): void;
         p6(pa1): void;
            ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:331:8: Add a type annotation to the parameter pa1
         p7(pa1, pa2): void;
            ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:332:8: Add a type annotation to the parameter pa1
                 ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:332:13: Add a type annotation to the parameter pa2
         p7? (pa1, pa2): void;
         ~~
 !!! error TS2386: Overload signatures must all be optional or required.
              ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:333:10: Add a type annotation to the parameter pa1
                   ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:333:15: Add a type annotation to the parameter pa2
     }
     export module eM {
         var V;
@@ -2077,37 +2095,44 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
         }
         export var eV;
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:415:16: Add a type annotation to the variable eV
         export function eF() { };
                         ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:416:21: Add a return type to the function declaration
         export class eC {
             constructor () { }
             public pV;
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:419:16: Add a type annotation to the property pV
             private rV;
             public pF() { }
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:421:16: Add a return type to the method
             private rF() { }
             public pgF() { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:423:16: Add a return type to the method
             public get pgF()
                        ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                        ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 giant.ts:424:20: Add a return type to the get accessor declaration
                            ~
 !!! error TS1005: '{' expected.
             public psF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:425:16: Add a return type to the method
             public set psF(param:any)
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -2131,15 +2156,18 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS1005: '{' expected.
             static tV;
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:431:16: Add a type annotation to the property tV
             static tF() { }
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:432:16: Add a return type to the method
             static tsF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:433:16: Add a return type to the method
             static set tsF(param:any)
                        ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
@@ -2149,12 +2177,14 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:435:16: Add a return type to the method
             static get tgF()
                        ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                        ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 giant.ts:436:20: Add a return type to the get accessor declaration
                            ~
 !!! error TS1005: '{' expected.
         }
@@ -2164,7 +2194,8 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
             (): number;
             (p);
              ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:442:10: Add a type annotation to the parameter p
             (p1: string);
             (p2?: string);
             (...p3: any[]);
@@ -2206,19 +2237,24 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
             p5? (): void;
             p6(pa1): void;
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:474:12: Add a type annotation to the parameter pa1
             p7(pa1, pa2): void;
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:475:12: Add a type annotation to the parameter pa1
                     ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:475:17: Add a type annotation to the parameter pa2
             p7? (pa1, pa2): void;
             ~~
 !!! error TS2386: Overload signatures must all be optional or required.
                  ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:476:14: Add a type annotation to the parameter pa1
                       ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:476:19: Add a type annotation to the parameter pa2
         }
         export module eM {
             var V;
@@ -2228,19 +2264,23 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
             module M { };
             export var eV;
                        ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:484:20: Add a type annotation to the variable eV
             export function eF() { };
                             ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:485:25: Add a return type to the function declaration
             export class eC { };
             export interface eI { };
             export module eM { };
             export declare var eaV;
                                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:489:28: Add a type annotation to the variable eaV
             export declare function eaF() { };
                                     ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:490:33: Add a return type to the function declaration
                                           ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { };
@@ -2248,10 +2288,12 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
         }
         export declare var eaV;
                            ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:494:24: Add a type annotation to the variable eaV
         export declare function eaF() { };
                                 ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:495:29: Add a return type to the function declaration
                                       ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         export declare class eaC {
@@ -2260,11 +2302,13 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public pV;
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:498:16: Add a type annotation to the property pV
             private rV;
             public pF() { }
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:500:16: Add a return type to the method
                         ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             private rF() { }
@@ -2274,19 +2318,22 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:502:16: Add a return type to the method
                          ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public get pgF()
                        ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                        ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 giant.ts:503:20: Add a return type to the get accessor declaration
             public psF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:504:16: Add a return type to the method
                                   ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public set psF(param:any)
@@ -2310,17 +2357,20 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS2300: Duplicate identifier 'rsF'.
             static tV;
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:510:16: Add a type annotation to the property tV
             static tF() { }
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:511:16: Add a return type to the method
                         ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static tsF(param:any) { }
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:512:16: Add a return type to the method
                                   ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static set tsF(param:any)
@@ -2330,22 +2380,26 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:514:16: Add a return type to the method
                          ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static get tgF()
                        ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                        ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 giant.ts:515:20: Add a return type to the get accessor declaration
         }
         export declare module eaM {
             var V;
                 ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:518:13: Add a type annotation to the variable V
             function F() { };
                      ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:519:18: Add a return type to the function declaration
                          ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
                             ~
@@ -2355,10 +2409,12 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
             module M { }
             export var eV;
                        ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:523:20: Add a type annotation to the variable eV
             export function eF() { };
                             ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:524:25: Add a return type to the function declaration
                                  ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
@@ -2368,10 +2424,12 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
     }
     export declare var eaV;
                        ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:530:20: Add a type annotation to the variable eaV
     export declare function eaF() { };
                             ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:531:25: Add a return type to the function declaration
                                   ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
     export declare class eaC {
@@ -2380,11 +2438,13 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         public pV;
                ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:534:12: Add a type annotation to the property pV
         private rV;
         public pF() { }
                ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:536:12: Add a return type to the method
                     ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         private rF() { }
@@ -2394,19 +2454,22 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
                ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:538:12: Add a return type to the method
                      ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         public get pgF()
                    ~~~
 !!! error TS2300: Duplicate identifier 'pgF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 giant.ts:539:16: Add a return type to the get accessor declaration
         public psF(param:any) { }
                ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:540:12: Add a return type to the method
                               ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         public set psF(param:any)
@@ -2430,17 +2493,20 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS2300: Duplicate identifier 'rsF'.
         static tV;
                ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:546:12: Add a type annotation to the property tV
         static tF() { }
                ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:547:12: Add a return type to the method
                     ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         static tsF(param:any) { }
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:548:12: Add a return type to the method
                               ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         static set tsF(param:any)
@@ -2450,22 +2516,26 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
                ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:550:12: Add a return type to the method
                      ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         static get tgF()
                    ~~~
 !!! error TS2300: Duplicate identifier 'tgF'.
                    ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 giant.ts:551:16: Add a return type to the get accessor declaration
     }
     export declare module eaM {
         var V;
             ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:554:9: Add a type annotation to the variable V
         function F() { };
                  ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:555:14: Add a return type to the function declaration
                      ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
                         ~
@@ -2476,19 +2546,23 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public pV;
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:558:16: Add a type annotation to the property pV
             private rV;
             public pF() { }
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:560:16: Add a return type to the method
                         ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static tV;
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:561:16: Add a type annotation to the property tV
             static tF() { }
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:562:16: Add a return type to the method
                         ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         }
@@ -2537,27 +2611,34 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
             p5? (): void;
             p6(pa1): void;
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:599:12: Add a type annotation to the parameter pa1
             p7(pa1, pa2): void;
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:600:12: Add a type annotation to the parameter pa1
                     ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:600:17: Add a type annotation to the parameter pa2
             p7? (pa1, pa2): void;
             ~~
 !!! error TS2386: Overload signatures must all be optional or required.
                  ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:601:14: Add a type annotation to the parameter pa1
                       ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:601:19: Add a type annotation to the parameter pa2
         }
         module M {
             var V;
                 ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:604:13: Add a type annotation to the variable V
             function F() { };
                      ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:605:18: Add a return type to the function declaration
                          ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
                             ~
@@ -2567,10 +2648,12 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
             module M { }
             export var eV;
                        ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:609:20: Add a type annotation to the variable eV
             export function eF() { };
                             ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:610:25: Add a return type to the function declaration
                                  ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }
@@ -2580,12 +2663,14 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
                                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:614:28: Add a type annotation to the variable eaV
             export declare function eaF() { };
                    ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.
                                     ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:615:33: Add a return type to the function declaration
                                           ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export declare class eaC { }
@@ -2597,10 +2682,12 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
         }
         export var eV;
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:619:16: Add a type annotation to the variable eV
         export function eF() { };
                         ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:620:21: Add a return type to the function declaration
                              ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         export class eC {
@@ -2609,19 +2696,23 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public pV;
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:623:16: Add a type annotation to the property pV
             private rV;
             public pF() { }
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:625:16: Add a return type to the method
                         ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static tV
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 giant.ts:626:16: Add a type annotation to the property tV
             static tF() { }
                    ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 giant.ts:627:16: Add a return type to the method
                         ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         }
@@ -2631,7 +2722,8 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
             (): number;
             (p);
              ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:633:10: Add a type annotation to the parameter p
             (p1: string);
             (p2?: string);
             (...p3: any[]);
@@ -2673,27 +2765,34 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
             p5? (): void;
             p6(pa1): void;
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:665:12: Add a type annotation to the parameter pa1
             p7(pa1, pa2): void;
                ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:666:12: Add a type annotation to the parameter pa1
                     ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:666:17: Add a type annotation to the parameter pa2
             p7? (pa1, pa2): void;
             ~~
 !!! error TS2386: Overload signatures must all be optional or required.
                  ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:667:14: Add a type annotation to the parameter pa1
                       ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9028 giant.ts:667:19: Add a type annotation to the parameter pa2
         }
         export module eM {
             var V;
                 ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:670:13: Add a type annotation to the variable V
             function F() { };
                      ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:671:18: Add a return type to the function declaration
                          ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
                             ~
@@ -2702,10 +2801,12 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
             module M { }
             export var eV;
                        ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 giant.ts:674:20: Add a type annotation to the variable eV
             export function eF() { };
                             ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9031 giant.ts:675:25: Add a return type to the function declaration
                                  ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             export class eC { }

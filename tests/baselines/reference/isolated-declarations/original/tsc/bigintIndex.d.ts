@@ -56,15 +56,15 @@ declare const c: invalid;
 a.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 a.ts(8,11): error TS2538: Type '1n' cannot be used as an index type.
 a.ts(14,1): error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
-a.ts(18,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+a.ts(18,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
 a.ts(19,12): error TS2538: Type 'bigint' cannot be used as an index type.
 b.ts(2,12): error TS1136: Property assignment expected.
 b.ts(2,14): error TS1005: ';' expected.
 b.ts(2,19): error TS1128: Declaration or statement expected.
 b.ts(3,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-b.ts(3,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+b.ts(3,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-b.ts(4,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+b.ts(4,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 
 
 ==== a.ts (5 errors) ====
@@ -93,7 +93,8 @@ b.ts(4,12): error TS9007: Declaration emit for this file requires type resolutio
     const bigNum: bigint = 0n;
     const typedArray = new Uint8Array(3);
                        ~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9027 a.ts:18:7: Add a type annotation to the variable typedArray
     typedArray[bigNum] = 0xAA; // should error
                ~~~~~~
 !!! error TS2538: Type 'bigint' cannot be used as an index type.
@@ -115,10 +116,12 @@ b.ts(4,12): error TS9007: Declaration emit for this file requires type resolutio
                ~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
                ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! related TS9027 b.ts:3:7: Add a type annotation to the variable b
     const c = {[bigNum]: 789};
                ~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
                ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! related TS9027 b.ts:4:7: Add a type annotation to the variable c
     

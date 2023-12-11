@@ -157,59 +157,73 @@ declare var getParamType3: invalid;
 
 /// [Errors] ////
 
-objectLiteralGettersAndSetters.ts(2,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(3,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(4,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(5,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(6,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(7,24): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(10,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(12,23): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-objectLiteralGettersAndSetters.ts(14,23): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-objectLiteralGettersAndSetters.ts(22,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(30,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(60,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(67,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-objectLiteralGettersAndSetters.ts(76,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+objectLiteralGettersAndSetters.ts(2,24): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(3,24): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(4,24): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(5,24): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(6,24): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(7,24): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(10,18): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(12,23): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(14,23): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(22,21): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(30,23): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(64,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(67,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+objectLiteralGettersAndSetters.ts(76,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 
 
 ==== objectLiteralGettersAndSetters.ts (14 errors) ====
     // Get and set accessor with the same name
     var sameName1a = { get 'a'() { return ''; }, set a(n) { var p = n; var p: string; } };
                            ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:2:50: Add a type to parameter of the set accessor declaration
+!!! related TS9032 objectLiteralGettersAndSetters.ts:2:24: Add a return type to the get accessor declaration
     var sameName2a = { get 0.0() { return ''; }, set 0(n) { var p = n; var p: string; } };
                            ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:3:50: Add a type to parameter of the set accessor declaration
+!!! related TS9032 objectLiteralGettersAndSetters.ts:3:24: Add a return type to the get accessor declaration
     var sameName3a = { get 0x20() { return ''; }, set 3.2e1(n) { var p = n; var p: string; } };
                            ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:4:51: Add a type to parameter of the set accessor declaration
+!!! related TS9032 objectLiteralGettersAndSetters.ts:4:24: Add a return type to the get accessor declaration
     var sameName4a = { get ''() { return ''; }, set ""(n) { var p = n; var p: string; } };
                            ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:5:49: Add a type to parameter of the set accessor declaration
+!!! related TS9032 objectLiteralGettersAndSetters.ts:5:24: Add a return type to the get accessor declaration
     var sameName5a = { get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } };
                            ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:6:51: Add a type to parameter of the set accessor declaration
+!!! related TS9032 objectLiteralGettersAndSetters.ts:6:24: Add a return type to the get accessor declaration
     var sameName6a = { get 'a'() { return ''; }, set a(n) { var p = n; var p: string; } };
                            ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:7:50: Add a type to parameter of the set accessor declaration
+!!! related TS9032 objectLiteralGettersAndSetters.ts:7:24: Add a return type to the get accessor declaration
     
     // PropertyName CallSignature{FunctionBody} is equivalent to PropertyName:function CallSignature{FunctionBody}
     var callSig1 = { num(n: number) { return '' } };
                      ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 objectLiteralGettersAndSetters.ts:10:5: Add a type annotation to the variable callSig1
+!!! related TS9034 objectLiteralGettersAndSetters.ts:10:18: Add a return type to the method
     var callSig1: { num: (n: number) => string; };
     var callSig2 = { num: function (n: number) { return '' } };
                           ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 objectLiteralGettersAndSetters.ts:12:5: Add a type annotation to the variable callSig2
-!!! related TS9603 objectLiteralGettersAndSetters.ts:12:23: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 objectLiteralGettersAndSetters.ts:12:5: Add a type annotation to the variable callSig2
+!!! related TS9030 objectLiteralGettersAndSetters.ts:12:23: Add a return type to the function expression
     var callSig2: { num: (n: number) => string; };
     var callSig3 = { num: (n: number) => '' };
                           ~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 objectLiteralGettersAndSetters.ts:14:5: Add a type annotation to the variable callSig3
-!!! related TS9603 objectLiteralGettersAndSetters.ts:14:23: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 objectLiteralGettersAndSetters.ts:14:5: Add a type annotation to the variable callSig3
+!!! related TS9030 objectLiteralGettersAndSetters.ts:14:23: Add a return type to the function expression
     var callSig3: { num: (n: number) => string; };
     
     // Get accessor only, type of the property is the annotated return type of the get accessor
@@ -219,7 +233,8 @@ objectLiteralGettersAndSetters.ts(76,9): error TS9007: Declaration emit for this
     // Get accessor only, type of the property is the inferred return type of the get accessor
     var getter2 = { get x() { return ''; } };
                         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 objectLiteralGettersAndSetters.ts:22:21: Add a return type to the get accessor declaration
     var getter2: { readonly x: string; }
     
     // Set accessor only, type of the property is the param type of the set accessor
@@ -228,8 +243,9 @@ objectLiteralGettersAndSetters.ts(76,9): error TS9007: Declaration emit for this
     
     // Set accessor only, type of the property is Any for an unannotated set accessor
     var setter2 = { set x(n) { } };
-                        ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+                          ~
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:30:21: Add a type to parameter of the set accessor declaration
     var setter2: { x: any };
     
     var anyVar: any;
@@ -260,17 +276,21 @@ objectLiteralGettersAndSetters.ts(76,9): error TS9007: Declaration emit for this
     // Type of unannotated set accessor parameter is the return type annotation of the get accessor
     var getParamType1 = {
         set n(x) {
-            ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
             var y = x;
             var y: string;
         },
         get n() { return ''; }
+            ~
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:60:9: Add a type to parameter of the set accessor declaration
+!!! related TS9032 objectLiteralGettersAndSetters.ts:64:9: Add a return type to the get accessor declaration
     };
     var getParamType2 = {
         get n() { return ''; },
             ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:68:9: Add a type to parameter of the set accessor declaration
+!!! related TS9032 objectLiteralGettersAndSetters.ts:67:9: Add a return type to the get accessor declaration
         set n(x) {
             var y = x;
             var y: string;
@@ -281,7 +301,9 @@ objectLiteralGettersAndSetters.ts(76,9): error TS9007: Declaration emit for this
     var getParamType3 = {
         get n() { return ''; },
             ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 objectLiteralGettersAndSetters.ts:77:9: Add a type to parameter of the set accessor declaration
+!!! related TS9032 objectLiteralGettersAndSetters.ts:76:9: Add a return type to the get accessor declaration
         set n(x) {
             var y = x;
             var y: string;

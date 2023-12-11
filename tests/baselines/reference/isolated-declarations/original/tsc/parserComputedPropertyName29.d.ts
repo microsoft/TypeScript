@@ -20,13 +20,13 @@ declare class C {
 /// [Errors] ////
 
 parserComputedPropertyName29.ts(3,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-parserComputedPropertyName29.ts(3,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parserComputedPropertyName29.ts(3,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 parserComputedPropertyName29.ts(3,6): error TS2304: Cannot find name 'e'.
 parserComputedPropertyName29.ts(3,6): error TS4031: Public property '[e]' of exported class has or is using private name 'e'.
 parserComputedPropertyName29.ts(3,11): error TS2304: Cannot find name 'id'.
-parserComputedPropertyName29.ts(3,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parserComputedPropertyName29.ts(3,11): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
 parserComputedPropertyName29.ts(4,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-parserComputedPropertyName29.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parserComputedPropertyName29.ts(4,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 parserComputedPropertyName29.ts(4,6): error TS2304: Cannot find name 'e2'.
 parserComputedPropertyName29.ts(4,6): error TS4031: Public property '[e2]' of exported class has or is using private name 'e2'.
 
@@ -38,7 +38,7 @@ parserComputedPropertyName29.ts(4,6): error TS4031: Public property '[e2]' of ex
         ~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
          ~
 !!! error TS2304: Cannot find name 'e'.
          ~
@@ -46,12 +46,13 @@ parserComputedPropertyName29.ts(4,6): error TS4031: Public property '[e2]' of ex
               ~~
 !!! error TS2304: Cannot find name 'id'.
               ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+!!! related TS9029 parserComputedPropertyName29.ts:3:5: Add a type annotation to the property [e]
         [e2]: number
         ~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
          ~~
 !!! error TS2304: Cannot find name 'e2'.
          ~~

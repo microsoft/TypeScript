@@ -17,7 +17,7 @@ declare class C {
 /// [Errors] ////
 
 parserComputedPropertyName22.ts(2,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-parserComputedPropertyName22.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parserComputedPropertyName22.ts(2,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
 parserComputedPropertyName22.ts(2,6): error TS2304: Cannot find name 'e'.
 parserComputedPropertyName22.ts(2,6): error TS4031: Public property '[e]' of exported class has or is using private name 'e'.
 
@@ -28,7 +28,7 @@ parserComputedPropertyName22.ts(2,6): error TS4031: Public property '[e]' of exp
         ~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
          ~
 !!! error TS2304: Cannot find name 'e'.
          ~

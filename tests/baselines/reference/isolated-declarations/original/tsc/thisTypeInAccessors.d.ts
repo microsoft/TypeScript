@@ -76,12 +76,12 @@ thisTypeInAccessors.ts(8,11): error TS2784: 'get' and 'set' accessors cannot dec
 thisTypeInAccessors.ts(9,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 thisTypeInAccessors.ts(13,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 thisTypeInAccessors.ts(19,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-thisTypeInAccessors.ts(23,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+thisTypeInAccessors.ts(23,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 thisTypeInAccessors.ts(23,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 thisTypeInAccessors.ts(24,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 thisTypeInAccessors.ts(29,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 thisTypeInAccessors.ts(30,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-thisTypeInAccessors.ts(34,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+thisTypeInAccessors.ts(34,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
 
 
 ==== thisTypeInAccessors.ts (10 errors) ====
@@ -117,7 +117,9 @@ thisTypeInAccessors.ts(34,9): error TS9007: Declaration emit for this file requi
         n: 16,
         get x(this: Foo) { return this.n },
             ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9033 thisTypeInAccessors.ts:24:9: Add a type to parameter of the set accessor declaration
+!!! related TS9032 thisTypeInAccessors.ts:23:9: Add a return type to the get accessor declaration
               ~~~~~~~~~
 !!! error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
         set x(this, n) { this.n = n; }
@@ -138,6 +140,7 @@ thisTypeInAccessors.ts(34,9): error TS9007: Declaration emit for this file requi
         n = 21;
         get x() { return this.n } // inside a class, so already correct
             ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9032 thisTypeInAccessors.ts:34:9: Add a return type to the get accessor declaration
     }
     

@@ -1,0 +1,32 @@
+// [[Reason: Invalid computed property can only be detected by TSC]] ////
+
+//// [tests/cases/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName39.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -7,23 +7,20 @@
+ 
+ /// [Errors] ////
+ 
+ parserComputedPropertyName39.ts(3,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+-parserComputedPropertyName39.ts(3,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+ parserComputedPropertyName39.ts(3,6): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+ parserComputedPropertyName39.ts(3,6): error TS2304: Cannot find name 'public'.
+ parserComputedPropertyName39.ts(3,6): error TS4100: Public method '[public]' of exported class has or is using private name 'public'.
+ 
+ 
+-==== parserComputedPropertyName39.ts (5 errors) ====
++==== parserComputedPropertyName39.ts (4 errors) ====
+     "use strict";
+     class C {
+         [public]() { }
+         ~~~~~~~~
+ !!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+ !!! related TS9034 parserComputedPropertyName39.ts:3:5: Add a return type to the method
+-        ~~~~~~~~
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+          ~~~~~~
+ !!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+          ~~~~~~
+ !!! error TS2304: Cannot find name 'public'.

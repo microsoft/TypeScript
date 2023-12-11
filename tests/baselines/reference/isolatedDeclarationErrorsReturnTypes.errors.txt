@@ -1,146 +1,146 @@
-isolatedDeclarationErrorsReturnTypes.ts(2,51): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(3,37): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(5,47): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(6,33): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(8,47): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(9,33): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(13,45): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(16,41): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(19,41): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(34,29): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(35,15): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(36,48): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(37,34): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(39,42): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(40,28): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(41,61): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(42,47): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(67,29): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(68,15): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(70,42): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(71,28): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(73,61): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(74,47): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(109,56): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(109,65): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(110,42): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(110,48): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(112,52): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(112,61): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(113,38): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(113,44): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(115,52): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(115,61): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(116,38): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(116,44): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(119,83): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(120,66): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(122,79): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(123,62): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(125,79): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(126,62): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(138,64): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(138,73): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(139,50): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(139,56): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(141,60): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(141,69): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(142,46): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(142,52): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(144,60): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(144,69): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(145,46): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(145,52): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(151,29): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(151,38): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(152,15): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(152,21): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(153,48): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(153,57): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(154,34): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(154,40): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(156,42): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(156,51): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(157,28): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(157,34): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(158,61): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(158,70): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(159,47): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(159,53): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(162,53): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(163,36): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(164,72): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(165,55): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(167,66): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(168,49): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(169,85): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(170,68): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(173,40): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(174,26): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(175,59): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(176,45): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(178,53): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(179,39): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(180,72): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-isolatedDeclarationErrorsReturnTypes.ts(181,58): error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(2,51): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(3,37): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(5,47): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(6,33): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(8,47): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(9,33): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(13,45): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(16,41): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(19,41): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(34,29): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(35,15): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(36,48): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(37,34): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(39,42): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(40,28): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(41,61): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(42,47): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(67,29): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(68,15): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(70,42): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(71,28): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(73,61): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(74,47): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(109,56): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(109,65): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(110,42): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(110,48): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(112,52): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(112,61): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(113,38): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(113,44): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(115,52): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(115,61): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(116,38): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(116,44): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(119,83): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(120,66): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(122,79): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(123,62): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(125,79): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(126,62): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(138,64): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(138,73): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(139,50): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(139,56): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(141,60): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(141,69): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(142,46): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(142,52): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(144,60): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(144,69): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(145,46): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(145,52): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(151,29): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(151,38): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(152,15): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(152,21): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(153,48): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(153,57): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(154,34): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(154,40): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(156,42): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(156,51): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(157,28): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(157,34): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(158,61): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(158,70): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(159,47): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(159,53): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(162,53): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(163,36): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(164,72): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(165,55): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(167,66): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(168,49): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(169,85): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(170,68): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(173,40): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(174,26): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(175,59): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(176,45): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(178,53): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(179,39): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(180,72): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsReturnTypes.ts(181,58): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
 
 
 ==== isolatedDeclarationErrorsReturnTypes.ts (85 errors) ====
     // Function Variables
     export const fnExpressionConstVariable = function foo() { return 0;}
                                                       ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:2:14: Add a type annotation to the variable fnExpressionConstVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:2:51: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:2:14: Add a type annotation to the variable fnExpressionConstVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:2:51: Add a return type to the function expression
     export const fnArrowConstVariable = () => "S";
                                         ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:3:14: Add a type annotation to the variable fnArrowConstVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:3:37: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:3:14: Add a type annotation to the variable fnArrowConstVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:3:37: Add a return type to the function expression
     
     export let fnExpressionLetVariable = function foo() { return 0;}
                                                   ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:5:12: Add a type annotation to the variable fnExpressionLetVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:5:47: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:5:12: Add a type annotation to the variable fnExpressionLetVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:5:47: Add a return type to the function expression
     export let fnArrowLetVariable = () => "S";
                                     ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:6:12: Add a type annotation to the variable fnArrowLetVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:6:33: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:6:12: Add a type annotation to the variable fnArrowLetVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:6:33: Add a return type to the function expression
     
     export var fnExpressionVarVariable = function foo() { return 0;}
                                                   ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:8:12: Add a type annotation to the variable fnExpressionVarVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:8:47: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:8:12: Add a type annotation to the variable fnExpressionVarVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:8:47: Add a return type to the function expression
     export var fnArrowVarVariable = () => "S";
                                     ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:9:12: Add a type annotation to the variable fnArrowVarVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:9:33: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:9:12: Add a type annotation to the variable fnArrowVarVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:9:33: Add a return type to the function expression
     
     // No Errors
     export const fnExpressionConstVariableOk = function foo(): number { return 0;}
     export const fnArrowConstVariableOk = (cb = function(){ }): string => "S";
                                                 ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:13:40: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:13:45: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:13:40: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:13:45: Add a return type to the function expression
     
     export let fnExpressionLetVariableOk = function foo(): number { return 0;}
     export let fnArrowLetVariableOk = (cb = function(){ }): string => "S";
                                             ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:16:36: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:16:41: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:16:36: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:16:41: Add a return type to the function expression
     
     export var fnExpressionVarVariableOk = function foo(): number { return 0;}
     export var fnArrowVarVariableOk = (cb = function(){ }): string => "S";
                                             ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:19:36: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:19:41: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:19:36: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:19:41: Add a return type to the function expression
     
     // Not exported
     const fnExpressionConstVariableInternal = function foo() { return 0;}
@@ -157,45 +157,45 @@ isolatedDeclarationErrorsReturnTypes.ts(181,58): error TS9507: Function must hav
         // Should Error
         fnExpression = function foo() { return 0; }
                                 ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:34:5: Add a type annotation to the property fnExpression
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:34:29: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:34:5: Add a type annotation to the property fnExpression
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:34:29: Add a return type to the function expression
         fnArrow = () => "S";    
                   ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:35:5: Add a type annotation to the property fnArrow
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:35:15: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:35:5: Add a type annotation to the property fnArrow
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:35:15: Add a return type to the function expression
         protected fnExpressionProtected = function foo() { return 0; }
                                                    ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:36:15: Add a type annotation to the property fnExpressionProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:36:48: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:36:15: Add a type annotation to the property fnExpressionProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:36:48: Add a return type to the function expression
         protected fnArrowProtected = () => "S";
                                      ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:37:15: Add a type annotation to the property fnArrowProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:37:34: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:37:15: Add a type annotation to the property fnArrowProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:37:34: Add a return type to the function expression
     
         static fnStaticExpression = function foo() { return 0; }
                                              ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:39:12: Add a type annotation to the property fnStaticExpression
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:39:42: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:39:12: Add a type annotation to the property fnStaticExpression
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:39:42: Add a return type to the function expression
         static fnStaticArrow = () => "S";
                                ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:40:12: Add a type annotation to the property fnStaticArrow
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:40:28: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:40:12: Add a type annotation to the property fnStaticArrow
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:40:28: Add a return type to the function expression
         protected static fnStaticExpressionProtected = function foo() { return 0; }    
                                                                 ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:41:22: Add a type annotation to the property fnStaticExpressionProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:41:61: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:41:22: Add a type annotation to the property fnStaticExpressionProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:41:61: Add a return type to the function expression
         protected static fnStaticArrowProtected = () => "S";
                                                   ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:42:22: Add a type annotation to the property fnStaticArrowProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:42:47: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:42:22: Add a type annotation to the property fnStaticArrowProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:42:47: Add a return type to the function expression
     
         // Have annotation, so ok 
         fnExpressionOk = function foo(): number { return 0; }
@@ -222,36 +222,36 @@ isolatedDeclarationErrorsReturnTypes.ts(181,58): error TS9507: Function must hav
     class IndirectlyExportedClass { 
         fnExpression = function foo() { return 0; }
                                 ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:67:5: Add a type annotation to the property fnExpression
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:67:29: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:67:5: Add a type annotation to the property fnExpression
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:67:29: Add a return type to the function expression
         fnArrow = () => "S";
                   ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:68:5: Add a type annotation to the property fnArrow
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:68:15: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:68:5: Add a type annotation to the property fnArrow
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:68:15: Add a return type to the function expression
     
         static fnStaticExpression = function foo() { return 0; }
                                              ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:70:12: Add a type annotation to the property fnStaticExpression
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:70:42: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:70:12: Add a type annotation to the property fnStaticExpression
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:70:42: Add a return type to the function expression
         static fnStaticArrow = () => "S";
                                ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:71:12: Add a type annotation to the property fnStaticArrow
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:71:28: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:71:12: Add a type annotation to the property fnStaticArrow
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:71:28: Add a return type to the function expression
         
         protected static fnStaticExpressionProtected = function foo() { return 0; }    
                                                                 ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:73:22: Add a type annotation to the property fnStaticExpressionProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:73:61: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:73:22: Add a type annotation to the property fnStaticExpressionProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:73:61: Add a return type to the function expression
         protected static fnStaticArrowProtected = () => "S";
                                                   ~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:74:22: Add a type annotation to the property fnStaticArrowProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:74:47: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:74:22: Add a type annotation to the property fnStaticArrowProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:74:47: Add a return type to the function expression
     
         private fnExpressionPrivate = function foo() { return 0; }
         private fnArrowPrivate = () => "S";
@@ -288,94 +288,94 @@ isolatedDeclarationErrorsReturnTypes.ts(181,58): error TS9507: Function must hav
     // In Function Variables - No annotations
     export const fnParamExpressionConstVariable = function foo(cb = function(){ }) { return 0;}
                                                            ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:109:14: Add a type annotation to the variable fnParamExpressionConstVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:109:56: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:109:14: Add a type annotation to the variable fnParamExpressionConstVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:109:56: Add a return type to the function expression
                                                                     ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:109:60: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:109:65: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:109:60: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:109:65: Add a return type to the function expression
     export const fnParamArrowConstVariable = (cb = () => 1) => "S";
                                              ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:110:14: Add a type annotation to the variable fnParamArrowConstVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:110:42: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:110:14: Add a type annotation to the variable fnParamArrowConstVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:110:42: Add a return type to the function expression
                                                    ~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:110:43: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:110:48: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:110:43: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:110:48: Add a return type to the function expression
     
     export let fnParamExpressionLetVariable = function foo(cb = function(){ }) { return 0;}
                                                        ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:112:12: Add a type annotation to the variable fnParamExpressionLetVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:112:52: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:112:12: Add a type annotation to the variable fnParamExpressionLetVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:112:52: Add a return type to the function expression
                                                                 ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:112:56: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:112:61: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:112:56: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:112:61: Add a return type to the function expression
     export let fnParamArrowLetVariable = (cb = () => 1) => "S";
                                          ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:113:12: Add a type annotation to the variable fnParamArrowLetVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:113:38: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:113:12: Add a type annotation to the variable fnParamArrowLetVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:113:38: Add a return type to the function expression
                                                ~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:113:39: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:113:44: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:113:39: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:113:44: Add a return type to the function expression
     
     export var fnParamExpressionVarVariable = function foo(cb = function(){ }) { return 0;}
                                                        ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:115:12: Add a type annotation to the variable fnParamExpressionVarVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:115:52: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:115:12: Add a type annotation to the variable fnParamExpressionVarVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:115:52: Add a return type to the function expression
                                                                 ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:115:56: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:115:61: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:115:56: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:115:61: Add a return type to the function expression
     export var fnParamArrowVarVariable = (cb = () => 1) => "S";
                                          ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:116:12: Add a type annotation to the variable fnParamArrowVarVariable
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:116:38: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:116:12: Add a type annotation to the variable fnParamArrowVarVariable
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:116:38: Add a return type to the function expression
                                                ~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:116:39: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:116:44: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:116:39: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:116:44: Add a return type to the function expression
     
     // In Function Variables - No annotations on parameter
     export const fnParamExpressionConstVariableOwnerHasReturnType = function foo(cb = function(){ }): number { return 0;}
                                                                                       ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:119:78: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:119:83: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:119:78: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:119:83: Add a return type to the function expression
     export const fnParamArrowConstVariableOwnerHasReturnType = (cb = function(){ }): string => "S";
                                                                      ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:120:61: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:120:66: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:120:61: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:120:66: Add a return type to the function expression
     
     export let fnParamExpressionLetVariableOwnerHasReturnType = function foo(cb = function(){ }): number { return 0;}
                                                                                   ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:122:74: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:122:79: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:122:74: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:122:79: Add a return type to the function expression
     export let fnParamArrowLetVariableOwnerHasReturnType = (cb = function(){ }): string => "S";
                                                                  ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:123:57: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:123:62: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:123:57: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:123:62: Add a return type to the function expression
     
     export var fnParamExpressionVarVariableOwnerHasReturnType = function foo(cb = function(){ }): number { return 0;}
                                                                                   ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:125:74: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:125:79: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:125:74: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:125:79: Add a return type to the function expression
     export var fnParamArrowVarVariableOwnerHasReturnType = (cb = function(){ }): string => "S";
                                                                  ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:126:57: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:126:62: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:126:57: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:126:62: Add a return type to the function expression
     
     // No Errors
     export const fnParamExpressionConstVariableOk = function foo(cb = function(): void{ }): number { return 0;}
@@ -389,60 +389,60 @@ isolatedDeclarationErrorsReturnTypes.ts(181,58): error TS9507: Function must hav
     
     export const fnParamExpressionConstVariableInternal = function foo(cb = function(){ }) { return 0;}
                                                                    ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:138:14: Add a type annotation to the variable fnParamExpressionConstVariableInternal
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:138:64: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:138:14: Add a type annotation to the variable fnParamExpressionConstVariableInternal
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:138:64: Add a return type to the function expression
                                                                             ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:138:68: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:138:73: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:138:68: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:138:73: Add a return type to the function expression
     export const fnParamArrowConstVariableInternal = (cb = () => 1) => "S";
                                                      ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:139:14: Add a type annotation to the variable fnParamArrowConstVariableInternal
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:139:50: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:139:14: Add a type annotation to the variable fnParamArrowConstVariableInternal
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:139:50: Add a return type to the function expression
                                                            ~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:139:51: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:139:56: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:139:51: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:139:56: Add a return type to the function expression
     
     export let fnParamExpressionLetVariableInternal = function foo(cb = function(){ }) { return 0;}
                                                                ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:141:12: Add a type annotation to the variable fnParamExpressionLetVariableInternal
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:141:60: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:141:12: Add a type annotation to the variable fnParamExpressionLetVariableInternal
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:141:60: Add a return type to the function expression
                                                                         ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:141:64: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:141:69: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:141:64: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:141:69: Add a return type to the function expression
     export let fnParamArrowLetVariableInternal = (cb = () => 1) => "S";
                                                  ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:142:12: Add a type annotation to the variable fnParamArrowLetVariableInternal
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:142:46: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:142:12: Add a type annotation to the variable fnParamArrowLetVariableInternal
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:142:46: Add a return type to the function expression
                                                        ~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:142:47: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:142:52: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:142:47: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:142:52: Add a return type to the function expression
     
     export var fnParamExpressionVarVariableInternal = function foo(cb = function(){ }) { return 0;}
                                                                ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:144:12: Add a type annotation to the variable fnParamExpressionVarVariableInternal
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:144:60: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:144:12: Add a type annotation to the variable fnParamExpressionVarVariableInternal
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:144:60: Add a return type to the function expression
                                                                         ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:144:64: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:144:69: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:144:64: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:144:69: Add a return type to the function expression
     export var fnParamArrowVarVariableInternal = (cb = () => 1) => "S";
                                                  ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9600 isolatedDeclarationErrorsReturnTypes.ts:145:12: Add a type annotation to the variable fnParamArrowVarVariableInternal
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:145:46: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9027 isolatedDeclarationErrorsReturnTypes.ts:145:12: Add a type annotation to the variable fnParamArrowVarVariableInternal
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:145:46: Add a return type to the function expression
                                                        ~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:145:47: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:145:52: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:145:47: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:145:52: Add a return type to the function expression
     
     
     // In Function Fields
@@ -450,163 +450,163 @@ isolatedDeclarationErrorsReturnTypes.ts(181,58): error TS9507: Function must hav
         // Should Error
         fnExpression = function foo(cb = function(){ }) { return 0; }
                                 ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:151:5: Add a type annotation to the property fnExpression
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:151:29: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:151:5: Add a type annotation to the property fnExpression
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:151:29: Add a return type to the function expression
                                          ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:151:33: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:151:38: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:151:33: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:151:38: Add a return type to the function expression
         fnArrow = (cb = function(){ }) => "S";
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:152:5: Add a type annotation to the property fnArrow
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:152:15: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:152:5: Add a type annotation to the property fnArrow
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:152:15: Add a return type to the function expression
                         ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:152:16: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:152:21: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:152:16: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:152:21: Add a return type to the function expression
         protected fnExpressionProtected = function foo(cb = function(){ }) { return 0; }
                                                    ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:153:15: Add a type annotation to the property fnExpressionProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:153:48: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:153:15: Add a type annotation to the property fnExpressionProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:153:48: Add a return type to the function expression
                                                             ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:153:52: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:153:57: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:153:52: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:153:57: Add a return type to the function expression
         protected fnArrowProtected = (cb = function(){ }) => "S";
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:154:15: Add a type annotation to the property fnArrowProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:154:34: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:154:15: Add a type annotation to the property fnArrowProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:154:34: Add a return type to the function expression
                                            ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:154:35: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:154:40: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:154:35: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:154:40: Add a return type to the function expression
     
         static fnStaticExpression = function foo(cb = function(){ }) { return 0; }
                                              ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:156:12: Add a type annotation to the property fnStaticExpression
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:156:42: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:156:12: Add a type annotation to the property fnStaticExpression
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:156:42: Add a return type to the function expression
                                                       ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:156:46: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:156:51: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:156:46: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:156:51: Add a return type to the function expression
         static fnStaticArrow = (cb = function(){ }) => "S";
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:157:12: Add a type annotation to the property fnStaticArrow
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:157:28: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:157:12: Add a type annotation to the property fnStaticArrow
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:157:28: Add a return type to the function expression
                                      ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:157:29: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:157:34: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:157:29: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:157:34: Add a return type to the function expression
         protected static fnStaticExpressionProtected = function foo(cb = function(){ }) { return 0; }    
                                                                 ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:158:22: Add a type annotation to the property fnStaticExpressionProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:158:61: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:158:22: Add a type annotation to the property fnStaticExpressionProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:158:61: Add a return type to the function expression
                                                                          ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:158:65: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:158:70: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:158:65: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:158:70: Add a return type to the function expression
         protected static fnStaticArrowProtected = (cb = function(){ }) => "S";
                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:159:22: Add a type annotation to the property fnStaticArrowProtected
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:159:47: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:159:22: Add a type annotation to the property fnStaticArrowProtected
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:159:47: Add a return type to the function expression
                                                         ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:159:48: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:159:53: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:159:48: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:159:53: Add a return type to the function expression
     
         // Have annotation on owner
         fnExpressionMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
                                                         ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:162:48: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:162:53: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:162:48: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:162:53: Add a return type to the function expression
         fnArrowMethodHasReturn = (cb = function(){ }): string => "S";
                                        ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:163:31: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:163:36: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:163:31: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:163:36: Add a return type to the function expression
         protected fnExpressionProtectedMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
                                                                            ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:164:67: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:164:72: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:164:67: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:164:72: Add a return type to the function expression
         protected fnArrowProtectedMethodHasReturn = (cb = function(){ }): string => "S";
                                                           ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:165:50: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:165:55: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:165:50: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:165:55: Add a return type to the function expression
     
         static fnStaticExpressionMethodHasReturn = function foo(cb = function(){ }): number { return 0; }
                                                                      ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:167:61: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:167:66: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:167:61: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:167:66: Add a return type to the function expression
         static fnStaticArrowMethodHasReturn = (cb = function(){ }): string => "S";
                                                     ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:168:44: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:168:49: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:168:44: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:168:49: Add a return type to the function expression
         protected static fnStaticExpressionProtectedMethodHasReturn = function foo(cb = function(){ }): number { return 0; }    
                                                                                         ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:169:80: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:169:85: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:169:80: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:169:85: Add a return type to the function expression
         protected static fnStaticArrowProtectedMethodHasReturn = (cb = function(){ }): string => "S";
                                                                        ~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9601 isolatedDeclarationErrorsReturnTypes.ts:170:63: Add a type annotation to the parameter cb
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:170:68: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9028 isolatedDeclarationErrorsReturnTypes.ts:170:63: Add a type annotation to the parameter cb
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:170:68: Add a return type to the function expression
     
         // Have annotation only on parameter
         fnExpressionOnlyOnParam = function foo(cb = function(): void { }) { return 0; }
                                            ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:173:5: Add a type annotation to the property fnExpressionOnlyOnParam
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:173:40: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:173:5: Add a type annotation to the property fnExpressionOnlyOnParam
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:173:40: Add a return type to the function expression
         fnArrowOnlyOnParam = (cb = function(): void { }) => "S";
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:174:5: Add a type annotation to the property fnArrowOnlyOnParam
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:174:26: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:174:5: Add a type annotation to the property fnArrowOnlyOnParam
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:174:26: Add a return type to the function expression
         protected fnExpressionProtectedOnlyOnParam = function foo(cb = function(): void { }) { return 0; }
                                                               ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:175:15: Add a type annotation to the property fnExpressionProtectedOnlyOnParam
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:175:59: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:175:15: Add a type annotation to the property fnExpressionProtectedOnlyOnParam
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:175:59: Add a return type to the function expression
         protected fnArrowProtectedOnlyOnParam = (cb = function(): void { }) => "S";
                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:176:15: Add a type annotation to the property fnArrowProtectedOnlyOnParam
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:176:45: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:176:15: Add a type annotation to the property fnArrowProtectedOnlyOnParam
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:176:45: Add a return type to the function expression
     
         static fnStaticExpressionOnlyOnParam = function foo(cb = function(): void{ }) { return 0; }
                                                         ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:178:12: Add a type annotation to the property fnStaticExpressionOnlyOnParam
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:178:53: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:178:12: Add a type annotation to the property fnStaticExpressionOnlyOnParam
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:178:53: Add a return type to the function expression
         static fnStaticArrowOnlyOnParam = (cb = function(): void{ }) => "S";
                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:179:12: Add a type annotation to the property fnStaticArrowOnlyOnParam
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:179:39: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:179:12: Add a type annotation to the property fnStaticArrowOnlyOnParam
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:179:39: Add a return type to the function expression
         protected static fnStaticExpressionProtectedOnlyOnParam = function foo(cb = function(): void{ }) { return 0; }    
                                                                            ~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:180:22: Add a type annotation to the property fnStaticExpressionProtectedOnlyOnParam
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:180:72: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:180:22: Add a type annotation to the property fnStaticExpressionProtectedOnlyOnParam
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:180:72: Add a return type to the function expression
         protected static fnStaticArrowProtectedOnlyOnParam = (cb = function(): void{ }) => "S";
                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9507: Function must have an explicit type annotation with with --isolatedDeclarations
-!!! related TS9602 isolatedDeclarationErrorsReturnTypes.ts:181:22: Add a type annotation to the property fnStaticArrowProtectedOnlyOnParam
-!!! related TS9603 isolatedDeclarationErrorsReturnTypes.ts:181:58: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9029 isolatedDeclarationErrorsReturnTypes.ts:181:22: Add a type annotation to the property fnStaticArrowProtectedOnlyOnParam
+!!! related TS9030 isolatedDeclarationErrorsReturnTypes.ts:181:58: Add a return type to the function expression
     
         // Have annotation, so ok 
         fnExpressionOk = function foo(cb = function(): void { }): number { return 0; }
