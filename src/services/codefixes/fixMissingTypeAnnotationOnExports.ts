@@ -304,7 +304,7 @@ function withChanges<T>(
                 sourceFile,
                 targetNode.end,
                 createAsExpression(
-                    getSynthesizedDeepClone(targetNode),
+                    getSynthesizedDeepClone(targetNode.name),
                     typeNode,
                 ),
                 {
