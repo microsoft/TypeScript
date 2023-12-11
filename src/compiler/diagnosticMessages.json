@@ -6842,6 +6842,14 @@
         "category": "Error",
         "code": 9035
     },
+    "Move the expression in default export to a variable and add a type annotation to it.": {
+        "category": "Error",
+        "code": 9036
+    },
+    "Default exports can't be inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9037
+    },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",
         "code": 17000

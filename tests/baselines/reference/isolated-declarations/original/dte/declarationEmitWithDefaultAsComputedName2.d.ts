@@ -33,7 +33,7 @@ export default _default;
 
 /// [Errors] ////
 
-other.ts(7,16): error TS9013: Expression type can't be inferred with --isolatedDeclarations
+other.ts(7,16): error TS9037: Default exports can't be inferred with --isolatedDeclarations.
 
 
 ==== other.ts (1 errors) ====
@@ -49,7 +49,8 @@ other.ts(7,16): error TS9013: Expression type can't be inferred with --isolatedD
     ~~~~~~~~~~~~~~~
     });
     ~~
-!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations
+!!! error TS9037: Default exports can't be inferred with --isolatedDeclarations.
+!!! related TS9036 other.ts:7:1: Move the expression in default export to a variable and add a type annotation to it.
     
 ==== main.ts (0 errors) ====
     import * as other2 from "./other";

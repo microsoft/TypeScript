@@ -29,7 +29,7 @@ export default _default;
 //# sourceMappingURL=index.d.ts.map
 /// [Errors] ////
 
-/index.ts(4,16): error TS9013: Expression type can't be inferred with --isolatedDeclarations
+/index.ts(4,16): error TS9037: Default exports can't be inferred with --isolatedDeclarations.
 
 
 ==== /node_modules/.prisma/client/index.d.ts (0 errors) ====
@@ -50,5 +50,6 @@ export default _default;
     const EnhancedPrisma = enhancePrisma(PrismaClient);
     export default new EnhancedPrisma();
                    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations
+!!! error TS9037: Default exports can't be inferred with --isolatedDeclarations.
+!!! related TS9036 /index.ts:4:1: Move the expression in default export to a variable and add a type annotation to it.
     

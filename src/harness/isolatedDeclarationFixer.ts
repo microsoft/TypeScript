@@ -18,6 +18,7 @@ export const isolatedDeclarationsErrors = new Set([
     ts.Diagnostics.Objects_that_contain_shorthand_properties_can_t_be_inferred_with_isolatedDeclarations,
     ts.Diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations,
     ts.Diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations,
+    ts.Diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations,
     ts.Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations,
     ts.Diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations,
     ts.Diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations,

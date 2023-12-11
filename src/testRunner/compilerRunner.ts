@@ -595,6 +595,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         ts.Diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations,
         ts.Diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations,
         ts.Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations,
         ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
         ts.Diagnostics.Inference_from_class_expressions_is_not_supported_with_isolatedDeclarations,
     ].map(d => d.code));

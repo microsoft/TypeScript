@@ -124,6 +124,7 @@ const errorCodes = [
     Diagnostics.Objects_that_contain_shorthand_properties_can_t_be_inferred_with_isolatedDeclarations,
     Diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations,
     Diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations,
+    Diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations,
     Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations,
     Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
 ].map(d => d.code);

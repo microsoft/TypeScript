@@ -126,6 +126,7 @@ const relatedSuggestionByDeclarationKind = {
     [SyntaxKind.VariableDeclaration]: Diagnostics.Add_a_type_annotation_to_the_variable_0,
     [SyntaxKind.PropertyDeclaration]: Diagnostics.Add_a_type_annotation_to_the_property_0,
     [SyntaxKind.PropertySignature]: Diagnostics.Add_a_type_annotation_to_the_property_0,
+    [SyntaxKind.ExportAssignment]: Diagnostics.Move_the_expression_in_default_export_to_a_variable_and_add_a_type_annotation_to_it,
 } satisfies Partial<Record<SyntaxKind, DiagnosticMessage>>;
 
 const errorByDeclarationKind = {
@@ -143,6 +144,7 @@ const errorByDeclarationKind = {
     [SyntaxKind.SpreadAssignment]: Diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations,
     [SyntaxKind.ShorthandPropertyAssignment]: Diagnostics.Objects_that_contain_shorthand_properties_can_t_be_inferred_with_isolatedDeclarations,
     [SyntaxKind.ArrayLiteralExpression]: Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations,
+    [SyntaxKind.ExportAssignment]: Diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations,
     [SyntaxKind.SpreadElement]: Diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations,
 } satisfies Partial<Record<SyntaxKind, DiagnosticMessage>>;
 
@@ -241,8 +243,8 @@ export function createLocalInferenceResolver({
     }
 
     function findNearestDeclaration(node: Node) {
-        const result = findAncestor(node, n => isStatement(n) ? "quit" : isVariableDeclaration(n) || isPropertyDeclaration(n) || isParameter(n));
-        return result as VariableDeclaration | PropertyDeclaration | ParameterDeclaration | undefined;
+        const result = findAncestor(node, n => isExportAssignment(n) || (isStatement(n) ? "quit" : isVariableDeclaration(n) || isPropertyDeclaration(n) || isParameter(n)));
+        return result as VariableDeclaration | PropertyDeclaration | ParameterDeclaration | ExportAssignment | undefined;
     }
 
     function createAccessorTypeError(getAccessor: GetAccessorDeclaration | undefined, setAccessor: SetAccessorDeclaration | undefined) {
@@ -263,7 +265,7 @@ export function createLocalInferenceResolver({
         const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
         const parentDeclaration = findNearestDeclaration(node);
         if (parentDeclaration) {
-            const targetStr = getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            const targetStr = isExportAssignment(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
             addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
         }
         return diag;
@@ -272,7 +274,7 @@ export function createLocalInferenceResolver({
         const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
         const parentDeclaration = findNearestDeclaration(node);
         if (parentDeclaration) {
-            const targetStr = getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            const targetStr = isExportAssignment(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
             addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
         }
         return diag;
@@ -281,7 +283,7 @@ export function createLocalInferenceResolver({
         const diag = createDiagnosticForNode(node, errorByDeclarationKind[node.kind]);
         const parentDeclaration = findNearestDeclaration(node);
         if (parentDeclaration) {
-            const targetStr = getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            const targetStr = isExportAssignment(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
             addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
         }
         addRelatedInfo(diag, createDiagnosticForNode(node, relatedSuggestionByDeclarationKind[node.kind]));
@@ -310,8 +312,8 @@ export function createLocalInferenceResolver({
         const parentDeclaration = findNearestDeclaration(node);
         let diag: DiagnosticWithLocation;
         if (parentDeclaration) {
-            const targetStr = getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
-            const parent = findAncestor(node.parent, n => isStatement(n) ? "quit" : !isParenthesizedExpression(n) && !isTypeAssertionExpression(n) && !isAsExpression(n));
+            const targetStr = isExportAssignment(parentDeclaration) ? "" : getTextOfNode(parentDeclaration.name, /*includeTrivia*/ false);
+            const parent = findAncestor(node.parent, n => isExportAssignment(n) || (isStatement(n) ? "quit" : !isParenthesizedExpression(n) && !isTypeAssertionExpression(n) && !isAsExpression(n)));
             if (parentDeclaration === parent) {
                 diag = createDiagnosticForNode(node, errorByDeclarationKind[parentDeclaration.kind]);
                 addRelatedInfo(diag, createDiagnosticForNode(parentDeclaration, relatedSuggestionByDeclarationKind[parentDeclaration.kind], targetStr));
