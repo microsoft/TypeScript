@@ -45010,15 +45010,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!(nodeLinks.flags & NodeCheckFlags.EnumValuesComputed)) {
             nodeLinks.flags |= NodeCheckFlags.EnumValuesComputed;
             let autoValue: number | undefined = 0;
+            let previous: EnumMember | undefined;
             for (const member of node.members) {
-                const value = computeMemberValue(member, autoValue);
+                const value = computeMemberValue(member, autoValue, previous);
                 getNodeLinks(member).enumMemberValue = value;
                 autoValue = typeof value === "number" ? value + 1 : undefined;
+                previous = member;
             }
         }
     }
 
-    function computeMemberValue(member: EnumMember, autoValue: number | undefined) {
+    function computeMemberValue(member: EnumMember, autoValue: number | undefined, previous: EnumMember | undefined) {
         if (isComputedNonLiteralName(member.name)) {
             error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
         }
@@ -45040,11 +45042,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // If the member is the first member in the enum declaration, it is assigned the value zero.
         // Otherwise, it is assigned the value of the immediately preceding member plus one, and an error
         // occurs if the immediately preceding member is not a constant enum member.
-        if (autoValue !== undefined) {
-            return autoValue;
+        if (autoValue === undefined) {
+            error(member.name, Diagnostics.Enum_member_must_have_initializer);
+            return undefined;
         }
-        error(member.name, Diagnostics.Enum_member_must_have_initializer);
-        return undefined;
+        if (compilerOptions.isolatedModules && previous?.initializer && !evaluatesToNumericLiteral(previous.initializer)) {
+            error(
+                member.name,
+                Diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled,
+            );
+        }
+        return autoValue;
     }
 
     function computeConstantValue(member: EnumMember): string | number | undefined {
@@ -45060,6 +45068,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value,
                 );
             }
+            else if (compilerOptions.isolatedModules && typeof value === "string" && !evaluatesToStringLiteral(initializer)) {
+                error(
+                    initializer,
+                    Diagnostics.A_member_initializer_in_a_enum_declaration_for_a_string_value_must_be_a_string_literal_when_isolatedModules_is_enabled,
+                );
+            }
         }
         else if (isConstEnum) {
             error(initializer, Diagnostics.const_enum_member_initializers_must_be_constant_expressions);
@@ -45071,6 +45085,44 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             checkTypeAssignableTo(checkExpression(initializer), numberType, initializer, Diagnostics.Type_0_is_not_assignable_to_type_1_as_required_for_computed_enum_member_values);
         }
         return value;
+    }
+
+    function evaluatesToNumericLiteral(expr: Expression): boolean {
+        switch (expr.kind) {
+            case SyntaxKind.PrefixUnaryExpression:
+                return evaluatesToNumericLiteral((expr as PrefixUnaryExpression).operand);
+            case SyntaxKind.BinaryExpression:
+                return evaluatesToNumericLiteral((expr as BinaryExpression).left) && evaluatesToNumericLiteral((expr as BinaryExpression).right);
+            case SyntaxKind.ParenthesizedExpression:
+                return evaluatesToNumericLiteral((expr as ParenthesizedExpression).expression);
+            case SyntaxKind.NumericLiteral:
+                return true;
+        }
+        return false;
+    }
+
+    function evaluatesToStringLiteral(expr: Expression): boolean {
+        switch (expr.kind) {
+            case SyntaxKind.BinaryExpression:
+                const left = (expr as BinaryExpression).left;
+                const right = (expr as BinaryExpression).right;
+                const leftIsNumeric = evaluatesToNumericLiteral(left);
+                const rightIsNumeric = evaluatesToNumericLiteral(right);
+                return (
+                    !(leftIsNumeric && rightIsNumeric) &&
+                    (evaluatesToStringLiteral(left) || leftIsNumeric) &&
+                    (evaluatesToStringLiteral(right) || rightIsNumeric) &&
+                    (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
+                );
+            case SyntaxKind.TemplateExpression:
+                return (expr as TemplateExpression).templateSpans.every(span => evaluatesToStringLiteral(span.expression));
+            case SyntaxKind.ParenthesizedExpression:
+                return evaluatesToStringLiteral((expr as ParenthesizedExpression).expression);
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return true;
+        }
+        return false;
     }
 
     function evaluate(expr: Expression, location?: Declaration): string | number | undefined {

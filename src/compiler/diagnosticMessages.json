@@ -7936,5 +7936,13 @@
     "'await using' statements cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18054
+    },
+    "A member initializer in a enum declaration for a string value must be a string literal when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 18055
+    },
+    "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 18056
     }
 }
