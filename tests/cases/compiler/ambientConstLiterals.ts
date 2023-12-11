@@ -1,5 +1,5 @@
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: TODO: Printing differences. Seems avoidable.
+// @isolatedDeclarationFixedDiffReason: We made this is an error, thus the auto-fixer is trying to fix it. Although it's possible syntactically to figure out that E is an enum, I think we should rather make this an error for now.
 
 function f<T>(x: T): T {
     return x;

@@ -1,4 +1,4 @@
-// [[Reason: TODO: Files in node modules are not fixed. Should we?]] ////
+// [[Reason: checker.typeToTypeNode deliberately fails on types that originate from node_modules]] ////
 
 //// [tests/cases/compiler/moduleResolutionWithSuffixes_one_externalTSModule.ts] ////
 

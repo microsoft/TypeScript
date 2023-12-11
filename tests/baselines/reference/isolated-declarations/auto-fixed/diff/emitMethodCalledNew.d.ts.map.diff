@@ -1,4 +1,4 @@
-// [[Reason: TODO: new is not correctly emitted.]] ////
+// [[Reason: Source maps difference.]] ////
 
 //// [tests/cases/compiler/emitMethodCalledNew.ts] ////
 

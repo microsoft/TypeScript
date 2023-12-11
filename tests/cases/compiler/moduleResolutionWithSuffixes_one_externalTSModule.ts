@@ -1,5 +1,5 @@
 // moduleSuffixes has one entry and there's a matching package with TS files.
-// @isolatedDeclarationDiffReason: TODO: Files in node modules are not fixed. Should we?
+// @isolatedDeclarationDiffReason: checker.typeToTypeNode deliberately fails on types that originate from node_modules
 // @fullEmitPaths: true
 // @filename: /tsconfig.json
 {
