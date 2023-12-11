@@ -158,6 +158,7 @@ describe("unittests:: canWatch::", () => {
         getPathsOfDifferentFoldersWithUsers("user");
         getPathsOfDifferentFoldersWithUsers("usr");
         getPathsOfDifferentFoldersWithUsers("home");
+        getPathsOfDifferentFoldersWithWorkspaces();
         baselineOsRoot(paths, longestPathLength, baseline);
         Baseline.runBaseline(`canWatch/${scenario}${suffix}.baseline.md`, baseline.join("\r\n"));
         function getPathsOfDifferentFoldersAt(root: ts.Path) {
@@ -174,6 +175,9 @@ describe("unittests:: canWatch::", () => {
             const users = combinePaths(osRoot, usersType);
             paths.push(users);
             getPathsOfDifferentFoldersAt(combinePaths(users, "username"));
+        }
+        function getPathsOfDifferentFoldersWithWorkspaces() {
+            getPathsOfDifferentFoldersAt(combinePaths(osRoot, "workspaces"));
         }
     }
 

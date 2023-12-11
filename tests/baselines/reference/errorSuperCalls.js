@@ -146,8 +146,7 @@ var Derived = /** @class */ (function (_super) {
     //super call with type arguments 
     function Derived() {
         var _this = _super.call(this) || this;
-        _this = _super.call(this) || this;
-        return _this;
+        return _super.call(this) || this;
     }
     return Derived;
 }(Base));

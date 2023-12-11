@@ -1,0 +1,86 @@
+// @strict: true
+// @noEmit: true
+
+class Base {
+    basey: string = "";
+}
+
+class Derived1 extends Base {
+    d: string = "";
+}
+
+class Derived2 extends Base {
+    d: string = "";
+    other: string = "";
+}
+
+function classy(base: Base, someDerived: Derived1 | Derived2) {
+    switch (true) {
+        case base instanceof Derived1:
+            base.d
+            // fallthrough
+        default:
+            base.basey
+    }
+
+    switch (true) {
+        case someDerived instanceof Derived1:
+            someDerived.d
+            break;
+        case someDerived instanceof Derived2:
+            someDerived.d
+            break
+        default:
+            const never: never = someDerived;
+    }
+
+    switch (true) {
+        case someDerived instanceof Derived1:
+            someDerived.d
+            // fallthrough
+        case someDerived instanceof Derived2:
+            someDerived.d
+            break
+        default:
+            const never: never = someDerived;
+    }
+
+    switch (true) {
+        default:
+            const never: never = someDerived;
+        case someDerived instanceof Derived1:
+            someDerived.d;
+            someDerived.basey;
+            break
+        case someDerived instanceof Derived2:
+            someDerived.d;
+            someDerived.other;
+    }
+
+    switch (true) {
+        case someDerived instanceof Derived1:
+            someDerived.d;
+            someDerived.basey;
+            break
+        default:
+            const never: never = someDerived;
+        case someDerived instanceof Derived2:
+            someDerived.d;
+            someDerived.other;
+    }
+
+    switch (true) {
+        case someDerived instanceof Derived1:
+            someDerived.d;
+            someDerived.basey;
+            break
+        case someDerived instanceof Derived2:
+            someDerived.d;
+            someDerived.other;
+        default:
+            someDerived.d;
+            someDerived.other;
+            const never: never = someDerived;
+    }
+
+}

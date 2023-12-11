@@ -12,6 +12,7 @@ import {
     DiagnosticMessage,
     Diagnostics,
     identity,
+    JSDocParsingMode,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
@@ -21,6 +22,7 @@ import {
     parsePseudoBigInt,
     positionIsSynthesized,
     PunctuationOrKeywordSyntaxKind,
+    ScriptKind,
     ScriptTarget,
     SourceFileLike,
     SyntaxKind,
@@ -95,6 +97,8 @@ export interface Scanner {
     setOnError(onError: ErrorCallback | undefined): void;
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
+    setScriptKind(scriptKind: ScriptKind): void;
+    setJSDocParsingMode(kind: JSDocParsingMode): void;
     /** @deprecated use {@link resetTokenState} */
     setTextPos(textPos: number): void;
     resetTokenState(pos: number): void;
@@ -342,6 +346,8 @@ const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)
  * Test for whether a multi-line comment with leading whitespace trimmed's last line contains a directive.
  */
 const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
+
+const jsDocSeeOrLink = /@(?:see|link)/i;
 
 function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     // Bail out quickly if it couldn't possibly be in the map.
@@ -1001,6 +1007,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     var commentDirectives: CommentDirective[] | undefined;
     var inJSDocType = 0;
 
+    var scriptKind = ScriptKind.Unknown;
+    var jsDocParsingMode = JSDocParsingMode.ParseAll;
+
     setText(text, start, length);
 
     var scanner: Scanner = {
@@ -1045,6 +1054,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         setText,
         setScriptTarget,
         setLanguageVariant,
+        setScriptKind,
+        setJSDocParsingMode,
         setOnError,
         resetTokenState,
         setTextPos: resetTokenState,
@@ -1352,7 +1363,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 start = pos;
                 continue;
             }
-            if (isLineBreak(ch) && !jsxAttributeString) {
+
+            if ((ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn) && !jsxAttributeString) {
                 result += text.substring(start, pos);
                 tokenFlags |= TokenFlags.Unterminated;
                 error(Diagnostics.Unterminated_string_literal);
@@ -1971,9 +1983,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     // Multi-line comment
                     if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                         pos += 2;
-                        if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash) {
-                            tokenFlags |= TokenFlags.PrecedingJSDocComment;
-                        }
+                        const isJSDoc = text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash;
 
                         let commentClosed = false;
                         let lastLineStart = tokenStart;
@@ -1992,6 +2002,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 lastLineStart = pos;
                                 tokenFlags |= TokenFlags.PrecedingLineBreak;
                             }
+                        }
+
+                        if (isJSDoc && shouldParseJSDoc()) {
+                            tokenFlags |= TokenFlags.PrecedingJSDocComment;
                         }
 
                         commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
@@ -2273,6 +2287,28 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     return token = SyntaxKind.Unknown;
             }
         }
+    }
+
+    function shouldParseJSDoc() {
+        switch (jsDocParsingMode) {
+            case JSDocParsingMode.ParseAll:
+                return true;
+            case JSDocParsingMode.ParseNone:
+                return false;
+        }
+
+        if (scriptKind !== ScriptKind.TS && scriptKind !== ScriptKind.TSX) {
+            // If outside of TS, we need JSDoc to get any type info.
+            return true;
+        }
+
+        if (jsDocParsingMode === JSDocParsingMode.ParseForTypeInfo) {
+            // If we're in TS, but we don't need to produce reliable errors,
+            // we don't need to parse to find @see or @link.
+            return false;
+        }
+
+        return jsDocSeeOrLink.test(text.slice(fullStartPos, pos));
     }
 
     function reScanInvalidIdentifier(): SyntaxKind {
@@ -2773,6 +2809,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
     function setLanguageVariant(variant: LanguageVariant) {
         languageVariant = variant;
+    }
+
+    function setScriptKind(kind: ScriptKind) {
+        scriptKind = kind;
+    }
+
+    function setJSDocParsingMode(kind: JSDocParsingMode) {
+        jsDocParsingMode = kind;
     }
 
     function resetTokenState(position: number) {
