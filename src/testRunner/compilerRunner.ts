@@ -578,12 +578,25 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             });
     }
     private static dteDiagnosticErrors = new Set([
-        ts.Diagnostics.Function_must_have_an_explicit_type_annotation_with_with_isolatedDeclarations,
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit,
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit,
+        ts.Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations,
+        ts.Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations,
+        ts.Diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations,
+        ts.Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations,
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_which_are_not_supported_with_isolatedDeclarations,
         ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+        ts.Diagnostics.Objects_that_contain_shorthand_properties_can_t_be_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations,
         ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
-        ts.Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations,
+        ts.Diagnostics.Inference_from_class_expressions_is_not_supported_with_isolatedDeclarations,
     ].map(d => d.code));
     protected get baselinePath() {
         return "isolated-declarations/original";
@@ -743,7 +756,7 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         return env;
     }
     private static referenceDirectiveErrors = new Set([
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_which_are_not_supported_with_isolatedDeclarations.code,
         ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
     ]);
     constructor(compilerEnvironment: CompilerTestEnvironment) {

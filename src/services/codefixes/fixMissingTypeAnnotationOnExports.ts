@@ -56,6 +56,7 @@ import {
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isOmittedExpression,
+    isParameter,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
     isPropertyAssignment,
@@ -109,8 +110,21 @@ const addAnnotationFix = "add-annotation";
 const addInlineTypeAssertion = "add-type-assertion";
 const extractExpression = "extract-expression";
 const errorCodes = [
-    Diagnostics.Function_must_have_an_explicit_type_annotation_with_with_isolatedDeclarations,
-    Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit,
+    Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+    Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations,
+    Diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations,
+    Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations,
+    Diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations,
+    Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations,
+    Diagnostics.Objects_that_contain_shorthand_properties_can_t_be_inferred_with_isolatedDeclarations,
+    Diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations,
+    Diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations,
+    Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations,
     Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
 ].map(d => d.code);
 
@@ -244,10 +258,14 @@ function withChanges<T>(
         const expandoFunction = findExpandoFunction(nodeWithDiag);
         // No inline assertions for expando members
         if (expandoFunction) return;
-        const targetNode = findTargetErrorNode(nodeWithDiag, span) as Expression;
+        const targetNode = findTargetErrorNode(nodeWithDiag, span);
         if (!targetNode || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.parent)) return;
         const isExpressionTarget = isExpression(targetNode);
+        const isShorthandPropertyAssignmentTarget = isShorthandPropertyAssignment(targetNode);
 
+        if (!isShorthandPropertyAssignmentTarget && isDeclaration(targetNode)) {
+            return undefined;
+        }
         // No inline assertions on binding patterns
         if (findAncestor(targetNode, isBindingPattern)) {
             return undefined;
@@ -276,7 +294,6 @@ function withChanges<T>(
             return undefined;
         }
 
-        const isShorthandPropertyAssignmentTarget = isIdentifier(targetNode) && isShorthandPropertyAssignment(targetNode.parent);
         if (!(isExpressionTarget || isShorthandPropertyAssignmentTarget)) return undefined;
 
         const { typeNode, mutatedTarget } = inferNodeType(targetNode);
@@ -463,6 +480,9 @@ function withChanges<T>(
             node &&
             node.end < span.start + span.length
         ) {
+            node = node.parent;
+        }
+        while (node.parent.pos === node.pos && node.parent.end === node.end) {
             node = node.parent;
         }
         return node;
@@ -987,6 +1007,9 @@ function withChanges<T>(
     }
 
     function relativeType(node: Node): InferenceResult {
+        if (isParameter(node)) {
+            return emptyInferenceResult;
+        }
         if (isEntityNameExpression(node)) {
             return {
                 typeNode: createTypeOfFromEntityNameExpression(node),
