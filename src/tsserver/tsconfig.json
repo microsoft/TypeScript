@@ -10,7 +10,7 @@
         }
     },
     "references": [
-        { "path": "../typescript" },
+        { "path": "../typescript" }
     ],
     "include": ["**/*"]
 }
