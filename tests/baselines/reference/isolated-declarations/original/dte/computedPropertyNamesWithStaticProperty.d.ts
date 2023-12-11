@@ -34,7 +34,7 @@ declare class C {
 }
 declare class C1 {
     static staticProp: number;
-    get [C1.staticProp](): invalid;
+    get [C1.staticProp](): string;
     set [C1.staticProp](x: string);
     [C1.staticProp](): invalid;
 }
@@ -42,25 +42,22 @@ declare class C1 {
 /// [Errors] ////
 
 computedPropertyNamesWithStaticProperty.ts(2,1): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-computedPropertyNamesWithStaticProperty.ts(4,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 computedPropertyNamesWithStaticProperty.ts(4,10): error TS2449: Class 'C1' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(7,10): error TS2449: Class 'C1' used before its declaration.
-computedPropertyNamesWithStaticProperty.ts(10,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertyNamesWithStaticProperty.ts(10,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
 computedPropertyNamesWithStaticProperty.ts(10,6): error TS2449: Class 'C1' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(15,10): error TS2449: Class 'C2' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(18,10): error TS2449: Class 'C2' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(21,6): error TS2449: Class 'C2' used before its declaration.
 
 
-==== computedPropertyNamesWithStaticProperty.ts (9 errors) ====
+==== computedPropertyNamesWithStaticProperty.ts (8 errors) ====
     class C {
     class C1 {
     ~~~~~
 !!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
         static staticProp = 10;
         get [C1.staticProp]() {
-            ~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
              ~~
 !!! error TS2449: Class 'C1' used before its declaration.
 !!! related TS2728 computedPropertyNamesWithStaticProperty.ts:2:7: 'C1' is declared here.
@@ -74,7 +71,8 @@ computedPropertyNamesWithStaticProperty.ts(21,6): error TS2449: Class 'C2' used 
         }
         [C1.staticProp]() { }
         ~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! related TS9034 computedPropertyNamesWithStaticProperty.ts:10:5: Add a return type to the method
          ~~
 !!! error TS2449: Class 'C1' used before its declaration.
 !!! related TS2728 computedPropertyNamesWithStaticProperty.ts:2:7: 'C1' is declared here.
