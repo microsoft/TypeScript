@@ -471,7 +471,7 @@ class SystemLoader extends Loader<SystemModule> {
             for (const dependency of module.dependencies) {
                 this.evaluateModule(dependency, stack);
             }
-            module.declaration?.execute?.();
+            module.declaration?.execute();
             module.state = SystemModuleState.Ready;
         }
         catch (e) {

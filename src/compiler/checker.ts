@@ -6597,7 +6597,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowThisInObjectLiteral)) {
                         context.encounteredError = true;
                     }
-                    context.tracker.reportInaccessibleThisError?.();
+                    context.tracker.reportInaccessibleThisError();
                 }
                 context.approximateLength += 4;
                 return factory.createThisTypeNode();
@@ -6767,7 +6767,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (context.visitedTypes?.has(getTypeId(type))) {
                         if (!(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
                             context.encounteredError = true;
-                            context.tracker?.reportCyclicStructureError?.();
+                            context.tracker?.reportCyclicStructureError();
                         }
                         return createElidedInformationPlaceholder(context);
                     }
@@ -9279,7 +9279,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             const localName = getInternalSymbolName(s, name);
                             const aliasDecl = s.declarations && getDeclarationOfAliasSymbol(s);
                             if (containingFile && (aliasDecl ? containingFile !== getSourceFileOfNode(aliasDecl) : !some(s.declarations, d => getSourceFileOfNode(d) === containingFile))) {
-                                context.tracker?.reportNonlocalAugmentation?.(containingFile, symbol, s);
+                                context.tracker?.reportNonlocalAugmentation(containingFile, symbol, s);
                                 return undefined;
                             }
                             const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
