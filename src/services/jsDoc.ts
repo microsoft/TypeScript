@@ -259,14 +259,14 @@ export function getJsDocTagsFromDeclarations(declarations?: Declaration[], check
         }
         for (const tag of tags) {
             infos.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
-            infos.push(...getJSDocPropertyTagsInfo(tag, checker));
+            infos.push(...getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(tag), checker));
         }
     });
     return infos;
 }
 
-function getJSDocPropertyTagsInfo(node: JSDocTag, checker: TypeChecker | undefined): readonly JSDocTagInfo[] {
-    return flatMap(tryGetJSDocPropertyTags(node), propTag => concatenate([{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }], tryGetJSDocPropertyTags(propTag) ? getJSDocPropertyTagsInfo(propTag, checker) : undefined));
+function getJSDocPropertyTagsInfo(nodes: readonly JSDocTag[] | undefined, checker: TypeChecker | undefined): readonly JSDocTagInfo[] {
+    return flatMap(nodes, propTag => concatenate([{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }], getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(propTag), checker)));
 }
 
 function tryGetJSDocPropertyTags(node: JSDocTag) {
