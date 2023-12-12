@@ -2685,7 +2685,7 @@ export function isCommonJsExportPropertyAssignment(node: Node) {
 export function isValidESSymbolDeclaration(node: Node): boolean {
     return (isVariableDeclaration(node) ? isVarConst(node) && isIdentifier(node.name) && isVariableDeclarationInVariableStatement(node) :
         isPropertyDeclaration(node) ? hasEffectiveReadonlyModifier(node) && hasStaticModifier(node) :
-        isPropertySignature(node) && hasEffectiveReadonlyModifier(node)) || isCommonJsExportPropertyAssignment(node);
+        isPropertySignature(node) && hasEffectiveReadonlyModifier(node)) || isCommonJsExportPropertyAssignment(node) || isJSDocTypeExpression(node);
 }
 
 /** @internal */
