@@ -655,7 +655,12 @@ class IsolatedDeclarationTest extends CompilerTestBase {
     }
 
     verifyDiff() {
-        if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
+        if (this.isOutputEquivalent && this.isDiagnosticEquivalent) {
+            if (this.isOutputMapEquivalent) {
+                ts.Debug.assert(this.diffReason === undefined, "Should not have a diff reason if everything is equivalent");
+            }
+            return;
+        }
         Compiler.doDeclarationDiffBaseline(
             this.configuredName,
             this.baselinePath + "/diff",
