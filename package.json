@@ -78,7 +78,7 @@
         "playwright": "^1.38.0",
         "source-map-support": "^0.5.21",
         "tslib": "^2.5.0",
-        "typescript": "^5.3.2",
+        "typescript": "5.4.0-dev.20231206",
         "which": "^2.0.2"
     },
     "overrides": {
@@ -91,7 +91,6 @@
         "build:compiler": "hereby local",
         "build:tests": "hereby tests",
         "build:tests:notypecheck": "hereby tests --no-typecheck",
-        "start": "node lib/tsc",
         "clean": "hereby clean",
         "gulp": "hereby",
         "lint": "hereby lint",
