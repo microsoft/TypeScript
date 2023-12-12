@@ -617,6 +617,11 @@ export function transformDeclarations(context: TransformationContext) {
 
         function mapReferencesIntoArray(references: FileReference[], outputFilePath: string): (file: SourceFile) => void {
             return file => {
+                if (exportedModulesFromDeclarationEmit?.includes(file.symbol)) {
+                    // Already have an import declaration resolving to this file
+                    return;
+                }
+
                 let declFileName: string;
                 if (file.isDeclarationFile) { // Neither decl files or js should have their refs changed
                     declFileName = file.fileName;
@@ -1798,7 +1803,11 @@ export function transformDeclarations(context: TransformationContext) {
                         if (shouldStripInternal(m)) return;
                         // Rewrite enum values to their constants, if available
                         const constValue = resolver.getConstantValue(m);
-                        return preserveJsDoc(factory.updateEnumMember(m, m.name, constValue !== undefined ? typeof constValue === "string" ? factory.createStringLiteral(constValue) : factory.createNumericLiteral(constValue) : undefined), m);
+                        const newInitializer = constValue === undefined ? undefined
+                            : typeof constValue === "string" ? factory.createStringLiteral(constValue)
+                            : constValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constValue))
+                            : factory.createNumericLiteral(constValue);
+                        return preserveJsDoc(factory.updateEnumMember(m, m.name, newInitializer), m);
                     })),
                 ));
             }

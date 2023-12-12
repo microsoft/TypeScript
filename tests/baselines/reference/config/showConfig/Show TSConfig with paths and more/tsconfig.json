@@ -25,7 +25,8 @@
         },
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true
     },
     "include": [
         "./src/**/*"
