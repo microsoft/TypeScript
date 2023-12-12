@@ -617,6 +617,11 @@ export function transformDeclarations(context: TransformationContext) {
 
         function mapReferencesIntoArray(references: FileReference[], outputFilePath: string): (file: SourceFile) => void {
             return file => {
+                if (exportedModulesFromDeclarationEmit?.includes(file.symbol)) {
+                    // Already have an import declaration resolving to this file
+                    return;
+                }
+
                 let declFileName: string;
                 if (file.isDeclarationFile) { // Neither decl files or js should have their refs changed
                     declFileName = file.fileName;
