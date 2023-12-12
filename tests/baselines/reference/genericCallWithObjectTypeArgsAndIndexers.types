@@ -44,7 +44,7 @@ function other<T extends Date>(arg: T) {
     var r2 = foo(b);
 >r2 : { [x: string]: Object; [x: number]: T; }
 >foo(b) : { [x: string]: Object; [x: number]: T; }
->foo : <T>(x: T) => T
+>foo : <T_1>(x: T_1) => T_1
 >b : { [x: string]: Object; [x: number]: T; }
 
     var d = r2[1]; 

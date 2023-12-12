@@ -1,0 +1,102 @@
+// === Inlay Hints ===
+function foo1 () {
+                ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    }
+  ],
+  "position": 16,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+    foo() {
+         ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    }
+  ],
+  "position": 95,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+    bar() {
+         ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "this"
+    }
+  ],
+  "position": 130,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const a = () => 1
+            ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    }
+  ],
+  "position": 173,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const b = function () { return 1 }
+                     ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    }
+  ],
+  "position": 200,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+const c = (b) => 1
+             ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    }
+  ],
+  "position": 227,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

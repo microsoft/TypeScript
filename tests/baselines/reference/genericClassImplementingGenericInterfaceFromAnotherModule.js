@@ -22,11 +22,11 @@ var bar;
 
 
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.d.ts]
-declare module foo {
+declare namespace foo {
     interface IFoo<T> {
     }
 }
-declare module bar {
+declare namespace bar {
     class Foo<T> implements foo.IFoo<T> {
     }
 }

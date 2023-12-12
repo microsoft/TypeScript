@@ -41,7 +41,7 @@ type T30 = { [P in keyof any]: void };
 >T30 : { [x: string]: void; }
 
 type T31 = { [P in keyof string]: void };
->T31 : { [x: number]: void; toString: void; charAt: void; charCodeAt: void; concat: void; indexOf: void; lastIndexOf: void; localeCompare: void; match: void; replace: void; search: void; slice: void; split: void; substring: void; toLowerCase: void; toLocaleLowerCase: void; toUpperCase: void; toLocaleUpperCase: void; trim: void; readonly length: void; substr: void; valueOf: void; }
+>T31 : { readonly [x: number]: void; toString: void; charAt: void; charCodeAt: void; concat: void; indexOf: void; lastIndexOf: void; localeCompare: void; match: void; replace: void; search: void; slice: void; split: void; substring: void; toLowerCase: void; toLocaleLowerCase: void; toUpperCase: void; toLocaleUpperCase: void; trim: void; readonly length: void; substr: void; valueOf: void; }
 
 type T32 = { [P in keyof number]: void };
 >T32 : { toString: void; toFixed: void; toExponential: void; toPrecision: void; valueOf: void; toLocaleString: void; }

@@ -1,15 +1,19 @@
-import { getServerHosForLibResolution } from "../helpers/libraryResolution";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
+    getServerHostForLibResolution,
+} from "../helpers/libraryResolution";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
-    openFilesForSession
+    openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 
 describe("unittests:: tsserver:: libraryResolution", () => {
     it("with config", () => {
-        const host = getServerHosForLibResolution();
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const host = getServerHostForLibResolution();
+        const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project1/index.ts"], session);
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
         host.runQueuedTimeoutCallbacks();
@@ -20,23 +24,29 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.runQueuedTimeoutCallbacks();
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts");
         host.runQueuedTimeoutCallbacks();
-        host.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                typeRoots: ["./typeroot1", "./typeroot2"],
-                lib: ["es5", "dom"],
-                traceResolution: true,
-            },
-        }));
+        host.writeFile(
+            "/home/src/projects/project1/tsconfig.json",
+            jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    typeRoots: ["./typeroot1", "./typeroot2"],
+                    lib: ["es5", "dom"],
+                    traceResolution: true,
+                },
+            }),
+        );
         host.runQueuedTimeoutCallbacks();
-        host.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                typeRoots: ["./typeroot1"],
-                lib: ["es5", "dom"],
-                traceResolution: true,
-            },
-        }));
+        host.writeFile(
+            "/home/src/projects/project1/tsconfig.json",
+            jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    typeRoots: ["./typeroot1"],
+                    lib: ["es5", "dom"],
+                    traceResolution: true,
+                },
+            }),
+        );
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
         host.runQueuedTimeoutCallbacks();
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts", content: "interface WebWorkerInterface { }" });
@@ -47,8 +57,8 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         baselineTsserverLogs("libraryResolution", "with config", session);
     });
     it("with config with redirection", () => {
-        const host = getServerHosForLibResolution(/*libRedirection*/ true);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const host = getServerHostForLibResolution(/*libRedirection*/ true);
+        const session = new TestSession(host);
         openFilesForSession(["/home/src/projects/project1/index.ts"], session);
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts");
         host.runQueuedTimeoutCallbacks();
@@ -59,23 +69,29 @@ describe("unittests:: tsserver:: libraryResolution", () => {
         host.ensureFileOrFolder({ path: "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts", content: "interface DOMInterface { }" });
         host.runQueuedTimeoutCallbacks();
         host.runQueuedTimeoutCallbacks();
-        host.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                typeRoots: ["./typeroot1", "./typeroot2"],
-                lib: ["es5", "dom"],
-                traceResolution: true,
-            },
-        }));
+        host.writeFile(
+            "/home/src/projects/project1/tsconfig.json",
+            jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    typeRoots: ["./typeroot1", "./typeroot2"],
+                    lib: ["es5", "dom"],
+                    traceResolution: true,
+                },
+            }),
+        );
         host.runQueuedTimeoutCallbacks();
-        host.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-            compilerOptions: {
-                composite: true,
-                typeRoots: ["./typeroot1"],
-                lib: ["es5", "dom"],
-                traceResolution: true,
-            },
-        }));
+        host.writeFile(
+            "/home/src/projects/project1/tsconfig.json",
+            jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    typeRoots: ["./typeroot1"],
+                    lib: ["es5", "dom"],
+                    traceResolution: true,
+                },
+            }),
+        );
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts");
         host.runQueuedTimeoutCallbacks();
         host.deleteFile("/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts");

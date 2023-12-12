@@ -138,11 +138,11 @@ exports.newVar2 = new extMod.m4.m2.c();
 
 //// [commentsExternalModules2_0.d.ts]
 /** Module comment*/
-export declare module m1 {
+export declare namespace m1 {
     /** b's comment*/
     var b: number;
     /** m2 comments*/
-    module m2 {
+    namespace m2 {
         /** class comment;*/
         class c {
         }
@@ -153,12 +153,12 @@ export declare module m1 {
     function fooExport(): number;
 }
 /** Module comment */
-export declare module m4 {
+export declare namespace m4 {
     /** b's comment */
     var b: number;
     /** m2 comments
     */
-    module m2 {
+    namespace m2 {
         /** class comment; */
         class c {
         }

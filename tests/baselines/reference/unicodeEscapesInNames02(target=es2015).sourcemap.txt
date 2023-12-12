@@ -75,6 +75,7 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 5 >         ^^^^^^
 6 >               ^^
 7 >                 ^^
+8 >                   ^
 1->
   >
   >
@@ -84,6 +85,7 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 5 >         random
 6 >               ()
 7 >                 ) 
+8 >                   {
 1->Emitted(6, 1) Source(8, 1) + SourceIndex(0)
 2 >Emitted(6, 5) Source(8, 5) + SourceIndex(0)
 3 >Emitted(6, 9) Source(8, 9) + SourceIndex(0)
@@ -91,6 +93,7 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 5 >Emitted(6, 16) Source(8, 16) + SourceIndex(0)
 6 >Emitted(6, 18) Source(8, 18) + SourceIndex(0)
 7 >Emitted(6, 20) Source(8, 20) + SourceIndex(0)
+8 >Emitted(6, 21) Source(8, 21) + SourceIndex(0)
 ---
 >>>    𐊧 = "hello";
 1 >^^^^
@@ -98,7 +101,7 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 3 >      ^^^
 4 >         ^^^^^^^
 5 >                ^
-1 >{
+1 >
   >    
 2 >    𐊧
 3 >       = 
@@ -111,18 +114,24 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 5 >Emitted(7, 18) Source(9, 18) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^->
 1 >
-  >}
-1 >Emitted(8, 2) Source(10, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(8, 1) Source(10, 1) + SourceIndex(0)
+2 >Emitted(8, 2) Source(10, 2) + SourceIndex(0)
 ---
 >>>else {
 1->^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^->
+2 >     ^
+3 >      ^^^^^^^^^^^^^^^^^^^->
 1->
   >else 
+2 >     {
 1->Emitted(9, 6) Source(11, 6) + SourceIndex(0)
+2 >Emitted(9, 7) Source(11, 7) + SourceIndex(0)
 ---
 >>>    \u{102A7} = "hallo";
 1->^^^^
@@ -130,7 +139,7 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 3 >             ^^^
 4 >                ^^^^^^^
 5 >                       ^
-1->{
+1->
   >    
 2 >    \u{102A7}
 3 >              = 
@@ -143,11 +152,14 @@ sourceFile:extendedEscapesForAstralsInVarsAndClasses.ts
 5 >Emitted(10, 25) Source(12, 25) + SourceIndex(0)
 ---
 >>>}
-1 >^
-2 > ^^^^^^^^^^^->
 1 >
-  >}
-1 >Emitted(11, 2) Source(13, 2) + SourceIndex(0)
+2 >^
+3 > ^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(11, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(11, 2) Source(13, 2) + SourceIndex(0)
 ---
 >>>class Foo {
 1->

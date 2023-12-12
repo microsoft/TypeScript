@@ -27,7 +27,7 @@ var d = {
 
 
 //// [declFileModuleAssignmentInObjectLiteralProperty.d.ts]
-declare module m1 {
+declare namespace m1 {
     class c {
     }
 }

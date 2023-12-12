@@ -9,7 +9,7 @@
 // user2
 
 // === lib.d.ts ===
-// --- (line: 1588) skipped ---
+// --- (line: --) skipped ---
 // /**
 //  * From T, pick a set of properties whose keys are in the union K
 //  */
@@ -19,7 +19,7 @@
 // 
 // /**
 //  * Construct a type with a set of properties K of type T
-// --- (line: 1598) skipped ---
+// --- (line: --) skipped ---
 
   // === Details ===
   [
@@ -58,7 +58,7 @@
 // /*GOTO TYPE*/user2
 
 // === lib.d.ts ===
-// --- (line: 1588) skipped ---
+// --- (line: --) skipped ---
 // /**
 //  * From T, pick a set of properties whose keys are in the union K
 //  */
@@ -68,7 +68,7 @@
 // 
 // /**
 //  * Construct a type with a set of properties K of type T
-// --- (line: 1598) skipped ---
+// --- (line: --) skipped ---
 
   // === Details ===
   [

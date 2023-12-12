@@ -98,7 +98,59 @@ uncheckedInternally("zero", "one");
 
 
 //// [overloadTag1.d.ts]
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ *
+ * @param {string | number} a
+ * @param {string | number} b
+ * @returns {string | number}
+ */
 export function overloaded(a: number, b: number): number;
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ *
+ * @param {string | number} a
+ * @param {string | number} b
+ * @returns {string | number}
+ */
 export function overloaded(a: string, b: boolean): string;
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ */
 export function uncheckedInternally(a: number, b: number): number;
+/**
+ * @overload
+ * @param {number} a
+ * @param {number} b
+ * @returns {number}
+ *
+ * @overload
+ * @param {string} a
+ * @param {boolean} b
+ * @returns {string}
+ */
 export function uncheckedInternally(a: string, b: boolean): string;

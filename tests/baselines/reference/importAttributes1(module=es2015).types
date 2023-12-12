@@ -1,0 +1,138 @@
+//// [tests/cases/conformance/importAttributes/importAttributes1.ts] ////
+
+=== 0.ts ===
+export const a = 1;
+>a : 1
+>1 : 1
+
+export const b = 2;
+>b : 2
+>2 : 2
+
+=== 1.ts ===
+import './0' with { type: "json" }
+>type : any
+
+import { a, b } from './0' with { "type": "json" }
+>a : 1
+>b : 2
+
+import * as foo from './0' with { type: "json" }
+>foo : typeof foo
+>type : any
+
+a;
+>a : 1
+
+b;
+>b : 2
+
+foo.a;
+>foo.a : 1
+>foo : typeof foo
+>a : 1
+
+foo.b;
+>foo.b : 2
+>foo : typeof foo
+>b : 2
+
+=== 2.ts ===
+import { a, b } from './0' with {}
+>a : 1
+>b : 2
+
+import { a as c, b as d } from './0' with { a: "a", b: "b", c: "c" }
+>a : 1
+>c : 1
+>b : 2
+>d : 2
+>a : any
+>b : any
+>c : any
+
+a;
+>a : 1
+
+b;
+>b : 2
+
+c;
+>c : 1
+
+d;
+>d : 2
+
+=== 3.ts ===
+const a = import('./0')
+>a : Promise<typeof import("0")>
+>import('./0') : Promise<typeof import("0")>
+>'./0' : "./0"
+
+const b = import('./0', { with: { type: "json" } })
+>b : Promise<typeof import("0")>
+>import('./0', { with: { type: "json" } }) : Promise<typeof import("0")>
+>'./0' : "./0"
+>{ with: { type: "json" } } : { with: { type: string; }; }
+>with : { type: string; }
+>{ type: "json" } : { type: string; }
+>type : string
+>"json" : "json"
+
+const c = import('./0', { with: { type: "json", ttype: "typo" } })
+>c : Promise<typeof import("0")>
+>import('./0', { with: { type: "json", ttype: "typo" } }) : Promise<typeof import("0")>
+>'./0' : "./0"
+>{ with: { type: "json", ttype: "typo" } } : { with: { type: string; ttype: string; }; }
+>with : { type: string; ttype: string; }
+>{ type: "json", ttype: "typo" } : { type: string; ttype: string; }
+>type : string
+>"json" : "json"
+>ttype : string
+>"typo" : "typo"
+
+const d = import('./0', { with: {} })
+>d : Promise<typeof import("0")>
+>import('./0', { with: {} }) : Promise<typeof import("0")>
+>'./0' : "./0"
+>{ with: {} } : { with: {}; }
+>with : {}
+>{} : {}
+
+const dd = import('./0', {})
+>dd : Promise<typeof import("0")>
+>import('./0', {}) : Promise<typeof import("0")>
+>'./0' : "./0"
+>{} : {}
+
+declare function foo(): any;
+>foo : () => any
+
+const e = import('./0', foo())
+>e : Promise<typeof import("0")>
+>import('./0', foo()) : Promise<typeof import("0")>
+>'./0' : "./0"
+>foo() : any
+>foo : () => any
+
+const f = import()
+>f : Promise<any>
+>import() : Promise<any>
+
+const g = import('./0', {}, {})
+>g : Promise<typeof import("0")>
+>import('./0', {}, {}) : Promise<typeof import("0")>
+>'./0' : "./0"
+>{} : {}
+>{} : {}
+
+const h = import('./0', { with: { type: "json" }},)
+>h : Promise<typeof import("0")>
+>import('./0', { with: { type: "json" }},) : Promise<typeof import("0")>
+>'./0' : "./0"
+>{ with: { type: "json" }} : { with: { type: string; }; }
+>with : { type: string; }
+>{ type: "json" } : { type: string; }
+>type : string
+>"json" : "json"
+

@@ -26,7 +26,18 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/project/tsconfig.json]
-{"compilerOptions":{"outFile":"../output/common.js","target":"es5"},"files":["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]}
+{
+  "compilerOptions": {
+    "outFile": "../output/common.js",
+    "target": "es5"
+  },
+  "files": [
+    "/a/b/output/AnotherDependency/file1.d.ts",
+    "/a/b/dependencies/file2.d.ts",
+    "/a/b/project/src/main.ts",
+    "/a/b/project/src/main2.ts"
+  ]
+}
 
 
 /a/lib/tsc.js --w -p /a/b/project/tsconfig.json
@@ -42,40 +53,6 @@ Output::
 [[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]
-Program options: {"outFile":"/a/b/output/common.js","target":1,"watch":true,"project":"/a/b/project/tsconfig.json","configFilePath":"/a/b/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/output/AnotherDependency/file1.d.ts
-/a/b/dependencies/file2.d.ts
-/a/b/project/src/main.ts
-/a/b/project/src/main2.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-PolledWatches::
-/a/b/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/dependencies/file2.d.ts: *new*
-  {}
-/a/b/output/anotherdependency/file1.d.ts: *new*
-  {}
-/a/b/project/src/main.ts: *new*
-  {}
-/a/b/project/src/main2.ts: *new*
-  {}
-/a/b/project/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/a/b/output/common.js]
 var Main;
@@ -93,3 +70,48 @@ var main;
 })(main || (main = {}));
 
 
+
+PolledWatches::
+/a/b/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/dependencies/file2.d.ts: *new*
+  {}
+/a/b/output/AnotherDependency/file1.d.ts: *new*
+  {}
+/a/b/project/src/main.ts: *new*
+  {}
+/a/b/project/src/main2.ts: *new*
+  {}
+/a/b/project/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/b/output/AnotherDependency/file1.d.ts",
+  "/a/b/dependencies/file2.d.ts",
+  "/a/b/project/src/main.ts",
+  "/a/b/project/src/main2.ts"
+]
+Program options: {
+  "outFile": "/a/b/output/common.js",
+  "target": 1,
+  "watch": true,
+  "project": "/a/b/project/tsconfig.json",
+  "configFilePath": "/a/b/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/output/AnotherDependency/file1.d.ts
+/a/b/dependencies/file2.d.ts
+/a/b/project/src/main.ts
+/a/b/project/src/main2.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

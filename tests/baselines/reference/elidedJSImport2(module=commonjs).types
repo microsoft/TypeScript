@@ -11,21 +11,21 @@ import defaultFoo from "./other.js";
 >defaultFoo : any
 
 const x = new Foo();
->x : error
->new Foo() : error
->Foo : error
+>x : any
+>new Foo() : any
+>Foo : any
 
 const y = other.Foo();
->y : error
->other.Foo() : error
->other.Foo : error
+>y : any
+>other.Foo() : any
+>other.Foo : any
 >other : typeof other
 >Foo : any
 
 const z = new defaultFoo();
->z : error
->new defaultFoo() : error
->defaultFoo : error
+>z : any
+>new defaultFoo() : any
+>defaultFoo : any
 
 === other.d.ts ===
 export interface Foo {
