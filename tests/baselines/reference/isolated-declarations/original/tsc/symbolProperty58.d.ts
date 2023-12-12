@@ -21,7 +21,7 @@ declare var obj: invalid;
 
 /// [Errors] ////
 
-symbolProperty58.ts(6,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+symbolProperty58.ts(6,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 
 
 ==== symbolProperty58.ts (1 errors) ====
@@ -32,6 +32,6 @@ symbolProperty58.ts(6,5): error TS9014: Computed properties must be number or st
     var obj = {
         [Symbol.foo]: 0
         ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-!!! related TS9027 symbolProperty58.ts:5:5: Add a type annotation to the variable obj
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+!!! related TS9027 symbolProperty58.ts:5:5: Add a type annotation to the variable obj.
     }

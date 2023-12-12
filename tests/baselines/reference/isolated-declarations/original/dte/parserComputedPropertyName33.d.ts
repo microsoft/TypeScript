@@ -19,7 +19,7 @@ declare class C {
 /// [Errors] ////
 
 parserComputedPropertyName33.ts(3,6): error TS2304: Cannot find name 'e'.
-parserComputedPropertyName33.ts(3,11): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+parserComputedPropertyName33.ts(3,11): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
 parserComputedPropertyName33.ts(4,6): error TS2304: Cannot find name 'e2'.
 parserComputedPropertyName33.ts(4,12): error TS1005: ';' expected.
 parserComputedPropertyName33.ts(5,1): error TS1128: Declaration or statement expected.
@@ -34,8 +34,8 @@ parserComputedPropertyName33.ts(5,1): error TS1128: Declaration or statement exp
               ~
         [e2]() { }
     ~~~~~~~~~~
-!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9029 parserComputedPropertyName33.ts:3:5: Add a type annotation to the property [e]
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9029 parserComputedPropertyName33.ts:3:5: Add a type annotation to the property [e].
          ~~
 !!! error TS2304: Cannot find name 'e2'.
                ~

@@ -34,8 +34,8 @@ declare function g(s: string): invalid;
 
 /// [Errors] ////
 
-parseTypes.ts(5,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-parseTypes.ts(6,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+parseTypes.ts(5,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+parseTypes.ts(6,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 parseTypes.ts(8,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
 parseTypes.ts(9,1): error TS2322: Type '(s: string) => void' is not assignable to type '() => number'.
@@ -53,12 +53,12 @@ parseTypes.ts(11,1): error TS2322: Type '(s: string) => void' is not assignable 
     var w = <{[x:number]: number; }>null
     function f() { return 3 };
              ~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9031 parseTypes.ts:5:10: Add a return type to the function declaration
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 parseTypes.ts:5:10: Add a return type to the function declaration.
     function g(s: string) { true };
              ~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9031 parseTypes.ts:6:10: Add a return type to the function declaration
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 parseTypes.ts:6:10: Add a return type to the function declaration.
     y=f;
     y=g;
     ~

@@ -26,11 +26,11 @@ declare class C {
 
 /// [Errors] ////
 
-computedPropertyNames15_ES6.ts(5,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+computedPropertyNames15_ES6.ts(5,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 computedPropertyNames15_ES6.ts(6,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames15_ES6.ts(6,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+computedPropertyNames15_ES6.ts(6,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 computedPropertyNames15_ES6.ts(7,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames15_ES6.ts(7,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+computedPropertyNames15_ES6.ts(7,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 
 
 ==== computedPropertyNames15_ES6.ts (5 errors) ====
@@ -40,18 +40,18 @@ computedPropertyNames15_ES6.ts(7,5): error TS9008: Method must have an explicit 
     class C {
         [p1]() { }
         ~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 computedPropertyNames15_ES6.ts:5:5: Add a return type to the method
         [p2]() { }
         ~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
         ~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 computedPropertyNames15_ES6.ts:6:5: Add a return type to the method
         [p3]() { }
         ~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
         ~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 computedPropertyNames15_ES6.ts:7:5: Add a return type to the method
     }

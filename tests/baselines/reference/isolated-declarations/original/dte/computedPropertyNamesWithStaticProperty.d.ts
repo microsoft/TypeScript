@@ -44,7 +44,7 @@ declare class C1 {
 computedPropertyNamesWithStaticProperty.ts(2,1): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 computedPropertyNamesWithStaticProperty.ts(4,10): error TS2449: Class 'C1' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(7,10): error TS2449: Class 'C1' used before its declaration.
-computedPropertyNamesWithStaticProperty.ts(10,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+computedPropertyNamesWithStaticProperty.ts(10,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 computedPropertyNamesWithStaticProperty.ts(10,6): error TS2449: Class 'C1' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(15,10): error TS2449: Class 'C2' used before its declaration.
 computedPropertyNamesWithStaticProperty.ts(18,10): error TS2449: Class 'C2' used before its declaration.
@@ -71,7 +71,7 @@ computedPropertyNamesWithStaticProperty.ts(21,6): error TS2449: Class 'C2' used 
         }
         [C1.staticProp]() { }
         ~~~~~~~~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 computedPropertyNamesWithStaticProperty.ts:10:5: Add a return type to the method
          ~~
 !!! error TS2449: Class 'C1' used before its declaration.

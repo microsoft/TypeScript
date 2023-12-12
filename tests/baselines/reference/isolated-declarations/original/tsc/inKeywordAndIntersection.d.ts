@@ -59,7 +59,7 @@ declare const ClassOne: (new () => InstanceOne) & {
 
 /// [Errors] ////
 
-inKeywordAndIntersection.ts(4,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+inKeywordAndIntersection.ts(4,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 
 
 ==== inKeywordAndIntersection.ts (1 errors) ====
@@ -68,8 +68,8 @@ inKeywordAndIntersection.ts(4,10): error TS9007: Function must have an explicit 
     
     function f10(obj: A & { x: string } | B) {
              ~~~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9031 inKeywordAndIntersection.ts:4:10: Add a return type to the function declaration
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 inKeywordAndIntersection.ts:4:10: Add a return type to the function declaration.
         if (obj instanceof Object) {
             obj;  // A & { x: string } | B
         }

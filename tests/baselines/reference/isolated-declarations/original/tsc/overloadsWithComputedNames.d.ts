@@ -107,19 +107,19 @@ interface I3 {
 /// [Errors] ////
 
 overloadsWithComputedNames.ts(4,5): error TS2389: Function implementation name must be '["B"]'.
-overloadsWithComputedNames.ts(8,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+overloadsWithComputedNames.ts(8,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 overloadsWithComputedNames.ts(14,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 overloadsWithComputedNames.ts(16,5): error TS2389: Function implementation name must be '["bar"]'.
 overloadsWithComputedNames.ts(28,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
-overloadsWithComputedNames.ts(28,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+overloadsWithComputedNames.ts(28,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 overloadsWithComputedNames.ts(29,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 overloadsWithComputedNames.ts(35,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 overloadsWithComputedNames.ts(42,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
-overloadsWithComputedNames.ts(42,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-overloadsWithComputedNames.ts(43,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+overloadsWithComputedNames.ts(42,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+overloadsWithComputedNames.ts(43,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 overloadsWithComputedNames.ts(47,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
-overloadsWithComputedNames.ts(47,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-overloadsWithComputedNames.ts(48,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+overloadsWithComputedNames.ts(47,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+overloadsWithComputedNames.ts(48,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
@@ -135,8 +135,8 @@ overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is mi
     }
     let p = new Person();
             ~~~~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 overloadsWithComputedNames.ts:8:5: Add a type annotation to the variable p
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 overloadsWithComputedNames.ts:8:5: Add a type annotation to the variable p.
     p.A(0)
     p.B(0)
     
@@ -164,7 +164,7 @@ overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is mi
         ~~~~~
 !!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         ~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         [uniqueSym2](): void;   // should error
         ~~~~~~~~~~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
@@ -186,10 +186,10 @@ overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is mi
         ~~~~~~~~~~
 !!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         ~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         [strUnion]() { }
         ~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     }
     
     class I2 {
@@ -197,10 +197,10 @@ overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is mi
         ~~~~~~~~~~
 !!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         ~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         [strUnion]() { }
         ~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     }
     
     class C3 {

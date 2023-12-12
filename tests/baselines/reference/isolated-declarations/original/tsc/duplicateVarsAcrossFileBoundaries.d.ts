@@ -66,8 +66,8 @@ duplicateVarsAcrossFileBoundaries_1.ts(1,5): error TS2403: Subsequent variable d
 duplicateVarsAcrossFileBoundaries_2.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'string'.
 duplicateVarsAcrossFileBoundaries_2.ts(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string', but here has type 'number'.
 duplicateVarsAcrossFileBoundaries_2.ts(3,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'number', but here has type 'boolean'.
-duplicateVarsAcrossFileBoundaries_4.ts(3,5): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-duplicateVarsAcrossFileBoundaries_5.ts(3,5): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+duplicateVarsAcrossFileBoundaries_4.ts(3,5): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+duplicateVarsAcrossFileBoundaries_5.ts(3,5): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 ==== duplicateVarsAcrossFileBoundaries_0.ts (0 errors) ====
@@ -105,13 +105,13 @@ duplicateVarsAcrossFileBoundaries_5.ts(3,5): error TS9010: Variable must have an
     import p = P;
     var q;
         ~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 duplicateVarsAcrossFileBoundaries_4.ts:3:5: Add a type annotation to the variable q
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 duplicateVarsAcrossFileBoundaries_4.ts:3:5: Add a type annotation to the variable q.
     
 ==== duplicateVarsAcrossFileBoundaries_5.ts (1 errors) ====
     module Q { }
     import q = Q;
     var p;
         ~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 duplicateVarsAcrossFileBoundaries_5.ts:3:5: Add a type annotation to the variable p
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 duplicateVarsAcrossFileBoundaries_5.ts:3:5: Add a type annotation to the variable p.

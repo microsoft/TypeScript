@@ -43,7 +43,7 @@ export declare const vb: invalid;
 /// [Errors] ////
 
 main.ts(1,10): error TS2305: Module '"ext"' has no exported member 'fa'.
-main.ts(5,19): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+main.ts(5,19): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 ==== main.ts (2 errors) ====
@@ -55,8 +55,8 @@ main.ts(5,19): error TS9010: Variable must have an explicit type annotation with
     export const va: any = fa();
     export const vb = fb();
                       ~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 main.ts:5:14: Add a type annotation to the variable vb
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 main.ts:5:14: Add a type annotation to the variable vb.
     
 ==== node_modules/ext/package.json (0 errors) ====
     {

@@ -86,23 +86,23 @@ declare const enum NaNOrInfinity {
 
 constEnumErrors.ts(1,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 constEnumErrors.ts(5,8): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
-constEnumErrors.ts(12,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+constEnumErrors.ts(12,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 constEnumErrors.ts(12,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-constEnumErrors.ts(14,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+constEnumErrors.ts(14,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 constEnumErrors.ts(14,9): error TS2474: const enum member initializers must be constant expressions.
 constEnumErrors.ts(14,12): error TS2339: Property 'Z' does not exist on type 'typeof E1'.
-constEnumErrors.ts(15,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+constEnumErrors.ts(15,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 constEnumErrors.ts(15,10): error TS2474: const enum member initializers must be constant expressions.
 constEnumErrors.ts(15,13): error TS2339: Property 'Z' does not exist on type 'typeof E1'.
-constEnumErrors.ts(22,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+constEnumErrors.ts(22,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 constEnumErrors.ts(22,13): error TS2476: A const enum member can only be accessed using a string literal.
-constEnumErrors.ts(24,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+constEnumErrors.ts(24,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 constEnumErrors.ts(24,13): error TS2476: A const enum member can only be accessed using a string literal.
-constEnumErrors.ts(25,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+constEnumErrors.ts(25,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 constEnumErrors.ts(25,13): error TS2476: A const enum member can only be accessed using a string literal.
 constEnumErrors.ts(27,9): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
-constEnumErrors.ts(27,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-constEnumErrors.ts(28,9): error TS9017: Only const arrays can be inferred with --isolatedDeclarations
+constEnumErrors.ts(27,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+constEnumErrors.ts(28,9): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
 constEnumErrors.ts(28,10): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
 constEnumErrors.ts(33,5): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
 constEnumErrors.ts(41,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
@@ -128,20 +128,20 @@ constEnumErrors.ts(43,9): error TS2478: 'const' enum member initializer was eval
         // forward reference to the element of the same enum
         X = Y,
         ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
             ~
 !!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
         // forward reference to the element of the same enum
         Y = E1.Z,
         ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
             ~~~~
 !!! error TS2474: const enum member initializers must be constant expressions.
                ~
 !!! error TS2339: Property 'Z' does not exist on type 'typeof E1'.
         Y1 = E1["Z"]
         ~~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
              ~~~~~~~
 !!! error TS2474: const enum member initializers must be constant expressions.
                 ~~~
@@ -154,21 +154,21 @@ constEnumErrors.ts(43,9): error TS2478: 'const' enum member initializer was eval
     
     var y0 = E2[1]
              ~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 constEnumErrors.ts:22:5: Add a type annotation to the variable y0
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 constEnumErrors.ts:22:5: Add a type annotation to the variable y0.
                 ~
 !!! error TS2476: A const enum member can only be accessed using a string literal.
     var name = "A";
     var y1 = E2[name];
              ~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 constEnumErrors.ts:24:5: Add a type annotation to the variable y1
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 constEnumErrors.ts:24:5: Add a type annotation to the variable y1.
                 ~~~~
 !!! error TS2476: A const enum member can only be accessed using a string literal.
     var y2 = E2[`${name}`];
              ~~~~~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 constEnumErrors.ts:25:5: Add a type annotation to the variable y2
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 constEnumErrors.ts:25:5: Add a type annotation to the variable y2.
                 ~~~~~~~~~
 !!! error TS2476: A const enum member can only be accessed using a string literal.
     
@@ -176,12 +176,12 @@ constEnumErrors.ts(43,9): error TS2478: 'const' enum member initializer was eval
             ~~
 !!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
             ~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 constEnumErrors.ts:27:5: Add a type annotation to the variable x
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 constEnumErrors.ts:27:5: Add a type annotation to the variable x.
     var y = [E2];
             ~~~~
-!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations
-!!! related TS9027 constEnumErrors.ts:28:5: Add a type annotation to the variable y
+!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+!!! related TS9027 constEnumErrors.ts:28:5: Add a type annotation to the variable y.
              ~~
 !!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
     

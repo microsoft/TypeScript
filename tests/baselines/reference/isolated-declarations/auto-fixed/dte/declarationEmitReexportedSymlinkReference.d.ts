@@ -55,7 +55,7 @@ export declare const ADMIN: invalid;
 //# sourceMappingURL=keys.d.ts.map
 /// [Errors] ////
 
-monorepo/pkg3/src/keys.ts(3,22): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+monorepo/pkg3/src/keys.ts(3,22): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 ==== monorepo/pkg3/src/index.ts (0 errors) ====
@@ -65,8 +65,8 @@ monorepo/pkg3/src/keys.ts(3,22): error TS9010: Variable must have an explicit ty
     
     export const ADMIN = MetadataAccessor.create<boolean>('1');
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 monorepo/pkg3/src/keys.ts:3:14: Add a type annotation to the variable ADMIN
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 monorepo/pkg3/src/keys.ts:3:14: Add a type annotation to the variable ADMIN.
 ==== monorepo/pkg1/dist/index.d.ts (0 errors) ====
     export * from './types';
 ==== monorepo/pkg1/dist/types.d.ts (0 errors) ====

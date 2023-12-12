@@ -92,11 +92,11 @@ export {};
 
 /// [Errors] ////
 
-computedPropertiesNarrowed.ts(18,20): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-computedPropertiesNarrowed.ts(20,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-computedPropertiesNarrowed.ts(26,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-computedPropertiesNarrowed.ts(37,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-computedPropertiesNarrowed.ts(47,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+computedPropertiesNarrowed.ts(18,20): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(20,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(26,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(37,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+computedPropertiesNarrowed.ts(47,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 
 
 ==== computedPropertiesNarrowed.ts (5 errors) ====
@@ -119,13 +119,13 @@ computedPropertiesNarrowed.ts(47,5): error TS9014: Computed properties must be n
     
     export let o32 = { [1-1]: 1 } // error number 
                        ~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-!!! related TS9027 computedPropertiesNarrowed.ts:18:12: Add a type annotation to the variable o32
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:18:12: Add a type annotation to the variable o32.
     
     let u = Symbol();
             ~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 computedPropertiesNarrowed.ts:20:5: Add a type annotation to the variable u
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:20:5: Add a type annotation to the variable u.
     export let o4 = {
         [u]: 1 // Should error, nut a unique symbol
     }
@@ -133,8 +133,8 @@ computedPropertiesNarrowed.ts(47,5): error TS9014: Computed properties must be n
     export let o5  ={
         [Symbol()]: 1 // Should error
         ~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-!!! related TS9027 computedPropertiesNarrowed.ts:25:12: Add a type annotation to the variable o5
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:25:12: Add a type annotation to the variable o5.
     }
     
     const uu: unique symbol = Symbol();
@@ -147,8 +147,8 @@ computedPropertiesNarrowed.ts(47,5): error TS9014: Computed properties must be n
     export let o7 = {
         [foo()]: 1 // Should error
         ~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-!!! related TS9027 computedPropertiesNarrowed.ts:36:12: Add a type annotation to the variable o7
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:36:12: Add a type annotation to the variable o7.
     };
     
     let E = { A: 1 } as const
@@ -160,7 +160,7 @@ computedPropertiesNarrowed.ts(47,5): error TS9014: Computed properties must be n
     export const o9 = {
         [ns().v]: 1
         ~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-!!! related TS9027 computedPropertiesNarrowed.ts:46:14: Add a type annotation to the variable o9
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+!!! related TS9027 computedPropertiesNarrowed.ts:46:14: Add a type annotation to the variable o9.
     }
     

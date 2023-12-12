@@ -26,7 +26,7 @@ declare const readonlyFoundNumber: number | undefined;
 
 /// [Errors] ////
 
-arrayFind.ts(6,42): error TS9017: Only const arrays can be inferred with --isolatedDeclarations
+arrayFind.ts(6,42): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
 
 
 ==== arrayFind.ts (1 errors) ====
@@ -37,8 +37,8 @@ arrayFind.ts(6,42): error TS9017: Only const arrays can be inferred with --isola
     
     const arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true];
                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations
-!!! related TS9027 arrayFind.ts:6:7: Add a type annotation to the variable arrayOfStringsNumbersAndBooleans
+!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+!!! related TS9027 arrayFind.ts:6:7: Add a type annotation to the variable arrayOfStringsNumbersAndBooleans.
     const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(isNumber);
     
     const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean>;

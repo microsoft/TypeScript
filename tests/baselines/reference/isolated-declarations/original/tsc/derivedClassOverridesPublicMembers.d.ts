@@ -135,20 +135,20 @@ declare var r8: invalid;
 
 /// [Errors] ////
 
-derivedClassOverridesPublicMembers.ts(6,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(12,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(22,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(28,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(37,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(38,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(39,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(40,11): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(42,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(43,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(44,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(45,11): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(59,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-derivedClassOverridesPublicMembers.ts(60,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+derivedClassOverridesPublicMembers.ts(6,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(12,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(22,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(28,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(37,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(38,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(39,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(40,11): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(42,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(43,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(44,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(45,11): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(59,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+derivedClassOverridesPublicMembers.ts(60,10): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 ==== derivedClassOverridesPublicMembers.ts (14 errors) ====
@@ -159,7 +159,7 @@ derivedClassOverridesPublicMembers.ts(60,10): error TS9010: Variable must have a
         a: typeof x;
         b(a: typeof x) { }
         ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesPublicMembers.ts:6:5: Add a return type to the method
         get c() { return x; }
         set c(v: typeof x) { }
@@ -168,7 +168,7 @@ derivedClassOverridesPublicMembers.ts(60,10): error TS9010: Variable must have a
         static r: typeof x;
         static s(a: typeof x) { }
                ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesPublicMembers.ts:12:12: Add a return type to the method
         static get t() { return x; }
         static set t(v: typeof x) { }
@@ -181,7 +181,7 @@ derivedClassOverridesPublicMembers.ts(60,10): error TS9010: Variable must have a
         a: typeof y;
         b(a: typeof y) { }
         ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesPublicMembers.ts:22:5: Add a return type to the method
         get c() { return y; }
         set c(v: typeof y) { }
@@ -190,7 +190,7 @@ derivedClassOverridesPublicMembers.ts(60,10): error TS9010: Variable must have a
         static r: typeof y;
         static s(a: typeof y) { }
                ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesPublicMembers.ts:28:12: Add a return type to the method
         static get t() { return y; }
         static set t(a: typeof y) { }
@@ -202,37 +202,37 @@ derivedClassOverridesPublicMembers.ts(60,10): error TS9010: Variable must have a
     var d: Derived = new Derived(y);
     var r1 = d.a;
              ~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:37:5: Add a type annotation to the variable r1
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:37:5: Add a type annotation to the variable r1.
     var r2 = d.b(y);
              ~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:38:5: Add a type annotation to the variable r2
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:38:5: Add a type annotation to the variable r2.
     var r3 = d.c;
              ~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:39:5: Add a type annotation to the variable r3
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:39:5: Add a type annotation to the variable r3.
     var r3a = d.d;
               ~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:40:5: Add a type annotation to the variable r3a
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:40:5: Add a type annotation to the variable r3a.
     d.c = y;
     var r4 = Derived.r;
              ~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:42:5: Add a type annotation to the variable r4
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:42:5: Add a type annotation to the variable r4.
     var r5 = Derived.s(y);
              ~~~~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:43:5: Add a type annotation to the variable r5
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:43:5: Add a type annotation to the variable r5.
     var r6 = Derived.t;
              ~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:44:5: Add a type annotation to the variable r6
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:44:5: Add a type annotation to the variable r6.
     var r6a = Derived.u;
               ~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:45:5: Add a type annotation to the variable r6a
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:45:5: Add a type annotation to the variable r6a.
     Derived.t = y;
     
     class Base2 {
@@ -248,11 +248,11 @@ derivedClassOverridesPublicMembers.ts(60,10): error TS9010: Variable must have a
     var d2: Derived2;
     var r7 = d2[''];
              ~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:59:5: Add a type annotation to the variable r7
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:59:5: Add a type annotation to the variable r7.
     var r8 = d2[1];
              ~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 derivedClassOverridesPublicMembers.ts:60:5: Add a type annotation to the variable r8
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 derivedClassOverridesPublicMembers.ts:60:5: Add a type annotation to the variable r8.
     
     

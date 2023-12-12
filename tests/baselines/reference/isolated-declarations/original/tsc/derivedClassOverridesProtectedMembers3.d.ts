@@ -144,16 +144,16 @@ declare class Derived10 extends Base {
 
 /// [Errors] ////
 
-derivedClassOverridesProtectedMembers3.ts(6,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-derivedClassOverridesProtectedMembers3.ts(12,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+derivedClassOverridesProtectedMembers3.ts(6,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+derivedClassOverridesProtectedMembers3.ts(12,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 derivedClassOverridesProtectedMembers3.ts(22,7): error TS2415: Class 'Derived1' incorrectly extends base class 'Base'.
   Property 'a' is protected in type 'Derived1' but public in type 'Base'.
 derivedClassOverridesProtectedMembers3.ts(27,7): error TS2415: Class 'Derived2' incorrectly extends base class 'Base'.
   Property 'b' is protected in type 'Derived2' but public in type 'Base'.
-derivedClassOverridesProtectedMembers3.ts(28,15): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+derivedClassOverridesProtectedMembers3.ts(28,15): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 derivedClassOverridesProtectedMembers3.ts(32,7): error TS2415: Class 'Derived3' incorrectly extends base class 'Base'.
   Property 'c' is protected in type 'Derived3' but public in type 'Base'.
-derivedClassOverridesProtectedMembers3.ts(33,19): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+derivedClassOverridesProtectedMembers3.ts(33,19): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
 derivedClassOverridesProtectedMembers3.ts(37,7): error TS2415: Class 'Derived4' incorrectly extends base class 'Base'.
   Property 'c' is protected in type 'Derived4' but public in type 'Base'.
 derivedClassOverridesProtectedMembers3.ts(42,7): error TS2415: Class 'Derived5' incorrectly extends base class 'Base'.
@@ -162,10 +162,10 @@ derivedClassOverridesProtectedMembers3.ts(47,7): error TS2417: Class static side
   Property 'r' is protected in type 'typeof Derived6' but public in type 'typeof Base'.
 derivedClassOverridesProtectedMembers3.ts(52,7): error TS2417: Class static side 'typeof Derived7' incorrectly extends base class static side 'typeof Base'.
   Property 's' is protected in type 'typeof Derived7' but public in type 'typeof Base'.
-derivedClassOverridesProtectedMembers3.ts(53,22): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+derivedClassOverridesProtectedMembers3.ts(53,22): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 derivedClassOverridesProtectedMembers3.ts(57,7): error TS2417: Class static side 'typeof Derived8' incorrectly extends base class static side 'typeof Base'.
   Property 't' is protected in type 'typeof Derived8' but public in type 'typeof Base'.
-derivedClassOverridesProtectedMembers3.ts(58,26): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+derivedClassOverridesProtectedMembers3.ts(58,26): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
 derivedClassOverridesProtectedMembers3.ts(62,7): error TS2417: Class static side 'typeof Derived9' incorrectly extends base class static side 'typeof Base'.
   Property 't' is protected in type 'typeof Derived9' but public in type 'typeof Base'.
 derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side 'typeof Derived10' incorrectly extends base class static side 'typeof Base'.
@@ -180,7 +180,7 @@ derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side
         a: typeof x;
         b(a: typeof x) { }
         ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesProtectedMembers3.ts:6:5: Add a return type to the method
         get c() { return x; }
         set c(v: typeof x) { }
@@ -189,7 +189,7 @@ derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side
         static r: typeof x;
         static s(a: typeof x) { }
                ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesProtectedMembers3.ts:12:12: Add a return type to the method
         static get t() { return x; }
         static set t(v: typeof x) { }
@@ -214,7 +214,7 @@ derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side
 !!! error TS2415:   Property 'b' is protected in type 'Derived2' but public in type 'Base'.
         protected b(a: typeof x) { }
                   ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesProtectedMembers3.ts:28:15: Add a return type to the method
         constructor(a: typeof x) { super(a); }
     }
@@ -225,8 +225,8 @@ derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side
 !!! error TS2415:   Property 'c' is protected in type 'Derived3' but public in type 'Base'.
         protected get c() { return x; }
                       ~
-!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9032 derivedClassOverridesProtectedMembers3.ts:33:19: Add a return type to the get accessor declaration
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9032 derivedClassOverridesProtectedMembers3.ts:33:19: Add a return type to the get accessor declaration.
         constructor(a: typeof x) { super(a); }
     }
     
@@ -260,7 +260,7 @@ derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side
 !!! error TS2417:   Property 's' is protected in type 'typeof Derived7' but public in type 'typeof Base'.
         protected static s(a: typeof x) { }
                          ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesProtectedMembers3.ts:53:22: Add a return type to the method
         constructor(a: typeof x) { super(a); }
     }
@@ -271,8 +271,8 @@ derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side
 !!! error TS2417:   Property 't' is protected in type 'typeof Derived8' but public in type 'typeof Base'.
         protected static get t() { return x; }
                              ~
-!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9032 derivedClassOverridesProtectedMembers3.ts:58:26: Add a return type to the get accessor declaration
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9032 derivedClassOverridesProtectedMembers3.ts:58:26: Add a return type to the get accessor declaration.
         constructor(a: typeof x) { super(a); }
     }
     

@@ -16,18 +16,18 @@
  }
  export declare const oWithComputedProperties: invalid;
 @@ -36,19 +37,17 @@
- isolatedDeclarationErrorsObjects.ts(40,25): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- isolatedDeclarationErrorsObjects.ts(42,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- isolatedDeclarationErrorsObjects.ts(64,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
- isolatedDeclarationErrorsObjects.ts(65,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--isolatedDeclarationErrorsObjects.ts(68,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+ isolatedDeclarationErrorsObjects.ts(40,25): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ isolatedDeclarationErrorsObjects.ts(42,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ isolatedDeclarationErrorsObjects.ts(64,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ isolatedDeclarationErrorsObjects.ts(65,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-isolatedDeclarationErrorsObjects.ts(68,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
  isolatedDeclarationErrorsObjects.ts(73,14): error TS2451: Cannot redeclare block-scoped variable 'oWithSpread'.
- isolatedDeclarationErrorsObjects.ts(75,5): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations
- isolatedDeclarationErrorsObjects.ts(77,5): error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations
+ isolatedDeclarationErrorsObjects.ts(75,5): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
+ isolatedDeclarationErrorsObjects.ts(77,5): error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations.
  isolatedDeclarationErrorsObjects.ts(81,14): error TS2451: Cannot redeclare block-scoped variable 'oWithSpread'.
- isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations
- isolatedDeclarationErrorsObjects.ts(87,5): error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations
--isolatedDeclarationErrorsObjects.ts(88,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+ isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
+ isolatedDeclarationErrorsObjects.ts(87,5): error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations.
+-isolatedDeclarationErrorsObjects.ts(88,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
  
  
 -==== isolatedDeclarationErrorsObjects.ts (23 errors) ====
@@ -37,25 +37,25 @@
          b: ""
      }
 @@ -167,11 +166,8 @@
- !!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties
+ !!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
          [s]: 1,
          [E.V]: 1,
          [str]: 0,
 -        ~~~~~
--!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-!!! related TS9027 isolatedDeclarationErrorsObjects.ts:62:14: Add a type annotation to the variable oWithComputedProperties.
      }
      
      const part = { a: 1 };
      
 @@ -206,9 +202,6 @@
          ~~~~
- !!! error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations
- !!! related TS9027 isolatedDeclarationErrorsObjects.ts:81:14: Add a type annotation to the variable oWithSpread
+ !!! error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations.
+ !!! related TS9027 isolatedDeclarationErrorsObjects.ts:81:14: Add a type annotation to the variable oWithSpread.
          [str]: 0,
 -        ~~~~~
--!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--!!! related TS9027 isolatedDeclarationErrorsObjects.ts:81:14: Add a type annotation to the variable oWithSpread
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-!!! related TS9027 isolatedDeclarationErrorsObjects.ts:81:14: Add a type annotation to the variable oWithSpread.
      }
      
 \ No newline at end of file

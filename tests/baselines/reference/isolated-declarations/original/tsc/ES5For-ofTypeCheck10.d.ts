@@ -27,7 +27,7 @@ declare class StringIterator {
 
 /// [Errors] ////
 
-ES5For-ofTypeCheck10.ts(3,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+ES5For-ofTypeCheck10.ts(3,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 ES5For-ofTypeCheck10.ts(9,6): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
 ES5For-ofTypeCheck10.ts(14,15): error TS2495: Type 'StringIterator' is not an array type or a string type.
 
@@ -37,7 +37,7 @@ ES5For-ofTypeCheck10.ts(14,15): error TS2495: Type 'StringIterator' is not an ar
     class StringIterator {
         next() {
         ~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 ES5For-ofTypeCheck10.ts:3:5: Add a return type to the method
             return {
                 done: true,

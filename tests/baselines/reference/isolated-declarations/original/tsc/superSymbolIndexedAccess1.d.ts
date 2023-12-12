@@ -28,21 +28,21 @@ declare class Bar extends Foo {
 
 /// [Errors] ////
 
-superSymbolIndexedAccess1.ts(1,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-superSymbolIndexedAccess1.ts(4,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-superSymbolIndexedAccess1.ts(10,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+superSymbolIndexedAccess1.ts(1,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+superSymbolIndexedAccess1.ts(4,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+superSymbolIndexedAccess1.ts(10,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 
 
 ==== superSymbolIndexedAccess1.ts (3 errors) ====
     var symbol = Symbol.for('myThing');
                  ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 superSymbolIndexedAccess1.ts:1:5: Add a type annotation to the variable symbol
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 superSymbolIndexedAccess1.ts:1:5: Add a type annotation to the variable symbol.
     
     class Foo {
         [symbol]() {
         ~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
             return 0;
         }
     }
@@ -50,7 +50,7 @@ superSymbolIndexedAccess1.ts(10,5): error TS9014: Computed properties must be nu
     class Bar extends Foo {
         [symbol]() {
         ~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
             return super[symbol]();
         }
     }

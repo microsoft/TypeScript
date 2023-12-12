@@ -35,14 +35,14 @@ declare class C {
 /// [Errors] ////
 
 computedPropertyNames12_ES5.ts(5,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-computedPropertyNames12_ES5.ts(5,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+computedPropertyNames12_ES5.ts(5,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 computedPropertyNames12_ES5.ts(6,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-computedPropertyNames12_ES5.ts(6,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+computedPropertyNames12_ES5.ts(6,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 computedPropertyNames12_ES5.ts(7,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES5.ts(8,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES5.ts(9,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES5.ts(12,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-computedPropertyNames12_ES5.ts(12,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+computedPropertyNames12_ES5.ts(12,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 computedPropertyNames12_ES5.ts(13,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES5.ts(15,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 
@@ -56,12 +56,12 @@ computedPropertyNames12_ES5.ts(15,12): error TS1166: A computed property name in
         ~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         [n] = n;
         ~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         static [s + s]: string;
                ~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -77,7 +77,7 @@ computedPropertyNames12_ES5.ts(15,12): error TS1166: A computed property name in
         ~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         static [<any>true]: number;
                ~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

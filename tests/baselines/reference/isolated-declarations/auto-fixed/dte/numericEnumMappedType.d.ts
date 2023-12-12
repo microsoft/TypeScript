@@ -86,10 +86,10 @@ declare const x: E.ONE;
 //# sourceMappingURL=numericEnumMappedType.d.ts.map
 /// [Errors] ////
 
-numericEnumMappedType.ts(25,11): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
-numericEnumMappedType.ts(25,22): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
-numericEnumMappedType.ts(26,11): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
-numericEnumMappedType.ts(26,22): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+numericEnumMappedType.ts(25,11): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+numericEnumMappedType.ts(25,22): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+numericEnumMappedType.ts(26,11): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+numericEnumMappedType.ts(26,22): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 
 
 ==== numericEnumMappedType.ts (4 errors) ====
@@ -119,14 +119,14 @@ numericEnumMappedType.ts(26,22): error TS9020: Enum member initializers must be 
     
     enum N1 { A = val(), B = val() }
               ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
                          ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
     enum N2 { C = val(), D = val() }
               ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
                          ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
     
     type T1 = { [K in N1 | N2]: K };
     

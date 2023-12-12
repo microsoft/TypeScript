@@ -255,16 +255,16 @@ declare class I {
 
 /// [Errors] ////
 
-decoratorsOnComputedProperties.ts(1,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(1,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(18,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(19,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(20,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(21,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(21,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(21,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(22,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(22,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(22,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(23,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(23,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(23,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(27,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(28,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(29,5): error TS1206: Decorators are not valid here.
@@ -279,11 +279,11 @@ decoratorsOnComputedProperties.ts(52,5): error TS1166: A computed property name 
 decoratorsOnComputedProperties.ts(53,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(54,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(55,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(55,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(55,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(56,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(56,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(56,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(57,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(57,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(57,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(62,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(63,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(64,5): error TS1206: Decorators are not valid here.
@@ -298,11 +298,11 @@ decoratorsOnComputedProperties.ts(88,5): error TS1166: A computed property name 
 decoratorsOnComputedProperties.ts(89,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(90,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(92,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(92,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(92,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(93,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(93,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(93,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(94,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(94,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(94,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(98,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(99,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(100,5): error TS1206: Decorators are not valid here.
@@ -317,11 +317,11 @@ decoratorsOnComputedProperties.ts(124,5): error TS1166: A computed property name
 decoratorsOnComputedProperties.ts(125,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(126,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(128,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(128,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(128,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(129,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(129,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(129,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(131,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(131,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(131,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(135,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(136,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(137,5): error TS1206: Decorators are not valid here.
@@ -336,11 +336,11 @@ decoratorsOnComputedProperties.ts(162,5): error TS1166: A computed property name
 decoratorsOnComputedProperties.ts(163,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(164,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(166,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(166,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(166,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(167,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(167,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(167,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(169,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-decoratorsOnComputedProperties.ts(169,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(169,8): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(173,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(174,5): error TS1206: Decorators are not valid here.
 decoratorsOnComputedProperties.ts(175,5): error TS1206: Decorators are not valid here.
@@ -357,8 +357,8 @@ decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid
 ==== decoratorsOnComputedProperties.ts (97 errors) ====
     function x(o: object, k: PropertyKey) { }
              ~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9031 decoratorsOnComputedProperties.ts:1:10: Add a return type to the function declaration
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 decoratorsOnComputedProperties.ts:1:10: Add a return type to the function declaration.
     let i = 0;
     function foo(): string { return ++i + ""; }
     
@@ -388,17 +388,17 @@ decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid
         ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         @x [fieldNameB]: any;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         @x [fieldNameC]: any = null;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     }
     
     void class B {
@@ -460,17 +460,17 @@ decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid
         ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         @x [fieldNameB]: any;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         @x [fieldNameC]: any = null;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         ["some" + "method"]() {}
     }
     
@@ -535,17 +535,17 @@ decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid
         ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         @x [fieldNameB]: any;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         @x [fieldNameC]: any = null;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     }
     
     void class F {
@@ -609,18 +609,18 @@ decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid
         ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         @x [fieldNameB]: any;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         ["some" + "method2"]() {}
         @x [fieldNameC]: any = null;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     }
     
     void class H {
@@ -685,18 +685,18 @@ decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid
         ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
         ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         @x [fieldNameB]: any;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         ["some" + "method2"]() {}
         @x [fieldNameC]: any = null;
            ~~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
            ~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     }
     
     void class J {

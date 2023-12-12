@@ -438,21 +438,21 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
             context.addDiagnostic(createDiagnosticForRange(
                 file,
                 ref,
-                Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+                Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations,
             ));
         });
         file.typeReferenceDirectives.forEach(ref => {
             context.addDiagnostic(createDiagnosticForRange(
                 file,
                 ref,
-                Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+                Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations,
             ));
         });
         file.referencedFiles.forEach(ref => {
             context.addDiagnostic(createDiagnosticForRange(
                 file,
                 ref,
-                Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+                Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations,
             ));
         });
     }

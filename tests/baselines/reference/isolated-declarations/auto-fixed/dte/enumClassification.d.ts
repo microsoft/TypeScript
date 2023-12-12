@@ -146,10 +146,10 @@ declare enum E20 {
 //# sourceMappingURL=enumClassification.d.ts.map
 /// [Errors] ////
 
-enumClassification.ts(74,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
-enumClassification.ts(75,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
-enumClassification.ts(76,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
-enumClassification.ts(77,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+enumClassification.ts(74,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+enumClassification.ts(75,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+enumClassification.ts(76,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+enumClassification.ts(77,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 
 
 ==== enumClassification.ts (4 errors) ====
@@ -228,15 +228,15 @@ enumClassification.ts(77,5): error TS9020: Enum member initializers must be comp
     enum E20 {
         A = "foo".length,
         ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
         B = A + 1,
         ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
         C = +"123",
         ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
         D = Math.sin(1)
         ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
     }
     

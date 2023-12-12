@@ -21,4 +21,4 @@
  
  /// [Errors] ////
  
- booleanFilterAnyArray.ts(20,11): error TS9017: Only const arrays can be inferred with --isolatedDeclarations
+ booleanFilterAnyArray.ts(20,11): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.

@@ -12,15 +12,15 @@ declare var v: invalid;
 
 /// [Errors] ////
 
-parserComputedPropertyName3.ts(1,11): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+parserComputedPropertyName3.ts(1,11): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 parserComputedPropertyName3.ts(1,12): error TS2304: Cannot find name 'e'.
 
 
 ==== parserComputedPropertyName3.ts (2 errors) ====
     var v = { [e]() { } };
               ~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9027 parserComputedPropertyName3.ts:1:5: Add a type annotation to the variable v
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 parserComputedPropertyName3.ts:1:5: Add a type annotation to the variable v.
 !!! related TS9034 parserComputedPropertyName3.ts:1:11: Add a return type to the method
                ~
 !!! error TS2304: Cannot find name 'e'.

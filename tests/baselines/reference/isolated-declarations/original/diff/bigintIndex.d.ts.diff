@@ -21,9 +21,9 @@
 @@ -27,9 +29,8 @@
  b.ts(2,19): error TS1128: Declaration or statement expected.
  b.ts(3,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
- b.ts(3,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+ b.ts(3,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
  b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
--b.ts(4,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+-b.ts(4,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
  
  
  ==== a.ts (5 errors) ====
@@ -40,12 +40,12 @@
                 ~~
  !!! error TS1136: Property assignment expected.
 @@ -84,8 +85,5 @@
- !!! related TS9027 b.ts:3:7: Add a type annotation to the variable b
+ !!! related TS9027 b.ts:3:7: Add a type annotation to the variable b.
      const c = {[bigNum]: 789};
                 ~~~~~~~~
  !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 -               ~~~~~~~~
--!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--!!! related TS9027 b.ts:4:7: Add a type annotation to the variable c
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-!!! related TS9027 b.ts:4:7: Add a type annotation to the variable c.
      
 \ No newline at end of file

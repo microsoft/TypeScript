@@ -39,7 +39,7 @@ declare class C {
 
 computedPropertyNames12_ES6.ts(5,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES6.ts(6,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
-computedPropertyNames12_ES6.ts(6,11): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
+computedPropertyNames12_ES6.ts(6,11): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
 computedPropertyNames12_ES6.ts(7,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES6.ts(8,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES6.ts(9,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -60,8 +60,8 @@ computedPropertyNames12_ES6.ts(15,12): error TS1166: A computed property name in
         ~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
               ~
-!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9029 computedPropertyNames12_ES6.ts:6:5: Add a type annotation to the property [n]
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9029 computedPropertyNames12_ES6.ts:6:5: Add a type annotation to the property [n].
         static [s + s]: string;
                ~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

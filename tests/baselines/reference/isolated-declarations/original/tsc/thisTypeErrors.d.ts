@@ -145,10 +145,10 @@ thisTypeErrors.ts(29,19): error TS2526: A 'this' type is available only in a non
 thisTypeErrors.ts(29,26): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(35,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(36,20): error TS2331: 'this' cannot be referenced in a module or namespace body.
-thisTypeErrors.ts(36,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+thisTypeErrors.ts(36,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 thisTypeErrors.ts(41,14): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(41,21): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
-thisTypeErrors.ts(45,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+thisTypeErrors.ts(45,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 thisTypeErrors.ts(46,23): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(46,30): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 thisTypeErrors.ts(50,18): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
@@ -241,8 +241,8 @@ thisTypeErrors.ts(50,25): error TS2526: A 'this' type is available only in a non
                        ~~~~
 !!! error TS2331: 'this' cannot be referenced in a module or namespace body.
                        ~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 thisTypeErrors.ts:36:16: Add a type annotation to the variable y
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 thisTypeErrors.ts:36:16: Add a type annotation to the variable y.
     }
     
     class C3 {
@@ -257,7 +257,7 @@ thisTypeErrors.ts(50,25): error TS2526: A 'this' type is available only in a non
         }
         f() {
         ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 thisTypeErrors.ts:45:5: Add a return type to the method
             function g(x: this): this {
                           ~~~~

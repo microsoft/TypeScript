@@ -33,12 +33,12 @@ declare enum E1 {
 
 /// [Errors] ////
 
-forwardRefInEnum.ts(4,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+forwardRefInEnum.ts(4,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 forwardRefInEnum.ts(4,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-forwardRefInEnum.ts(5,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+forwardRefInEnum.ts(5,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 forwardRefInEnum.ts(5,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-forwardRefInEnum.ts(7,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
-forwardRefInEnum.ts(8,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+forwardRefInEnum.ts(7,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+forwardRefInEnum.ts(8,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 
 
 ==== forwardRefInEnum.ts (6 errors) ====
@@ -47,21 +47,21 @@ forwardRefInEnum.ts(8,5): error TS9020: Enum member initializers must be computa
         // forward reference to the element of the same enum
         X = Y, 
         ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
             ~
 !!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
         X1 = E1["Y"], 
         ~~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
              ~~~~~~~
 !!! error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
         // forward reference to the element of the same enum
         Y = E1.Z,
         ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
         Y1 = E1["Z"]
         ~~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
     }
     
     enum E1 {

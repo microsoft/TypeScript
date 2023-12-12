@@ -5,7 +5,7 @@ import * as vfs from "./_namespaces/vfs";
 export const isolatedDeclarationsErrors = new Set([
     ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_which_are_not_supported_with_isolatedDeclarations,
     ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
-    ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+    ts.Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations,
     ts.Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
     ts.Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
     ts.Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations,

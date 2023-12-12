@@ -9,25 +9,25 @@
  
  /// [Errors] ////
  
- computedPropertyNames11_ES6.ts(5,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
--computedPropertyNames11_ES6.ts(5,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--computedPropertyNames11_ES6.ts(6,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(6,13): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(7,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(7,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(8,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+ computedPropertyNames11_ES6.ts(5,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+-computedPropertyNames11_ES6.ts(5,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-computedPropertyNames11_ES6.ts(6,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(6,13): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(7,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(7,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(8,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 @@ -19,33 +17,26 @@
- computedPropertyNames11_ES6.ts(9,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(9,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(10,14): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(11,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
--computedPropertyNames11_ES6.ts(12,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(12,13): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(13,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(13,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(14,23): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(15,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- computedPropertyNames11_ES6.ts(15,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+ computedPropertyNames11_ES6.ts(9,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(9,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(10,14): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(11,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+-computedPropertyNames11_ES6.ts(12,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(12,13): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(13,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(13,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(14,23): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(15,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ computedPropertyNames11_ES6.ts(15,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
  
  
 -==== computedPropertyNames11_ES6.ts (19 errors) ====
@@ -38,28 +38,28 @@
      var v = {
          get [s]() { return 0; },
              ~~~
- !!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- !!! related TS9032 computedPropertyNames11_ES6.ts:5:9: Add a return type to the get accessor declaration
+ !!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ !!! related TS9032 computedPropertyNames11_ES6.ts:5:9: Add a return type to the get accessor declaration.
 -            ~~~
--!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--!!! related TS9027 computedPropertyNames11_ES6.ts:4:5: Add a type annotation to the variable v
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-!!! related TS9027 computedPropertyNames11_ES6.ts:4:5: Add a type annotation to the variable v.
          set [n](v) { },
 -            ~~~
--!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--!!! related TS9027 computedPropertyNames11_ES6.ts:4:5: Add a type annotation to the variable v
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-!!! related TS9027 computedPropertyNames11_ES6.ts:4:5: Add a type annotation to the variable v.
                  ~
- !!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- !!! related TS9033 computedPropertyNames11_ES6.ts:6:9: Add a type to parameter of the set accessor declaration
+ !!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ !!! related TS9033 computedPropertyNames11_ES6.ts:6:9: Add a type to parameter of the set accessor declaration.
          get [s + s]() { return 0; },
 @@ -77,11 +68,8 @@
              ~~~
- !!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- !!! related TS9032 computedPropertyNames11_ES6.ts:11:9: Add a return type to the get accessor declaration
+ !!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ !!! related TS9032 computedPropertyNames11_ES6.ts:11:9: Add a return type to the get accessor declaration.
          set [a](v) { },
 -            ~~~
--!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
--!!! related TS9027 computedPropertyNames11_ES6.ts:4:5: Add a type annotation to the variable v
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-!!! related TS9027 computedPropertyNames11_ES6.ts:4:5: Add a type annotation to the variable v.
                  ~
- !!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
- !!! related TS9033 computedPropertyNames11_ES6.ts:12:9: Add a type to parameter of the set accessor declaration
+ !!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+ !!! related TS9033 computedPropertyNames11_ES6.ts:12:9: Add a type to parameter of the set accessor declaration.
          get [<any>true]() { return 0; },

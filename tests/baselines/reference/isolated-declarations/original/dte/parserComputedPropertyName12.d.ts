@@ -16,7 +16,7 @@ declare class C {
 
 /// [Errors] ////
 
-parserComputedPropertyName12.ts(2,4): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+parserComputedPropertyName12.ts(2,4): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 parserComputedPropertyName12.ts(2,5): error TS2304: Cannot find name 'e'.
 
 
@@ -24,7 +24,7 @@ parserComputedPropertyName12.ts(2,5): error TS2304: Cannot find name 'e'.
     class C {
        [e]() { }
        ~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 parserComputedPropertyName12.ts:2:4: Add a return type to the method
         ~
 !!! error TS2304: Cannot find name 'e'.

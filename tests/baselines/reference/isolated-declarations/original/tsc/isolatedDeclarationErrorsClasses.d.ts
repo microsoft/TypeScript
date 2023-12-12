@@ -94,24 +94,24 @@ export {};
 
 /// [Errors] ////
 
-isolatedDeclarationErrorsClasses.ts(3,13): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
-isolatedDeclarationErrorsClasses.ts(4,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsClasses.ts(3,13): error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(4,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(8,18): error TS7006: Parameter 'p' implicitly has an 'any' type.
-isolatedDeclarationErrorsClasses.ts(8,18): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
-isolatedDeclarationErrorsClasses.ts(9,23): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
-isolatedDeclarationErrorsClasses.ts(11,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsClasses.ts(8,18): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(9,23): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(11,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(12,9): error TS7032: Property 'setOnly' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
 isolatedDeclarationErrorsClasses.ts(12,17): error TS7006: Parameter 'value' implicitly has an 'any' type.
-isolatedDeclarationErrorsClasses.ts(12,17): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
-isolatedDeclarationErrorsClasses.ts(14,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+isolatedDeclarationErrorsClasses.ts(12,17): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(14,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(36,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 isolatedDeclarationErrorsClasses.ts(36,6): error TS2304: Cannot find name 'missing'.
-isolatedDeclarationErrorsClasses.ts(42,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-isolatedDeclarationErrorsClasses.ts(44,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+isolatedDeclarationErrorsClasses.ts(42,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+isolatedDeclarationErrorsClasses.ts(44,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(44,35): error TS7006: Parameter 'v' implicitly has an 'any' type.
-isolatedDeclarationErrorsClasses.ts(46,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+isolatedDeclarationErrorsClasses.ts(46,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(48,9): error TS7032: Property '[noParamAnnotationStringName]' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
-isolatedDeclarationErrorsClasses.ts(48,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+isolatedDeclarationErrorsClasses.ts(48,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(48,39): error TS7006: Parameter 'value' implicitly has an 'any' type.
 isolatedDeclarationErrorsClasses.ts(50,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 isolatedDeclarationErrorsClasses.ts(55,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
@@ -123,11 +123,11 @@ isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralNa
     
         field = 1 + 1;
                 ~~~~~
-!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9029 isolatedDeclarationErrorsClasses.ts:3:5: Add a type annotation to the property field
+!!! error TS9012: Property must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9029 isolatedDeclarationErrorsClasses.ts:3:5: Add a type annotation to the property field.
         method() {}
         ~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 isolatedDeclarationErrorsClasses.ts:4:5: Add a return type to the method
     
         methodOk(): void {}
@@ -136,31 +136,31 @@ isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralNa
                      ~
 !!! error TS7006: Parameter 'p' implicitly has an 'any' type.
                      ~
-!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9028 isolatedDeclarationErrorsClasses.ts:8:18: Add a type annotation to the parameter p
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9028 isolatedDeclarationErrorsClasses.ts:8:18: Add a type annotation to the parameter p.
         methodParams2(p = 1 + 1): void {}
                           ~~~~~
-!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9028 isolatedDeclarationErrorsClasses.ts:9:19: Add a type annotation to the parameter p
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9028 isolatedDeclarationErrorsClasses.ts:9:19: Add a type annotation to the parameter p.
     
         get getOnly() { return 0 }
             ~~~~~~~
-!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9032 isolatedDeclarationErrorsClasses.ts:11:9: Add a return type to the get accessor declaration
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9032 isolatedDeclarationErrorsClasses.ts:11:9: Add a return type to the get accessor declaration.
         set setOnly(value) { }
             ~~~~~~~
 !!! error TS7032: Property 'setOnly' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
                     ~~~~~
 !!! error TS7006: Parameter 'value' implicitly has an 'any' type.
                     ~~~~~
-!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9033 isolatedDeclarationErrorsClasses.ts:12:9: Add a type to parameter of the set accessor declaration
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9033 isolatedDeclarationErrorsClasses.ts:12:9: Add a type to parameter of the set accessor declaration.
     
         get getSetBad() { return 0 }
             ~~~~~~~~~
-!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9033 isolatedDeclarationErrorsClasses.ts:15:9: Add a type to parameter of the set accessor declaration
-!!! related TS9032 isolatedDeclarationErrorsClasses.ts:14:9: Add a return type to the get accessor declaration
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9033 isolatedDeclarationErrorsClasses.ts:15:9: Add a type to parameter of the set accessor declaration.
+!!! related TS9032 isolatedDeclarationErrorsClasses.ts:14:9: Add a return type to the get accessor declaration.
         set getSetBad(value) { }
     
         get getSetOk(): number { return 0 }
@@ -194,23 +194,23 @@ isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralNa
     
         [noAnnotationStringName]() { }
         ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     
         [noParamAnnotationStringName](v): void { }
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
                                       ~
 !!! error TS7006: Parameter 'v' implicitly has an 'any' type.
     
         get [noAnnotationStringName]() { return 0;}
             ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     
         set [noParamAnnotationStringName](value) { }
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7032: Property '[noParamAnnotationStringName]' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
                                           ~~~~~
 !!! error TS7006: Parameter 'value' implicitly has an 'any' type.
     

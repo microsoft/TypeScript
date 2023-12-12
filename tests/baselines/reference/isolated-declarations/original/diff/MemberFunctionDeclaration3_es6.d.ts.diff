@@ -15,7 +15,7 @@
  
  /// [Errors] ////
  
-+MemberFunctionDeclaration3_es6.ts(2,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
++MemberFunctionDeclaration3_es6.ts(2,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
  MemberFunctionDeclaration3_es6.ts(2,6): error TS2304: Cannot find name 'foo'.
  
  
@@ -24,7 +24,7 @@
      class C {
         *[foo]() { }
 +        ~~~~~
-+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
++!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 +!!! related TS9034 MemberFunctionDeclaration3_es6.ts:2:5: Add a return type to the method
           ~~~
  !!! error TS2304: Cannot find name 'foo'.

@@ -89,7 +89,7 @@ genericTypeReferenceWithoutTypeArgument2.ts(11,18): error TS2314: Generic type '
 genericTypeReferenceWithoutTypeArgument2.ts(12,11): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
 genericTypeReferenceWithoutTypeArgument2.ts(12,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument2.ts(12,18): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-genericTypeReferenceWithoutTypeArgument2.ts(14,9): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+genericTypeReferenceWithoutTypeArgument2.ts(14,9): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 genericTypeReferenceWithoutTypeArgument2.ts(14,13): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument2.ts(14,28): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument2.ts(16,15): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
@@ -105,9 +105,9 @@ genericTypeReferenceWithoutTypeArgument2.ts(29,18): error TS2708: Cannot use nam
 genericTypeReferenceWithoutTypeArgument2.ts(29,18): error TS4020: 'extends' clause of exported class 'D2' has or is using private name 'M'.
 genericTypeReferenceWithoutTypeArgument2.ts(30,24): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument2.ts(31,24): error TS2694: Namespace 'M' has no exported member 'C'.
-genericTypeReferenceWithoutTypeArgument2.ts(33,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+genericTypeReferenceWithoutTypeArgument2.ts(33,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 genericTypeReferenceWithoutTypeArgument2.ts(33,22): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-genericTypeReferenceWithoutTypeArgument2.ts(34,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+genericTypeReferenceWithoutTypeArgument2.ts(34,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 genericTypeReferenceWithoutTypeArgument2.ts(34,22): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 genericTypeReferenceWithoutTypeArgument2.ts(36,10): error TS2304: Cannot find name 'C'.
 genericTypeReferenceWithoutTypeArgument2.ts(36,10): error TS4025: Exported variable 'j' has or is using private name 'C'.
@@ -144,9 +144,9 @@ genericTypeReferenceWithoutTypeArgument2.ts(37,10): error TS2314: Generic type '
     
     var e = (x: I) => { var y: I; return y; }
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9027 genericTypeReferenceWithoutTypeArgument2.ts:14:5: Add a type annotation to the variable e
-!!! related TS9030 genericTypeReferenceWithoutTypeArgument2.ts:14:9: Add a return type to the function expression
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 genericTypeReferenceWithoutTypeArgument2.ts:14:5: Add a type annotation to the variable e.
+!!! related TS9030 genericTypeReferenceWithoutTypeArgument2.ts:14:9: Add a return type to the function expression.
                 ~
 !!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
                                ~
@@ -197,14 +197,14 @@ genericTypeReferenceWithoutTypeArgument2.ts(37,10): error TS2314: Generic type '
     
     function h<T extends I>(x: T) { }
              ~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9031 genericTypeReferenceWithoutTypeArgument2.ts:33:10: Add a return type to the function declaration
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 genericTypeReferenceWithoutTypeArgument2.ts:33:10: Add a return type to the function declaration.
                          ~
 !!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
     function i<T extends M.E>(x: T) { }
              ~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9031 genericTypeReferenceWithoutTypeArgument2.ts:34:10: Add a return type to the function declaration
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 genericTypeReferenceWithoutTypeArgument2.ts:34:10: Add a return type to the function declaration.
                          ~~~
 !!! error TS2314: Generic type 'E<T>' requires 1 type argument(s).
     

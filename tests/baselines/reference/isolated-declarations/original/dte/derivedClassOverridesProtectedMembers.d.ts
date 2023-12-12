@@ -78,10 +78,10 @@ declare class Derived extends Base {
 
 /// [Errors] ////
 
-derivedClassOverridesProtectedMembers.ts(6,15): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-derivedClassOverridesProtectedMembers.ts(12,22): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-derivedClassOverridesProtectedMembers.ts(22,15): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-derivedClassOverridesProtectedMembers.ts(28,22): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+derivedClassOverridesProtectedMembers.ts(6,15): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+derivedClassOverridesProtectedMembers.ts(12,22): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+derivedClassOverridesProtectedMembers.ts(22,15): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+derivedClassOverridesProtectedMembers.ts(28,22): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 
 
 ==== derivedClassOverridesProtectedMembers.ts (4 errors) ====
@@ -92,7 +92,7 @@ derivedClassOverridesProtectedMembers.ts(28,22): error TS9008: Method must have 
         protected a: typeof x;
         protected b(a: typeof x) { }
                   ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesProtectedMembers.ts:6:15: Add a return type to the method
         protected get c() { return x; }
         protected set c(v: typeof x) { }
@@ -101,7 +101,7 @@ derivedClassOverridesProtectedMembers.ts(28,22): error TS9008: Method must have 
         protected static r: typeof x;
         protected static s(a: typeof x) { }
                          ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesProtectedMembers.ts:12:22: Add a return type to the method
         protected static get t() { return x; }
         protected static set t(v: typeof x) { }
@@ -114,7 +114,7 @@ derivedClassOverridesProtectedMembers.ts(28,22): error TS9008: Method must have 
         protected a: typeof y;
         protected b(a: typeof y) { }
                   ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesProtectedMembers.ts:22:15: Add a return type to the method
         protected get c() { return y; }
         protected set c(v: typeof y) { }
@@ -123,7 +123,7 @@ derivedClassOverridesProtectedMembers.ts(28,22): error TS9008: Method must have 
         protected static r: typeof y;
         protected static s(a: typeof y) { }
                          ~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 derivedClassOverridesProtectedMembers.ts:28:22: Add a return type to the method
         protected static get t() { return y; }
         protected static set t(a: typeof y) { }

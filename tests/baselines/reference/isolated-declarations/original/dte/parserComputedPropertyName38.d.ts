@@ -16,7 +16,7 @@ declare class C {
 
 /// [Errors] ////
 
-parserComputedPropertyName38.ts(2,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+parserComputedPropertyName38.ts(2,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 parserComputedPropertyName38.ts(2,6): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 parserComputedPropertyName38.ts(2,6): error TS2304: Cannot find name 'public'.
 
@@ -25,7 +25,7 @@ parserComputedPropertyName38.ts(2,6): error TS2304: Cannot find name 'public'.
     class C {
         [public]() { }
         ~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 parserComputedPropertyName38.ts:2:5: Add a return type to the method
          ~~~~~~
 !!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.

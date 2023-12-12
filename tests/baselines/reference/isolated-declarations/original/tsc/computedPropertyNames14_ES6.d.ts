@@ -23,12 +23,12 @@ declare class C {
 /// [Errors] ////
 
 computedPropertyNames14_ES6.ts(3,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames14_ES6.ts(3,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+computedPropertyNames14_ES6.ts(3,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 computedPropertyNames14_ES6.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames14_ES6.ts(5,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames14_ES6.ts(6,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames14_ES6.ts(7,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames14_ES6.ts(7,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+computedPropertyNames14_ES6.ts(7,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 computedPropertyNames14_ES6.ts(8,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
@@ -39,7 +39,7 @@ computedPropertyNames14_ES6.ts(8,12): error TS2464: A computed property name mus
         ~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
         ~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         static [true]() { }
                ~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
@@ -53,7 +53,7 @@ computedPropertyNames14_ES6.ts(8,12): error TS2464: A computed property name mus
         ~~~~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
         ~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         static [null]() { }
                ~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

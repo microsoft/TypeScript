@@ -43,7 +43,7 @@ export declare const a: invalid;
 //# sourceMappingURL=index.d.ts.map
 /// [Errors] ////
 
-/p1/index.ts(4,18): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+/p1/index.ts(4,18): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 ==== /p1/node_modules/typescript-fsa/src/impl.d.ts (0 errors) ====
@@ -76,8 +76,8 @@ export declare const a: invalid;
     
     export const a = getA();
                      ~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 /p1/index.ts:4:14: Add a type annotation to the variable a
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 /p1/index.ts:4:14: Add a type annotation to the variable a.
 ==== /p2/index.d.ts (0 errors) ====
     export const a: import("typescript-fsa").A;
     

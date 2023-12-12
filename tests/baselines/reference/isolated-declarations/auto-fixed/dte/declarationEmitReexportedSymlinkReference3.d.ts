@@ -56,7 +56,7 @@ export declare const ADMIN: invalid;
 /// [Errors] ////
 
 monorepo/pkg3/src/keys.ts(3,14): error TS2742: The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
-monorepo/pkg3/src/keys.ts(3,22): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+monorepo/pkg3/src/keys.ts(3,22): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 ==== monorepo/pkg3/src/index.ts (0 errors) ====
@@ -68,8 +68,8 @@ monorepo/pkg3/src/keys.ts(3,22): error TS9010: Variable must have an explicit ty
                  ~~~~~
 !!! error TS2742: The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 monorepo/pkg3/src/keys.ts:3:14: Add a type annotation to the variable ADMIN
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 monorepo/pkg3/src/keys.ts:3:14: Add a type annotation to the variable ADMIN.
 ==== monorepo/pkg1/dist/index.d.ts (0 errors) ====
     export * from './types';
 ==== monorepo/pkg1/dist/types.d.ts (0 errors) ====

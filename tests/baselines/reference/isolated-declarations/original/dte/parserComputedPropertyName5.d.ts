@@ -14,7 +14,7 @@ declare var v: invalid;
 
 parserComputedPropertyName5.ts(1,11): error TS1042: 'public' modifier cannot be used here.
 parserComputedPropertyName5.ts(1,22): error TS2378: A 'get' accessor must return a value.
-parserComputedPropertyName5.ts(1,22): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+parserComputedPropertyName5.ts(1,22): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
 parserComputedPropertyName5.ts(1,23): error TS2304: Cannot find name 'e'.
 
 
@@ -25,7 +25,7 @@ parserComputedPropertyName5.ts(1,23): error TS2304: Cannot find name 'e'.
                          ~~~
 !!! error TS2378: A 'get' accessor must return a value.
                          ~~~
-!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9032 parserComputedPropertyName5.ts:1:22: Add a return type to the get accessor declaration
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9032 parserComputedPropertyName5.ts:1:22: Add a return type to the get accessor declaration.
                           ~
 !!! error TS2304: Cannot find name 'e'.

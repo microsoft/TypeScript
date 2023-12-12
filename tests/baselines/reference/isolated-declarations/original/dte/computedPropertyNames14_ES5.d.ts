@@ -25,12 +25,12 @@ declare class C {
 /// [Errors] ////
 
 computedPropertyNames14_ES5.ts(3,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames14_ES5.ts(3,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+computedPropertyNames14_ES5.ts(3,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 computedPropertyNames14_ES5.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames14_ES5.ts(5,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames14_ES5.ts(6,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames14_ES5.ts(7,5): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames14_ES5.ts(7,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+computedPropertyNames14_ES5.ts(7,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 computedPropertyNames14_ES5.ts(8,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
@@ -41,7 +41,7 @@ computedPropertyNames14_ES5.ts(8,12): error TS2464: A computed property name mus
         ~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
         ~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 computedPropertyNames14_ES5.ts:3:5: Add a return type to the method
         static [true]() { }
                ~~~~~~
@@ -56,7 +56,7 @@ computedPropertyNames14_ES5.ts(8,12): error TS2464: A computed property name mus
         ~~~~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
         ~~~~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 computedPropertyNames14_ES5.ts:7:5: Add a return type to the method
         static [null]() { }
                ~~~~~~

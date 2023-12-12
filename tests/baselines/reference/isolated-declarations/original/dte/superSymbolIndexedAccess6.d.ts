@@ -30,8 +30,8 @@ declare class Bar extends Foo {
 
 /// [Errors] ////
 
-superSymbolIndexedAccess6.ts(4,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
-superSymbolIndexedAccess6.ts(10,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+superSymbolIndexedAccess6.ts(4,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+superSymbolIndexedAccess6.ts(10,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 
 
 ==== superSymbolIndexedAccess6.ts (2 errors) ====
@@ -40,7 +40,7 @@ superSymbolIndexedAccess6.ts(10,12): error TS9008: Method must have an explicit 
     class Foo {
         static [symbol]() {
                ~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 superSymbolIndexedAccess6.ts:4:12: Add a return type to the method
             return 0;
         }
@@ -49,7 +49,7 @@ superSymbolIndexedAccess6.ts(10,12): error TS9008: Method must have an explicit 
     class Bar extends Foo {
         static [symbol]() {
                ~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 superSymbolIndexedAccess6.ts:10:12: Add a return type to the method
             return super[symbol]();
         }

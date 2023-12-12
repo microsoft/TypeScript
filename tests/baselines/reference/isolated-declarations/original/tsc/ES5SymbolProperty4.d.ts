@@ -22,7 +22,7 @@ declare class C {
 
 /// [Errors] ////
 
-ES5SymbolProperty4.ts(4,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+ES5SymbolProperty4.ts(4,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 
 
 ==== ES5SymbolProperty4.ts (1 errors) ====
@@ -31,7 +31,7 @@ ES5SymbolProperty4.ts(4,5): error TS9014: Computed properties must be number or 
     class C {
         [Symbol.iterator]() { }
         ~~~~~~~~~~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     }
     
     (new C)[Symbol.iterator]

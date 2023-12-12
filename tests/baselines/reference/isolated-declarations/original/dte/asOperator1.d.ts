@@ -24,7 +24,7 @@ declare var j: number | string;
 
 /// [Errors] ////
 
-asOperator1.ts(3,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+asOperator1.ts(3,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 ==== asOperator1.ts (1 errors) ====
@@ -32,8 +32,8 @@ asOperator1.ts(3,9): error TS9010: Variable must have an explicit type annotatio
     var x = undefined as number;
     var y = (null as string).length;
             ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 asOperator1.ts:3:5: Add a type annotation to the variable y
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 asOperator1.ts:3:5: Add a type annotation to the variable y.
     var z = Date as any as string;
     
     // Should parse as a union type, not a bitwise 'or' of (32 as number) and 'string'

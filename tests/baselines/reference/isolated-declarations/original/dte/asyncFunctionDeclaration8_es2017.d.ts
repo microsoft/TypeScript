@@ -14,7 +14,7 @@ declare var v: invalid;
 
 asyncFunctionDeclaration8_es2017.ts(1,12): error TS2304: Cannot find name 'await'.
 asyncFunctionDeclaration8_es2017.ts(1,20): error TS2304: Cannot find name 'foo'.
-asyncFunctionDeclaration8_es2017.ts(1,20): error TS9013: Expression type can't be inferred with --isolatedDeclarations
+asyncFunctionDeclaration8_es2017.ts(1,20): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 
 
 ==== asyncFunctionDeclaration8_es2017.ts (3 errors) ====
@@ -24,6 +24,6 @@ asyncFunctionDeclaration8_es2017.ts(1,20): error TS9013: Expression type can't b
                        ~~~
 !!! error TS2304: Cannot find name 'foo'.
                        ~~~
-!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations
-!!! related TS9027 asyncFunctionDeclaration8_es2017.ts:1:5: Add a type annotation to the variable v
-!!! related TS9035 asyncFunctionDeclaration8_es2017.ts:1:20: Add a type assertion to this expression to make type type explicit
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 asyncFunctionDeclaration8_es2017.ts:1:5: Add a type annotation to the variable v.
+!!! related TS9035 asyncFunctionDeclaration8_es2017.ts:1:20: Add a type assertion to this expression to make type type explicit.

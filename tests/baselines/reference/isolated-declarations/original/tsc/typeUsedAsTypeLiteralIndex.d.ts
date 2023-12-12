@@ -52,7 +52,7 @@ type T4 = {
 
 typeUsedAsTypeLiteralIndex.ts(3,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
 typeUsedAsTypeLiteralIndex.ts(3,6): error TS2690: 'K' only refers to a type, but is being used as a value here. Did you mean to use 'P in K'?
-typeUsedAsTypeLiteralIndex.ts(6,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+typeUsedAsTypeLiteralIndex.ts(6,12): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 typeUsedAsTypeLiteralIndex.ts(13,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
 typeUsedAsTypeLiteralIndex.ts(13,6): error TS2690: 'K2' only refers to a type, but is being used as a value here. Did you mean to use 'K in K2'?
 typeUsedAsTypeLiteralIndex.ts(18,5): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
@@ -73,8 +73,8 @@ typeUsedAsTypeLiteralIndex.ts(23,6): error TS2693: 'K4' only refers to a type, b
     
     const K1 = Symbol();
                ~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 typeUsedAsTypeLiteralIndex.ts:6:7: Add a type annotation to the variable K1
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 typeUsedAsTypeLiteralIndex.ts:6:7: Add a type annotation to the variable K1.
     type T1 = {
         [K1]: number;
     }

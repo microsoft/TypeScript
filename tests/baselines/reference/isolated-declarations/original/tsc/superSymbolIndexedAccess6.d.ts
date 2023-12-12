@@ -28,8 +28,8 @@ declare class Bar extends Foo {
 
 /// [Errors] ////
 
-superSymbolIndexedAccess6.ts(4,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
-superSymbolIndexedAccess6.ts(10,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+superSymbolIndexedAccess6.ts(4,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+superSymbolIndexedAccess6.ts(10,12): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 
 
 ==== superSymbolIndexedAccess6.ts (2 errors) ====
@@ -38,7 +38,7 @@ superSymbolIndexedAccess6.ts(10,12): error TS9014: Computed properties must be n
     class Foo {
         static [symbol]() {
                ~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
             return 0;
         }
     }
@@ -46,7 +46,7 @@ superSymbolIndexedAccess6.ts(10,12): error TS9014: Computed properties must be n
     class Bar extends Foo {
         static [symbol]() {
                ~~~~~~~~
-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
             return super[symbol]();
         }
     }

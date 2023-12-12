@@ -270,7 +270,7 @@ declare class I {
 
 /// [Errors] ////
 
-decoratorsOnComputedProperties.ts(1,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+decoratorsOnComputedProperties.ts(1,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 decoratorsOnComputedProperties.ts(18,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(19,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 decoratorsOnComputedProperties.ts(20,8): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
@@ -357,8 +357,8 @@ decoratorsOnComputedProperties.ts(188,5): error TS1206: Decorators are not valid
 ==== decoratorsOnComputedProperties.ts (82 errors) ====
     function x(o: object, k: PropertyKey) { }
              ~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9031 decoratorsOnComputedProperties.ts:1:10: Add a return type to the function declaration
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 decoratorsOnComputedProperties.ts:1:10: Add a return type to the function declaration.
     let i = 0;
     function foo(): string { return ++i + ""; }
     

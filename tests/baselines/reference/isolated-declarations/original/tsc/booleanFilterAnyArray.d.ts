@@ -61,7 +61,7 @@ declare var foos: boolean[];
 
 /// [Errors] ////
 
-booleanFilterAnyArray.ts(20,11): error TS9017: Only const arrays can be inferred with --isolatedDeclarations
+booleanFilterAnyArray.ts(20,11): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
 
 
 ==== booleanFilterAnyArray.ts (1 errors) ====
@@ -86,8 +86,8 @@ booleanFilterAnyArray.ts(20,11): error TS9017: Only const arrays can be inferred
     
     var foo = [{ name: 'x' }]
               ~~~~~~~~~~~~~~~
-!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations
-!!! related TS9027 booleanFilterAnyArray.ts:20:5: Add a type annotation to the variable foo
+!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+!!! related TS9027 booleanFilterAnyArray.ts:20:5: Add a type annotation to the variable foo.
     var foor: Array<{name: string}>
     var foor = foo.filter(x => x.name)
     var foos: Array<boolean>

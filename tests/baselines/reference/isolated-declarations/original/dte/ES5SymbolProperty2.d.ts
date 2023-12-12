@@ -27,7 +27,7 @@ declare namespace M {
 
 /// [Errors] ////
 
-ES5SymbolProperty2.ts(5,9): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+ES5SymbolProperty2.ts(5,9): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 ES5SymbolProperty2.ts(10,11): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
 
 
@@ -38,7 +38,7 @@ ES5SymbolProperty2.ts(10,11): error TS2585: 'Symbol' only refers to a type, but 
         export class C {
             [Symbol.iterator]() { }
             ~~~~~~~~~~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 !!! related TS9034 ES5SymbolProperty2.ts:5:9: Add a return type to the method
         }
         (new C)[Symbol.iterator];

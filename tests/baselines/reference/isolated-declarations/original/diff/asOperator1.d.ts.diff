@@ -15,4 +15,4 @@
  
  /// [Errors] ////
  
- asOperator1.ts(3,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+ asOperator1.ts(3,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.

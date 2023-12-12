@@ -25,12 +25,12 @@ declare class C {
 /// [Errors] ////
 
 computedPropertyNames17_ES5.ts(3,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames17_ES5.ts(3,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+computedPropertyNames17_ES5.ts(3,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
 computedPropertyNames17_ES5.ts(4,16): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames17_ES5.ts(5,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames17_ES5.ts(6,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 computedPropertyNames17_ES5.ts(7,16): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-computedPropertyNames17_ES5.ts(7,16): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
+computedPropertyNames17_ES5.ts(7,16): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
 computedPropertyNames17_ES5.ts(8,9): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
@@ -41,8 +41,8 @@ computedPropertyNames17_ES5.ts(8,9): error TS2464: A computed property name must
             ~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
             ~~~
-!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9032 computedPropertyNames17_ES5.ts:3:9: Add a return type to the get accessor declaration
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9032 computedPropertyNames17_ES5.ts:3:9: Add a return type to the get accessor declaration.
         static set [true](v) { }
                    ~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
@@ -56,8 +56,8 @@ computedPropertyNames17_ES5.ts(8,9): error TS2464: A computed property name must
                    ~~~~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
                    ~~~~~~~~~~~
-!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9032 computedPropertyNames17_ES5.ts:7:16: Add a return type to the get accessor declaration
+!!! error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9032 computedPropertyNames17_ES5.ts:7:16: Add a return type to the get accessor declaration.
         set [null](v) { }
             ~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

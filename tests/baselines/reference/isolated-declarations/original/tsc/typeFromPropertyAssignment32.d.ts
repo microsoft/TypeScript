@@ -55,12 +55,12 @@ declare namespace ExpandoMerge {
 
 /// [Errors] ////
 
-expando.ts(1,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
+expando.ts(1,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 expando.ts(4,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 expando.ts(5,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 expando.ts(12,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 expando.ts(13,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
-expando.ts(14,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
+expando.ts(14,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 ns.ts(1,11): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 ns.ts(10,11): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
 
@@ -68,8 +68,8 @@ ns.ts(10,11): error TS2433: A namespace declaration cannot be in a different fil
 ==== expando.ts (6 errors) ====
     function ExpandoMerge(n: number) {
              ~~~~~~~~~~~~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations
-!!! related TS9031 expando.ts:1:10: Add a return type to the function declaration
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 expando.ts:1:10: Add a return type to the function declaration.
         return n;
     }
     ExpandoMerge.p1 = 111
@@ -92,8 +92,8 @@ ns.ts(10,11): error TS2433: A namespace declaration cannot be in a different fil
 !!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001);
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations
-!!! related TS9027 expando.ts:14:5: Add a type annotation to the variable n
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 expando.ts:14:5: Add a type annotation to the variable n.
     
 ==== ns.ts (2 errors) ====
     namespace ExpandoMerge {
