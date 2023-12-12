@@ -713,48 +713,17 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         }
         env.compilerOptions.forceDtsEmit = false;
 
-        const autoFixCacheTest = ts.combinePaths("tests/auto-fixed", compilerEnvironment.configuredName);
-        const existingTransformedTest = IO.readFile(autoFixCacheTest);
-        const hash = ts.sys.createHash!(env.testCaseContent.sourceCode);
-        const fixedTest = existingTransformedTest && TestCaseParser.makeUnitsFromTest(existingTransformedTest, compilerEnvironment.fileName);
-        let transformSucceeded = true;
-        let hasReferenceDirectiveErrors = false;
-        if (fixedTest && fixedTest.settings.hash === hash + "!") {
-            transformSucceeded = fixedTest.settings.succeeded !== "false";
-            hasReferenceDirectiveErrors = fixedTest.settings.hasReferenceDirectiveErrors !== "false";
-            if (transformSucceeded) {
-                env.allFiles = env.allFiles.map(f => {
-                    const testUnit = fixedTest.testUnitData.find(t => t.name === f.unitName);
-                    ts.Debug.assert(testUnit, "All files should be in the cached auto fixed version of the test");
-                    env.fileSystem.writeFileSync(testUnit.name, testUnit.content);
-                    return this.createHarnessTestFile(testUnit);
-                });
-                env.otherFiles = env.otherFiles.map(o => env.allFiles.find(f => f.unitName === o.unitName)!);
-                env.toBeCompiled = env.toBeCompiled.map(o => env.allFiles.find(f => f.unitName === o.unitName)!);
-            }
+        const fixerOptions = ts.cloneCompilerOptions(env.compilerOptions);
+        fixerOptions.isolatedDeclarations = true;
+        const fixResults = fixTestFiles(env.fileSystem, env.programFileNames, fixerOptions);
+
+        const hasReferenceDirectiveErrors = fixResults.success && fixResults.unfixedDiagnostics.some(d => FixedIsolatedDeclarationTest.referenceDirectiveErrors.has(d.code));
+        for (const file of env.allFiles) {
+            const content = env.fileSystem.readFileSync(file.unitName, "utf-8");
+            file.content = content;
         }
-        else {
-            const fixerOptions = ts.cloneCompilerOptions(env.compilerOptions);
-            fixerOptions.isolatedDeclarations = true;
-            const fixResults = fixTestFiles(env.fileSystem, env.programFileNames, fixerOptions);
-            let cachedTest = "// @hash: " + hash + "\n";
-            if (!fixResults.success) {
-                transformSucceeded = false;
-                cachedTest += "// @succeeded: false\n";
-            }
-            else {
-                hasReferenceDirectiveErrors = fixResults.unfixedDiagnostics.some(d => FixedIsolatedDeclarationTest.referenceDirectiveErrors.has(d.code));
-                cachedTest += "// @hasReferenceDirectiveErrors: " + hasReferenceDirectiveErrors + "\n";
-                for (const file of env.allFiles) {
-                    cachedTest += "\n// @fileName: " + file.unitName + "\n";
-                    const content = env.fileSystem.readFileSync(file.unitName, "utf-8");
-                    file.content = content;
-                    cachedTest += content;
-                }
-            }
-            IO.writeFile(autoFixCacheTest, cachedTest);
-        }
-        if (!transformSucceeded || hasReferenceDirectiveErrors) {
+
+        if (!fixResults.success || hasReferenceDirectiveErrors) {
             return undefined;
         }
         env.fileSystem.makeReadonly();
