@@ -45,7 +45,6 @@ import {
     concatenate,
     ConditionalExpression,
     ConditionalTypeNode,
-    ConstKeyword,
     ConstructorDeclaration,
     ConstructorTypeNode,
     ConstructSignatureDeclaration,
@@ -9713,11 +9712,7 @@ namespace Parser {
                     skipWhitespace();
                 }
 
-                let modifiers: Modifier[] | undefined;
-                if (token() === SyntaxKind.ConstKeyword) {
-                    modifiers = append(modifiers, parseTokenNode<ConstKeyword>());
-                }
-
+                const modifiers = parseModifiers(/*allowDecorators*/ false, /*permitConstAsModifier*/ true);
                 const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
                 let defaultType: TypeNode | undefined;
                 if (isBracketed) {
