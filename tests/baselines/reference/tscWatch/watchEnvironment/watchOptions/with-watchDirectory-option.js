@@ -48,9 +48,9 @@ var y = 1;
 FsWatches::
 /a/b: *new*
   {}
-/a/b/commonfile1.ts: *new*
+/a/b/commonFile1.ts: *new*
   {}
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}

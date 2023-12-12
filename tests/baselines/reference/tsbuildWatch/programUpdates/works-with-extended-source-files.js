@@ -273,15 +273,15 @@ FsWatches::
   {}
 /a/b/bravo.tsconfig.json: *new*
   {}
-/a/b/commonfile1.ts: *new*
+/a/b/commonFile1.ts: *new*
   {}
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
-/a/b/extendsconfig1.tsconfig.json: *new*
+/a/b/extendsConfig1.tsconfig.json: *new*
   {}
-/a/b/extendsconfig2.tsconfig.json: *new*
+/a/b/extendsConfig2.tsconfig.json: *new*
   {}
-/a/b/extendsconfig3.tsconfig.json: *new*
+/a/b/extendsConfig3.tsconfig.json: *new*
   {}
 /a/b/other.ts: *new*
   {}
@@ -757,15 +757,15 @@ var k = 0;
 FsWatches::
 /a/b/alpha.tsconfig.json:
   {}
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {}
-/a/b/extendsconfig1.tsconfig.json:
+/a/b/extendsConfig1.tsconfig.json:
   {}
-/a/b/extendsconfig2.tsconfig.json:
+/a/b/extendsConfig2.tsconfig.json:
   {}
-/a/b/extendsconfig3.tsconfig.json:
+/a/b/extendsConfig3.tsconfig.json:
   {}
 /a/b/other.ts:
   {}
@@ -1110,13 +1110,13 @@ Output::
 FsWatches::
 /a/b/alpha.tsconfig.json:
   {}
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {}
-/a/b/extendsconfig1.tsconfig.json:
+/a/b/extendsConfig1.tsconfig.json:
   {}
-/a/b/extendsconfig2.tsconfig.json:
+/a/b/extendsConfig2.tsconfig.json:
   {}
 /a/b/other.ts:
   {}
@@ -1130,7 +1130,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/extendsconfig3.tsconfig.json:
+/a/b/extendsConfig3.tsconfig.json:
   {}
 
 FsWatchesRecursive::

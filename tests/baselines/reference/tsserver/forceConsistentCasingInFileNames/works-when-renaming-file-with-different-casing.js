@@ -302,9 +302,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/another.ts:
+/user/username/projects/myproject/Logger.ts: *new*
   {}
-/user/username/projects/myproject/logger.ts: *new*
+/user/username/projects/myproject/another.ts:
   {}
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -366,7 +366,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/logger.ts:
+/user/username/projects/myproject/Logger.ts:
   {}
 
 FsWatchesRecursive::

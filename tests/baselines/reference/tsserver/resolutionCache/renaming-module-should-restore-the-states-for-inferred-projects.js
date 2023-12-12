@@ -67,7 +67,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 
 Before request
@@ -114,7 +114,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches *deleted*::
-/users/username/projects/project/modulefile.ts:
+/users/username/projects/project/moduleFile.ts:
   {}
 
 Timeout callback:: count: 2
@@ -175,7 +175,7 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/users/username/projects/project/modulefile: *new*
+/users/username/projects/project/moduleFile: *new*
   {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
@@ -333,11 +333,11 @@ PolledWatches::
   {"pollingInterval":2000}
 
 PolledWatches *deleted*::
-/users/username/projects/project/modulefile:
+/users/username/projects/project/moduleFile:
   {"pollingInterval":500}
 
 FsWatches::
-/users/username/projects/project/modulefile.ts: *new*
+/users/username/projects/project/moduleFile.ts: *new*
   {}
 
 FsWatches *deleted*::
