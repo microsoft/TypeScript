@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/compositeContextualSignature.ts] ////
+
+=== compositeContextualSignature.ts ===
+// Repro from #55145
+
+function f<T extends any[]>(v: ReadonlyArray<T>) { }
+>f : Symbol(f, Decl(compositeContextualSignature.ts, 0, 0))
+>T : Symbol(T, Decl(compositeContextualSignature.ts, 2, 11))
+>v : Symbol(v, Decl(compositeContextualSignature.ts, 2, 28))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(compositeContextualSignature.ts, 2, 11))
+
+f([
+>f : Symbol(f, Decl(compositeContextualSignature.ts, 0, 0))
+
+    [
+        undefined,
+>undefined : Symbol(undefined)
+
+        () => { },
+    ],
+    [
+        1,
+        () => {
+            console.log('Hello')
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        },
+    ],
+]);
+

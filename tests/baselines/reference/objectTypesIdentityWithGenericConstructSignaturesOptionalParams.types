@@ -39,8 +39,8 @@ var a: { new<T>(x: T, y?: T): B<T> }
 >y : T
 
 var b = { new<T>(x: T, y?: T) { return new C<T>(x, y); } }; // not a construct signature, function called new
->b : { new<T>(x: T, y?: T): C<T>; }
->{ new<T>(x: T, y?: T) { return new C<T>(x, y); } } : { new<T>(x: T, y?: T): C<T>; }
+>b : { "new"<T>(x: T, y?: T): C<T>; }
+>{ new<T>(x: T, y?: T) { return new C<T>(x, y); } } : { "new"<T>(x: T, y?: T): C<T>; }
 >new : <T>(x: T, y?: T) => C<T>
 >x : T
 >y : T
@@ -100,17 +100,17 @@ function foo3(x: any) { }
 >x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: typeof b): any; (x: { new<T>(x: T, y?: T): C<T>; }): any; }
->x : { new<T>(x: T, y?: T): C<T>; }
->b : { new<T>(x: T, y?: T): C<T>; }
+>foo4 : { (x: typeof b): any; (x: { "new"<T>(x: T, y?: T): C<T>; }): any; }
+>x : { "new"<T>(x: T, y?: T): C<T>; }
+>b : { "new"<T>(x: T, y?: T): C<T>; }
 
 function foo4(x: typeof b); // error
->foo4 : { (x: { new<T>(x: T, y?: T): C<T>; }): any; (x: typeof b): any; }
->x : { new<T>(x: T, y?: T): C<T>; }
->b : { new<T>(x: T, y?: T): C<T>; }
+>foo4 : { (x: { "new"<T>(x: T, y?: T): C<T>; }): any; (x: typeof b): any; }
+>x : { "new"<T>(x: T, y?: T): C<T>; }
+>b : { "new"<T>(x: T, y?: T): C<T>; }
 
 function foo4(x: any) { }
->foo4 : { (x: { new<T>(x: T, y?: T): C<T>; }): any; (x: { new<T>(x: T, y?: T): C<T>; }): any; }
+>foo4 : { (x: { "new"<T>(x: T, y?: T): C<T>; }): any; (x: { "new"<T>(x: T, y?: T): C<T>; }): any; }
 >x : any
 
 function foo8(x: B<string>): string;
@@ -151,16 +151,16 @@ function foo10(x: any) { }
 >x : any
 
 function foo11(x: B<string>);
->foo11 : { (x: B<string>): any; (x: { new<T>(x: T, y?: T): C<T>; }): any; }
+>foo11 : { (x: B<string>): any; (x: { "new"<T>(x: T, y?: T): C<T>; }): any; }
 >x : B<string>
 
 function foo11(x: typeof b); // ok
 >foo11 : { (x: B<string>): any; (x: typeof b): any; }
->x : { new<T>(x: T, y?: T): C<T>; }
->b : { new<T>(x: T, y?: T): C<T>; }
+>x : { "new"<T>(x: T, y?: T): C<T>; }
+>b : { "new"<T>(x: T, y?: T): C<T>; }
 
 function foo11(x: any) { }
->foo11 : { (x: B<string>): any; (x: { new<T>(x: T, y?: T): C<T>; }): any; }
+>foo11 : { (x: B<string>): any; (x: { "new"<T>(x: T, y?: T): C<T>; }): any; }
 >x : any
 
 function foo12(x: I<string>);
@@ -201,15 +201,15 @@ function foo13(x: any) { }
 >x : any
 
 function foo14(x: I<string>);
->foo14 : { (x: I<string>): any; (x: { new<T>(x: T, y?: T): C<T>; }): any; }
+>foo14 : { (x: I<string>): any; (x: { "new"<T>(x: T, y?: T): C<T>; }): any; }
 >x : I<string>
 
 function foo14(x: typeof b); // ok
 >foo14 : { (x: I<string>): any; (x: typeof b): any; }
->x : { new<T>(x: T, y?: T): C<T>; }
->b : { new<T>(x: T, y?: T): C<T>; }
+>x : { "new"<T>(x: T, y?: T): C<T>; }
+>b : { "new"<T>(x: T, y?: T): C<T>; }
 
 function foo14(x: any) { }
->foo14 : { (x: I<string>): any; (x: { new<T>(x: T, y?: T): C<T>; }): any; }
+>foo14 : { (x: I<string>): any; (x: { "new"<T>(x: T, y?: T): C<T>; }): any; }
 >x : any
 

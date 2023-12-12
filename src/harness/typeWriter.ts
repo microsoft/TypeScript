@@ -123,7 +123,8 @@ export class TypeWriterWalker {
             // return `error`s via `getTypeAtLocation`
             // But this is generally expected, so we don't call those out, either
             let typeString: string;
-            if (!this.hadErrorBaseline &&
+            if (
+                !this.hadErrorBaseline &&
                 type.flags & ts.TypeFlags.Any &&
                 !ts.isBindingElement(node.parent) &&
                 !ts.isPropertyAccessOrQualifiedName(node.parent) &&
@@ -132,22 +133,24 @@ export class TypeWriterWalker {
                 !ts.isMetaProperty(node.parent) &&
                 !this.isImportStatementName(node) &&
                 !this.isExportStatementName(node) &&
-                !this.isIntrinsicJsxTag(node)) {
+                !this.isIntrinsicJsxTag(node)
+            ) {
                 typeString = (type as ts.IntrinsicType).intrinsicName;
             }
             else {
-                typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
+                const typeFormatFlags = ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.GenerateNamesForShadowedTypeParams;
+                typeString = this.checker.typeToString(type, node.parent, typeFormatFlags);
                 if (ts.isIdentifier(node) && ts.isTypeAliasDeclaration(node.parent) && node.parent.name === node && typeString === ts.idText(node)) {
                     // for a complex type alias `type T = ...`, showing "T : T" isn't very helpful for type tests. When the type produced is the same as
                     // the name of the type alias, recreate the type string without reusing the alias name
-                    typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.InTypeAlias);
+                    typeString = this.checker.typeToString(type, node.parent, typeFormatFlags | ts.TypeFormatFlags.InTypeAlias);
                 }
             }
             return {
                 line: lineAndCharacter.line,
                 syntaxKind: node.kind,
                 sourceText,
-                type: typeString
+                type: typeString,
             };
         }
         const symbol = this.checker.getSymbolAtLocation(node);
@@ -172,7 +175,7 @@ export class TypeWriterWalker {
                 const declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
                 const fileName = ts.getBaseFileName(declSourceFile.fileName);
                 const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
-                const declText = `Decl(${ fileName }, ${ isLibFile ? "--" : declLineAndCharacter.line }, ${ isLibFile ? "--" : declLineAndCharacter.character })`;
+                const declText = `Decl(${fileName}, ${isLibFile ? "--" : declLineAndCharacter.line}, ${isLibFile ? "--" : declLineAndCharacter.character})`;
                 symbolString += declText;
                 (declaration as any).__symbolTestOutputCache = declText;
             }
@@ -182,7 +185,7 @@ export class TypeWriterWalker {
             line: lineAndCharacter.line,
             syntaxKind: node.kind,
             sourceText,
-            symbol: symbolString
+            symbol: symbolString,
         };
     }
 }

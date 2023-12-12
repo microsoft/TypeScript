@@ -1,0 +1,45 @@
+index.js(17,15): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+index.js(28,15): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+
+
+==== index.js (2 errors) ====
+    /**
+     * 
+     * @param {number} num 
+     */
+    function acceptNum(num) {}
+    
+    /**
+     * @typedef {(a: string, b: number) => void} Fn
+     */
+    
+    /** @type {Fn} */
+    const fn1 =
+      /**
+       * @param [b]
+       */
+      function self(a, b) {
+        acceptNum(b); // error
+                  ~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
+        self("");
+        self("", undefined);
+      };
+    
+    /** @type {Fn} */
+    const fn2 =
+      /**
+       * @param {number} [b]
+       */
+      function self(a, b) {
+        acceptNum(b); // error
+                  ~
+!!! error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'undefined' is not assignable to type 'number'.
+        self("");
+        self("", undefined);
+      };
+    

@@ -120,9 +120,9 @@ async function main() {
     ] = await Promise.all([
 >await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
 >Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, true | Promise<true> | PromiseLike<true>]
 
         MaybePromise(1),
@@ -486,7 +486,7 @@ async function findManyWrapper<
 >result : Awaited<CheckSelect<T, Promise<1>, Promise<2>>>
 >await findMany(args) : Awaited<CheckSelect<T, Promise<1>, Promise<2>>>
 >findMany(args) : CheckSelect<T, Promise<1>, Promise<2>>
->findMany : <T extends { select?: string; include?: string; }>(args: T) => CheckSelect<T, Promise<1>, Promise<2>>
+>findMany : <T_1 extends { select?: string; include?: string; }>(args: T_1) => CheckSelect<T_1, Promise<1>, Promise<2>>
 >args : T
 
   return result;
@@ -546,18 +546,18 @@ async function mainFindMany() {
 >[Promise.resolve(0)] as const : readonly [Promise<number>]
 >[Promise.resolve(0)] : readonly [Promise<number>]
 >Promise.resolve(0) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >0 : 0
 
   Promise.all(promises).then((results) => {
 >Promise.all(promises).then((results) => {    const first = results[0]    const second = results[1] // error  }) : Promise<void>
 >Promise.all(promises).then : <TResult1 = [number], TResult2 = never>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >Promise.all(promises) : Promise<[number]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >promises : readonly [Promise<number>]
 >then : <TResult1 = [number], TResult2 = never>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >(results) => {    const first = results[0]    const second = results[1] // error  } : (results: [number]) => void
@@ -586,9 +586,9 @@ async function test40330() {
     const promiseNumber = Promise.resolve(1);
 >promiseNumber : Promise<number>
 >Promise.resolve(1) : Promise<number>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >1 : 1
 
     const promiseVoid = async () => {}
@@ -599,9 +599,9 @@ async function test40330() {
 >res : [number, ...void[]]
 >await Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : [number, ...void[]]
 >Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : Promise<[number, ...void[]]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >[        promiseNumber,        ...[promiseVoid()]    ] : [Promise<number>, ...Promise<void>[]]
 
         promiseNumber,

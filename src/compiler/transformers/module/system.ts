@@ -142,7 +142,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         factory,
         startLexicalEnvironment,
         endLexicalEnvironment,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     const compilerOptions = context.getCompilerOptions();
@@ -219,10 +219,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             /*typeParameters*/ undefined,
             [
                 factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, exportFunction),
-                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, contextObject)
+                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, contextObject),
             ],
             /*type*/ undefined,
-            moduleBodyBlock
+            moduleBodyBlock,
         );
 
         // Write the call to `System.register`
@@ -241,13 +241,15 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                 /*typeArguments*/ undefined,
                                 moduleName
                                     ? [moduleName, dependencies, moduleBodyFunction]
-                                    : [dependencies, moduleBodyFunction]
-                            )
-                        )
+                                    : [dependencies, moduleBodyFunction],
+                            ),
+                        ),
                     ]),
-                    node.statements
-                )
-            ), EmitFlags.NoTrailingComments);
+                    node.statements,
+                ),
+            ),
+            EmitFlags.NoTrailingComments,
+        );
 
         if (!outFile(compilerOptions)) {
             moveEmitHelpers(updated, moduleBodyBlock, helper => !helper.scoped);
@@ -288,7 +290,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     groupIndices.set(text, dependencyGroups.length);
                     dependencyGroups.push({
                         name: externalModuleName,
-                        externalImports: [externalImport]
+                        externalImports: [externalImport],
                     });
                 }
             }
@@ -367,11 +369,11 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                         /*type*/ undefined,
                         factory.createLogicalAnd(
                             contextObject,
-                            factory.createPropertyAccessExpression(contextObject, "id")
-                        )
-                    )
-                ])
-            )
+                            factory.createPropertyAccessExpression(contextObject, "id"),
+                        ),
+                    ),
+                ]),
+            ),
         );
 
         // Visit the synthetic external helpers import declaration if present
@@ -397,10 +399,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             factory.createModifiersFromModifierFlags(ModifierFlags.Async) :
             undefined;
         const moduleObject = factory.createObjectLiteralExpression([
-            factory.createPropertyAssignment("setters",
-                createSettersArray(exportStarFunction, dependencyGroups)
-            ),
-            factory.createPropertyAssignment("execute",
+            factory.createPropertyAssignment("setters", createSettersArray(exportStarFunction, dependencyGroups)),
+            factory.createPropertyAssignment(
+                "execute",
                 factory.createFunctionExpression(
                     modifiers,
                     /*asteriskToken*/ undefined,
@@ -408,9 +409,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     /*typeParameters*/ undefined,
                     /*parameters*/ [],
                     /*type*/ undefined,
-                    factory.createBlock(executeStatements, /*multiLine*/ true)
-                )
-            )
+                    factory.createBlock(executeStatements, /*multiLine*/ true),
+                ),
+            ),
         ], /*multiLine*/ true);
 
         statements.push(factory.createReturnStatement(moduleObject));
@@ -463,8 +464,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 exportedNames.push(
                     factory.createPropertyAssignment(
                         factory.createStringLiteralFromNode(exportedLocalName),
-                        factory.createTrue()
-                    )
+                        factory.createTrue(),
+                    ),
                 );
             }
         }
@@ -478,10 +479,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                         exportedNamesStorageRef,
                         /*exclamationToken*/ undefined,
                         /*type*/ undefined,
-                        factory.createObjectLiteralExpression(exportedNames, /*multiLine*/ true)
-                    )
-                ])
-            )
+                        factory.createObjectLiteralExpression(exportedNames, /*multiLine*/ true),
+                    ),
+                ]),
+            ),
         );
 
         const exportStarFunction = createExportStarFunction(exportedNamesStorageRef);
@@ -509,9 +510,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     factory.createCallExpression(
                         factory.createPropertyAccessExpression(localNames, "hasOwnProperty"),
                         /*typeArguments*/ undefined,
-                        [n]
-                    )
-                )
+                        [n],
+                    ),
+                ),
             );
         }
 
@@ -530,13 +531,13 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                             exports,
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
-                            factory.createObjectLiteralExpression([])
-                        )
-                    ])
+                            factory.createObjectLiteralExpression([]),
+                        ),
+                    ]),
                 ),
                 factory.createForInStatement(
                     factory.createVariableDeclarationList([
-                        factory.createVariableDeclaration(n)
+                        factory.createVariableDeclaration(n),
                     ]),
                     m,
                     factory.createBlock([
@@ -546,22 +547,22 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                 factory.createExpressionStatement(
                                     factory.createAssignment(
                                         factory.createElementAccessExpression(exports, n),
-                                        factory.createElementAccessExpression(m, n)
-                                    )
-                                )
+                                        factory.createElementAccessExpression(m, n),
+                                    ),
+                                ),
                             ),
-                            EmitFlags.SingleLine
-                        )
-                    ])
+                            EmitFlags.SingleLine,
+                        ),
+                    ]),
                 ),
                 factory.createExpressionStatement(
                     factory.createCallExpression(
                         exportFunction,
                         /*typeArguments*/ undefined,
-                        [exports]
-                    )
-                )
-            ], /*multiLine*/ true)
+                        [exports],
+                    ),
+                ),
+            ], /*multiLine*/ true),
         );
     }
 
@@ -594,8 +595,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                         // save import into the local
                         statements.push(
                             factory.createExpressionStatement(
-                                factory.createAssignment(importVariableName, parameterName)
-                            )
+                                factory.createAssignment(importVariableName, parameterName),
+                            ),
                         );
                         if (hasSyntacticModifier(entry, ModifierFlags.Export)) {
                             statements.push(
@@ -606,9 +607,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                         [
                                             factory.createStringLiteral(idText(importVariableName)),
                                             parameterName,
-                                        ]
-                                    )
-                                )
+                                        ],
+                                    ),
+                                ),
                             );
                         }
                         break;
@@ -632,9 +633,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                             factory.createStringLiteral(idText(e.name)),
                                             factory.createElementAccessExpression(
                                                 parameterName,
-                                                factory.createStringLiteral(idText(e.propertyName || e.name))
-                                            )
-                                        )
+                                                factory.createStringLiteral(idText(e.propertyName || e.name)),
+                                            ),
+                                        ),
                                     );
                                 }
 
@@ -643,9 +644,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                         factory.createCallExpression(
                                             exportFunction,
                                             /*typeArguments*/ undefined,
-                                            [factory.createObjectLiteralExpression(properties, /*multiLine*/ true)]
-                                        )
-                                    )
+                                            [factory.createObjectLiteralExpression(properties, /*multiLine*/ true)],
+                                        ),
+                                    ),
                                 );
                             }
                             else {
@@ -656,10 +657,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                             /*typeArguments*/ undefined,
                                             [
                                                 factory.createStringLiteral(idText(entry.exportClause.name)),
-                                                parameterName
-                                            ]
-                                        )
-                                    )
+                                                parameterName,
+                                            ],
+                                        ),
+                                    ),
                                 );
                             }
                         }
@@ -674,9 +675,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                     factory.createCallExpression(
                                         exportStarFunction,
                                         /*typeArguments*/ undefined,
-                                        [parameterName]
-                                    )
-                                )
+                                        [parameterName],
+                                    ),
+                                ),
                             );
                         }
                         break;
@@ -691,8 +692,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     /*typeParameters*/ undefined,
                     [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                     /*type*/ undefined,
-                    factory.createBlock(statements, /*multiLine*/ true)
-                )
+                    factory.createBlock(statements, /*multiLine*/ true),
+                ),
             );
         }
 
@@ -780,7 +781,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
      */
     function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement | undefined> {
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-            hoistedStatements = append(hoistedStatements,
+            hoistedStatements = append(
+                hoistedStatements,
                 factory.updateFunctionDeclaration(
                     node,
                     visitNodes(node.modifiers, modifierVisitor, isModifierLike),
@@ -789,7 +791,9 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     /*typeParameters*/ undefined,
                     visitNodes(node.parameters, visitor, isParameter),
                     /*type*/ undefined,
-                    visitNode(node.body, visitor, isBlock)));
+                    visitNode(node.body, visitor, isBlock),
+                ),
+            );
         }
         else {
             hoistedStatements = append(hoistedStatements, visitEachChild(node, visitor, context));
@@ -812,7 +816,8 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         hoistVariableDeclaration(name);
 
         // Rewrite the class declaration into an assignment of a class expression.
-        statements = append(statements,
+        statements = append(
+            statements,
             setTextRange(
                 factory.createExpressionStatement(
                     factory.createAssignment(
@@ -823,14 +828,14 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                                 node.name,
                                 /*typeParameters*/ undefined,
                                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
-                                visitNodes(node.members, visitor, isClassElement)
+                                visitNodes(node.members, visitor, isClassElement),
                             ),
-                            node
-                        )
-                    )
+                            node,
+                        ),
+                    ),
                 ),
-                node
-            )
+                node,
+            ),
         );
 
         statements = appendExportsOfHoistedDeclaration(statements, node);
@@ -861,13 +866,13 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     factory.getGeneratedNameForNode(variable.name),
                     /*exclamationToken*/ undefined,
                     /*type*/ undefined,
-                    transformInitializedVariable(variable, /*isExportedDeclaration*/ false)
+                    transformInitializedVariable(variable, /*isExportedDeclaration*/ false),
                 ));
             }
 
             const declarationList = factory.updateVariableDeclarationList(
                 node.declarationList,
-                declarations
+                declarations,
             );
             statements = append(statements, factory.updateVariableStatement(node, modifiers, declarationList));
         }
@@ -937,7 +942,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 context,
                 FlattenLevel.All,
                 /*needsValue*/ false,
-                createAssignment
+                createAssignment,
             )
             : node.initializer ? createAssignment(node.name, visitNode(node.initializer, visitor, isExpression)) : node.name;
     }
@@ -1281,7 +1286,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             visitNode(node.initializer, isTopLevel ? visitForInitializer : discardedValueVisitor, isForInitializer),
             visitNode(node.condition, visitor, isExpression),
             visitNode(node.incrementor, discardedValueVisitor, isExpression),
-            visitIterationBody(node.statement, isTopLevel ? topLevelNestedVisitor : visitor, context)
+            visitIterationBody(node.statement, isTopLevel ? topLevelNestedVisitor : visitor, context),
         );
 
         enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1301,7 +1306,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             node,
             visitForInitializer(node.initializer),
             visitNode(node.expression, visitor, isExpression),
-            visitIterationBody(node.statement, topLevelNestedVisitor, context)
+            visitIterationBody(node.statement, topLevelNestedVisitor, context),
         );
 
         enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1322,7 +1327,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             node.awaitModifier,
             visitForInitializer(node.initializer),
             visitNode(node.expression, visitor, isExpression),
-            visitIterationBody(node.statement, topLevelNestedVisitor, context)
+            visitIterationBody(node.statement, topLevelNestedVisitor, context),
         );
 
         enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1371,7 +1376,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateDoStatement(
             node,
             visitIterationBody(node.statement, topLevelNestedVisitor, context),
-            visitNode(node.expression, visitor, isExpression)
+            visitNode(node.expression, visitor, isExpression),
         );
     }
 
@@ -1384,7 +1389,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateWhileStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            visitIterationBody(node.statement, topLevelNestedVisitor, context)
+            visitIterationBody(node.statement, topLevelNestedVisitor, context),
         );
     }
 
@@ -1397,7 +1402,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateLabeledStatement(
             node,
             node.label,
-            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
+            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
         );
     }
 
@@ -1410,7 +1415,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateWithStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
+            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
         );
     }
 
@@ -1424,7 +1429,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
             node,
             visitNode(node.expression, visitor, isExpression),
             Debug.checkDefined(visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
-            visitNode(node.elseStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)
+            visitNode(node.elseStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock),
         );
     }
 
@@ -1437,7 +1442,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateSwitchStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            Debug.checkDefined(visitNode(node.caseBlock, topLevelNestedVisitor, isCaseBlock))
+            Debug.checkDefined(visitNode(node.caseBlock, topLevelNestedVisitor, isCaseBlock)),
         );
     }
 
@@ -1452,7 +1457,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
 
         node = factory.updateCaseBlock(
             node,
-            visitNodes(node.clauses, topLevelNestedVisitor, isCaseOrDefaultClause)
+            visitNodes(node.clauses, topLevelNestedVisitor, isCaseOrDefaultClause),
         );
 
         enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1468,7 +1473,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.updateCaseClause(
             node,
             visitNode(node.expression, visitor, isExpression),
-            visitNodes(node.statements, topLevelNestedVisitor, isStatement)
+            visitNodes(node.statements, topLevelNestedVisitor, isStatement),
         );
     }
 
@@ -1502,7 +1507,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         node = factory.updateCatchClause(
             node,
             node.variableDeclaration,
-            Debug.checkDefined(visitNode(node.block, topLevelNestedVisitor, isBlock))
+            Debug.checkDefined(visitNode(node.block, topLevelNestedVisitor, isBlock)),
         );
 
         enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1606,10 +1611,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         return factory.createCallExpression(
             factory.createPropertyAccessExpression(
                 contextObject,
-                factory.createIdentifier("import")
+                factory.createIdentifier("import"),
             ),
             /*typeArguments*/ undefined,
-            argument ? [argument] : []
+            argument ? [argument] : [],
         );
     }
 
@@ -1625,7 +1630,7 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                 visitor,
                 context,
                 FlattenLevel.All,
-                !valueIsDiscarded
+                !valueIsDiscarded,
             );
         }
 
@@ -1675,11 +1680,13 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         // - We do not transform identifiers that were originally the name of an enum or
         //   namespace due to how they are transformed in TypeScript.
         // - We only transform identifiers that are exported at the top level.
-        if ((node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken)
+        if (
+            (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken)
             && isIdentifier(node.operand)
             && !isGeneratedIdentifier(node.operand)
             && !isLocalName(node.operand)
-            && !isDeclarationNameOfEnumOrNamespace(node.operand)) {
+            && !isDeclarationNameOfEnumOrNamespace(node.operand)
+        ) {
             const exportedNames = getExports(node.operand);
             if (exportedNames) {
                 let temp: Identifier | undefined;
@@ -1823,10 +1830,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                             factory.cloneNode(name),
                             factory.createPropertyAccessExpression(
                                 factory.getGeneratedNameForNode(importDeclaration.parent),
-                                factory.createIdentifier("default")
-                            )
+                                factory.createIdentifier("default"),
+                            ),
                         ),
-                        /*location*/ node
+                        /*location*/ node,
                     );
                 }
                 else if (isImportSpecifier(importDeclaration)) {
@@ -1835,10 +1842,10 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                             factory.cloneNode(name),
                             factory.createPropertyAccessExpression(
                                 factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
+                                factory.cloneNode(importDeclaration.propertyName || importDeclaration.name),
                             ),
                         ),
-                        /*location*/ node
+                        /*location*/ node,
                     );
                 }
             }
@@ -1892,18 +1899,18 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
                     return setTextRange(
                         factory.createPropertyAccessExpression(
                             factory.getGeneratedNameForNode(importDeclaration.parent),
-                            factory.createIdentifier("default")
+                            factory.createIdentifier("default"),
                         ),
-                        /*location*/ node
+                        /*location*/ node,
                     );
                 }
                 else if (isImportSpecifier(importDeclaration)) {
                     return setTextRange(
                         factory.createPropertyAccessExpression(
                             factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                            factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
+                            factory.cloneNode(importDeclaration.propertyName || importDeclaration.name),
                         ),
-                        /*location*/ node
+                        /*location*/ node,
                     );
                 }
             }
@@ -1924,10 +1931,12 @@ export function transformSystemModule(context: TransformationContext): (x: Sourc
         // - We do not substitute generated identifiers unless they are file-level reserved names.
         // - We do not substitute identifiers tagged with the LocalName flag.
         // - We only substitute identifiers that are exported at the top level.
-        if (isAssignmentOperator(node.operatorToken.kind)
+        if (
+            isAssignmentOperator(node.operatorToken.kind)
             && isIdentifier(node.left)
             && (!isGeneratedIdentifier(node.left) || isFileLevelReservedGeneratedIdentifier(node.left))
-            && !isLocalName(node.left)) {
+            && !isLocalName(node.left)
+        ) {
             const exportedNames = getExports(node.left);
             if (exportedNames) {
                 // For each additional export of the declaration, apply an export assignment.

@@ -33,6 +33,6 @@ blockScopedSameNameFunctionDeclarationES5.ts(16,1): error TS2554: Expected 1 arg
     }
     foo(10);
     foo(); // not ok - needs number
-    ~~~~~
+    ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 blockScopedSameNameFunctionDeclarationES5.ts:1:14: An argument for 'a' was not provided.

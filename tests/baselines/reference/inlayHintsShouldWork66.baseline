@@ -1,8 +1,0 @@
-    bar: function (x?): void {
-                     ^
-{
-  "text": ": boolean",
-  "position": 87,
-  "kind": "Type",
-  "whitespaceBefore": true
-}
