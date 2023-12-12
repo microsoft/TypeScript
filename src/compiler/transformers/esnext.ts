@@ -60,7 +60,7 @@ import {
     visitEachChild,
     visitNode,
     visitNodes,
-    VisitResult
+    VisitResult,
 } from "../_namespaces/ts";
 
 const enum UsingKind {
@@ -197,11 +197,14 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
 
             // add `export {}` declarations for any hoisted bindings.
             if (exportBindings.size) {
-                append(topLevelStatements, factory.createExportDeclaration(
-                    /*modifiers*/ undefined,
-                    /*isTypeOnly*/ false,
-                    factory.createNamedExports(arrayFrom(exportBindings.values()))
-                ));
+                append(
+                    topLevelStatements,
+                    factory.createExportDeclaration(
+                        /*modifiers*/ undefined,
+                        /*isTypeOnly*/ false,
+                        factory.createNamedExports(arrayFrom(exportBindings.values())),
+                    ),
+                );
             }
 
             addRange(topLevelStatements, endLexicalEnvironment());
@@ -210,8 +213,8 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                     factory.createModifiersFromModifierFlags(ModifierFlags.Export),
                     factory.createVariableDeclarationList(
                         exportVars,
-                        NodeFlags.Let
-                    )
+                        NodeFlags.Let,
+                    ),
                 ));
             }
             addRange(topLevelStatements, createDownlevelUsingStatements(bodyStatements, envBinding, usingKind === UsingKind.Async));
@@ -220,7 +223,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 topLevelStatements.push(factory.createExportAssignment(
                     /*modifiers*/ undefined,
                     /*isExportEquals*/ true,
-                    exportEqualsBinding
+                    exportEqualsBinding,
                 ));
             }
 
@@ -243,8 +246,8 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         transformUsingDeclarations(node.statements, prologueCount, node.statements.length, envBinding, /*topLevelStatements*/ undefined),
                         envBinding,
                         usingKind === UsingKind.Async,
-                    )
-                ]
+                    ),
+                ],
             );
         }
         return visitEachChild(node, visitor, context);
@@ -272,11 +275,11 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         /*initializer*/ undefined,
                         node.condition,
                         node.incrementor,
-                        node.statement
-                    )
+                        node.statement,
+                    ),
                 ]),
                 visitor,
-                isStatement
+                isStatement,
             );
         }
 
@@ -314,21 +317,21 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                     node,
                     node.awaitModifier,
                     factory.createVariableDeclarationList([
-                        factory.createVariableDeclaration(temp)
+                        factory.createVariableDeclaration(temp),
                     ], NodeFlags.Const),
                     node.expression,
                     isBlock(node.statement) ?
                         factory.updateBlock(node.statement, [
                             usingVarStatement,
-                            ...node.statement.statements
+                            ...node.statement.statements,
                         ]) :
                         factory.createBlock([
                             usingVarStatement,
-                            node.statement
-                        ], /*multiLine*/ true)
+                            node.statement,
+                        ], /*multiLine*/ true),
                 ),
                 visitor,
-                isStatement
+                isStatement,
             );
         }
         return visitEachChild(node, visitor, context);
@@ -340,13 +343,13 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 return factory.updateCaseClause(
                     node,
                     visitNode(node.expression, visitor, isExpression),
-                    transformUsingDeclarations(node.statements, /*start*/ 0, node.statements.length, envBinding, /*topLevelStatements*/ undefined)
+                    transformUsingDeclarations(node.statements, /*start*/ 0, node.statements.length, envBinding, /*topLevelStatements*/ undefined),
                 );
             }
             else {
                 return factory.updateDefaultClause(
                     node,
-                    transformUsingDeclarations(node.statements, /*start*/ 0, node.statements.length, envBinding, /*topLevelStatements*/ undefined)
+                    transformUsingDeclarations(node.statements, /*start*/ 0, node.statements.length, envBinding, /*topLevelStatements*/ undefined),
                 );
             }
         }
@@ -388,9 +391,9 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         visitNode(node.expression, visitor, isExpression),
                         factory.updateCaseBlock(
                             node.caseBlock,
-                            node.caseBlock.clauses.map(clause => visitCaseOrDefaultClause(clause, envBinding))
-                        )
-                    )
+                            node.caseBlock.clauses.map(clause => visitCaseOrDefaultClause(clause, envBinding)),
+                        ),
+                    ),
                 ],
                 envBinding,
                 usingKind === UsingKind.Async,
@@ -433,8 +436,8 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         emitHelpers().createAddDisposableResourceHelper(
                             envBinding,
                             initializer,
-                            usingKind === UsingKind.Async
-                        )
+                            usingKind === UsingKind.Async,
+                        ),
                     ));
                 }
 
@@ -738,7 +741,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         const envObject = factory.createObjectLiteralExpression([
             factory.createPropertyAssignment("stack", factory.createArrayLiteralExpression()),
             factory.createPropertyAssignment("error", factory.createVoidZero()),
-            factory.createPropertyAssignment("hasError", factory.createFalse())
+            factory.createPropertyAssignment("hasError", factory.createFalse()),
         ]);
         const envVar = factory.createVariableDeclaration(envBinding, /*exclamationToken*/ undefined, /*type*/ undefined, envObject);
         const envVarList = factory.createVariableDeclarationList([envVar], NodeFlags.Const);
@@ -784,14 +787,16 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                 factory.createExpressionStatement(
                     factory.createAssignment(
                         factory.createPropertyAccessExpression(envBinding, "error"),
-                        bodyCatchBinding)
+                        bodyCatchBinding,
+                    ),
                 ),
                 factory.createExpressionStatement(
                     factory.createAssignment(
                         factory.createPropertyAccessExpression(envBinding, "hasError"),
-                        factory.createTrue())
+                        factory.createTrue(),
+                    ),
                 ),
-            ], /*multiLine*/ true)
+            ], /*multiLine*/ true),
         );
 
         let finallyBlock: Block;
@@ -805,18 +810,18 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                             result,
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
-                            emitHelpers().createDisposeResourcesHelper(envBinding)
-                        )
-                    ], NodeFlags.Const)
+                            emitHelpers().createDisposeResourcesHelper(envBinding),
+                        ),
+                    ], NodeFlags.Const),
                 ),
-                factory.createIfStatement(result, factory.createExpressionStatement(factory.createAwaitExpression(result)))
+                factory.createIfStatement(result, factory.createExpressionStatement(factory.createAwaitExpression(result))),
             ], /*multiLine*/ true);
         }
         else {
             finallyBlock = factory.createBlock([
                 factory.createExpressionStatement(
-                    emitHelpers().createDisposeResourcesHelper(envBinding)
-                )
+                    emitHelpers().createDisposeResourcesHelper(envBinding),
+                ),
             ], /*multiLine*/ true);
         }
 
@@ -836,7 +841,7 @@ function countPrologueStatements(statements: readonly Statement[]) {
     return 0;
 }
 
-function isUsingVariableDeclarationList(node: Node): node is VariableDeclarationList & { _usingBrand: any } {
+function isUsingVariableDeclarationList(node: Node): node is VariableDeclarationList & { _usingBrand: any; } {
     return isVariableDeclarationList(node) && getUsingKindOfVariableDeclarationList(node) !== UsingKind.None;
 }
 

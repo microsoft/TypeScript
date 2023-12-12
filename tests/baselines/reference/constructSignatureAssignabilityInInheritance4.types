@@ -52,7 +52,7 @@ interface A { // T
 >arg : T
 
     a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->a11 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>a11 : new <T>(x: {    foo: T;}, y: {    foo: T;    bar: T;}) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: T; bar: T; }
@@ -60,13 +60,13 @@ interface A { // T
 >bar : T
 
     a15: new <T>(x: { a: T; b: T }) => T[];
->a15 : new <T>(x: { a: T; b: T; }) => T[]
+>a15 : new <T>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
 
     a16: new <T extends Base>(x: { a: T; b: T }) => T[];
->a16 : new <T extends Base>(x: { a: T; b: T; }) => T[]
+>a16 : new <T extends Base>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -104,7 +104,7 @@ interface A { // T
 
     };
     a20: {
->a20 : { new (x: { new <T extends Derived>(a: T): T; new <U extends Base>(a: U): U; }): any[]; new (x: { new <T extends Base>(a: T): T; new <U extends Derived2>(a: U): U; }): any[]; }
+>a20 : { new (x: { new <T extends Derived>(a: T): T; new <U extends Base>(a: U): U; }): any[]; new (x: { new <T_1 extends Base>(a: T_1): T_1; new <U_1 extends Derived2>(a: U_1): U_1; }): any[]; }
 
         new (x: {
 >x : { new <T extends Derived>(a: T): T; new <U extends Base>(a: U): U; }
@@ -160,7 +160,7 @@ interface I extends A {
 >arg : T
 
     a11: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; // ok
->a11 : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>a11 : new <T, U>(x: {    foo: T;}, y: {    foo: U;    bar: U;}) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: U; bar: U; }
@@ -168,13 +168,13 @@ interface I extends A {
 >bar : U
 
     a15: new <U, V>(x: { a: U; b: V; }) => U[]; // ok, T = U, T = V
->a15 : new <U, V>(x: { a: U; b: V; }) => U[]
+>a15 : new <U, V>(x: {    a: U;    b: V;}) => U[]
 >x : { a: U; b: V; }
 >a : U
 >b : V
 
     a16: new <T>(x: { a: T; b: T }) => T[]; // ok, more general parameter type
->a16 : new <T>(x: { a: T; b: T; }) => T[]
+>a16 : new <T>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T

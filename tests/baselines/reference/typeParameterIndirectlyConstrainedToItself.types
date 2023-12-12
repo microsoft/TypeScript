@@ -17,7 +17,7 @@ function f2<T extends U, U extends V, V extends T>() { }
 >f2 : <T, U, V>() => void
 
 var a: {
->a : { <U, T>(): void; <T, U, V>(): void; }
+>a : { <U, T>(): void; <T_1, U_1, V>(): void; }
 
     <U extends T, T extends U>(): void;
     <T extends U, U extends V, V extends T>(): void;

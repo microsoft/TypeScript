@@ -40,8 +40,10 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
         return;
     }
     const declaration = token.parent;
-    if (declaration.kind === SyntaxKind.PropertyDeclaration &&
-        (!fixedNodes || tryAddToSet(fixedNodes, declaration))) {
+    if (
+        declaration.kind === SyntaxKind.PropertyDeclaration &&
+        (!fixedNodes || tryAddToSet(fixedNodes, declaration))
+    ) {
         changeTracker.insertModifierBefore(sourceFile, SyntaxKind.DeclareKeyword, declaration);
     }
 }

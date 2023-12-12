@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,7 +21,19 @@ import { b } from "@ref/compositeb/b";
 export const x = 10;
 
 //// [/user/username/projects/myproject/compositea/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"../dist/","rootDir":"../","baseUrl":"../","paths":{"@ref/*":["./dist/*"]}}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../dist/",
+    "rootDir": "../",
+    "baseUrl": "../",
+    "paths": {
+      "@ref/*": [
+        "./dist/*"
+      ]
+    }
+  }
+}
 
 //// [/user/username/projects/myproject/dist/compositeb/b.d.ts]
 export declare function b(): void;
@@ -30,19 +42,67 @@ export declare function b(): void;
 export function b() {}
 
 //// [/user/username/projects/myproject/compositeb/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"../dist/","rootDir":"../","baseUrl":"../","paths":{"@ref/*":["./dist/*"]}}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../dist/",
+    "rootDir": "../",
+    "baseUrl": "../",
+    "paths": {
+      "@ref/*": [
+        "./dist/*"
+      ]
+    }
+  }
+}
 
 //// [/user/username/projects/myproject/compositec/c.ts]
 import { b } from "@ref/compositeb/b";
 
 //// [/user/username/projects/myproject/compositec/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"../dist/","rootDir":"../","baseUrl":"../","paths":{"@ref/*":["./*"]}},"references":[{"path":"../compositeb"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../dist/",
+    "rootDir": "../",
+    "baseUrl": "../",
+    "paths": {
+      "@ref/*": [
+        "./*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../compositeb"
+    }
+  ]
+}
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/compositea/a.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/compositea
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/compositea/a.ts :: Config file name: /user/username/projects/myproject/compositea/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/compositea/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/compositea/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/compositea/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/compositea/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/compositea/a.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/compositea/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/compositea/a.ts",
@@ -95,6 +155,73 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/myproject/compositea/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "6b567c9929e3ec90dbe041ba5ebb01f30fe4d1d602af4473153f736b45fb7df1",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 58,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 2,
+            "dtsSize": 368,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "composite": true,
+            "outDir": "",
+            "rootDir": "",
+            "baseUrl": "",
+            "paths": ""
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/compositea/a.ts",
+        "configFile": "/user/username/projects/myproject/compositea/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/compositea
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/compositea/tsconfig.json :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/compositea/tsconfig.json' (Configured)
@@ -104,10 +231,61 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/compositea/a.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/compositea/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/compositea/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/compositea/a2.ts: *new*
+  {}
+/user/username/projects/myproject/compositea/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/dist/compositeb/b.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/compositea: *new*
+  {}
+/user/username/projects/myproject/dist: *new*
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/compositec/c.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/compositec
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/compositec/c.ts :: Config file name: /user/username/projects/myproject/compositec/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/compositec/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/compositec/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/compositec/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/compositec/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/compositec/c.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/compositec/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/compositec/c.ts"
@@ -179,6 +357,73 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/myproject/compositec/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "40bc5c0296701580b806b8dca6e153ff5bc53b232b4e5b054c9bd630a316d017",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 60,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "composite": true,
+            "outDir": "",
+            "rootDir": "",
+            "baseUrl": "",
+            "paths": ""
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/compositec/c.ts",
+        "configFile": "/user/username/projects/myproject/compositec/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/compositec
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/compositec/tsconfig.json :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/compositea/tsconfig.json' (Configured)
@@ -194,6 +439,48 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/compositea
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/compositea/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/compositec/c.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/compositec/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/compositea/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/compositec/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/compositea/a2.ts:
+  {}
+/user/username/projects/myproject/compositea/tsconfig.json:
+  {}
+/user/username/projects/myproject/compositeb/b.ts: *new*
+  {}
+/user/username/projects/myproject/compositeb/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/compositec/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/dist/compositeb/b.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/compositea:
+  {}
+/user/username/projects/myproject/compositeb: *new*
+  {}
+/user/username/projects/myproject/compositec: *new*
+  {}
+/user/username/projects/myproject/dist:
+  {}
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/compositea/a2.ts 1:: WatchInfo: /user/username/projects/myproject/compositea/a2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/compositea/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -203,41 +490,9 @@ a2Ts modified
 export const x = 10;export const y = 30;
 
 
-PolledWatches::
-/user/username/projects/myproject/compositea/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/compositec/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/compositea/a2.ts: *new*
-  {}
-/user/username/projects/myproject/compositea/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/compositeb/b.ts: *new*
-  {}
-/user/username/projects/myproject/compositeb/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/compositec/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/dist/compositeb/b.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/compositea: *new*
-  {}
-/user/username/projects/myproject/compositeb: *new*
-  {}
-/user/username/projects/myproject/compositec: *new*
-  {}
-/user/username/projects/myproject/dist: *new*
-  {}
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/compositea/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/compositea/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/compositea/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms

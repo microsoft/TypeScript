@@ -3,14 +3,12 @@ File: /node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
@@ -34,20 +32,17 @@ x: {
     "/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/node_modules/x/index.d.ts
 
 
 export = class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
@@ -71,13 +66,12 @@ x: {
     "/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
 import { a } from "a"; import { b } from "b";
 a(b)
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",
@@ -110,10 +104,11 @@ b: {
     "/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 /node_modules/b/index.d.ts(2,8): error TS1259: Module '"/node_modules/b/node_modules/x/index"' can only be default-imported using the 'allowSyntheticDefaultImports' flag
 /node_modules/b/node_modules/x/index.d.ts(3,16): error TS2714: The expression of an export assignment must be an identifier or qualified name in an ambient context.
@@ -125,14 +120,12 @@ File: /node_modules/a/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/a/index.d.ts
 
 import X from "x";
 export function a(x: X): void;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/node_modules/x/index.d.ts",
@@ -156,20 +149,17 @@ x: {
     "/node_modules/a/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/node_modules/x/index.d.ts
 
 
 export default class X { private x: number; }
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /node_modules/b/index.d.ts
 
 import X from "x";
 export const b: X;
-resolvedModules: 
+resolvedModules:
 x: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/node_modules/x/index.d.ts",
@@ -193,13 +183,12 @@ x: {
     "/node_modules/b/node_modules/x/package.json"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a.ts
 
 import { a } from "a"; import { b } from "b";
 a(b)
-resolvedModules: 
+resolvedModules:
 a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",
@@ -232,10 +221,11 @@ b: {
     "/node_modules/b/index.tsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 

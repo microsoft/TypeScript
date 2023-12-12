@@ -5,11 +5,11 @@ export const m: number = 3;
 
 //// [/alpha/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": []
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": []
 }
 
 //// [/lib/lib.d.ts]

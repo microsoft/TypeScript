@@ -1,16 +1,16 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
- "name": "@types/bar",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "require": "./index.d.ts"
+  "name": "@types/bar",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
@@ -18,15 +18,15 @@ export declare const bar: number;
 
 //// [/home/src/projects/project/node_modules/bar/package.json]
 {
- "name": "bar",
- "version": "1.0.0",
- "main": "index.js",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "bar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/bar/index.js]
@@ -37,16 +37,16 @@ export const bar = 1;
 
 //// [/home/src/projects/project/node_modules/foo/package.json]
 {
- "name": "foo",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/foo/index.js]
@@ -60,15 +60,15 @@ export declare const foo: number;
 
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json]
 {
- "name": "@types/bar2",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "require": "./index.d.ts"
+  "name": "@types/bar2",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
@@ -76,15 +76,15 @@ export declare const bar2: number;
 
 //// [/home/src/projects/project/node_modules/bar2/package.json]
 {
- "name": "bar2",
- "version": "1.0.0",
- "main": "index.js",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "bar2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/bar2/index.js]
@@ -95,17 +95,17 @@ export const bar2 = 1;
 
 //// [/home/src/projects/project/node_modules/foo2/package.json]
 {
- "name": "foo2",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/foo2/index.js]
@@ -125,7 +125,18 @@ import { bar2 } from "bar2";
 
 
 //// [/home/src/projects/project/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node16","traceResolution":true,"incremental":true,"strict":true,"types":[]},"files":["index.mts"]}
+{
+  "compilerOptions": {
+    "moduleResolution": "node16",
+    "traceResolution": true,
+    "incremental": true,
+    "strict": true,
+    "types": []
+  },
+  "files": [
+    "index.mts"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -156,13 +167,13 @@ Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/proje
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingStart",
-     "body": {
-      "projectName": "/home/src/projects/project/tsconfig.json",
-      "reason": "Creating possible configured project for /home/src/projects/project/index.mts to open"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/home/src/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/index.mts to open"
+      }
     }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/tsconfig.json : {
  "rootNames": [
@@ -387,76 +398,76 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingFinish",
-     "body": {
-      "projectName": "/home/src/projects/project/tsconfig.json"
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "telemetry",
-     "body": {
-      "telemetryEventName": "projectInfo",
-      "payload": {
-       "projectId": "1097a5f82e8323ba7aba7567ec06402f7ad4ea74abce44ec5efd223ac77ff169",
-       "fileStats": {
-        "js": 0,
-        "jsSize": 0,
-        "jsx": 0,
-        "jsxSize": 0,
-        "ts": 1,
-        "tsSize": 112,
-        "tsx": 0,
-        "tsxSize": 0,
-        "dts": 3,
-        "dtsSize": 402,
-        "deferred": 0,
-        "deferredSize": 0
-       },
-       "compilerOptions": {
-        "moduleResolution": "node16",
-        "traceResolution": true,
-        "incremental": true,
-        "strict": true,
-        "types": []
-       },
-       "typeAcquisition": {
-        "enable": false,
-        "include": false,
-        "exclude": false
-       },
-       "extends": false,
-       "files": true,
-       "include": false,
-       "exclude": false,
-       "compileOnSave": false,
-       "configFileName": "tsconfig.json",
-       "projectType": "configured",
-       "languageServiceEnabled": true,
-       "version": "FakeVersion"
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/home/src/projects/project/tsconfig.json"
       }
-     }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "configFileDiag",
-     "body": {
-      "triggerFile": "/home/src/projects/project/index.mts",
-      "configFile": "/home/src/projects/project/tsconfig.json",
-      "diagnostics": [
-       {
-        "text": "Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.",
-        "code": 5110,
-        "category": "error"
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "1097a5f82e8323ba7aba7567ec06402f7ad4ea74abce44ec5efd223ac77ff169",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 112,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 3,
+            "dtsSize": 402,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "moduleResolution": "node16",
+            "traceResolution": true,
+            "incremental": true,
+            "strict": true,
+            "types": []
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": true,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/home/src/projects/project/index.mts",
+        "configFile": "/home/src/projects/project/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.",
+            "code": 5110,
+            "category": "error"
+          }
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -521,142 +532,150 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 1,
-         "offset": 21
-        },
-        "end": {
-         "line": 1,
-         "offset": 26
-        },
-        "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 2,
-         "offset": 21
-        },
-        "end": {
-         "line": 2,
-         "offset": 26
-        },
-        "text": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 21
+            },
+            "end": {
+              "line": 1,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 21
+            },
+            "end": {
+              "line": 2,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 1,
-         "offset": 1
-        },
-        "end": {
-         "line": 1,
-         "offset": 27
-        },
-        "text": "'foo' is declared but its value is never read.",
-        "code": 6133,
-        "category": "suggestion",
-        "reportsUnnecessary": true
-       },
-       {
-        "start": {
-         "line": 2,
-         "offset": 1
-        },
-        "end": {
-         "line": 2,
-         "offset": 27
-        },
-        "text": "'bar' is declared but its value is never read.",
-        "code": 6133,
-        "category": "suggestion",
-        "reportsUnnecessary": true
-       },
-       {
-        "start": {
-         "line": 3,
-         "offset": 1
-        },
-        "end": {
-         "line": 3,
-         "offset": 29
-        },
-        "text": "'foo2' is declared but its value is never read.",
-        "code": 6133,
-        "category": "suggestion",
-        "reportsUnnecessary": true
-       },
-       {
-        "start": {
-         "line": 4,
-         "offset": 1
-        },
-        "end": {
-         "line": 4,
-         "offset": 29
-        },
-        "text": "'bar2' is declared but its value is never read.",
-        "code": 6133,
-        "category": "suggestion",
-        "reportsUnnecessary": true
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 2
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 2
+      }
     }
 After running Immedidate callback:: count: 0
 
@@ -669,12 +688,17 @@ Before running Timeout callback:: count: 1
 2: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] deleted
 
+Timeout callback:: count: 1
+2: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-3: /home/src/projects/project/tsconfig.json
-4: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+3: /home/src/projects/project/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Before running Immedidate callback:: count: 0
 
@@ -699,6 +723,11 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 3
+3: /home/src/projects/project/tsconfig.json
+4: *ensureProjectForOpenFiles*
+5: checkOne *new*
 
 Before running Timeout callback:: count: 3
 3: /home/src/projects/project/tsconfig.json
@@ -826,36 +855,157 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 3
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-6: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+3: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+3: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 21
+            },
+            "end": {
+              "line": 1,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 21
+            },
+            "end": {
+              "line": 2,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+4: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 3
+      }
+    }
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -863,12 +1013,57 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 2
-6: checkOne
-7: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 1
+6: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/foo/index.d.ts] deleted
 
+Timeout callback:: count: 1
+6: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+7: /home/src/projects/project/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 4,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Timeout callback:: count: 3
+7: /home/src/projects/project/tsconfig.json
+8: *ensureProjectForOpenFiles*
+9: checkOne *new*
+
+Before running Timeout callback:: count: 3
+7: /home/src/projects/project/tsconfig.json
+8: *ensureProjectForOpenFiles*
+9: checkOne
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -953,86 +1148,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/index.mts SVC-1-0 "import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
-    }
-After running Timeout callback:: count: 1
-8: *ensureProjectForOpenFiles*
-
-Before running Immedidate callback:: count: 1
-3: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 1,
-         "offset": 21
-        },
-        "end": {
-         "line": 1,
-         "offset": 26
-        },
-        "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/foo` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo';`",
-        "code": 7016,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 2,
-         "offset": 21
-        },
-        "end": {
-         "line": 2,
-         "offset": 26
-        },
-        "text": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
-    }
-After running Immedidate callback:: count: 1
-4: suggestionCheck
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 4,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Before running Timeout callback:: count: 2
-8: *ensureProjectForOpenFiles*
-9: checkOne
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
@@ -1050,36 +1165,157 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 4
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-10: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+5: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+5: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 21
+            },
+            "end": {
+              "line": 1,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/foo` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo';`",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 21
+            },
+            "end": {
+              "line": 2,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+6: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+6: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 4
+      }
+    }
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -1087,14 +1323,59 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 2
-10: checkOne
-11: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 1
+10: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
 export declare const bar: number;
 
 
+Timeout callback:: count: 1
+10: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+11: /home/src/projects/project/tsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 5,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Timeout callback:: count: 3
+11: /home/src/projects/project/tsconfig.json
+12: *ensureProjectForOpenFiles*
+13: checkOne *new*
+
+Before running Timeout callback:: count: 3
+11: /home/src/projects/project/tsconfig.json
+12: *ensureProjectForOpenFiles*
+13: checkOne
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -1185,86 +1466,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/index.mts SVC-1-0 "import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
-    }
-After running Timeout callback:: count: 1
-12: *ensureProjectForOpenFiles*
-
-Before running Immedidate callback:: count: 1
-5: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 1,
-         "offset": 21
-        },
-        "end": {
-         "line": 1,
-         "offset": 26
-        },
-        "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/foo` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo';`",
-        "code": 7016,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 2,
-         "offset": 21
-        },
-        "end": {
-         "line": 2,
-         "offset": 26
-        },
-        "text": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
-    }
-After running Immedidate callback:: count: 1
-6: suggestionCheck
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 5,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Before running Timeout callback:: count: 2
-12: *ensureProjectForOpenFiles*
-13: checkOne
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
@@ -1282,36 +1483,157 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 5
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-14: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+7: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+7: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 21
+            },
+            "end": {
+              "line": 1,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/foo` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo';`",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 21
+            },
+            "end": {
+              "line": 2,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+8: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+8: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 5
+      }
+    }
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -1319,14 +1641,59 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 2
-14: checkOne
-15: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 1
+14: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/foo/index.d.ts]
 export declare const foo: number;
 
 
+Timeout callback:: count: 1
+14: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+15: /home/src/projects/project/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 6,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Timeout callback:: count: 3
+15: /home/src/projects/project/tsconfig.json
+16: *ensureProjectForOpenFiles*
+17: checkOne *new*
+
+Before running Timeout callback:: count: 3
+15: /home/src/projects/project/tsconfig.json
+16: *ensureProjectForOpenFiles*
+17: checkOne
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -1398,86 +1765,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/index.mts SVC-1-0 "import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
-    }
-After running Timeout callback:: count: 1
-16: *ensureProjectForOpenFiles*
-
-Before running Immedidate callback:: count: 1
-7: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 1,
-         "offset": 21
-        },
-        "end": {
-         "line": 1,
-         "offset": 26
-        },
-        "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 2,
-         "offset": 21
-        },
-        "end": {
-         "line": 2,
-         "offset": 26
-        },
-        "text": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
-    }
-After running Immedidate callback:: count: 1
-8: suggestionCheck
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 6,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Before running Timeout callback:: count: 2
-16: *ensureProjectForOpenFiles*
-17: checkOne
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
@@ -1495,59 +1782,225 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 6
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-18: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+9: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+9: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 21
+            },
+            "end": {
+              "line": 1,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 21
+            },
+            "end": {
+              "line": 2,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'bar'. '/home/src/projects/project/node_modules/bar/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+10: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+10: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 6
+      }
+    }
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
-Before running Timeout callback:: count: 2
-18: checkOne
-19: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 1
+18: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
- "name": "@types/bar",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "require": "./index.d.ts"
+  "name": "@types/bar",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 
+Timeout callback:: count: 1
+18: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+19: /home/src/projects/project/tsconfig.json *new*
+20: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 7,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Timeout callback:: count: 3
+19: /home/src/projects/project/tsconfig.json
+20: *ensureProjectForOpenFiles*
+21: checkOne *new*
+
+Before running Timeout callback:: count: 3
+19: /home/src/projects/project/tsconfig.json
+20: *ensureProjectForOpenFiles*
+21: checkOne
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -1617,73 +2070,6 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
-    }
-After running Timeout callback:: count: 1
-20: *ensureProjectForOpenFiles*
-
-Before running Immedidate callback:: count: 1
-9: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 1,
-         "offset": 21
-        },
-        "end": {
-         "line": 1,
-         "offset": 26
-        },
-        "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
-    }
-After running Immedidate callback:: count: 1
-10: suggestionCheck
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 7,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Before running Timeout callback:: count: 2
-20: *ensureProjectForOpenFiles*
-21: checkOne
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
@@ -1701,61 +2087,214 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 7
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-22: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+11: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+11: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 21
+            },
+            "end": {
+              "line": 1,
+              "offset": 26
+            },
+            "text": "Could not find a declaration file for module 'foo'. '/home/src/projects/project/node_modules/foo/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+12: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+12: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 7
+      }
+    }
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
-Before running Timeout callback:: count: 2
-22: checkOne
-23: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 1
+22: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/foo/package.json]
 {
- "name": "foo",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 
+Timeout callback:: count: 1
+22: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+23: /home/src/projects/project/tsconfig.json *new*
+24: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 8,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Timeout callback:: count: 3
+23: /home/src/projects/project/tsconfig.json
+24: *ensureProjectForOpenFiles*
+25: checkOne *new*
+
+Before running Timeout callback:: count: 3
+23: /home/src/projects/project/tsconfig.json
+24: *ensureProjectForOpenFiles*
+25: checkOne
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -1823,18 +2362,46 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (6)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
-After running Timeout callback:: count: 1
-24: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
+    }
+After running Timeout callback:: count: 0
 
 PolledWatches *deleted*::
 /home/src/projects/node_modules:
@@ -1866,21 +2433,141 @@ FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
 
+Immedidate callback:: count: 1
+13: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
-11: semanticCheck
+13: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
 After running Immedidate callback:: count: 1
-12: suggestionCheck
+
+Immedidate callback:: count: 1
+14: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+14: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 8
+      }
+    }
+After running Immedidate callback:: count: 0
+
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Before running Timeout callback:: count: 1
+26: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+//// [/home/src/projects/project/node_modules/@types/bar2/package.json]
+{
+  "name": "@types/bar2",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./index.d.ts"
+    }
+  }
+}
+
+
+Timeout callback:: count: 1
+26: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+27: /home/src/projects/project/tsconfig.json *new*
+28: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
 
 Before request
 
@@ -1893,7 +2580,7 @@ Info seq  [hh:mm:ss:mss] request:
           "/home/src/projects/project/index.mts"
         ]
       },
-      "seq": 8,
+      "seq": 9,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
@@ -1902,79 +2589,17 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Before running Timeout callback:: count: 2
-24: *ensureProjectForOpenFiles*
-25: checkOne
+Timeout callback:: count: 3
+27: /home/src/projects/project/tsconfig.json
+28: *ensureProjectForOpenFiles*
+29: checkOne *new*
 
-Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
+Before running Timeout callback:: count: 3
+27: /home/src/projects/project/tsconfig.json
+28: *ensureProjectForOpenFiles*
+29: checkOne
 
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (6)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 8
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
-    }
-After running Timeout callback:: count: 1
-26: checkOne
-
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
-Before running Timeout callback:: count: 2
-26: checkOne
-27: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/project/node_modules/@types/bar2/package.json]
-{
- "name": "@types/bar2",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "require": "./index.d.ts"
-  }
- }
-}
-
-
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -2087,18 +2712,46 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
-After running Timeout callback:: count: 1
-28: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
+    }
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /home/src/projects/node_modules: *new*
@@ -2130,35 +2783,157 @@ FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
 
+Immedidate callback:: count: 1
+15: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
-13: semanticCheck
+15: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 4,
-         "offset": 22
-        },
-        "end": {
-         "line": 4,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 22
+            },
+            "end": {
+              "line": 4,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
     }
 After running Immedidate callback:: count: 1
-14: suggestionCheck
+
+Immedidate callback:: count: 1
+16: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+16: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 9
+      }
+    }
+After running Immedidate callback:: count: 0
+
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
+Before running Timeout callback:: count: 1
+30: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+//// [/home/src/projects/project/node_modules/foo2/package.json]
+{
+  "name": "foo2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
+  }
+}
+
+
+Timeout callback:: count: 1
+30: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+31: /home/src/projects/project/tsconfig.json *new*
+32: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
 
 Before request
 
@@ -2171,7 +2946,7 @@ Info seq  [hh:mm:ss:mss] request:
           "/home/src/projects/project/index.mts"
         ]
       },
-      "seq": 9,
+      "seq": 10,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
@@ -2180,81 +2955,17 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Before running Timeout callback:: count: 2
-28: *ensureProjectForOpenFiles*
-29: checkOne
+Timeout callback:: count: 3
+31: /home/src/projects/project/tsconfig.json
+32: *ensureProjectForOpenFiles*
+33: checkOne *new*
 
-Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Before running Timeout callback:: count: 3
+31: /home/src/projects/project/tsconfig.json
+32: *ensureProjectForOpenFiles*
+33: checkOne
 
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 9
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
-    }
-After running Timeout callback:: count: 1
-30: checkOne
-
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Before running Immedidate callback:: count: 0
-
-After running Immedidate callback:: count: 0
-
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: File location affecting resolution
-Before running Timeout callback:: count: 2
-30: checkOne
-31: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/project/node_modules/foo2/package.json]
-{
- "name": "foo2",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
-  }
- }
-}
-
-
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -2339,86 +3050,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
-    }
-After running Timeout callback:: count: 1
-32: *ensureProjectForOpenFiles*
-
-Before running Immedidate callback:: count: 1
-15: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 3,
-         "offset": 22
-        },
-        "end": {
-         "line": 3,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 4,
-         "offset": 22
-        },
-        "end": {
-         "line": 4,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
-    }
-After running Immedidate callback:: count: 1
-16: suggestionCheck
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 10,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Before running Timeout callback:: count: 2
-32: *ensureProjectForOpenFiles*
-33: checkOne
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
@@ -2436,36 +3067,157 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 10
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-34: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+17: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+17: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 22
+            },
+            "end": {
+              "line": 3,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 22
+            },
+            "end": {
+              "line": 4,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+18: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+18: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 10
+      }
+    }
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -2473,12 +3225,57 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 2
-34: checkOne
-35: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 1
+34: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] deleted
 
+Timeout callback:: count: 1
+34: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+35: /home/src/projects/project/tsconfig.json *new*
+36: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 11,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Timeout callback:: count: 3
+35: /home/src/projects/project/tsconfig.json
+36: *ensureProjectForOpenFiles*
+37: checkOne *new*
+
+Before running Timeout callback:: count: 3
+35: /home/src/projects/project/tsconfig.json
+36: *ensureProjectForOpenFiles*
+37: checkOne
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -2582,86 +3379,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/index.mts SVC-1-0 "import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
-    }
-After running Timeout callback:: count: 1
-36: *ensureProjectForOpenFiles*
-
-Before running Immedidate callback:: count: 1
-17: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 3,
-         "offset": 22
-        },
-        "end": {
-         "line": 3,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 4,
-         "offset": 22
-        },
-        "end": {
-         "line": 4,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/bar2` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar2';`",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
-    }
-After running Immedidate callback:: count: 1
-18: suggestionCheck
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 11,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Before running Timeout callback:: count: 2
-36: *ensureProjectForOpenFiles*
-37: checkOne
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
@@ -2679,36 +3396,157 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 11
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-38: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+19: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+19: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 22
+            },
+            "end": {
+              "line": 3,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 22
+            },
+            "end": {
+              "line": 4,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/bar2` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar2';`",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+20: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+20: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 11
+      }
+    }
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -2716,12 +3554,57 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 2
-38: checkOne
-39: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 1
+38: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts] deleted
 
+Timeout callback:: count: 1
+38: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+39: /home/src/projects/project/tsconfig.json *new*
+40: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 12,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Timeout callback:: count: 3
+39: /home/src/projects/project/tsconfig.json
+40: *ensureProjectForOpenFiles*
+41: checkOne *new*
+
+Before running Timeout callback:: count: 3
+39: /home/src/projects/project/tsconfig.json
+40: *ensureProjectForOpenFiles*
+41: checkOne
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -2806,86 +3689,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/index.mts SVC-1-0 "import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
-    }
-After running Timeout callback:: count: 1
-40: *ensureProjectForOpenFiles*
-
-Before running Immedidate callback:: count: 1
-19: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 3,
-         "offset": 22
-        },
-        "end": {
-         "line": 3,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/foo2` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo2';`",
-        "code": 7016,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 4,
-         "offset": 22
-        },
-        "end": {
-         "line": 4,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/bar2` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar2';`",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
-    }
-After running Immedidate callback:: count: 1
-20: suggestionCheck
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 12,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Before running Timeout callback:: count: 2
-40: *ensureProjectForOpenFiles*
-41: checkOne
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
@@ -2903,36 +3706,157 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 12
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-42: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+21: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+21: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 22
+            },
+            "end": {
+              "line": 3,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/foo2` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo2';`",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 22
+            },
+            "end": {
+              "line": 4,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/bar2` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar2';`",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+22: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+22: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 12
+      }
+    }
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -2940,14 +3864,59 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 2
-42: checkOne
-43: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 1
+42: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
 export declare const bar2: number;
 
 
+Timeout callback:: count: 1
+42: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+43: /home/src/projects/project/tsconfig.json *new*
+44: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 13,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Timeout callback:: count: 3
+43: /home/src/projects/project/tsconfig.json
+44: *ensureProjectForOpenFiles*
+45: checkOne *new*
+
+Before running Timeout callback:: count: 3
+43: /home/src/projects/project/tsconfig.json
+44: *ensureProjectForOpenFiles*
+45: checkOne
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -3038,86 +4007,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/index.mts SVC-1-0 "import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
-    }
-After running Timeout callback:: count: 1
-44: *ensureProjectForOpenFiles*
-
-Before running Immedidate callback:: count: 1
-21: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 3,
-         "offset": 22
-        },
-        "end": {
-         "line": 3,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/foo2` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo2';`",
-        "code": 7016,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 4,
-         "offset": 22
-        },
-        "end": {
-         "line": 4,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
-    }
-After running Immedidate callback:: count: 1
-22: suggestionCheck
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 13,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Before running Timeout callback:: count: 2
-44: *ensureProjectForOpenFiles*
-45: checkOne
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
@@ -3135,36 +4024,157 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 13
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-46: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+23: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+23: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 22
+            },
+            "end": {
+              "line": 3,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  Try `npm i --save-dev @types/foo2` if it exists or add a new declaration (.d.ts) file containing `declare module 'foo2';`",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 22
+            },
+            "end": {
+              "line": 4,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+24: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+24: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 13
+      }
+    }
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -3172,14 +4182,59 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 2
-46: checkOne
-47: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 1
+46: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts]
 export declare const foo2: number;
 
 
+Timeout callback:: count: 1
+46: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+47: /home/src/projects/project/tsconfig.json *new*
+48: *ensureProjectForOpenFiles* *new*
+
+Before running Immedidate callback:: count: 0
+
+After running Immedidate callback:: count: 0
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/home/src/projects/project/index.mts"
+        ]
+      },
+      "seq": 14,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Timeout callback:: count: 3
+47: /home/src/projects/project/tsconfig.json
+48: *ensureProjectForOpenFiles*
+49: checkOne *new*
+
+Before running Timeout callback:: count: 3
+47: /home/src/projects/project/tsconfig.json
+48: *ensureProjectForOpenFiles*
+49: checkOne
+
+Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
@@ -3251,86 +4306,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/projects/project/index.mts SVC-1-0 "import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": []
-     }
-    }
-After running Timeout callback:: count: 1
-48: *ensureProjectForOpenFiles*
-
-Before running Immedidate callback:: count: 1
-23: semanticCheck
-
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/home/src/projects/project/index.mts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 3,
-         "offset": 22
-        },
-        "end": {
-         "line": 3,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       },
-       {
-        "start": {
-         "line": 4,
-         "offset": 22
-        },
-        "end": {
-         "line": 4,
-         "offset": 28
-        },
-        "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
-        "code": 7016,
-        "category": "error"
-       }
-      ]
-     }
-    }
-After running Immedidate callback:: count: 1
-24: suggestionCheck
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/home/src/projects/project/index.mts"
-        ]
-      },
-      "seq": 14,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Before running Timeout callback:: count: 2
-48: *ensureProjectForOpenFiles*
-49: checkOne
-
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
@@ -3348,34 +4323,155 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/index.mts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /home/src/projects/project/index.mts
+Info seq  [hh:mm:ss:mss] got projects updated in background /home/src/projects/project/index.mts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 14
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/home/src/projects/project/index.mts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/home/src/projects/project/index.mts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": []
+      }
     }
-After running Timeout callback:: count: 1
-50: checkOne
+After running Timeout callback:: count: 0
 
-Before running Immedidate callback:: count: 0
+Immedidate callback:: count: 1
+25: semanticCheck *new*
 
-After running Immedidate callback:: count: 0
+Before running Immedidate callback:: count: 1
+25: semanticCheck
 
-Before running Immedidate callback:: count: 0
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 22
+            },
+            "end": {
+              "line": 3,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'foo2'. '/home/src/projects/project/node_modules/foo2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/foo2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The 'foo2' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 22
+            },
+            "end": {
+              "line": 4,
+              "offset": 28
+            },
+            "text": "Could not find a declaration file for module 'bar2'. '/home/src/projects/project/node_modules/bar2/index.mjs' implicitly has an 'any' type.\n  There are types at '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', but this result could not be resolved when respecting package.json \"exports\". The '@types/bar2' library may need to update its package.json or typings.",
+            "code": 7016,
+            "category": "error"
+          }
+        ]
+      }
+    }
+After running Immedidate callback:: count: 1
 
+Immedidate callback:: count: 1
+26: suggestionCheck *new*
+
+Before running Immedidate callback:: count: 1
+26: suggestionCheck
+
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/home/src/projects/project/index.mts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 1
+            },
+            "end": {
+              "line": 1,
+              "offset": 27
+            },
+            "text": "'foo' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 27
+            },
+            "text": "'bar' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 3,
+              "offset": 1
+            },
+            "end": {
+              "line": 3,
+              "offset": 29
+            },
+            "text": "'foo2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 1
+            },
+            "end": {
+              "line": 4,
+              "offset": 29
+            },
+            "text": "'bar2' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 14
+      }
+    }
 After running Immedidate callback:: count: 0

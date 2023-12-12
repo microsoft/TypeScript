@@ -44,9 +44,9 @@ export class SortedMap<K, V> {
         return index >= 0 ? this._values[index] : undefined;
     }
 
-    public getEntry(key: K): [ K, V ] | undefined {
+    public getEntry(key: K): [K, V] | undefined {
         const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
-        return index >= 0 ? [ this._keys[index], this._values[index] ] : undefined;
+        return index >= 0 ? [this._keys[index], this._values[index]] : undefined;
     }
 
     public set(key: K, value: V) {
@@ -112,7 +112,7 @@ export class SortedMap<K, V> {
         }
     }
 
-    public * keys() {
+    public *keys() {
         const keys = this._keys;
         const indices = this.getIterationOrder();
         const version = this._version;
@@ -134,7 +134,7 @@ export class SortedMap<K, V> {
         }
     }
 
-    public * values() {
+    public *values() {
         const values = this._values;
         const indices = this.getIterationOrder();
         const version = this._version;
@@ -156,7 +156,7 @@ export class SortedMap<K, V> {
         }
     }
 
-    public * entries() {
+    public *entries() {
         const keys = this._keys;
         const values = this._values;
         const indices = this.getIterationOrder();
@@ -230,7 +230,7 @@ function insertAt<T>(array: T[], index: number, value: T): void {
 export class Metadata {
     private static readonly _undefinedValue = {};
     private _parent: Metadata | undefined;
-    private _map: { [key: string]: any };
+    private _map: { [key: string]: any; };
     private _version = 0;
     private _size = -1;
     private _parentVersion: number | undefined;

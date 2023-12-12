@@ -124,7 +124,7 @@ var a: {
 }
 
 var a2: {
->a2 : { (x: 'a'): any; <T>(x: T): any; foo(x: 'a'): any; foo<T>(x: T): any; }
+>a2 : { (x: 'a'): any; <T>(x: T): any; foo(x: 'a'): any; foo<T_1>(x: T_1): any; }
 
     (x: 'a');
 >x : "a"
@@ -142,7 +142,7 @@ var a2: {
 }
 
 var a3: {
->a3 : { (x: 'a'): any; <T>(x: T): any; foo(x: 'a'): any; foo<T extends String>(x: T): any; }
+>a3 : { (x: 'a'): any; <T>(x: T): any; foo(x: 'a'): any; foo<T_1 extends String>(x: T_1): any; }
 
     (x: 'a');
 >x : "a"

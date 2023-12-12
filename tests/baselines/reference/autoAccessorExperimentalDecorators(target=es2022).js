@@ -32,8 +32,8 @@ class C1 {
     get a() { return this.#a_accessor_storage; }
     set a(value) { this.#a_accessor_storage = value; }
     static #b_accessor_storage;
-    static get b() { return this.#b_accessor_storage; }
-    static set b(value) { this.#b_accessor_storage = value; }
+    static get b() { return C1.#b_accessor_storage; }
+    static set b(value) { C1.#b_accessor_storage = value; }
 }
 __decorate([
     dec
@@ -46,6 +46,6 @@ class C2 {
     get #a() { return this.#a_accessor_storage; }
     set #a(value) { this.#a_accessor_storage = value; }
     static #b_accessor_storage;
-    static get #b() { return this.#b_accessor_storage; }
-    static set #b(value) { this.#b_accessor_storage = value; }
+    static get #b() { return C2.#b_accessor_storage; }
+    static set #b(value) { C2.#b_accessor_storage = value; }
 }

@@ -9,7 +9,7 @@ async function foo<T>(x: T): Promise<T> {
 >yaddable : Yadda | Awaited<T>
 >await getXOrYadda(x) : Yadda | Awaited<T>
 >getXOrYadda(x) : T | Yadda
->getXOrYadda : <T>(x: T) => T | Yadda
+>getXOrYadda : <T_1>(x: T_1) => T_1 | Yadda
 >x : T
 
   return yaddable;

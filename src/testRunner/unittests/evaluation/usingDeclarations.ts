@@ -7,7 +7,8 @@ function FakeSuppressedError(error: any, suppressed: any) {
 
 describe("unittests:: evaluation:: usingDeclarations", () => {
     it("'using' in Block, normal completion (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -30,7 +31,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -40,12 +43,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit block",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
     it("'using' in Block, 'throw' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -72,7 +76,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -82,12 +88,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "disposed",
             "error",
-            "after try"
+            "after try",
         ]);
     });
 
     it("'using' in Block, 'throw' in dispose (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -114,7 +121,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -125,12 +134,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "exit try",
             "disposed",
             "error",
-            "after try"
+            "after try",
         ]);
     });
 
     it("'using' in Block, 'throw' in multiple dispose (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable_1 = {
@@ -164,7 +174,10 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         main();
 
@@ -177,14 +190,15 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "disposed 1",
             {
                 error: "error 1",
-                suppressed: "error 2"
+                suppressed: "error 2",
             },
-            "after try"
+            "after try",
         ]);
     });
 
     it("'using' in Block, 'throw' in body and dispose (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -212,7 +226,10 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         main();
 
@@ -223,14 +240,15 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
-            "after try"
+            "after try",
         ]);
     });
 
     it("'using' in Block, 'throw' in body and multiple dispose (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable_1 = {
@@ -265,7 +283,10 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         main();
 
@@ -279,15 +300,16 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
                 error: "dispose error 1",
                 suppressed: {
                     error: "dispose error 2",
-                    suppressed: "body error"
-                }
+                    suppressed: "body error",
+                },
             },
-            "after try"
+            "after try",
         ]);
     });
 
     it("'using' in Block, 'throw' in body and dispose, no global SuppressedError (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -315,7 +337,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -323,18 +347,20 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before try",
             "enter try",
             "body",
-            "disposed"]);
+            "disposed",
+        ]);
         assert.instanceOf(output[4], Error);
         assert.strictEqual(output[4].name, "SuppressedError");
         assert.strictEqual(output[4].error, "dispose error");
         assert.strictEqual(output[4].suppressed, "body error");
         assert.deepEqual(output.slice(5), [
-            "after try"
+            "after try",
         ]);
     });
 
     it("'using' in Block, 'return' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -357,7 +383,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -365,12 +393,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before block",
             "enter block",
             "body",
-            "disposed"
+            "disposed",
         ]);
     });
 
     it("'using' in Block, 'break' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -393,7 +422,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -402,12 +433,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter block",
             "body",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
     it("'using' in Block, 'continue' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -430,7 +462,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -442,12 +476,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter block",
             "body",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
     it("'using' in head of 'for', normal completion (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -470,7 +505,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -483,12 +520,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit loop",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for', 'throw' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -516,7 +554,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -526,12 +566,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "disposed",
             "error",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for', 'throw' in dispose (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -559,7 +600,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -573,12 +616,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "exit loop",
             "disposed",
             "error",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for', 'throw' in body and dispose (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -607,7 +651,10 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         main();
 
@@ -618,14 +665,15 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for', 'return' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -648,7 +696,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -656,12 +706,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before loop",
             "enter loop",
             "body",
-            "disposed"
+            "disposed",
         ]);
     });
 
     it("'using' in head of 'for', 'break' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -684,7 +735,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -693,12 +746,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for', 'continue' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -721,7 +775,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -732,12 +788,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for', multiple iterations (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -760,7 +817,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -773,12 +832,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit loop",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for-of', normal completion (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -807,7 +867,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -821,12 +883,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit loop",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for-of', 'throw' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -861,7 +924,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -876,7 +941,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
     });
 
     it("'using' in head of 'for-of', 'throw' in dispose (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -911,7 +977,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -927,7 +995,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
     });
 
     it("'using' in head of 'for-of', 'throw' in body and dispose (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -963,7 +1032,10 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         main();
 
@@ -974,14 +1046,15 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "a disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
             "after loop",
         ]);
     });
 
     it("'using' in head of 'for-of', 'return' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1010,7 +1083,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -1023,7 +1098,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
     });
 
     it("'using' in head of 'for-of', 'break' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1052,7 +1128,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -1061,12 +1139,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "a disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for-of', 'continue' in body (es2018)", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1095,7 +1174,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -1107,12 +1188,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for-await-of', normal completion (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1141,7 +1223,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1155,12 +1239,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit loop",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for-await-of', 'throw' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1195,7 +1280,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1210,7 +1297,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
     });
 
     it("'using' in head of 'for-await-of', 'throw' in dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1245,7 +1333,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1261,7 +1351,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
     });
 
     it("'using' in head of 'for-await-of', 'throw' in body and dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1297,7 +1388,10 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         await main();
 
@@ -1308,14 +1402,15 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "a disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
             "after loop",
         ]);
     });
 
     it("'using' in head of 'for-await-of', 'return' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1344,7 +1439,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1357,7 +1454,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
     });
 
     it("'using' in head of 'for-await-of', 'break' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1386,7 +1484,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1395,12 +1495,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "a disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' in head of 'for-await-of', 'continue' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1429,7 +1530,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1441,12 +1544,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
     it("'using' at top level of module (CommonJS)", () => {
-        const { output, x, y } = evaluator.evaluateTypeScript(`
+        const { output, x, y } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
         output.push("before export x");
         export const x = 1;
@@ -1459,7 +1563,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         output.push("after using");
         export const y = 2;
         output.push("after export y");
-        `, { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.CommonJS });
+        `,
+            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.CommonJS },
+        );
 
         assert.strictEqual(x, 1);
         assert.strictEqual(y, 2);
@@ -1468,12 +1574,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before using",
             "after using",
             "after export y",
-            "disposed"
+            "disposed",
         ]);
     });
 
     it("'using' at top level of module (AMD)", () => {
-        const { output, x, y } = evaluator.evaluateTypeScript(`
+        const { output, x, y } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
         output.push("before export x");
         export const x = 1;
@@ -1486,7 +1593,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         output.push("after using");
         export const y = 2;
         output.push("after export y");
-        `, { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.AMD });
+        `,
+            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.AMD },
+        );
 
         assert.strictEqual(x, 1);
         assert.strictEqual(y, 2);
@@ -1495,12 +1604,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before using",
             "after using",
             "after export y",
-            "disposed"
+            "disposed",
         ]);
     });
 
     it("'using' at top level of module (System)", () => {
-        const { output, x, y } = evaluator.evaluateTypeScript(`
+        const { output, x, y } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
         output.push("before export x");
         export const x = 1;
@@ -1513,7 +1623,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         output.push("after using");
         export const y = 2;
         output.push("after export y");
-        `, { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.System });
+        `,
+            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.System },
+        );
 
         assert.strictEqual(x, 1);
         assert.strictEqual(y, 2);
@@ -1522,12 +1634,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before using",
             "after using",
             "after export y",
-            "disposed"
+            "disposed",
         ]);
     });
 
     it("'using' for 'null' value", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function body() {
@@ -1544,7 +1657,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -1553,12 +1668,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter block",
             "body",
             "exit block",
-            "after block"
+            "after block",
         ]);
     });
 
     it("'using' for 'undefined' value", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function body() {
@@ -1575,7 +1691,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -1584,12 +1702,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter block",
             "body",
             "exit block",
-            "after block"
+            "after block",
         ]);
     });
 
     it("'using' for non-disposable value", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function body() {
@@ -1606,7 +1725,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         assert.throws(main);
         assert.deepEqual(output, [
@@ -1616,7 +1737,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
     });
 
     it("'using' disposes in reverse order", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable_1 = {
@@ -1644,7 +1766,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
@@ -1655,12 +1779,13 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "exit block",
             "disposed 2",
             "disposed 1",
-            "after block"
+            "after block",
         ]);
     });
 
     it("'using' for 'function' disposable resource ", () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function disposable() {
@@ -1674,7 +1799,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             run();
         }
 
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         main();
 
