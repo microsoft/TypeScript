@@ -1946,7 +1946,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var subtypeReductionCache = new Map<string, Type[]>();
     var decoratorContextOverrideTypeCache = new Map<string, Type>();
     var cachedTypes = new Map<string, Type>();
-    var cachedUnionOrIntersectionPropertySymbols = new Map<string, Symbol>();
     var evolvingArrayTypes: EvolvingArrayType[] = [];
     var undefinedProperties: SymbolTable = new Map();
     var markerTypes = new Set<number>();
@@ -13034,8 +13033,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return length(target.typeParameters) === length(typeArguments) ? createTypeReference(target, concatenate(typeArguments, [thisArgument || target.thisType!])) : type;
         }
         else if (type.flags & TypeFlags.Intersection) {
-            const types = sameMap((type as IntersectionType).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType));
-            return types !== (type as IntersectionType).types ? getIntersectionType(types) : type;
+            const intersectionType = type as IntersectionType;
+            const types = sameMap(intersectionType.types, t => getTypeWithThisArgument(t, thisArgument, needApparentType));
+            if (types === intersectionType.types) {
+                return type;
+            }
+            const result = getIntersectionType(types);
+            if (result.flags & TypeFlags.Intersection) {
+                (result as IntersectionType).withThisArgumentTarget = intersectionType;
+            }
+            return result;
         }
         return needApparentType ? getApparentType(type) : type;
     }
@@ -14599,11 +14606,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const props = propSet ? arrayFrom(propSet.values()) : [singleProp];
-        const id = `${checkFlags & CheckFlags.ReadPartial ? 'p' : ''}${skipObjectFunctionPropertyAugment ? 's' : ''}${isUnion ? 'u' : 'i'}${getSymbolListId(props)}`;
-        const cached = cachedUnionOrIntersectionPropertySymbols.get(id);
-        if (cached) {
-            return cached;
-        }
         let declarations: Declaration[] | undefined;
         let firstType: Type | undefined;
         let nameType: Type | undefined;
@@ -14666,7 +14668,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 result.links.writeType = isUnion ? getUnionType(writeTypes) : getIntersectionType(writeTypes);
             }
         }
-        cachedUnionOrIntersectionPropertySymbols.set(id, result);
+        if (!isUnion && (containingType as IntersectionType).withThisArgumentTarget) {
+            result.links.withThisArgumentIntersectionPropTarget = getUnionOrIntersectionProperty((containingType as IntersectionType).withThisArgumentTarget!, name, skipObjectFunctionPropertyAugment);
+        }
         return result;
     }
 
@@ -15736,22 +15740,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result += ":" + count;
                 }
                 i += count;
-            }
-        }
-        return result;
-    }
-
-    function getSymbolListId(symbols: readonly Symbol[] | undefined) {
-        let result = "";
-        if (symbols) {
-            const length = symbols.length;
-            let i = 0;
-            while (i < length) {
-                if (result.length) {
-                    result += ",";
-                }
-                result += getSymbolId(symbols[i]);
-                i++;
             }
         }
         return result;
@@ -44673,11 +44661,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function getTargetSymbol(s: Symbol) {
+    function getTargetSymbol(s: Symbol): Symbol {
+        // NOTE: cast to TransientSymbol should be safe because only TransientSymbols have `CheckFlags.Instantiated | CheckFlags.Synthetic`
+        const checkFlags = getCheckFlags(s);
+
         // if symbol is instantiated its flags are not copied from the 'target'
         // so we'll need to get back original 'target' symbol to work with correct set of flags
-        // NOTE: cast to TransientSymbol should be safe because only TransientSymbols have CheckFlags.Instantiated
-        return getCheckFlags(s) & CheckFlags.Instantiated ? (s as TransientSymbol).links.target! : s;
+        if (checkFlags & CheckFlags.Instantiated) {
+            return (s as TransientSymbol).links.target!;
+        }
+        if (checkFlags & CheckFlags.Synthetic && (s as TransientSymbol).links.withThisArgumentIntersectionPropTarget) {
+            return (s as TransientSymbol).links.withThisArgumentIntersectionPropTarget!;
+        }
+        return s;
     }
 
     function getClassOrInterfaceDeclarationsOfSymbol(symbol: Symbol) {

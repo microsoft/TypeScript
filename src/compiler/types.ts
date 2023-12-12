@@ -5879,6 +5879,7 @@ export interface SymbolLinks {
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     accessibleChainCache?: Map<string, Symbol[] | undefined>;
     filteredIndexSymbolCache?: Map<string, Symbol> //Symbol with applicable declarations
+    withThisArgumentIntersectionPropTarget?: Symbol; 
 }
 
 /** @internal */
@@ -6495,6 +6496,8 @@ export interface IntersectionType extends UnionOrIntersectionType {
     resolvedApparentType: Type;
     /** @internal */
     uniqueLiteralFilledInstantiation?: Type; // Instantiation with type parameters mapped to never type
+    /** @internal */
+    withThisArgumentTarget?: IntersectionType;
 }
 
 export type StructuredType = ObjectType | UnionType | IntersectionType;
