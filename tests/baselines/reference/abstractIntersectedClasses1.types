@@ -1,0 +1,81 @@
+//// [tests/cases/compiler/abstractIntersectedClasses1.ts] ////
+
+=== abstractIntersectedClasses1.ts ===
+// https://github.com/microsoft/TypeScript/issues/56738
+
+abstract class A {
+>A : A
+
+  abstract a(): number;
+>a : () => number
+}
+
+abstract class A2 {
+>A2 : A2
+
+  abstract a(): number;
+>a : () => number
+}
+
+abstract class B {
+>B : B
+
+  abstract b(): number;
+>b : () => number
+}
+
+declare const Base: abstract new () => A & B;
+>Base : abstract new () => A & B
+
+class Foo1 extends Base {} // error
+>Foo1 : Foo1
+>Base : A & B
+
+class Foo2 extends Base { // error
+>Foo2 : Foo2
+>Base : A & B
+
+  a() {
+>a : () => number
+
+    return 10;
+>10 : 10
+  }
+}
+class Foo3 extends Base { // ok
+>Foo3 : Foo3
+>Base : A & B
+
+  a() {
+>a : () => number
+
+    return 10;
+>10 : 10
+  }
+  b() {
+>b : () => number
+
+    return 42;
+>42 : 42
+  }
+}
+
+declare const Base2: abstract new () => A & A2;
+>Base2 : abstract new () => A & A2
+
+class Bar1 extends Base2 {} // error
+>Bar1 : Bar1
+>Base2 : A & A2
+
+class Bar2 extends Base2 { // ok
+>Bar2 : Bar2
+>Base2 : A & A2
+
+  a() {
+>a : () => number
+
+    return 100;
+>100 : 100
+  }
+}
+

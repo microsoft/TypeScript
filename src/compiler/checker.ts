@@ -1946,6 +1946,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var subtypeReductionCache = new Map<string, Type[]>();
     var decoratorContextOverrideTypeCache = new Map<string, Type>();
     var cachedTypes = new Map<string, Type>();
+    var cachedUnionOrIntersectionPropertySymbols = new Map<string, Symbol>();
     var evolvingArrayTypes: EvolvingArrayType[] = [];
     var undefinedProperties: SymbolTable = new Map();
     var markerTypes = new Set<number>();
@@ -14548,7 +14549,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkFlags |= (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
                         (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
                         (modifiers & ModifierFlags.Private ? CheckFlags.ContainsPrivate : 0) |
-                        (modifiers & ModifierFlags.Static ? CheckFlags.ContainsStatic : 0);
+                        (modifiers & ModifierFlags.Static ? CheckFlags.ContainsStatic : 0) |
+                        (modifiers & ModifierFlags.Abstract ? CheckFlags.ContainsAbstract : 0);
                     if (!isPrototypeProperty(prop)) {
                         syntheticFlag = CheckFlags.SyntheticProperty;
                     }
@@ -14597,6 +14599,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         const props = propSet ? arrayFrom(propSet.values()) : [singleProp];
+        const id = `${checkFlags & CheckFlags.ReadPartial ? 'p' : ''}${skipObjectFunctionPropertyAugment ? 's' : ''}${isUnion ? 'u' : 'i'}${getSymbolListId(props)}`;
+        const cached = cachedUnionOrIntersectionPropertySymbols.get(id);
+        if (cached) {
+            return cached;
+        }
         let declarations: Declaration[] | undefined;
         let firstType: Type | undefined;
         let nameType: Type | undefined;
@@ -14659,6 +14666,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 result.links.writeType = isUnion ? getUnionType(writeTypes) : getIntersectionType(writeTypes);
             }
         }
+        cachedUnionOrIntersectionPropertySymbols.set(id, result);
         return result;
     }
 
@@ -15728,6 +15736,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result += ":" + count;
                 }
                 i += count;
+            }
+        }
+        return result;
+    }
+
+    function getSymbolListId(symbols: readonly Symbol[] | undefined) {
+        let result = "";
+        if (symbols) {
+            const length = symbols.length;
+            let i = 0;
+            while (i < length) {
+                if (result.length) {
+                    result += ",";
+                }
+                result += getSymbolId(symbols[i]);
+                i++;
             }
         }
         return result;
