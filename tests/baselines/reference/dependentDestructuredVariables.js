@@ -435,6 +435,37 @@ function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
     }
 }
 
+// https://github.com/microsoft/TypeScript/issues/56312
+
+function parameterReassigned1([x, y]: [1, 2] | [3, 4]) {
+  if (Math.random()) {
+    x = 1;
+  }
+  if (y === 2) {
+    x; // 1 | 3
+  }
+}
+
+function parameterReassigned2([x, y]: [1, 2] | [3, 4]) {
+  if (Math.random()) {
+    y = 2;
+  }
+  if (y === 2) {
+    x; // 1 | 3
+  }
+}
+
+// https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
+
+const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (x, y) => {
+  if (Math.random()) {
+    y = 2;
+  }
+  if (y === 2) {
+    x; // 1 | 3
+  }
+}
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
@@ -766,6 +797,32 @@ function tooNarrow([x, y]) {
         const shouldNotBeOk = x; // Error
     }
 }
+// https://github.com/microsoft/TypeScript/issues/56312
+function parameterReassigned1([x, y]) {
+    if (Math.random()) {
+        x = 1;
+    }
+    if (y === 2) {
+        x; // 1 | 3
+    }
+}
+function parameterReassigned2([x, y]) {
+    if (Math.random()) {
+        y = 2;
+    }
+    if (y === 2) {
+        x; // 1 | 3
+    }
+}
+// https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
+const parameterReassignedContextualRest1 = (x, y) => {
+    if (Math.random()) {
+        y = 2;
+    }
+    if (y === 2) {
+        x; // 1 | 3
+    }
+};
 
 
 //// [dependentDestructuredVariables.d.ts]
@@ -916,3 +973,6 @@ declare class Client {
 declare const bot: Client;
 declare function fz1([x, y]: [1, 2] | [3, 4] | [5]): void;
 declare function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]): void;
+declare function parameterReassigned1([x, y]: [1, 2] | [3, 4]): void;
+declare function parameterReassigned2([x, y]: [1, 2] | [3, 4]): void;
+declare const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void;
