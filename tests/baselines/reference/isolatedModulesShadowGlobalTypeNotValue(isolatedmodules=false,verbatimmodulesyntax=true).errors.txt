@@ -2,6 +2,7 @@ bad.ts(1,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 
 bad.ts(1,10): error TS1484: 'Date' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
 bad.ts(1,16): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 bad.ts(1,16): error TS1484: 'Event' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+good.ts(2,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 
 
 ==== ./types.ts (0 errors) ====
@@ -13,6 +14,23 @@ bad.ts(1,16): error TS1484: 'Event' is a type and must be imported using a type-
     
     export namespace Event {
         export type T = any;
+    }
+    
+==== ./node.d.ts (0 errors) ====
+    declare module 'node:console' {
+        global {
+            interface Console {
+                Console: console.ConsoleConstructor;
+            }
+            namespace console {
+                interface ConsoleConstructor {
+                    prototype: Console;
+                    new (): Console;
+                }
+            }
+            var console: Console;
+        }
+        export = globalThis.console;
     }
     
 ==== ./bad.ts (4 errors) ====
@@ -33,8 +51,11 @@ bad.ts(1,16): error TS1484: 'Event' is a type and must be imported using a type-
         return new Event('bar') as Event.T;
     }
     
-==== ./good.ts (0 errors) ====
+==== ./good.ts (1 errors) ====
     import type { Date, Event } from './types';
+    import { Console } from 'node:console';
+             ~~~~~~~
+!!! error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     function foo(a: Date) {
         const b = new Date(a.year, a.month, a.day);
         return b.getTime();
@@ -42,4 +63,5 @@ bad.ts(1,16): error TS1484: 'Event' is a type and must be imported using a type-
     function bar() {
         return new Event('bar') as Event.T;
     }
+    const baz: Console = new Console();
     

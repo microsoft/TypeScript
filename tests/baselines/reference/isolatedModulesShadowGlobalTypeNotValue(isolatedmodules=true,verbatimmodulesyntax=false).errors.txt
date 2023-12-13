@@ -13,6 +13,23 @@ bad.ts(1,16): error TS2866: Import 'Event' conflicts with global value used in t
         export type T = any;
     }
     
+==== ./node.d.ts (0 errors) ====
+    declare module 'node:console' {
+        global {
+            interface Console {
+                Console: console.ConsoleConstructor;
+            }
+            namespace console {
+                interface ConsoleConstructor {
+                    prototype: Console;
+                    new (): Console;
+                }
+            }
+            var console: Console;
+        }
+        export = globalThis.console;
+    }
+    
 ==== ./bad.ts (2 errors) ====
     import { Date, Event } from './types';
              ~~~~
@@ -29,6 +46,7 @@ bad.ts(1,16): error TS2866: Import 'Event' conflicts with global value used in t
     
 ==== ./good.ts (0 errors) ====
     import type { Date, Event } from './types';
+    import { Console } from 'node:console';
     function foo(a: Date) {
         const b = new Date(a.year, a.month, a.day);
         return b.getTime();
@@ -36,4 +54,5 @@ bad.ts(1,16): error TS2866: Import 'Event' conflicts with global value used in t
     function bar() {
         return new Event('bar') as Event.T;
     }
+    const baz: Console = new Console();
     

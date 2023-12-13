@@ -3607,7 +3607,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 // Look at 'compilerOptions.isolatedModules' and not 'getIsolatedModules(...)' (which considers 'verbatimModuleSyntax')
                 // here because 'verbatimModuleSyntax' will already have an error for importing a type without 'import type'.
-                if (compilerOptions.isolatedModules && result && isInExternalModule && meaning & SymbolFlags.Value) {
+                if (compilerOptions.isolatedModules && result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
                     const isGlobal = lookup(globals, name, meaning) === result;
                     const nonValueSymbol = isGlobal && isSourceFile(lastLocation!) && lastLocation.locals && lookup(lastLocation.locals, name, ~SymbolFlags.Value);
                     if (nonValueSymbol) {
