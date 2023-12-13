@@ -29,14 +29,14 @@ declare class Derived<T> extends Base<T> {
 >Base : Symbol(Base, Decl(mappedTypeInferenceToMappedType.ts, 0, 0))
 >T : Symbol(T, Decl(mappedTypeInferenceToMappedType.ts, 7, 22))
 
-    method<U extends unknown[]>(x: { [K in keyof U]: U[K] }): Base<U>;
+    method<V extends unknown[]>(x: { [K in keyof V]: V[K] }): Base<V>;
 >method : Symbol(Derived.method, Decl(mappedTypeInferenceToMappedType.ts, 7, 42))
->U : Symbol(U, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
+>V : Symbol(V, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
 >x : Symbol(x, Decl(mappedTypeInferenceToMappedType.ts, 8, 32))
 >K : Symbol(K, Decl(mappedTypeInferenceToMappedType.ts, 8, 38))
->U : Symbol(U, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
->U : Symbol(U, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
+>V : Symbol(V, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
+>V : Symbol(V, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
 >K : Symbol(K, Decl(mappedTypeInferenceToMappedType.ts, 8, 38))
 >Base : Symbol(Base, Decl(mappedTypeInferenceToMappedType.ts, 0, 0))
->U : Symbol(U, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
+>V : Symbol(V, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
 }

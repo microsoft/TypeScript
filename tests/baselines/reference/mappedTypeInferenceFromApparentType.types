@@ -2,13 +2,10 @@
 
 === mappedTypeInferenceFromApparentType.ts ===
 type Obj = {
->Obj : { [s: string]: number; [u: symbol]: boolean; }
+>Obj : { [s: string]: number; }
 
     [s: string]: number;
 >s : string
-
-    [u: symbol]: boolean;
->u : symbol
 
 };
 

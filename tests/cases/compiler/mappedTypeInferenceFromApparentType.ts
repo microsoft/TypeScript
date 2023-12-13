@@ -3,7 +3,6 @@
 
 type Obj = {
     [s: string]: number;
-    [u: symbol]: boolean;
 };
 
 type foo = <T>(target: { [K in keyof T]: T[K] }) => void;

@@ -9,5 +9,5 @@ declare class Base<T> {
 }
 
 declare class Derived<T> extends Base<T> {
-    method<U extends unknown[]>(x: { [K in keyof U]: U[K] }): Base<U>;
+    method<V extends unknown[]>(x: { [K in keyof V]: V[K] }): Base<V>;
 }
