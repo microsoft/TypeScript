@@ -5591,6 +5591,7 @@ export type LateVisibilityPaintedStatement =
 /** @internal */
 export interface SymbolVisibilityResult {
     accessibility: SymbolAccessibility;
+    bindingElementToMakeVisible?: BindingElement;
     aliasesToMakeVisible?: LateVisibilityPaintedStatement[]; // aliases that need to have this symbol visible
     errorSymbolName?: string; // Optional symbol name that results in error
     errorNode?: Node; // optional node that results in error
