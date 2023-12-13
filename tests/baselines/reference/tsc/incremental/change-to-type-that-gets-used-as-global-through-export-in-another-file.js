@@ -23,7 +23,11 @@ console.log(a);
 export default 1;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/src/project/types.d.ts]
 type MagicNumber = typeof import('./constants').default

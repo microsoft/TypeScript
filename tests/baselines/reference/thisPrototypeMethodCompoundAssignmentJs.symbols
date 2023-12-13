@@ -1,0 +1,40 @@
+//// [tests/cases/conformance/jsdoc/thisPrototypeMethodCompoundAssignmentJs.ts] ////
+
+=== index.js ===
+Element.prototype.remove ??= function () {
+>Element.prototype.remove : Symbol(ChildNode.remove, Decl(lib.dom.d.ts, --, --))
+>Element.prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
+>remove : Symbol(ChildNode.remove, Decl(lib.dom.d.ts, --, --))
+
+  this.parentNode?.removeChild(this);
+>this.parentNode?.removeChild : Symbol(Node.removeChild, Decl(lib.dom.d.ts, --, --))
+>this.parentNode : Symbol(Node.parentNode, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>parentNode : Symbol(Node.parentNode, Decl(lib.dom.d.ts, --, --))
+>removeChild : Symbol(Node.removeChild, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+};
+
+/**
+ * @this Node
+ */
+Element.prototype.remove ??= function () {
+>Element.prototype.remove : Symbol(ChildNode.remove, Decl(lib.dom.d.ts, --, --))
+>Element.prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
+>remove : Symbol(ChildNode.remove, Decl(lib.dom.d.ts, --, --))
+
+  this.parentNode?.removeChild(this);
+>this.parentNode?.removeChild : Symbol(Node.removeChild, Decl(lib.dom.d.ts, --, --))
+>this.parentNode : Symbol(Node.parentNode, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(this)
+>parentNode : Symbol(Node.parentNode, Decl(lib.dom.d.ts, --, --))
+>removeChild : Symbol(Node.removeChild, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(this)
+
+};
+

@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionPropertyFromConstraint.ts ===
 // interface Styles {
 //   alignContent: string | null;

@@ -1,4 +1,7 @@
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
@@ -12,7 +15,7 @@ describe("unittests:: tsc:: projectReferences::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.ts": "export const x = 10;",
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "amd",
                         outFile: "theApp.js",
@@ -31,14 +34,14 @@ describe("unittests:: tsc:: projectReferences::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/utils/index.ts": "export const x = 10;",
-                "/src/utils/tsconfig.json": JSON.stringify({
+                "/src/utils/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         noEmit: true,
                     },
                 }),
                 "/src/project/index.ts": `import { x } from "../utils";`,
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     references: [
                         { path: "../utils" },
                     ],

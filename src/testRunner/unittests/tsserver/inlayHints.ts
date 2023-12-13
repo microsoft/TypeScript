@@ -5,8 +5,6 @@ import {
 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     TestSession,
 } from "../helpers/tsserver";
 import {
@@ -27,7 +25,7 @@ describe("unittests:: tsserver:: inlayHints", () => {
 
     it("with updateOpen request does not corrupt documents", () => {
         const host = createServerHost([app, commonFile1, commonFile2, libFile, configFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: app.path },

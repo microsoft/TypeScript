@@ -52,10 +52,9 @@ var T5 = /** @class */ (function () {
 var T6 = /** @class */ (function (_super) {
     __extends(T6, _super);
     function T6() {
-        var _this = 
         // Should error; base constructor has type T for first arg,
         // which is instantiated with 'number' in the extends clause
-        _super.call(this, "hi") || this;
+        var _this = _super.call(this, "hi") || this;
         var x = _this.foo;
         return _this;
     }

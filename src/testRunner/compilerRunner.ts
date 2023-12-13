@@ -140,6 +140,7 @@ class CompilerTest {
         "importHelpers",
         "downlevelIteration",
         "isolatedModules",
+        "verbatimModuleSyntax",
         "strict",
         "noImplicitAny",
         "strictNullChecks",

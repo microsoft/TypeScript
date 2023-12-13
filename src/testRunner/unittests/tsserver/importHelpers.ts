@@ -1,8 +1,7 @@
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openExternalProjectForSession,
+    TestSession,
     toExternalFile,
 } from "../helpers/tsserver";
 import {
@@ -20,8 +19,12 @@ describe("unittests:: tsserver:: importHelpers", () => {
             content: "",
         };
         const host = createServerHost([f1, tslib]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-        openExternalProjectForSession({ projectFileName: "p", rootFiles: [toExternalFile(f1.path)], options: { importHelpers: true } }, session);
+        const session = new TestSession(host);
+        openExternalProjectForSession({
+            projectFileName: "p",
+            rootFiles: [toExternalFile(f1.path)],
+            options: { importHelpers: true },
+        }, session);
         baselineTsserverLogs("importHelpers", "should not crash in tsserver", session);
     });
 });
