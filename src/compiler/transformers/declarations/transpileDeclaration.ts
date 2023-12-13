@@ -70,7 +70,6 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
     const compilerOptions: CompilerOptions = {
         ...transpileOptions.compilerOptions,
         isolatedDeclarations: true,
-        traceResolution: false,
     };
     const emitHost = createEmitDeclarationHost(transpileOptions);
     const emitResolver = createEmitDeclarationResolver(sourceFile);
