@@ -27,7 +27,8 @@ jobs:
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
       - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
         with:
-          node-version: 16
+          node-version: '*'
+          check-latest: true
       - run: |
           npm --version
           # corepack enable npm
