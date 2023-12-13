@@ -1,6 +1,5 @@
 // @lib: esnext
 // @noImplicitAny: true
-// @isolatedDeclarationDiffReason: TODO Nested access to expando function.
 
 declare namespace app {
   function foo(): void;
