@@ -60,3 +60,9 @@ let sub_invariant = { f: (x) => { return "" } };
 
 super_invariant = sub_invariant;  // Error
 sub_invariant = super_invariant;  // Error
+
+/**
+ * @template in T
+ * @param {T} x
+ */
+function f(x) {}

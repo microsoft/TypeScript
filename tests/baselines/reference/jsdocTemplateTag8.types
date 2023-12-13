@@ -108,3 +108,11 @@ sub_invariant = super_invariant;  // Error
 >sub_invariant : Invariant<string>
 >super_invariant : Invariant<unknown>
 
+/**
+ * @template in T
+ * @param {T} x
+ */
+function f(x) {}
+>f : <in T>(x: T) => void
+>x : T
+

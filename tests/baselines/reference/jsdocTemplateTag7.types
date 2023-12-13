@@ -2,12 +2,23 @@
 
 === a.js ===
 /**
+ * @template const T
+ * @typedef {[T]} X
+ */
+
+/**
+ * @template const T
+ */
+class C { }
+>C : C<T>
+
+/**
  * @template private T
  * @param {T} x
  * @returns {T}
  */
-function f1(x) {
->f1 : <T>(x: T) => T
+function f(x) {
+>f : <T>(x: T) => T
 >x : T
 
     return x;

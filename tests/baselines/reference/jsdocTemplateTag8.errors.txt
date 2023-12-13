@@ -10,9 +10,10 @@ a.js(55,1): error TS2322: Type 'Invariant<string>' is not assignable to type 'In
 a.js(56,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
   The types returned by 'f(...)' are incompatible between these types.
     Type 'unknown' is not assignable to type 'string'.
+a.js(59,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
 
 
-==== a.js (4 errors) ====
+==== a.js (5 errors) ====
     /**
      * @template out T
      * @typedef {Object} Covariant
@@ -85,3 +86,12 @@ a.js(56,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'I
 !!! error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
 !!! error TS2322:   The types returned by 'f(...)' are incompatible between these types.
 !!! error TS2322:     Type 'unknown' is not assignable to type 'string'.
+    
+    /**
+     * @template in T
+                 ~~
+!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+     * @param {T} x
+     */
+    function f(x) {}
+    

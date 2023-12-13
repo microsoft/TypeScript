@@ -89,3 +89,11 @@ sub_invariant = super_invariant;  // Error
 >sub_invariant : Symbol(sub_invariant, Decl(a.js, 52, 3))
 >super_invariant : Symbol(super_invariant, Decl(a.js, 47, 3))
 
+/**
+ * @template in T
+ * @param {T} x
+ */
+function f(x) {}
+>f : Symbol(f, Decl(a.js, 55, 32))
+>x : Symbol(x, Decl(a.js, 61, 11))
+
