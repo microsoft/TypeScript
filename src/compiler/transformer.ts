@@ -4,11 +4,13 @@ import {
     Bundle,
     chainBundle,
     CompilerOptions,
+    CoreEmitResolver,
     createEmitHelperFactory,
     CustomTransformer,
     CustomTransformerFactory,
     CustomTransformers,
     Debug,
+    Diagnostic,
     DiagnosticWithLocation,
     disposeEmitNodes,
     EmitFlags,
@@ -30,6 +32,7 @@ import {
     getUseDefineForClassFields,
     Identifier,
     isBundle,
+    IsolatedTransformationContext,
     isSourceFile,
     LexicalEnvironmentFlags,
     map,
@@ -40,6 +43,7 @@ import {
     NodeFlags,
     noop,
     notImplemented,
+    NullTransformationContext,
     returnUndefined,
     ScriptTarget,
     setEmitFlags,
@@ -49,6 +53,7 @@ import {
     SyntaxKind,
     tracing,
     TransformationContext,
+    TransformationContextKind,
     TransformationResult,
     transformClassFields,
     transformDeclarations,
@@ -267,6 +272,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     // The transformation context is provided to each transformer as part of transformer
     // initialization.
     const context: TransformationContext = {
+        kind: TransformationContextKind.FullContext,
         factory,
         getCompilerOptions: () => options,
         getEmitResolver: () => resolver!, // TODO: GH#18217
@@ -662,33 +668,51 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         }
     }
 }
-
 /** @internal */
-export const nullTransformationContext: TransformationContext = {
-    factory: factory, // eslint-disable-line object-shorthand
-    getCompilerOptions: () => ({}),
-    getEmitResolver: notImplemented,
-    getEmitHost: notImplemented,
-    getEmitHelperFactory: notImplemented,
-    startLexicalEnvironment: noop,
-    resumeLexicalEnvironment: noop,
-    suspendLexicalEnvironment: noop,
-    endLexicalEnvironment: returnUndefined,
-    setLexicalEnvironmentFlags: noop,
-    getLexicalEnvironmentFlags: () => 0,
-    hoistVariableDeclaration: noop,
-    hoistFunctionDeclaration: noop,
-    addInitializationStatement: noop,
-    startBlockScope: noop,
-    endBlockScope: returnUndefined,
-    addBlockScopedVariable: noop,
-    requestEmitHelper: noop,
-    readEmitHelpers: notImplemented,
-    enableSubstitution: noop,
-    enableEmitNotification: noop,
-    isSubstitutionEnabled: notImplemented,
-    isEmitNotificationEnabled: notImplemented,
-    onSubstituteNode: noEmitSubstitution,
-    onEmitNode: noEmitNotification,
-    addDiagnostic: noop,
-};
+export function createTransformationContext(kind: TransformationContextKind.NullContext): NullTransformationContext;
+/** @internal */
+export function createTransformationContext(
+    kind: TransformationContextKind.IsolatedContext,
+    options: CompilerOptions,
+    diagnostics: Diagnostic[],
+    resolver: CoreEmitResolver,
+): IsolatedTransformationContext;
+export function createTransformationContext(
+    kind: TransformationContextKind.IsolatedContext | TransformationContextKind.NullContext,
+    options: CompilerOptions = {},
+    diagnostics?: Diagnostic[],
+    resolver?: EmitResolver | CoreEmitResolver,
+    host?: EmitHost,
+): NullTransformationContext | IsolatedTransformationContext | TransformationContext {
+    return {
+        kind,
+        factory: factory, // eslint-disable-line object-shorthand
+        getCompilerOptions: () => options,
+        getEmitResolver: !resolver ? notImplemented : () => resolver,
+        getEmitHost: !host ? notImplemented : () => host,
+        getEmitHelperFactory: notImplemented,
+        startLexicalEnvironment: noop,
+        resumeLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop,
+        endLexicalEnvironment: returnUndefined,
+        setLexicalEnvironmentFlags: noop,
+        getLexicalEnvironmentFlags: () => 0,
+        hoistVariableDeclaration: noop,
+        hoistFunctionDeclaration: noop,
+        addInitializationStatement: noop,
+        startBlockScope: noop,
+        endBlockScope: returnUndefined,
+        addBlockScopedVariable: noop,
+        requestEmitHelper: noop,
+        readEmitHelpers: notImplemented,
+        enableSubstitution: noop,
+        enableEmitNotification: noop,
+        isSubstitutionEnabled: notImplemented,
+        isEmitNotificationEnabled: notImplemented,
+        onSubstituteNode: noEmitSubstitution,
+        onEmitNode: noEmitNotification,
+        addDiagnostic: !diagnostics ? noop : (diag: Diagnostic) => diagnostics.push(diag),
+    };
+}
+/** @internal */
+export const nullTransformationContext: NullTransformationContext = createTransformationContext(TransformationContextKind.NullContext);

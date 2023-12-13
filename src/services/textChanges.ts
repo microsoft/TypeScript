@@ -128,6 +128,7 @@ import {
     NodeArray,
     NodeFactoryFlags,
     nodeIsSynthesized,
+    NullTransformationContext,
     nullTransformationContext,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
@@ -162,7 +163,6 @@ import {
     textSpanEnd,
     Token,
     tokenToString,
-    TransformationContext,
     TypeLiteralNode,
     TypeNode,
     TypeParameterDeclaration,
@@ -1367,7 +1367,7 @@ function isTrivia(s: string) {
 
 // A transformation context that won't perform parenthesization, as some parenthesization rules
 // are more aggressive than is strictly necessary.
-const textChangesTransformationContext: TransformationContext = {
+const textChangesTransformationContext: NullTransformationContext = {
     ...nullTransformationContext,
     factory: createNodeFactory(
         nullTransformationContext.factory.flags | NodeFactoryFlags.NoParenthesizerRules,

@@ -220,6 +220,7 @@ import {
     SyntaxKind,
     toFileNameLowerCase,
     TransformationContext,
+    TransformationContextKind,
     transformNodes,
     tryCast,
     tryGetModuleSpecifierFromDeclaration,
@@ -292,7 +293,7 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
  *
  * @internal
  */
-export function transformDeclarations(context: (TransformationContext & { useLocalInferenceTypePrint?: false; }) | IsolatedTransformationContext) {
+export function transformDeclarations(context: TransformationContext | IsolatedTransformationContext) {
     const throwDiagnostic = () => Debug.fail("Diagnostic emitted without context");
     let getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic = throwDiagnostic;
     let needsDeclare = true;
@@ -339,7 +340,7 @@ export function transformDeclarations(context: (TransformationContext & { useLoc
                     return checkEntityNameVisibility(name, container ?? enclosingDeclaration);
                 },
             });
-            if (context.useLocalInferenceTypePrint) {
+            if (context.kind === TransformationContextKind.IsolatedContext) {
                 const resolver: CoreEmitResolver = context.getEmitResolver();
                 // Ideally nothing should require the symbol tracker in isolated declarations mode.
                 // createLiteralConstValue is the one exception
@@ -370,7 +371,7 @@ export function transformDeclarations(context: (TransformationContext & { useLoc
             }
         }
         else {
-            Debug.assert(!context.useLocalInferenceTypePrint);
+            Debug.assert(context.kind === TransformationContextKind.FullContext);
             const host = context.getEmitHost();
             const resolver = context.getEmitResolver();
             const symbolTracker: SymbolTracker = createSymbolTracker(resolver, host);

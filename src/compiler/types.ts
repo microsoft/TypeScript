@@ -9167,7 +9167,14 @@ export const enum LexicalEnvironmentFlags {
     VariablesHoistedInParameters = 1 << 1, // a temp variable was hoisted while visiting a parameter list
 }
 
+export const enum TransformationContextKind {
+    FullContext = 0,
+    IsolatedContext = 1,
+    NullContext = 2,
+}
+
 export interface CoreTransformationContext {
+    /** @internal */ kind: TransformationContextKind;
     readonly factory: NodeFactory;
 
     /** Gets the compiler options supplied to the transformer. */
@@ -9209,6 +9216,7 @@ export interface CoreTransformationContext {
 }
 
 export interface TransformationContext extends CoreTransformationContext {
+    kind: TransformationContextKind.FullContext;
     /** @internal */ getEmitResolver(): EmitResolver;
     /** @internal */ getEmitHost(): EmitHost;
     /** @internal */ getEmitHelperFactory(): EmitHelperFactory;
@@ -9256,6 +9264,19 @@ export interface TransformationContext extends CoreTransformationContext {
     onEmitNode: (hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) => void;
 
     /** @internal */ addDiagnostic(diag: DiagnosticWithLocation): void;
+}
+
+/** @internal */
+export interface IsolatedTransformationContext extends CoreTransformationContext {
+    kind: TransformationContextKind.IsolatedContext;
+    getEmitResolver(): CoreEmitResolver;
+    getCompilerOptions(): CompilerOptions;
+    factory: NodeFactory;
+    addDiagnostic(diag: Diagnostic): void;
+}
+/** @internal */
+export interface NullTransformationContext extends CoreTransformationContext {
+    kind: TransformationContextKind.NullContext;
 }
 
 export interface TransformationResult<T extends Node> {

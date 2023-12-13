@@ -7,6 +7,7 @@ import {
     createPrinter,
     createSourceMapGenerator,
     createTextWriter,
+    createTransformationContext,
     Debug,
     Diagnostic,
     EmitHost,
@@ -21,11 +22,11 @@ import {
     getSourceFilePathInNewDir,
     normalizePath,
     normalizeSlashes,
-    nullTransformationContext,
     PrinterOptions,
     SourceFile,
     SourceMapGenerator,
     sys,
+    TransformationContextKind,
     transformDeclarations,
     TranspileDeclarationsOptions,
     TranspileDeclarationsOutput,
@@ -46,19 +47,8 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
     };
     const emitResolver = createEmitDeclarationResolver(sourceFile);
     const diagnostics: Diagnostic[] = [];
-    const transformer = transformDeclarations({
-        useLocalInferenceTypePrint: true,
-        ...nullTransformationContext,
-        getEmitResolver() {
-            return emitResolver;
-        },
-        getCompilerOptions() {
-            return compilerOptions;
-        },
-        addDiagnostic(diag: any) {
-            diagnostics.push(diag);
-        },
-    });
+    const transformationContext = createTransformationContext(TransformationContextKind.IsolatedContext, compilerOptions, diagnostics, emitResolver);
+    const transformer = transformDeclarations(transformationContext);
     const result = transformer(sourceFile);
 
     const printer = createPrinter({
