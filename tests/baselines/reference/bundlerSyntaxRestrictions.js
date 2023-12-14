@@ -18,7 +18,7 @@ declare module "path" {
 //// [mainJs.js]
 import {} from "./a";
 import("./a");
-const _ = require("./a"); // No resolution
+const _ = require("./a");
 _.a; // any
 
 //// [main.ts]
@@ -35,7 +35,7 @@ export const a = "a";
 export var a = "a";
 //// [mainJs.js]
 import("./a");
-var _ = require("./a"); // No resolution
+var _ = require("./a");
 _.a; // any
 export {};
 //// [main.js]

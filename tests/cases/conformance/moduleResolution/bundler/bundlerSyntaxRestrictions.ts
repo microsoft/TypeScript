@@ -22,7 +22,7 @@ declare module "path" {
 // @Filename: /mainJs.js
 import {} from "./a";
 import("./a");
-const _ = require("./a"); // No resolution
+const _ = require("./a");
 _.a; // any
 
 // @Filename: /main.ts

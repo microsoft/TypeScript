@@ -36,7 +36,7 @@ import("./a");
 >import("./a") : Promise<typeof _>
 >"./a" : "./a"
 
-const _ = require("./a"); // No resolution
+const _ = require("./a");
 >_ : typeof _
 >require("./a") : typeof _
 >require : (...args: any[]) => any
