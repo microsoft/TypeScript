@@ -1,5 +1,5 @@
 [
-    "======== Resolving module 'dep' from '/index.ts'. ========",
+    "======== Resolving module 'dep' from '/main.js'. ========",
     "Module resolution kind is not specified, using 'Bundler'.",
     "Resolving in CJS mode with conditions 'import', 'types'.",
     "File '/package.json' does not exist.",
@@ -16,7 +16,7 @@
     "Exiting conditional exports.",
     "Resolving real path for '/node_modules/dep/import.d.mts', result '/node_modules/dep/import.d.mts'.",
     "======== Module name 'dep' was successfully resolved to '/node_modules/dep/import.d.mts'. ========",
-    "======== Resolving module 'dep' from '/index.ts'. ========",
+    "======== Resolving module 'dep' from '/main.js'. ========",
     "Module resolution kind is not specified, using 'Bundler'.",
     "Resolving in CJS mode with conditions 'require', 'types'.",
     "File '/package.json' does not exist according to earlier cached lookups.",

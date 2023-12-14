@@ -286,7 +286,6 @@ import {
     ScriptTarget,
     setParent,
     setParentRecursive,
-    shouldResolveJsRequire,
     skipTrivia,
     skipTypeChecking,
     some,
@@ -904,7 +903,9 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
         }
     }
     if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler) {
-        return usage.parent.parent && isImportEqualsDeclaration(usage.parent.parent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
+        return (usage.parent.parent && isImportEqualsDeclaration(usage.parent.parent) || isRequireCall(usage.parent, /*requireStringLiteralLikeArgument*/ false))
+            ? ModuleKind.CommonJS
+            : ModuleKind.ESNext;
     }
     if (file.impliedNodeFormat === undefined) return undefined;
     if (file.impliedNodeFormat !== ModuleKind.ESNext) {
@@ -3349,8 +3350,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             collectModuleReferences(node, /*inAmbientModule*/ false);
         }
 
-        const shouldProcessRequires = isJavaScriptFile && shouldResolveJsRequire(options);
-        if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || shouldProcessRequires) {
+        if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
             collectDynamicImportOrRequireCalls(file);
         }
 
@@ -3412,7 +3412,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const r = /import|require/g;
             while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                 const node = getNodeAtPosition(file, r.lastIndex);
-                if (shouldProcessRequires && isRequireCall(node, /*requireStringLiteralLikeArgument*/ true)) {
+                if (isJavaScriptFile && isRequireCall(node, /*requireStringLiteralLikeArgument*/ true)) {
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                     imports = append(imports, node.arguments[0]);
                 }
