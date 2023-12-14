@@ -25297,6 +25297,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             priority = savePriority;
         }
 
+        // Ensure an inference action is performed only once for the given source and target types.
+        // This includes two things:
+        // Avoiding inferring between the same pair of source and target types,
+        // and avoiding circularly inferring between source and target types.
+        // For an example of the last, consider if we are inferring between source type
+        // `type Deep<T> = { next: Deep<Deep<T>> }` and target type `type Loop<U> = { next: Loop<U> }`.
+        // We would then infer between the types of the `next` property: `Deep<Deep<T>>` = `{ next: Deep<Deep<Deep<T>>> }` and `Loop<U>` = `{ next: Loop<U> }`.
+        // We will then infer again between the types of the `next` property:
+        // `Deep<Deep<Deep<T>>>` and `Loop<U>`, and so on, such that we would be forever inferring
+        // between instantiations of the same types `Deep` and `Loop`.
+        // In particular, we would be inferring from increasingly deep instantiations of `Deep` to `Loop`,
+        // such that we would go on inferring forever, even though we would never infer
+        // between the same pair of types.
         function invokeOnce<Source extends Type, Target extends Type>(source: Source, target: Target, action: (source: Source, target: Target) => void) {
             const key = source.id + "," + target.id;
             const status = visited && visited.get(key);
