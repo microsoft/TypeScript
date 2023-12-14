@@ -246,7 +246,7 @@ function getSourceFileToImport(
         return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
     }
     else {
-        const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
+        const mode = getModeForUsageLocation(importingSourceFile, importLiteral, program.getCompilerOptions());
         const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
             program.getResolvedModule(importingSourceFile, importLiteral.text, mode) :
             host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);

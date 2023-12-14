@@ -857,14 +857,14 @@ export function getModeForFileReference(ref: FileReference | string, containingF
  * @param file File to fetch the resolution mode within
  * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
  */
-export function getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+export function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
 /** @internal */
 // eslint-disable-next-line @typescript-eslint/unified-signatures
-export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ResolutionMode;
-export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ResolutionMode {
+export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions: CompilerOptions): ResolutionMode;
+export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions: CompilerOptions): ResolutionMode {
     // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
     // so it's safe to use them even pre-bind
-    return getModeForUsageLocation(file, getModuleNameStringLiteralAt(file, index));
+    return getModeForUsageLocation(file, getModuleNameStringLiteralAt(file, index), compilerOptions);
 }
 
 /** @internal */
@@ -887,7 +887,7 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
  * @param usage The module reference string
  * @returns The final resolution mode of the import
  */
-export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike) {
+export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions: CompilerOptions) {
     if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
@@ -902,6 +902,9 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
         if (override) {
             return override;
         }
+    }
+    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler) {
+        return usage.parent.parent && isImportEqualsDeclaration(usage.parent.parent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
     }
     if (file.impliedNodeFormat === undefined) return undefined;
     if (file.impliedNodeFormat !== ModuleKind.ESNext) {
@@ -953,7 +956,7 @@ const emptyResolution: ResolvedModuleWithFailedLookupLocations & ResolvedTypeRef
 /** @internal */
 export interface ResolutionNameAndModeGetter<Entry, SourceFile> {
     getName(entry: Entry): string;
-    getMode(entry: Entry, file: SourceFile): ResolutionMode;
+    getMode(entry: Entry, file: SourceFile, compilerOptions: CompilerOptions): ResolutionMode;
 }
 
 /** @internal */
@@ -969,7 +972,7 @@ function getModuleResolutionName(literal: StringLiteralLike) {
 /** @internal */
 export const moduleResolutionNameAndModeGetter: ResolutionNameAndModeGetter<StringLiteralLike, SourceFile> = {
     getName: getModuleResolutionName,
-    getMode: (entry, file) => getModeForUsageLocation(file, entry),
+    getMode: (entry, file, compilerOptions) => getModeForUsageLocation(file, entry, compilerOptions),
 };
 
 /** @internal */
@@ -1052,7 +1055,7 @@ export function loadWithModeAwareCache<Entry, SourceFile, ResolutionCache, Resol
     const loader = createLoader(containingFile, redirectedReference, options, host, resolutionCache);
     for (const entry of entries) {
         const name = loader.nameAndMode.getName(entry);
-        const mode = loader.nameAndMode.getMode(entry, containingSourceFile);
+        const mode = loader.nameAndMode.getMode(entry, containingSourceFile, options);
         const key = createModeAwareCacheKey(name, mode);
         let result = cache.get(key);
         if (!result) {
@@ -1183,7 +1186,7 @@ export function getReferencedFileLocation(program: Program, ref: ReferencedFile)
     switch (kind) {
         case FileIncludeKind.Import:
             const importLiteral = getModuleNameStringLiteralAt(file, index);
-            packageId = program.getResolvedModule(file, importLiteral.text, getModeForResolutionAtIndex(file, index))?.resolvedModule?.packageId;
+            packageId = program.getResolvedModule(file, importLiteral.text, getModeForResolutionAtIndex(file, index, program.getCompilerOptions()))?.resolvedModule?.packageId;
             if (importLiteral.pos === -1) return { file, packageId, text: importLiteral.text };
             pos = skipTrivia(file.text, importLiteral.pos);
             end = importLiteral.end;
@@ -2157,7 +2160,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const moduleName = moduleNames[i];
             // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
             if (file === oldSourceFile && !hasInvalidatedResolutions(file.path)) {
-                const mode = getModeForUsageLocation(file, moduleName);
+                const mode = getModeForUsageLocation(file, moduleName, options);
                 const oldResolution = oldProgram?.getResolvedModule(file, moduleName.text, mode);
                 if (oldResolution?.resolvedModule) {
                     if (isTraceEnabled(options, host)) {
@@ -2226,7 +2229,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // If we change our policy of rechecking failed lookups on each program create,
         // we should adjust the value returned here.
         function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: StringLiteralLike): boolean {
-            const resolutionToFile = oldProgram?.getResolvedModule(file, moduleName.text, getModeForUsageLocation(file, moduleName))?.resolvedModule;
+            const resolutionToFile = oldProgram?.getResolvedModule(file, moduleName.text, getModeForUsageLocation(file, moduleName, oldProgram.getCompilerOptions()))?.resolvedModule;
             const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
             if (resolutionToFile && resolvedFile) {
                 // In the old program, we resolved to an ambient module that was in the same
@@ -2525,6 +2528,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 (name, mode) => oldProgram!.getResolvedModule(newSourceFile, name, mode),
                 moduleResolutionIsEqualTo,
                 moduleResolutionNameAndModeGetter,
+                oldProgram.getCompilerOptions(),
             );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
             const typesReferenceDirectives = newSourceFile.typeReferenceDirectives;
@@ -2538,6 +2542,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 (name, mode) => oldProgram?.getResolvedTypeReferenceDirective(newSourceFile, name, mode),
                 typeDirectiveIsEqualTo,
                 typeReferenceResolutionNameAndModeGetter,
+                oldProgram.getCompilerOptions(),
             );
             if (typeReferenceResolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
         }
@@ -4029,7 +4034,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             for (let index = 0; index < moduleNames.length; index++) {
                 const resolution = resolutions[index].resolvedModule;
                 const moduleName = moduleNames[index].text;
-                const mode = getModeForUsageLocation(file, moduleNames[index]);
+                const mode = getModeForUsageLocation(file, moduleNames[index], optionsForFile);
                 resolutionsInFile.set(moduleName, mode, resolutions[index]);
                 addResolutionDiagnosticsFromResolutionOrCache(file, moduleName, resolutions[index], mode);
 

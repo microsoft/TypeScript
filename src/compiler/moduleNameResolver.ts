@@ -44,7 +44,6 @@ import {
     getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     GetEffectiveTypeRootsHost,
-    getEmitModuleKind,
     getEmitModuleResolutionKind,
     getNormalizedAbsolutePath,
     getOwnKeys,
@@ -1410,20 +1409,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
     else {
         let moduleResolution = compilerOptions.moduleResolution;
         if (moduleResolution === undefined) {
-            switch (getEmitModuleKind(compilerOptions)) {
-                case ModuleKind.CommonJS:
-                    moduleResolution = ModuleResolutionKind.Node10;
-                    break;
-                case ModuleKind.Node16:
-                    moduleResolution = ModuleResolutionKind.Node16;
-                    break;
-                case ModuleKind.NodeNext:
-                    moduleResolution = ModuleResolutionKind.NodeNext;
-                    break;
-                default:
-                    moduleResolution = ModuleResolutionKind.Classic;
-                    break;
-            }
+            moduleResolution = getEmitModuleResolutionKind(compilerOptions);
             if (traceEnabled) {
                 trace(host, Diagnostics.Module_resolution_kind_is_not_specified_using_0, ModuleResolutionKind[moduleResolution]);
             }

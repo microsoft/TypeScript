@@ -9897,7 +9897,7 @@ declare namespace ts {
      * @param file File to fetch the resolution mode within
      * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
      */
-    function getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+    function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
     /**
      * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
      * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
@@ -9907,9 +9907,13 @@ declare namespace ts {
      * @param usage The module reference string
      * @returns The final resolution mode of the import
      */
-    function getModeForUsageLocation(file: {
-        impliedNodeFormat?: ResolutionMode;
-    }, usage: StringLiteralLike): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    function getModeForUsageLocation(
+        file: {
+            impliedNodeFormat?: ResolutionMode;
+        },
+        usage: StringLiteralLike,
+        compilerOptions: CompilerOptions,
+    ): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the

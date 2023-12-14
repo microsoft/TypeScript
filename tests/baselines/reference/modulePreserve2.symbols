@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/modulePreserve2.ts] ////
+
+=== /index.ts ===
+import { esm } from "dep";
+>esm : Symbol(esm, Decl(index.ts, 0, 8))
+
+import cjs = require("dep");
+>cjs : Symbol(cjs, Decl(index.ts, 0, 26))
+
+=== /node_modules/dep/import.d.mts ===
+export const esm: "esm";
+>esm : Symbol(esm, Decl(import.d.mts, 0, 12))
+
+=== /node_modules/dep/require.d.ts ===
+declare const cjs: "cjs";
+>cjs : Symbol(cjs, Decl(require.d.ts, 0, 13))
+
+export = cjs;
+>cjs : Symbol(cjs, Decl(require.d.ts, 0, 13))
+

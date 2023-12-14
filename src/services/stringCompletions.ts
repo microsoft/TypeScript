@@ -583,7 +583,7 @@ function getStringLiteralCompletionsFromModuleNames(sourceFile: SourceFile, node
 
 function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker, preferences: UserPreferences): readonly NameAndKind[] {
     const literalValue = normalizeSlashes(node.text);
-    const mode = isStringLiteralLike(node) ? getModeForUsageLocation(sourceFile, node) : undefined;
+    const mode = isStringLiteralLike(node) ? getModeForUsageLocation(sourceFile, node, compilerOptions) : undefined;
 
     const scriptPath = sourceFile.path;
     const scriptDirectory = getDirectoryPath(scriptPath);

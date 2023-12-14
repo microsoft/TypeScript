@@ -835,6 +835,7 @@ export function hasChangesInResolutions<K, V>(
     getOldResolution: (name: string, mode: ResolutionMode) => V | undefined,
     comparer: (oldResolution: V, newResolution: V) => boolean,
     nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
+    compilerOptions: CompilerOptions,
 ): boolean {
     Debug.assert(names.length === newResolutions.length);
 
@@ -842,7 +843,7 @@ export function hasChangesInResolutions<K, V>(
         const newResolution = newResolutions[i];
         const entry = names[i];
         const name = nameAndModeGetter.getName(entry);
-        const mode = nameAndModeGetter.getMode(entry, newSourceFile);
+        const mode = nameAndModeGetter.getMode(entry, newSourceFile, compilerOptions);
         const oldResolution = getOldResolution(name, mode);
         const changed = oldResolution
             ? !newResolution || !comparer(oldResolution, newResolution)
@@ -9571,7 +9572,8 @@ export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (
 
 /** @internal */
 export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile): ModuleSpecifierEnding {
-    if (preference === "js" || resolutionMode === ModuleKind.ESNext) {
+    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+    if (preference === "js" || resolutionMode === ModuleKind.ESNext && ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext) {
         // Extensions are explicitly requested or required. Now choose between .js and .ts.
         if (!shouldAllowImportingTsExtension(compilerOptions)) {
             return ModuleSpecifierEnding.JsExtension;
