@@ -1220,7 +1220,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -3595,7 +3595,7 @@
         "category": "Error",
         "code": 2820
     },
-    "Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2821
     },
@@ -3603,7 +3603,7 @@
         "category": "Error",
         "code": 2822
     },
-    "Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2823
     },
