@@ -4293,7 +4293,7 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
+    "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.": {
         "category": "Error",
         "code": 5071
     },
@@ -4385,7 +4385,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option '{0}' can only be used when 'module' is set to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },

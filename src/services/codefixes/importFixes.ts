@@ -1159,6 +1159,7 @@ function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOp
         case ModuleKind.ES2022:
         case ModuleKind.ESNext:
         case ModuleKind.None:
+        case ModuleKind.Preserve:
             // Fall back to the `import * as ns` style import.
             return ImportKind.Namespace;
         case ModuleKind.Node16:

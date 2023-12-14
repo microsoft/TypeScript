@@ -8633,6 +8633,9 @@ export const computedOptions = createComputedCompilerOptions({
                     case ModuleKind.NodeNext:
                         moduleResolution = ModuleResolutionKind.NodeNext;
                         break;
+                    case ModuleKind.Preserve:
+                        moduleResolution = ModuleResolutionKind.Bundler;
+                        break;
                     default:
                         moduleResolution = ModuleResolutionKind.Classic;
                         break;
@@ -8664,6 +8667,7 @@ export const computedOptions = createComputedCompilerOptions({
             switch (computedOptions.module.computeValue(compilerOptions)) {
                 case ModuleKind.Node16:
                 case ModuleKind.NodeNext:
+                case ModuleKind.Preserve:
                     return true;
             }
             return false;
@@ -8856,18 +8860,12 @@ export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
 /** @internal */
 export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
     switch (getEmitModuleKind(options)) {
-        case ModuleKind.CommonJS:
-        case ModuleKind.AMD:
-        case ModuleKind.ES2015:
-        case ModuleKind.ES2020:
-        case ModuleKind.ES2022:
-        case ModuleKind.ESNext:
-        case ModuleKind.Node16:
-        case ModuleKind.NodeNext:
-            return true;
-        default:
+        case ModuleKind.None:
+        case ModuleKind.System:
+        case ModuleKind.UMD:
             return false;
     }
+    return true;
 }
 
 /** @internal */

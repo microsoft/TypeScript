@@ -7294,6 +7294,9 @@ export enum ModuleKind {
     // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
     Node16 = 100,
     NodeNext = 199,
+
+    // Emit as written
+    Preserve = 200,
 }
 
 export const enum JsxEmit {

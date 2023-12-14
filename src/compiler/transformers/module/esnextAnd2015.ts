@@ -11,6 +11,7 @@ import {
     ExportAssignment,
     ExportDeclaration,
     Expression,
+    ExpressionStatement,
     GeneratedIdentifierFlags,
     getEmitFlags,
     getEmitModuleKind,
@@ -146,6 +147,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         if (moduleName) {
             args.push(moduleName);
         }
+        if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
+            return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, args);
+        }
 
         if (!importRequireStatements) {
             const createRequireName = factory.createUniqueName("_createRequire", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
@@ -238,9 +242,27 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         return statements;
     }
 
-    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | undefined> {
-        // Elide `export=` as it is not legal with --module ES6
-        return node.isExportEquals ? undefined : node;
+    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | ExpressionStatement | undefined> {
+        if (node.isExportEquals) {
+            if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
+                const statement = setOriginalNode(
+                    factory.createExpressionStatement(
+                        factory.createAssignment(
+                            factory.createPropertyAccessExpression(
+                                factory.createIdentifier("module"),
+                                "exports",
+                            ),
+                            node.expression,
+                        ),
+                    ),
+                    node,
+                );
+                return statement;
+            }
+            // Elide `export=` as it is not legal with --module ES6
+            return undefined;
+        }
+        return node;
     }
 
     function visitExportDeclaration(node: ExportDeclaration) {

@@ -556,6 +556,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         esnext: ModuleKind.ESNext,
         node16: ModuleKind.Node16,
         nodenext: ModuleKind.NodeNext,
+        preserve: ModuleKind.Preserve,
     })),
     affectsSourceFile: true,
     affectsModuleResolution: true,
