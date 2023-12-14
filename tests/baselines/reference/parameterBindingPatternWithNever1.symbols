@@ -1,0 +1,20 @@
+//// [tests/cases/compiler/parameterBindingPatternWithNever1.ts] ////
+
+=== parameterBindingPatternWithNever1.ts ===
+function something(foo: string) {}
+>something : Symbol(something, Decl(parameterBindingPatternWithNever1.ts, 0, 0))
+>foo : Symbol(foo, Decl(parameterBindingPatternWithNever1.ts, 0, 19))
+
+type ComplexTypeThatReturnsNever = never;
+>ComplexTypeThatReturnsNever : Symbol(ComplexTypeThatReturnsNever, Decl(parameterBindingPatternWithNever1.ts, 0, 34))
+
+function somethingWrapper({ foo }: ComplexTypeThatReturnsNever) {
+>somethingWrapper : Symbol(somethingWrapper, Decl(parameterBindingPatternWithNever1.ts, 2, 41))
+>foo : Symbol(foo, Decl(parameterBindingPatternWithNever1.ts, 4, 27))
+>ComplexTypeThatReturnsNever : Symbol(ComplexTypeThatReturnsNever, Decl(parameterBindingPatternWithNever1.ts, 0, 34))
+
+  something(foo);
+>something : Symbol(something, Decl(parameterBindingPatternWithNever1.ts, 0, 0))
+>foo : Symbol(foo, Decl(parameterBindingPatternWithNever1.ts, 4, 27))
+}
+

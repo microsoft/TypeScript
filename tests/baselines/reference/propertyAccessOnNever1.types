@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/propertyAccessOnNever1.ts] ////
+
+=== propertyAccessOnNever1.ts ===
+// https://github.com/microsoft/TypeScript/issues/56778
+
+declare const example: never;
+>example : never
+
+example.foo;
+>example.foo : any
+>example : never
+>foo : any
+
+example['foo'];
+>example['foo'] : any
+>example : never
+>'foo' : "foo"
+
+const { foo } = example
+>foo : any
+>example : never
+

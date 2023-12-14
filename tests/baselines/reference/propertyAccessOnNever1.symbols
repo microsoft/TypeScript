@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/propertyAccessOnNever1.ts] ////
+
+=== propertyAccessOnNever1.ts ===
+// https://github.com/microsoft/TypeScript/issues/56778
+
+declare const example: never;
+>example : Symbol(example, Decl(propertyAccessOnNever1.ts, 2, 13))
+
+example.foo;
+>example : Symbol(example, Decl(propertyAccessOnNever1.ts, 2, 13))
+
+example['foo'];
+>example : Symbol(example, Decl(propertyAccessOnNever1.ts, 2, 13))
+
+const { foo } = example
+>foo : Symbol(foo, Decl(propertyAccessOnNever1.ts, 6, 7))
+>example : Symbol(example, Decl(propertyAccessOnNever1.ts, 2, 13))
+

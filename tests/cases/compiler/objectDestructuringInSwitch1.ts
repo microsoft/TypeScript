@@ -1,0 +1,17 @@
+// @strict: true
+// @noEmit: true
+
+type X = { kind: "a", a: { prop: 1 } } | { kind: "b", a: {} }
+
+function foo(x: X): 1 {
+  const { kind, a } = x;
+  switch (kind) {
+    case "a":
+      return a.prop;
+    case "b":
+      return 1;
+    default:
+      const { prop } = a;
+      return a;
+  }
+}

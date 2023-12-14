@@ -1,0 +1,46 @@
+//// [tests/cases/compiler/objectDestructuringInSwitch1.ts] ////
+
+=== objectDestructuringInSwitch1.ts ===
+type X = { kind: "a", a: { prop: 1 } } | { kind: "b", a: {} }
+>X : { kind: "a"; a: {    prop: 1;}; } | { kind: "b"; a: {}; }
+>kind : "a"
+>a : { prop: 1; }
+>prop : 1
+>kind : "b"
+>a : {}
+
+function foo(x: X): 1 {
+>foo : (x: X) => 1
+>x : X
+
+  const { kind, a } = x;
+>kind : "a" | "b"
+>a : {} | { prop: 1; }
+>x : X
+
+  switch (kind) {
+>kind : "a" | "b"
+
+    case "a":
+>"a" : "a"
+
+      return a.prop;
+>a.prop : 1
+>a : { prop: 1; }
+>prop : 1
+
+    case "b":
+>"b" : "b"
+
+      return 1;
+>1 : 1
+
+    default:
+      const { prop } = a;
+>prop : any
+>a : never
+
+      return a;
+>a : never
+  }
+}

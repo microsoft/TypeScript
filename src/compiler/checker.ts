@@ -10863,7 +10863,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     mapType(baseConstraint, t => sliceTupleType(t as TupleTypeReference, index)) :
                     createArrayType(elementType);
             }
-            else if (isArrayLikeType(parentType)) {
+            else if (isArrayLikeType(parentType) && !isErrorType(elementType)) {
                 const indexType = getNumberLiteralType(index);
                 const accessFlags = AccessFlags.ExpressionPosition | (noTupleBoundsCheck || hasDefaultValue(declaration) ? AccessFlags.NoTupleBoundsCheck : 0);
                 const declaredType = getIndexedAccessTypeOrUndefined(parentType, indexType, accessFlags, declaration.name) || errorType;
@@ -18040,7 +18040,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
-            if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
+            if (objectType.flags & TypeFlags.Any || objectType.flags & TypeFlags.Never && !(accessFlags & AccessFlags.ExpressionPosition)) {
                 return objectType;
             }
             // If no index signature is applicable, we default to the string index signature. In effect, this means the string
@@ -42893,7 +42893,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const allowAsyncIterables = (use & IterationUse.AllowsAsyncIterablesFlag) !== 0;
         if (inputType === neverType) {
             reportTypeNotIterableError(errorNode!, inputType, allowAsyncIterables); // TODO: GH#18217
-            return undefined;
+            return errorType;
         }
 
         const uplevelIteration = languageVersion >= ScriptTarget.ES2015;

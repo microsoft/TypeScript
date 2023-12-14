@@ -36,7 +36,7 @@ function foo(x: X): 1 {
 
     default:
       const [n] = a;
->n : never
+>n : any
 >a : never
 
       return a;

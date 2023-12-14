@@ -1,0 +1,22 @@
+propertyAccessOnNever1.ts(5,9): error TS2339: Property 'foo' does not exist on type 'never'.
+propertyAccessOnNever1.ts(6,1): error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'never'.
+  Property 'foo' does not exist on type 'never'.
+propertyAccessOnNever1.ts(7,9): error TS2339: Property 'foo' does not exist on type 'never'.
+
+
+==== propertyAccessOnNever1.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/56778
+    
+    declare const example: never;
+    
+    example.foo;
+            ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'never'.
+    example['foo'];
+    ~~~~~~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"foo"' can't be used to index type 'never'.
+!!! error TS7053:   Property 'foo' does not exist on type 'never'.
+    const { foo } = example
+            ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'never'.
+    

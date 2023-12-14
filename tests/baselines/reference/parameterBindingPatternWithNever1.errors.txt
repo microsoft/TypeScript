@@ -1,0 +1,14 @@
+parameterBindingPatternWithNever1.ts(5,29): error TS2339: Property 'foo' does not exist on type 'never'.
+
+
+==== parameterBindingPatternWithNever1.ts (1 errors) ====
+    function something(foo: string) {}
+    
+    type ComplexTypeThatReturnsNever = never;
+    
+    function somethingWrapper({ foo }: ComplexTypeThatReturnsNever) {
+                                ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'never'.
+      something(foo);
+    }
+    
