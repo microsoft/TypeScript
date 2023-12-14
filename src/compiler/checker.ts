@@ -202,6 +202,7 @@ import {
     FlowAssignment,
     FlowCall,
     FlowCondition,
+    FlowContainer,
     FlowFlags,
     FlowLabel,
     FlowNode,
@@ -44264,6 +44265,119 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             }
             forEachChild(node, collectReferences);
+        }
+    }
+
+    function collectQueryTypeParameterReferences(typeParameter: TypeParameter, endFlowNode: FlowNode) {
+        // >> TODO: this should not be node, should be identifier or prop access
+        const references: Node[] = [];
+        visitFlowNode(endFlowNode, collect);
+        function collect(flow: FlowNode) {
+            const flags = flow.flags;
+            // Based on `getTypeAtFlowX` functions
+            // >> Assignment: narrow lvalue?
+            // >> Call: narrow arguments if call is to a predicate
+            let node;
+            if (flags & FlowFlags.Assignment) {
+                node = (flow as FlowAssignment).node;
+            }
+            if (flags & FlowFlags.Call) {
+                node = (flow as FlowCall).node;
+            }
+            // Expression: go into binary expressions, etc
+            if (flags & FlowFlags.Condition) {
+                node = (flow as FlowCondition).node;
+            }
+            // same as expression/condition
+            if (flags & FlowFlags.SwitchClause) {
+                // switch condition
+                node = (flow as FlowSwitchClause).switchStatement.expression;
+            }
+            // from `getTypeAtFlowArrayMutation`
+            if (flags & FlowFlags.ArrayMutation) {
+                const callNode = (flow as FlowArrayMutation).node;
+                node = callNode.kind === SyntaxKind.CallExpression ?
+                    (callNode.expression as PropertyAccessExpression).expression :
+                    (callNode.left as ElementAccessExpression).expression;
+            }
+            getReferences(node);
+        }
+        
+        // >> TODO: maybe refine the type `Node` here based on the above types
+        // >> TODO: get the type of the references here as well
+        // >> TODO: what does the control flow graph look like for e.g. an `if` with a condition that is
+        // an || or && ???
+        // Based on `isMatchingReference`
+        function getReferences(node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.NonNullExpression:
+                    return getReferences((node as NonNullExpression | ParenthesizedExpression).expression);
+                case SyntaxKind.BinaryExpression:
+                    if (isAssignmentExpression(node)) {
+                        getReferences(node.left);
+                    }
+                    if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.CommaToken) {
+                        getReferences(node.right);
+                    }
+                    return;
+                case SyntaxKind.MetaProperty:
+                    references.push(node);
+                    // >> TODO: I think you can never actually have `import.meta` or
+                    // `new.target` involved in narrowing, so this might be pointless
+                    return;
+                case SyntaxKind.ThisKeyword:
+                    references.push(node);
+                    return;
+                case SyntaxKind.Identifier:
+                case SyntaxKind.PrivateIdentifier:
+                    references.push(node);
+                    return;
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.VariableDeclaration:
+                    // >> TODO: get name of variable declaration/binding element and use that as ref?
+                    // Can we get away with skipping this?
+                    return;
+                case SyntaxKind.SuperKeyword:
+                    // >> TODO: is this ever relevant?
+                    references.push(node);
+                    return;
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    const type = getTypeOfSymbol(symbol);
+                    references.push(node);
+                    return;
+                case SyntaxKind.QualifiedName:
+                    // >> TODO: can this happen? we don't ever match on target being this
+                    return;
+            }
+        }
+    }
+
+    type HasFlowAntecedent =
+        | FlowAssignment
+        | FlowCondition
+        | FlowSwitchClause
+        | FlowArrayMutation
+        | FlowCall
+        | FlowReduceLabel;
+
+    function hasFlowAntecedent(flow: FlowNode): flow is HasFlowAntecedent {
+        return !!(flow.flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.SwitchClause | FlowFlags.ArrayMutation | FlowFlags.Call | FlowFlags.ReduceLabel));
+    }
+
+    function visitFlowNode(flow: FlowNode, visit: (n: FlowNode) => void): void {
+        visit(flow);
+        const flags = flow.flags;
+        if (flags & FlowFlags.Label) {
+            return (flow as FlowLabel).antecedents?.forEach(f => visitFlowNode(f, visit));
+        }
+        if (flags & FlowFlags.ReduceLabel) {
+            (flow as FlowReduceLabel).antecedents.forEach(f => visitFlowNode(f, visit));
+            // >> TODO: also visit flow.target?
+        }
+        if (hasFlowAntecedent(flow)) {
+            return visitFlowNode((flow as HasFlowAntecedent).antecedent, visit);
         }
     }
 
