@@ -435,9 +435,9 @@ function withChanges<T>(
                 sourceFile,
                 replacementTarget,
                 factory.createAsExpression(
-                    tempName,
+                    factory.cloneNode(tempName),
                     factory.createTypeQueryNode(
-                        tempName,
+                        factory.cloneNode(tempName),
                     ),
                 ),
             );
