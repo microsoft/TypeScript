@@ -7633,6 +7633,7 @@ declare namespace ts {
         ESNext = 99,
         Node16 = 100,
         NodeNext = 199,
+        Preserve = 200,
     }
     enum JsxEmit {
         None = 0,
