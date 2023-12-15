@@ -4,7 +4,7 @@
 //          case null: break;
 //      }
 // 
-//      [|{| contextId: 0 |}switch|] (<|null|>) {
+//      <|[|switch|] (null)|> {
 //         /*GOTO DEF*/case null: break;
 //      }
 
