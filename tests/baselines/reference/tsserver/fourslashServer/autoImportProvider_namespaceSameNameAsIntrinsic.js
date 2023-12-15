@@ -705,6 +705,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "NoInfer",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "NonNullable",
             "kind": "type",
             "kindModifiers": "declare",
