@@ -3735,6 +3735,14 @@
         "category": "Error",
         "code": 2866
     },
+    "Cannot find name '{0}'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun`.": {
+        "category": "Error",
+        "code": 2867
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun` and then add 'bun' to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2868
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
