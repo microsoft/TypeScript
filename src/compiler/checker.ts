@@ -19089,6 +19089,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getESSymbolLikeTypeForNode(node: Node) {
+        if (isInJSFile(node) && isJSDocTypeExpression(node)) {
+            const host = getJSDocHost(node);
+            if (host) {
+                node = getSingleVariableOfVariableStatement(host) || host;
+            }
+        }
         if (isValidESSymbolDeclaration(node)) {
             const symbol = isCommonJsExportPropertyAssignment(node) ? getSymbolOfNode((node as BinaryExpression).left) : getSymbolOfNode(node);
             if (symbol) {
