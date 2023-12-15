@@ -3731,9 +3731,13 @@
         "category": "Error",
         "code": 2865
     },
-    "Properties not assignable with exactOptionalPropertyTypes: {0}": {
+    "Import '{0}' conflicts with global value used in this file, so must be declared with a type-only import when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 2866
+    },
+    "Properties not assignable with exactOptionalPropertyTypes: {0}": {
+        "category": "Error",
+        "code": 2867
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
