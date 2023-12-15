@@ -87,19 +87,20 @@ function createNodeIO(): IO {
     function listFiles(path: string, spec: RegExp, options: { recursive?: boolean; } = {}) {
         function filesInFolder(folder: string): string[] {
             let paths: string[] = [];
+            const dir = fs.opendirSync(folder);
+            for (let entry = dir.readSync(); entry; entry = dir.readSync()) {
+                const pathToFile = pathModule.join(folder, entry.name);
 
-            for (const file of fs.readdirSync(folder)) {
-                const pathToFile = pathModule.join(folder, file);
-                if (!fs.existsSync(pathToFile)) continue; // ignore invalid symlinks
-                const stat = fs.statSync(pathToFile);
-                if (options.recursive && stat.isDirectory()) {
+                if (entry.isSymbolicLink() && !fs.existsSync(pathToFile)) continue; // ignore invalid symlinks
+
+                if (options.recursive && entry.isDirectory()) {
                     paths = paths.concat(filesInFolder(pathToFile));
                 }
-                else if (stat.isFile() && (!spec || file.match(spec))) {
+                else if (entry.isFile() && (!spec || entry.name.match(spec))) {
                     paths.push(pathToFile);
                 }
             }
-
+            dir.closeSync();
             return paths;
         }
 

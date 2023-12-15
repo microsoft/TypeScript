@@ -191,7 +191,6 @@ function handleTestConfig() {
                     case "fourslash-generated":
                         runners.push(new GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
                         break;
-                        break;
                 }
             }
         }

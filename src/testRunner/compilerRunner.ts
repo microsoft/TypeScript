@@ -51,9 +51,10 @@ export class CompilerBaselineRunner extends RunnerBase {
         return this.testSuiteName;
     }
 
+    private loadedTestFiles: CompilerFileBasedTest[] | undefined;
     public enumerateTestFiles() {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
-        return this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true }).map(CompilerTest.getConfigurations);
+        return this.loadedTestFiles ??= this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true }).map(CompilerTest.getConfigurations);
     }
 
     public initializeTests() {
