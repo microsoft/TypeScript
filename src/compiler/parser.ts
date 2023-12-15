@@ -9710,8 +9710,9 @@ namespace Parser {
                 if (isBracketed) {
                     skipWhitespace();
                 }
-                const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
 
+                const modifiers = parseModifiers(/*allowDecorators*/ false, /*permitConstAsModifier*/ true);
+                const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
                 let defaultType: TypeNode | undefined;
                 if (isBracketed) {
                     skipWhitespace();
@@ -9723,7 +9724,7 @@ namespace Parser {
                 if (nodeIsMissing(name)) {
                     return undefined;
                 }
-                return finishNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, name, /*constraint*/ undefined, defaultType), typeParameterPos);
+                return finishNode(factory.createTypeParameterDeclaration(modifiers, name, /*constraint*/ undefined, defaultType), typeParameterPos);
             }
 
             function parseTemplateTagTypeParameters() {
