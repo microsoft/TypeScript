@@ -37,4 +37,3 @@ export var x = 0;
 //// [index.js]
 export var y = 0;
 //// [main.js]
-export {};

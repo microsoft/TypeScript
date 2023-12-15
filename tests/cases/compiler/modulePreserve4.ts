@@ -2,7 +2,8 @@
 // @target: esnext
 // @verbatimModuleSyntax: true
 // @checkJs: true
-// @noEmit: true
+// @outDir: dist
+// @declaration: true
 // @strict: true
 
 // @Filename: /a.js

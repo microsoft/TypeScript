@@ -89,7 +89,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     setTextRange(factory.createNodeArray(insertStatementsAfterCustomPrologue(result.statements.slice(), importRequireStatements)), result.statements),
                 );
             }
-            if (!isExternalModule(node) || some(result.statements, isExternalModuleIndicator)) {
+            if (!isExternalModule(node) || getEmitModuleKind(compilerOptions) === ModuleKind.Preserve || some(result.statements, isExternalModuleIndicator)) {
                 return result;
             }
             return factory.updateSourceFile(

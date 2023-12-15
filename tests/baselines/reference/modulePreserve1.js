@@ -18,7 +18,6 @@ export class A {
 //// [b.js]
 module.exports = class B {
 };
-export {};
 //// [main.js]
 import { A } from "./a";
 const B = require("./b");

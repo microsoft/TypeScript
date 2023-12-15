@@ -16,6 +16,4 @@ import { esm } from "./esm.mjs";
 //// [esm.mjs]
 export var esm = 0;
 //// [not-actually-cjs.cjs]
-export {};
 //// [still-not-cjs.js]
-export {};

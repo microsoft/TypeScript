@@ -38,8 +38,5 @@ import { esm, cjs } from "dual";
 
 
 //// [main.js]
-export {};
 //// [main.mjs]
-export {};
 //// [main.cjs]
-export {};

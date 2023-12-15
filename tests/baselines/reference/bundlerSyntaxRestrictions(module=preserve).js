@@ -37,7 +37,5 @@ export var a = "a";
 import("./a");
 var _ = require("./a");
 _.a; // any
-export {};
 //// [main.js]
 module.exports = {};
-export {};
