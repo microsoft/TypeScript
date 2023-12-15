@@ -753,7 +753,7 @@ function createDefinitionInfoFromStatement(
         name,
         containerKind: undefined!,
         containerName: "",
-        contextSpan: createTextSpanFromBounds(keyword.getStart(sourceFile), statement.expression.getEnd() + 1),
+        contextSpan: createTextSpanFromBounds(keyword.getStart(sourceFile), statement.caseBlock.getFullStart()),
         isLocal: true,
         isAmbient: false,
         unverified: false,

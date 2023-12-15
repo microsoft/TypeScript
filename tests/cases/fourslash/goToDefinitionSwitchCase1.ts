@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////switch (null) {
+////switch (null ) {
 ////  [|/*start*/case|] null: break;
 ////}
 
