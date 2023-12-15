@@ -34,7 +34,7 @@ jobs:
           - true
         include:
           - { runtime: { name: node, version: 20 }, bundle: false }
-          - { runtime: { name: bun, version: latest }, bundle: true }
+          - { runtime: { name: bun, version: '1.0.7' }, bundle: true }
 
     name: Test ${{ matrix.runtime.name }} ${{ matrix.runtime.version }} with --bundle=${{ matrix.bundle }}
 
