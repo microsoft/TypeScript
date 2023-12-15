@@ -62,6 +62,17 @@ const a2 = require("./a"); // Error in TS
 >require : any
 >"./a" : "./a"
 
+const a3 = await import("./a"); // { x: 0 }
+>a3 : typeof a1
+>await import("./a") : typeof a1
+>import("./a") : Promise<typeof a1>
+>"./a" : "./a"
+
+a3.x;
+>a3.x : 0
+>a3 : typeof a1
+>x : 0
+
 import b1 from "./b"; // 0
 >b1 : 0
 
@@ -71,6 +82,17 @@ import b2 = require("./b"); // { default: 0 }
 b2.default;
 >b2.default : 0
 >b2 : typeof b2
+>default : 0
+
+const b3 = await import("./b"); // { default: 0 }
+>b3 : typeof b2
+>await import("./b") : typeof b2
+>import("./b") : Promise<typeof b2>
+>"./b" : "./b"
+
+b3.default;
+>b3.default : 0
+>b3 : typeof b2
 >default : 0
 
 import c1 from "./c"; // { default: [Function: default] }
@@ -99,6 +121,18 @@ d2.default(); // Error
 >d2.default : any
 >d2 : () => void
 >default : any
+
+const d3 = await import("./d"); // { default: [Function: default] }
+>d3 : { default: () => void; }
+>await import("./d") : { default: () => void; }
+>import("./d") : Promise<{ default: () => void; }>
+>"./d" : "./d"
+
+d3.default();
+>d3.default() : void
+>d3.default : () => void
+>d3 : { default: () => void; }
+>default : () => void
 
 import e1 from "./e.mjs"; // 0
 >e1 : 0

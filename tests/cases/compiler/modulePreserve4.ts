@@ -34,10 +34,14 @@ exports.default = 0;
 import { x, y } from "./a"; // No y
 import a1 = require("./a"); // { x: 0 }
 const a2 = require("./a"); // Error in TS
+const a3 = await import("./a"); // { x: 0 }
+a3.x;
 
 import b1 from "./b"; // 0
 import b2 = require("./b"); // { default: 0 }
 b2.default;
+const b3 = await import("./b"); // { default: 0 }
+b3.default;
 
 import c1 from "./c"; // { default: [Function: default] }
 import c2 = require("./c"); // { default: [Function: default] }
@@ -46,6 +50,9 @@ import d1 from "./d"; // [Function: default]
 import d2 = require("./d"); // [Function: default]
 d2();
 d2.default(); // Error
+const d3 = await import("./d"); // { default: [Function: default] }
+d3.default();
+
 import e1 from "./e.mjs"; // 0
 import e2 = require("./e.mjs"); // 0
 import f1 from "./f.cjs"; // 0
