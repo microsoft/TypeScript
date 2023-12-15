@@ -6,6 +6,7 @@
 const fs = require("fs");
 >fs : Symbol(fs, Decl(app.js, 2, 5))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"fs" : Symbol(fs, Decl(node.d.ts, 0, 50))
 
 const text = fs.readFileSync("/a/b/c");
 >text : Symbol(text, Decl(app.js, 3, 5))

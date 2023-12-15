@@ -47315,7 +47315,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (
                     (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                     ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (node.parent as ImportDeclaration).moduleSpecifier === node) ||
-                    ((isInJSFile(node) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler && isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false)) || isImportCall(node.parent)) ||
+                    ((isInJSFile(node) && isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false)) || isImportCall(node.parent)) ||
                     (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
                 ) {
                     return resolveExternalModuleName(node, node as LiteralExpression, ignoreErrors);
