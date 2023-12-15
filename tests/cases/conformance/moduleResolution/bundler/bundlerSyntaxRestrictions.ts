@@ -1,5 +1,5 @@
 // @moduleResolution: bundler
-// @module: esnext
+// @module: esnext, preserve
 // @checkJs: true
 // @allowJs: true
 // @outDir: out
@@ -27,7 +27,7 @@ _.a; // any
 
 // @Filename: /main.ts
 import {} from "./a";
-import _ = require("./a"); // Error
+import _ = require("./a"); // Error in esnext
 export = {}; // Error
 export {};
 
