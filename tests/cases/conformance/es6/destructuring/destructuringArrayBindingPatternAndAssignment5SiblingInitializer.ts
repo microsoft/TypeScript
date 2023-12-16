@@ -17,3 +17,10 @@ function f3() {
     const [a1, b1 = a1] = ['hi', 1];
     const [a2, b2 = a2 + '!'] = ['hi', 1];
 }
+
+// Based on comment:
+//   - https://github.com/microsoft/TypeScript/issues/49989#issuecomment-1852694486
+declare const yadda: [number, number] | undefined
+function f4() {
+    const [ a, b = a ] = yadda ?? [];
+}

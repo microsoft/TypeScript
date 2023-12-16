@@ -19,6 +19,14 @@ function f3() {
     const { a2, b2 = a2 + '!' } = { a2: 'hi', b2: 1 };
 }
 
+// Based on comment:
+//   - https://github.com/microsoft/TypeScript/issues/49989#issuecomment-1852694486
+declare const yadda: { a?: number, b?: number } | undefined
+function f4() {
+    const { a, b = a } = yadda ?? {};
+}
+
+
 //// [destructuringObjectBindingPatternAndAssignment9SiblingInitializer.js]
 // To be inferred as `number`
 function f1() {
@@ -34,4 +42,7 @@ function f2() {
 function f3() {
     var _a = { a1: 'hi', b1: 1 }, a1 = _a.a1, _b = _a.b1, b1 = _b === void 0 ? a1 : _b;
     var _c = { a2: 'hi', b2: 1 }, a2 = _c.a2, _d = _c.b2, b2 = _d === void 0 ? a2 + '!' : _d;
+}
+function f4() {
+    var _a = yadda !== null && yadda !== void 0 ? yadda : {}, a = _a.a, _b = _a.b, b = _b === void 0 ? a : _b;
 }

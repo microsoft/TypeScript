@@ -17,3 +17,10 @@ function f3() {
     const { a1, b1 = a1 } = { a1: 'hi', b1: 1 };
     const { a2, b2 = a2 + '!' } = { a2: 'hi', b2: 1 };
 }
+
+// Based on comment:
+//   - https://github.com/microsoft/TypeScript/issues/49989#issuecomment-1852694486
+declare const yadda: { a?: number, b?: number } | undefined
+function f4() {
+    const { a, b = a } = yadda ?? {};
+}

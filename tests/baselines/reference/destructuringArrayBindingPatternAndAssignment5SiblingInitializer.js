@@ -19,6 +19,13 @@ function f3() {
     const [a2, b2 = a2 + '!'] = ['hi', 1];
 }
 
+// Based on comment:
+//   - https://github.com/microsoft/TypeScript/issues/49989#issuecomment-1852694486
+declare const yadda: [number, number] | undefined
+function f4() {
+    const [ a, b = a ] = yadda ?? [];
+}
+
 
 //// [destructuringArrayBindingPatternAndAssignment5SiblingInitializer.js]
 // To be inferred as `number`
@@ -35,4 +42,7 @@ function f2() {
 function f3() {
     var _a = ['hi', 1], a1 = _a[0], _b = _a[1], b1 = _b === void 0 ? a1 : _b;
     var _c = ['hi', 1], a2 = _c[0], _d = _c[1], b2 = _d === void 0 ? a2 + '!' : _d;
+}
+function f4() {
+    var _a = yadda !== null && yadda !== void 0 ? yadda : [], a = _a[0], _b = _a[1], b = _b === void 0 ? a : _b;
 }
