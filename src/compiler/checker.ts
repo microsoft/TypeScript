@@ -11642,7 +11642,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             //   const { a, b = a } = { a: 0 }
             //
             if (isBindingElement(declaration) && checkMode === CheckMode.Contextual) {
-                return anyType;
+                return errorType;
             }
             return reportCircularityError(symbol);
         }
