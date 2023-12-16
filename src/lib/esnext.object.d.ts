@@ -5,7 +5,7 @@ interface ObjectConstructor {
      * @param keySelector A callback which will be invoked for each item in items.
      */
     groupBy<Item, Key extends PropertyKey>(
-      items: Iterable<Item>,
-      keySelector: (item: Item, index: number) => Key,
+        items: Iterable<Item>,
+        keySelector: (item: Item, index: number) => Key,
     ): Partial<Record<Key, Item[]>>;
 }
