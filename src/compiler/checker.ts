@@ -11635,7 +11635,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getTypeOfFuncClassEnumModule(symbol);
             }
 
-            if (checkMode !== CheckMode.Normal && checkMode) {
+            // When trying to get the *contextual* type of a binding element, it's possible to fall in a loop and therefore
+            // end up in a circularity-like situation. This is not a true circularity so we should not report such an error.
+            // For example, here the looping could happen when trying to get the type of `a` (binding element):
+            //
+            //   const { a, b = a } = { a: 0 }
+            //
+            if (isBindingElement(declaration) && checkMode === CheckMode.Contextual) {
                 return anyType;
             }
             return reportCircularityError(symbol);
@@ -11711,7 +11717,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getTypeOfFuncClassEnumModule(symbol);
             }
 
-            if (checkMode !== CheckMode.Normal && checkMode) {
+            // When trying to get the *contextual* type of a binding element, it's possible to fall in a loop and therefore
+            // end up in a circularity-like situation. This is not a true circularity so we should not report such an error.
+            // For example, here the looping could happen when trying to get the type of `a` (binding element):
+            //
+            //   const { a, b = a } = { a: 0 }
+            //
+            if (isBindingElement(declaration) && checkMode === CheckMode.Contextual) {
                 return type;
             }
             return reportCircularityError(symbol);
