@@ -1,0 +1,34 @@
+{
+    "$schema": "https://unpkg.com/knip@5/schema.json",
+    "entry": [
+        "Herebyfile.mjs",
+        // Knip does not understand Herebyfile.mjs (a new Knip plugin could probably handle it), so we add the entry files manually:
+        "src/cancellationToken/cancellationToken.ts",
+        "src/testRunner/_namespaces/Harness.ts",
+        "src/tsc/tsc.ts",
+        "src/tsserver/server.ts",
+        "src/typescript/typescript.ts",
+        "src/typingsInstaller/nodeTypingsInstaller.ts",
+        "src/watchGuard/watchGuard.ts",
+
+        "src/testRunner/tests.ts",
+
+        // The rest of the entry files, mostly to track used dependencies:
+        ".eslint-plugin-local.cjs",
+        ".gulp.js",
+        "scripts/eslint/{rules,tests}/*.cjs",
+        "scripts/*.{cjs,mjs}"
+    ],
+    "ignore": [
+        "built/**",
+        "src/lib/**",
+        "tests/**",
+        "scripts/failed-tests.d.cts"
+    ],
+    "ignoreDependencies": ["c8", "eslint-formatter-autolinkable-stylish", "mocha-fivemat-progress-reporter"],
+    "ignoreExportsUsedInFile": {
+        "enum": true,
+        "interface": true,
+        "type": true
+    }
+}
