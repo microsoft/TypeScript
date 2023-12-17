@@ -7,12 +7,6 @@ import {
     version,
 } from "./_namespaces/ts";
 
-export let enableDeprecationWarnings = true;
-
-export function setEnableDeprecationWarnings(value: boolean) {
-    enableDeprecationWarnings = value;
-}
-
 let typeScriptVersion: Version | undefined;
 
 function getTypeScriptVersion() {
@@ -38,16 +32,16 @@ function createErrorDeprecation(name: string, errorAfter: Version | undefined, s
 function createWarningDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
     let hasWrittenDeprecation = false;
     return () => {
-        if (enableDeprecationWarnings && !hasWrittenDeprecation) {
+        if (!hasWrittenDeprecation) {
             Debug.log.warn(formatDeprecationMessage(name, /*error*/ false, errorAfter, since, message));
             hasWrittenDeprecation = true;
         }
     };
 }
 
-export function createDeprecation(name: string, options: DeprecationOptions & { error: true; }): () => never;
-export function createDeprecation(name: string, options?: DeprecationOptions): () => void;
-export function createDeprecation(name: string, options: DeprecationOptions = {}) {
+function createDeprecation(name: string, options: DeprecationOptions & { error: true; }): () => never;
+function createDeprecation(name: string, options?: DeprecationOptions): () => void;
+function createDeprecation(name: string, options: DeprecationOptions = {}) {
     const version = typeof options.typeScriptVersion === "string" ? new Version(options.typeScriptVersion) : options.typeScriptVersion ?? getTypeScriptVersion();
     const errorAfter = typeof options.errorAfter === "string" ? new Version(options.errorAfter) : options.errorAfter;
     const warnAfter = typeof options.warnAfter === "string" ? new Version(options.warnAfter) : options.warnAfter;
