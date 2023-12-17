@@ -67,6 +67,7 @@
         "glob": "^10.3.10",
         "hereby": "^1.8.9",
         "jsonc-parser": "^3.2.1",
+        "knip": "^5.10.0-canary.3",
         "minimist": "^1.2.8",
         "mocha": "^10.3.0",
         "mocha-fivemat-progress-reporter": "^0.1.0",
@@ -91,6 +92,7 @@
         "clean": "hereby clean",
         "gulp": "hereby",
         "lint": "hereby lint",
+        "knip": "hereby knip",
         "format": "dprint fmt",
         "setup-hooks": "node scripts/link-hooks.mjs"
     },
