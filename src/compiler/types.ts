@@ -5142,6 +5142,7 @@ export interface TypeChecker {
      * is `null`. Instead, use `type.flags & TypeFlags.Null`.
      */
     getNullType(): Type;
+    getUnknownType(): Type;
     getESSymbolType(): Type;
     /**
      * Gets the intrinsic `never` type. There are multiple types that act as `never` used internally in the compiler,
