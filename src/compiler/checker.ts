@@ -17759,7 +17759,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function shouldDeferIndexType(type: Type, indexFlags = IndexFlags.None) {
-        return !!(type.flags & TypeFlags.InstantiableNonPrimitive ||
+        return !!(type.flags & TypeFlags.InstantiableNonPrimitive && !isNoInferType(type) ||
             isGenericTupleType(type) ||
             isGenericMappedType(type) && (!hasDistributiveNameType(type) || getMappedTypeNameTypeKind(type) === MappedTypeNameTypeKind.Remapping) ||
             type.flags & TypeFlags.Union && !(indexFlags & IndexFlags.NoReducibleCheck) && isGenericReducibleType(type) ||
@@ -17771,6 +17771,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return shouldDeferIndexType(type, indexFlags) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, indexFlags) :
             type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, indexFlags))) :
             type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, indexFlags))) :
+            type.flags & TypeFlags.Substitution ? getIndexType((type as SubstitutionType).baseType, indexFlags) :
             getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, indexFlags) :
             type === wildcardType ? wildcardType :
             type.flags & TypeFlags.Unknown ? neverType :
