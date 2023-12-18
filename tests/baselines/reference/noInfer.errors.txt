@@ -1,14 +1,14 @@
-noInfer.ts(29,13): error TS2345: Argument of type '"bar"' is not assignable to parameter of type '"foo"'.
-noInfer.ts(30,14): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
-noInfer.ts(31,14): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
-noInfer.ts(32,15): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
-noInfer.ts(33,15): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
-noInfer.ts(41,30): error TS2741: Property 'woof' is missing in type 'Animal' but required in type 'Dog'.
-noInfer.ts(47,16): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type '{ x: number; y: number; }'.
+noInfer.ts(35,13): error TS2345: Argument of type '"bar"' is not assignable to parameter of type '"foo"'.
+noInfer.ts(36,14): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+noInfer.ts(37,14): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+noInfer.ts(38,15): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+noInfer.ts(39,15): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+noInfer.ts(47,30): error TS2741: Property 'woof' is missing in type 'Animal' but required in type 'Dog'.
+noInfer.ts(53,16): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type '{ x: number; y: number; }'.
   Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
-noInfer.ts(52,22): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
-noInfer.ts(53,14): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
-noInfer.ts(60,14): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
+noInfer.ts(58,22): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
+noInfer.ts(59,14): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; }'.
+noInfer.ts(66,14): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
   Property 'foo' is missing in type '{}' but required in type '{ foo: number; }'.
 
 
@@ -34,6 +34,12 @@ noInfer.ts(60,14): error TS2345: Argument of type '{}' is not assignable to para
     type T21<T> = NoInfer<NoInfer<T> & string>;
     type T22<T> = NoInfer<NoInfer<T> & string[]>;
     
+    // NoInfer<T> is erased in index types and mapped types
+    
+    type T30 = keyof NoInfer<{ a: string, b: string }>;
+    type T31<T> = keyof NoInfer<T>;
+    type T32 = { [K in keyof NoInfer<{ a: string, b: string }>]: K };
+    
     declare function foo1<T extends string>(a: T, b: NoInfer<T>): void
     declare function foo2<T extends string>(a: T, b: NoInfer<T>[]): void
     declare function foo3<T extends string>(a: T, b: NoInfer<T[]>): void
@@ -53,11 +59,11 @@ noInfer.ts(60,14): error TS2345: Argument of type '{}' is not assignable to para
     foo4('foo', { x: 'bar' }) // error
                   ~
 !!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
-!!! related TS6500 noInfer.ts:25:52: The expected type comes from property 'x' which is declared here on type '{ x: "foo"; }'
+!!! related TS6500 noInfer.ts:31:52: The expected type comes from property 'x' which is declared here on type '{ x: "foo"; }'
     foo5('foo', { x: 'bar' }) // error
                   ~
 !!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
-!!! related TS6500 noInfer.ts:26:60: The expected type comes from property 'x' which is declared here on type 'NoInfer<{ x: "foo"; }>'
+!!! related TS6500 noInfer.ts:32:60: The expected type comes from property 'x' which is declared here on type 'NoInfer<{ x: "foo"; }>'
     
     declare class Animal { move(): void }
     declare class Dog extends Animal { woof(): void }
@@ -68,8 +74,8 @@ noInfer.ts(60,14): error TS2345: Argument of type '{}' is not assignable to para
     doSomething(new Dog(), () => new Animal()); // error
                                  ~~~~~~~~~~~~
 !!! error TS2741: Property 'woof' is missing in type 'Animal' but required in type 'Dog'.
-!!! related TS2728 noInfer.ts:36:36: 'woof' is declared here.
-!!! related TS6502 noInfer.ts:37:55: The expected type comes from the return type of this signature.
+!!! related TS2728 noInfer.ts:42:36: 'woof' is declared here.
+!!! related TS6502 noInfer.ts:43:55: The expected type comes from the return type of this signature.
     
     declare function assertEqual<T>(actual: T, expected: NoInfer<T>): boolean;
     
@@ -79,7 +85,7 @@ noInfer.ts(60,14): error TS2345: Argument of type '{}' is not assignable to para
                    ~~~~~~~~
 !!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type '{ x: number; y: number; }'.
 !!! error TS2345:   Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
-!!! related TS2728 noInfer.ts:46:19: 'y' is declared here.
+!!! related TS2728 noInfer.ts:52:19: 'y' is declared here.
     
     declare function invoke<T, R>(func: (value: T) => R, value: NoInfer<T>): R;
     declare function test(value: { x: number; }): number;
@@ -100,7 +106,7 @@ noInfer.ts(60,14): error TS2345: Argument of type '{}' is not assignable to para
                  ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
 !!! error TS2345:   Property 'foo' is missing in type '{}' but required in type '{ foo: number; }'.
-!!! related TS2728 noInfer.ts:57:33: 'foo' is declared here.
+!!! related TS2728 noInfer.ts:63:33: 'foo' is declared here.
     
     declare function mutate<T>(callback: (a: NoInfer<T>, b: number) => T): T;
     const mutate1 = mutate((a, b) => b);

@@ -22,6 +22,12 @@ type T20<T> = NoInfer<NoInfer<T>>;
 type T21<T> = NoInfer<NoInfer<T> & string>;
 type T22<T> = NoInfer<NoInfer<T> & string[]>;
 
+// NoInfer<T> is erased in index types and mapped types
+
+type T30 = keyof NoInfer<{ a: string, b: string }>;
+type T31<T> = keyof NoInfer<T>;
+type T32 = { [K in keyof NoInfer<{ a: string, b: string }>]: K };
+
 declare function foo1<T extends string>(a: T, b: NoInfer<T>): void
 declare function foo2<T extends string>(a: T, b: NoInfer<T>[]): void
 declare function foo3<T extends string>(a: T, b: NoInfer<T[]>): void
