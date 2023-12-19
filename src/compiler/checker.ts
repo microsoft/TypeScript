@@ -20620,8 +20620,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const sourceIsString = typeof sourceValue === "string";
                     const targetIsString = typeof targetValue === "string";
 
+                    // If we have 2 enums with *known* values that differ, they are incompatible.
                     if (sourceValue !== undefined && targetValue !== undefined) {
-                        // If we have 2 enums with *known* values that differ, they are incompatible.
                         if (!errorReporter) {
                             enumRelation.set(id, RelationComparisonResult.Failed);
                         }
@@ -20633,13 +20633,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         return false;
                     }
-                    else if (sourceIsString || targetIsString) {
-                        // At this point we know that at least one of the values is 'undefined'.
-                        // This may mean that we have an opaque member from an ambient enum declaration,
-                        // or that we were not able to calculate it (which is basically an error).
-                        //
-                        // Either way, we can assume that it's numeric.
-                        // If the other is a string, we have a mismatch in types.
+
+                    // At this point we know that at least one of the values is 'undefined'.
+                    // This may mean that we have an opaque member from an ambient enum declaration,
+                    // or that we were not able to calculate it (which is basically an error).
+                    //
+                    // Either way, we can assume that it's numeric.
+                    // If the other is a string, we have a mismatch in types.
+                    if (sourceIsString || targetIsString) {
                         if (!errorReporter) {
                             enumRelation.set(id, RelationComparisonResult.Failed);
                         }
