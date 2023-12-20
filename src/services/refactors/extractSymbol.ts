@@ -2222,7 +2222,7 @@ function isExtractableExpression(node: Node): boolean {
     return true;
 }
 
-function isBlockLike(node: Node): node is BlockLike {
+export function isBlockLike(node: Node): node is BlockLike {
     switch (node.kind) {
         case SyntaxKind.Block:
         case SyntaxKind.SourceFile:

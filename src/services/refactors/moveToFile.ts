@@ -42,6 +42,7 @@ import {
     FindAllReferences,
     findIndex,
     findLast,
+    findTokenOnLeftOfPosition,
     firstDefined,
     flatMap,
     forEachKey,
@@ -151,6 +152,7 @@ import {
 import {
     registerRefactor,
 } from "../refactorProvider";
+import { isBlockLike } from "./extractSymbol";
 
 const refactorNameForMoveToFile = "Move to file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);
@@ -167,6 +169,16 @@ registerRefactor(refactorNameForMoveToFile, {
         if (!interactiveRefactorArguments) {
             return emptyArray;
         }
+        const file = context.file;
+        const startPosition = context.startPosition;
+        const endPosition = context.endPosition;
+         const startNode = findTokenOnLeftOfPosition(file, textSpanEnd(span));
+          const endNode = findTokenOnLeftOfPosition(file, textSpanEnd(span));
+
+        if (startNode && startNode.kind !== SyntaxKind.SourceFile && isBlockLike(startNode)
+            && endNode && endNode.kind !== SyntaxKind.SourceFile && isBlockLike(endNode)) {
+            return emptyArray;
+        }
         if (context.preferences.allowTextChangesInNewFiles && statements) {
             return [{ name: refactorNameForMoveToFile, description, actions: [moveToFileAction] }];
         }
@@ -175,6 +187,7 @@ registerRefactor(refactorNameForMoveToFile, {
         }
         return emptyArray;
     },
+
     getEditsForAction: function getRefactorEditsToMoveToFile(context, actionName, interactiveRefactorArguments): RefactorEditInfo | undefined {
         Debug.assert(actionName === refactorNameForMoveToFile, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
