@@ -6713,7 +6713,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (type.flags & TypeFlags.Substitution) {
                 const typeNode = typeToTypeNodeHelper((type as SubstitutionType).baseType, context);
-                return isNoInferType(type) ? factory.createTypeReferenceNode("NoInfer", [typeNode]) : typeNode;
+                const noInferSymbol = isNoInferType(type) && getGlobalTypeSymbol("NoInfer" as __String, /*reportErrors*/ false);
+                return noInferSymbol ? symbolToTypeNode(noInferSymbol, context, SymbolFlags.Type, [typeNode]) : typeNode;
             }
 
             return Debug.fail("Should be unreachable.");
@@ -17771,7 +17772,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return shouldDeferIndexType(type, indexFlags) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, indexFlags) :
             type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, indexFlags))) :
             type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, indexFlags))) :
-            type.flags & TypeFlags.Substitution ? getIndexType((type as SubstitutionType).baseType, indexFlags) :
+            type.flags & TypeFlags.Substitution ? getNoInferType(getIndexType((type as SubstitutionType).baseType, indexFlags)) :
             getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, indexFlags) :
             type === wildcardType ? wildcardType :
             type.flags & TypeFlags.Unknown ? neverType :
