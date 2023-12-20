@@ -20883,18 +20883,58 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return !!(entry & RelationComparisonResult.Succeeded);
         }
         const targetEnumType = getTypeOfSymbol(targetSymbol);
-        for (const property of getPropertiesOfType(getTypeOfSymbol(sourceSymbol))) {
-            if (property.flags & SymbolFlags.EnumMember) {
-                const targetProperty = getPropertyOfType(targetEnumType, property.escapedName);
+        for (const sourceProperty of getPropertiesOfType(getTypeOfSymbol(sourceSymbol))) {
+            if (sourceProperty.flags & SymbolFlags.EnumMember) {
+                const targetProperty = getPropertyOfType(targetEnumType, sourceProperty.escapedName);
                 if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
                     if (errorReporter) {
-                        errorReporter(Diagnostics.Property_0_is_missing_in_type_1, symbolName(property), typeToString(getDeclaredTypeOfSymbol(targetSymbol), /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
+                        errorReporter(Diagnostics.Property_0_is_missing_in_type_1, symbolName(sourceProperty), typeToString(getDeclaredTypeOfSymbol(targetSymbol), /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
                         enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
                     }
                     else {
                         enumRelation.set(id, RelationComparisonResult.Failed);
                     }
                     return false;
+                }
+                const sourceValue = getEnumMemberValue(getDeclarationOfKind(sourceProperty, SyntaxKind.EnumMember)!);
+                const targetValue = getEnumMemberValue(getDeclarationOfKind(targetProperty, SyntaxKind.EnumMember)!);
+                if (sourceValue !== targetValue) {
+                    const sourceIsString = typeof sourceValue === "string";
+                    const targetIsString = typeof targetValue === "string";
+
+                    // If we have 2 enums with *known* values that differ, they are incompatible.
+                    if (sourceValue !== undefined && targetValue !== undefined) {
+                        if (!errorReporter) {
+                            enumRelation.set(id, RelationComparisonResult.Failed);
+                        }
+                        else {
+                            const escapedSource = sourceIsString ? `"${escapeString(sourceValue)}"` : sourceValue;
+                            const escapedTarget = targetIsString ? `"${escapeString(targetValue)}"` : targetValue;
+                            errorReporter(Diagnostics.Each_declaration_of_0_1_differs_in_its_value_where_2_was_expected_but_3_was_given, symbolName(targetSymbol), symbolName(targetProperty), escapedTarget, escapedSource);
+                            enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
+                        }
+                        return false;
+                    }
+
+                    // At this point we know that at least one of the values is 'undefined'.
+                    // This may mean that we have an opaque member from an ambient enum declaration,
+                    // or that we were not able to calculate it (which is basically an error).
+                    //
+                    // Either way, we can assume that it's numeric.
+                    // If the other is a string, we have a mismatch in types.
+                    if (sourceIsString || targetIsString) {
+                        if (!errorReporter) {
+                            enumRelation.set(id, RelationComparisonResult.Failed);
+                        }
+                        else {
+                            const knownStringValue = sourceValue ?? targetValue;
+                            Debug.assert(typeof knownStringValue === "string");
+                            const escapedValue = `"${escapeString(knownStringValue)}"`;
+                            errorReporter(Diagnostics.One_value_of_0_1_is_the_string_2_and_the_other_is_assumed_to_be_an_unknown_numeric_value, symbolName(targetSymbol), symbolName(targetProperty), escapedValue);
+                            enumRelation.set(id, RelationComparisonResult.Failed | RelationComparisonResult.Reported);
+                        }
+                        return false;
+                    }
                 }
             }
         }
