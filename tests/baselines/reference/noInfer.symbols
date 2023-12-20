@@ -65,7 +65,7 @@ type T22<T> = NoInfer<NoInfer<T> & string[]>;
 >NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(noInfer.ts, 19, 9))
 
-// NoInfer<T> is erased in index types and mapped types
+// keyof NoInfer<T> is transformed into NoInfer<keyof T>
 
 type T30 = keyof NoInfer<{ a: string, b: string }>;
 >T30 : Symbol(T30, Decl(noInfer.ts, 19, 45))

@@ -22,7 +22,7 @@ type T20<T> = NoInfer<NoInfer<T>>;
 type T21<T> = NoInfer<NoInfer<T> & string>;
 type T22<T> = NoInfer<NoInfer<T> & string[]>;
 
-// NoInfer<T> is erased in index types and mapped types
+// keyof NoInfer<T> is transformed into NoInfer<keyof T>
 
 type T30 = keyof NoInfer<{ a: string, b: string }>;
 type T31<T> = keyof NoInfer<T>;
