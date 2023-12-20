@@ -207,7 +207,8 @@ interface RegExp {
      * @param limit if not undefined, the output array is truncated so that it contains no more
      * than 'limit' elements.
      */
-    [Symbol.split](string: string, limit?: number): string[];
+    [Symbol.split](string: string, limit: 0): string[];
+    [Symbol.split](string: string, limit?: number): [string, ...string[]];
 }
 
 interface RegExpConstructor {
@@ -247,7 +248,8 @@ interface String {
      * @param splitter An object that can split a string.
      * @param limit A value used to limit the number of elements returned in the array.
      */
-    split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
+    split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit: 0): string[];
+    split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): [string, ...string[]];
 }
 
 interface ArrayBuffer {
