@@ -2292,8 +2292,8 @@ function loadEntrypointsFromExportMap(
                     /*excludes*/ undefined,
                     [
                         isDeclarationFileName(target)
-                            ? replaceFirstStar(target, "**/*")
-                            : changeAnyExtension(replaceFirstStar(target, "**/*"), getDeclarationEmitExtensionForPath(target)),
+                            ? changeAnyExtension(replaceFirstStar(target, "**/*"), ".*", supportedDeclarationExtensions, /*ignoreCase*/ true)
+                            : changeAnyExtension(replaceFirstStar(target, "**/*"), ".*"),
                     ],
                 ).forEach(entry => {
                     entrypoints = appendIfUnique(entrypoints, {
