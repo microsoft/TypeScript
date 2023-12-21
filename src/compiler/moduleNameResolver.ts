@@ -41,7 +41,6 @@ import {
     GetCanonicalFileName,
     getCommonSourceDirectory,
     getCompilerOptionValue,
-    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     GetEffectiveTypeRootsHost,
     getEmitModuleKind,
