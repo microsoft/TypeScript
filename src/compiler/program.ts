@@ -142,6 +142,7 @@ import {
     getSetExternalModuleIndicator,
     getSpellingSuggestion,
     getStrictOptionValue,
+    getStringComparer,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTemporaryModuleResolutionState,
@@ -290,6 +291,7 @@ import {
     skipTrivia,
     skipTypeChecking,
     some,
+    sortAndDeduplicate,
     sortAndDeduplicateDiagnostics,
     SortedReadonlyArray,
     SourceFile,
@@ -2470,7 +2472,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 else {
                     // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
-                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
+
+                    // when trying to re-use the structure from the old program, the new source
+                    // file might contain additional imports that resolve to previously resolved
+                    // modules. In those cases, the structure can still be re-used completely.
+                    if (!areModuleImportsEqualForReuse(oldSourceFile, newSourceFile)) {
                         // imports has changed
                         structureIsReused = StructureIsReused.SafeModules;
                     }
@@ -3295,6 +3301,30 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return a.kind === SyntaxKind.Identifier
             ? b.kind === SyntaxKind.Identifier && a.escapedText === b.escapedText
             : b.kind === SyntaxKind.StringLiteral && a.text === b.text;
+    }
+
+    function moduleImportCompareForReuse(a: StringLiteralLike, b: StringLiteralLike): number {
+        return getStringComparer(/*ignoreCase*/ true)(a.text, b.text);
+    }
+
+    function areModuleImportsEqualForReuse(aFile: SourceFile, bFile: SourceFile): boolean {
+        // NOTE: Technically a change of the import mode might signify a change in the structure,
+        // invalidating the full program re-use. We could detect this here by comparing the
+        // modes of the import specifiers- but in practice we can be more flexible here and consider
+        // imports as "equal" at this point. Later on, the resolutions will be validated and we can
+        // detect if module imports changed. In the best case though, we can continue re-using more.
+        const aImportsSortedAndDeduped = sortAndDeduplicate(
+            aFile.imports,
+            moduleImportCompareForReuse,
+            moduleNameIsEqualTo,
+        );
+        const bImportsSortedAndDeduped = sortAndDeduplicate(
+            bFile.imports,
+            moduleImportCompareForReuse,
+            moduleNameIsEqualTo,
+        );
+
+        return arrayIsEqualTo(aImportsSortedAndDeduped, bImportsSortedAndDeduped, moduleNameIsEqualTo);
     }
 
     function createSyntheticImport(text: string, file: SourceFile) {

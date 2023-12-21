@@ -161,6 +161,69 @@ describe("unittests:: Reuse program structure:: General", () => {
         runBaseline("change affects imports", baselines);
     });
 
+    it("succeeds if change affects imports but same overall modules", () => {
+        const referencedFile: NamedSourceText = {
+            name: "b.ts",
+            text: SourceText.New("", `export const works = true;`, ""),
+        };
+
+        const program1 = newProgram(
+            [{
+                name: "a.ts",
+                text: SourceText.New("", `import {works} from './b';`, ""),
+            }, referencedFile],
+            ["a.ts", "b.ts"],
+            { target },
+        );
+
+        const baselines: string[] = [];
+        baselineProgram(baselines, program1);
+        const program2 = updateProgram(program1, ["a.ts", "b.ts"], { target }, files => {
+            files[0].text = files[0].text.updateImportsAndExports(`
+                import {works} from './b';
+                import * as namespaceImp from './b';
+            `);
+        });
+        baselineProgram(baselines, program2);
+        runBaseline("change affects imports but same overall modules", baselines);
+    });
+
+    it("fails if change affects imports, same module names, but different modes", () => {
+        const referencedFile: NamedSourceText = {
+            name: "b.ts",
+            text: SourceText.New("", `export const works = true;`, ""),
+        };
+
+        const program1 = newProgram(
+            [{
+                name: "a.ts",
+                text: SourceText.New(
+                    "",
+                    `
+                import {works} from './b';
+                import * as bla from './b';
+            `,
+                    "",
+                ),
+            }, referencedFile],
+            ["a.ts", "b.ts"],
+            { target },
+        );
+
+        const baselines: string[] = [];
+        baselineProgram(baselines, program1);
+        const program2 = updateProgram(program1, ["a.ts", "b.ts"], { target }, files => {
+            files[0].text = files[0].text.updateImportsAndExports(`
+                import type {works} from './b' with {
+                    "resolution-mode": "require"
+                };
+                import * as bla from './b';
+            `);
+        });
+        baselineProgram(baselines, program2);
+        runBaseline("change affects imports, same modules, but different modes", baselines);
+    });
+
     it("fails if change affects type directives", () => {
         const program1 = newProgram(getFiles(), ["a.ts"], { target });
         const baselines: string[] = [];
