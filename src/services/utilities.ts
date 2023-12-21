@@ -362,6 +362,7 @@ import {
     tokenToString,
     toPath,
     tryCast,
+    tryParseJson,
     Type,
     TypeChecker,
     TypeFlags,
@@ -2473,6 +2474,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
+        getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
     };
 }
 
@@ -3892,15 +3894,6 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
             return `${components[0]}/${components[1]}`;
         }
         return components[0];
-    }
-}
-
-function tryParseJson(text: string) {
-    try {
-        return JSON.parse(text);
-    }
-    catch {
-        return undefined;
     }
 }
 
