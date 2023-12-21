@@ -162,6 +162,10 @@ interface PromiseConstructor {
     readonly [Symbol.species]: PromiseConstructor;
 }
 
+// TODO: inline at usage site
+type NonEmptyStringParam<S extends string> = S extends '' ? never : S;
+type NonZeroNumberParam<N extends number> = N extends 0 ? never : N;
+
 interface RegExp {
     /**
      * Matches a string with this regular expression, and returns an array containing the results of
@@ -207,6 +211,11 @@ interface RegExp {
      * @param limit if not undefined, the output array is truncated so that it contains no more
      * than 'limit' elements.
      */
+    [Symbol.split]<S extends string>(string: NonEmptyStringParam<S>): [string, ...string[]];
+    [Symbol.split]<S extends string, N extends number>(
+        string: NonEmptyStringParam<S>,
+        limit: NonZeroNumberParam<N>
+    ): [string, ...string[]];
     [Symbol.split](string: string, limit?: number): string[];
 }
 
@@ -247,6 +256,25 @@ interface String {
      * @param splitter An object that can split a string.
      * @param limit A value used to limit the number of elements returned in the array.
      */
+    split(
+        splitter: {
+            [Symbol.split]<S extends string>(string: NonEmptyStringParam<S>): [string, ...string[]];
+            [Symbol.split]<S extends string, NN extends number>(
+                string: NonEmptyStringParam<S>,
+                limit: NonZeroNumberParam<NN>
+            ): [string, ...string[]];
+        }
+    ): [string, ...string[]];
+    split<N extends number>(
+        splitter: {
+            [Symbol.split]<S extends string>(string: NonEmptyStringParam<S>): [string, ...string[]];
+            [Symbol.split]<S extends string, NN extends number>(
+                string: NonEmptyStringParam<S>,
+                limit: NonZeroNumberParam<NN>
+            ): [string, ...string[]];
+        },
+        limit: NonZeroNumberParam<N>
+    ): [string, ...string[]];
     split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
 }
 

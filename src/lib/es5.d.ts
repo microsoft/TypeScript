@@ -470,6 +470,11 @@ interface String {
      * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
      * @param limit A value used to limit the number of elements returned in the array.
      */
+    split<S extends string>(separator: NonEmptyStringParam<S>): [string, ...string[]];
+    split<S extends string, N extends number>(
+        separator: NonEmptyStringParam<S>,
+        limit: NonZeroNumberParam<N>
+    ): [string, ...string[]];
     split(separator: string | RegExp, limit?: number): string[];
 
     /**
