@@ -44124,7 +44124,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 function checkReturnStatementExpression(expr: Expression | undefined): void {
                     let actualReturnType = unwrappedReturnType;
                     if (expr) {
-                        expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
+                        expr = skipParentheses(expr);
                         if (isConditionalExpression(expr)) {
                             return checkReturnConditionalExpression(expr);
                         }
@@ -44411,7 +44411,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function visitConditionalReturnExpression(node: Expression | undefined): void {
             if (!node) return;
-            node = skipParentheses(node, /*excludeJSDocTypeAssertions*/ false);
+            node = skipParentheses(node);
             if (isConditionalExpression(node)) {
                 visitConditionalReturnExpression(node.whenTrue);
                 visitConditionalReturnExpression(node.whenFalse);
