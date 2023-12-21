@@ -915,6 +915,11 @@ export function isPackageJsonInfo(entry: PackageJsonInfoCacheEntry | undefined):
     return !!(entry as PackageJsonInfo | undefined)?.contents;
 }
 
+/** @internal */
+export function isMissingPackageJsonInfo(entry: PackageJsonInfoCacheEntry | undefined): entry is MissingPackageJsonInfo {
+    return !!entry && !(entry as PackageJsonInfo).contents;
+}
+
 export interface PackageJsonInfoCache {
     /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfoCacheEntry | undefined;
     /** @internal */ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfoCacheEntry): void;

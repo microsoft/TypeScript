@@ -65,6 +65,7 @@ import {
     isDeclarationFileName,
     isExternalModuleAugmentation,
     isExternalModuleNameRelative,
+    isMissingPackageJsonInfo,
     isModuleBlock,
     isModuleDeclaration,
     isNonGlobalAmbientModule,
@@ -948,7 +949,7 @@ function tryGetModuleNameFromExports(options: CompilerOptions, host: ModuleSpeci
     return tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, exports, conditions, MatchingMode.Exact, /*isImports*/ false);
 }
 
-function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDirectory: Path, options: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode) {
+function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDirectory: string, options: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode) {
     if (!host.readFile || !getResolvePackageJsonImports(options)) {
         return undefined;
     }
@@ -959,7 +960,7 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
     }
     const packageJsonPath = combinePaths(ancestorDirectoryWithPackageJson, "package.json");
     const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
-    if (typeof cachedPackageJson !== "object" && cachedPackageJson !== undefined || !host.fileExists(packageJsonPath)) {
+    if (isMissingPackageJsonInfo(cachedPackageJson) || !host.fileExists(packageJsonPath)) {
         return undefined;
     }
     const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || tryParseJson(host.readFile(packageJsonPath)!);
