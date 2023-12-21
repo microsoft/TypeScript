@@ -116,6 +116,8 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Signatu
         const newParameters: ParameterInfo[] = [];
         const parametersLength = length(declaration.parameters);
         const argumentsLength = length(callExpression.arguments);
+        if (parametersLength > argumentsLength) return undefined;
+
         for (let i = 0, pos = 0, paramIndex = 0; i < argumentsLength; i++) {
             const arg = callExpression.arguments[i];
             const expr = isAccessExpression(arg) ? getNameOfAccessExpression(arg) : arg;
