@@ -1,11 +1,19 @@
+comparisonOperatorWithOneOperandIsNull.ts(4,18): error TS2365: Operator '<' cannot be applied to types 'T' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(4,22): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(5,18): error TS2365: Operator '>' cannot be applied to types 'T' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(5,22): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(6,18): error TS2365: Operator '<=' cannot be applied to types 'T' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(6,23): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(7,18): error TS2365: Operator '>=' cannot be applied to types 'T' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(7,23): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(13,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(13,18): error TS2365: Operator '<' cannot be applied to types 'any' and 'T'.
 comparisonOperatorWithOneOperandIsNull.ts(14,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(14,18): error TS2365: Operator '>' cannot be applied to types 'any' and 'T'.
 comparisonOperatorWithOneOperandIsNull.ts(15,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(15,18): error TS2365: Operator '<=' cannot be applied to types 'any' and 'T'.
 comparisonOperatorWithOneOperandIsNull.ts(16,18): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(16,18): error TS2365: Operator '>=' cannot be applied to types 'any' and 'T'.
 comparisonOperatorWithOneOperandIsNull.ts(32,12): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(32,12): error TS2365: Operator '<' cannot be applied to types 'any' and 'boolean'.
 comparisonOperatorWithOneOperandIsNull.ts(33,12): error TS18050: The value 'null' cannot be used here.
@@ -14,7 +22,9 @@ comparisonOperatorWithOneOperandIsNull.ts(35,12): error TS18050: The value 'null
 comparisonOperatorWithOneOperandIsNull.ts(35,12): error TS2365: Operator '<' cannot be applied to types 'any' and 'void'.
 comparisonOperatorWithOneOperandIsNull.ts(36,12): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(37,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(37,12): error TS2365: Operator '<' cannot be applied to types 'any' and '{}'.
 comparisonOperatorWithOneOperandIsNull.ts(38,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(38,12): error TS2365: Operator '<' cannot be applied to types 'any' and 'string[]'.
 comparisonOperatorWithOneOperandIsNull.ts(40,12): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(40,16): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(41,16): error TS18050: The value 'null' cannot be used here.
@@ -22,7 +32,9 @@ comparisonOperatorWithOneOperandIsNull.ts(42,16): error TS18050: The value 'null
 comparisonOperatorWithOneOperandIsNull.ts(43,12): error TS2365: Operator '<' cannot be applied to types 'void' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(43,16): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(44,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{}' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(45,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(46,12): error TS2365: Operator '<' cannot be applied to types 'string[]' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(46,16): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(49,12): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(49,12): error TS2365: Operator '>' cannot be applied to types 'any' and 'boolean'.
@@ -32,7 +44,9 @@ comparisonOperatorWithOneOperandIsNull.ts(52,12): error TS18050: The value 'null
 comparisonOperatorWithOneOperandIsNull.ts(52,12): error TS2365: Operator '>' cannot be applied to types 'any' and 'void'.
 comparisonOperatorWithOneOperandIsNull.ts(53,12): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(54,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(54,12): error TS2365: Operator '>' cannot be applied to types 'any' and '{}'.
 comparisonOperatorWithOneOperandIsNull.ts(55,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(55,12): error TS2365: Operator '>' cannot be applied to types 'any' and 'string[]'.
 comparisonOperatorWithOneOperandIsNull.ts(57,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(57,16): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(58,16): error TS18050: The value 'null' cannot be used here.
@@ -40,7 +54,9 @@ comparisonOperatorWithOneOperandIsNull.ts(59,16): error TS18050: The value 'null
 comparisonOperatorWithOneOperandIsNull.ts(60,12): error TS2365: Operator '>' cannot be applied to types 'void' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(60,16): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(61,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(62,12): error TS2365: Operator '>' cannot be applied to types '{}' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(62,16): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(63,12): error TS2365: Operator '>' cannot be applied to types 'string[]' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(63,16): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(66,12): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(66,12): error TS2365: Operator '<=' cannot be applied to types 'any' and 'boolean'.
@@ -50,7 +66,9 @@ comparisonOperatorWithOneOperandIsNull.ts(69,12): error TS18050: The value 'null
 comparisonOperatorWithOneOperandIsNull.ts(69,12): error TS2365: Operator '<=' cannot be applied to types 'any' and 'void'.
 comparisonOperatorWithOneOperandIsNull.ts(70,12): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(71,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(71,12): error TS2365: Operator '<=' cannot be applied to types 'any' and '{}'.
 comparisonOperatorWithOneOperandIsNull.ts(72,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(72,12): error TS2365: Operator '<=' cannot be applied to types 'any' and 'string[]'.
 comparisonOperatorWithOneOperandIsNull.ts(74,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(74,17): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(75,17): error TS18050: The value 'null' cannot be used here.
@@ -58,7 +76,9 @@ comparisonOperatorWithOneOperandIsNull.ts(76,17): error TS18050: The value 'null
 comparisonOperatorWithOneOperandIsNull.ts(77,12): error TS2365: Operator '<=' cannot be applied to types 'void' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(77,17): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(78,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(79,12): error TS2365: Operator '<=' cannot be applied to types '{}' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(79,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(80,12): error TS2365: Operator '<=' cannot be applied to types 'string[]' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(80,17): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(83,12): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(83,12): error TS2365: Operator '>=' cannot be applied to types 'any' and 'boolean'.
@@ -68,7 +88,9 @@ comparisonOperatorWithOneOperandIsNull.ts(86,12): error TS18050: The value 'null
 comparisonOperatorWithOneOperandIsNull.ts(86,12): error TS2365: Operator '>=' cannot be applied to types 'any' and 'void'.
 comparisonOperatorWithOneOperandIsNull.ts(87,12): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(88,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(88,12): error TS2365: Operator '>=' cannot be applied to types 'any' and '{}'.
 comparisonOperatorWithOneOperandIsNull.ts(89,12): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(89,12): error TS2365: Operator '>=' cannot be applied to types 'any' and 'string[]'.
 comparisonOperatorWithOneOperandIsNull.ts(91,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(91,17): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(92,17): error TS18050: The value 'null' cannot be used here.
@@ -76,24 +98,34 @@ comparisonOperatorWithOneOperandIsNull.ts(93,17): error TS18050: The value 'null
 comparisonOperatorWithOneOperandIsNull.ts(94,12): error TS2365: Operator '>=' cannot be applied to types 'void' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(94,17): error TS18050: The value 'null' cannot be used here.
 comparisonOperatorWithOneOperandIsNull.ts(95,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(96,12): error TS2365: Operator '>=' cannot be applied to types '{}' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(96,17): error TS18050: The value 'null' cannot be used here.
+comparisonOperatorWithOneOperandIsNull.ts(97,12): error TS2365: Operator '>=' cannot be applied to types 'string[]' and 'any'.
 comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null' cannot be used here.
 
 
-==== comparisonOperatorWithOneOperandIsNull.ts (80 errors) ====
+==== comparisonOperatorWithOneOperandIsNull.ts (104 errors) ====
     enum E { a, b, c }
     
     function foo<T>(t: T) {
         var foo_r1 = t < null;
+                     ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'any'.
                          ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
         var foo_r2 = t > null;
+                     ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'T' and 'any'.
                          ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
         var foo_r3 = t <= null;
+                     ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'T' and 'any'.
                           ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
         var foo_r4 = t >= null;
+                     ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'T' and 'any'.
                           ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
         var foo_r5 = t == null;
@@ -104,15 +136,23 @@ comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null
         var foo_r1 = null < t;
                      ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+                     ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'any' and 'T'.
         var foo_r2 = null > t;
                      ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+                     ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any' and 'T'.
         var foo_r3 = null <= t;
                      ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+                     ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'any' and 'T'.
         var foo_r4 = null >= t;
                      ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+                     ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'any' and 'T'.
         var foo_r5 = null == t;
         var foo_r6 = null != t;
         var foo_r7 = null === t;
@@ -150,9 +190,13 @@ comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null
     var r1a6 = null < f;
                ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'any' and '{}'.
     var r1a7 = null < g;
                ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'any' and 'string[]'.
     
     var r1b1 = a < null;
                ~~~~~~~~
@@ -174,9 +218,13 @@ comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null
                    ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     var r1b6 = f < null;
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{}' and 'any'.
                    ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     var r1b7 = g < null;
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'string[]' and 'any'.
                    ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     
@@ -203,9 +251,13 @@ comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null
     var r2a6 = null > f;
                ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+               ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any' and '{}'.
     var r2a7 = null > g;
                ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+               ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any' and 'string[]'.
     
     var r2b1 = a > null;
                ~~~~~~~~
@@ -227,9 +279,13 @@ comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null
                    ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     var r2b6 = f > null;
+               ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{}' and 'any'.
                    ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     var r2b7 = g > null;
+               ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'string[]' and 'any'.
                    ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     
@@ -256,9 +312,13 @@ comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null
     var r3a6 = null <= f;
                ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+               ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'any' and '{}'.
     var r3a7 = null <= g;
                ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+               ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'any' and 'string[]'.
     
     var r3b1 = a <= null;
                ~~~~~~~~~
@@ -280,9 +340,13 @@ comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null
                     ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     var r3b6 = f <= null;
+               ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{}' and 'any'.
                     ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     var r3b7 = g <= null;
+               ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'string[]' and 'any'.
                     ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     
@@ -309,9 +373,13 @@ comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null
     var r4a6 = null >= f;
                ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+               ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'any' and '{}'.
     var r4a7 = null >= g;
                ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
+               ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'any' and 'string[]'.
     
     var r4b1 = a >= null;
                ~~~~~~~~~
@@ -333,9 +401,13 @@ comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS18050: The value 'null
                     ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     var r4b6 = f >= null;
+               ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{}' and 'any'.
                     ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     var r4b7 = g >= null;
+               ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'string[]' and 'any'.
                     ~~~~
 !!! error TS18050: The value 'null' cannot be used here.
     

@@ -18,6 +18,7 @@ comparisonOperatorWithInvalidOperand.ts(34,12): error TS2365: Operator '<' canno
 comparisonOperatorWithInvalidOperand.ts(35,12): error TS2365: Operator '<' cannot be applied to types 'number' and '{}'.
 comparisonOperatorWithInvalidOperand.ts(36,12): error TS2365: Operator '<' cannot be applied to types 'number' and 'string[]'.
 comparisonOperatorWithInvalidOperand.ts(38,12): error TS2365: Operator '<' cannot be applied to types 'number' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(45,12): error TS2365: Operator '<' cannot be applied to types 'Date' and 'Date'.
 comparisonOperatorWithInvalidOperand.ts(46,12): error TS2365: Operator '<' cannot be applied to types 'Date' and 'boolean'.
 comparisonOperatorWithInvalidOperand.ts(50,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'boolean'.
 comparisonOperatorWithInvalidOperand.ts(51,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
@@ -37,6 +38,7 @@ comparisonOperatorWithInvalidOperand.ts(66,12): error TS2365: Operator '>' canno
 comparisonOperatorWithInvalidOperand.ts(67,12): error TS2365: Operator '>' cannot be applied to types 'number' and '{}'.
 comparisonOperatorWithInvalidOperand.ts(68,12): error TS2365: Operator '>' cannot be applied to types 'number' and 'string[]'.
 comparisonOperatorWithInvalidOperand.ts(70,12): error TS2365: Operator '>' cannot be applied to types 'number' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(77,12): error TS2365: Operator '>' cannot be applied to types 'Date' and 'Date'.
 comparisonOperatorWithInvalidOperand.ts(78,12): error TS2365: Operator '>' cannot be applied to types 'Date' and 'boolean'.
 comparisonOperatorWithInvalidOperand.ts(82,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'boolean'.
 comparisonOperatorWithInvalidOperand.ts(83,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'number'.
@@ -56,6 +58,7 @@ comparisonOperatorWithInvalidOperand.ts(98,12): error TS2365: Operator '<=' cann
 comparisonOperatorWithInvalidOperand.ts(99,12): error TS2365: Operator '<=' cannot be applied to types 'number' and '{}'.
 comparisonOperatorWithInvalidOperand.ts(100,12): error TS2365: Operator '<=' cannot be applied to types 'number' and 'string[]'.
 comparisonOperatorWithInvalidOperand.ts(102,12): error TS2365: Operator '<=' cannot be applied to types 'number' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(109,12): error TS2365: Operator '<=' cannot be applied to types 'Date' and 'Date'.
 comparisonOperatorWithInvalidOperand.ts(110,12): error TS2365: Operator '<=' cannot be applied to types 'Date' and 'boolean'.
 comparisonOperatorWithInvalidOperand.ts(114,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'boolean'.
 comparisonOperatorWithInvalidOperand.ts(115,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'number'.
@@ -75,10 +78,11 @@ comparisonOperatorWithInvalidOperand.ts(130,12): error TS2365: Operator '>=' can
 comparisonOperatorWithInvalidOperand.ts(131,12): error TS2365: Operator '>=' cannot be applied to types 'number' and '{}'.
 comparisonOperatorWithInvalidOperand.ts(132,12): error TS2365: Operator '>=' cannot be applied to types 'number' and 'string[]'.
 comparisonOperatorWithInvalidOperand.ts(134,12): error TS2365: Operator '>=' cannot be applied to types 'number' and 'Number'.
+comparisonOperatorWithInvalidOperand.ts(141,12): error TS2365: Operator '>=' cannot be applied to types 'Date' and 'Date'.
 comparisonOperatorWithInvalidOperand.ts(142,12): error TS2365: Operator '>=' cannot be applied to types 'Date' and 'boolean'.
 
 
-==== comparisonOperatorWithInvalidOperand.ts (78 errors) ====
+==== comparisonOperatorWithInvalidOperand.ts (82 errors) ====
     // repro #15506
     // assumes that only valid comparisons are between anys, numbers and strings
     var a: boolean = false;
@@ -164,6 +168,8 @@ comparisonOperatorWithInvalidOperand.ts(142,12): error TS2365: Operator '>=' can
     
     // Date
     var r1c1 = d < d;
+               ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'Date' and 'Date'.
     var r1c2 = d < a;
                ~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types 'Date' and 'boolean'.
@@ -234,6 +240,8 @@ comparisonOperatorWithInvalidOperand.ts(142,12): error TS2365: Operator '>=' can
     
     // Date
     var r2c1 = d > d;
+               ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'Date' and 'Date'.
     var r2c2 = d > a;
                ~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types 'Date' and 'boolean'.
@@ -304,6 +312,8 @@ comparisonOperatorWithInvalidOperand.ts(142,12): error TS2365: Operator '>=' can
     
     // Date
     var r3c1 = d <= d;
+               ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'Date' and 'Date'.
     var r3c2 = d <= a;
                ~~~~~~
 !!! error TS2365: Operator '<=' cannot be applied to types 'Date' and 'boolean'.
@@ -374,6 +384,8 @@ comparisonOperatorWithInvalidOperand.ts(142,12): error TS2365: Operator '>=' can
     
     // Date
     var r4c1 = d >= d;
+               ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'Date' and 'Date'.
     var r4c2 = d >= a;
                ~~~~~~
 !!! error TS2365: Operator '>=' cannot be applied to types 'Date' and 'boolean'.

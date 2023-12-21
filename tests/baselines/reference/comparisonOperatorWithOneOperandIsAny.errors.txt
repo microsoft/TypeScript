@@ -1,40 +1,80 @@
+comparisonOperatorWithOneOperandIsAny.ts(6,18): error TS2365: Operator '<' cannot be applied to types 'T' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(7,18): error TS2365: Operator '>' cannot be applied to types 'T' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(8,18): error TS2365: Operator '<=' cannot be applied to types 'T' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(9,18): error TS2365: Operator '>=' cannot be applied to types 'T' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(15,18): error TS2365: Operator '<' cannot be applied to types 'any' and 'T'.
+comparisonOperatorWithOneOperandIsAny.ts(16,18): error TS2365: Operator '>' cannot be applied to types 'any' and 'T'.
+comparisonOperatorWithOneOperandIsAny.ts(17,18): error TS2365: Operator '<=' cannot be applied to types 'any' and 'T'.
+comparisonOperatorWithOneOperandIsAny.ts(18,18): error TS2365: Operator '>=' cannot be applied to types 'any' and 'T'.
 comparisonOperatorWithOneOperandIsAny.ts(34,12): error TS2365: Operator '<' cannot be applied to types 'any' and 'boolean'.
 comparisonOperatorWithOneOperandIsAny.ts(37,12): error TS2365: Operator '<' cannot be applied to types 'any' and 'void'.
+comparisonOperatorWithOneOperandIsAny.ts(39,12): error TS2365: Operator '<' cannot be applied to types 'any' and '{}'.
+comparisonOperatorWithOneOperandIsAny.ts(40,12): error TS2365: Operator '<' cannot be applied to types 'any' and 'string[]'.
 comparisonOperatorWithOneOperandIsAny.ts(42,12): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'any'.
 comparisonOperatorWithOneOperandIsAny.ts(45,12): error TS2365: Operator '<' cannot be applied to types 'void' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(47,12): error TS2365: Operator '<' cannot be applied to types '{}' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(48,12): error TS2365: Operator '<' cannot be applied to types 'string[]' and 'any'.
 comparisonOperatorWithOneOperandIsAny.ts(51,12): error TS2365: Operator '>' cannot be applied to types 'any' and 'boolean'.
 comparisonOperatorWithOneOperandIsAny.ts(54,12): error TS2365: Operator '>' cannot be applied to types 'any' and 'void'.
+comparisonOperatorWithOneOperandIsAny.ts(56,12): error TS2365: Operator '>' cannot be applied to types 'any' and '{}'.
+comparisonOperatorWithOneOperandIsAny.ts(57,12): error TS2365: Operator '>' cannot be applied to types 'any' and 'string[]'.
 comparisonOperatorWithOneOperandIsAny.ts(59,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 comparisonOperatorWithOneOperandIsAny.ts(62,12): error TS2365: Operator '>' cannot be applied to types 'void' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(64,12): error TS2365: Operator '>' cannot be applied to types '{}' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(65,12): error TS2365: Operator '>' cannot be applied to types 'string[]' and 'any'.
 comparisonOperatorWithOneOperandIsAny.ts(68,12): error TS2365: Operator '<=' cannot be applied to types 'any' and 'boolean'.
 comparisonOperatorWithOneOperandIsAny.ts(71,12): error TS2365: Operator '<=' cannot be applied to types 'any' and 'void'.
+comparisonOperatorWithOneOperandIsAny.ts(73,12): error TS2365: Operator '<=' cannot be applied to types 'any' and '{}'.
+comparisonOperatorWithOneOperandIsAny.ts(74,12): error TS2365: Operator '<=' cannot be applied to types 'any' and 'string[]'.
 comparisonOperatorWithOneOperandIsAny.ts(76,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'any'.
 comparisonOperatorWithOneOperandIsAny.ts(79,12): error TS2365: Operator '<=' cannot be applied to types 'void' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(81,12): error TS2365: Operator '<=' cannot be applied to types '{}' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(82,12): error TS2365: Operator '<=' cannot be applied to types 'string[]' and 'any'.
 comparisonOperatorWithOneOperandIsAny.ts(85,12): error TS2365: Operator '>=' cannot be applied to types 'any' and 'boolean'.
 comparisonOperatorWithOneOperandIsAny.ts(88,12): error TS2365: Operator '>=' cannot be applied to types 'any' and 'void'.
+comparisonOperatorWithOneOperandIsAny.ts(90,12): error TS2365: Operator '>=' cannot be applied to types 'any' and '{}'.
+comparisonOperatorWithOneOperandIsAny.ts(91,12): error TS2365: Operator '>=' cannot be applied to types 'any' and 'string[]'.
 comparisonOperatorWithOneOperandIsAny.ts(93,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'any'.
 comparisonOperatorWithOneOperandIsAny.ts(96,12): error TS2365: Operator '>=' cannot be applied to types 'void' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(98,12): error TS2365: Operator '>=' cannot be applied to types '{}' and 'any'.
+comparisonOperatorWithOneOperandIsAny.ts(99,12): error TS2365: Operator '>=' cannot be applied to types 'string[]' and 'any'.
 
 
-==== comparisonOperatorWithOneOperandIsAny.ts (16 errors) ====
+==== comparisonOperatorWithOneOperandIsAny.ts (40 errors) ====
     var x: any;
     
     enum E { a, b, c }
     
     function foo<T>(t: T) {
         var foo_r1 = t < x;
+                     ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'T' and 'any'.
         var foo_r2 = t > x;
+                     ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'T' and 'any'.
         var foo_r3 = t <= x;
+                     ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'T' and 'any'.
         var foo_r4 = t >= x;
+                     ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'T' and 'any'.
         var foo_r5 = t == x;
         var foo_r6 = t != x;
         var foo_r7 = t === x;
         var foo_r8 = t !== x;
     
         var foo_r1 = x < t;
+                     ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'any' and 'T'.
         var foo_r2 = x > t;
+                     ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any' and 'T'.
         var foo_r3 = x <= t;
+                     ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'any' and 'T'.
         var foo_r4 = x >= t;
+                     ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'any' and 'T'.
         var foo_r5 = x == t;
         var foo_r6 = x != t;
         var foo_r7 = x === t;
@@ -60,7 +100,11 @@ comparisonOperatorWithOneOperandIsAny.ts(96,12): error TS2365: Operator '>=' can
 !!! error TS2365: Operator '<' cannot be applied to types 'any' and 'void'.
     var r1a5 = x < e;
     var r1a6 = x < f;
+               ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'any' and '{}'.
     var r1a7 = x < g;
+               ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'any' and 'string[]'.
     
     var r1b1 = a < x;
                ~~~~~
@@ -72,7 +116,11 @@ comparisonOperatorWithOneOperandIsAny.ts(96,12): error TS2365: Operator '>=' can
 !!! error TS2365: Operator '<' cannot be applied to types 'void' and 'any'.
     var r1b5 = e < x;
     var r1b6 = f < x;
+               ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{}' and 'any'.
     var r1b7 = g < x;
+               ~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'string[]' and 'any'.
     
     // operator >
     var r2a1 = x > a;
@@ -85,7 +133,11 @@ comparisonOperatorWithOneOperandIsAny.ts(96,12): error TS2365: Operator '>=' can
 !!! error TS2365: Operator '>' cannot be applied to types 'any' and 'void'.
     var r2a5 = x > e;
     var r2a6 = x > f;
+               ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any' and '{}'.
     var r2a7 = x > g;
+               ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any' and 'string[]'.
     
     var r2b1 = a > x;
                ~~~~~
@@ -97,7 +149,11 @@ comparisonOperatorWithOneOperandIsAny.ts(96,12): error TS2365: Operator '>=' can
 !!! error TS2365: Operator '>' cannot be applied to types 'void' and 'any'.
     var r2b5 = e > x;
     var r2b6 = f > x;
+               ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{}' and 'any'.
     var r2b7 = g > x;
+               ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'string[]' and 'any'.
     
     // operator <=
     var r3a1 = x <= a;
@@ -110,7 +166,11 @@ comparisonOperatorWithOneOperandIsAny.ts(96,12): error TS2365: Operator '>=' can
 !!! error TS2365: Operator '<=' cannot be applied to types 'any' and 'void'.
     var r3a5 = x <= e;
     var r3a6 = x <= f;
+               ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'any' and '{}'.
     var r3a7 = x <= g;
+               ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'any' and 'string[]'.
     
     var r3b1 = a <= x;
                ~~~~~~
@@ -122,7 +182,11 @@ comparisonOperatorWithOneOperandIsAny.ts(96,12): error TS2365: Operator '>=' can
 !!! error TS2365: Operator '<=' cannot be applied to types 'void' and 'any'.
     var r3b5 = e <= x;
     var r3b6 = f <= x;
+               ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types '{}' and 'any'.
     var r3b7 = g <= x;
+               ~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'string[]' and 'any'.
     
     // operator >=
     var r4a1 = x >= a;
@@ -135,7 +199,11 @@ comparisonOperatorWithOneOperandIsAny.ts(96,12): error TS2365: Operator '>=' can
 !!! error TS2365: Operator '>=' cannot be applied to types 'any' and 'void'.
     var r4a5 = x >= e;
     var r4a6 = x >= f;
+               ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'any' and '{}'.
     var r4a7 = x >= g;
+               ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'any' and 'string[]'.
     
     var r4b1 = a >= x;
                ~~~~~~
@@ -147,7 +215,11 @@ comparisonOperatorWithOneOperandIsAny.ts(96,12): error TS2365: Operator '>=' can
 !!! error TS2365: Operator '>=' cannot be applied to types 'void' and 'any'.
     var r4b5 = e >= x;
     var r4b6 = f >= x;
+               ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types '{}' and 'any'.
     var r4b7 = g >= x;
+               ~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'string[]' and 'any'.
     
     // operator ==
     var r5a1 = x == a;

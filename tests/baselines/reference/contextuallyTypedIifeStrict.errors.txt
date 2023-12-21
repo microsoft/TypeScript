@@ -1,10 +1,9 @@
 contextuallyTypedIifeStrict.ts(14,10): error TS18048: 'j' is possibly 'undefined'.
 contextuallyTypedIifeStrict.ts(15,10): error TS18048: 'k' is possibly 'undefined'.
 contextuallyTypedIifeStrict.ts(16,17): error TS18048: 'o' is possibly 'undefined'.
-contextuallyTypedIifeStrict.ts(20,40): error TS2365: Operator '>' cannot be applied to types 'never' and 'number'.
 
 
-==== contextuallyTypedIifeStrict.ts (4 errors) ====
+==== contextuallyTypedIifeStrict.ts (3 errors) ====
     // arrow
     (jake => { })("build");
     // function expression
@@ -31,8 +30,6 @@ contextuallyTypedIifeStrict.ts(20,40): error TS2365: Operator '>' cannot be appl
     ((...numbers) => numbers.every(n => n > 0))(5,6,7);
     ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
     ((...noNumbers) => noNumbers.some(n => n > 0))();
-                                           ~~~~~
-!!! error TS2365: Operator '>' cannot be applied to types 'never' and 'number'.
     ((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
     // destructuring parameters (with defaults too!)
     (({ q }) => q)({ q : 13 });

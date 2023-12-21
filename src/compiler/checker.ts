@@ -20049,24 +20049,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isTypeComparableTo(type1, type2) || isTypeComparableTo(type2, type1);
     }
 
-    function checkTypeComparableWithLessOrGreaterThanOperator(valueType: Type): boolean {
-        const t = valueType.flags;
-        return !!(
-            (t & TypeFlags.Number ||
-                t & TypeFlags.NumberLiteral ||
-                t & TypeFlags.BigInt ||
-                t & TypeFlags.BigIntLiteral ||
-                t & TypeFlags.String ||
-                t & TypeFlags.StringLiteral ||
-                t & TypeFlags.Any ||
-                t & TypeFlags.TypeParameter ||
-                t & TypeFlags.Object ||
-                t & TypeFlags.Intersection ||
-                t & TypeFlags.Union) &&
-            !(t & TypeFlags.Boolean)
-        );
-    }
-
     function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined, errorOutputObject?: { errors?: Diagnostic[]; }): boolean {
         return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain, errorOutputObject);
     }
@@ -38331,7 +38313,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(leftType, left));
                     rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
                     reportOperatorErrorUnless((left, right) => {
-                        if (!checkTypeComparableWithLessOrGreaterThanOperator(left) || !checkTypeComparableWithLessOrGreaterThanOperator(right)) {
+                        const isLeftTypeComparable = !!(
+                            isTypeAssignableTo(left, numberOrBigIntType) ||
+                            isTypeAssignableTo(left, stringType) ||
+                            (isTypeAssignableTo(left, anyType) &&
+                                !isTypeAssignableTo(left, voidType) &&
+                                !isTypeAssignableTo(left, booleanType) &&
+                                !isTypeAssignableTo(left, emptyGenericType) &&
+                                !(left.flags & TypeFlags.Object))
+                        );
+
+                        const isRightTypeComparable = !!(
+                            isTypeAssignableTo(right, numberOrBigIntType) ||
+                            isTypeAssignableTo(right, stringType) ||
+                            (isTypeAssignableTo(right, anyType) &&
+                                !isTypeAssignableTo(right, voidType) &&
+                                !isTypeAssignableTo(right, booleanType) &&
+                                !isTypeAssignableTo(right, emptyGenericType) &&
+                                !(right.flags & TypeFlags.Object))
+                        );
+
+                        if (!isLeftTypeComparable || !isRightTypeComparable) {
                             return false;
                         }
 

@@ -4,48 +4,56 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(37,12): err
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(38,12): error TS2365: Operator '<' cannot be applied to types 'new () => Base' and 'new () => C'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(39,12): error TS2365: Operator '<' cannot be applied to types 'new (a?: Base) => Base' and 'new (a?: C) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(40,12): error TS2365: Operator '<' cannot be applied to types 'new (...a: Base[]) => Base' and 'new (...a: C[]) => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(41,12): error TS2365: Operator '<' cannot be applied to types 'new <T>(t: T) => T' and 'new <T>(t: T[]) => T'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(43,12): error TS2365: Operator '<' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(44,12): error TS2365: Operator '<' cannot be applied to types 'new (a: string) => Base' and 'new (a: number, b: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(45,12): error TS2365: Operator '<' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(46,12): error TS2365: Operator '<' cannot be applied to types 'new () => C' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(47,12): error TS2365: Operator '<' cannot be applied to types 'new (a?: C) => Base' and 'new (a?: Base) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(48,12): error TS2365: Operator '<' cannot be applied to types 'new (...a: C[]) => Base' and 'new (...a: Base[]) => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(49,12): error TS2365: Operator '<' cannot be applied to types 'new <T>(t: T[]) => T' and 'new <T>(t: T) => T'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(52,12): error TS2365: Operator '>' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(53,12): error TS2365: Operator '>' cannot be applied to types 'new (a: number, b: string) => Base' and 'new (a: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(54,12): error TS2365: Operator '>' cannot be applied to types 'new (a: Base, b: string) => Base' and 'new (a: Derived, b: Base) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(55,12): error TS2365: Operator '>' cannot be applied to types 'new () => Base' and 'new () => C'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(56,12): error TS2365: Operator '>' cannot be applied to types 'new (a?: Base) => Base' and 'new (a?: C) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(57,12): error TS2365: Operator '>' cannot be applied to types 'new (...a: Base[]) => Base' and 'new (...a: C[]) => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(58,12): error TS2365: Operator '>' cannot be applied to types 'new <T>(t: T) => T' and 'new <T>(t: T[]) => T'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(60,12): error TS2365: Operator '>' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(61,12): error TS2365: Operator '>' cannot be applied to types 'new (a: string) => Base' and 'new (a: number, b: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(62,12): error TS2365: Operator '>' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(63,12): error TS2365: Operator '>' cannot be applied to types 'new () => C' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(64,12): error TS2365: Operator '>' cannot be applied to types 'new (a?: C) => Base' and 'new (a?: Base) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(65,12): error TS2365: Operator '>' cannot be applied to types 'new (...a: C[]) => Base' and 'new (...a: Base[]) => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(66,12): error TS2365: Operator '>' cannot be applied to types 'new <T>(t: T[]) => T' and 'new <T>(t: T) => T'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(69,12): error TS2365: Operator '<=' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(70,12): error TS2365: Operator '<=' cannot be applied to types 'new (a: number, b: string) => Base' and 'new (a: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(71,12): error TS2365: Operator '<=' cannot be applied to types 'new (a: Base, b: string) => Base' and 'new (a: Derived, b: Base) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(72,12): error TS2365: Operator '<=' cannot be applied to types 'new () => Base' and 'new () => C'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(73,12): error TS2365: Operator '<=' cannot be applied to types 'new (a?: Base) => Base' and 'new (a?: C) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(74,12): error TS2365: Operator '<=' cannot be applied to types 'new (...a: Base[]) => Base' and 'new (...a: C[]) => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(75,12): error TS2365: Operator '<=' cannot be applied to types 'new <T>(t: T) => T' and 'new <T>(t: T[]) => T'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(77,12): error TS2365: Operator '<=' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(78,12): error TS2365: Operator '<=' cannot be applied to types 'new (a: string) => Base' and 'new (a: number, b: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(79,12): error TS2365: Operator '<=' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(80,12): error TS2365: Operator '<=' cannot be applied to types 'new () => C' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(81,12): error TS2365: Operator '<=' cannot be applied to types 'new (a?: C) => Base' and 'new (a?: Base) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(82,12): error TS2365: Operator '<=' cannot be applied to types 'new (...a: C[]) => Base' and 'new (...a: Base[]) => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(83,12): error TS2365: Operator '<=' cannot be applied to types 'new <T>(t: T[]) => T' and 'new <T>(t: T) => T'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(86,12): error TS2365: Operator '>=' cannot be applied to types '{ fn(): Base; }' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(87,12): error TS2365: Operator '>=' cannot be applied to types 'new (a: number, b: string) => Base' and 'new (a: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(88,12): error TS2365: Operator '>=' cannot be applied to types 'new (a: Base, b: string) => Base' and 'new (a: Derived, b: Base) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(89,12): error TS2365: Operator '>=' cannot be applied to types 'new () => Base' and 'new () => C'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(90,12): error TS2365: Operator '>=' cannot be applied to types 'new (a?: Base) => Base' and 'new (a?: C) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(91,12): error TS2365: Operator '>=' cannot be applied to types 'new (...a: Base[]) => Base' and 'new (...a: C[]) => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(92,12): error TS2365: Operator '>=' cannot be applied to types 'new <T>(t: T) => T' and 'new <T>(t: T[]) => T'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(94,12): error TS2365: Operator '>=' cannot be applied to types 'new () => Base' and '{ fn(): Base; }'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(95,12): error TS2365: Operator '>=' cannot be applied to types 'new (a: string) => Base' and 'new (a: number, b: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(96,12): error TS2365: Operator '>=' cannot be applied to types 'new (a: Derived, b: Base) => Base' and 'new (a: Base, b: string) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(97,12): error TS2365: Operator '>=' cannot be applied to types 'new () => C' and 'new () => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(98,12): error TS2365: Operator '>=' cannot be applied to types 'new (a?: C) => Base' and 'new (a?: Base) => Base'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(99,12): error TS2365: Operator '>=' cannot be applied to types 'new (...a: C[]) => Base' and 'new (...a: Base[]) => Base'.
+comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(100,12): error TS2365: Operator '>=' cannot be applied to types 'new <T>(t: T[]) => T' and 'new <T>(t: T) => T'.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(103,12): error TS2367: This comparison appears to be unintentional because the types '{ fn(): Base; }' and 'new () => Base' have no overlap.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(104,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: number, b: string) => Base' and 'new (a: string) => Base' have no overlap.
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(105,12): error TS2367: This comparison appears to be unintentional because the types 'new (a: Base, b: string) => Base' and 'new (a: Derived, b: Base) => Base' have no overlap.
@@ -96,7 +104,7 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(166,12): er
 comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(167,12): error TS2367: This comparison appears to be unintentional because the types 'new (...a: C[]) => Base' and 'new (...a: Base[]) => Base' have no overlap.
 
 
-==== comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts (96 errors) ====
+==== comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts (104 errors) ====
     class Base {
         public a: string;
     }
@@ -150,6 +158,8 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(167,12): er
                ~~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types 'new (...a: Base[]) => Base' and 'new (...a: C[]) => Base'.
     var r1a7 = a7 < b7;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'new <T>(t: T) => T' and 'new <T>(t: T[]) => T'.
     
     var r1b1 = b1 < a1;
                ~~~~~~~
@@ -170,6 +180,8 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(167,12): er
                ~~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types 'new (...a: C[]) => Base' and 'new (...a: Base[]) => Base'.
     var r1b7 = b7 < a7;
+               ~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'new <T>(t: T[]) => T' and 'new <T>(t: T) => T'.
     
     // operator >
     var r2a1 = a1 > b1;
@@ -191,6 +203,8 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(167,12): er
                ~~~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types 'new (...a: Base[]) => Base' and 'new (...a: C[]) => Base'.
     var r2a7 = a7 > b7;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'new <T>(t: T) => T' and 'new <T>(t: T[]) => T'.
     
     var r2b1 = b1 > a1;
                ~~~~~~~
@@ -211,6 +225,8 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(167,12): er
                ~~~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types 'new (...a: C[]) => Base' and 'new (...a: Base[]) => Base'.
     var r2b7 = b7 > a7;
+               ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'new <T>(t: T[]) => T' and 'new <T>(t: T) => T'.
     
     // operator <=
     var r3a1 = a1 <= b1;
@@ -232,6 +248,8 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(167,12): er
                ~~~~~~~~
 !!! error TS2365: Operator '<=' cannot be applied to types 'new (...a: Base[]) => Base' and 'new (...a: C[]) => Base'.
     var r3a7 = a7 <= b7;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'new <T>(t: T) => T' and 'new <T>(t: T[]) => T'.
     
     var r3b1 = b1 <= a1;
                ~~~~~~~~
@@ -252,6 +270,8 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(167,12): er
                ~~~~~~~~
 !!! error TS2365: Operator '<=' cannot be applied to types 'new (...a: C[]) => Base' and 'new (...a: Base[]) => Base'.
     var r3b7 = b7 <= a7;
+               ~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'new <T>(t: T[]) => T' and 'new <T>(t: T) => T'.
     
     // operator >=
     var r4a1 = a1 >= b1;
@@ -273,6 +293,8 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(167,12): er
                ~~~~~~~~
 !!! error TS2365: Operator '>=' cannot be applied to types 'new (...a: Base[]) => Base' and 'new (...a: C[]) => Base'.
     var r4a7 = a7 >= b7;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'new <T>(t: T) => T' and 'new <T>(t: T[]) => T'.
     
     var r4b1 = b1 >= a1;
                ~~~~~~~~
@@ -293,6 +315,8 @@ comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.ts(167,12): er
                ~~~~~~~~
 !!! error TS2365: Operator '>=' cannot be applied to types 'new (...a: C[]) => Base' and 'new (...a: Base[]) => Base'.
     var r4b7 = b7 >= a7;
+               ~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'new <T>(t: T[]) => T' and 'new <T>(t: T) => T'.
     
     // operator ==
     var r5a1 = a1 == b1;

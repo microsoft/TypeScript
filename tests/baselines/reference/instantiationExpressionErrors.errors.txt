@@ -1,7 +1,9 @@
 instantiationExpressionErrors.ts(7,13): error TS1477: An instantiation expression cannot be followed by a property access.
 instantiationExpressionErrors.ts(8,13): error TS1477: An instantiation expression cannot be followed by a property access.
+instantiationExpressionErrors.ts(13,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'any'.
 instantiationExpressionErrors.ts(13,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
 instantiationExpressionErrors.ts(13,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
+instantiationExpressionErrors.ts(18,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'any'.
 instantiationExpressionErrors.ts(18,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
 instantiationExpressionErrors.ts(18,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
 instantiationExpressionErrors.ts(18,29): error TS1109: Expression expected.
@@ -17,7 +19,7 @@ instantiationExpressionErrors.ts(45,12): error TS2365: Operator '<' cannot be ap
 instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
 
 
-==== instantiationExpressionErrors.ts (17 errors) ====
+==== instantiationExpressionErrors.ts (19 errors) ====
     declare let f: { <T>(): T, g<U>(): U };
     
     // Type arguments in member expressions
@@ -35,6 +37,8 @@ instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be ap
     // `[` is an expression starter and cannot immediately follow a type argument list
     
     const a6 = f<number>['g'];  // Error
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'any'.
                ~~~~~~~~~~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
                  ~~~~~~
@@ -44,6 +48,8 @@ instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be ap
     // An `<` cannot immediately follow a type argument list
     
     const a8 = f<number><number>;  // Relational operator error
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'any'.
                ~~~~~~~~~~~~~~~~~
 !!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
                  ~~~~~~
