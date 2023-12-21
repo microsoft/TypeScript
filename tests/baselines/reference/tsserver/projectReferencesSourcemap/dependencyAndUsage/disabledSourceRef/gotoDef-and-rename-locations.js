@@ -821,9 +821,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts.map: *new*
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map: *new*
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1590,9 +1590,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1667,9 +1667,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1742,9 +1742,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1813,11 +1813,11 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
+/user/username/projects/myproject/decls/FnS.d.ts.map:
+  {}
 /user/username/projects/myproject/decls/fns.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map:
-  {}
-/user/username/projects/myproject/dependency/fns.ts: *new*
+/user/username/projects/myproject/dependency/FnS.ts: *new*
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1884,11 +1884,11 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
+/user/username/projects/myproject/decls/FnS.d.ts.map:
+  {}
 /user/username/projects/myproject/decls/fns.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
+/user/username/projects/myproject/dependency/FnS.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -2012,11 +2012,11 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
+/user/username/projects/myproject/decls/FnS.d.ts.map:
+  {}
 /user/username/projects/myproject/decls/fns.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map:
-  {}
-/user/username/projects/myproject/dependency/fns.ts:
+/user/username/projects/myproject/dependency/FnS.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}

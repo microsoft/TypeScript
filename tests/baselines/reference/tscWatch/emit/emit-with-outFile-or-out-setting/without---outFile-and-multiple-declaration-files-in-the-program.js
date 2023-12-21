@@ -81,7 +81,7 @@ PolledWatches::
 FsWatches::
 /a/b/dependencies/file2.d.ts: *new*
   {}
-/a/b/output/anotherdependency/file1.d.ts: *new*
+/a/b/output/AnotherDependency/file1.d.ts: *new*
   {}
 /a/b/project/src/main.ts: *new*
   {}

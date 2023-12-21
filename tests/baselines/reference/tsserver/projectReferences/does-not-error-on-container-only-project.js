@@ -768,7 +768,7 @@ declare namespace container {
 
 
 PolledWatches::
-/user/username/projects/container/compositeexec/node_modules/@types: *new*
+/user/username/projects/container/compositeExec/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/container/exec/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -782,9 +782,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/container/compositeexec/index.ts: *new*
+/user/username/projects/container/compositeExec/index.ts: *new*
   {}
-/user/username/projects/container/compositeexec/tsconfig.json: *new*
+/user/username/projects/container/compositeExec/tsconfig.json: *new*
   {}
 /user/username/projects/container/exec/index.ts: *new*
   {}
