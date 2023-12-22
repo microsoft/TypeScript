@@ -195,7 +195,6 @@ import {
     isOmittedExpression,
     isOptionalChain,
     isOptionalChainRoot,
-    isOuterExpression,
     isOutermostOptionalChain,
     isParameterDeclaration,
     isParameterPropertyDeclaration,
@@ -316,6 +315,7 @@ import {
     unreachableCodeIsError,
     unusedLabelIsError,
     VariableDeclaration,
+    walkUpParenthesizedExpressions,
     WhileStatement,
     WithStatement,
 } from "./_namespaces/ts";
@@ -1974,38 +1974,36 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const postExpressionLabel = createBranchLabel();
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
+        if (isInReturnStatement) {
+            const expr = skipParentheses(node.whenTrue);
+            (expr as Node as FlowContainer).flowNode = currentFlow;
+        }
         bind(node.questionToken);
         bind(node.whenTrue);
-        if (isInReturnStatement) {
-            (node.whenTrue as Node as FlowContainer).flowNode = currentFlow;
-        }
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
+        if (isInReturnStatement) {
+            const expr = skipParentheses(node.whenFalse);
+            (expr as Node as FlowContainer).flowNode = currentFlow;
+        }
         bind(node.colonToken);
         bind(node.whenFalse);
-        if (isInReturnStatement) {
-            (node.whenFalse as Node as FlowContainer).flowNode = currentFlow;
-        }
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(postExpressionLabel);
     }
 
     function isConditionalExpressionInReturnStatement(node: ConditionalExpression) {
-        const returnStmt = findAncestor(node.parent, isReturnStatement);
-        if (!returnStmt) {
-            return false;
-        }
         let n: Node = node;
-        while (n !== returnStmt) {
+        while (n) {
+            if (isReturnStatement(n)) {
+                return true;
+            }
             if (!isConditionalExpression(n)) {
                 return false;
             }
-            n = n.parent;
-            while (isOuterExpression(n)) { // >> TODO: I think we should only skip parentheses
-                n = n.parent;
-            }
+            n = walkUpParenthesizedExpressions(n.parent);
         }
-        return true;
+        return false;
     }
 
     function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {

@@ -43425,25 +43425,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
                     const queryTypeParameters = typeParameters?.filter(isQueryTypeParameter);
                     if (queryTypeParameters) {
-                        const narrowParent = expr
-                            ? isConditionalExpression(expr.parent)
-                                ? expr
-                                : expr.parent
-                            : node;
+                        // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
+                        // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
+                        // `function foo(...) {
+                        //       return cond ? |expr| : ...
+                        // }`
+                        // - When the return expression is undefined, or it is defined and it is not one of the branches of a conditional expression, then the position is the return statement itself:
+                        // `function foo(...) {
+                        //       |return expr;|
+                        // }`
+                        // or
+                        // `function foo(...) {
+                        //       |return;|
+                        // }`
+                        const narrowPosition = expr && isConditionalExpression(walkUpParenthesizedExpressions(expr.parent)) ?
+                            expr : node;
                         const narrowed: [TypeParameter, Type][] = mapDefined(queryTypeParameters, tp => {
                             const narrowReference = factory.cloneNode(tp.exprName); // Construct a reference that can be narrowed.
                             // Set the symbol of the synthetic reference.
                             // This allows us to get the type of the reference at a location where the reference is possibly shadowed.
                             getNodeLinks(narrowReference).resolvedSymbol = getResolvedSymbol(tp.exprName);
-                            setParent(narrowReference, narrowParent.parent);
+                            setParent(narrowReference, narrowPosition.parent);
                             setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
-                            narrowReference.flowNode = (narrowParent as HasFlowNode).flowNode;
-                            // >> TODO: this call to checkExpression might report errors,
-                            // >> and so might throw when trying to get span for fakeName.
-                            // >> TODO: also, it shouldn't throw errors. Maybe we can reuse `CheckMode.TypeOnly`?
-                            // const exprType = checkExpression(narrowReference);
-                            // We don't want to emit errors when getting the type.
-                            const exprType = getTypeOfExpression(narrowReference); // >> TODO: that doesn't work for qualified names
+                            narrowReference.flowNode = (narrowPosition as HasFlowNode).flowNode;
+                            const exprType = getTypeOfExpression(narrowReference);
                             // >> TODO: is there a better way of detecting that narrowing will be useless?
                             if (getConstraintOfTypeParameter(tp)) {
                                 const narrowableConstraintType = mapType(tp.constraint!, getBaseConstraintOrType);
