@@ -2,3 +2,4 @@
 /// <reference lib="esnext.intl" />
 /// <reference lib="esnext.decorators" />
 /// <reference lib="esnext.disposable" />
+/// <reference lib="esnext.promise" />

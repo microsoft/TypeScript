@@ -137,6 +137,7 @@ import {
     isBlock,
     isBlockOrCatchScoped,
     IsBlockScopedContainer,
+    isBooleanLiteral,
     isCallExpression,
     isClassStaticBlockDeclaration,
     isConditionalExpression,
@@ -174,6 +175,7 @@ import {
     isJSDocEnumTag,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
+    isJSDocTypeAssertion,
     isJsonSourceFile,
     isJsxNamespacedName,
     isLeftHandSideExpression,
@@ -1226,6 +1228,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.CallExpression:
                 return hasNarrowableArgument(expr as CallExpression);
             case SyntaxKind.ParenthesizedExpression:
+                if (isJSDocTypeAssertion(expr)) {
+                    return false;
+                }
+                // fallthrough
             case SyntaxKind.NonNullExpression:
                 return isNarrowingExpression((expr as ParenthesizedExpression | NonNullExpression).expression);
             case SyntaxKind.BinaryExpression:
@@ -1283,7 +1289,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.EqualsEqualsEqualsToken:
             case SyntaxKind.ExclamationEqualsEqualsToken:
                 return isNarrowableOperand(expr.left) || isNarrowableOperand(expr.right) ||
-                    isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right);
+                    isNarrowingTypeofOperands(expr.right, expr.left) || isNarrowingTypeofOperands(expr.left, expr.right) ||
+                    (isBooleanLiteral(expr.right) && isNarrowingExpression(expr.left) || isBooleanLiteral(expr.left) && isNarrowingExpression(expr.right));
             case SyntaxKind.InstanceOfKeyword:
                 return isNarrowableOperand(expr.left);
             case SyntaxKind.InKeyword:
@@ -1684,11 +1691,15 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function bindCaseBlock(node: CaseBlock): void {
         const clauses = node.clauses;
-        const isNarrowingSwitch = isNarrowingExpression(node.parent.expression);
+        const isNarrowingSwitch = node.parent.expression.kind === SyntaxKind.TrueKeyword || isNarrowingExpression(node.parent.expression);
         let fallthroughFlow = unreachableFlow;
+
         for (let i = 0; i < clauses.length; i++) {
             const clauseStart = i;
             while (!clauses[i].statements.length && i + 1 < clauses.length) {
+                if (fallthroughFlow === unreachableFlow) {
+                    currentFlow = preSwitchCaseFlow!;
+                }
                 bind(clauses[i]);
                 i++;
             }
@@ -3325,7 +3336,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
         // Class declarations in Typescript do not allow property declarations
-        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) || lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer);
+        const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) || lookupSymbolForPropertyAccess(node.left.expression, container);
         if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
             return;
         }
@@ -3444,7 +3455,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
-        let namespaceSymbol = lookupSymbolForPropertyAccess(name, container) || lookupSymbolForPropertyAccess(name, blockScopeContainer);
+        let namespaceSymbol = lookupSymbolForPropertyAccess(name, blockScopeContainer) || lookupSymbolForPropertyAccess(name, container);
         const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
         namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
         bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);

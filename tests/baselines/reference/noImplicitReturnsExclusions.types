@@ -129,3 +129,98 @@ function f16(b: boolean) {  // Error
 >b : false
 }
 
+declare class HistoryItem {
+>HistoryItem : HistoryItem
+
+  input: {
+>input : { location: {    uri: string;}; }
+
+    location: {
+>location : { uri: string; }
+
+      uri: string;
+>uri : string
+
+    };
+  };
+}
+
+interface Thenable<T> {
+  then<TResult>(
+>then : { <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => TResult | Thenable<TResult>) | undefined): Thenable<TResult>; <TResult_1>(onfulfilled?: ((value: T) => TResult_1 | Thenable<TResult_1>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult_1>; }
+
+    onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+>onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
+>value : T
+
+    onrejected?: (reason: any) => TResult | Thenable<TResult>
+>onrejected : ((reason: any) => TResult | Thenable<TResult>) | undefined
+>reason : any
+
+  ): Thenable<TResult>;
+  then<TResult>(
+>then : { <TResult_1>(onfulfilled?: ((value: T) => TResult_1 | Thenable<TResult_1>) | undefined, onrejected?: ((reason: any) => TResult_1 | Thenable<TResult_1>) | undefined): Thenable<TResult_1>; <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult>; }
+
+    onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+>onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
+>value : T
+
+    onrejected?: (reason: any) => void
+>onrejected : ((reason: any) => void) | undefined
+>reason : any
+
+  ): Thenable<TResult>;
+}
+
+export declare function executeCommand<T = unknown>(
+>executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
+
+  command: string,
+>command : string
+
+  ...rest: any[]
+>rest : any[]
+
+): Thenable<T>;
+
+export declare function registerCommand(
+>registerCommand : (command: string, callback: (...args: any[]) => any, thisArg?: any) => void
+
+  command: string,
+>command : string
+
+  callback: (...args: any[]) => any,
+>callback : (...args: any[]) => any
+>args : any[]
+
+  thisArg?: any
+>thisArg : any
+
+): void;
+
+registerCommand("_references-view.showHistoryItem", async (item) => { // Error, contextual return type of Promise<unknown>
+>registerCommand("_references-view.showHistoryItem", async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }}) : void
+>registerCommand : (command: string, callback: (...args: any[]) => any, thisArg?: any) => void
+>"_references-view.showHistoryItem" : "_references-view.showHistoryItem"
+>async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }} : (item: any) => Promise<unknown>
+>item : any
+
+  if (item instanceof HistoryItem) {
+>item instanceof HistoryItem : boolean
+>item : any
+>HistoryItem : typeof HistoryItem
+
+    return executeCommand("vscode.open", item.input.location.uri);
+>executeCommand("vscode.open", item.input.location.uri) : Thenable<unknown>
+>executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
+>"vscode.open" : "vscode.open"
+>item.input.location.uri : string
+>item.input.location : { uri: string; }
+>item.input : { location: { uri: string; }; }
+>item : HistoryItem
+>input : { location: { uri: string; }; }
+>location : { uri: string; }
+>uri : string
+  }
+});
+

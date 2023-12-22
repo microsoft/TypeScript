@@ -1,0 +1,91 @@
+dependentReturnType2.ts(61,13): error TS2322: Type 'undefined' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>'.
+dependentReturnType2.ts(78,16): error TS2536: Type 'I' cannot be used to index type '{ [s: string]: any; }'.
+
+
+==== dependentReturnType2.ts (2 errors) ====
+    // ---5
+    type SettingComposedValue<T extends SettingValue = SettingValue> = { key: string; value: T };
+    type SettingCallback = (key: string, value: SettingValue, initialLoad?: boolean) => void;
+    
+    type SettingValue = object;
+    declare const Meteor: { settings: { [s: string]: any } };
+    declare const _: { isRegExp(x: unknown): x is RegExp; };
+    
+    type HelperCond<T, A, R1, B, R2> =
+        T extends A
+            ? R1
+            : T extends B
+                ? R2
+                : (R1 | R2);
+    
+    declare function takesRegExp(x: RegExp): void;
+    declare function takesString(x: string): void;
+    
+    class NewSettingsBase {
+        public newGet<C extends SettingCallback | undefined, I extends string | RegExp, T extends SettingValue = SettingValue>(
+            _id: I,
+            callback?: C,
+        ): HelperCond<C,
+            SettingCallback, void,
+            undefined, HelperCond<I,
+                string, T | undefined,
+                RegExp, SettingComposedValue<T>[]>> {
+            if (callback !== undefined) {
+                // this.onload(_id, callback);
+                if (!Meteor.settings) {
+                    return;
+                }
+                if (_id === '*') {
+                    return Object.keys(Meteor.settings).forEach((key) => {
+                        const value = Meteor.settings[key];
+                        callback(key, value);
+                    });
+                }
+                if (_.isRegExp(_id) && Meteor.settings) {
+                    return Object.keys(Meteor.settings).forEach((key) => {
+                        if (!_id.test(key)) {
+                            return;
+                        }
+                        const value = Meteor.settings[key];
+                        callback(key, value);
+                    });
+                }
+    
+                if (typeof _id === 'string') {
+                    const value = Meteor.settings[_id];
+                    if (value != null) {
+                        callback(_id, Meteor.settings[_id]);
+                    }
+                    return;
+                }
+    
+                return; // Needed to add this for exhaustiveness
+            }
+    
+            if (!Meteor.settings) { // Wrong: we don't know that _id is string here, cannot return undefined
+                return undefined;
+                ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>'.
+            }
+    
+            if (_.isRegExp(_id)) {
+                takesRegExp(_id);
+                return Object.keys(Meteor.settings).reduce((items: SettingComposedValue<T>[], key) => {
+                    const value = Meteor.settings[key];
+                    if (_id.test(key)) {
+                        items.push({
+                            key,
+                            value,
+                        });
+                    }
+                    return items;
+                }, []);
+            }
+    
+            return Meteor.settings?.[_id]; // The indexing doesn't work
+                   ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'I' cannot be used to index type '{ [s: string]: any; }'.
+        }
+    }
+    
+    declare function takesRegExp(x: RegExp): void;
