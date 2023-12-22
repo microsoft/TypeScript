@@ -382,7 +382,6 @@ import {
     hasEffectiveReadonlyModifier,
     HasExpressionInitializer,
     hasExtension,
-    HasFlowNode,
     HasIllegalDecorators,
     HasIllegalModifiers,
     HasInitializer,
@@ -18742,7 +18741,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getNarrowConditionalType(root: ConditionalRoot, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         let result;
-        let originalRoot = root;
+        const originalRoot = root;
 
         // We loop here for an immediately nested conditional type in the false position, effectively treating
         // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
@@ -44125,7 +44124,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const outerTypeParameters = getOuterTypeParameters(container!, /*includeThisTypes*/ false);
                     const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
                     const queryTypeParameters = typeParameters?.filter(isQueryTypeParameter);
-                    if (queryTypeParameters) {
+                    if (queryTypeParameters && queryTypeParameters.length) {
                         // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
                         // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
                         // `function foo(...) {
@@ -44148,7 +44147,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             getNodeLinks(narrowReference).resolvedSymbol = getResolvedSymbol(tp.exprName);
                             setParent(narrowReference, narrowPosition.parent);
                             setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
-                            narrowReference.flowNode = (narrowPosition as HasFlowNode).flowNode;
+                            narrowReference.flowNode = narrowPosition.flowNode!;
                             const exprType = getTypeOfExpression(narrowReference);
                             // >> TODO: is there a better way of detecting that narrowing will be useless?
                             if (getConstraintOfTypeParameter(tp)) {
@@ -44215,11 +44214,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (typeParameter.exprName) {
             return true;
         }
-        if (typeParameter.exprName === null) {
+        if (typeParameter.exprName === null) { // eslint-disable-line no-null/no-null
             return false;
         }
 
-        typeParameter.exprName = null;
+        typeParameter.exprName = null; // eslint-disable-line no-null/no-null
         // Type parameter should have a type parameter declaration because it is not a `this` type parameter, and it has a symbol.
         const declaration = getDeclarationOfKind(typeParameter.symbol, SyntaxKind.TypeParameter)!;
         const owner = getTypeParameterOwner(declaration);

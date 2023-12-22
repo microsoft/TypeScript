@@ -140,7 +140,7 @@ import {
     isBooleanLiteral,
     isCallExpression,
     isClassStaticBlockDeclaration,
-    isConditionalExpression,
+    isConditionalExpressionInReturnStatement,
     isConditionalTypeNode,
     IsContainer,
     isDeclaration,
@@ -211,7 +211,6 @@ import {
     isPrototypeAccess,
     isPushOrUnshiftIdentifier,
     isRequireCall,
-    isReturnStatement,
     isShorthandPropertyAssignment,
     isSignedNumericLiteral,
     isSourceFile,
@@ -317,7 +316,6 @@ import {
     unreachableCodeIsError,
     unusedLabelIsError,
     VariableDeclaration,
-    walkUpParenthesizedExpressions,
     WhileStatement,
     WithStatement,
 } from "./_namespaces/ts";
@@ -2001,20 +1999,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         bind(node.whenFalse);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(postExpressionLabel);
-    }
-
-    function isConditionalExpressionInReturnStatement(node: ConditionalExpression) {
-        let n: Node = node;
-        while (n) {
-            if (isReturnStatement(n)) {
-                return true;
-            }
-            if (!isConditionalExpression(n)) {
-                return false;
-            }
-            n = walkUpParenthesizedExpressions(n.parent);
-        }
-        return false;
     }
 
     function bindInitializedVariableFlow(node: VariableDeclaration | ArrayBindingElement) {

@@ -253,6 +253,7 @@ import {
     isClassStaticBlockDeclaration,
     isCommaListExpression,
     isComputedPropertyName,
+    isConditionalExpression,
     isConstructorDeclaration,
     isDeclaration,
     isDecorator,
@@ -261,6 +262,7 @@ import {
     isEnumMember,
     isExportAssignment,
     isExportDeclaration,
+    isExpression,
     isExpressionStatement,
     isExpressionWithTypeArguments,
     isExternalModule,
@@ -331,6 +333,7 @@ import {
     isPropertyName,
     isPropertySignature,
     isQualifiedName,
+    isReturnStatement,
     isRootedDiskPath,
     isSetAccessorDeclaration,
     isShiftOperatorOrHigher,
@@ -4158,21 +4161,47 @@ function getNestedModuleDeclaration(node: Node): Node | undefined {
 }
 
 /** @internal */
+export function isConditionalExpressionInReturnStatement(node: Expression) {
+    let n: Node = node;
+    while (n) {
+        if (isReturnStatement(n)) {
+            return true;
+        }
+        if (!isConditionalExpression(n)) {
+            return false;
+        }
+        n = walkUpParenthesizedExpressions(n.parent);
+    }
+    return false;
+}
+
+/** @internal */
 export function canHaveFlowNode(node: Node): node is HasFlowNode {
     if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement) {
         return true;
     }
 
+    // >> TODO: how precise do we want to be here?
+    if (isExpression(node)) {
+        return true;
+    }
+    // let parent;
+    // if (isExpression(node)
+    //     && isConditionalExpression(parent = walkUpParenthesizedExpressions(node.parent))
+    //     && isConditionalExpressionInReturnStatement(parent)) {
+    //     return true;
+    // }
+
     switch (node.kind) {
-        case SyntaxKind.Identifier:
-        case SyntaxKind.ThisKeyword:
-        case SyntaxKind.SuperKeyword:
+        // case SyntaxKind.Identifier:
+        // case SyntaxKind.ThisKeyword:
+        // case SyntaxKind.SuperKeyword:
+        // case SyntaxKind.ElementAccessExpression:
+        // case SyntaxKind.PropertyAccessExpression:
+        // case SyntaxKind.FunctionExpression:
         case SyntaxKind.QualifiedName:
         case SyntaxKind.MetaProperty:
-        case SyntaxKind.ElementAccessExpression:
-        case SyntaxKind.PropertyAccessExpression:
         case SyntaxKind.BindingElement:
-        case SyntaxKind.FunctionExpression:
         case SyntaxKind.ArrowFunction:
         case SyntaxKind.MethodDeclaration:
         case SyntaxKind.GetAccessor:
