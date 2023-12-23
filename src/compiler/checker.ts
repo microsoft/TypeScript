@@ -19989,10 +19989,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     /**
      * This is similar to `instantiateType`, but with behavior specific to narrowing a return type based on control flow for type parameters.
      */
-    function instantiateNarrowType(type: Type, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, noTopLevel?: boolean): Type;
-    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, noTopLevel?: boolean): Type | undefined;
-    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, noTopLevel = false): Type | undefined {
-        return type ? instantiateNarrowTypeWithAlias(type, narrowMapper, mapper, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, noTopLevel) : type;
+    function instantiateNarrowType(type: Type, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type;
+    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type | undefined;
+    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type | undefined {
+        return type ? instantiateNarrowTypeWithAlias(type, narrowMapper, mapper, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined) : type;
     }
 
     function instantiateNarrowTypeWithAlias(
@@ -20000,8 +20000,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         narrowMapper: TypeMapper,
         mapper: TypeMapper | undefined,
         aliasSymbol: Symbol | undefined,
-        aliasTypeArguments: readonly Type[] | undefined,
-        _noTopLevel: boolean): Type {
+        aliasTypeArguments: readonly Type[] | undefined): Type {
         if (!couldContainTypeVariables(type)) {
             return type;
         }
@@ -20016,7 +20015,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
-        const result = instantiateNarrowTypeWorker(type, narrowMapper, mapper, aliasSymbol, aliasTypeArguments /*, noTopLevel*/);
+        const result = instantiateNarrowTypeWorker(type, narrowMapper, mapper, aliasSymbol, aliasTypeArguments);
         instantiationDepth--;
         return result;
     }
@@ -20031,8 +20030,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         narrowMapper: TypeMapper,
         mapper: TypeMapper | undefined,
         aliasSymbol: Symbol | undefined,
-        aliasTypeArguments: readonly Type[] | undefined,
-        ): Type {
+        aliasTypeArguments: readonly Type[] | undefined): Type {
         type = instantiateType(type, mapper);
         const flags = type.flags;
         if (flags & TypeFlags.IndexedAccess) {
@@ -44114,7 +44112,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 function checkReturnStatementExpression(expr: Expression | undefined): void {
                     let actualReturnType = unwrappedReturnType;
                     if (expr) {
-                        expr = skipParentheses(expr);
+                        expr = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
                         if (isConditionalExpression(expr)) {
                             return checkReturnConditionalExpression(expr);
                         }
@@ -44124,22 +44122,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const outerTypeParameters = getOuterTypeParameters(container!, /*includeThisTypes*/ false);
                     const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
                     const queryTypeParameters = typeParameters?.filter(isQueryTypeParameter);
-                    if (queryTypeParameters && queryTypeParameters.length) {
-                        // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
-                        // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
-                        // `function foo(...) {
-                        //       return cond ? |expr| : ...
-                        // }`
-                        // - When the return expression is undefined, or it is defined and it is not one of the branches of a conditional expression, then the position is the return statement itself:
-                        // `function foo(...) {
-                        //       |return expr;|
-                        // }`
-                        // or
-                        // `function foo(...) {
-                        //       |return;|
-                        // }`
-                        const narrowPosition = expr && isConditionalExpression(walkUpParenthesizedExpressions(expr.parent)) ?
-                            expr : node;
+                    // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
+                    // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
+                    // `function foo(...) {
+                    //       return cond ? |expr| : ...
+                    // }`
+                    // - When the return expression is undefined, or it is defined and it is not one of the branches of a conditional expression, then the position is the return statement itself:
+                    // `function foo(...) {
+                    //       |return expr;|
+                    // }`
+                    // or
+                    // `function foo(...) {
+                    //       |return;|
+                    // }`
+                    const narrowPosition = expr && isConditionalExpression(walkUpParenthesizedExpressions(expr.parent)) ?
+                        expr : node;
+                    if (queryTypeParameters && queryTypeParameters.length && narrowPosition.flowNode) {
                         const narrowed: [TypeParameter, Type][] = mapDefined(queryTypeParameters, tp => {
                             const narrowReference = factory.cloneNode(tp.exprName); // Construct a reference that can be narrowed.
                             // Set the symbol of the synthetic reference.
@@ -44147,7 +44145,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             getNodeLinks(narrowReference).resolvedSymbol = getResolvedSymbol(tp.exprName);
                             setParent(narrowReference, narrowPosition.parent);
                             setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
-                            narrowReference.flowNode = narrowPosition.flowNode!;
+                            narrowReference.flowNode = narrowPosition.flowNode;
                             const exprType = getTypeOfExpression(narrowReference);
                             // >> TODO: is there a better way of detecting that narrowing will be useless?
                             if (getConstraintOfTypeParameter(tp)) {
@@ -44162,8 +44160,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         actualReturnType = instantiateNarrowType(
                             unwrappedReturnType,
                             narrowMapper,
-                            /*mapper*/ undefined,
-                            /*noTopLevel*/ true,
+                            /*mapper*/ undefined
                         );
                     }
 
@@ -44192,6 +44189,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 function checkReturnConditionalExpression(expr: ConditionalExpression): void {
+                    checkExpression(expr.condition);
                     checkReturnStatementExpression(expr.whenTrue);
                     checkReturnStatementExpression(expr.whenFalse);
                 }
