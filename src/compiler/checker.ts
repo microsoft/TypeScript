@@ -27461,7 +27461,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 const rootDeclaration = getRootDeclaration(node.parent);
-                return isVariableDeclaration(rootDeclaration) && isVarConstLike(rootDeclaration);
+                return isVariableDeclaration(rootDeclaration) ? isVarConstLike(rootDeclaration) : !isSomeSymbolAssigned(rootDeclaration);
         }
         return false;
     }
