@@ -44416,8 +44416,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 visitConditionalReturnExpression(node.whenTrue);
                 visitConditionalReturnExpression(node.whenFalse);
             }
-            else if ((node as HasFlowNode).flowNode) {
-                flowNodes.push((node as HasFlowNode).flowNode);
+            else if (node.flowNode) {
+                flowNodes.push(node.flowNode);
             }
         }
     }
