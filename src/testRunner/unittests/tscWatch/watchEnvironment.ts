@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     commonFile1,
     commonFile2,
     noopChange,
@@ -88,7 +91,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         sys: () => {
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     watchOptions: {
                         watchFile: "FixedChunkSizePolling",
                     },
@@ -141,7 +144,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             const projectSrcFolder = `${projectFolder}/src`;
             const configFile: File = {
                 path: `${projectFolder}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     watchOptions: {
                         synchronousWatchDirectory: true,
                     },
@@ -279,17 +282,17 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     caption: "Start npm install",
                     // npm install
                     edit: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules`),
-                    timeouts: sys => sys.logTimeoutQueueLength(), // To update folder structure
+                    timeouts: ts.noop, // To update folder structure
                 },
                 {
                     caption: "npm install folder creation of file2",
                     edit: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules/file2`),
-                    timeouts: sys => sys.logTimeoutQueueLength(), // To update folder structure
+                    timeouts: ts.noop, // To update folder structure
                 },
                 {
                     caption: "npm install index file in file2",
                     edit: sys => sys.writeFile(`/user/username/projects/myproject/node_modules/file2/index.d.ts`, `export const x = 10;`),
-                    timeouts: sys => sys.logTimeoutQueueLength(), // To update folder structure
+                    timeouts: ts.noop, // To update folder structure
                 },
                 {
                     caption: "Updates the program",
@@ -316,7 +319,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             sys: () => {
                 const configFile: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { outDir: "dist", declaration: true } }),
+                    content: jsonToReadableText({ compilerOptions: { outDir: "dist", declaration: true } }),
                 };
                 const file1: File = {
                     path: `/user/username/projects/myproject/src/file1.ts`,
@@ -357,7 +360,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             sys: () => {
                 const configFile: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { outDir: "dist" } }),
+                    content: jsonToReadableText({ compilerOptions: { outDir: "dist" } }),
                 };
                 const file1: File = {
                     path: `/user/username/projects/myproject/src/file1.ts`,
@@ -399,7 +402,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             sys: () => {
                 const configFile: File = {
                     path: "/a/b/tsconfig.json",
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         watchOptions: {
                             watchFile: "UseFsEvents",
                         },
@@ -417,7 +420,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             sys: () => {
                 const configFile: File = {
                     path: "/a/b/tsconfig.json",
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         watchOptions: {
                             watchDirectory: "UseFsEvents",
                         },
@@ -435,7 +438,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             sys: () => {
                 const configFile: File = {
                     path: "/a/b/tsconfig.json",
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         watchOptions: {
                             fallbackPolling: "PriorityInterval",
                         },
@@ -464,7 +467,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             function sys(watchOptions: ts.WatchOptions, runWithoutRecursiveWatches?: boolean): TestServerHost {
                 const configFile: File = {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: JSON.stringify({ exclude: ["node_modules"], watchOptions }),
+                    content: jsonToReadableText({ exclude: ["node_modules"], watchOptions }),
                 };
                 const main: File = {
                     path: `/user/username/projects/myproject/src/main.ts`,
@@ -500,7 +503,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         {
                             caption: "Change foo",
                             edit: sys => sys.replaceFileText(`/user/username/projects/myproject/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
-                            timeouts: sys => sys.logTimeoutQueueLength(),
+                            timeouts: ts.noop,
                         },
                     ],
                 });
@@ -514,7 +517,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         {
                             caption: "delete fooBar",
                             edit: sys => sys.deleteFile(`/user/username/projects/myproject/node_modules/bar/fooBar.d.ts`),
-                            timeouts: sys => sys.logTimeoutQueueLength(),
+                            timeouts: ts.noop,
                         },
                     ],
                 });
@@ -533,7 +536,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         {
                             caption: "add new folder to temp",
                             edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
-                            timeouts: sys => sys.logTimeoutQueueLength(),
+                            timeouts: ts.noop,
                         },
                     ],
                 });
@@ -554,7 +557,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     [libFile.path]: libFile.content,
                     [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                     [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
-                    [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
+                    [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({
                         watchOptions: { watchFile: "useFsEvents" },
                         files: ["foo.ts", "main.ts"],
                     }),
@@ -592,7 +595,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         [libFile.path]: libFile.content,
                         [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                         [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
-                        [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
+                        [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
                     },
                     {
                         currentDirectory: "/user/username/projects/myproject",
@@ -623,7 +626,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         [libFile.path]: libFile.content,
                         [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                         [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
-                        [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
+                        [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
                     },
                     {
                         currentDirectory: "/user/username/projects/myproject",
@@ -654,7 +657,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         [libFile.path]: libFile.content,
                         [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
                         [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
-                        [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
+                        [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({
                             watchOptions: { watchFile: "useFsEvents" },
                             files: ["foo.ts", "main.ts"],
                         }),
@@ -684,6 +687,42 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 },
             ],
         });
+    });
+
+    describe("with fsWatch with fsWatchWithTimestamp", () => {
+        function verify(fsWatchWithTimestamp: boolean) {
+            verifyTscWatch({
+                scenario,
+                subScenario: `fsWatch/fsWatchWithTimestamp ${fsWatchWithTimestamp}`,
+                commandLineArgs: ["-w", "--extendedDiagnostics"],
+                sys: () =>
+                    createWatchedSystem(
+                        {
+                            [libFile.path]: libFile.content,
+                            "/user/username/projects/myproject/main.ts": `export const x = 10;`,
+                            "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({ files: ["main.ts"] }),
+                        },
+                        {
+                            currentDirectory: "/user/username/projects/myproject",
+                            fsWatchWithTimestamp,
+                        },
+                    ),
+                edits: [
+                    {
+                        caption: "emulate access",
+                        edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "modify file contents",
+                        edit: sys => sys.appendFile("/user/username/projects/myproject/main.ts", "export const y = 10;"),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                ],
+            });
+        }
+        verify(/*fsWatchWithTimestamp*/ true);
+        verify(/*fsWatchWithTimestamp*/ false);
     });
 
     verifyTscWatch({

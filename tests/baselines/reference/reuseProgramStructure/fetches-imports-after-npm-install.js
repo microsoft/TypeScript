@@ -52,7 +52,9 @@ File 'node_modules/a/index.js' does not exist.
 File 'node_modules/a/index.jsx' does not exist.
 ======== Module name 'a' was not resolved. ========
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 file1.ts(2,20): error TS2307: Cannot find module 'a' or its corresponding type declarations.
 

@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: true
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -15,10 +15,26 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/packages/emit-composite/tsconfig.json]
-{"compilerOptions":{"composite":true,"allowJs":true,"emitDeclarationOnly":true,"outDir":"lib","rootDir":"src"},"include":["src"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "allowJs": true,
+    "emitDeclarationOnly": true,
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/emit-composite/package.json]
-{"name":"emit-composite","version":"1.0.0","main":"src/index.js","typings":"lib/index.d.ts"}
+{
+  "name": "emit-composite",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "typings": "lib/index.d.ts"
+}
 
 //// [/user/username/projects/myproject/packages/emit-composite/src/index.js]
 const testModule = require('./testModule');
@@ -37,7 +53,16 @@ module.exports = {
 }
 
 //// [/user/username/projects/myproject/packages/consumer/tsconfig.json]
-{"include":["src"],"references":[{"path":"../emit-composite"}]}
+{
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../emit-composite"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/consumer/src/index.ts]
 import { testCompositeFunction } from 'emit-composite';
@@ -276,6 +301,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -290,6 +318,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
@@ -319,7 +350,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck

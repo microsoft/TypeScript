@@ -35,7 +35,6 @@ import {
     ModuleResolutionHost,
     moduleSpecifiers,
     normalizePath,
-    Path,
     pathIsRelative,
     Program,
     PropertyAssignment,
@@ -214,7 +213,7 @@ function updateImports(
 
             // Need an update if the imported file moved, or the importing file moved and was using a relative path.
             return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
+                ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
                 : undefined;
         });
     }

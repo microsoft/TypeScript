@@ -13,8 +13,7 @@ body:
 
         List them here so people in the future can find this one more easily.
       placeholder: |
-        List of keywords you searched for before creating this issue.
-        Write them down here so that others can find this bug more easily and help provide feedback.
+        List of keywords you searched for before creating this issue. Write them down here so that others can find this bug more easily and help provide feedback.
 
         e.g. "function inference any", "jsx attribute spread", "move to file duplicate imports", "discriminated union inference", "ts2822"
     validations:
@@ -52,7 +51,6 @@ body:
 
         This should have the same code as the code snippet below, and use whichever settings are relevant to your report.
 
-
         As a last resort, you can link to a repo, but these will be slower for us to investigate.
       placeholder: 'Playground link with relevant code: https://www.typescriptlang.org/play?#code/PTAEFkE9QYwewCYFNQHM5IM6gBZIE5JA'
     validations:
@@ -63,6 +61,7 @@ body:
       label: 💻 Code
       description: |
         Please post the relevant code sample here as well.
+
         This code and the Playground code should be the same, do not use separate examples.
 
         We can quickly address your report if:
@@ -72,6 +71,7 @@ body:
           - The incorrectness of the behavior is readily apparent from reading the sample.
 
         Reports are slower to investigate if:
+
           - We have to pare too much extraneous code.
           - We have to clone a large repo and validate that the problem isn't elsewhere.
           - The sample is confusing or doesn't clearly demonstrate what's wrong.

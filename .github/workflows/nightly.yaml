@@ -6,7 +6,7 @@ on:
   # enable users to manually trigger with workflow_dispatch
   workflow_dispatch: {}
   repository_dispatch:
-    types: publish-nightly
+    types: [publish-nightly]
 
 permissions:
   contents: read
@@ -23,8 +23,8 @@ jobs:
     if: github.repository == 'microsoft/TypeScript'
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/setup-node@8f152de45cc393bb48ce5d89d36b731f54556e65 # v4.0.0
         with:
           # Use NODE_AUTH_TOKEN environment variable to authenticate to this registry.
           registry-url: https://registry.npmjs.org/

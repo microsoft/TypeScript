@@ -1,11 +1,10 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createSession,
-    TestServerCancellationToken,
+    TestSession,
     TestSessionRequest,
 } from "../helpers/tsserver";
 import {
@@ -30,13 +29,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             content: "let xyz = 1;",
         };
         const host = createServerHost([f1]);
-        const cancellationToken: ts.server.ServerCancellationToken = {
-            isCancellationRequested: () => false,
-            setRequest: requestId => session.logger.log(`ServerCancellationToken:: Cancellation Request id:: ${requestId}`),
-            resetRequest: ts.noop,
-        };
-
-        const session = createSession(host, { cancellationToken, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, useCancellationToken: true });
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
@@ -66,19 +59,15 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {},
             }),
         };
 
         const host = createServerHost([f1, config]);
-        const logger = createLoggerWithInMemoryLogs(host);
-        const cancellationToken = new TestServerCancellationToken(logger);
-        const session = createSession(host, {
-            canUseEvents: true,
-            eventHandler: ts.noop,
-            cancellationToken,
-            logger,
+        const session = new TestSession({
+            host,
+            useCancellationToken: true,
         });
         {
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -109,9 +98,9 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             });
 
             // cancel previously issued Geterr
-            cancellationToken.setRequestToCancel(getErrId);
+            session.serverCancellationToken.setRequestToCancel(getErrId);
             host.runQueuedTimeoutCallbacks();
-            cancellationToken.resetToken();
+            session.serverCancellationToken.resetToken();
         }
         {
             const getErrId = session.getNextSeq();
@@ -123,10 +112,10 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             // run first step
             host.runQueuedTimeoutCallbacks();
 
-            cancellationToken.setRequestToCancel(getErrId);
+            session.serverCancellationToken.setRequestToCancel(getErrId);
             host.runQueuedImmediateCallbacks();
 
-            cancellationToken.resetToken();
+            session.serverCancellationToken.resetToken();
         }
         {
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
@@ -138,7 +127,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             // the semanticDiag message
             host.runQueuedImmediateCallbacks();
             host.runQueuedImmediateCallbacks();
-            cancellationToken.resetToken();
+            session.serverCancellationToken.resetToken();
         }
         {
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
@@ -163,19 +152,15 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         };
         const config = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {},
             }),
         };
         const host = createServerHost([f1, config]);
-        const logger = createLoggerWithInMemoryLogs(host);
-        const cancellationToken = new TestServerCancellationToken(logger, /*cancelAfterRequest*/ 3);
-        const session = createSession(host, {
-            canUseEvents: true,
-            eventHandler: ts.noop,
-            cancellationToken,
+        const session = new TestSession({
+            host,
             throttleWaitMilliseconds: 0,
-            logger,
+            useCancellationToken: 3,
         });
         {
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -213,7 +198,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             // Set the next request to be cancellable
             // The cancellation token will cancel the request the third time
             // isCancellationRequested() is called.
-            cancellationToken.setRequestToCancel(session.getNextSeq());
+            session.serverCancellationToken.setRequestToCancel(session.getNextSeq());
             let operationCanceledExceptionThrown = false;
 
             try {
@@ -223,7 +208,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
                 session.logger.log(`Exception is OperationCanceledException: ${e instanceof ts.OperationCanceledException}`);
                 operationCanceledExceptionThrown = true;
             }
-            if (!operationCanceledExceptionThrown) session.logger.log("Operation Canceled Exception not thrown for request: " + JSON.stringify(request));
+            if (!operationCanceledExceptionThrown) session.logger.log("Operation Canceled Exception not thrown for request: " + jsonToReadableText(request));
         }
     });
 });

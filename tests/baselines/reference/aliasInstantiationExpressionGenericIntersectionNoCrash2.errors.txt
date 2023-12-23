@@ -1,0 +1,28 @@
+aliasInstantiationExpressionGenericIntersectionNoCrash2.ts(15,1): error TS2352: Conversion of type 'Wat<number>' to type 'Wat<string>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Wat<number>' is not comparable to type '{ new (): Class<string>; prototype: Class<any>; }'.
+    Type 'Class<number>' is not comparable to type 'Class<string>'.
+      Type 'number' is not comparable to type 'string'.
+
+
+==== aliasInstantiationExpressionGenericIntersectionNoCrash2.ts (1 errors) ====
+    declare class Class<T> {
+      x: T;
+    }
+    
+    declare function fn<T>(): T;
+    
+    
+    type ClassAlias<T> = typeof Class<T>;
+    type FnAlias<T> = typeof fn<T>;
+    
+    type Wat<T> = ClassAlias<T> & FnAlias<T>;
+    
+    
+    declare const wat: Wat<number>;
+    wat as Wat<string>;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Conversion of type 'Wat<number>' to type 'Wat<string>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Type 'Wat<number>' is not comparable to type '{ new (): Class<string>; prototype: Class<any>; }'.
+!!! error TS2352:     Type 'Class<number>' is not comparable to type 'Class<string>'.
+!!! error TS2352:       Type 'number' is not comparable to type 'string'.
+    

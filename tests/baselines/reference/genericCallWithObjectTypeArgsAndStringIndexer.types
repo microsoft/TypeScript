@@ -32,7 +32,7 @@ function other<T>(arg: T) {
     var r2 = foo(b); // T
 >r2 : { [x: string]: T; }
 >foo(b) : { [x: string]: T; }
->foo : <T>(x: T) => T
+>foo : <T_1>(x: T_1) => T_1
 >b : { [x: string]: T; }
 }
 
@@ -47,7 +47,7 @@ function other2<T extends Date>(arg: T) {
     var r2 = foo(b);
 >r2 : { [x: string]: T; }
 >foo(b) : { [x: string]: T; }
->foo : <T>(x: T) => T
+>foo : <T_1>(x: T_1) => T_1
 >b : { [x: string]: T; }
 
     var d: Date = r2['hm']; // ok
@@ -68,7 +68,7 @@ function other3<T extends Date, U extends Date>(arg: T) {
     var r2 = foo(b);
 >r2 : { [x: string]: T; }
 >foo(b) : { [x: string]: T; }
->foo : <T>(x: T) => T
+>foo : <T_1>(x: T_1) => T_1
 >b : { [x: string]: T; }
 
     var d: Date = r2['hm']; // ok

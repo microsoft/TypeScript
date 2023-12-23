@@ -170,3 +170,126 @@ function f14(a: AList4, b: BList4) {
 >a : AList4
 }
 
+// Repro from #51620
+
+type Bivar<T> = { set(value: T): void }
+>Bivar : Bivar<T>
+>set : (value: T) => void
+>value : T
+
+declare let bu: Bivar<unknown>;
+>bu : Bivar<unknown>
+
+declare let bs: Bivar<string>;
+>bs : Bivar<string>
+
+bu = bs;
+>bu = bs : Bivar<string>
+>bu : Bivar<unknown>
+>bs : Bivar<string>
+
+bs = bu;
+>bs = bu : Bivar<unknown>
+>bs : Bivar<string>
+>bu : Bivar<unknown>
+
+declare let bfu: Bivar<(x: unknown) => void>;
+>bfu : Bivar<(x: unknown) => void>
+>x : unknown
+
+declare let bfs: Bivar<(x: string) => void>;
+>bfs : Bivar<(x: string) => void>
+>x : string
+
+bfu = bfs;
+>bfu = bfs : Bivar<(x: string) => void>
+>bfu : Bivar<(x: unknown) => void>
+>bfs : Bivar<(x: string) => void>
+
+bfs = bfu;
+>bfs = bfu : Bivar<(x: unknown) => void>
+>bfs : Bivar<(x: string) => void>
+>bfu : Bivar<(x: unknown) => void>
+
+type Bivar1<T> = { set(value: T): void }
+>Bivar1 : Bivar1<T>
+>set : (value: T) => void
+>value : T
+
+type Bivar2<T> = { set(value: T): void }
+>Bivar2 : Bivar2<T>
+>set : (value: T) => void
+>value : T
+
+declare let b1fu: Bivar1<(x: unknown) => void>;
+>b1fu : Bivar1<(x: unknown) => void>
+>x : unknown
+
+declare let b2fs: Bivar2<(x: string) => void>;
+>b2fs : Bivar2<(x: string) => void>
+>x : string
+
+b1fu = b2fs;
+>b1fu = b2fs : Bivar2<(x: string) => void>
+>b1fu : Bivar1<(x: unknown) => void>
+>b2fs : Bivar2<(x: string) => void>
+
+b2fs = b1fu;
+>b2fs = b1fu : Bivar1<(x: unknown) => void>
+>b2fs : Bivar2<(x: string) => void>
+>b1fu : Bivar1<(x: unknown) => void>
+
+type SetLike<T> = { set(value: T): void, get(): T }
+>SetLike : SetLike<T>
+>set : (value: T) => void
+>value : T
+>get : () => T
+
+declare let sx: SetLike1<(x: unknown) => void>;
+>sx : SetLike1<(x: unknown) => void>
+>x : unknown
+
+declare let sy: SetLike1<(x: string) => void>;
+>sy : SetLike1<(x: string) => void>
+>x : string
+
+sx = sy;  // Error
+>sx = sy : SetLike1<(x: string) => void>
+>sx : SetLike1<(x: unknown) => void>
+>sy : SetLike1<(x: string) => void>
+
+sy = sx;
+>sy = sx : SetLike1<(x: unknown) => void>
+>sy : SetLike1<(x: string) => void>
+>sx : SetLike1<(x: unknown) => void>
+
+type SetLike1<T> = { set(value: T): void, get(): T }
+>SetLike1 : SetLike1<T>
+>set : (value: T) => void
+>value : T
+>get : () => T
+
+type SetLike2<T> = { set(value: T): void, get(): T }
+>SetLike2 : SetLike2<T>
+>set : (value: T) => void
+>value : T
+>get : () => T
+
+declare let s1: SetLike1<(x: unknown) => void>;
+>s1 : SetLike1<(x: unknown) => void>
+>x : unknown
+
+declare let s2: SetLike2<(x: string) => void>;
+>s2 : SetLike2<(x: string) => void>
+>x : string
+
+s1 = s2;  // Error
+>s1 = s2 : SetLike2<(x: string) => void>
+>s1 : SetLike1<(x: unknown) => void>
+>s2 : SetLike2<(x: string) => void>
+
+s2 = s1;
+>s2 = s1 : SetLike1<(x: unknown) => void>
+>s2 : SetLike2<(x: string) => void>
+>s1 : SetLike1<(x: unknown) => void>
+
