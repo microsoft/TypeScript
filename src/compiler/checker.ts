@@ -1968,10 +1968,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var blockedStringType = createIntrinsicType(TypeFlags.Any, "any", /*objectFlags*/ undefined, "blocked string");
     var errorType = createIntrinsicType(TypeFlags.Any, "error");
     var unresolvedType = createIntrinsicType(TypeFlags.Any, "unresolved");
-    var nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType, "non-inferrable");
     var intrinsicMarkerType = createIntrinsicType(TypeFlags.Any, "intrinsic");
     var unknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
     var nonNullUnknownType = createIntrinsicType(TypeFlags.Unknown, "unknown", /*objectFlags*/ undefined, "non-null");
+    var nonInferrableUnknownType = createIntrinsicType(TypeFlags.Unknown, "unknown", ObjectFlags.ContainsWideningType, "non-inferrable");
     var undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
     var undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined, "undefined", ObjectFlags.ContainsWideningType, "widening");
     var missingType = createIntrinsicType(TypeFlags.Undefined, "undefined", /*objectFlags*/ undefined, "missing");
@@ -11444,10 +11444,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             reportImplicitAny(element, anyType);
         }
         // When we're including the pattern in the type (an indication we're obtaining a contextual type), we
-        // use a non-inferrable any type. Inference will never directly infer this type, but it is possible
+        // use a non-inferrable unknown type. Inference will never directly infer this type, but it is possible
         // to infer a type that contains it, e.g. for a binding pattern like [foo] or { foo }. In such cases,
-        // widening of the binding pattern type substitutes a regular any for the non-inferrable any.
-        return includePatternInType ? nonInferrableAnyType : anyType;
+        // widening of the binding pattern type substitutes a regular any for the non-inferrable unknown.
+        return includePatternInType ? nonInferrableUnknownType : anyType;
     }
 
     // Return the type implied by an object binding pattern
@@ -20905,7 +20905,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>, errorReporter?: ErrorReporter) {
         const s = source.flags;
         const t = target.flags;
-        if (t & TypeFlags.Any || s & TypeFlags.Never || source === wildcardType) return true;
+        if (t & TypeFlags.Any || s & TypeFlags.Never || source === wildcardType || source === nonInferrableUnknownType) return true;
         if (t & TypeFlags.Unknown && !(relation === strictSubtypeRelation && s & TypeFlags.Any)) return true;
         if (t & TypeFlags.Never) return false;
         if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
@@ -24603,6 +24603,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (isObjectLiteralType(type)) {
                 result = getWidenedTypeOfObjectLiteral(type, context);
+                if (type.pattern) {
+                    result.pattern = type.pattern;
+                }
             }
             else if (type.flags & TypeFlags.Union) {
                 const unionContext = context || createWideningContext(/*parent*/ undefined, /*propertyName*/ undefined, (type as UnionType).types);
@@ -24617,6 +24620,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (isArrayOrTupleType(type)) {
                 result = createTypeReference(type.target, sameMap(getTypeArguments(type), getWidenedType));
+                if (type.pattern) {
+                    result.pattern = type.pattern;
+                }
             }
             if (result && context === undefined) {
                 type.widened = result;
@@ -25025,14 +25031,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
         // applied to the element type(s).
         if (isArrayType(source)) {
-            return createArrayType(inferReverseMappedType(getTypeArguments(source)[0], target, constraint), isReadonlyArrayType(source));
+            let reversed = createArrayType(inferReverseMappedType(getTypeArguments(source)[0], target, constraint), isReadonlyArrayType(source)) as TypeReference;
+            if (source.pattern) {
+                reversed = cloneTypeReference(reversed);
+                reversed.pattern = source.pattern;
+            }
+            return reversed;
         }
         if (isTupleType(source)) {
             const elementTypes = map(getElementTypes(source), t => inferReverseMappedType(t, target, constraint));
             const elementFlags = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
                 sameMap(source.target.elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
                 source.target.elementFlags;
-            return createTupleType(elementTypes, elementFlags, source.target.readonly, source.target.labeledElementDeclarations);
+            let reversed = createTupleType(elementTypes, elementFlags, source.target.readonly, source.target.labeledElementDeclarations) as TypeReference;
+            if (source.pattern) {
+                reversed = cloneTypeReference(reversed);
+                reversed.pattern = source.pattern;
+            }
+            return reversed;
         }
         // For all other object types we infer a new object type where the reverse mapping has been
         // applied to the type of each property.
@@ -25040,6 +25056,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         reversed.source = source;
         reversed.mappedType = target;
         reversed.constraintType = constraint;
+        if (source.pattern) {
+            reversed.pattern = source.pattern;
+        }
         return reversed;
     }
 
@@ -25056,7 +25075,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        return getTypeFromInference(inference) || unknownType;
+        return getTypeFromInference(inference) || (sourceType.pattern ? nonInferrableUnknownType : unknownType);
     }
 
     function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol> {
@@ -25089,8 +25108,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
-        return !(target.target.combinedFlags & ElementFlags.Variadic) && target.target.minLength > source.target.minLength ||
-            !target.target.hasRestElement && (source.target.hasRestElement || target.target.fixedLength < source.target.fixedLength);
+        return !source.pattern && (!(target.target.combinedFlags & ElementFlags.Variadic) && target.target.minLength > source.target.minLength ||
+            !target.target.hasRestElement && (source.target.hasRestElement || target.target.fixedLength < source.target.fixedLength));
     }
 
     function typesDefinitelyUnrelated(source: Type, target: Type) {
@@ -25396,9 +25415,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // This flag is infectious; if we produce Box<never> (where never is silentNeverType), Box<never> is
                     // also non-inferrable.
                     //
-                    // As a special case, also ignore nonInferrableAnyType, which is a special form of the any type
-                    // used as a stand-in for binding elements when they are being inferred.
-                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableAnyType) {
+                    // As a special case, also ignore nonInferrableUnknownType, which is a special form of the unknown type
+                    // used as a stand-in for binding elements when they are being inferred. It is ignored as a direct inference candidate
+                    // but types containing it can be inferred.
+                    if (getObjectFlags(source) & ObjectFlags.NonInferrableType || source === nonInferrableUnknownType) {
                         return;
                     }
                     if (!inference.isFixed) {
@@ -26099,12 +26119,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getInferredType(context: InferenceContext, index: number): Type {
         const inference = context.inferences[index];
         if (!inference.inferredType) {
+            let isFromBindingPattern = false;
             let inferredType: Type | undefined;
             let fallbackType: Type | undefined;
             if (context.signature) {
                 const inferredCovariantType = inference.candidates ? getCovariantInference(inference, context.signature) : undefined;
                 const inferredContravariantType = inference.contraCandidates ? getContravariantInference(inference) : undefined;
-                if (inferredCovariantType || inferredContravariantType) {
+                if (!inferredContravariantType && inference.candidates?.length === 1 && inference.candidates[0].pattern) {
+                    isFromBindingPattern = true;
+                    inferredType = inferredCovariantType;
+                }
+                else if (inferredCovariantType || inferredContravariantType) {
                     // If we have both co- and contra-variant inferences, we prefer the co-variant inference if it is not 'never',
                     // all co-variant inferences are subtypes of it (i.e. it isn't one of a conflicting set of candidates), it is
                     // a subtype of some contra-variant inference, and no other type parameter is constrained to this type parameter
@@ -26145,7 +26170,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
-                if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                if (isFromBindingPattern) {
+                    inference.inferredType = getIntersectionType([inference.inferredType, instantiatedConstraint]);
+                }
+                else if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                     // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
@@ -30279,7 +30307,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (t.flags & TypeFlags.StructuredType) {
                 const prop = getPropertyOfType(t, name);
                 if (prop) {
-                    return isCircularMappedProperty(prop) ? undefined : removeMissingType(getTypeOfSymbol(prop), !!(prop && prop.flags & SymbolFlags.Optional));
+                    if (isCircularMappedProperty(prop)) {
+                        return undefined;
+                    }
+                    const type = getTypeOfSymbol(prop);
+                    if (type !== nonInferrableUnknownType) {
+                        return removeMissingType(type, !!(prop && prop.flags & SymbolFlags.Optional));
+                    }
+                    if (t.flags & TypeFlags.Intersection) {
+                        t = getIntersectionType((t as IntersectionType).types.filter(t => !t.pattern));
+                    }
                 }
                 if (isTupleType(t) && isNumericLiteralName(name) && +name >= 0) {
                     const restType = getElementTypeOfSliceOfTupleType(t, t.target.fixedLength, /*endSkipCount*/ 0, /*writing*/ false, /*noReductions*/ true);
@@ -31248,7 +31285,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         pushCachedContextualType(node);
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
-        const contextualTypeHasPattern = contextualType && contextualType.pattern &&
+        const contextualTypeHasPattern = !(checkMode & CheckMode.Inferential) && contextualType && contextualType.pattern &&
             (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
         const inConstContext = isConstContext(node);
         const checkFlags = inConstContext ? CheckFlags.Readonly : 0;

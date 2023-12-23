@@ -11,7 +11,7 @@ declare const x: A | B;
 >x : A | B
 
 const { a } = { ...x } // error
->a : any
->{ ...x } : { a: any; } | { a: any; b: number; }
+>a : unknown
+>{ ...x } : { a: unknown; } | { a: unknown; b: number; }
 >x : A | B
 

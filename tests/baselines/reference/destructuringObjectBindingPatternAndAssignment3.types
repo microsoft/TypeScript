@@ -23,7 +23,7 @@ var {i1}: string | number| {} = { i1: 2 };
 var { f2: {f21} = { f212: "string" } }: any = undefined;
 >f2 : any
 >f21 : any
->{ f212: "string" } : { f212: string; f21: any; }
+>{ f212: "string" } : { f212: string; f21: unknown; }
 >f212 : string
 >"string" : "string"
 >undefined : undefined

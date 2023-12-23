@@ -1,0 +1,168 @@
+//// [tests/cases/compiler/bindingPatternContextualTypeDoesNotCauseWidening2.ts] ////
+
+=== bindingPatternContextualTypeDoesNotCauseWidening2.ts ===
+// https://github.com/microsoft/TypeScript/issues/56771
+
+declare function fn1<T extends { A: { a: "A"; } | null | undefined }>(t: T): T;
+>fn1 : <T extends { A: {    a: "A";} | null | undefined; }>(t: T) => T
+>A : { a: "A"; } | null | undefined
+>a : "A"
+>t : T
+
+const { A } = fn1({ A: { a: "A" } });
+>A : { a: "A"; }
+>fn1({ A: { a: "A" } }) : { A: { a: "A"; }; }
+>fn1 : <T extends { A: { a: "A"; } | null | undefined; }>(t: T) => T
+>{ A: { a: "A" } } : { A: { a: "A"; }; }
+>A : { a: "A"; }
+>{ a: "A" } : { a: "A"; }
+>a : "A"
+>"A" : "A"
+
+A.a;
+>A.a : "A"
+>A : { a: "A"; }
+>a : "A"
+
+declare function fn2<T extends { A: ["a" | "b"] }>(t: T): T;
+>fn2 : <T extends { A: ["a" | "b"]; }>(t: T) => T
+>A : ["a" | "b"]
+>t : T
+
+const { A: [nested] } = fn2({ A: ["a"] });
+>A : any
+>nested : "a"
+>fn2({ A: ["a"] }) : { A: ["a"]; }
+>fn2 : <T extends { A: ["a" | "b"]; }>(t: T) => T
+>{ A: ["a"] } : { A: ["a"]; }
+>A : ["a"]
+>["a"] : ["a"]
+>"a" : "a"
+
+declare function fn3<T extends { a: unknown; b: unknown }>(obj: T): T;
+>fn3 : <T extends { a: unknown; b: unknown; }>(obj: T) => T
+>a : unknown
+>b : unknown
+>obj : T
+
+const { a: [a3] } = fn3({ a: [1, ""], b: "" });
+>a : any
+>a3 : number
+>fn3({ a: [1, ""], b: "" }) : { a: [number, string]; b: string; }
+>fn3 : <T extends { a: unknown; b: unknown; }>(obj: T) => T
+>{ a: [1, ""], b: "" } : { a: [number, string]; b: string; }
+>a : [number, string]
+>[1, ""] : [number, string]
+>1 : 1
+>"" : ""
+>b : string
+>"" : ""
+
+declare function fn4<T extends { a: unknown; b: unknown }[]>(obj: T): T;
+>fn4 : <T extends { a: unknown; b: unknown; }[]>(obj: T) => T
+>a : unknown
+>b : unknown
+>obj : T
+
+const [{ a: a4 }] = fn4([{ a: "", b: 10 }, { a: true, b: "" }]);
+>a : any
+>a4 : string
+>fn4([{ a: "", b: 10 }, { a: true, b: "" }]) : [{ a: string; b: number; }, { a: boolean; b: string; }]
+>fn4 : <T extends { a: unknown; b: unknown; }[]>(obj: T) => T
+>[{ a: "", b: 10 }, { a: true, b: "" }] : [{ a: string; b: number; }, { a: true; b: string; }]
+>{ a: "", b: 10 } : { a: string; b: number; }
+>a : string
+>"" : ""
+>b : number
+>10 : 10
+>{ a: true, b: "" } : { a: true; b: string; }
+>a : true
+>true : true
+>b : string
+>"" : ""
+
+declare function fn5<
+>fn5 : <O extends { a?: "a" | undefined; b?: "b1" | "b2" | undefined; c?: "c" | undefined; }[], T extends keyof O[number]>(keys: T[], obj?: O) => { [K in keyof O]: Pick<O[K], T>; }
+
+  O extends { a?: "a"; b?: "b1" | "b2"; c?: "c" }[],
+>a : "a" | undefined
+>b : "b1" | "b2" | undefined
+>c : "c" | undefined
+
+  T extends keyof O[number],
+>(
+  keys: T[],
+>keys : T[]
+
+  obj?: O,
+>obj : O | undefined
+
+): {
+  [K in keyof O]: Pick<O[K], T>;
+}
+const [{ b: b5_1 }, { b: b5_2 }] = fn5(["b"], [{ a: "a", b: "b1" }, { b: "b2", c: "c" }]);
+>b : any
+>b5_1 : "b1"
+>b : any
+>b5_2 : "b2"
+>fn5(["b"], [{ a: "a", b: "b1" }, { b: "b2", c: "c" }]) : [Pick<{ a: "a"; b: "b1"; }, "b">, Pick<{ b: "b2"; c: "c"; }, "b">]
+>fn5 : <O extends { a?: "a" | undefined; b?: "b1" | "b2" | undefined; c?: "c" | undefined; }[], T extends keyof O[number]>(keys: T[], obj?: O | undefined) => { [K in keyof O]: Pick<O[K], T>; }
+>["b"] : "b"[]
+>"b" : "b"
+>[{ a: "a", b: "b1" }, { b: "b2", c: "c" }] : [{ a: "a"; b: "b1"; }, { b: "b2"; c: "c"; }]
+>{ a: "a", b: "b1" } : { a: "a"; b: "b1"; }
+>a : "a"
+>"a" : "a"
+>b : "b1"
+>"b1" : "b1"
+>{ b: "b2", c: "c" } : { b: "b2"; c: "c"; }
+>b : "b2"
+>"b2" : "b2"
+>c : "c"
+>"c" : "c"
+
+declare function fn6<
+>fn6 : <O extends { a?: "valA" | undefined; b?: "valB" | "valC" | undefined; } | null, T extends keyof O>(keys: T[], obj?: O) => Pick<O, T> & {    pickedKeys: T;}
+
+  O extends { a?: "valA", b?: "valB" | "valC" } | null,
+>a : "valA" | undefined
+>b : "valB" | "valC" | undefined
+
+  T extends keyof O
+>(
+  keys: T[],
+>keys : T[]
+
+  obj?: O,
+>obj : O | undefined
+
+): Pick<O, T> & { pickedKeys: T };
+>pickedKeys : T
+
+const { b: b6, pickedKeys } = fn6(["b"], { a: "valA", b: "valB" });
+>b : any
+>b6 : "valB"
+>pickedKeys : "b"
+>fn6(["b"], { a: "valA", b: "valB" }) : Pick<{ a: "valA"; b: "valB"; }, "b"> & { pickedKeys: "b"; }
+>fn6 : <O extends { a?: "valA" | undefined; b?: "valB" | "valC" | undefined; } | null, T extends keyof O>(keys: T[], obj?: O | undefined) => Pick<O, T> & { pickedKeys: T; }
+>["b"] : "b"[]
+>"b" : "b"
+>{ a: "valA", b: "valB" } : { a: "valA"; b: "valB"; }
+>a : "valA"
+>"valA" : "valA"
+>b : "valB"
+>"valB" : "valB"
+
+declare function fn7<T extends { [k: string]: 'a' | 'b' }>(obj: T): T
+>fn7 : <T extends { [k: string]: "a" | "b"; }>(obj: T) => T
+>k : string
+>obj : T
+
+const { a7 } = fn7({ a7: 'a' })
+>a7 : "a"
+>fn7({ a7: 'a' }) : { a7: "a"; }
+>fn7 : <T extends { [k: string]: "a" | "b"; }>(obj: T) => T
+>{ a7: 'a' } : { a7: "a"; }
+>a7 : "a"
+>'a' : "a"
+

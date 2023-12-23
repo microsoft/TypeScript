@@ -10,7 +10,7 @@ verify.codeFix({
     description: "Infer parameter types from usage",
     index: 0,
     newFileContent: `/**
- * @param {{ type: any; }} message
+ * @param {{ type: unknown; }} message
  */
 function formatter(message) {
   const { type } = false ? { type: message } : message;
