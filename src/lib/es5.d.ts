@@ -780,7 +780,7 @@ interface Date {
     /** Gets the day-of-the-month, using Universal Coordinated Time (UTC). */
     getUTCDate(): number;
     /** Gets the day of the week, using local time. */
-    getDay(): number;
+    getDay(): 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /** Gets the day of the week using Universal Coordinated Time (UTC). */
     getUTCDay(): number;
     /** Gets the hours in a date, using local time. */
