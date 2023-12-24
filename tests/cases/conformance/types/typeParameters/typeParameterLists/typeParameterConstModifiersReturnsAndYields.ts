@@ -45,3 +45,20 @@ const result22 = test4(async function*() {
     yield 10;
     return '1';
 });
+
+// https://github.com/microsoft/TypeScript/issues/53813
+const UploadThingServerHelper = <const ValidRoutes,>(route: {
+  readonly [Route in keyof ValidRoutes]: {
+    middleware: () => ValidRoutes[Route];
+    onUpload: (response: { metadata: ValidRoutes[Route] }) => void;
+  };
+}) => {};
+
+const FileRouter = UploadThingServerHelper({
+  example: {
+    middleware: () => "someValue",
+    onUpload: (response) => {
+      const v: "someValue" = response.metadata;
+    },
+  },
+});

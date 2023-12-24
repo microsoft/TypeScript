@@ -206,3 +206,51 @@ const result22 = test4(async function*() {
 
 });
 
+// https://github.com/microsoft/TypeScript/issues/53813
+const UploadThingServerHelper = <const ValidRoutes,>(route: {
+>UploadThingServerHelper : <const ValidRoutes>(route: { readonly [Route in keyof ValidRoutes]: { middleware: () => ValidRoutes[Route]; onUpload: (response: { metadata: ValidRoutes[Route]; }) => void; }; }) => void
+><const ValidRoutes,>(route: {  readonly [Route in keyof ValidRoutes]: {    middleware: () => ValidRoutes[Route];    onUpload: (response: { metadata: ValidRoutes[Route] }) => void;  };}) => {} : <const ValidRoutes>(route: { readonly [Route in keyof ValidRoutes]: { middleware: () => ValidRoutes[Route]; onUpload: (response: { metadata: ValidRoutes[Route]; }) => void; }; }) => void
+>route : { readonly [Route in keyof ValidRoutes]: { middleware: () => ValidRoutes[Route]; onUpload: (response: { metadata: ValidRoutes[Route]; }) => void; }; }
+
+  readonly [Route in keyof ValidRoutes]: {
+    middleware: () => ValidRoutes[Route];
+>middleware : () => ValidRoutes[Route]
+
+    onUpload: (response: { metadata: ValidRoutes[Route] }) => void;
+>onUpload : (response: {    metadata: ValidRoutes[Route];}) => void
+>response : { metadata: ValidRoutes[Route]; }
+>metadata : ValidRoutes[Route]
+
+  };
+}) => {};
+
+const FileRouter = UploadThingServerHelper({
+>FileRouter : void
+>UploadThingServerHelper({  example: {    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  },}) : void
+>UploadThingServerHelper : <const ValidRoutes>(route: { readonly [Route in keyof ValidRoutes]: { middleware: () => ValidRoutes[Route]; onUpload: (response: { metadata: ValidRoutes[Route]; }) => void; }; }) => void
+>{  example: {    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  },} : { example: { middleware: () => "someValue"; onUpload: (response: { metadata: "someValue"; }) => void; }; }
+
+  example: {
+>example : { middleware: () => "someValue"; onUpload: (response: { metadata: "someValue"; }) => void; }
+>{    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  } : { middleware: () => "someValue"; onUpload: (response: { metadata: "someValue"; }) => void; }
+
+    middleware: () => "someValue",
+>middleware : () => "someValue"
+>() => "someValue" : () => "someValue"
+>"someValue" : "someValue"
+
+    onUpload: (response) => {
+>onUpload : (response: { metadata: "someValue"; }) => void
+>(response) => {      const v: "someValue" = response.metadata;    } : (response: { metadata: "someValue"; }) => void
+>response : { metadata: "someValue"; }
+
+      const v: "someValue" = response.metadata;
+>v : "someValue"
+>response.metadata : "someValue"
+>response : { metadata: "someValue"; }
+>metadata : "someValue"
+
+    },
+  },
+});
+

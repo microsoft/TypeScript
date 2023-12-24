@@ -151,3 +151,52 @@ const result22 = test4(async function*() {
     return '1';
 });
 
+// https://github.com/microsoft/TypeScript/issues/53813
+const UploadThingServerHelper = <const ValidRoutes,>(route: {
+>UploadThingServerHelper : Symbol(UploadThingServerHelper, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 5))
+>ValidRoutes : Symbol(ValidRoutes, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 33))
+>route : Symbol(route, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 53))
+
+  readonly [Route in keyof ValidRoutes]: {
+>Route : Symbol(Route, Decl(typeParameterConstModifiersReturnsAndYields.ts, 46, 12))
+>ValidRoutes : Symbol(ValidRoutes, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 33))
+
+    middleware: () => ValidRoutes[Route];
+>middleware : Symbol(middleware, Decl(typeParameterConstModifiersReturnsAndYields.ts, 46, 42))
+>ValidRoutes : Symbol(ValidRoutes, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 33))
+>Route : Symbol(Route, Decl(typeParameterConstModifiersReturnsAndYields.ts, 46, 12))
+
+    onUpload: (response: { metadata: ValidRoutes[Route] }) => void;
+>onUpload : Symbol(onUpload, Decl(typeParameterConstModifiersReturnsAndYields.ts, 47, 41))
+>response : Symbol(response, Decl(typeParameterConstModifiersReturnsAndYields.ts, 48, 15))
+>metadata : Symbol(metadata, Decl(typeParameterConstModifiersReturnsAndYields.ts, 48, 26))
+>ValidRoutes : Symbol(ValidRoutes, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 33))
+>Route : Symbol(Route, Decl(typeParameterConstModifiersReturnsAndYields.ts, 46, 12))
+
+  };
+}) => {};
+
+const FileRouter = UploadThingServerHelper({
+>FileRouter : Symbol(FileRouter, Decl(typeParameterConstModifiersReturnsAndYields.ts, 52, 5))
+>UploadThingServerHelper : Symbol(UploadThingServerHelper, Decl(typeParameterConstModifiersReturnsAndYields.ts, 45, 5))
+
+  example: {
+>example : Symbol(example, Decl(typeParameterConstModifiersReturnsAndYields.ts, 52, 44))
+
+    middleware: () => "someValue",
+>middleware : Symbol(middleware, Decl(typeParameterConstModifiersReturnsAndYields.ts, 53, 12))
+
+    onUpload: (response) => {
+>onUpload : Symbol(onUpload, Decl(typeParameterConstModifiersReturnsAndYields.ts, 54, 34))
+>response : Symbol(response, Decl(typeParameterConstModifiersReturnsAndYields.ts, 55, 15))
+
+      const v: "someValue" = response.metadata;
+>v : Symbol(v, Decl(typeParameterConstModifiersReturnsAndYields.ts, 56, 11))
+>response.metadata : Symbol(metadata, Decl(typeParameterConstModifiersReturnsAndYields.ts, 48, 26))
+>response : Symbol(response, Decl(typeParameterConstModifiersReturnsAndYields.ts, 55, 15))
+>metadata : Symbol(metadata, Decl(typeParameterConstModifiersReturnsAndYields.ts, 48, 26))
+
+    },
+  },
+});
+
