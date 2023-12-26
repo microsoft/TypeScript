@@ -41,6 +41,29 @@ Output::
 
 
 
+//// [/a/b/c/f1.js]
+var x = 1;
+
+
+//// [/a/b/d/f2.js]
+var y = 1;
+
+
+
+FsWatches::
+/a/b/c/f1.ts: *new*
+  {}
+/a/b/d/f2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
 Program root files: [
   "/a/b/c/f1.ts",
   "/a/b/d/f2.ts"
@@ -66,27 +89,4 @@ Shape signatures in builder refreshed for::
 /a/b/c/f1.ts (used version)
 /a/b/d/f2.ts (used version)
 
-FsWatches::
-/a/b/c/f1.ts: *new*
-  {}
-/a/b/d/f2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/c/f1.js]
-var x = 1;
-
-
-//// [/a/b/d/f2.js]
-var y = 1;
-
-

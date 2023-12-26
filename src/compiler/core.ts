@@ -2400,9 +2400,13 @@ function levenshteinWithMax(s1: string, s2: string, max: number): number | undef
 }
 
 /** @internal */
-export function endsWith(str: string, suffix: string): boolean {
+export function endsWith(str: string, suffix: string, ignoreCase?: boolean): boolean {
     const expectedPos = str.length - suffix.length;
-    return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    return expectedPos >= 0 && (
+        ignoreCase
+            ? equateStringsCaseInsensitive(str.slice(expectedPos), suffix)
+            : str.indexOf(suffix, expectedPos) === expectedPos
+    );
 }
 
 /** @internal */
@@ -2579,8 +2583,10 @@ export function findBestPatternMatch<T>(values: readonly T[], getPattern: (value
 }
 
 /** @internal */
-export function startsWith(str: string, prefix: string): boolean {
-    return str.lastIndexOf(prefix, 0) === 0;
+export function startsWith(str: string, prefix: string, ignoreCase?: boolean): boolean {
+    return ignoreCase
+        ? equateStringsCaseInsensitive(str.slice(0, prefix.length), prefix)
+        : str.lastIndexOf(prefix, 0) === 0;
 }
 
 /** @internal */

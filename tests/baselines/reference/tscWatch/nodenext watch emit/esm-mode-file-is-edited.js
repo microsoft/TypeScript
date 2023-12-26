@@ -51,6 +51,26 @@ Output::
 
 
 
+//// [/dist/index.js]
+import * as Thing from "thing";
+Thing.fn();
+
+
+
+FsWatches::
+/a/lib/lib.es2020.full.d.ts: *new*
+  {}
+/project/src/deps.d.ts: *new*
+  {}
+/project/src/index.ts: *new*
+  {}
+/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/project: *new*
+  {}
+
 Program root files: [
   "/project/src/deps.d.ts",
   "/project/src/index.ts"
@@ -81,27 +101,7 @@ Shape signatures in builder refreshed for::
 /project/src/deps.d.ts (used version)
 /project/src/index.ts (used version)
 
-FsWatches::
-/a/lib/lib.es2020.full.d.ts: *new*
-  {}
-/project/src/deps.d.ts: *new*
-  {}
-/project/src/index.ts: *new*
-  {}
-/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/project: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/dist/index.js]
-import * as Thing from "thing";
-Thing.fn();
-
-
 
 Change:: Modify typescript file
 
@@ -111,8 +111,12 @@ import * as Thing from "thing";
 Thing.fn();
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -120,6 +124,9 @@ Output::
 
 [[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/dist/index.js] file written with same contents
 
 
 Program root files: [
@@ -149,5 +156,3 @@ Shape signatures in builder refreshed for::
 /project/src/index.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/dist/index.js] file written with same contents

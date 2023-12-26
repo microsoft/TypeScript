@@ -88,10 +88,10 @@ export function getAllRules(): RuleSpec[] {
     const functionOpenBraceLeftTokenRange = anyTokenIncludingMultilineComments;
 
     // Place a space before open brace in a TypeScript declaration that has braces as children (class, module, enum, etc)
-    const typeScriptOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.Identifier, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ClassKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ImportKeyword]);
+    const typeScriptOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.Identifier, SyntaxKind.GreaterThanToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.ClassKeyword, SyntaxKind.ExportKeyword, SyntaxKind.ImportKeyword]);
 
     // Place a space before open brace in a control flow construct
-    const controlOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.CloseParenToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.DoKeyword, SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword, SyntaxKind.ElseKeyword]);
+    const controlOpenBraceLeftTokenRange = tokenRangeFrom([SyntaxKind.CloseParenToken, SyntaxKind.MultiLineCommentTrivia, SyntaxKind.DoKeyword, SyntaxKind.TryKeyword, SyntaxKind.FinallyKeyword, SyntaxKind.ElseKeyword, SyntaxKind.CatchKeyword]);
 
     // These rules are higher in priority than user-configurable
     const highPriorityCommonRules = [

@@ -1,4 +1,7 @@
 import {
+    noop,
+} from "../../_namespaces/ts";
+import {
     jsonToReadableText,
 } from "../helpers";
 import {
@@ -43,7 +46,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
                 },
                 // not ideal, but currently because of d.ts but no new file is written
                 // There will be timeout queued even though file contents are same
-                timeouts: sys => sys.logTimeoutQueueLength(),
+                timeouts: noop,
             },
             {
                 caption: "non local edit in logic ts, and build logic",

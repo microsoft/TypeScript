@@ -48,6 +48,9 @@ lib.es2016.array.include.d.ts-Text
 //// [/lib.es2016.d.ts]
 lib.es2016.d.ts-Text
 
+//// [/lib.es2016.intl.d.ts]
+lib.es2016.intl.d.ts-Text
+
 //// [/lib.es2017.d.ts]
 lib.es2017.d.ts-Text
 
@@ -162,6 +165,7 @@ Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
   "/lib.es2015.symbol.wellknown.d.ts",
   "/lib.es2016.array.include.d.ts",
   "/lib.es2016.d.ts",
+  "/lib.es2016.intl.d.ts",
   "/lib.es2017.d.ts",
   "/lib.es2017.date.d.ts",
   "/lib.es2017.intl.d.ts",
@@ -209,6 +213,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es2015.symbol.d.t
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es2015.symbol.wellknown.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es2016.array.include.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es2016.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es2016.intl.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es2017.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es2017.date.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es2017.intl.d.ts 500 undefined WatchType: Closed Script info
@@ -233,7 +238,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/react/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (37)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 	/lib.es5.d.ts Text-1 lib.d.ts-Text
 	/lib.es2015.generator.d.ts Text-1 lib.es2015.generator.d.ts-Text
 	/lib.es2015.iterable.d.ts Text-1 lib.es2015.iterable.d.ts-Text
@@ -242,6 +247,7 @@ Info seq  [hh:mm:ss:mss] 	Files (37)
 	/lib.es2015.reflect.d.ts Text-1 lib.es2015.reflect.d.ts-Text
 	/lib.es2015.symbol.d.ts Text-1 lib.es2015.symbol.d.ts-Text
 	/lib.es2015.symbol.wellknown.d.ts Text-1 lib.es2015.symbol.wellknown.d.ts-Text
+	/lib.es2016.intl.d.ts Text-1 lib.es2016.intl.d.ts-Text
 	/lib.es2017.date.d.ts Text-1 lib.es2017.date.d.ts-Text
 	/lib.es2017.object.d.ts Text-1 lib.es2017.object.d.ts-Text
 	/lib.es2017.sharedmemory.d.ts Text-1 lib.es2017.sharedmemory.d.ts-Text
@@ -305,6 +311,9 @@ Info seq  [hh:mm:ss:mss] 	Files (37)
 	  Library referenced via 'es2015.symbol.wellknown' from file 'lib.es2015.d.ts'
 	  Matched by default include pattern '**/*'
 	  Library referenced via 'es2015.symbol.wellknown' from file 'lib.es2017.sharedmemory.d.ts'
+	lib.es2016.intl.d.ts
+	  Library referenced via 'es2016.intl' from file 'lib.es2016.d.ts'
+	  Matched by default include pattern '**/*'
 	lib.es2017.date.d.ts
 	  Library referenced via 'es2017.date' from file 'lib.es2017.d.ts'
 	  Matched by default include pattern '**/*'
@@ -438,7 +447,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (37)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -481,6 +490,8 @@ watchedFiles::
 /lib.es2016.array.include.d.ts: *new*
   {"pollingInterval":500}
 /lib.es2016.d.ts: *new*
+  {"pollingInterval":500}
+/lib.es2016.intl.d.ts: *new*
   {"pollingInterval":500}
 /lib.es2017.d.ts: *new*
   {"pollingInterval":500}
@@ -546,7 +557,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /index.ts 500 undefine
 Info seq  [hh:mm:ss:mss] Search path: /
 Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (37)
+Info seq  [hh:mm:ss:mss] 	Files (38)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -589,6 +600,8 @@ watchedFiles::
 /lib.es2016.array.include.d.ts:
   {"pollingInterval":500}
 /lib.es2016.d.ts:
+  {"pollingInterval":500}
+/lib.es2016.intl.d.ts:
   {"pollingInterval":500}
 /lib.es2017.d.ts:
   {"pollingInterval":500}

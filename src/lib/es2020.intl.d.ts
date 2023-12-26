@@ -1,9 +1,11 @@
 /// <reference lib="es2018.intl" />
 declare namespace Intl {
     /**
-     * [Unicode BCP 47 Locale Identifiers](https://unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers) definition.
+     * A string that is a valid [Unicode BCP 47 Locale Identifier](https://unicode.org/reports/tr35/#Unicode_locale_identifier).
      *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
+     * For example: "fa", "es-MX", "zh-Hant-TW".
+     *
+     * See [MDN - Intl - locales argument](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
      */
     type UnicodeBCP47LocaleIdentifier = string;
 
@@ -71,16 +73,9 @@ declare namespace Intl {
     type RelativeTimeFormatStyle = "long" | "short" | "narrow";
 
     /**
-     * [BCP 47 language tag](http://tools.ietf.org/html/rfc5646) definition.
+     * The locale or locales to use
      *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
-     */
-    type BCP47LanguageTag = string;
-
-    /**
-     * The locale(s) to use
-     *
-     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
+     * See [MDN - Intl - locales argument](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
      */
     type LocalesArgument = UnicodeBCP47LocaleIdentifier | Locale | readonly (UnicodeBCP47LocaleIdentifier | Locale)[] | undefined;
 
@@ -200,7 +195,7 @@ declare namespace Intl {
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/RelativeTimeFormat).
          */
         new (
-            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
+            locales?: LocalesArgument,
             options?: RelativeTimeFormatOptions,
         ): RelativeTimeFormat;
 
@@ -223,7 +218,7 @@ declare namespace Intl {
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/supportedLocalesOf).
          */
         supportedLocalesOf(
-            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
+            locales?: LocalesArgument,
             options?: RelativeTimeFormatOptions,
         ): UnicodeBCP47LocaleIdentifier[];
     };
@@ -294,7 +289,7 @@ declare namespace Intl {
         /** Attempts to remove information about the locale that would be added by calling `Locale.maximize()`. */
         minimize(): Locale;
         /** Returns the locale's full locale identifier string. */
-        toString(): BCP47LanguageTag;
+        toString(): UnicodeBCP47LocaleIdentifier;
     }
 
     /**
@@ -312,7 +307,7 @@ declare namespace Intl {
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale).
      */
     const Locale: {
-        new (tag: BCP47LanguageTag | Locale, options?: LocaleOptions): Locale;
+        new (tag: UnicodeBCP47LocaleIdentifier | Locale, options?: LocaleOptions): Locale;
     };
 
     type DisplayNamesFallback =
@@ -406,6 +401,31 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/supportedLocalesOf).
          */
-        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }): BCP47LanguageTag[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }): UnicodeBCP47LocaleIdentifier[];
     };
+
+    interface CollatorConstructor {
+        new (locales?: LocalesArgument, options?: CollatorOptions): Collator;
+        (locales?: LocalesArgument, options?: CollatorOptions): Collator;
+        supportedLocalesOf(locales: LocalesArgument, options?: CollatorOptions): string[];
+    }
+
+    interface DateTimeFormatConstructor {
+        new (locales?: LocalesArgument, options?: DateTimeFormatOptions): DateTimeFormat;
+        (locales?: LocalesArgument, options?: DateTimeFormatOptions): DateTimeFormat;
+        supportedLocalesOf(locales: LocalesArgument, options?: DateTimeFormatOptions): string[];
+    }
+
+    interface NumberFormatConstructor {
+        new (locales?: LocalesArgument, options?: NumberFormatOptions): NumberFormat;
+        (locales?: LocalesArgument, options?: NumberFormatOptions): NumberFormat;
+        supportedLocalesOf(locales: LocalesArgument, options?: NumberFormatOptions): string[];
+    }
+
+    interface PluralRulesConstructor {
+        new (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
+        (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
+
+        supportedLocalesOf(locales: LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
+    }
 }

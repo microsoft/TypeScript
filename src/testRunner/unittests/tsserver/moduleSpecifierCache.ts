@@ -1,14 +1,11 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -144,10 +141,9 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
 
 function setup() {
     const host = createServerHost([aTs, bTs, cTs, bSymlink, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts]);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const session = new TestSession(host);
     openFilesForSession([aTs, bTs, cTs], session);
-    const projectService = session.getProjectService();
-    const project = projectService.configuredProjects.get(tsconfig.path)!;
+    const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
         command: ts.server.protocol.CommandTypes.Configure,
         arguments: {
@@ -161,7 +157,7 @@ function setup() {
     });
     triggerCompletions({ file: bTs.path, line: 1, offset: 3 });
 
-    return { host, project, projectService, session, moduleSpecifierCache: project.getModuleSpecifierCache(), triggerCompletions };
+    return { host, project, session, moduleSpecifierCache: project.getModuleSpecifierCache(), triggerCompletions };
 
     function triggerCompletions(requestLocation: ts.server.protocol.FileLocationRequestArgs) {
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({

@@ -52,6 +52,28 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/index.ts: *new*
+  {}
+/user/username/projects/myproject/settings.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/index.ts"
 ]
@@ -76,26 +98,4 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/settings.json (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/index.ts: *new*
-  {}
-/user/username/projects/myproject/settings.json: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
