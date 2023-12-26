@@ -40252,7 +40252,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Check if we're indexing with a numeric type and if either object or index types
         // is a generic type with a constraint that has a numeric index signature.
         const apparentObjectType = getApparentType(objectType);
-        if (getIndexInfoOfType(apparentObjectType, numberType) && isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
+        if (getIndexInfoOfType(apparentObjectType, numberType) && isApplicableIndexType(indexType, numberType)) {
             return type;
         }
         if (isGenericObjectType(objectType)) {

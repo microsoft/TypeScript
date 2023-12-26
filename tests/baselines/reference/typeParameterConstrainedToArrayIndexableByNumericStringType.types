@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/typeParameterConstrainedToArrayIndexableByNumericStringType.ts] ////
+
+=== typeParameterConstrainedToArrayIndexableByNumericStringType.ts ===
+// https://github.com/microsoft/TypeScript/issues/56823
+
+declare function test1<A extends unknown[]>(arr: A): A[`${number}`];
+>test1 : <A extends unknown[]>(arr: A) => A[`${number}`]
+>arr : A
+
+const res1 = test1([1, 2, 3]);
+>res1 : number
+>test1([1, 2, 3]) : number
+>test1 : <A extends unknown[]>(arr: A) => A[`${number}`]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+declare function test2<A extends [unknown, unknown]>(arr: A): A[`${number}`];
+>test2 : <A extends [unknown, unknown]>(arr: A) => A[`${number}`]
+>arr : A
+
+const res2 = test2([1, 'foo']);
+>res2 : string | number
+>test2([1, 'foo']) : string | number
+>test2 : <A extends [unknown, unknown]>(arr: A) => A[`${number}`]
+>[1, 'foo'] : [number, string]
+>1 : 1
+>'foo' : "foo"
+
+declare function test3<A extends [unknown, unknown, ...unknown[]]>(arr: A): A[`${number}`];
+>test3 : <A extends [unknown, unknown, ...unknown[]]>(arr: A) => A[`${number}`]
+>arr : A
+
+const res3 = test3([1, 'foo', true]);
+>res3 : string | number | boolean
+>test3([1, 'foo', true]) : string | number | boolean
+>test3 : <A extends [unknown, unknown, ...unknown[]]>(arr: A) => A[`${number}`]
+>[1, 'foo', true] : [number, string, true]
+>1 : 1
+>'foo' : "foo"
+>true : true
+
+declare const tuple1: [number, string, ...boolean[]];
+>tuple1 : [number, string, ...boolean[]]
+
+const res4 = test3(tuple1);
+>res4 : string | number | boolean
+>test3(tuple1) : string | number | boolean
+>test3 : <A extends [unknown, unknown, ...unknown[]]>(arr: A) => A[`${number}`]
+>tuple1 : [number, string, ...boolean[]]
+
