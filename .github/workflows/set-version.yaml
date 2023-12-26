@@ -2,7 +2,7 @@ name: Set branch version
 
 on:
   repository_dispatch:
-    types: set-version
+    types: [set-version]
 
 permissions:
   contents: read

@@ -72,74 +72,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/myproject/app.ts"
-]
-Program options: {
-  "baseUrl": "/user/username/projects/myproject",
-  "watch": true,
-  "declaration": true,
-  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data2.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data2.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib2/data2.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
-/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
-/user/username/projects/myproject/app.ts (computed .d.ts during emit)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/app.ts: *new*
-  {}
-/user/username/projects/myproject/lib1/public.ts: *new*
-  {}
-/user/username/projects/myproject/lib1/tools/public.ts: *new*
-  {}
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts: *new*
-  {}
-/user/username/projects/myproject/lib2/data.ts: *new*
-  {}
-/user/username/projects/myproject/lib2/data2.ts: *new*
-  {}
-/user/username/projects/myproject/lib2/public.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/lib1/tools/toolsinterface.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -290,6 +222,74 @@ export declare class App {
 
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/app.ts: *new*
+  {}
+/user/username/projects/myproject/lib1/public.ts: *new*
+  {}
+/user/username/projects/myproject/lib1/tools/public.ts: *new*
+  {}
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts: *new*
+  {}
+/user/username/projects/myproject/lib2/data.ts: *new*
+  {}
+/user/username/projects/myproject/lib2/data2.ts: *new*
+  {}
+/user/username/projects/myproject/lib2/public.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/app.ts"
+]
+Program options: {
+  "baseUrl": "/user/username/projects/myproject",
+  "watch": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data2.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts
+/user/username/projects/myproject/lib1/tools/public.ts
+/user/username/projects/myproject/lib1/public.ts
+/user/username/projects/myproject/lib2/data2.ts
+/user/username/projects/myproject/lib2/data.ts
+/user/username/projects/myproject/lib2/public.ts
+/user/username/projects/myproject/app.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data2.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Rename property title to title2 of interface ITest to initialize signatures
 
 Input::
@@ -299,8 +299,12 @@ export interface ITest {
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -315,6 +319,22 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
+export interface ITest {
+    title2: string;
+}
+
+
+//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/app.d.ts] file written with same contents
+
+
 Program root files: [
   "/user/username/projects/myproject/app.ts"
 ]
@@ -354,21 +374,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
-export interface ITest {
-    title2: string;
-}
-
-
-//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/app.d.ts] file written with same contents
 
 Change:: Rename property title2 to title of interface ITest to revert back to original text
 
@@ -379,8 +384,12 @@ export interface ITest {
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -388,6 +397,22 @@ Output::
 
 [[90m12:02:12 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
+export interface ITest {
+    title: string;
+}
+
+
+//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/app.d.ts] file written with same contents
 
 
 Program root files: [
@@ -430,21 +455,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
-export interface ITest {
-    title: string;
-}
-
-
-//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/app.d.ts] file written with same contents
-
 Change:: Rename property title to title2 of interface ITest
 
 Input::
@@ -454,8 +464,12 @@ export interface ITest {
 }
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -470,6 +484,22 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
+export interface ITest {
+    title2: string;
+}
+
+
+//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
+//// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
+//// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
+//// [/user/username/projects/myproject/app.d.ts] file written with same contents
+
+
 Program root files: [
   "/user/username/projects/myproject/app.ts"
 ]
@@ -509,18 +539,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/lib1/tools/toolsinterface.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
-export interface ITest {
-    title2: string;
-}
-
-
-//// [/user/username/projects/myproject/lib1/tools/public.js] file written with same contents
-//// [/user/username/projects/myproject/lib1/tools/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib1/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/data2.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/data.d.ts] file written with same contents
-//// [/user/username/projects/myproject/lib2/public.d.ts] file written with same contents
-//// [/user/username/projects/myproject/app.d.ts] file written with same contents

@@ -1,13 +1,9 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../../harness/tsserverLogger";
 import * as ts from "../../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     createSessionWithCustomEventHandler,
     openFilesForSession,
     TestSession,
@@ -411,19 +407,14 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
     describe("when event handler is not set but session is created with canUseEvents = true", () => {
         describe("without noGetErrOnBackgroundUpdate, diagnostics for open files are queued", () => {
             verifyProjectsUpdatedInBackgroundEvent("without noGetErrOnBackgroundUpdate", host =>
-                createSession(host, {
-                    canUseEvents: true,
-                    logger: createLoggerWithInMemoryLogs(host),
+                new TestSession({
+                    host,
+                    noGetErrOnBackgroundUpdate: false,
                 }));
         });
 
         describe("with noGetErrOnBackgroundUpdate, diagnostics for open file are not queued", () => {
-            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", host =>
-                createSession(host, {
-                    canUseEvents: true,
-                    logger: createLoggerWithInMemoryLogs(host),
-                    noGetErrOnBackgroundUpdate: true,
-                }));
+            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", host => new TestSession(host));
         });
     });
 });

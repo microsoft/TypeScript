@@ -1,6 +1,3 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
@@ -8,8 +5,8 @@ import {
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -58,7 +55,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
 
         it("can pass through metadata when the command returns array", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([aTs], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.Completions,
@@ -69,7 +66,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
 
         it("can pass through metadata when the command returns object", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([aTs], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
@@ -81,7 +78,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
         it("returns undefined correctly", () => {
             const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
             const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([aTs], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.Completions,

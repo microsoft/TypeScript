@@ -33,6 +33,21 @@ Output::
 
 
 
+//// [/a/username/project/src/file1.js]
+
+
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/a/username/project/src/file1.ts: *new*
+  {}
+/a/username/project/tsconfig.json: *new*
+  {}
+
+Timeout callback:: count: 1
+1: pollPollingIntervalQueue *new*
+
 Program root files: [
   "/a/username/project/src/file1.ts"
 ]
@@ -54,19 +69,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/username/project/src/file1.ts (used version)
 
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/a/username/project/src/file1.ts: *new*
-  {}
-/a/username/project/tsconfig.json: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/username/project/src/file1.js]
-
-
 
 Change:: Rename file1 to file2
 
@@ -76,27 +79,56 @@ Input::
 
 //// [/a/username/project/src/file1.ts] deleted
 
+Timeout callback:: count: 2
+1: pollPollingIntervalQueue
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 2
 1: pollPollingIntervalQueue
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 3
-3: timerToUpdateProgram
-4: pollLowPollingIntervalQueue
-5: pollPollingIntervalQueue
+
+Timeout callback:: count: 3
+2: timerToUpdateProgram *deleted*
+3: timerToUpdateProgram *new*
+4: pollLowPollingIntervalQueue *new*
+5: pollPollingIntervalQueue *new*
+
 Before running Timeout callback:: count: 3
 3: timerToUpdateProgram
 4: pollLowPollingIntervalQueue
 5: pollPollingIntervalQueue
+
 After running Timeout callback:: count: 3
-6: timerToUpdateProgram
-7: pollLowPollingIntervalQueue
-8: pollPollingIntervalQueue
 Output::
 >> Screen clear
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/a/username/project/src/file2.js]
+
+
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/a/username/project/src/file2.ts: *new*
+  {}
+/a/username/project/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/a/username/project/src/file1.ts:
+  {}
+
+Timeout callback:: count: 3
+6: timerToUpdateProgram *new*
+7: pollLowPollingIntervalQueue *new*
+8: pollPollingIntervalQueue *new*
 
 
 Program root files: [
@@ -118,20 +150,4 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/username/project/src/file2.ts (used version)
 
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/a/username/project/src/file2.ts: *new*
-  {}
-/a/username/project/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/a/username/project/src/file1.ts:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/username/project/src/file2.js]
-
-

@@ -45,61 +45,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/myproject/a.ts",
-  "/user/username/projects/myproject/b.ts",
-  "/user/username/projects/myproject/c.ts"
-]
-Program options: {
-  "watch": true,
-  "assumeChangesOnlyAffectDirectDependencies": true,
-  "declaration": true,
-  "incremental": true,
-  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/c.ts (computed .d.ts during emit)
-/user/username/projects/myproject/b.ts (computed .d.ts during emit)
-/user/username/projects/myproject/a.ts (computed .d.ts during emit)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/a.ts: *new*
-  {}
-/user/username/projects/myproject/b.ts: *new*
-  {}
-/user/username/projects/myproject/c.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -249,26 +194,27 @@ export {};
 }
 
 
-Change:: Rename property d to d2 of class C to initialize signatures
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
 
-Input::
-//// [/user/username/projects/myproject/c.ts]
-export class C
-{
-    d2 = 1;
-}
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/c.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
-
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
-
-
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/myproject/a.ts",
@@ -282,7 +228,7 @@ Program options: {
   "incremental": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
-Program structureReused: Completely
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/c.ts
@@ -290,14 +236,43 @@ Program files::
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
-/user/username/projects/myproject/c.ts (computed .d.ts)
-/user/username/projects/myproject/b.ts (computed .d.ts)
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Rename property d to d2 of class C to initialize signatures
+
+Input::
+//// [/user/username/projects/myproject/c.ts]
+export class C
+{
+    d2 = 1;
+}
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:00:46 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
@@ -417,26 +392,6 @@ export declare class C {
 }
 
 
-Change:: Rename property d2 to d of class C to revert back to original text
-
-Input::
-//// [/user/username/projects/myproject/c.ts]
-export class C
-{
-    d = 1;
-}
-
-
-Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
-
-
 
 Program root files: [
   "/user/username/projects/myproject/a.ts",
@@ -466,6 +421,31 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Rename property d2 to d of class C to revert back to original text
+
+Input::
+//// [/user/username/projects/myproject/c.ts]
+export class C
+{
+    d = 1;
+}
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
@@ -585,26 +565,6 @@ export declare class C {
 }
 
 
-Change:: Rename property d to d2 of class C
-
-Input::
-//// [/user/username/projects/myproject/c.ts]
-export class C
-{
-    d2 = 1;
-}
-
-
-Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
-
-
 
 Program root files: [
   "/user/username/projects/myproject/a.ts",
@@ -634,6 +594,31 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
+
+Change:: Rename property d to d2 of class C
+
+Input::
+//// [/user/username/projects/myproject/c.ts]
+export class C
+{
+    d2 = 1;
+}
+
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:48 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
@@ -752,3 +737,33 @@ export declare class C {
   "size": 1207
 }
 
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts"
+]
+Program options: {
+  "watch": true,
+  "assumeChangesOnlyAffectDirectDependencies": true,
+  "declaration": true,
+  "incremental": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/b.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/c.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

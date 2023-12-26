@@ -33,28 +33,6 @@ export const y = 20;
 Output::
 
 
-Program root files: [
-  "/users/username/projects/project/file1.ts",
-  "/users/username/projects/project/file2.ts"
-]
-Program options: {
-  "incremental": true,
-  "module": 2,
-  "outFile": "/users/username/projects/project/out.js",
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-exitCode:: ExitStatus.Success
-
 //// [/users/username/projects/project/out.js]
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -142,3 +120,25 @@ define("file2", ["require", "exports"], function (require, exports) {
 
 ======================================================================
 
+
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "module": 2,
+  "outFile": "/users/username/projects/project/out.js",
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.Success

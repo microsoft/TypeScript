@@ -39,6 +39,31 @@ Output::
 
 
 
+//// [/a.js]
+class C {
+    get prop() { return 1; }
+}
+class D extends C {
+    constructor() {
+        super(...arguments);
+        this.prop = 1;
+    }
+}
+
+
+
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
 Program root files: [
   "/a.ts",
   "/a/lib/lib.d.ts"
@@ -61,32 +86,7 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-FsWatches::
-/a.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a.js]
-class C {
-    get prop() { return 1; }
-}
-class D extends C {
-    constructor() {
-        super(...arguments);
-        this.prop = 1;
-    }
-}
-
-
 
 Change:: Enable useDefineForClassFields
 
@@ -100,8 +100,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -113,6 +117,25 @@ Output::
 [7m [0m [91m                    ~~~~[0m
 
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/a.js]
+class C {
+    get prop() { return 1; }
+}
+class D extends C {
+    constructor() {
+        super(...arguments);
+        Object.defineProperty(this, "prop", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: 1
+        });
+    }
+}
+
 
 
 
@@ -138,21 +161,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/a.js]
-class C {
-    get prop() { return 1; }
-}
-class D extends C {
-    constructor() {
-        super(...arguments);
-        Object.defineProperty(this, "prop", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: 1
-        });
-    }
-}
-
-

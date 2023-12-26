@@ -125,6 +125,67 @@ Output::
 
 
 
+//// [/user/username/projects/myproject/pkg0/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pkg0 = void 0;
+exports.pkg0 = 0;
+
+
+//// [/user/username/projects/myproject/pkg1/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pkg1 = void 0;
+exports.pkg1 = 1;
+
+
+//// [/user/username/projects/myproject/pkg2/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pkg2 = void 0;
+exports.pkg2 = 2;
+
+
+//// [/user/username/projects/myproject/pkg3/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.pkg3 = void 0;
+exports.pkg3 = 3;
+
+
+
+FsWatches::
+/user/username/projects/myproject/pkg0/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg0/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg2/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/pkg3/index.ts: *new*
+  {}
+/user/username/projects/myproject/pkg3/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/pkg0: *new*
+  {}
+/user/username/projects/myproject/pkg1: *new*
+  {}
+/user/username/projects/myproject/pkg2: *new*
+  {}
+/user/username/projects/myproject/pkg3: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/pkg0/index.ts",
   "/user/username/projects/myproject/typings/xterm.d.ts"
@@ -221,68 +282,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg3/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-FsWatches::
-/user/username/projects/myproject/pkg0/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg0/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg1/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg1/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg2/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg2/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/pkg3/index.ts: *new*
-  {}
-/user/username/projects/myproject/pkg3/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/typings/xterm.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/pkg0: *new*
-  {}
-/user/username/projects/myproject/pkg1: *new*
-  {}
-/user/username/projects/myproject/pkg2: *new*
-  {}
-/user/username/projects/myproject/pkg3: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/pkg0/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pkg0 = void 0;
-exports.pkg0 = 0;
-
-
-//// [/user/username/projects/myproject/pkg1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pkg1 = void 0;
-exports.pkg1 = 1;
-
-
-//// [/user/username/projects/myproject/pkg2/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pkg2 = void 0;
-exports.pkg2 = 2;
-
-
-//// [/user/username/projects/myproject/pkg3/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pkg3 = void 0;
-exports.pkg3 = 3;
-
-
 
 Change:: modify typing file
 
@@ -291,13 +291,13 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
+Timeout callback:: count: 1
+4: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 4: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 1
-5: timerToBuildInvalidatedProject
-Before running Timeout callback:: count: 1
-5: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
@@ -308,6 +308,18 @@ Output::
 
 [[90m12:01:16 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
+
+
+//// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
+
+Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+5: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
+Output::
 [[90m12:01:18 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
 
 [[90m12:01:19 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
@@ -328,6 +340,11 @@ Output::
 
 [[90m12:01:30 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
 
 
 Program root files: [
@@ -412,11 +429,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg3/index.js] file changed its modified time
-
 Change:: change pkg references
 
 Input::
@@ -438,14 +450,19 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+6: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 6: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:34 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:01:35 AM[0m] Found 0 errors. Watching for file changes.
+
 
 
 
@@ -485,8 +502,8 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/pkg3:
   {}
 
-exitCode:: ExitStatus.undefined
 
+exitCode:: ExitStatus.undefined
 
 Change:: modify typing file
 
@@ -495,13 +512,13 @@ Input::
 export const typing = 10;
 
 
+Timeout callback:: count: 1
+9: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 9: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 1
-10: timerToBuildInvalidatedProject
-Before running Timeout callback:: count: 1
-10: timerToBuildInvalidatedProject
-After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
@@ -512,6 +529,18 @@ Output::
 
 [[90m12:01:42 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
+
+
+//// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
+
+Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject *new*
+
+Before running Timeout callback:: count: 1
+10: timerToBuildInvalidatedProject
+
+After running Timeout callback:: count: 0
+Output::
 [[90m12:01:44 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'typings/xterm.d.ts'
 
 [[90m12:01:45 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
@@ -526,6 +555,10 @@ Output::
 
 [[90m12:01:52 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
+//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
 
 
 Program root files: [
@@ -590,10 +623,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/pkg0/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg1/index.js] file changed its modified time
-//// [/user/username/projects/myproject/pkg2/index.js] file changed its modified time
-
 Change:: change pkg references to remove all watches
 
 Input::
@@ -605,8 +634,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+11: timerToBuildInvalidatedProject *new*
+
 Before running Timeout callback:: count: 1
 11: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -618,6 +651,7 @@ Output::
 [7m [0m [91m           ~~[0m
 
 [[90m12:01:58 AM[0m] Found 1 error. Watching for file changes.
+
 
 
 
@@ -649,8 +683,8 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/pkg2:
   {}
 
-exitCode:: ExitStatus.undefined
 
+exitCode:: ExitStatus.undefined
 
 Change:: modify typing file
 
@@ -659,9 +693,5 @@ Input::
 export const typing = 10;export const typing1 = 10;
 
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-

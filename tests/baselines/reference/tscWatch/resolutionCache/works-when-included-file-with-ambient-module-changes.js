@@ -43,6 +43,30 @@ Output::
 
 
 
+//// [/users/username/projects/project/foo.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+PolledWatches::
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/bar.d.ts: *new*
+  {}
+/users/username/projects/project/foo.ts: *new*
+  {}
+
 Program root files: [
   "/users/username/projects/project/foo.ts",
   "/users/username/projects/project/bar.d.ts"
@@ -66,31 +90,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (used version)
 /users/username/projects/project/bar.d.ts (used version)
 
-PolledWatches::
-/users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/bar.d.ts: *new*
-  {}
-/users/username/projects/project/foo.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/foo.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: Add fs definition
 
@@ -111,8 +111,12 @@ declare module "fs" {
 
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -120,6 +124,9 @@ Output::
 
 [[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/users/username/projects/project/foo.js] file written with same contents
 
 
 Program root files: [
@@ -144,5 +151,3 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/foo.js] file written with same contents
