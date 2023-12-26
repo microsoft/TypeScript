@@ -155,30 +155,18 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: [
-  "/user/username/projects/myproject/a.ts",
-  "/user/username/projects/myproject/index.ts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "watch": true,
-  "traceResolution": true,
-  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/node_modules/pkg/import.d.ts
-/user/username/projects/myproject/index.ts
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
 
-No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
-/user/username/projects/myproject/index.ts (used version)
+//// [/user/username/projects/myproject/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -218,20 +206,32 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/node_modules/pkg/import.d.ts
+/user/username/projects/myproject/index.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
+/user/username/projects/myproject/index.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/user/username/projects/myproject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: modify aFile by adding import
 
@@ -241,8 +241,12 @@ export const x = 10;
 import type { ImportInterface } from "pkg" with { "resolution-mode": "import" }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -307,6 +311,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/index.js] file written with same contents
+
+
 Program root files: [
   "/user/username/projects/myproject/a.ts",
   "/user/username/projects/myproject/index.ts"
@@ -331,6 +339,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/index.js] file written with same contents

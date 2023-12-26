@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/rootfolder/otherfolder/a/b/project/file1.ts]
 import a from "file2"
@@ -203,6 +203,10 @@ Before running Timeout callback:: count: 2
 export class c { }export class d {}
 
 
+Timeout callback:: count: 2
+1: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -230,7 +234,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/rootfolder/otherfolder/a/b/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -287,12 +291,17 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/project:
   {}
 
+Timeout callback:: count: 1
+5: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-7: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json *new*
+7: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -344,7 +353,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/rootfolder/otherfolder/a/b/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

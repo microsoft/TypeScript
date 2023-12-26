@@ -1,13 +1,9 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../../harness/tsserverLogger";
 import * as ts from "../../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     createSessionWithCustomEventHandler,
     openExternalProjectForSession,
     openFilesForSession,
@@ -180,10 +176,6 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
         });
     }
 
-    verifyProjectLoadingStartAndFinish("when using event handler", host => createSessionWithCustomEventHandler(host));
-    verifyProjectLoadingStartAndFinish("when using default event handler", host =>
-        createSession(
-            host,
-            { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) },
-        ));
+    verifyProjectLoadingStartAndFinish("when using event handler", createSessionWithCustomEventHandler);
+    verifyProjectLoadingStartAndFinish("when using default event handler", host => new TestSession(host));
 });

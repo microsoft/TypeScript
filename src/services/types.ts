@@ -316,6 +316,9 @@ export interface IncompleteCompletionsCache {
 export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalResolutionCacheHost {
     getCompilationSettings(): CompilerOptions;
     getNewLine?(): string;
+    /** @internal */ updateFromProject?(): void;
+    /** @internal */ updateFromProjectInProgress?: boolean;
+
     getProjectVersion?(): string;
     getScriptFileNames(): string[];
     getScriptKind?(fileName: string): ScriptKind;
@@ -337,7 +340,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      */
     readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
     realpath?(path: string): string;
-    /** @internal */ createHash?(data: string): string;
+    /** @internal */ createHash?: ((data: string) => string) | undefined;
 
     /*
      * Unlike `realpath and `readDirectory`, `readFile` and `fileExists` are now _required_
@@ -390,9 +393,9 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      * If provided along with custom resolveLibrary, used to determine if we should redo library resolutions
      * @internal
      */
-    hasInvalidatedLibResolutions?(libFileName: string): boolean;
+    hasInvalidatedLibResolutions?: ((libFileName: string) => boolean) | undefined;
 
-    /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
+    /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions | undefined;
     /** @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
     /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
     /** @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
@@ -429,7 +432,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
 
-    jsDocParsingMode?: JSDocParsingMode;
+    jsDocParsingMode?: JSDocParsingMode | undefined;
 }
 
 /** @internal */
@@ -1288,6 +1291,10 @@ export interface RenameInfoSuccess {
      */
     fileToRename?: string;
     displayName: string;
+    /**
+     * Full display name of item to be renamed.
+     * If item to be renamed is a file, then this is the original text of the module specifer
+     */
     fullDisplayName: string;
     kind: ScriptElementKind;
     kindModifiers: string;

@@ -66,56 +66,6 @@ FileWatcher:: Added:: WatchInfo: /users/user/projects/myconfigs/node_modules/@so
 FileWatcher:: Added:: WatchInfo: /users/user/projects/myconfigs/node_modules/@something/tsconfig-base/tsconfig.json 2000 undefined Extended config file
 
 
-Program root files: [
-  "/users/user/projects/myproject/src/index.ts"
-]
-Program options: {
-  "composite": true,
-  "removeComments": true,
-  "watch": true,
-  "project": "/users/user/projects/myproject/src",
-  "extendedDiagnostics": true,
-  "configFilePath": "/users/user/projects/myproject/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/user/projects/myproject/src/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/user/projects/myproject/src/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/user/projects/myproject/src/index.ts (computed .d.ts during emit)
-
-PolledWatches::
-/users/user/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/user/projects/myproject/src/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/user/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/user/projects/myconfigs/node_modules/@something/tsconfig-base/tsconfig.json: *new*
-  {}
-/users/user/projects/myconfigs/node_modules/@something/tsconfig-node/tsconfig.json: *new*
-  {}
-/users/user/projects/myproject/src/index.ts: *new*
-  {}
-/users/user/projects/myproject/src/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/user/projects/myproject/src: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/users/user/projects/myproject/src/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -178,3 +128,53 @@ export declare const x = 10;
   "size": 811
 }
 
+
+PolledWatches::
+/users/user/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/user/projects/myproject/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/user/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/user/projects/myconfigs/node_modules/@something/tsconfig-base/tsconfig.json: *new*
+  {}
+/users/user/projects/myconfigs/node_modules/@something/tsconfig-node/tsconfig.json: *new*
+  {}
+/users/user/projects/myproject/src/index.ts: *new*
+  {}
+/users/user/projects/myproject/src/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/user/projects/myproject/src: *new*
+  {}
+
+Program root files: [
+  "/users/user/projects/myproject/src/index.ts"
+]
+Program options: {
+  "composite": true,
+  "removeComments": true,
+  "watch": true,
+  "project": "/users/user/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/user/projects/myproject/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/user/projects/myproject/src/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/user/projects/myproject/src/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/user/projects/myproject/src/index.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined

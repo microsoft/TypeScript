@@ -28,7 +28,7 @@ interface StateMachineConfig<TActors extends ProvidedActor> {
 }
 
 declare function setup<TActors extends Record<string, unknown>>(_: {
->setup : <TActors extends Record<string, unknown>>(_: { actors: { [K in keyof TActors]: TActors[K]; }; }) => { createMachine: (config: StateMachineConfig<Values<{ [K in keyof TActors as K & string]: { src: K; logic: TActors[K]; }; }>>) => void; }
+>setup : <TActors extends Record<string, unknown>>(_: { actors: { [K in keyof TActors]: TActors[K]; }; }) => { createMachine: (config: StateMachineConfig<Values<{ [K_1 in keyof TActors as K_1 & string]: { src: K_1; logic: TActors[K_1]; }; }>>) => void; }
 >_ : { actors: { [K in keyof TActors]: TActors[K]; }; }
 
   actors: {

@@ -36,6 +36,26 @@ Output::
 
 
 
+//// [/a/out.js]
+var x = 1;
+var y = 1;
+
+
+
+FsWatches::
+/a/a.ts: *new*
+  {}
+/a/b.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/a/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a: *new*
+  {}
+
 Program root files: [
   "/a/a.ts",
   "/a/b.ts",
@@ -57,27 +77,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-FsWatches::
-/a/a.ts: *new*
-  {}
-/a/b.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/a/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/a: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var x = 1;
-var y = 1;
-
-
 
 Change:: Make change in the file
 
@@ -86,8 +86,12 @@ Input::
 let x = 11
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -97,6 +101,13 @@ Output::
 
 
 
+//// [/a/out.js]
+var x = 11;
+var y = 1;
+
+
+
+
 Program root files: [
   "/a/a.ts",
   "/a/b.ts",
@@ -120,12 +131,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/out.js]
-var x = 11;
-var y = 1;
-
-
-
 Change:: Make change in the file again
 
 Input::
@@ -133,8 +138,12 @@ Input::
 let xy = 11
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -144,6 +153,13 @@ Output::
 
 
 
+//// [/a/out.js]
+var xy = 11;
+var y = 1;
+
+
+
+
 Program root files: [
   "/a/a.ts",
   "/a/b.ts",
@@ -166,9 +182,3 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var xy = 11;
-var y = 1;
-
-

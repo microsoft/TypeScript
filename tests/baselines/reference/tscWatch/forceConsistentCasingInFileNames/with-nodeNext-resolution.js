@@ -115,6 +115,48 @@ src/bin.ts
 
 
 
+//// [/Users/name/projects/web/src/bin.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+PolledWatches::
+/Users/name/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/Users/name/projects/package.json: *new*
+  {"pollingInterval":2000}
+/Users/name/projects/web/package.json: *new*
+  {"pollingInterval":2000}
+/Users/name/projects/web/src/package.json: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/Users/name/projects: *new*
+  {}
+/Users/name/projects/web: *new*
+  {}
+/Users/name/projects/web/node_modules/@types/yargs/index.d.ts: *new*
+  {}
+/Users/name/projects/web/node_modules/@types/yargs/package.json: *new*
+  {}
+/Users/name/projects/web/src/bin.ts: *new*
+  {}
+/Users/name/projects/web/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/Users/name/projects/web: *new*
+  {}
+/Users/name/projects/web/node_modules: *new*
+  {}
+/Users/name/projects/web/node_modules/@types: *new*
+  {}
+/Users/name/projects/web/src: *new*
+  {}
+
 Program root files: [
   "/Users/name/projects/web/src/bin.ts"
 ]
@@ -139,46 +181,4 @@ Shape signatures in builder refreshed for::
 /users/name/projects/web/node_modules/@types/yargs/index.d.ts (used version)
 /users/name/projects/web/src/bin.ts (used version)
 
-PolledWatches::
-/users/name/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/name/projects/package.json: *new*
-  {"pollingInterval":2000}
-/users/name/projects/web/package.json: *new*
-  {"pollingInterval":2000}
-/users/name/projects/web/src/package.json: *new*
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/name/projects: *new*
-  {}
-/users/name/projects/web: *new*
-  {}
-/users/name/projects/web/node_modules/@types/yargs/index.d.ts: *new*
-  {}
-/users/name/projects/web/node_modules/@types/yargs/package.json: *new*
-  {}
-/users/name/projects/web/src/bin.ts: *new*
-  {}
-/users/name/projects/web/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/name/projects/web: *new*
-  {}
-/users/name/projects/web/node_modules: *new*
-  {}
-/users/name/projects/web/node_modules/@types: *new*
-  {}
-/users/name/projects/web/src: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/Users/name/projects/web/src/bin.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-

@@ -6,7 +6,7 @@ import * as Utils from "./_namespaces/Utils";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
 import {
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "./tsserverLogger";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
@@ -259,7 +259,7 @@ export class TestState {
 
     private inputFiles = new Map<string, string>(); // Map between inputFile's fileName and its content for easily looking up when resolving references
 
-    private logger: Logger | undefined;
+    private logger: LoggerWithInMemoryLogs | undefined;
 
     private static getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[] | undefined) {
         let result = "";
@@ -519,7 +519,7 @@ export class TestState {
         if (this.logger) {
             Harness.Baseline.runBaseline(
                 `tsserver/fourslashServer/${ts.getBaseFileName(this.originalInputFileName).replace(".ts", ".js")}`,
-                this.logger.logs!.join("\n"),
+                this.logger.logs.join("\n"),
             );
         }
     }
@@ -1569,7 +1569,7 @@ export class TestState {
                 details.push({ location: contextSpanEnd, locationMarker: "|>", span, type: "contextEnd" });
             }
 
-            if (additionalSpan && ts.documentSpansEqual(additionalSpan, span)) {
+            if (additionalSpan && ts.documentSpansEqual(additionalSpan, span, this.languageServiceAdapterHost.useCaseSensitiveFileNames())) {
                 // This span is same as text span
                 groupedSpanForAdditionalSpan = span;
             }

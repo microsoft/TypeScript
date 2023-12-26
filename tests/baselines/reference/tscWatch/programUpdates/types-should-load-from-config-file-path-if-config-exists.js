@@ -38,6 +38,25 @@ Output::
 
 
 
+//// [/a/b/app.js]
+var x = 1;
+
+
+
+FsWatches::
+/a/b/app.ts: *new*
+  {}
+/a/b/node_modules/@types/node/index.d.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
 Program root files: [
   "/a/b/app.ts"
 ]
@@ -65,23 +84,4 @@ Shape signatures in builder refreshed for::
 /a/b/app.ts (used version)
 /a/b/node_modules/@types/node/index.d.ts (used version)
 
-FsWatches::
-/a/b/app.ts: *new*
-  {}
-/a/b/node_modules/@types/node/index.d.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/app.js]
-var x = 1;
-
-

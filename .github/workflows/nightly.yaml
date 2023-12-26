@@ -6,7 +6,7 @@ on:
   # enable users to manually trigger with workflow_dispatch
   workflow_dispatch: {}
   repository_dispatch:
-    types: publish-nightly
+    types: [publish-nightly]
 
 permissions:
   contents: read
