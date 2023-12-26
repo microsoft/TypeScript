@@ -37014,7 +37014,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!witnesses) {
                 return false;
             }
-            const operandConstraint = getBaseConstraintOrType(checkExpressionCached((node.expression as TypeOfExpression).expression));
+            const operandConstraint = getBaseConstraintOfType(checkExpressionCached((node.expression as TypeOfExpression).expression)) || unknownType;
             // Get the not-equal flags for all handled cases.
             const notEqualFacts = getNotEqualFactsFromTypeofSwitch(0, 0, witnesses);
             if (operandConstraint.flags & TypeFlags.AnyOrUnknown) {
