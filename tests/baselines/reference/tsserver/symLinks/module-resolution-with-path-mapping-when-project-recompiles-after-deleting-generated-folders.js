@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -19,13 +19,28 @@ import {C} from "@microsoft/recognizers-text";
 new C();
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json]
-{"compilerOptions":{"rootDir":"src","baseUrl":"./","paths":{"@microsoft/*":["../*"]}},"include":["src"]}
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "baseUrl": "./",
+    "paths": {
+      "@microsoft/*": [
+        "../*"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/src/recognizers-text.ts]
 export class C { method () { return 10; } }
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/package.json]
-{"typings":"dist/types/recognizers-text.d.ts"}
+{
+  "typings": "dist/types/recognizers-text.d.ts"
+}
 
 //// [/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@microsoft/recognizers-text] symlink(/users/username/projects/myproject/javascript/packages/recognizers-text)
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts]
@@ -232,6 +247,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -247,6 +265,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
@@ -261,7 +282,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -327,6 +350,10 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
   {}
 
+Timeout callback:: count: 2
+2: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
@@ -373,7 +400,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -385,8 +412,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-4: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /users/username/projects/myproject/javascript/node_modules: *new*
@@ -426,19 +452,8 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-text: *new*
   {}
 
-Before running Timeout callback:: count: 1
-4: checkOne
+Before running Timeout callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts",
-        "diagnostics": []
-      }
-    }
 After running Timeout callback:: count: 0
 
 Before request
@@ -461,8 +476,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+4: checkOne *new*
+
 Before running Timeout callback:: count: 1
-5: checkOne
+4: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -476,8 +494,11 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+3: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
-4: semanticCheck
+3: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -504,10 +525,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-5: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
-5: suggestionCheck
+4: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -540,21 +563,26 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/proje
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
-8: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation
+7: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation
 //// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts]
 export class C { method(): number; }
 
+
+Timeout callback:: count: 1
+7: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
-9: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-10: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+8: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *new*
+9: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
-9: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-10: *ensureProjectForOpenFiles*
+8: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+9: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
@@ -606,7 +634,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
 Info seq  [hh:mm:ss:mss] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -618,8 +646,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-11: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /users/username/projects/myproject/javascript/node_modules/@types:
@@ -685,8 +712,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+10: checkOne *new*
+
 Before running Timeout callback:: count: 1
-12: checkOne
+10: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -700,8 +730,11 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+5: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
-6: semanticCheck
+5: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -714,10 +747,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-7: suggestionCheck
+
+Immedidate callback:: count: 1
+6: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
-7: suggestionCheck
+6: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {

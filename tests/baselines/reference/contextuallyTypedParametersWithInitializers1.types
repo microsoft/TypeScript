@@ -1,0 +1,379 @@
+//// [tests/cases/compiler/contextuallyTypedParametersWithInitializers1.ts] ////
+
+=== contextuallyTypedParametersWithInitializers1.ts ===
+declare function id1<T>(input: T): T;
+>id1 : <T>(input: T) => T
+>input : T
+
+declare function id2<T extends (x: any) => any>(input: T): T;
+>id2 : <T extends (x: any) => any>(input: T) => T
+>x : any
+>input : T
+
+declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
+>id3 : <T extends (x: {    foo: any;}) => any>(input: T) => T
+>x : { foo: any; }
+>foo : any
+>input : T
+
+declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
+>id4 : <T extends (x: {    foo?: number;}) => any>(input: T) => T
+>x : { foo?: number | undefined; }
+>foo : number | undefined
+>input : T
+
+declare function id5<T extends (x?: number) => any>(input: T): T;
+>id5 : <T extends (x?: number) => any>(input: T) => T
+>x : number | undefined
+>input : T
+
+const f10 = function ({ foo = 42 }) { return foo };
+>f10 : ({ foo }: { foo?: number | undefined; }) => number
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
+>foo : number
+>42 : 42
+>foo : number
+
+const f11 = id1(function ({ foo = 42 }) { return foo });
+>f11 : ({ foo }: { foo?: number | undefined; }) => number
+>id1(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number | undefined; }) => number
+>id1 : <T>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
+>foo : number
+>42 : 42
+>foo : number
+
+const f12 = id2(function ({ foo = 42 }) { return foo });
+>f12 : ({ foo }: any) => any
+>id2(function ({ foo = 42 }) { return foo }) : ({ foo }: any) => any
+>id2 : <T extends (x: any) => any>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: any) => any
+>foo : any
+>42 : 42
+>foo : any
+
+const f13 = id3(function ({ foo = 42 }) { return foo });
+>f13 : ({ foo }: { foo: any; }) => any
+>id3(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo: any; }) => any
+>id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo: any; }) => any
+>foo : any
+>42 : 42
+>foo : any
+
+const f14 = id4(function ({ foo = 42 }) { return foo });
+>f14 : ({ foo }: { foo?: number | undefined; }) => number
+>id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number | undefined; }) => number
+>id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
+>foo : number
+>42 : 42
+>foo : number
+
+const f20 = function (foo = 42) { return foo };
+>f20 : (foo?: number) => number
+>function (foo = 42) { return foo } : (foo?: number) => number
+>foo : number
+>42 : 42
+>foo : number
+
+const f21 = id1(function (foo = 42) { return foo });
+>f21 : (foo?: number) => number
+>id1(function (foo = 42) { return foo }) : (foo?: number) => number
+>id1 : <T>(input: T) => T
+>function (foo = 42) { return foo } : (foo?: number) => number
+>foo : number
+>42 : 42
+>foo : number
+
+const f22 = id2(function (foo = 42) { return foo });
+>f22 : (foo?: any) => any
+>id2(function (foo = 42) { return foo }) : (foo?: any) => any
+>id2 : <T extends (x: any) => any>(input: T) => T
+>function (foo = 42) { return foo } : (foo?: any) => any
+>foo : any
+>42 : 42
+>foo : any
+
+const f25 = id5(function (foo = 42) { return foo });
+>f25 : (foo?: number | undefined) => number
+>id5(function (foo = 42) { return foo }) : (foo?: number | undefined) => number
+>id5 : <T extends (x?: number | undefined) => any>(input: T) => T
+>function (foo = 42) { return foo } : (foo?: number | undefined) => number
+>foo : number | undefined
+>42 : 42
+>foo : number
+
+const f1 = (x = 1) => 0;  // number
+>f1 : (x?: number) => number
+>(x = 1) => 0 : (x?: number) => number
+>x : number
+>1 : 1
+>0 : 0
+
+const f2: any = (x = 1) => 0;  // number
+>f2 : any
+>(x = 1) => 0 : (x?: number) => number
+>x : number
+>1 : 1
+>0 : 0
+
+const f3: unknown = (x = 1) => 0;  // number
+>f3 : unknown
+>(x = 1) => 0 : (x?: number) => number
+>x : number
+>1 : 1
+>0 : 0
+
+const f4: Function = (x = 1) => 0;  // number
+>f4 : Function
+>(x = 1) => 0 : (x?: number) => number
+>x : number
+>1 : 1
+>0 : 0
+
+const f5: (...args: any[]) => any = (x = 1) => 0;  // any
+>f5 : (...args: any[]) => any
+>args : any[]
+>(x = 1) => 0 : (x?: any) => number
+>x : any
+>1 : 1
+>0 : 0
+
+const f6: () => any = (x = 1) => 0;  // number
+>f6 : () => any
+>(x = 1) => 0 : (x?: number) => number
+>x : number
+>1 : 1
+>0 : 0
+
+const f7: () => any = (x?) => 0;  // Implicit any error
+>f7 : () => any
+>(x?) => 0 : (x?: any) => number
+>x : any
+>0 : 0
+
+const f8: () => any = (...x) => 0;  // []
+>f8 : () => any
+>(...x) => 0 : () => number
+>x : []
+>0 : 0
+
+declare function g1<T>(x: T): T;
+>g1 : <T>(x: T) => T
+>x : T
+
+declare function g2<T extends any>(x: T): T;
+>g2 : <T extends unknown>(x: T) => T
+>x : T
+
+declare function g3<T extends unknown>(x: T): T;
+>g3 : <T extends unknown>(x: T) => T
+>x : T
+
+declare function g4<T extends Function>(x: T): T;
+>g4 : <T extends Function>(x: T) => T
+>x : T
+
+declare function g5<T extends (...args: any[]) => any>(x: T): T;
+>g5 : <T extends (...args: any[]) => any>(x: T) => T
+>args : any[]
+>x : T
+
+declare function g6<T extends () => any>(x: T): T;
+>g6 : <T extends () => any>(x: T) => T
+>x : T
+
+g1((x = 1) => 0);  // number
+>g1((x = 1) => 0) : (x?: number) => 0
+>g1 : <T>(x: T) => T
+>(x = 1) => 0 : (x?: number) => 0
+>x : number
+>1 : 1
+>0 : 0
+
+g2((x = 1) => 0);  // number
+>g2((x = 1) => 0) : (x?: number) => 0
+>g2 : <T extends unknown>(x: T) => T
+>(x = 1) => 0 : (x?: number) => 0
+>x : number
+>1 : 1
+>0 : 0
+
+g3((x = 1) => 0);  // number
+>g3((x = 1) => 0) : (x?: number) => 0
+>g3 : <T extends unknown>(x: T) => T
+>(x = 1) => 0 : (x?: number) => 0
+>x : number
+>1 : 1
+>0 : 0
+
+g4((x = 1) => 0);  // number
+>g4((x = 1) => 0) : (x?: number) => 0
+>g4 : <T extends Function>(x: T) => T
+>(x = 1) => 0 : (x?: number) => 0
+>x : number
+>1 : 1
+>0 : 0
+
+g5((x = 1) => 0);  // any
+>g5((x = 1) => 0) : (x?: any) => number
+>g5 : <T extends (...args: any[]) => any>(x: T) => T
+>(x = 1) => 0 : (x?: any) => number
+>x : any
+>1 : 1
+>0 : 0
+
+g6((x = 1) => 0);  // number
+>g6((x = 1) => 0) : (x?: number) => number
+>g6 : <T extends () => any>(x: T) => T
+>(x = 1) => 0 : (x?: number) => number
+>x : number
+>1 : 1
+>0 : 0
+
+g6((x?) => 0);     // Implicit any error
+>g6((x?) => 0) : (x?: any) => number
+>g6 : <T extends () => any>(x: T) => T
+>(x?) => 0 : (x?: any) => number
+>x : any
+>0 : 0
+
+g6((...x) => 0);   // []
+>g6((...x) => 0) : () => number
+>g6 : <T extends () => any>(x: T) => T
+>(...x) => 0 : () => number
+>x : []
+>0 : 0
+
+// Repro from #28816
+
+function id<T>(input: T): T { return input }
+>id : <T>(input: T) => T
+>input : T
+>input : T
+
+function getFoo ({ foo = 42 }) {
+>getFoo : ({ foo }: { foo?: number | undefined; }) => number
+>foo : number
+>42 : 42
+
+  return foo;
+>foo : number
+}
+
+const newGetFoo = id(getFoo);
+>newGetFoo : ({ foo }: { foo?: number | undefined; }) => number
+>id(getFoo) : ({ foo }: { foo?: number | undefined; }) => number
+>id : <T>(input: T) => T
+>getFoo : ({ foo }: { foo?: number | undefined; }) => number
+
+const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
+>newGetFoo2 : ({ foo }: { foo?: number | undefined; }) => number
+>id(function getFoo ({ foo = 42 }) {  return foo;}) : ({ foo }: { foo?: number | undefined; }) => number
+>id : <T>(input: T) => T
+>function getFoo ({ foo = 42 }) {  return foo;} : ({ foo }: { foo?: number | undefined; }) => number
+>getFoo : ({ foo }: { foo?: number | undefined; }) => number
+>foo : number
+>42 : 42
+
+  return foo;
+>foo : number
+
+});
+
+// Repro from comment in #30840
+
+declare function memoize<F extends Function>(func: F): F;
+>memoize : <F extends Function>(func: F) => F
+>func : F
+
+function add(x: number, y = 0): number {
+>add : (x: number, y?: number) => number
+>x : number
+>y : number
+>0 : 0
+
+    return x + y;
+>x + y : number
+>x : number
+>y : number
+}
+const memoizedAdd = memoize(add);
+>memoizedAdd : (x: number, y?: number) => number
+>memoize(add) : (x: number, y?: number) => number
+>memoize : <F extends Function>(func: F) => F
+>add : (x: number, y?: number) => number
+
+const add2 = (x: number, y = 0): number => x + y;
+>add2 : (x: number, y?: number) => number
+>(x: number, y = 0): number => x + y : (x: number, y?: number) => number
+>x : number
+>y : number
+>0 : 0
+>x + y : number
+>x : number
+>y : number
+
+const memoizedAdd2 = memoize(add2);
+>memoizedAdd2 : (x: number, y?: number) => number
+>memoize(add2) : (x: number, y?: number) => number
+>memoize : <F extends Function>(func: F) => F
+>add2 : (x: number, y?: number) => number
+
+const memoizedAdd3 = memoize((x: number, y = 0): number => x + y);
+>memoizedAdd3 : (x: number, y?: number) => number
+>memoize((x: number, y = 0): number => x + y) : (x: number, y?: number) => number
+>memoize : <F extends Function>(func: F) => F
+>(x: number, y = 0): number => x + y : (x: number, y?: number) => number
+>x : number
+>y : number
+>0 : 0
+>x + y : number
+>x : number
+>y : number
+
+// Repro from #36052
+
+declare function execute(script: string | Function): Promise<string>;
+>execute : (script: string | Function) => Promise<string>
+>script : string | Function
+  
+export function executeSomething() {
+>executeSomething : () => Promise<string>
+
+    return execute((root: HTMLElement, debug = true) => {
+>execute((root: HTMLElement, debug = true) => {        if (debug) {            root.innerHTML = '';        }    }) : Promise<string>
+>execute : (script: string | Function) => Promise<string>
+>(root: HTMLElement, debug = true) => {        if (debug) {            root.innerHTML = '';        }    } : (root: HTMLElement, debug?: boolean) => void
+>root : HTMLElement
+>debug : boolean
+>true : true
+
+        if (debug) {
+>debug : boolean
+
+            root.innerHTML = '';
+>root.innerHTML = '' : ""
+>root.innerHTML : string
+>root : HTMLElement
+>innerHTML : string
+>'' : ""
+        }
+    });
+}
+
+const fz1 = (debug = true) => false;
+>fz1 : (debug?: boolean) => boolean
+>(debug = true) => false : (debug?: boolean) => boolean
+>debug : boolean
+>true : true
+>false : false
+
+const fz2: Function = (debug = true) => false;
+>fz2 : Function
+>(debug = true) => false : (debug?: boolean) => boolean
+>debug : boolean
+>true : true
+>false : false
+

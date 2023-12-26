@@ -2,14 +2,14 @@ currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames: false
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
- "name": "@types/bar",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "require": "./index.d.ts"
+  "name": "@types/bar",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
@@ -17,15 +17,15 @@ export declare const bar: number;
 
 //// [/home/src/projects/project/node_modules/bar/package.json]
 {
- "name": "bar",
- "version": "1.0.0",
- "main": "index.js",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "bar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/bar/index.js]
@@ -36,16 +36,16 @@ export const bar = 1;
 
 //// [/home/src/projects/project/node_modules/foo/package.json]
 {
- "name": "foo",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/foo/index.js]
@@ -59,15 +59,15 @@ export declare const foo: number;
 
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json]
 {
- "name": "@types/bar2",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "require": "./index.d.ts"
+  "name": "@types/bar2",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
@@ -75,15 +75,15 @@ export declare const bar2: number;
 
 //// [/home/src/projects/project/node_modules/bar2/package.json]
 {
- "name": "bar2",
- "version": "1.0.0",
- "main": "index.js",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "bar2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/bar2/index.js]
@@ -94,17 +94,17 @@ export const bar2 = 1;
 
 //// [/home/src/projects/project/node_modules/foo2/package.json]
 {
- "name": "foo2",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 //// [/home/src/projects/project/node_modules/foo2/index.js]
@@ -124,7 +124,18 @@ import { bar2 } from "bar2";
 
 
 //// [/home/src/projects/project/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node16","traceResolution":true,"incremental":true,"strict":true,"types":[]},"files":["index.mts"]}
+{
+  "compilerOptions": {
+    "moduleResolution": "node16",
+    "traceResolution": true,
+    "incremental": true,
+    "strict": true,
+    "types": []
+  },
+  "files": [
+    "index.mts"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -352,61 +363,6 @@ Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/home/src/projects/project/node_modules/foo2/index.d.ts (used version)
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts (used version)
-/home/src/projects/project/index.mts (used version)
-
-PolledWatches::
-/home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/home/src/projects: *new*
-  {}
-/home/src/projects/project: *new*
-  {}
-/home/src/projects/project/index.mts: *new*
-  {}
-/home/src/projects/project/node_modules/@types/bar/package.json: *new*
-  {}
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts: *new*
-  {}
-/home/src/projects/project/node_modules/@types/bar2/package.json: *new*
-  {}
-/home/src/projects/project/node_modules/bar/package.json: *new*
-  {}
-/home/src/projects/project/node_modules/bar2/package.json: *new*
-  {}
-/home/src/projects/project/node_modules/foo/package.json: *new*
-  {}
-/home/src/projects/project/node_modules/foo2/index.d.ts: *new*
-  {}
-/home/src/projects/project/node_modules/foo2/package.json: *new*
-  {}
-/home/src/projects/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project/node_modules: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/home/src/projects/project/index.mjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -497,23 +453,107 @@ Object.defineProperty(exports, "__esModule", { value: true });
 }
 
 
+PolledWatches::
+/home/src/projects/node_modules: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/home/src/projects: *new*
+  {}
+/home/src/projects/project: *new*
+  {}
+/home/src/projects/project/index.mts: *new*
+  {}
+/home/src/projects/project/node_modules/@types/bar/package.json: *new*
+  {}
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts: *new*
+  {}
+/home/src/projects/project/node_modules/@types/bar2/package.json: *new*
+  {}
+/home/src/projects/project/node_modules/bar/package.json: *new*
+  {}
+/home/src/projects/project/node_modules/bar2/package.json: *new*
+  {}
+/home/src/projects/project/node_modules/foo/package.json: *new*
+  {}
+/home/src/projects/project/node_modules/foo2/index.d.ts: *new*
+  {}
+/home/src/projects/project/node_modules/foo2/package.json: *new*
+  {}
+/home/src/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/node_modules: *new*
+  {}
+
+Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions *new*
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/home/src/projects/project/node_modules/foo2/index.d.ts (used version)
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts (used version)
+/home/src/projects/project/index.mts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: delete the node10Result in @types
 
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] deleted
 
-Before running Timeout callback:: count: 1
-4: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-5: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions *deleted*
+4: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+4: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:22 AM[0m] File change detected. Starting incremental compilation...
 
@@ -619,8 +659,21 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -634,24 +687,37 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: delete the ndoe10Result in package/types
 
 Input::
 //// [/home/src/projects/project/node_modules/foo/index.d.ts] deleted
 
-Before running Timeout callback:: count: 1
-6: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-7: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-7: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+6: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+6: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+7: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+7: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
 
@@ -738,8 +804,21 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -753,7 +832,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: add the node10Result in @types
 
 Input::
@@ -761,18 +839,32 @@ Input::
 export declare const bar: number;
 
 
-Before running Timeout callback:: count: 1
-8: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-9: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-9: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+8: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+8: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+9: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+9: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:30 AM[0m] File change detected. Starting incremental compilation...
 
@@ -865,8 +957,21 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -880,7 +985,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: add the ndoe10Result in package/types
 
 Input::
@@ -888,18 +992,32 @@ Input::
 export declare const foo: number;
 
 
-Before running Timeout callback:: count: 1
-10: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-11: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-11: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+10: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+10: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+11: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+11: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:35 AM[0m] File change detected. Starting incremental compilation...
 
@@ -973,8 +1091,21 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -988,36 +1119,49 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: update package.json from @types so error is fixed
 
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/package.json]
 {
- "name": "@types/bar",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "require": "./index.d.ts"
+  "name": "@types/bar",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 
-Before running Timeout callback:: count: 1
-12: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-13: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-13: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar/package.json 2000 undefined File location affecting resolution
+
+
+Timeout callback:: count: 1
+12: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+12: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+13: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+13: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
 
@@ -1073,62 +1217,6 @@ File '/package.json' does not exist according to earlier cached lookups.
 [[90m12:01:47 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/node_modules/@types/bar/index.d.ts (used version)
-/home/src/projects/project/index.mts (computed .d.ts)
-
-PolledWatches::
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/home/src/projects:
-  {}
-/home/src/projects/project:
-  {}
-/home/src/projects/project/index.mts:
-  {}
-/home/src/projects/project/node_modules/@types/bar/index.d.ts: *new*
-  {}
-/home/src/projects/project/node_modules/@types/bar/package.json:
-  {}
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/@types/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/bar/package.json:
-  {}
-/home/src/projects/project/node_modules/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/foo/package.json:
-  {}
-/home/src/projects/project/node_modules/foo2/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/foo2/package.json:
-  {}
-/home/src/projects/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project/node_modules:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -1224,37 +1312,119 @@ exitCode:: ExitStatus.undefined
 }
 
 
+PolledWatches::
+/home/src/projects/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/home/src/projects:
+  {}
+/home/src/projects/project:
+  {}
+/home/src/projects/project/index.mts:
+  {}
+/home/src/projects/project/node_modules/@types/bar/index.d.ts: *new*
+  {}
+/home/src/projects/project/node_modules/@types/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/@types/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/foo/package.json:
+  {}
+/home/src/projects/project/node_modules/foo2/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/foo2/package.json:
+  {}
+/home/src/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/node_modules:
+  {}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/node_modules/@types/bar/index.d.ts (used version)
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: update package.json so error is fixed
 
 Input::
 //// [/home/src/projects/project/node_modules/foo/package.json]
 {
- "name": "foo",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "types": "./index.d.ts",
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 
-Before running Timeout callback:: count: 1
-14: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-15: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-15: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo/package.json 2000 undefined File location affecting resolution
+
+
+Timeout callback:: count: 1
+14: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+14: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+15: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+15: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:55 AM[0m] File change detected. Starting incremental compilation...
 
@@ -1304,65 +1474,6 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
 [[90m12:02:02 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo/index.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/node_modules/foo/index.d.ts (used version)
-/home/src/projects/project/index.mts (computed .d.ts)
-
-PolledWatches *deleted*::
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/home/src/projects:
-  {}
-/home/src/projects/project:
-  {}
-/home/src/projects/project/index.mts:
-  {}
-/home/src/projects/project/node_modules/@types/bar/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/@types/bar/package.json:
-  {}
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/@types/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/bar/package.json:
-  {}
-/home/src/projects/project/node_modules/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/foo/index.d.ts: *new*
-  {}
-/home/src/projects/project/node_modules/foo/package.json:
-  {}
-/home/src/projects/project/node_modules/foo2/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/foo2/package.json:
-  {}
-/home/src/projects/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project/node_modules:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -1470,34 +1581,119 @@ exitCode:: ExitStatus.undefined
 }
 
 
+PolledWatches *deleted*::
+/home/src/projects/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/home/src/projects:
+  {}
+/home/src/projects/project:
+  {}
+/home/src/projects/project/index.mts:
+  {}
+/home/src/projects/project/node_modules/@types/bar/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/@types/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/@types/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/foo/index.d.ts: *new*
+  {}
+/home/src/projects/project/node_modules/foo/package.json:
+  {}
+/home/src/projects/project/node_modules/foo2/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/foo2/package.json:
+  {}
+/home/src/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/node_modules:
+  {}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/node_modules/foo/index.d.ts (used version)
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: update package.json from @types so error is introduced
 
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/package.json]
 {
- "name": "@types/bar2",
- "version": "1.0.0",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "require": "./index.d.ts"
+  "name": "@types/bar2",
+  "version": "1.0.0",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./index.d.ts"
+    }
   }
- }
 }
 
 
-Before running Timeout callback:: count: 1
-16: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-17: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-17: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/@types/bar2/package.json 2000 undefined File location affecting resolution
+
+
+Timeout callback:: count: 1
+16: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+16: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+17: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+17: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:09 AM[0m] File change detected. Starting incremental compilation...
 
@@ -1597,65 +1793,6 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo/index.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/node_modules/foo2/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/index.mts (computed .d.ts)
-
-PolledWatches::
-/home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/home/src/projects:
-  {}
-/home/src/projects/project:
-  {}
-/home/src/projects/project/index.mts:
-  {}
-/home/src/projects/project/node_modules/@types/bar/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/@types/bar/package.json:
-  {}
-/home/src/projects/project/node_modules/@types/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/bar/package.json:
-  {}
-/home/src/projects/project/node_modules/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/foo/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/foo/package.json:
-  {}
-/home/src/projects/project/node_modules/foo2/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/foo2/package.json:
-  {}
-/home/src/projects/project/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project/node_modules:
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"fileIdsList":[[2,3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
@@ -1750,36 +1887,121 @@ exitCode:: ExitStatus.undefined
 }
 
 
+PolledWatches::
+/home/src/projects/node_modules: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/home/src/projects:
+  {}
+/home/src/projects/project:
+  {}
+/home/src/projects/project/index.mts:
+  {}
+/home/src/projects/project/node_modules/@types/bar/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/@types/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/@types/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/foo/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/foo/package.json:
+  {}
+/home/src/projects/project/node_modules/foo2/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/foo2/package.json:
+  {}
+/home/src/projects/project/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/node_modules:
+  {}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: update package.json so error is introduced
 
 Input::
 //// [/home/src/projects/project/node_modules/foo2/package.json]
 {
- "name": "foo2",
- "version": "1.0.0",
- "main": "index.js",
- "types": "index.d.ts",
- "exports": {
-  ".": {
-   "import": "./index.mjs",
-   "require": "./index.js"
+  "name": "foo2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js"
+    }
   }
- }
 }
 
 
-Before running Timeout callback:: count: 1
-18: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-19: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-19: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/package.json 1:: WatchInfo: /home/src/projects/project/node_modules/foo2/package.json 2000 undefined File location affecting resolution
+
+
+Timeout callback:: count: 1
+18: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+18: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+19: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+19: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:24 AM[0m] File change detected. Starting incremental compilation...
 
@@ -1854,62 +2076,6 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
 [[90m12:02:31 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/home/src/projects/project/node_modules/foo/index.d.ts
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-/home/src/projects/project/index.mts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/home/src/projects/project/index.mts (computed .d.ts)
-
-PolledWatches::
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/home/src/projects:
-  {}
-/home/src/projects/project:
-  {}
-/home/src/projects/project/index.mts:
-  {}
-/home/src/projects/project/node_modules/@types/bar/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/@types/bar/package.json:
-  {}
-/home/src/projects/project/node_modules/@types/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/bar/package.json:
-  {}
-/home/src/projects/project/node_modules/bar2/package.json:
-  {}
-/home/src/projects/project/node_modules/foo/index.d.ts:
-  {}
-/home/src/projects/project/node_modules/foo/package.json:
-  {}
-/home/src/projects/project/node_modules/foo2/package.json:
-  {}
-/home/src/projects/project/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/home/src/projects/project/node_modules/foo2/index.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project/node_modules:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
@@ -1993,23 +2159,105 @@ exitCode:: ExitStatus.undefined
 }
 
 
+PolledWatches::
+/home/src/projects/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/home/src/projects:
+  {}
+/home/src/projects/project:
+  {}
+/home/src/projects/project/index.mts:
+  {}
+/home/src/projects/project/node_modules/@types/bar/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/@types/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/@types/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/bar/package.json:
+  {}
+/home/src/projects/project/node_modules/bar2/package.json:
+  {}
+/home/src/projects/project/node_modules/foo/index.d.ts:
+  {}
+/home/src/projects/project/node_modules/foo/package.json:
+  {}
+/home/src/projects/project/node_modules/foo2/package.json:
+  {}
+/home/src/projects/project/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/home/src/projects/project/node_modules/foo2/index.d.ts:
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project/node_modules:
+  {}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/home/src/projects/project/node_modules/foo/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+/home/src/projects/project/index.mts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/home/src/projects/project/index.mts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
+
 Change:: delete the node10Result in @types
 
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] deleted
 
-Before running Timeout callback:: count: 1
-20: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-21: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-21: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+20: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+20: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+21: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+21: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:36 AM[0m] File change detected. Starting incremental compilation...
 
@@ -2115,8 +2363,21 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -2130,24 +2391,37 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: delete the ndoe10Result in package/types
 
 Input::
 //// [/home/src/projects/project/node_modules/foo2/index.d.ts] deleted
 
-Before running Timeout callback:: count: 1
-22: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-23: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-23: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+22: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+22: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+23: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+23: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:40 AM[0m] File change detected. Starting incremental compilation...
 
@@ -2234,8 +2508,21 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -2249,7 +2536,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: add the node10Result in @types
 
 Input::
@@ -2257,18 +2543,32 @@ Input::
 export declare const bar2: number;
 
 
-Before running Timeout callback:: count: 1
-24: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-25: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-25: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/@types/bar2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+24: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+24: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+25: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+25: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:44 AM[0m] File change detected. Starting incremental compilation...
 
@@ -2361,8 +2661,21 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -2376,7 +2689,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: add the ndoe10Result in package/types
 
 Input::
@@ -2384,18 +2696,32 @@ Input::
 export declare const foo2: number;
 
 
-Before running Timeout callback:: count: 1
-26: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-27: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-27: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/foo2/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
+
+
+Timeout callback:: count: 1
+26: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+26: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+27: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+27: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:02:49 AM[0m] File change detected. Starting incremental compilation...
 
@@ -2469,8 +2795,21 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 
 
-Program root files: ["/home/src/projects/project/index.mts"]
-Program options: {"moduleResolution":3,"traceResolution":true,"incremental":true,"strict":true,"types":[],"watch":true,"extendedDiagnostics":true,"configFilePath":"/home/src/projects/project/tsconfig.json"}
+
+
+Program root files: [
+  "/home/src/projects/project/index.mts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "traceResolution": true,
+  "incremental": true,
+  "strict": true,
+  "types": [],
+  "watch": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -2483,4 +2822,3 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

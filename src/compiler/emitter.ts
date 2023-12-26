@@ -223,6 +223,7 @@ import {
     isGeneratedIdentifier,
     isGeneratedPrivateIdentifier,
     isIdentifier,
+    isImportAttributes,
     isIncrementalCompilation,
     isInJsonFile,
     isInternalDeclaration,
@@ -582,33 +583,48 @@ export function getOutputExtension(fileName: string, options: CompilerOptions): 
         Extension.Js;
 }
 
-function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined, getCommonSourceDirectory?: () => string) {
+function getOutputPathWithoutChangingExt(
+    inputFileName: string,
+    ignoreCase: boolean,
+    outputDir: string | undefined,
+    getCommonSourceDirectory: () => string,
+): string {
     return outputDir ?
         resolvePath(
             outputDir,
-            getRelativePathFromDirectory(getCommonSourceDirectory ? getCommonSourceDirectory() : getCommonSourceDirectoryOfConfig(configFile, ignoreCase), inputFileName, ignoreCase),
+            getRelativePathFromDirectory(getCommonSourceDirectory(), inputFileName, ignoreCase),
         ) :
         inputFileName;
 }
 
 /** @internal */
-export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
+export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)) {
+    return getOutputDeclarationFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
+}
+
+/** @internal */
+export function getOutputDeclarationFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string) {
     return changeExtension(
-        getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir, getCommonSourceDirectory),
+        getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.declarationDir || options.outDir, getCommonSourceDirectory),
         getDeclarationEmitExtensionForPath(inputFileName),
     );
 }
 
-function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
+function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)) {
     if (configFile.options.emitDeclarationOnly) return undefined;
     const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
-    const outputFileName = changeExtension(
-        getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir, getCommonSourceDirectory),
-        getOutputExtension(inputFileName, configFile.options),
-    );
+    const outputFileName = getOutputJSFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
     return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
         outputFileName :
         undefined;
+}
+
+/** @internal */
+export function getOutputJSFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string): string {
+    return changeExtension(
+        getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.outDir, getCommonSourceDirectory),
+        getOutputExtension(inputFileName, options),
+    );
 }
 
 function createAddOutput() {
@@ -800,28 +816,6 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         emitBuildInfo(bundleBuildInfo, buildInfoPath);
         tracing?.pop();
 
-        if (!emitSkipped && emittedFilesList) {
-            if (!emitOnly) {
-                if (jsFilePath) {
-                    emittedFilesList.push(jsFilePath);
-                }
-                if (sourceMapFilePath) {
-                    emittedFilesList.push(sourceMapFilePath);
-                }
-                if (buildInfoPath) {
-                    emittedFilesList.push(buildInfoPath);
-                }
-            }
-            if (emitOnly !== EmitOnly.Js) {
-                if (declarationFilePath) {
-                    emittedFilesList.push(declarationFilePath);
-                }
-                if (declarationMapPath) {
-                    emittedFilesList.push(declarationMapPath);
-                }
-            }
-        }
-
         function relativeToBuildInfo(path: string) {
             return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory!, path, host.getCanonicalFileName));
         }
@@ -837,6 +831,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const buildInfo = host.getBuildInfo(bundle) || createBuildInfo(/*program*/ undefined, bundle);
         // Pass buildinfo as additional data to avoid having to reparse
         writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
+        emittedFilesList?.push(buildInfoPath);
     }
 
     function emitJsFileOrBundle(
@@ -888,6 +883,13 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         // Clean up emit nodes on parse tree
         transform.dispose();
         if (bundleBuildInfo) bundleBuildInfo.js = printer.bundleFileInfo;
+
+        if (emittedFilesList) {
+            emittedFilesList.push(jsFilePath);
+            if (sourceMapFilePath) {
+                emittedFilesList.push(sourceMapFilePath);
+            }
+        }
     }
 
     function emitDeclarationFileOrBundle(
@@ -917,35 +919,35 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             }
         }
 
-        const printerOptions: PrinterOptions = {
-            removeComments: compilerOptions.removeComments,
-            newLine: compilerOptions.newLine,
-            noEmitHelpers: true,
-            module: compilerOptions.module,
-            target: compilerOptions.target,
-            sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
-            inlineSourceMap: compilerOptions.inlineSourceMap,
-            extendedDiagnostics: compilerOptions.extendedDiagnostics,
-            onlyPrintJsDocStyle: true,
-            omitBraceSourceMapPositions: true,
-            writeBundleFileInfo: !!bundleBuildInfo,
-            recordInternalSection: !!bundleBuildInfo,
-            relativeToBuildInfo,
-        };
-
-        const declarationPrinter = createPrinter(printerOptions, {
-            // resolver hooks
-            hasGlobalName: resolver.hasGlobalName,
-
-            // transform hooks
-            onEmitNode: declarationTransform.emitNodeWithNotification,
-            isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
-            substituteNode: declarationTransform.substituteNode,
-        });
         const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
         emitSkipped = emitSkipped || declBlocked;
         if (!declBlocked || forceDtsEmit) {
             Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
+            const printerOptions: PrinterOptions = {
+                removeComments: compilerOptions.removeComments,
+                newLine: compilerOptions.newLine,
+                noEmitHelpers: true,
+                module: compilerOptions.module,
+                target: compilerOptions.target,
+                sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
+                inlineSourceMap: compilerOptions.inlineSourceMap,
+                extendedDiagnostics: compilerOptions.extendedDiagnostics,
+                onlyPrintJsDocStyle: true,
+                omitBraceSourceMapPositions: true,
+                writeBundleFileInfo: !!bundleBuildInfo,
+                recordInternalSection: !!bundleBuildInfo,
+                relativeToBuildInfo,
+            };
+
+            const declarationPrinter = createPrinter(printerOptions, {
+                // resolver hooks
+                hasGlobalName: resolver.hasGlobalName,
+
+                // transform hooks
+                onEmitNode: declarationTransform.emitNodeWithNotification,
+                isEmitNotificationEnabled: declarationTransform.isEmitNotificationEnabled,
+                substituteNode: declarationTransform.substituteNode,
+            });
             printSourceFileOrBundle(
                 declarationFilePath,
                 declarationMapPath,
@@ -959,9 +961,15 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
                     // Explicitly do not passthru either `inline` option
                 },
             );
+            if (emittedFilesList) {
+                emittedFilesList.push(declarationFilePath);
+                if (declarationMapPath) {
+                    emittedFilesList.push(declarationMapPath);
+                }
+            }
+            if (bundleBuildInfo) bundleBuildInfo.dts = declarationPrinter.bundleFileInfo;
         }
         declarationTransform.dispose();
-        if (bundleBuildInfo) bundleBuildInfo.dts = declarationPrinter.bundleFileInfo;
     }
 
     function collectLinkedAliases(node: Node) {
@@ -1848,6 +1856,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
         if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
         if (hint === EmitHint.MappedTypeParameter) return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
+        if (hint === EmitHint.ImportTypeNodeAttributes) return emitImportTypeNodeAttributes(cast(node, isImportAttributes));
         if (hint === EmitHint.EmbeddedStatement) {
             Debug.assertNode(node, isEmptyStatement);
             return emitEmptyStatement(/*isEmbeddedStatement*/ true);
@@ -2952,15 +2961,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (node.attributes) {
             writePunctuation(",");
             writeSpace();
-            writePunctuation("{");
-            writeSpace();
-            writeKeyword(node.attributes.token === SyntaxKind.AssertKeyword ? "assert" : "with");
-            writePunctuation(":");
-            writeSpace();
-            const elements = node.attributes.elements;
-            emitList(node.attributes, elements, ListFormat.ImportAttributes);
-            writeSpace();
-            writePunctuation("}");
+            pipelineEmit(EmitHint.ImportTypeNodeAttributes, node.attributes);
         }
         writePunctuation(")");
         if (node.qualifier) {
@@ -4083,6 +4084,18 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             emitWithLeadingSpace(node.attributes);
         }
         writeTrailingSemicolon();
+    }
+
+    function emitImportTypeNodeAttributes(node: ImportAttributes) {
+        writePunctuation("{");
+        writeSpace();
+        writeKeyword(node.token === SyntaxKind.AssertKeyword ? "assert" : "with");
+        writePunctuation(":");
+        writeSpace();
+        const elements = node.elements;
+        emitList(node, elements, ListFormat.ImportAttributes);
+        writeSpace();
+        writePunctuation("}");
     }
 
     function emitImportAttributes(node: ImportAttributes) {

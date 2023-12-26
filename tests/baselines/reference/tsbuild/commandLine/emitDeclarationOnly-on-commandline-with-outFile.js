@@ -28,7 +28,13 @@ import { a } from "./a";export const c = a;
 import { b } from "./b";export const d = b;
 
 //// [/src/project1/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"outFile":"../outFile.js","module":"amd"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outFile": "../outFile.js",
+    "module": "amd"
+  }
+}
 
 //// [/src/project2/src/e.ts]
 export const e = 10;
@@ -40,7 +46,18 @@ import { a } from "a"; export const f = a;
 import { b } from "b"; export const g = b;
 
 //// [/src/project2/src/tsconfig.json]
-{"compilerOptions":{"composite":true,"outFile":"../outFile.js","module":"amd"},"references":[{"path":"../../project1/src"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outFile": "../outFile.js",
+    "module": "amd"
+  },
+  "references": [
+    {
+      "path": "../../project1/src"
+    }
+  ]
+}
 
 
 
@@ -59,8 +76,19 @@ Output::
 [[90m12:00:28 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -73,8 +101,18 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"composite":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -325,8 +363,19 @@ Output::
 [[90m12:00:46 AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -432,8 +481,19 @@ Output::
 [[90m12:00:59 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -446,8 +506,18 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"composite":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -650,8 +720,18 @@ Output::
 [[90m12:01:13 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"outFile":"/src/project1/outFile.js","module":2,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -664,8 +744,17 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"composite":true,"outFile":"/src/project2/outFile.js","module":2,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1018,8 +1107,18 @@ Output::
 [[90m12:01:32 AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"outFile":"/src/project1/outFile.js","module":2,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1221,8 +1320,19 @@ Output::
 [[90m12:01:44 AM[0m] Updating output timestamps of project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1348,8 +1458,19 @@ Output::
 [[90m12:01:57 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1362,8 +1483,18 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"composite":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1587,8 +1718,18 @@ Output::
 [[90m12:02:13 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"composite":true,"outFile":"/src/project1/outFile.js","module":2,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -1601,8 +1742,17 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"composite":true,"outFile":"/src/project2/outFile.js","module":2,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "composite": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

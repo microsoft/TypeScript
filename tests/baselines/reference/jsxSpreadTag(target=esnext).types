@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/jsxSpreadTag.ts] ////
+
+=== /a.tsx ===
+declare const React: any;
+>React : any
+
+const t1 = <div {...<span />} />;
+>t1 : any
+><div {...<span />} /> : any
+>div : any
+><span /> : any
+>span : any
+
+const t2 = <div {...<span className="foo" />} />;
+>t2 : any
+><div {...<span className="foo" />} /> : any
+>div : any
+><span className="foo" /> : any
+>span : any
+>className : string
+
+const t3 = <Comp
+>t3 : any
+><Comp    right={<div>x</div>}    {...{ wrong: <div>x</div>}}/> : any
+>Comp : any
+
+    right={<div>x</div>}
+>right : any
+><div>x</div> : any
+>div : any
+>div : any
+
+    {...{ wrong: <div>x</div>}}
+>{ wrong: <div>x</div>} : { wrong: any; }
+>wrong : any
+><div>x</div> : any
+>div : any
+>div : any
+
+/>;
+const t4 = <Comp
+>t4 : any
+><Comp    right={<div>x</div>}    {...{ wrong() { return <div>x</div>; }}}/> : any
+>Comp : any
+
+    right={<div>x</div>}
+>right : any
+><div>x</div> : any
+>div : any
+>div : any
+
+    {...{ wrong() { return <div>x</div>; }}}
+>{ wrong() { return <div>x</div>; }} : { wrong(): any; }
+>wrong : () => any
+><div>x</div> : any
+>div : any
+>div : any
+
+/>;
+const t5 = <Comp
+>t5 : any
+><Comp    right={<div>x</div>}    {...{ get wrong() { return <div>x</div>; }}}/> : any
+>Comp : any
+
+    right={<div>x</div>}
+>right : any
+><div>x</div> : any
+>div : any
+>div : any
+
+    {...{ get wrong() { return <div>x</div>; }}}
+>{ get wrong() { return <div>x</div>; }} : { readonly wrong: any; }
+>wrong : any
+><div>x</div> : any
+>div : any
+>div : any
+
+/>;
+const t6 = <Comp
+>t6 : any
+><Comp    right={<div>x</div>}    {...{ set wrong(s) { let a = <div>x</div>; }}}/> : any
+>Comp : any
+
+    right={<div>x</div>}
+>right : any
+><div>x</div> : any
+>div : any
+>div : any
+
+    {...{ set wrong(s) { let a = <div>x</div>; }}}
+>{ set wrong(s) { let a = <div>x</div>; }} : { wrong: any; }
+>wrong : any
+>s : any
+>a : any
+><div>x</div> : any
+>div : any
+>div : any
+
+/>;
+

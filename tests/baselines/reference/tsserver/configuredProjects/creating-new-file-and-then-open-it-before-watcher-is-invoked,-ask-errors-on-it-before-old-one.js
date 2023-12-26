@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/src/foo.ts]
 export function foo() { }
@@ -21,7 +21,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"include":["./src"]}
+{
+  "include": [
+    "./src"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -288,6 +292,10 @@ Before request
 export function fooBar() { }
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
@@ -307,6 +315,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 3
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
+3: checkOne *new*
+
 Before running Timeout callback:: count: 3
 1: /user/username/projects/myproject/tsconfig.json
 2: *ensureProjectForOpenFiles*
@@ -324,8 +337,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
@@ -341,7 +355,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -357,6 +373,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 0
+
+Timeout callback:: count: 3
+1: /user/username/projects/myproject/tsconfig.json
+2: *ensureProjectForOpenFiles*
+4: checkOne *new*
 
 Before running Timeout callback:: count: 3
 1: /user/username/projects/myproject/tsconfig.json
@@ -400,8 +421,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
-1: /user/username/projects/myproject/tsconfig.json
-2: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -437,6 +456,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Immedidate callback:: count: 1
+3: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 3: semanticCheck
 
@@ -451,7 +473,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-4: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 4: suggestionCheck

@@ -58,6 +58,9 @@ import {
     EndOfFileToken,
     endsWith,
     ensureScriptKind,
+    EqualityComparer,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
     escapeString,
     ExportAssignment,
     ExportDeclaration,
@@ -358,6 +361,7 @@ import {
     tokenToString,
     toPath,
     tryCast,
+    tryParseJson,
     Type,
     TypeChecker,
     TypeFlags,
@@ -2468,6 +2472,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
+        getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
     };
 }
 
@@ -2661,8 +2666,14 @@ export function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined)
     return !!a && !!b && a.start === b.start && a.length === b.length;
 }
 /** @internal */
-export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean {
-    return a.fileName === b.fileName && textSpansEqual(a.textSpan, b.textSpan);
+export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan, useCaseSensitiveFileNames: boolean): boolean {
+    return (useCaseSensitiveFileNames ? equateStringsCaseSensitive : equateStringsCaseInsensitive)(a.fileName, b.fileName) &&
+        textSpansEqual(a.textSpan, b.textSpan);
+}
+
+/** @internal */
+export function getDocumentSpansEqualityComparer(useCaseSensitiveFileNames: boolean): EqualityComparer<DocumentSpan> {
+    return (a, b) => documentSpansEqual(a, b, useCaseSensitiveFileNames);
 }
 
 /**
@@ -2975,7 +2986,8 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
             if (text) parts.push(linkTextPart(text));
         }
         else {
-            parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
+            const separator = suffix === 0 || (link.text.charCodeAt(suffix) === CharacterCodes.bar && name.charCodeAt(name.length - 1) !== CharacterCodes.space) ? " " : "";
+            parts.push(linkTextPart(name + separator + text));
         }
     }
     parts.push(linkPart("}"));
@@ -3362,7 +3374,7 @@ export function quote(sourceFile: SourceFile, preferences: UserPreferences, text
     // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
     const quotePreference = getQuotePreference(sourceFile, preferences);
     const quoted = JSON.stringify(text);
-    return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, "\\'").replace(/\\"/g, '"')}'` : quoted;
+    return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, () => "\\'").replace(/\\"/g, '"')}'` : quoted;
 }
 
 /** @internal */
@@ -3843,15 +3855,6 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
             return `${components[0]}/${components[1]}`;
         }
         return components[0];
-    }
-}
-
-function tryParseJson(text: string) {
-    try {
-        return JSON.parse(text);
-    }
-    catch {
-        return undefined;
     }
 }
 

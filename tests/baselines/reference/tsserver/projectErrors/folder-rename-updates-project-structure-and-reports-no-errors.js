@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/projects/myproject/bar/app.ts]
 class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }
@@ -8,7 +8,15 @@ class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }
 declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }
 
 //// [/a/b/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"none","targer":"es5"},"exclude":["node_modules"]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "targer": "es5"
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -174,12 +182,12 @@ Info seq  [hh:mm:ss:mss] event:
           },
           {
             "start": {
-              "line": 1,
-              "offset": 37
+              "line": 4,
+              "offset": 5
             },
             "end": {
-              "line": 1,
-              "offset": 45
+              "line": 4,
+              "offset": 13
             },
             "text": "Unknown compiler option 'targer'. Did you mean 'target'?",
             "code": 5025,
@@ -240,6 +248,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -255,6 +266,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
@@ -269,7 +283,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -344,6 +360,10 @@ FsWatchesRecursive::
 /a/b/projects/myproject:
   {}
 
+Timeout callback:: count: 2
+10: /a/b/projects/myproject/tsconfig.json *new*
+11: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /a/b/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/myproject/foo2/foo.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json
@@ -377,7 +397,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/myproject/bar/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /a/b/projects/myproject/bar/app.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/projects/myproject/bar/app.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -389,8 +409,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-12: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /a/b/projects/myproject/node_modules/@types:
@@ -410,19 +429,8 @@ FsWatchesRecursive::
 /a/b/projects/myproject:
   {}
 
-Before running Timeout callback:: count: 1
-12: checkOne
+Before running Timeout callback:: count: 0
 
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "syntaxDiag",
-      "body": {
-        "file": "/a/b/projects/myproject/bar/app.ts",
-        "diagnostics": []
-      }
-    }
 After running Timeout callback:: count: 0
 
 Before request
@@ -445,8 +453,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+12: checkOne *new*
+
 Before running Timeout callback:: count: 1
-13: checkOne
+12: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -460,8 +471,11 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+3: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
-4: semanticCheck
+3: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -474,10 +488,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-5: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
-5: suggestionCheck
+4: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
