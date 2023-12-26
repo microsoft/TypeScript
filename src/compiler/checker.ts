@@ -26125,7 +26125,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (context.signature) {
                 const inferredCovariantType = inference.candidates ? getCovariantInference(inference, context.signature) : undefined;
                 const inferredContravariantType = inference.contraCandidates ? getContravariantInference(inference) : undefined;
-                if (!inferredContravariantType && inference.candidates?.length === 1 && inference.candidates[0].pattern) {
+                if (inferredCovariantType?.pattern) {
                     isFromBindingPattern = true;
                     inferredType = inferredCovariantType;
                 }
