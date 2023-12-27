@@ -156,19 +156,19 @@ function g<T>() {
     // no string index signature, right?
     
     type Oops = keyof Remapped;
->Oops : unique symbol | "str" | (keyof T extends infer T_1 ? T_1 extends keyof T ? T_1 extends unknown ? {} extends Record<T_1, any> ? never : T_1 : never : never : never)
+>Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 
     let x: Oops;
->x : unique symbol | "str" | (keyof T extends infer T_1 ? T_1 extends keyof T ? T_1 extends unknown ? {} extends Record<T_1, any> ? never : T_1 : never : never : never)
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 
     x = sym;
 >x = sym : unique symbol
->x : unique symbol | "str" | (keyof T extends infer T_1 ? T_1 extends keyof T ? T_1 extends unknown ? {} extends Record<T_1, any> ? never : T_1 : never : never : never)
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 >sym : unique symbol
 
     x = "str";
 >x = "str" : "str"
->x : unique symbol | "str" | (keyof T extends infer T_1 ? T_1 extends keyof T ? T_1 extends unknown ? {} extends Record<T_1, any> ? never : T_1 : never : never : never)
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 >"str" : "str"
 }
 
