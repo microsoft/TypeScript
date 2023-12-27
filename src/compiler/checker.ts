@@ -22565,7 +22565,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (sourceFlags & TypeFlags.Index) {
-                if (result = isRelatedTo(keyofConstraintType, target, RecursionFlags.Source, reportErrors)) {
+                const indexType = source as IndexType;
+                let sourceKeys = keyofConstraintType;
+                if (isGenericMappedType(indexType.type)) {
+                    sourceKeys = getMappedTypeNameTypeKind(indexType.type) !== MappedTypeNameTypeKind.None ? getNameTypeFromMappedType(indexType.type)! : getConstraintTypeFromMappedType(indexType.type);
+                }
+                if (result = isRelatedTo(sourceKeys, target, RecursionFlags.Source, reportErrors)) {
                     return result;
                 }
             }
