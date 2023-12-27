@@ -1442,6 +1442,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var totalInstantiationCount = 0;
     var instantiationCount = 0;
     var instantiationDepth = 0;
+    var instantiatedTypeStrings = new Set<string>();
     var inlineLevel = 0;
     var currentNode: Node | undefined;
     var varianceTypeParameter: TypeParameter | undefined;
@@ -19778,12 +19779,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
             tracing?.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+            instantiatedTypeStrings.clear();
             return errorType;
         }
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
+        const typeString = `${type.id} ${aliasSymbol ? symbolToString(aliasSymbol) : "undefined"} ${(aliasTypeArguments ?? []).map(a => a.id).join(" ")}`;
+        // tracing?.instant(
+        //     tracing.Phase.CheckTypes,
+        //     "instantiateType_TypeString",
+        //     { typeId: type.id, instantiationDepth, instantiationCount, typeString },
+        // );
         const result = instantiateTypeWorker(type, mapper, aliasSymbol, aliasTypeArguments);
+
+        if (instantiatedTypeStrings.has(typeString)) {
+            tracing?.instant(
+                tracing.Phase.CheckTypes,
+                "instantiateType_Cycle",
+                { typeId: type.id, instantiationDepth, instantiationCount, typeString, stack: [...instantiatedTypeStrings.values()] },
+            );
+            error(
+                currentNode,
+                Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite,
+            );
+            instantiatedTypeStrings.clear();
+            return errorType;
+        }
+        instantiatedTypeStrings.add(typeString);
+
+        instantiatedTypeStrings.delete(typeString);
         instantiationDepth--;
         return result;
     }
