@@ -1008,7 +1008,7 @@ interface RegExpConstructor {
     new (pattern: string, flags?: string): RegExp;
     (pattern: RegExp | string): RegExp;
     (pattern: string, flags?: string): RegExp;
-    readonly "prototype": RegExp;
+    readonly prototype: RegExp;
 
     // Non-standard extensions
     /** @deprecated A legacy feature for browser compatibility */
