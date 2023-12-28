@@ -574,3 +574,113 @@ isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgai
 >workingAgain : { type: "A"; aProp: number; }
 >aProp : number
 
+// Repro from #56144
+
+type Union =
+>Union : { type: 'a'; variant: 1; } | { type: 'a'; variant: 2; } | { type: 'b'; }
+
+    | { type: 'a'; variant: 1 }
+>type : "a"
+>variant : 1
+
+    | { type: 'a'; variant: 2 }
+>type : "a"
+>variant : 2
+
+    | { type: 'b' };
+>type : "b"
+
+function example1(value: Union): { type: 'a'; variant: 2 } | null {
+>example1 : (value: Union) => {    type: 'a';    variant: 2;} | null
+>value : Union
+>type : "a"
+>variant : 2
+
+    if (value.type !== 'a') {
+>value.type !== 'a' : boolean
+>value.type : "a" | "b"
+>value : Union
+>type : "a" | "b"
+>'a' : "a"
+
+        return null;
+    }
+    if (value.variant === 1) {
+>value.variant === 1 : boolean
+>value.variant : 1 | 2
+>value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>variant : 1 | 2
+>1 : 1
+
+        return null;
+    }
+    return value;
+>value : { type: "a"; variant: 2; }
+}
+
+function example2(value: Union): { type: 'a'; variant: 2 } | null {
+>example2 : (value: Union) => {    type: 'a';    variant: 2;} | null
+>value : Union
+>type : "a"
+>variant : 2
+
+    if (value.type !== 'a') {
+>value.type !== 'a' : boolean
+>value.type : "a" | "b"
+>value : Union
+>type : "a" | "b"
+>'a' : "a"
+
+        return null;
+    }
+    if (value.type === 'a' && value.variant === 1) {
+>value.type === 'a' && value.variant === 1 : boolean
+>value.type === 'a' : boolean
+>value.type : "a"
+>value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>type : "a"
+>'a' : "a"
+>value.variant === 1 : boolean
+>value.variant : 1 | 2
+>value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>variant : 1 | 2
+>1 : 1
+
+        return null;
+    }
+    return value;
+>value : { type: "a"; variant: 2; }
+}
+
+function example3(value: Union): { type: 'a'; variant: 2 } | null {
+>example3 : (value: Union) => {    type: 'a';    variant: 2;} | null
+>value : Union
+>type : "a"
+>variant : 2
+
+    if (value.type !== 'a') {
+>value.type !== 'a' : boolean
+>value.type : "a" | "b"
+>value : Union
+>type : "a" | "b"
+>'a' : "a"
+
+        return null;
+    }
+    if (value.type && value.variant === 1) {
+>value.type && value.variant === 1 : boolean
+>value.type : "a"
+>value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>type : "a"
+>value.variant === 1 : boolean
+>value.variant : 1 | 2
+>value : { type: "a"; variant: 1; } | { type: "a"; variant: 2; }
+>variant : 1 | 2
+>1 : 1
+
+        return null;
+    }
+    return value;
+>value : { type: "a"; variant: 2; }
+}
+

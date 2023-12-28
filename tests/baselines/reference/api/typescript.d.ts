@@ -49,9 +49,11 @@ declare namespace ts {
             readonly fileName: Path;
             readonly packageName: string;
             readonly projectRootPath: Path;
+            readonly id: number;
         }
         interface PackageInstalledResponse extends ProjectResponse {
             readonly kind: ActionPackageInstalled;
+            readonly id: number;
             readonly success: boolean;
             readonly message: string;
         }
@@ -1085,6 +1087,7 @@ declare namespace ts {
                 displayName: string;
                 /**
                  * Full display name of item to be renamed.
+                 * If item to be renamed is a file, then this is the original text of the module specifer
                  */
                 fullDisplayName: string;
                 /**
@@ -3274,7 +3277,7 @@ declare namespace ts {
         }
         interface PluginModule {
             create(createInfo: PluginCreateInfo): LanguageService;
-            getExternalFiles?(proj: Project): string[];
+            getExternalFiles?(proj: Project, updateLevel: ProgramUpdateLevel): string[];
             onConfigurationChanged?(config: any): void;
         }
         interface PluginModuleWithName {
@@ -3354,7 +3357,6 @@ declare namespace ts {
             readFile(fileName: string): string | undefined;
             writeFile(fileName: string, content: string): void;
             fileExists(file: string): boolean;
-            getModuleResolutionCache(): ModuleResolutionCache | undefined;
             directoryExists(path: string): boolean;
             getDirectories(path: string): string[];
             log(s: string): void;
@@ -3379,7 +3381,7 @@ declare namespace ts {
             disableLanguageService(lastFileExceededProgramSize?: string): void;
             getProjectName(): string;
             protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
-            getExternalFiles(): SortedReadonlyArray<string>;
+            getExternalFiles(updateLevel?: ProgramUpdateLevel): SortedReadonlyArray<string>;
             getSourceFile(path: Path): ts.SourceFile | undefined;
             close(): void;
             private detachScriptInfoIfNotRoot;
@@ -3451,7 +3453,6 @@ declare namespace ts {
             getLanguageService(): never;
             getHostForAutoImportProvider(): never;
             getProjectReferences(): readonly ts.ProjectReference[] | undefined;
-            getTypeAcquisition(): TypeAcquisition;
         }
         /**
          * If a file is opened, the server will look for a tsconfig (or jsconfig)
@@ -4134,7 +4135,7 @@ declare namespace ts {
             responseRequired?: boolean;
         }
     }
-    const versionMajorMinor = "5.3";
+    const versionMajorMinor = "5.4";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -4754,32 +4755,32 @@ declare namespace ts {
     }
     enum ModifierFlags {
         None = 0,
-        Export = 1,
-        Ambient = 2,
-        Public = 4,
-        Private = 8,
-        Protected = 16,
-        Static = 32,
-        Readonly = 64,
-        Accessor = 128,
-        Abstract = 256,
-        Async = 512,
-        Default = 1024,
-        Const = 2048,
-        HasComputedJSDocModifiers = 4096,
-        Deprecated = 8192,
-        Override = 16384,
-        In = 32768,
-        Out = 65536,
-        Decorator = 131072,
+        Public = 1,
+        Private = 2,
+        Protected = 4,
+        Readonly = 8,
+        Override = 16,
+        Export = 32,
+        Abstract = 64,
+        Ambient = 128,
+        Static = 256,
+        Accessor = 512,
+        Async = 1024,
+        Default = 2048,
+        Const = 4096,
+        In = 8192,
+        Out = 16384,
+        Decorator = 32768,
+        Deprecated = 65536,
+        HasComputedJSDocModifiers = 268435456,
         HasComputedFlags = 536870912,
-        AccessibilityModifier = 28,
-        ParameterPropertyModifier = 16476,
-        NonPublicAccessibilityModifier = 24,
-        TypeScriptModifier = 117086,
-        ExportDefault = 1025,
-        All = 258047,
-        Modifier = 126975,
+        AccessibilityModifier = 7,
+        ParameterPropertyModifier = 31,
+        NonPublicAccessibilityModifier = 6,
+        TypeScriptModifier = 28895,
+        ExportDefault = 2080,
+        All = 131071,
+        Modifier = 98303,
     }
     enum JsxFlags {
         None = 0,
@@ -6020,9 +6021,11 @@ declare namespace ts {
     /** @deprecated */
     type AssertionKey = ImportAttributeName;
     /** @deprecated */
-    type AssertEntry = ImportAttribute;
+    interface AssertEntry extends ImportAttribute {
+    }
     /** @deprecated */
-    type AssertClause = ImportAttributes;
+    interface AssertClause extends ImportAttributes {
+    }
     type ImportAttributeName = Identifier | StringLiteral;
     interface ImportAttribute extends Node {
         readonly kind: SyntaxKind.ImportAttribute;
@@ -6780,6 +6783,7 @@ declare namespace ts {
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
+        getMergedSymbol(symbol: Symbol): Symbol;
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
         /** Follow all aliases to get the original symbol. */
@@ -6828,6 +6832,20 @@ declare namespace ts {
          * is `never`. Instead, use `type.flags & TypeFlags.Never`.
          */
         getNeverType(): Type;
+        /**
+         * Returns true if the "source" type is assignable to the "target" type.
+         *
+         * ```ts
+         * declare const abcLiteral: ts.Type; // Type of "abc"
+         * declare const stringType: ts.Type; // Type of string
+         *
+         * isTypeAssignableTo(abcLiteral, abcLiteral); // true; "abc" is assignable to "abc"
+         * isTypeAssignableTo(abcLiteral, stringType); // true; "abc" is assignable to string
+         * isTypeAssignableTo(stringType, abcLiteral); // false; string is not assignable to "abc"
+         * isTypeAssignableTo(stringType, stringType); // true; string is assignable to string
+         * ```
+         */
+        isTypeAssignableTo(source: Type, target: Type): boolean;
         /**
          * True if this type is the `Array` or `ReadonlyArray` type from lib.d.ts.
          * This function will _not_ return true if passed a type which
@@ -6888,6 +6906,7 @@ declare namespace ts {
         None = 0,
         NoTruncation = 1,
         WriteArrayAsGenericType = 2,
+        GenerateNamesForShadowedTypeParams = 4,
         UseStructuralFallback = 8,
         WriteTypeArgumentsOfSignature = 32,
         UseFullyQualifiedType = 64,
@@ -6907,7 +6926,7 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        NodeBuilderFlagsMask = 848330091,
+        NodeBuilderFlagsMask = 848330095,
     }
     enum SymbolFormatFlags {
         None = 0,
@@ -7049,6 +7068,7 @@ declare namespace ts {
         ExportEquals = "export=",
         Default = "default",
         This = "this",
+        InstantiationExpression = "__instantiationExpression",
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
@@ -7891,6 +7911,7 @@ declare namespace ts {
         Unspecified = 4,
         EmbeddedStatement = 5,
         JsxAttributeValue = 6,
+        ImportTypeNodeAttributes = 7,
     }
     enum OuterExpressionKinds {
         Parentheses = 1,
@@ -8388,6 +8409,18 @@ declare namespace ts {
         createExportDefault(expression: Expression): ExportAssignment;
         createExternalModuleExport(exportName: Identifier): ExportDeclaration;
         restoreOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds?: OuterExpressionKinds): Expression;
+        /**
+         * Updates a node that may contain modifiers, replacing only the modifiers of the node.
+         */
+        replaceModifiers<T extends HasModifiers>(node: T, modifiers: readonly Modifier[] | ModifierFlags | undefined): T;
+        /**
+         * Updates a node that may contain decorators or modifiers, replacing only the decorators and modifiers of the node.
+         */
+        replaceDecoratorsAndModifiers<T extends HasModifiers & HasDecorators>(node: T, modifiers: readonly ModifierLike[] | undefined): T;
+        /**
+         * Updates a node that contains a property name, replacing only the name of the node.
+         */
+        replacePropertyName<T extends AccessorDeclaration | MethodDeclaration | MethodSignature | PropertyDeclaration | PropertySignature | PropertyAssignment>(node: T, name: T["name"]): T;
     }
     interface CoreTransformationContext {
         readonly factory: NodeFactory;
@@ -8744,6 +8777,7 @@ declare namespace ts {
         readonly interactiveInlayHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        readonly preferTypeOnlyAutoImports?: boolean;
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
         readonly organizeImportsCollation?: "ordinal" | "unicode";
         readonly organizeImportsLocale?: string;
@@ -9829,6 +9863,19 @@ declare namespace ts {
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
     function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
+    enum ProgramUpdateLevel {
+        /** Program is updated with same root file names and options */
+        Update = 0,
+        /** Loads program after updating root file names from the disk */
+        RootNamesAndUpdate = 1,
+        /**
+         * Loads program completely, including:
+         *  - re-reading contents of config file from disk
+         *  - calculating root file names for the program
+         *  - Updating the program
+         */
+        Full = 2,
+    }
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string | undefined;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
@@ -10391,7 +10438,7 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
-        jsDocParsingMode?: JSDocParsingMode;
+        jsDocParsingMode?: JSDocParsingMode | undefined;
     }
     type WithMetadata<T> = T & {
         metadata?: unknown;
@@ -11060,6 +11107,10 @@ declare namespace ts {
          */
         fileToRename?: string;
         displayName: string;
+        /**
+         * Full display name of item to be renamed.
+         * If item to be renamed is a file, then this is the original text of the module specifer
+         */
         fullDisplayName: string;
         kind: ScriptElementKind;
         kindModifiers: string;
@@ -11587,6 +11638,7 @@ declare namespace ts {
         moduleName?: string;
         renamedDependencies?: MapLike<string>;
         transformers?: CustomTransformers;
+        jsDocParsingMode?: JSDocParsingMode;
     }
     interface TranspileOutput {
         outputText: string;

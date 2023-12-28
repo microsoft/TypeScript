@@ -38,34 +38,6 @@ a/b/f1.ts
 
 
 
-Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"explainFiles":true}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/f2.ts
-/a/b/f1.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/f2.ts
-/a/b/f1.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/f2.ts (used version)
-/a/b/f1.ts (used version)
-
-FsWatches::
-/a/b/f1.ts: *new*
-  {}
-/a/b/f2.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/a/b/f2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -94,6 +66,39 @@ __exportStar(require("./f2"), exports);
 
 
 
+FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/b/f2.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "watch": true,
+  "explainFiles": true
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/f2.ts
+/a/b/f1.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/f2.ts
+/a/b/f1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/f2.ts (used version)
+/a/b/f1.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Modify f2 to include f3
 
 Input::
@@ -101,8 +106,12 @@ Input::
 export * from "../c/f3"
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -119,37 +128,6 @@ a/b/f1.ts
 [[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/a/b/f1.ts"]
-Program options: {"watch":true,"explainFiles":true}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/a/c/f3.ts
-/a/b/f2.ts
-/a/b/f1.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/c/f3.ts
-/a/b/f2.ts
-/a/b/f1.ts
-
-Shape signatures in builder refreshed for::
-/a/c/f3.ts (computed .d.ts)
-/a/b/f2.ts (computed .d.ts)
-/a/b/f1.ts (computed .d.ts)
-
-FsWatches::
-/a/b/f1.ts:
-  {}
-/a/b/f2.ts:
-  {}
-/a/c/f3.ts: *new*
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/a/b/f2.js]
 "use strict";
@@ -179,3 +157,40 @@ exports.y = void 0;
 exports.y = 1;
 
 
+
+FsWatches::
+/a/b/f1.ts:
+  {}
+/a/b/f2.ts:
+  {}
+/a/c/f3.ts: *new*
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+
+Program root files: [
+  "/a/b/f1.ts"
+]
+Program options: {
+  "watch": true,
+  "explainFiles": true
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/a/c/f3.ts
+/a/b/f2.ts
+/a/b/f1.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/c/f3.ts
+/a/b/f2.ts
+/a/b/f1.ts
+
+Shape signatures in builder refreshed for::
+/a/c/f3.ts (computed .d.ts)
+/a/b/f2.ts (computed .d.ts)
+/a/b/f1.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

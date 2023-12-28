@@ -1,3 +1,4 @@
+// === Inlay Hints ===
 const f1: F1 = (a, b) => { }
                  ^
 {

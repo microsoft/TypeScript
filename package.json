@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "5.3.0",
+    "version": "5.4.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -59,7 +59,7 @@
         "chalk": "^4.1.2",
         "chokidar": "^3.5.3",
         "diff": "^5.1.0",
-        "dprint": "^0.41.0",
+        "dprint": "^0.42.3",
         "esbuild": "^0.19.0",
         "eslint": "^8.22.0",
         "eslint-formatter-autolinkable-stylish": "^1.2.0",
@@ -78,7 +78,7 @@
         "playwright": "^1.38.0",
         "source-map-support": "^0.5.21",
         "tslib": "^2.5.0",
-        "typescript": "^5.0.2",
+        "typescript": "5.4.0-dev.20231206",
         "which": "^2.0.2"
     },
     "overrides": {
@@ -91,7 +91,6 @@
         "build:compiler": "hereby local",
         "build:tests": "hereby tests",
         "build:tests:notypecheck": "hereby tests --no-typecheck",
-        "start": "node lib/tsc",
         "clean": "hereby clean",
         "gulp": "hereby",
         "lint": "hereby lint",
@@ -106,7 +105,8 @@
         "buffer": false,
         "@microsoft/typescript-etw": false,
         "source-map-support": false,
-        "inspector": false
+        "inspector": false,
+        "perf_hooks": false
     },
     "packageManager": "npm@8.19.4",
     "volta": {

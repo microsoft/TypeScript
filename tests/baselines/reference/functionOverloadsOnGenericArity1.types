@@ -4,10 +4,10 @@
 // overloading on arity not allowed
 interface C {
    f<T>(): string;
->f : { <T>(): string; <T, U>(): string; }
+>f : { <T>(): string; <T_1, U>(): string; }
 
    f<T, U>(): string; 
->f : { <T>(): string; <T, U>(): string; }
+>f : { <T_1>(): string; <T, U>(): string; }
  
    <T>(): string;
    <T, U>(): string; 

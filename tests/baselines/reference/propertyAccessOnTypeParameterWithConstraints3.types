@@ -117,7 +117,7 @@ var r2b = i.foo['foo']();
 >'foo' : "foo"
 
 var a: {
->a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
 
     <U extends A, T extends U>(): T;
     <U extends T, T extends A>(x: U): U;
@@ -128,7 +128,7 @@ var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constrai
 >a().foo() : string
 >a().foo : () => string
 >a() : A
->a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
 >foo : () => string
 
 var r3b = a()['foo']();
@@ -136,7 +136,7 @@ var r3b = a()['foo']();
 >a()['foo']() : string
 >a()['foo'] : () => string
 >a() : A
->a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
 >'foo' : "foo"
 
 // parameter supplied for type argument inference for U
@@ -145,7 +145,7 @@ var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred 
 >a(new B()).foo() : string
 >a(new B()).foo : () => string
 >a(new B()) : B
->a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
 >new B() : B
 >B : typeof B
 >foo : () => string
@@ -155,7 +155,7 @@ var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferr
 >a(new B())['foo']() : string
 >a(new B())['foo'] : () => string
 >a(new B()) : B
->a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
 >new B() : B
 >B : typeof B
 >'foo' : "foo"

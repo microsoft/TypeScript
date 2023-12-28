@@ -1,3 +1,4 @@
+// === Call Hierarchy ===
 ╭ name: foo
 ├ kind: method
 ├ file: /tests/cases/fourslash/callHierarchyInterfaceMethod.ts
