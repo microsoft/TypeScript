@@ -340,12 +340,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -428,8 +424,6 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
-TI:: [hh:mm:ss:mss] Closing file watchers for project '/a/tsconfig.json'
-TI:: [hh:mm:ss:mss] No watchers are registered for project '/a/tsconfig.json'
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/app.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info

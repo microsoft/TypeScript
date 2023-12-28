@@ -189,12 +189,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["jquery"]
@@ -488,12 +484,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project/package.json' dependencies: ["jquery"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -709,12 +701,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project2",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/user/username/projects/project2/package.json' dependencies: ["commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -872,6 +860,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/app.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -907,8 +896,6 @@ PolledWatches *deleted*::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/project/package.json:
-  {}
 /user/username/projects/project2/package.json: *new*
   {}
 /user/username/projects/project2/tsconfig.json: *new*
@@ -916,6 +903,8 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/project/app.js:
+  {}
+/user/username/projects/project/package.json:
   {}
 /user/username/projects/project/tsconfig.json:
   {}
