@@ -170,6 +170,11 @@ function g<T>() {
 >x = "str" : "str"
 >x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 >"str" : "str"
+
+    x = "whatever"; // error
+>x = "whatever" : "whatever"
+>x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
+>"whatever" : "whatever"
 }
 
 export {};

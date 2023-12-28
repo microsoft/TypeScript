@@ -13984,6 +13984,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isTypeAssignableTo(nameType, getTypeParameterFromMappedType(type)) ? MappedTypeNameTypeKind.Filtering : MappedTypeNameTypeKind.Remapping;
     }
 
+    // generic mapped types that don't simplify or have a constraint still have a very simple set of keys - their nameType or constraintType.
+    // In many ways, this is a deferred version of what `getIndexTypeForMappedType` does to actually resolve the keys for _non_-generic types
+    function getGenericMappedTypeKeys(type: MappedType) {
+        const nameType = getNameTypeFromMappedType(type);
+        if (nameType && isMappedTypeWithKeyofConstraintDeclaration(type)) {
+            // we need to get the apparent mappings and union them with the generic mappings, since some properties may be
+            // missing from the `constraintType` which will otherwise be mapped in the object
+            const modifiersType = getApparentType(getModifiersTypeFromMappedType(type));
+            const mappedKeys: Type[] = [];
+            forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(
+                modifiersType,
+                TypeFlags.StringOrNumberLiteralOrUnique,
+                /*stringsOnly*/ false,
+                t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(type.mapper, getTypeParameterFromMappedType(type), t))),
+            );
+            // We still need to include the non-apparent (and thus still generic) keys since when this gets used in comparisons the other side might include them
+            return getUnionType([...mappedKeys, nameType]);
+        }
+        return nameType || getConstraintTypeFromMappedType(type);
+    }
+
     function resolveStructuredTypeMembers(type: StructuredType): ResolvedType {
         if (!(type as ResolvedType).members) {
             if (type.flags & TypeFlags.Object) {
@@ -22352,34 +22373,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return Ternary.True;
                         }
                     }
-                    else if (isGenericMappedType(targetType)) {
-                        // generic mapped types that don't simplify or have a constraint still have a very simple set of keys we can compare against
-                        // - their nameType or constraintType.
-                        // In many ways, this comparison is a deferred version of what `getIndexTypeForMappedType` does to actually resolve the keys for _non_-generic types
-
-                        const nameType = getNameTypeFromMappedType(targetType);
-                        const constraintType = getConstraintTypeFromMappedType(targetType);
-                        let targetKeys;
-                        if (nameType && isMappedTypeWithKeyofConstraintDeclaration(targetType)) {
-                            // we need to get the apparent mappings and union them with the generic mappings, since some properties may be
-                            // missing from the `constraintType` which will otherwise be mapped in the object
-                            const modifiersType = getApparentType(getModifiersTypeFromMappedType(targetType));
-                            const mappedKeys: Type[] = [];
-                            forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(
-                                modifiersType,
-                                TypeFlags.StringOrNumberLiteralOrUnique,
-                                /*stringsOnly*/ false,
-                                t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(targetType.mapper, getTypeParameterFromMappedType(targetType), t))),
-                            );
-                            // We still need to include the non-apparent (and thus still generic) keys in the target side of the comparison (in case they're in the source side)
-                            targetKeys = getUnionType([...mappedKeys, nameType]);
-                        }
-                        else {
-                            targetKeys = nameType || constraintType;
-                        }
-                        if (isRelatedTo(source, targetKeys, RecursionFlags.Target, reportErrors) === Ternary.True) {
-                            return Ternary.True;
-                        }
+                    else if (isGenericMappedType(targetType) && isRelatedTo(source, getGenericMappedTypeKeys(targetType), RecursionFlags.Target, reportErrors) === Ternary.True) {
+                        return Ternary.True;
                     }
                 }
             }
@@ -22565,12 +22560,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (sourceFlags & TypeFlags.Index) {
-                const indexType = source as IndexType;
-                let sourceKeys = keyofConstraintType;
-                if (isGenericMappedType(indexType.type)) {
-                    sourceKeys = getMappedTypeNameTypeKind(indexType.type) !== MappedTypeNameTypeKind.None ? getNameTypeFromMappedType(indexType.type)! : getConstraintTypeFromMappedType(indexType.type);
+                const sourceType = (source as IndexType).type;
+                if (isGenericMappedType(sourceType) && isRelatedTo(getGenericMappedTypeKeys(sourceType), target, RecursionFlags.Source, reportErrors) === Ternary.True) {
+                    return Ternary.True;
                 }
-                if (result = isRelatedTo(sourceKeys, target, RecursionFlags.Source, reportErrors)) {
+                if (result = isRelatedTo(keyofConstraintType, target, RecursionFlags.Source, reportErrors)) {
                     return result;
                 }
             }
