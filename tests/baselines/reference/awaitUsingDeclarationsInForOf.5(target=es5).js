@@ -96,10 +96,10 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
 for (var _i = 0, x_1 = x; _i < x_1.length; _i++) {
-    var x_2_1 = x_1[_i];
+    var _a_1 = x_1[_i];
     var env_1 = { stack: [], error: void 0, hasError: false };
     try {
-        var x_2 = __addDisposableResource(env_1, x_2_1, true);
+        var _a = __addDisposableResource(env_1, _a_1, true);
         ;
     }
     catch (e_1) {
@@ -114,24 +114,24 @@ for (var _i = 0, x_1 = x; _i < x_1.length; _i++) {
 }
 export function test() {
     return __awaiter(this, void 0, void 0, function () {
-        var _i, x_3, x_4_1, env_2, x_4, e_2, result_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _i, x_2, _a_2, env_2, _a, e_2, result_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    _i = 0, x_3 = x;
-                    _a.label = 1;
+                    _i = 0, x_2 = x;
+                    _b.label = 1;
                 case 1:
-                    if (!(_i < x_3.length)) return [3 /*break*/, 8];
-                    x_4_1 = x_3[_i];
+                    if (!(_i < x_2.length)) return [3 /*break*/, 8];
+                    _a_2 = x_2[_i];
                     env_2 = { stack: [], error: void 0, hasError: false };
-                    _a.label = 2;
+                    _b.label = 2;
                 case 2:
-                    _a.trys.push([2, 3, 4, 7]);
-                    x_4 = __addDisposableResource(env_2, x_4_1, true);
+                    _b.trys.push([2, 3, 4, 7]);
+                    _a = __addDisposableResource(env_2, _a_2, true);
                     ;
                     return [3 /*break*/, 7];
                 case 3:
-                    e_2 = _a.sent();
+                    e_2 = _b.sent();
                     env_2.error = e_2;
                     env_2.hasError = true;
                     return [3 /*break*/, 7];
@@ -140,8 +140,8 @@ export function test() {
                     if (!result_2) return [3 /*break*/, 6];
                     return [4 /*yield*/, result_2];
                 case 5:
-                    _a.sent();
-                    _a.label = 6;
+                    _b.sent();
+                    _b.label = 6;
                 case 6: return [7 /*endfinally*/];
                 case 7:
                     _i++;

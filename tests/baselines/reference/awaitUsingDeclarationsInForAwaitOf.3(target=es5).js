@@ -107,10 +107,10 @@ try {
     for (var _d = true, x_1 = __asyncValues(x), x_1_1; x_1_1 = await x_1.next(), _a = x_1_1.done, !_a; _d = true) {
         _c = x_1_1.value;
         _d = false;
-        var x_2_1 = _c;
+        var _e_1 = _c;
         var env_1 = { stack: [], error: void 0, hasError: false };
         try {
-            var x_2 = __addDisposableResource(env_1, x_2_1, true);
+            var _e = __addDisposableResource(env_1, _e_1, true);
             ;
         }
         catch (e_2) {
@@ -133,29 +133,29 @@ finally {
 }
 export function test() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, x_3, x_3_1, x_4_1, env_2, x_4, e_3, result_2, e_4_1;
-        var _b, e_4, _c, _d;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
+        var _a, x_2, x_2_1, _b_1, env_2, _b, e_3, result_2, e_4_1;
+        var _c, e_4, _d, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
-                    _e.trys.push([0, 10, 11, 16]);
-                    _a = true, x_3 = __asyncValues(x);
-                    _e.label = 1;
-                case 1: return [4 /*yield*/, x_3.next()];
+                    _f.trys.push([0, 10, 11, 16]);
+                    _a = true, x_2 = __asyncValues(x);
+                    _f.label = 1;
+                case 1: return [4 /*yield*/, x_2.next()];
                 case 2:
-                    if (!(x_3_1 = _e.sent(), _b = x_3_1.done, !_b)) return [3 /*break*/, 9];
-                    _d = x_3_1.value;
+                    if (!(x_2_1 = _f.sent(), _c = x_2_1.done, !_c)) return [3 /*break*/, 9];
+                    _e = x_2_1.value;
                     _a = false;
-                    x_4_1 = _d;
+                    _b_1 = _e;
                     env_2 = { stack: [], error: void 0, hasError: false };
-                    _e.label = 3;
+                    _f.label = 3;
                 case 3:
-                    _e.trys.push([3, 4, 5, 8]);
-                    x_4 = __addDisposableResource(env_2, x_4_1, true);
+                    _f.trys.push([3, 4, 5, 8]);
+                    _b = __addDisposableResource(env_2, _b_1, true);
                     ;
                     return [3 /*break*/, 8];
                 case 4:
-                    e_3 = _e.sent();
+                    e_3 = _f.sent();
                     env_2.error = e_3;
                     env_2.hasError = true;
                     return [3 /*break*/, 8];
@@ -164,24 +164,24 @@ export function test() {
                     if (!result_2) return [3 /*break*/, 7];
                     return [4 /*yield*/, result_2];
                 case 6:
-                    _e.sent();
-                    _e.label = 7;
+                    _f.sent();
+                    _f.label = 7;
                 case 7: return [7 /*endfinally*/];
                 case 8:
                     _a = true;
                     return [3 /*break*/, 1];
                 case 9: return [3 /*break*/, 16];
                 case 10:
-                    e_4_1 = _e.sent();
+                    e_4_1 = _f.sent();
                     e_4 = { error: e_4_1 };
                     return [3 /*break*/, 16];
                 case 11:
-                    _e.trys.push([11, , 14, 15]);
-                    if (!(!_a && !_b && (_c = x_3.return))) return [3 /*break*/, 13];
-                    return [4 /*yield*/, _c.call(x_3)];
+                    _f.trys.push([11, , 14, 15]);
+                    if (!(!_a && !_c && (_d = x_2.return))) return [3 /*break*/, 13];
+                    return [4 /*yield*/, _d.call(x_2)];
                 case 12:
-                    _e.sent();
-                    _e.label = 13;
+                    _f.sent();
+                    _f.label = 13;
                 case 13: return [3 /*break*/, 15];
                 case 14:
                     if (e_4) throw e_4.error;
