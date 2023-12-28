@@ -427,235 +427,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/project4/utils.d.ts 250 unde
 FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-esnext/package.json 2000 undefined package.json file /home/src/projects/project4/tsconfig.json
 
 
-Program root files: [
-  "/home/src/projects/project1/core.d.ts",
-  "/home/src/projects/project1/file.ts",
-  "/home/src/projects/project1/file2.ts",
-  "/home/src/projects/project1/index.ts",
-  "/home/src/projects/project1/utils.d.ts",
-  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
-]
-Program options: {
-  "composite": true,
-  "typeRoots": [
-    "/home/src/projects/project1/typeroot1"
-  ],
-  "lib": [
-    "lib.es5.d.ts",
-    "lib.dom.d.ts"
-  ],
-  "traceResolution": true,
-  "watch": true,
-  "explainFiles": true,
-  "extendedDiagnostics": true,
-  "configFilePath": "/home/src/projects/project1/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/lib/lib.scripthost.d.ts
-/home/src/projects/project1/core.d.ts
-/home/src/projects/project1/file.ts
-/home/src/projects/project1/file2.ts
-/home/src/projects/project1/index.ts
-/home/src/projects/project1/utils.d.ts
-/home/src/projects/project1/typeroot1/sometype/index.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/lib/lib.scripthost.d.ts
-/home/src/projects/project1/core.d.ts
-/home/src/projects/project1/file.ts
-/home/src/projects/project1/file2.ts
-/home/src/projects/project1/index.ts
-/home/src/projects/project1/utils.d.ts
-/home/src/projects/project1/typeroot1/sometype/index.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/lib/lib.es5.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
-/home/src/lib/lib.webworker.d.ts (used version)
-/home/src/lib/lib.scripthost.d.ts (used version)
-/home/src/projects/project1/core.d.ts (used version)
-/home/src/projects/project1/file.ts (computed .d.ts during emit)
-/home/src/projects/project1/file2.ts (computed .d.ts during emit)
-/home/src/projects/project1/index.ts (computed .d.ts during emit)
-/home/src/projects/project1/utils.d.ts (used version)
-/home/src/projects/project1/typeroot1/sometype/index.d.ts (used version)
-
-Program root files: [
-  "/home/src/projects/project2/index.ts",
-  "/home/src/projects/project2/utils.d.ts"
-]
-Program options: {
-  "composite": true,
-  "lib": [
-    "lib.es5.d.ts",
-    "lib.dom.d.ts"
-  ],
-  "traceResolution": true,
-  "watch": true,
-  "explainFiles": true,
-  "extendedDiagnostics": true,
-  "configFilePath": "/home/src/projects/project2/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/projects/project2/index.ts
-/home/src/projects/project2/utils.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/projects/project2/index.ts
-/home/src/projects/project2/utils.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/lib/lib.es5.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
-/home/src/projects/project2/index.ts (computed .d.ts during emit)
-/home/src/projects/project2/utils.d.ts (used version)
-
-Program root files: [
-  "/home/src/projects/project3/index.ts",
-  "/home/src/projects/project3/utils.d.ts"
-]
-Program options: {
-  "composite": true,
-  "lib": [
-    "lib.es5.d.ts",
-    "lib.dom.d.ts"
-  ],
-  "traceResolution": true,
-  "watch": true,
-  "explainFiles": true,
-  "extendedDiagnostics": true,
-  "configFilePath": "/home/src/projects/project3/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/projects/project3/index.ts
-/home/src/projects/project3/utils.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/lib/lib.es5.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/projects/project3/index.ts
-/home/src/projects/project3/utils.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/lib/lib.es5.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
-/home/src/projects/project3/index.ts (computed .d.ts during emit)
-/home/src/projects/project3/utils.d.ts (used version)
-
-Program root files: [
-  "/home/src/projects/project4/index.ts",
-  "/home/src/projects/project4/utils.d.ts"
-]
-Program options: {
-  "composite": true,
-  "lib": [
-    "lib.esnext.d.ts",
-    "lib.dom.d.ts",
-    "lib.webworker.d.ts"
-  ],
-  "traceResolution": true,
-  "watch": true,
-  "explainFiles": true,
-  "extendedDiagnostics": true,
-  "configFilePath": "/home/src/projects/project4/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/lib/lib.esnext.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/projects/project4/index.ts
-/home/src/projects/project4/utils.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/lib/lib.esnext.d.ts
-/home/src/lib/lib.dom.d.ts
-/home/src/lib/lib.webworker.d.ts
-/home/src/projects/project4/index.ts
-/home/src/projects/project4/utils.d.ts
-
-Shape signatures in builder refreshed for::
-/home/src/lib/lib.esnext.d.ts (used version)
-/home/src/lib/lib.dom.d.ts (used version)
-/home/src/lib/lib.webworker.d.ts (used version)
-/home/src/projects/project4/index.ts (computed .d.ts during emit)
-/home/src/projects/project4/utils.d.ts (used version)
-
-PolledWatches::
-/home/src/projects/node_modules/@typescript/lib-dom/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-es5/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-esnext/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-scripthost/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-webworker/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/project1/typeroot1/sometype/package.json: *new*
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/projects/project1/core.d.ts: *new*
-  {}
-/home/src/projects/project1/file.ts: *new*
-  {}
-/home/src/projects/project1/file2.ts: *new*
-  {}
-/home/src/projects/project1/index.ts: *new*
-  {}
-/home/src/projects/project1/tsconfig.json: *new*
-  {}
-/home/src/projects/project1/typeroot1/sometype/index.d.ts: *new*
-  {}
-/home/src/projects/project1/utils.d.ts: *new*
-  {}
-/home/src/projects/project2/index.ts: *new*
-  {}
-/home/src/projects/project2/tsconfig.json: *new*
-  {}
-/home/src/projects/project2/utils.d.ts: *new*
-  {}
-/home/src/projects/project3/index.ts: *new*
-  {}
-/home/src/projects/project3/tsconfig.json: *new*
-  {}
-/home/src/projects/project3/utils.d.ts: *new*
-  {}
-/home/src/projects/project4/index.ts: *new*
-  {}
-/home/src/projects/project4/tsconfig.json: *new*
-  {}
-/home/src/projects/project4/utils.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project1: *new*
-  {}
-/home/src/projects/project2: *new*
-  {}
-/home/src/projects/project3: *new*
-  {}
-/home/src/projects/project4: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/home/src/projects/project1/file.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -1078,3 +849,232 @@ export declare const z = 10;
   "size": 1126
 }
 
+
+PolledWatches::
+/home/src/projects/node_modules/@typescript/lib-dom/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-es5/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-esnext/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-scripthost/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-webworker/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project1/typeroot1/sometype/package.json: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/projects/project1/core.d.ts: *new*
+  {}
+/home/src/projects/project1/file.ts: *new*
+  {}
+/home/src/projects/project1/file2.ts: *new*
+  {}
+/home/src/projects/project1/index.ts: *new*
+  {}
+/home/src/projects/project1/tsconfig.json: *new*
+  {}
+/home/src/projects/project1/typeroot1/sometype/index.d.ts: *new*
+  {}
+/home/src/projects/project1/utils.d.ts: *new*
+  {}
+/home/src/projects/project2/index.ts: *new*
+  {}
+/home/src/projects/project2/tsconfig.json: *new*
+  {}
+/home/src/projects/project2/utils.d.ts: *new*
+  {}
+/home/src/projects/project3/index.ts: *new*
+  {}
+/home/src/projects/project3/tsconfig.json: *new*
+  {}
+/home/src/projects/project3/utils.d.ts: *new*
+  {}
+/home/src/projects/project4/index.ts: *new*
+  {}
+/home/src/projects/project4/tsconfig.json: *new*
+  {}
+/home/src/projects/project4/utils.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project1: *new*
+  {}
+/home/src/projects/project2: *new*
+  {}
+/home/src/projects/project3: *new*
+  {}
+/home/src/projects/project4: *new*
+  {}
+
+Program root files: [
+  "/home/src/projects/project1/core.d.ts",
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/lib/lib.scripthost.d.ts
+/home/src/projects/project1/core.d.ts
+/home/src/projects/project1/file.ts
+/home/src/projects/project1/file2.ts
+/home/src/projects/project1/index.ts
+/home/src/projects/project1/utils.d.ts
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/lib/lib.scripthost.d.ts
+/home/src/projects/project1/core.d.ts
+/home/src/projects/project1/file.ts
+/home/src/projects/project1/file2.ts
+/home/src/projects/project1/index.ts
+/home/src/projects/project1/utils.d.ts
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/lib/lib.es5.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
+/home/src/lib/lib.webworker.d.ts (used version)
+/home/src/lib/lib.scripthost.d.ts (used version)
+/home/src/projects/project1/core.d.ts (used version)
+/home/src/projects/project1/file.ts (computed .d.ts during emit)
+/home/src/projects/project1/file2.ts (computed .d.ts during emit)
+/home/src/projects/project1/index.ts (computed .d.ts during emit)
+/home/src/projects/project1/utils.d.ts (used version)
+/home/src/projects/project1/typeroot1/sometype/index.d.ts (used version)
+
+Program root files: [
+  "/home/src/projects/project2/index.ts",
+  "/home/src/projects/project2/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project2/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/projects/project2/index.ts
+/home/src/projects/project2/utils.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/projects/project2/index.ts
+/home/src/projects/project2/utils.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/lib/lib.es5.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
+/home/src/projects/project2/index.ts (computed .d.ts during emit)
+/home/src/projects/project2/utils.d.ts (used version)
+
+Program root files: [
+  "/home/src/projects/project3/index.ts",
+  "/home/src/projects/project3/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project3/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/projects/project3/index.ts
+/home/src/projects/project3/utils.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/projects/project3/index.ts
+/home/src/projects/project3/utils.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/lib/lib.es5.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
+/home/src/projects/project3/index.ts (computed .d.ts during emit)
+/home/src/projects/project3/utils.d.ts (used version)
+
+Program root files: [
+  "/home/src/projects/project4/index.ts",
+  "/home/src/projects/project4/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "lib": [
+    "lib.esnext.d.ts",
+    "lib.dom.d.ts",
+    "lib.webworker.d.ts"
+  ],
+  "traceResolution": true,
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/home/src/projects/project4/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/lib/lib.esnext.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/projects/project4/index.ts
+/home/src/projects/project4/utils.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/home/src/lib/lib.esnext.d.ts
+/home/src/lib/lib.dom.d.ts
+/home/src/lib/lib.webworker.d.ts
+/home/src/projects/project4/index.ts
+/home/src/projects/project4/utils.d.ts
+
+Shape signatures in builder refreshed for::
+/home/src/lib/lib.esnext.d.ts (used version)
+/home/src/lib/lib.dom.d.ts (used version)
+/home/src/lib/lib.webworker.d.ts (used version)
+/home/src/projects/project4/index.ts (computed .d.ts during emit)
+/home/src/projects/project4/utils.d.ts (used version)
+
+exitCode:: ExitStatus.undefined

@@ -1,6 +1,3 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     dedent,
@@ -11,9 +8,9 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createSession,
     openFilesForSession,
     protocolLocationFromSubstring,
+    TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
@@ -64,7 +61,7 @@ describe("unittests:: tsserver:: symLinks", () => {
 
         const files = [cFile, libFile, aFile, aTsconfig, aC, bFile, bTsconfig, bC];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(
             [
                 { file: aFile, projectRootPath: folderA },
@@ -134,7 +131,7 @@ new C();`,
         };
 
         function createSessionAndOpenFile(host: TestServerHost) {
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
                 command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
@@ -244,7 +241,7 @@ new C();`,
             }),
             "C:/temp/replay/axios-src/node_modules/follow-redirects/index.js": "export const x = 10;",
         }, { windowsStyleRoot: "C:/" });
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host), disableAutomaticTypingAcquisition: true });
+        const session = new TestSession({ host, disableAutomaticTypingAcquisition: true });
         openFilesForSession(["c:/temp/replay/axios-src/lib/core/AxiosHeaders.js"], session); // Creates InferredProject1 and AutoImportProvider1
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({ // Different content from disk
             command: ts.server.protocol.CommandTypes.UpdateOpen,

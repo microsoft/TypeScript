@@ -1,11 +1,8 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -19,7 +16,7 @@ describe("unittests:: tsserver:: refactors", () => {
             content: "function f() {\n  1;\n}",
         };
         const host = createServerHost([file]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file], session);
 
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
@@ -57,7 +54,7 @@ describe("unittests:: tsserver:: refactors", () => {
         };
 
         const host = createServerHost([aTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
@@ -79,7 +76,7 @@ describe("unittests:: tsserver:: refactors", () => {
         const aTs: File = { path: "/Foo/a.ts", content: "const x = 0;" };
         const tsconfig: File = { path: "/Foo/tsconfig.json", content: '{ "files": ["./a.ts"] }' };
         const host = createServerHost([aTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
@@ -106,7 +103,7 @@ describe("unittests:: tsserver:: refactors", () => {
         };
         const tsconfig: File = { path: "/Foo/tsconfig.json", content: `{ "files": ["./a.ts", "./b.ts"] }` };
         const host = createServerHost([aTs, bTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
@@ -139,7 +136,7 @@ describe("unittests:: tsserver:: refactors", () => {
             content: `{ "files": ["./a.ts"] }`,
         };
         const host = createServerHost([aTs, bTxt, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
@@ -181,7 +178,7 @@ describe("unittests:: tsserver:: refactors", () => {
             content: `{ "files": ["./a.ts"] }`,
         };
         const host = createServerHost([fooATs, fooTsconfig, barATs, barTsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([barATs], session);
 
         session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({

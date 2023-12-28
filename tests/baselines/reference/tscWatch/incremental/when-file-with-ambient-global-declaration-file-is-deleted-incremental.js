@@ -33,32 +33,6 @@ console.log(Config.value);
 Output::
 
 
-Program root files: [
-  "/users/username/projects/project/globals.d.ts",
-  "/users/username/projects/project/index.ts"
-]
-Program options: {
-  "incremental": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/globals.d.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/globals.d.ts
-/users/username/projects/project/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/globals.d.ts (used version)
-/users/username/projects/project/index.ts (used version)
-
-exitCode:: ExitStatus.Success
-
 //// [/users/username/projects/project/index.js]
 console.log(Config.value);
 
@@ -126,6 +100,32 @@ console.log(Config.value);
 }
 
 
+Program root files: [
+  "/users/username/projects/project/globals.d.ts",
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/globals.d.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/globals.d.ts
+/users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/globals.d.ts (used version)
+/users/username/projects/project/index.ts (used version)
+
+exitCode:: ExitStatus.Success
+
 Change::
 
 Input::
@@ -141,27 +141,6 @@ Output::
 Found 1 error in index.ts[90m:1[0m
 
 
-
-Program root files: [
-  "/users/username/projects/project/index.ts"
-]
-Program options: {
-  "incremental": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/index.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/index.ts (computed .d.ts)
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/users/username/projects/project/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -224,3 +203,24 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
   "size": 891
 }
 
+
+Program root files: [
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/index.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

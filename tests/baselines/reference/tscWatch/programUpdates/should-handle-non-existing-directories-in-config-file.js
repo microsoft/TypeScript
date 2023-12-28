@@ -35,6 +35,27 @@ Output::
 
 
 
+//// [/a/src/app.js]
+var x = 1;
+
+
+
+PolledWatches::
+/a/notexistingfolder: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/a/src/app.ts: *new*
+  {}
+/a/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a/src: *new*
+  {}
+
 Program root files: [
   "/a/src/app.ts"
 ]
@@ -56,25 +77,4 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/src/app.ts (used version)
 
-PolledWatches::
-/a/notexistingfolder: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/a/src/app.ts: *new*
-  {}
-/a/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/a/src: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/src/app.js]
-var x = 1;
-
-

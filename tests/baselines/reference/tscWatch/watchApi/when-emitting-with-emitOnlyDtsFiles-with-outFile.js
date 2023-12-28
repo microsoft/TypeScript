@@ -60,6 +60,23 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
 Program root files: [
   "/user/username/projects/myproject/a.ts",
   "/user/username/projects/myproject/b.ts"
@@ -82,24 +99,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/a.ts: *new*
-  {}
-/user/username/projects/myproject/b.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
 
 Change:: Fix error but run emit with emitOnlyDts
 
@@ -108,13 +108,20 @@ Input::
 export const y = 10;
 
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b.ts 1:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
 
@@ -122,30 +129,6 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
   options: {"composite":true,"noEmitOnError":true,"module":2,"outFile":"/user/username/projects/myproject/outFile.js","extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 
-
-Program root files: [
-  "/user/username/projects/myproject/a.ts",
-  "/user/username/projects/myproject/b.ts"
-]
-Program options: {
-  "composite": true,
-  "noEmitOnError": true,
-  "module": 2,
-  "outFile": "/user/username/projects/myproject/outFile.js",
-  "extendedDiagnostics": true,
-  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
-}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/outFile.d.ts]
 declare module "a" {
@@ -234,20 +217,41 @@ declare module "b" {
 ======================================================================
 
 
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "composite": true,
+  "noEmitOnError": true,
+  "module": 2,
+  "outFile": "/user/username/projects/myproject/outFile.js",
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
 Change:: Emit with emitOnlyDts shouldnt emit anything
 
 Input::
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 Program: Same as old program
 
 BuilderProgram: Same as old builder program
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Emit all files
 
@@ -366,43 +370,31 @@ define("b", ["require", "exports"], function (require, exports) {
 
 
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 Program: Same as old program
 
 BuilderProgram: Same as old builder program
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Emit with emitOnlyDts shouldnt emit anything
 
 Input::
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 Program: Same as old program
 
 BuilderProgram: Same as old builder program
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Emit full should not emit anything
 
 Input::
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 Program: Same as old program
 
 BuilderProgram: Same as old builder program
 
 exitCode:: ExitStatus.undefined
-

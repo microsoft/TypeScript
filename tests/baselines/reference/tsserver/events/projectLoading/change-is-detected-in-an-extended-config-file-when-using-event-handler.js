@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -179,6 +179,10 @@ Before running Timeout callback:: count: 2
 1: /user/username/projects/b/tsconfig.json
 2: *ensureProjectForOpenFiles*
 //// [/user/username/projects/a/tsconfig.json] file written with same contents
+
+Timeout callback:: count: 2
+1: /user/username/projects/b/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/b/tsconfig.json

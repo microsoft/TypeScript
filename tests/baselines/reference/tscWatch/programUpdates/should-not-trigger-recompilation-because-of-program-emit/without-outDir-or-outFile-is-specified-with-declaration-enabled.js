@@ -37,57 +37,6 @@ Output::
 
 
 
-Program root files: [
-  "/user/username/projects/myproject/file1.ts",
-  "/user/username/projects/myproject/src/file2.ts"
-]
-Program options: {
-  "module": 2,
-  "declaration": true,
-  "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
-  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/file1.ts
-/user/username/projects/myproject/src/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/file1.ts
-/user/username/projects/myproject/src/file2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/file1.ts (computed .d.ts during emit)
-/user/username/projects/myproject/src/file2.ts (computed .d.ts during emit)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/file1.ts: *new*
-  {}
-/user/username/projects/myproject/src/file2.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-/user/username/projects/myproject/src: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
@@ -115,16 +64,63 @@ export declare const d = 30;
 
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/file1.ts: *new*
+  {}
+/user/username/projects/myproject/src/file2.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/file1.ts",
+  "/user/username/projects/myproject/src/file2.ts"
+]
+Program options: {
+  "module": 2,
+  "declaration": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/file1.ts
+/user/username/projects/myproject/src/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/file1.ts
+/user/username/projects/myproject/src/file2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/file1.ts (computed .d.ts during emit)
+/user/username/projects/myproject/src/file2.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
+
 Change:: No change
 
 Input::
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Add new file
 
@@ -133,9 +129,14 @@ Input::
 export const y = 10;
 
 
+Timeout callback:: count: 2
+1: timerToInvalidateFailedLookupResolutions *new*
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 2
 1: timerToInvalidateFailedLookupResolutions
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -143,6 +144,45 @@ Output::
 
 [[90m12:00:42 AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/src/file3.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.y = void 0;
+    exports.y = 10;
+});
+
+
+//// [/user/username/projects/myproject/src/file3.d.ts]
+export declare const y = 10;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/file1.ts:
+  {}
+/user/username/projects/myproject/src/file2.ts:
+  {}
+/user/username/projects/myproject/src/file3.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/src:
+  {}
 
 
 Program root files: [
@@ -170,53 +210,11 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file3.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/file1.ts:
-  {}
-/user/username/projects/myproject/src/file2.ts:
-  {}
-/user/username/projects/myproject/src/file3.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-/user/username/projects/myproject/src:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/src/file3.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.y = void 0;
-    exports.y = 10;
-});
-
-
-//// [/user/username/projects/myproject/src/file3.d.ts]
-export declare const y = 10;
-
-
 
 Change:: No change
 
 Input::
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-

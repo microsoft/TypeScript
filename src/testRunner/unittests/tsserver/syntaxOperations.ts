@@ -1,11 +1,8 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -40,7 +37,7 @@ describe("Test Suite 1", () => {
         };
         const files = [app, libFile, tsconfig];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([{ file: app.path, content: app.content }], session);
 
         host.writeFile(unitTest1.path, unitTest1.content);

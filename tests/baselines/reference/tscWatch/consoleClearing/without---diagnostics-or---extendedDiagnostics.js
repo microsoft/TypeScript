@@ -26,6 +26,16 @@ Output::
 
 
 
+//// [/f.js]
+
+
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/f.ts: *new*
+  {}
+
 Program root files: [
   "/f.ts"
 ]
@@ -45,17 +55,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /f.ts (used version)
 
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/f.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/f.js]
-
-
 
 Change:: Comment added to file f
 
@@ -64,14 +64,24 @@ Input::
 //
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:17 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:21 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/f.js]
+//
+
 
 
 
@@ -93,8 +103,3 @@ Shape signatures in builder refreshed for::
 /f.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/f.js]
-//
-
-
