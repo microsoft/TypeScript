@@ -2834,8 +2834,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return findAncestor(errorBindingElement, isBindingElement) !== findAncestor(declaration, isBindingElement) ||
                         declaration.pos < errorBindingElement.pos;
                 }
+                const rootDeclaration = getRootDeclaration(declaration) as Declaration;
+                if (rootDeclaration.kind !== SyntaxKind.VariableDeclaration) {
+                    return true;
+                }
                 // or it might be illegal if usage happens before parent variable is declared (eg var [a] = a)
-                return isBlockScopedNameDeclaredBeforeUse(getAncestor(declaration, SyntaxKind.VariableDeclaration) as Declaration, usage);
+                return isBlockScopedNameDeclaredBeforeUse(rootDeclaration, usage);
             }
             else if (declaration.kind === SyntaxKind.VariableDeclaration) {
                 // still might be illegal if usage is in the initializer of the variable declaration (eg var a = a)
