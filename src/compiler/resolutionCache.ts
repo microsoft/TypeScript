@@ -1,5 +1,4 @@
 import {
-    arrayToMap,
     CachedDirectoryStructureHost,
     clearMap,
     closeFileWatcher,
@@ -54,7 +53,7 @@ import {
     normalizePath,
     PackageId,
     packageIdToString,
-    PackageJsonInfo,
+    PackageJsonInfoCacheEntry,
     parseNodeModuleFromPath,
     Path,
     PathPathComponents,
@@ -1179,7 +1178,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
     }
 
-    function invalidateAffectingFileWatcher(path: string, packageJsonMap: Map<Path, PackageJsonInfo | boolean> | undefined) {
+    function invalidateAffectingFileWatcher(path: string, packageJsonMap: Map<Path, PackageJsonInfoCacheEntry> | undefined) {
         const watcher = fileWatchesOfAffectingLocations.get(path);
         if (watcher?.resolutions) (affectingPathChecks ??= new Set()).add(path);
         if (watcher?.files) (affectingPathChecksForFile ??= new Set()).add(path);
@@ -1482,9 +1481,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         clearMap(typeRootsWatches, closeFileWatcher);
     }
 
-    function createTypeRootsWatch(typeRootPath: Path, typeRoot: string): FileWatcher {
+    function createTypeRootsWatch(typeRoot: string): FileWatcher {
         // Create new watch and recursive info
-        return canWatchTypeRootPath(typeRootPath) ?
+        return canWatchTypeRootPath(typeRoot) ?
             resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrDirectory => {
                 const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
                 if (cachedDirectoryStructureHost) {
@@ -1502,7 +1501,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 // So handle to failed lookup locations here as well to ensure we are invalidating resolutions
                 const dirPath = getDirectoryToWatchFailedLookupLocationFromTypeRoot(
                     typeRoot,
-                    typeRootPath,
+                    resolutionHost.toPath(typeRoot),
                     rootPath,
                     rootPathComponents,
                     getCurrentDirectory,
@@ -1534,7 +1533,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         if (typeRoots) {
             mutateMap(
                 typeRootsWatches,
-                arrayToMap(typeRoots, tr => resolutionHost.toPath(tr)),
+                new Set(typeRoots),
                 {
                     createNewValue: createTypeRootsWatch,
                     onDeleteValue: closeFileWatcher,

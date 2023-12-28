@@ -69,17 +69,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/node_modules: *new*
+/User/userName/Projects/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
+/User/userName/Projects/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/İ/jsconfig.json: *new*
+/User/userName/Projects/İ/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/İ/node_modules: *new*
+/User/userName/Projects/İ/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/İ/node_modules/@types: *new*
+/User/userName/Projects/İ/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/İ/tsconfig.json: *new*
+/User/userName/Projects/İ/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::

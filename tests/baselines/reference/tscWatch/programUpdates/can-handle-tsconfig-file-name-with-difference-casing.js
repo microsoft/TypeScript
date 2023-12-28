@@ -39,9 +39,9 @@ var x = 1;
 
 
 FsWatches::
-/a/b/app.ts: *new*
+/A/B/app.ts: *new*
   {}
-/a/b/tsconfig.json: *new*
+/A/B/tsconfig.json: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}

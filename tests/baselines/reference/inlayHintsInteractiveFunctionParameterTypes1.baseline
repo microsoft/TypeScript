@@ -263,6 +263,30 @@
       "text": "; "
     },
     {
+      "text": "["
+    },
+    {
+      "text": "i"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "]"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": "; "
+    },
+    {
       "text": "a"
     },
     {
@@ -464,7 +488,7 @@
       "text": "}"
     }
   ],
-  "position": 646,
+  "position": 671,
   "kind": "Type",
   "whitespaceBefore": true
 }
@@ -490,7 +514,7 @@
       "text": "42"
     }
   ],
-  "position": 716,
+  "position": 741,
   "kind": "Type",
   "whitespaceBefore": true
 }
@@ -506,13 +530,60 @@ foo4(p => {})
     {
       "text": "Thing",
       "span": {
-        "start": 735,
+        "start": 760,
         "length": 5
       },
       "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
     }
   ],
-  "position": 801,
+  "position": 826,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ const foo5: F4 = (a) => { }
+                    ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "{"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "["
+    },
+    {
+      "text": "x"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "]"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "}"
+    }
+  ],
+  "position": 910,
   "kind": "Type",
   "whitespaceBefore": true
 }
