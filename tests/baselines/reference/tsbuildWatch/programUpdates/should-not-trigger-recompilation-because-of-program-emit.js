@@ -226,7 +226,7 @@ export declare function multiply(a: number, b: number): number;
 
 
 FsWatches::
-/user/username/projects/sample1/core/anothermodule.ts: *new*
+/user/username/projects/sample1/core/anotherModule.ts: *new*
   {}
 /user/username/projects/sample1/core/index.ts: *new*
   {}
@@ -414,7 +414,7 @@ export declare const y = 10;
 
 
 FsWatches::
-/user/username/projects/sample1/core/anothermodule.ts:
+/user/username/projects/sample1/core/anotherModule.ts:
   {}
 /user/username/projects/sample1/core/file3.ts: *new*
   {}

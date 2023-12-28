@@ -1,5 +1,5 @@
 name: 'Library change'
-description: 'Fix or improve issues with built-in type definitions like `lib.dom.d.ts`, `lib.es6.d.ts`, etc.'
+description: 'Fix or improve issues with built-in type definitions like `lib.es6.d.ts`, etc.'
 body:
   - type: markdown
     attributes:

@@ -2,7 +2,7 @@ name: Sync branch with master
 
 on:
   repository_dispatch:
-    types: sync-branch
+    types: [sync-branch]
   workflow_dispatch:
     inputs:
       branch_name:

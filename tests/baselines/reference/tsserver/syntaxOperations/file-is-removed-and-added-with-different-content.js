@@ -259,7 +259,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/tsconfig.json:
   {}
-/user/username/projects/myproject/unittest1.ts: *new*
+/user/username/projects/myproject/unitTest1.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -313,7 +313,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/unittest1.ts:
+/user/username/projects/myproject/unitTest1.ts:
   {}
 
 FsWatchesRecursive::
@@ -637,7 +637,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/tsconfig.json:
   {}
-/user/username/projects/myproject/unittest1.ts: *new*
+/user/username/projects/myproject/unitTest1.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -691,7 +691,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/unittest1.ts:
+/user/username/projects/myproject/unitTest1.ts:
   {}
 
 FsWatchesRecursive::

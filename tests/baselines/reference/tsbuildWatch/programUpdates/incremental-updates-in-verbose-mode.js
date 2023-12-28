@@ -454,7 +454,7 @@ export declare const m: typeof mod;
 
 
 FsWatches::
-/user/username/projects/sample1/core/anothermodule.ts: *new*
+/user/username/projects/sample1/core/anotherModule.ts: *new*
   {}
 /user/username/projects/sample1/core/index.ts: *new*
   {}

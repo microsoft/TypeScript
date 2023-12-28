@@ -140,6 +140,7 @@ import "./unittests/tsserver/autoImportProvider";
 import "./unittests/tsserver/auxiliaryProject";
 import "./unittests/tsserver/cachingFileSystemInformation";
 import "./unittests/tsserver/cancellationToken";
+import "./unittests/tsserver/codeFix";
 import "./unittests/tsserver/compileOnSave";
 import "./unittests/tsserver/completions";
 import "./unittests/tsserver/completionsIncomplete";

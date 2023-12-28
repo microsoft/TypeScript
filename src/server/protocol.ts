@@ -1336,6 +1336,7 @@ export interface RenameInfoSuccess {
 
     /**
      * Full display name of item to be renamed.
+     * If item to be renamed is a file, then this is the original text of the module specifer
      */
     fullDisplayName: string;
 

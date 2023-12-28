@@ -617,9 +617,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts: *new*
+/user/username/projects/myproject/decls/FnS.d.ts: *new*
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map: *new*
+/user/username/projects/myproject/decls/FnS.d.ts.map: *new*
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -653,7 +653,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -661,7 +661,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -740,7 +740,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts: *new*
+/user/username/projects/myproject/decls/FnS.d.ts: *new*
   {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
@@ -754,7 +754,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1049,7 +1049,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts:
   {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
@@ -1063,7 +1063,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1113,7 +1113,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts:
   {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
@@ -1133,7 +1133,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/decls/fns.d.ts.map:
+/user/username/projects/myproject/decls/FnS.d.ts.map:
   {}
 /user/username/projects/myproject/random/random.ts:
   {}
@@ -1174,7 +1174,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts:
   {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
@@ -1188,7 +1188,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/dependency/fns.ts: *new*
+/user/username/projects/myproject/dependency/FnS.ts: *new*
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1229,7 +1229,7 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts:
   {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
@@ -1243,7 +1243,7 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/dependency/fns.ts:
+/user/username/projects/myproject/dependency/FnS.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1318,7 +1318,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/myproject/decls/fns.d.ts:
+/user/username/projects/myproject/decls/FnS.d.ts:
   {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
@@ -1330,7 +1330,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/dependency/fns.ts:
+/user/username/projects/myproject/dependency/FnS.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}

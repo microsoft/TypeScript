@@ -4,7 +4,6 @@ import * as path from "path";
 import {
     combinePaths,
     createGetCanonicalFileName,
-    Debug,
     getDirectoryPath,
     MapLike,
     normalizePath,
@@ -15,14 +14,12 @@ import {
 } from "./_namespaces/ts";
 import {
     Arguments,
-    EventTypesRegistry,
     findArgument,
     hasArgument,
     InitializationFailedResponse,
     InstallTypingHost,
     nowString,
     stringifyIndented,
-    TypesRegistryResponse,
     TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
 } from "./_namespaces/ts.server";
@@ -156,35 +153,13 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
     }
 
-    handleRequest(req: TypingInstallerRequestUnion) {
+    override handleRequest(req: TypingInstallerRequestUnion) {
         if (this.delayedInitializationError) {
             // report initializationFailed error
             this.sendResponse(this.delayedInitializationError);
             this.delayedInitializationError = undefined;
         }
-        switch (req.kind) {
-            case "discover":
-                this.install(req);
-                break;
-            case "closeProject":
-                this.closeProject(req);
-                break;
-            case "typesRegistry": {
-                const typesRegistry: { [key: string]: MapLike<string>; } = {};
-                this.typesRegistry.forEach((value, key) => {
-                    typesRegistry[key] = value;
-                });
-                const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
-                this.sendResponse(response);
-                break;
-            }
-            case "installPackage": {
-                this.installPackage(req);
-                break;
-            }
-            default:
-                Debug.assertNever(req);
-        }
+        super.handleRequest(req);
     }
 
     protected sendResponse(response: TypingInstallerResponseUnion) {
