@@ -5016,16 +5016,13 @@ declare var CSSStyleDeclaration: {
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleRule)
  */
-interface CSSStyleRule extends CSSRule {
-    readonly cssRules: CSSRuleList;
+interface CSSStyleRule extends CSSGroupingRule {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleRule/selectorText) */
     selectorText: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleRule/style) */
     readonly style: CSSStyleDeclaration;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/CSSStyleRule/styleMap) */
     readonly styleMap: StylePropertyMap;
-    deleteRule(index: number): void;
-    insertRule(rule: string, index?: number): number;
 }
 
 declare var CSSStyleRule: {
