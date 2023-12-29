@@ -14674,7 +14674,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             result.links.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
             if (writeTypes) {
-                result.links.writeType = isUnion ? getUnionType(writeTypes) : getIntersectionType(writeTypes);
+                result.links.writeType = isUnion ? getIntersectionType(writeTypes) : getUnionType(writeTypes);
             }
         }
         return result;
