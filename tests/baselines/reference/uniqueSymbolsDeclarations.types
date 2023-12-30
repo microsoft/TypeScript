@@ -855,3 +855,15 @@ const o4: Context = {
 >p : unique symbol
     }
 };
+
+// https://github.com/microsoft/TypeScript/issues/35896
+let revision: symbol
+>revision : symbol
+
+const rev = revision = Symbol();
+>rev : unique symbol
+>revision = Symbol() : unique symbol
+>revision : symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+

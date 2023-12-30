@@ -368,6 +368,7 @@ import {
     getTrailingSemicolonDeferringWriter,
     getTypeParameterFromJsDoc,
     getUseDefineForClassFields,
+    getValidESSymbolDeclaration,
     group,
     hasAbstractModifier,
     hasAccessorModifier,
@@ -746,7 +747,6 @@ import {
     isTypeUsableAsPropertyName,
     isUMDExportSymbol,
     isValidBigIntString,
-    isValidESSymbolDeclaration,
     isValidTypeOnlyAliasUseSite,
     isValueSignatureDeclaration,
     isVariableDeclaration,
@@ -19107,8 +19107,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getESSymbolLikeTypeForNode(node: Node) {
-        if (isValidESSymbolDeclaration(node)) {
-            const symbol = isCommonJsExportPropertyAssignment(node) ? getSymbolOfNode((node as BinaryExpression).left) : getSymbolOfNode(node);
+        const declaration = getValidESSymbolDeclaration(node);
+        if (declaration) {
+            const symbol = isCommonJsExportPropertyAssignment(declaration) ? getSymbolOfNode((declaration as BinaryExpression).left) : getSymbolOfNode(declaration);
             if (symbol) {
                 const links = getSymbolLinks(symbol);
                 return links.uniqueESSymbolType || (links.uniqueESSymbolType = createUniqueESSymbolType(symbol));
