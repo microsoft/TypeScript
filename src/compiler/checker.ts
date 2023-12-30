@@ -13705,7 +13705,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     continue;
                 }
                 if (nameType) {
-                    const nameMapper = appendTypeMapping(type.mappedType.mapper, getTypeParameterFromMappedType(type.mappedType), propertyNameType)
+                    const nameMapper = appendTypeMapping(type.mappedType.mapper, getTypeParameterFromMappedType(type.mappedType), propertyNameType);
                     const instantiatedNameType = instantiateType(nameType, nameMapper);
                     if (instantiatedNameType.flags & TypeFlags.Never) {
                         continue;
