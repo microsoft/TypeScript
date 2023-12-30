@@ -223,11 +223,20 @@ declare namespace Intl {
         ): UnicodeBCP47LocaleIdentifier[];
     };
 
+    interface NumberFormatOptionsSignDisplayRegistry {
+        auto: any;
+        never: any;
+        always: any;
+        exceptZero: any;
+    }
+
+    type NumberFormatOptionsSignDisplay = keyof NumberFormatOptionsSignDisplayRegistry;
+
     interface NumberFormatOptions {
         numberingSystem: string | undefined;
         compactDisplay?: "short" | "long" | undefined;
         notation?: "standard" | "scientific" | "engineering" | "compact" | undefined;
-        signDisplay?: "auto" | "never" | "always" | "exceptZero" | undefined;
+        signDisplay?: NumberFormatOptionsSignDisplay | undefined;
         unit?: string | undefined;
         unitDisplay?: "short" | "long" | "narrow" | undefined;
         currencySign?: string | undefined;
@@ -236,7 +245,7 @@ declare namespace Intl {
     interface ResolvedNumberFormatOptions {
         compactDisplay?: "short" | "long";
         notation: "standard" | "scientific" | "engineering" | "compact";
-        signDisplay: "auto" | "never" | "always" | "exceptZero";
+        signDisplay: NumberFormatOptionsSignDisplay;
         unit?: string;
         unitDisplay?: "short" | "long" | "narrow";
         currencySign?: string;

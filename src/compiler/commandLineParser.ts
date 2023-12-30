@@ -215,6 +215,7 @@ const libEntries: [string, string][] = [
     ["es2022.regexp", "lib.es2022.regexp.d.ts"],
     ["es2023.array", "lib.es2023.array.d.ts"],
     ["es2023.collection", "lib.es2023.collection.d.ts"],
+    ["es2023.intl", "lib.es2023.intl.d.ts"],
     ["esnext.array", "lib.es2023.array.d.ts"],
     ["esnext.collection", "lib.es2023.collection.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],

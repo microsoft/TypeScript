@@ -4409,12 +4409,16 @@ declare namespace Intl {
 
     var Collator: CollatorConstructor;
 
+    interface NumberFormatOptionsUseGroupingRegistry {}
+
+    type NumberFormatOptionsUseGrouping = keyof NumberFormatOptionsUseGroupingRegistry | boolean;
+
     interface NumberFormatOptions {
         localeMatcher?: string | undefined;
         style?: string | undefined;
         currency?: string | undefined;
         currencyDisplay?: string | undefined;
-        useGrouping?: boolean | undefined;
+        useGrouping?: NumberFormatOptionsUseGrouping | undefined;
         minimumIntegerDigits?: number | undefined;
         minimumFractionDigits?: number | undefined;
         maximumFractionDigits?: number | undefined;
@@ -4433,7 +4437,7 @@ declare namespace Intl {
         maximumFractionDigits: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
-        useGrouping: boolean;
+        useGrouping: NumberFormatOptionsUseGrouping;
     }
 
     interface NumberFormat {
