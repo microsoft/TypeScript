@@ -2793,12 +2793,27 @@ namespace Parser {
 
     function nextTokenCanFollowDefaultKeyword(): boolean {
         nextToken();
-        return token() === SyntaxKind.ClassKeyword
-            || token() === SyntaxKind.FunctionKeyword
-            || token() === SyntaxKind.InterfaceKeyword
-            || token() === SyntaxKind.AtToken
-            || (token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine))
-            || (token() === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
+        switch (token()) {
+            case SyntaxKind.ClassKeyword:
+            case SyntaxKind.InterfaceKeyword:
+            case SyntaxKind.FunctionKeyword:
+            case SyntaxKind.NamespaceKeyword:
+            case SyntaxKind.ModuleKeyword:
+            case SyntaxKind.EnumKeyword:
+            case SyntaxKind.ConstKeyword:
+            case SyntaxKind.AtToken:
+                return true;
+            case SyntaxKind.DeclareKeyword:
+                return lookAhead(nextTokenCanFollowExportDefaultDeclareKeyword);
+            case SyntaxKind.TypeKeyword:
+                return lookAhead(nextTokenIsIdentifierOnSameLine);
+            case SyntaxKind.AbstractKeyword:
+                return lookAhead(nextTokenIsClassKeywordOnSameLine);
+            case SyntaxKind.AsyncKeyword:
+                return lookAhead(nextTokenIsFunctionKeywordOnSameLine);
+            default:
+                return false;
+        }
     }
 
     // True if positioned at the start of a list element
@@ -7108,6 +7123,18 @@ namespace Parser {
     function nextTokenIsClassKeywordOnSameLine() {
         nextToken();
         return token() === SyntaxKind.ClassKeyword && !scanner.hasPrecedingLineBreak();
+    }
+
+    function nextTokenCanFollowExportDefaultDeclareKeyword() {
+        nextToken();
+        switch (token()) {
+            case SyntaxKind.NamespaceKeyword:
+            case SyntaxKind.ModuleKeyword:
+            case SyntaxKind.ClassKeyword:
+                return !scanner.hasPrecedingLineBreak();
+            default:
+                return false;
+        }
     }
 
     function nextTokenIsFunctionKeywordOnSameLine() {
