@@ -95,7 +95,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/app",
       "kind": "discover"
     }
@@ -216,7 +215,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/app",
       "kind": "discover"
     }
@@ -323,7 +321,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/app",
       "kind": "discover"
     }
@@ -360,7 +357,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/app",
       "kind": "discover"
     }
@@ -474,14 +470,12 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","cordova","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["commander"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -629,7 +623,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/a/data/node_modules/@types/cordova/index.d.ts",
         "/a/data/node_modules/@types/commander/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
@@ -655,7 +648,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "/a/data/node_modules/@types/cordova/index.d.ts",
         "/a/data/node_modules/@types/commander/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Skipping defunct request for: /a/app/test2.csproj
@@ -688,7 +680,6 @@ Info seq  [hh:mm:ss:mss] event:
           "/a/data/node_modules/@types/cordova/index.d.ts",
           "/a/data/node_modules/@types/commander/index.d.ts"
         ],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -766,7 +757,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/app",
       "kind": "discover"
     }
@@ -792,13 +782,11 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: ["grunt","gulp","lodash"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -930,7 +918,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/a/data/node_modules/@types/gulp/index.d.ts",
         "/a/data/node_modules/@types/lodash/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
@@ -956,7 +943,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "/a/data/node_modules/@types/gulp/index.d.ts",
         "/a/data/node_modules/@types/lodash/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /a/app/test2.csproj
@@ -987,7 +973,6 @@ Info seq  [hh:mm:ss:mss] event:
           "/a/data/node_modules/@types/gulp/index.d.ts",
           "/a/data/node_modules/@types/lodash/index.d.ts"
         ],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }

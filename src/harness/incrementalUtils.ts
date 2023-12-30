@@ -206,7 +206,7 @@ export function verifyResolutionCache(
     projectName: string,
 ) {
     const currentDirectory = resolutionHostCacheHost.getCurrentDirectory!();
-    const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution, /*logChangesWhenResolvingModule*/ false);
+    const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution);
     expected.startCachingPerDirectoryResolution();
 
     type ExpectedResolution = ts.CachedResolvedModuleWithFailedLookupLocations & ts.CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations;
@@ -271,6 +271,14 @@ export function verifyResolutionCache(
     verifyResolutionSet(expected.resolutionsWithOnlyAffectingLocations, actual.resolutionsWithOnlyAffectingLocations, `resolutionsWithOnlyAffectingLocations`);
     verifyDirectoryWatchesOfFailedLookups(expected.directoryWatchesOfFailedLookups, actual.directoryWatchesOfFailedLookups);
     verifyFileWatchesOfAffectingLocations(expected.fileWatchesOfAffectingLocations, actual.fileWatchesOfAffectingLocations);
+    ts.Debug.assert(
+        expected.countResolutionsResolvedWithGlobalCache() === actual.countResolutionsResolvedWithGlobalCache(),
+        `${projectName}:: Expected ResolutionsResolvedWithGlobalCache count ${expected.countResolutionsResolvedWithGlobalCache()} but got ${actual.countResolutionsResolvedWithGlobalCache()}`,
+    );
+    ts.Debug.assert(
+        expected.countResolutionsResolvedWithoutGlobalCache() === actual.countResolutionsResolvedWithoutGlobalCache(),
+        `${projectName}:: Expected ResolutionsResolvedWithoutGlobalCache count ${expected.countResolutionsResolvedWithoutGlobalCache()} but got ${actual.countResolutionsResolvedWithoutGlobalCache()}`,
+    );
 
     // Stop watching resolutions to verify everything gets closed.
     expected.startCachingPerDirectoryResolution();
@@ -287,6 +295,8 @@ export function verifyResolutionCache(
     ts.Debug.assert(expected.resolutionsWithOnlyAffectingLocations.size === 0, `${projectName}:: resolutionsWithOnlyAffectingLocations should be released`);
     ts.Debug.assert(expected.directoryWatchesOfFailedLookups.size === 0, `${projectName}:: directoryWatchesOfFailedLookups should be released`);
     ts.Debug.assert(expected.fileWatchesOfAffectingLocations.size === 0, `${projectName}:: fileWatchesOfAffectingLocations should be released`);
+    ts.Debug.assert(expected.countResolutionsResolvedWithGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithGlobalCache should be cleared`);
+    ts.Debug.assert(expected.countResolutionsResolvedWithoutGlobalCache() === 0, `${projectName}:: ResolutionsResolvedWithoutGlobalCache should be cleared`);
 
     function collectResolutionToRefFromCache<T extends ts.ResolutionWithFailedLookupLocations>(
         cacheType: string,
@@ -332,6 +342,7 @@ export function verifyResolutionCache(
                 failedLookupLocations: resolved.failedLookupLocations,
                 affectingLocations: resolved.affectingLocations,
                 node10Result: resolved.node10Result,
+                globalCacheResolution: resolved.globalCacheResolution,
             };
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
@@ -411,15 +422,23 @@ function verifySet(
     expected?.forEach(expected =>
         ts.Debug.assert(
             actual?.has(expected),
-            `${caption}:: Expected should be present in actual`,
+            `${caption}:: ${expected} should be present in actual`,
         )
     );
     actual?.forEach(actual =>
         ts.Debug.assert(
             expected?.has(actual),
-            `${caption}:: Actual should be present in expected`,
+            `${caption}:: ${actual} should be present in expected`,
         )
     );
+}
+
+function verifyArray(
+    expected: readonly string[] | undefined,
+    actual: readonly string[] | undefined,
+    caption: string,
+) {
+    return verifySet(expected && new Set(expected), actual && new Set(actual), caption);
 }
 
 function verifyProgram(service: ts.server.ProjectService, project: ts.server.Project) {
@@ -512,6 +531,24 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
     verifyResolutionCache(project.resolutionCache, project.getCurrentProgram()!, resolutionHostCacheHost, project.projectName);
 }
 
+function verifyUnresolvedImports(_service: ts.server.ProjectService, project: ts.server.Project) {
+    const cachedUnresolvedImportsPerFile = new Map<ts.Path, readonly string[]>();
+    const lastCachedUnresolvedImportsList = project.useTypingsFromGlobalCache() ?
+        ts.server.getUnresolvedImports(project.getCurrentProgram()!, cachedUnresolvedImportsPerFile) :
+        undefined;
+    verifyArray(
+        lastCachedUnresolvedImportsList,
+        project.lastCachedUnresolvedImportsList,
+        `${project.getProjectName()}:: lastCachedUnresolvedImportsList`,
+    );
+    verifyMap(
+        cachedUnresolvedImportsPerFile,
+        project.cachedUnresolvedImportsPerFile,
+        (expected, actual, caption) => verifyArray(expected, actual, caption),
+        `${project.getProjectName()}:: cachedUnresolvedImportsPerFile`,
+    );
+}
+
 interface ResolveSingleModuleNameWithoutWatchingData {
     resolutionToData: Map<ts.ResolutionWithFailedLookupLocations, Pick<ts.ResolvedModuleWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics">>;
     packageJsonMap: Map<ts.Path, ts.PackageJsonInfoCacheEntry> | undefined;
@@ -588,6 +625,7 @@ export interface IncrementalVerifierCallbacks {
 export function incrementalVerifier(service: ts.server.ProjectService) {
     service.verifyDocumentRegistry = withIncrementalVerifierCallbacks(service, verifyDocumentRegistry);
     service.verifyProgram = withIncrementalVerifierCallbacks(service, verifyProgram);
+    service.verifyUnresovedImports = withIncrementalVerifierCallbacks(service, verifyUnresolvedImports);
     service.onProjectCreation = onProjectCreation;
 }
 

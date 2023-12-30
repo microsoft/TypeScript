@@ -339,12 +339,10 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/b",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -376,7 +374,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "maxNodeModuleJsDepth": 2
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
@@ -402,7 +399,6 @@ Info seq  [hh:mm:ss:mss] event:
           "maxNodeModuleJsDepth": 2
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -457,14 +453,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
 	/tmp/node_modules/node/index.d.ts Text-1 "\ndeclare module \"net\" {\n    export type n = number;\n}\ndeclare module \"stream\" {\n    export type s = string;\n}"
 	/a/b/app.js SVC-1-1 "// @ts-check\n\nconst net = require(\"net\");\nconst stream = require(\"s tream\");"
-
-
-	../lib/lib.d.ts
-	  Default library for target 'es5'
-	../../tmp/node_modules/node/index.d.ts
-	  Imported via "net" from file 'app.js'
-	app.js
-	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: [hh:mm:ss:mss] Got install request
@@ -634,105 +622,4 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/b/app.js SVC-1-2 "// @ts-check\n\nconst bar = require(\"bar\");const net = require(\"net\");\nconst stream = require(\"s tream\");"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request
-    {
-      "projectName": "/dev/null/inferredProject1*",
-      "fileNames": [
-        "/a/lib/lib.d.ts",
-        "/a/b/app.js"
-      ],
-      "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
-        "allowJs": true,
-        "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
-      },
-      "typeAcquisition": {
-        "enable": true,
-        "include": [],
-        "exclude": []
-      },
-      "unresolvedImports": [
-        "bar",
-        "s tream"
-      ],
-      "projectRootPath": "/a/b",
-      "kind": "discover"
-    }
-TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["bar","s tream"]
-TI:: [hh:mm:ss:mss] Finished typings discovery:
-    {
-      "cachedTypingPaths": [],
-      "newTypingNames": [
-        "bar",
-        "s tream"
-      ],
-      "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
-      ]
-    }
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "kind": "action::watchTypingLocations",
-      "projectName": "/dev/null/inferredProject1*"
-    }
-TI:: [hh:mm:ss:mss] Installing typings ["bar","s tream"]
-TI:: [hh:mm:ss:mss] 'bar':: Entry for package 'bar' does not exist in local types registry - skipping...
-TI:: [hh:mm:ss:mss] 's tream':: 's tream' is in missingTypingsSet - skipping...
-TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
-TI:: [hh:mm:ss:mss] Sending response:
-    {
-      "projectName": "/dev/null/inferredProject1*",
-      "typeAcquisition": {
-        "enable": true,
-        "include": [],
-        "exclude": []
-      },
-      "compilerOptions": {
-        "target": 1,
-        "jsx": 1,
-        "allowNonTsExtensions": true,
-        "allowJs": true,
-        "noEmitForJsFiles": true,
-        "maxNodeModuleJsDepth": 2
-      },
-      "typings": [],
-      "unresolvedImports": [
-        "bar",
-        "s tream"
-      ],
-      "kind": "action::set"
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "setTypings",
-      "body": {
-        "projectName": "/dev/null/inferredProject1*",
-        "typeAcquisition": {
-          "enable": true,
-          "include": [],
-          "exclude": []
-        },
-        "compilerOptions": {
-          "target": 1,
-          "jsx": 1,
-          "allowNonTsExtensions": true,
-          "allowJs": true,
-          "noEmitForJsFiles": true,
-          "maxNodeModuleJsDepth": 2
-        },
-        "typings": [],
-        "unresolvedImports": [
-          "bar",
-          "s tream"
-        ],
-        "kind": "action::set"
-      }
-    }
 After program update

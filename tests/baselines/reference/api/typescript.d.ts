@@ -3154,6 +3154,18 @@ declare namespace ts {
             trace?(s: string): void;
             require?(initialPath: string, moduleName: string): ModuleImportResult;
         }
+        interface InstallPackageOptionsWithProject extends InstallPackageOptions {
+            projectName: string;
+            projectRootPath: Path;
+        }
+        interface ITypingsInstaller {
+            isKnownTypesPackageName(name: string): boolean;
+            installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
+            enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
+            attach(projectService: ProjectService): void;
+            onProjectClosed(p: Project): void;
+            readonly globalTypingsCacheLocation: string | undefined;
+        }
         function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings;
         function toNormalizedPath(fileName: string): NormalizedPath;
         function normalizedPathToPath(normalizedPath: NormalizedPath, currentDirectory: string, getCanonicalFileName: (f: string) => string): Path;
@@ -3245,19 +3257,6 @@ declare namespace ts {
             positionToLineOffset(position: number): protocol.Location;
             isJavaScript(): boolean;
         }
-        interface InstallPackageOptionsWithProject extends InstallPackageOptions {
-            projectName: string;
-            projectRootPath: Path;
-        }
-        interface ITypingsInstaller {
-            isKnownTypesPackageName(name: string): boolean;
-            installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
-            enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
-            attach(projectService: ProjectService): void;
-            onProjectClosed(p: Project): void;
-            readonly globalTypingsCacheLocation: string | undefined;
-        }
-        const nullTypingsInstaller: ITypingsInstaller;
         function allRootFilesAreJsOrDts(project: Project): boolean;
         function allFilesAreJsOrDts(project: Project): boolean;
         enum ProjectKind {
@@ -3338,7 +3337,6 @@ declare namespace ts {
             readonly jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
-            private get typingsCache();
             getCompilationSettings(): ts.CompilerOptions;
             getCompilerOptions(): ts.CompilerOptions;
             getNewLine(): string;
@@ -3432,6 +3430,7 @@ declare namespace ts {
          */
         class InferredProject extends Project {
             private _isJsInferredProject;
+            private inferredTypeAcquisition;
             toggleJsInferredProject(isJsInferredProject: boolean): void;
             setCompilerOptions(options?: CompilerOptions): void;
             /** this is canonical project root path */
@@ -3440,6 +3439,7 @@ declare namespace ts {
             removeRoot(info: ScriptInfo): void;
             isProjectWithSingleRoot(): boolean;
             close(): void;
+            setTypeAcquisition(newTypeAcquisition: ts.TypeAcquisition | undefined): void;
             getTypeAcquisition(): TypeAcquisition;
         }
         class AutoImportProviderProject extends Project {
@@ -3581,6 +3581,7 @@ declare namespace ts {
             readonly eventName: protocol.CloseFileWatcherEventName;
             readonly data: protocol.CloseFileWatcherEventBody;
         }
+        const nullTypingsInstaller: ITypingsInstaller;
         interface ProjectInfoTelemetryEventData {
             /** Cryptographically secure hash of project file location. */
             readonly projectId: string;

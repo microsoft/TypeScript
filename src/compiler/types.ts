@@ -7755,6 +7755,8 @@ export interface ResolvedModuleWithFailedLookupLocations {
      * while respecting package.json `exports`, but were found when disabling `exports`.
      */
     node10Result?: string;
+    /** @internal */
+    globalCacheResolution?: boolean;
 }
 
 export interface ResolvedTypeReferenceDirective {

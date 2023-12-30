@@ -206,7 +206,6 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/",
       "kind": "discover"
     }
@@ -215,7 +214,6 @@ TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/package.json' dependencies: ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] Searching for typing names in /node_modules; all files: ["/node_modules/@zkat/cacache/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -489,7 +487,6 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typings": [
         "/tmp/node_modules/@types/zkat__cacache/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json, Cancelled earlier one
@@ -518,7 +515,6 @@ Info seq  [hh:mm:ss:mss] event:
         "typings": [
           "/tmp/node_modules/@types/zkat__cacache/index.d.ts"
         ],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -598,7 +594,6 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/",
       "kind": "discover"
     }
@@ -606,7 +601,6 @@ TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/package.json' dependencies: ["@zkat/cacache"]
 TI:: [hh:mm:ss:mss] Searching for typing names in /node_modules; all files: ["/node_modules/@zkat/cacache/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -645,7 +639,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "allowNonTsExtensions": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /jsconfig.json
@@ -672,7 +665,6 @@ Info seq  [hh:mm:ss:mss] event:
           "allowNonTsExtensions": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
