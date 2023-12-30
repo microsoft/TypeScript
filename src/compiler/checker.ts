@@ -13682,7 +13682,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const keyofConstraintRecord = getTypeAliasInstantiation(recordSymbol, [keyofConstraintType, unknownType]);
         const mapper = appendTypeMapping(type.mappedType.mapper, type.constraintType.type, keyofConstraintRecord);
-        return instantiateType(constraint, mapper);
+        return getBaseConstraintOfType(instantiateType(constraint, mapper));
     }
 
     function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
@@ -25761,7 +25761,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
             if (constraintType.flags & TypeFlags.UnionOrIntersection) {
                 let result = false;
-                for (const type of (constraintType as (UnionOrIntersectionType)).types) {
+                for (const type of (constraintType as UnionOrIntersectionType).types) {
                     result = inferToMappedType(source, target, type) || result;
                 }
                 return result;
