@@ -4413,7 +4413,7 @@ declare namespace Intl {
         localeMatcher?: string | undefined;
         style?: string | undefined;
         currency?: string | undefined;
-        currencySign?: string | undefined;
+        currencyDisplay?: string | undefined;
         useGrouping?: boolean | undefined;
         minimumIntegerDigits?: number | undefined;
         minimumFractionDigits?: number | undefined;
@@ -4427,6 +4427,7 @@ declare namespace Intl {
         numberingSystem: string;
         style: string;
         currency?: string;
+        currencyDisplay?: string;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
