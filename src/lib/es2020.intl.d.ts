@@ -227,6 +227,10 @@ declare namespace Intl {
         unit: any;
     }
 
+    interface NumberFormatOptionsCurrencyDisplayRegistry {
+        narrowSymbol: any;
+    }
+
     interface NumberFormatOptionsSignDisplayRegistry {
         auto: any;
         never: any;

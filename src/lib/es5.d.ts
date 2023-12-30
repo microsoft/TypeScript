@@ -4417,6 +4417,14 @@ declare namespace Intl {
 
     type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
 
+    interface NumberFormatOptionsCurrencyDisplayRegistry {
+        code: any;
+        symbol: any;
+        name: any;
+    }
+
+    type NumberFormatOptionsCurrencyDisplay = keyof NumberFormatOptionsCurrencyDisplayRegistry;
+
     interface NumberFormatOptionsUseGroupingRegistry {}
 
     type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
@@ -4426,7 +4434,7 @@ declare namespace Intl {
         localeMatcher?: "lookup" | "best fit" | undefined;
         style?: NumberFormatOptionsStyle | undefined;
         currency?: string | undefined;
-        currencyDisplay?: string | undefined;
+        currencyDisplay?: NumberFormatOptionsCurrencyDisplay | undefined;
         useGrouping?: NumberFormatOptionsUseGrouping | undefined;
         minimumIntegerDigits?: number | undefined;
         minimumFractionDigits?: number | undefined;
@@ -4440,7 +4448,7 @@ declare namespace Intl {
         numberingSystem: string;
         style: NumberFormatOptionsStyle;
         currency?: string;
-        currencyDisplay?: string;
+        currencyDisplay?: NumberFormatOptionsCurrencyDisplay;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
