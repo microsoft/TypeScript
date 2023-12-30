@@ -11979,7 +11979,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.writeType && links.deferralWriteConstituents) {
             Debug.assertIsDefined(links.deferralParent);
             Debug.assertIsDefined(links.deferralConstituents);
-            links.writeType = links.deferralParent.flags & TypeFlags.Union ? getUnionType(links.deferralWriteConstituents) : getIntersectionType(links.deferralWriteConstituents);
+            links.writeType = links.deferralParent.flags & TypeFlags.Union ? getIntersectionType(links.deferralWriteConstituents) : getUnionType(links.deferralWriteConstituents);
         }
         return links.writeType;
     }

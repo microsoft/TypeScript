@@ -64,32 +64,32 @@ declare const i: One & Two & Three;
 >i : One & Two & Three
 
 // "hello"
-i.prop1 = 42; // error
+i.prop1 = 42;
 >i.prop1 = 42 : 42
->i.prop1 : "hello"
+>i.prop1 : string | number | boolean
 >i : One & Two & Three
->prop1 : "hello"
+>prop1 : string | number | boolean
 >42 : 42
 
 i.prop1 = "hello";
 >i.prop1 = "hello" : "hello"
->i.prop1 : "hello"
+>i.prop1 : string | number | boolean
 >i : One & Two & Three
->prop1 : "hello"
+>prop1 : string | number | boolean
 >"hello" : "hello"
 
 // 42
 i.prop2 = 42;
 >i.prop2 = 42 : 42
->i.prop2 : 42
+>i.prop2 : string | number | boolean
 >i : One & Two & Three
->prop2 : 42
+>prop2 : string | number | boolean
 >42 : 42
 
-i.prop2 = "hello"; // error
+i.prop2 = "hello";
 >i.prop2 = "hello" : "hello"
->i.prop2 : 42
+>i.prop2 : string | number | boolean
 >i : One & Two & Three
->prop2 : 42
+>prop2 : string | number | boolean
 >"hello" : "hello"
 

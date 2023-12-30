@@ -338,28 +338,28 @@ declare const i2: Three & Four & Five;
 
 i2['prop1'] = 42;
 >i2['prop1'] = 42 : 42
->i2['prop1'] : "hello"
+>i2['prop1'] : string | number | boolean
 >i2 : Three & Four & Five
 >'prop1' : "prop1"
 >42 : 42
 
 i2['prop1'] = "hello";
 >i2['prop1'] = "hello" : "hello"
->i2['prop1'] : "hello"
+>i2['prop1'] : string | number | boolean
 >i2 : Three & Four & Five
 >'prop1' : "prop1"
 >"hello" : "hello"
 
 i2['prop2'] = 42;
 >i2['prop2'] = 42 : 42
->i2['prop2'] : 42
+>i2['prop2'] : string | number | boolean
 >i2 : Three & Four & Five
 >'prop2' : "prop2"
 >42 : 42
 
 i2['prop2'] = "hello";
 >i2['prop2'] = "hello" : "hello"
->i2['prop2'] : 42
+>i2['prop2'] : string | number | boolean
 >i2 : Three & Four & Five
 >'prop2' : "prop2"
 >"hello" : "hello"
