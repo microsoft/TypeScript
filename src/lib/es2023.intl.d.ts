@@ -24,4 +24,13 @@ declare namespace Intl {
         roundingIncrement: 1 | 2 | 5 | 10 | 20 | 25 | 50 | 100 | 200 | 250 | 500 | 1000 | 2000 | 2500 | 5000;
         trailingZeroDisplay: "auto" | "stripIfInteger";
     }
+
+    interface NumberRangeFormatPart extends NumberFormatPart {
+        source: "startRange" | "endRange" | "shared";
+    }
+
+    interface NumberFormat {
+        formatRange(start: number | bigint, end: number | bigint): string;
+        formatRangeToParts(start: number | bigint, end: number | bigint): NumberRangeFormatPart[];
+    }
 }
