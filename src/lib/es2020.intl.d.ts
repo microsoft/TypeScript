@@ -247,7 +247,7 @@ declare namespace Intl {
         signDisplay?: NumberFormatOptionsSignDisplay | undefined;
         unit?: string | undefined;
         unitDisplay?: "short" | "long" | "narrow" | undefined;
-        currencySign?: string | undefined;
+        currencySign?: "standard" | "accounting" | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -256,7 +256,7 @@ declare namespace Intl {
         signDisplay: NumberFormatOptionsSignDisplay;
         unit?: string;
         unitDisplay?: "short" | "long" | "narrow";
-        currencySign?: string;
+        currencySign?: "standard" | "accounting";
     }
 
     interface DateTimeFormatOptions {
