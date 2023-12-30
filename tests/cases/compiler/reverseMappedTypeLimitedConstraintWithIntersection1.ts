@@ -1,3 +1,5 @@
+// @strict: true
+
 type XNumber_ = { x: number }
 
 declare function foo_<T extends XNumber_>(props: {[K in keyof T & keyof XNumber_]: T[K]}): T;

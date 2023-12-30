@@ -13653,15 +13653,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // e.g. { [K in keyof U & ("a" | "b") ] } -> "a" | "b"
     function getLimitedConstraint(type: ReverseMappedType) {
         const constraint = getConstraintTypeFromMappedType(type.mappedType);
-        if (!(constraint.flags & TypeFlags.Union || constraint.flags & TypeFlags.Intersection)) {
+        if (constraint === type.constraintType) {
             return;
         }
-        const origin = (constraint.flags & TypeFlags.Union) ? (constraint as UnionType).origin : (constraint as IntersectionType);
-        if (!origin || !(origin.flags & TypeFlags.Intersection)) {
+        const recordSymbol = getGlobalRecordSymbol();
+        if (!recordSymbol) {
             return;
         }
-        const limitedConstraint = getIntersectionType((origin as IntersectionType).types.filter(t => t !== type.constraintType));
-        return limitedConstraint !== neverType ? limitedConstraint : undefined;
+        const keyofConstraintRecord = getTypeAliasInstantiation(recordSymbol, [keyofConstraintType, unknownType]);
+        const mapper = appendTypeMapping(type.mappedType.mapper, type.constraintType.type, keyofConstraintRecord);
+        return instantiateType(constraint, mapper);
     }
 
     function resolveReverseMappedTypeMembers(type: ReverseMappedType) {
@@ -13672,14 +13673,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
         const limitedConstraint = getLimitedConstraint(type);
+        const nameType = getNameTypeFromMappedType(type.mappedType);
+
         for (const prop of getPropertiesOfType(type.source)) {
             // In case of a reverse mapped type with an intersection constraint, if we were able to
             // extract the filtering type literals we skip those properties that are not assignable to them,
             // because the extra properties wouldn't get through the application of the mapped type anyway
-            if (limitedConstraint) {
+            if (limitedConstraint || nameType) {
                 const propertyNameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
-                if (!isTypeAssignableTo(propertyNameType, limitedConstraint)) {
+                if (limitedConstraint && !isTypeAssignableTo(propertyNameType, limitedConstraint)) {
                     continue;
+                }
+                if (nameType) {
+                    const nameMapper = appendTypeMapping(type.mappedType.mapper, getTypeParameterFromMappedType(type.mappedType), propertyNameType)
+                    const instantiatedNameType = instantiateType(nameType, nameMapper);
+                    if (instantiatedNameType.flags & TypeFlags.Never) {
+                        continue;
+                    }
                 }
             }
             const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
@@ -25692,9 +25702,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
-            if ((constraintType.flags & TypeFlags.Union) || (constraintType.flags & TypeFlags.Intersection)) {
+            if (constraintType.flags & TypeFlags.UnionOrIntersection) {
                 let result = false;
-                for (const type of (constraintType as (UnionType | IntersectionType)).types) {
+                for (const type of (constraintType as (UnionOrIntersectionType)).types) {
                     result = inferToMappedType(source, target, type) || result;
                 }
                 return result;

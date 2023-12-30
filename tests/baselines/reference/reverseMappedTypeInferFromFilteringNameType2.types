@@ -54,8 +54,8 @@ const inferredParams1 = createMachine({
 
 });
 const inferredParams2 = createMachine({
->inferredParams2 : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }]
->createMachine({  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,}) : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }]
+>inferredParams2 : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; }]
+>createMachine({  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,}) : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; }]
 >createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig as K & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
 >{  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }
 
@@ -151,8 +151,8 @@ function doStuffWithStuff<T extends Stuff>(s: {
   }
 }
 const stuff1 = doStuffWithStuff({ field: 1, anotherField: "a", extra: 123 });
->stuff1 : { field: 1; anotherField: "a"; extra: number; }
->doStuffWithStuff({ field: 1, anotherField: "a", extra: 123 }) : { field: 1; anotherField: "a"; extra: number; }
+>stuff1 : { field: 1; anotherField: "a"; }
+>doStuffWithStuff({ field: 1, anotherField: "a", extra: 123 }) : { field: 1; anotherField: "a"; }
 >doStuffWithStuff : <T extends Stuff>(s: { [K in keyof T as K & keyof Stuff]: T[K]; }) => T
 >{ field: 1, anotherField: "a", extra: 123 } : { field: 1; anotherField: "a"; extra: number; }
 >field : 1
@@ -187,8 +187,8 @@ function doStuffWithStuffArr<T extends Stuff>(
   }
 }
 const stuff2 = doStuffWithStuffArr([{ field: 1, anotherField: "a", extra: 123 }]);
->stuff2 : { field: 1; anotherField: "a"; extra: number; }[]
->doStuffWithStuffArr([{ field: 1, anotherField: "a", extra: 123 }]) : { field: 1; anotherField: "a"; extra: number; }[]
+>stuff2 : { field: 1; anotherField: "a"; }[]
+>doStuffWithStuffArr([{ field: 1, anotherField: "a", extra: 123 }]) : { field: 1; anotherField: "a"; }[]
 >doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T as K & keyof Stuff]: T[K]; }[]) => T[]
 >[{ field: 1, anotherField: "a", extra: 123 }] : { field: 1; anotherField: "a"; extra: number; }[]
 >{ field: 1, anotherField: "a", extra: 123 } : { field: 1; anotherField: "a"; extra: number; }
@@ -210,19 +210,19 @@ declare function foo<T extends XNumber>(props: {
   [K in keyof T as K & keyof XNumber]: T[K];
 }): T;
 function bar(props: { x: number; y: string }) {
->bar : (props: {    x: number;    y: string;}) => { x: number; y: string; }
+>bar : (props: {    x: number;    y: string;}) => { x: number; }
 >props : { x: number; y: string; }
 >x : number
 >y : string
 
   return foo(props); // no error because lack of excess property check by design
->foo(props) : { x: number; y: string; }
+>foo(props) : { x: number; }
 >foo : <T extends XNumber>(props: { [K in keyof T as K & "x"]: T[K]; }) => T
 >props : { x: number; y: string; }
 }
 const foo1 = foo({ x: 1, y: "foo" });
->foo1 : { x: 1; y: string; }
->foo({ x: 1, y: "foo" }) : { x: 1; y: string; }
+>foo1 : { x: 1; }
+>foo({ x: 1, y: "foo" }) : { x: 1; }
 >foo : <T extends XNumber>(props: { [K in keyof T as K & "x"]: T[K]; }) => T
 >{ x: 1, y: "foo" } : { x: 1; y: string; }
 >x : 1
@@ -231,8 +231,8 @@ const foo1 = foo({ x: 1, y: "foo" });
 >"foo" : "foo"
 
 const foo2 = foo({ ...{ x: 1, y: "foo" } }); // no error because lack of excess property check by design
->foo2 : { x: 1; y: string; }
->foo({ ...{ x: 1, y: "foo" } }) : { x: 1; y: string; }
+>foo2 : { x: 1; }
+>foo({ ...{ x: 1, y: "foo" } }) : { x: 1; }
 >foo : <T extends XNumber>(props: { [K in keyof T as K & "x"]: T[K]; }) => T
 >{ ...{ x: 1, y: "foo" } } : { x: 1; y: string; }
 >{ x: 1, y: "foo" } : { x: 1; y: string; }
@@ -261,8 +261,8 @@ const baz1 = baz({ x: 1 });
 >1 : 1
 
 const baz2 = baz({ x: 1, z: 123 });
->baz2 : { x: 1; z: number; }
->baz({ x: 1, z: 123 }) : { x: 1; z: number; }
+>baz2 : { x: 1; }
+>baz({ x: 1, z: 123 }) : { x: 1; }
 >baz : <T extends NoErrWithOptProps>(props: { [K in keyof T as K & keyof NoErrWithOptProps]: T[K]; }) => T
 >{ x: 1, z: 123 } : { x: 1; z: number; }
 >x : 1
@@ -281,8 +281,8 @@ const baz3 = baz({ x: 1, y: "foo" });
 >"foo" : "foo"
 
 const baz4 = baz({ x: 1, y: "foo", z: 123 });
->baz4 : { x: 1; y: "foo"; z: number; }
->baz({ x: 1, y: "foo", z: 123 }) : { x: 1; y: "foo"; z: number; }
+>baz4 : { x: 1; y: "foo"; }
+>baz({ x: 1, y: "foo", z: 123 }) : { x: 1; y: "foo"; }
 >baz : <T extends NoErrWithOptProps>(props: { [K in keyof T as K & keyof NoErrWithOptProps]: T[K]; }) => T
 >{ x: 1, y: "foo", z: 123 } : { x: 1; y: "foo"; z: number; }
 >x : 1
@@ -311,8 +311,8 @@ declare function withNestedProp<T extends WithNestedProp>(props: {
   [K in keyof T as K & keyof WithNestedProp]: T[K];
 }): T;
 const wnp = withNestedProp({ prop: "foo", nested: { prop: "bar" }, extra: 10 });
->wnp : { prop: "foo"; nested: { prop: string; }; extra: number; }
->withNestedProp({ prop: "foo", nested: { prop: "bar" }, extra: 10 }) : { prop: "foo"; nested: { prop: string; }; extra: number; }
+>wnp : { prop: "foo"; nested: { prop: string; }; }
+>withNestedProp({ prop: "foo", nested: { prop: "bar" }, extra: 10 }) : { prop: "foo"; nested: { prop: string; }; }
 >withNestedProp : <T extends WithNestedProp>(props: { [K in keyof T as K & keyof WithNestedProp]: T[K]; }) => T
 >{ prop: "foo", nested: { prop: "bar" }, extra: 10 } : { prop: "foo"; nested: { prop: string; }; extra: number; }
 >prop : "foo"
@@ -390,8 +390,8 @@ const child = () => Promise.resolve("foo");
 >"foo" : "foo"
 
 const config = createXMachine({
->config : { readonly types: { actors: {    src: "str";    logic: typeof child;}; }; readonly invoke: { readonly src: "str"; }; readonly extra: 10; }
->createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10,}) : { readonly types: { actors: {    src: "str";    logic: typeof child;}; }; readonly invoke: { readonly src: "str"; }; readonly extra: 10; }
+>config : { readonly types: { actors: {    src: "str";    logic: typeof child;}; }; readonly invoke: { readonly src: "str"; }; }
+>createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10,}) : { readonly types: { actors: {    src: "str";    logic: typeof child;}; }; readonly invoke: { readonly src: "str"; }; }
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof TConfig as K & keyof MachineConfig<any>]: TConfig[K]; }) => TConfig
 >{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10,} : { types: { actors: {    src: "str";    logic: typeof child;}; }; invoke: { src: "str"; }; extra: number; }
 
@@ -427,8 +427,8 @@ const config = createXMachine({
 
 });
 const config2 = createXMachine({
->config2 : { readonly invoke: { readonly src: "whatever"; }; readonly extra: 10; }
->createXMachine({  invoke: {    src: "whatever",  },  extra: 10,}) : { readonly invoke: { readonly src: "whatever"; }; readonly extra: 10; }
+>config2 : { readonly invoke: { readonly src: "whatever"; }; }
+>createXMachine({  invoke: {    src: "whatever",  },  extra: 10,}) : { readonly invoke: { readonly src: "whatever"; }; }
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof TConfig as K & keyof MachineConfig<any>]: TConfig[K]; }) => TConfig
 >{  invoke: {    src: "whatever",  },  extra: 10,} : { invoke: { src: "whatever"; }; extra: number; }
 

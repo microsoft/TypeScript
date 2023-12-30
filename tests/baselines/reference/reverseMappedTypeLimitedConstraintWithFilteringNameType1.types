@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts] ////
+
+=== reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts ===
+type XNumber = { x: number };
+>XNumber : { x: number; }
+>x : number
+
+declare function foo<T extends XNumber>(props: {
+>foo : <T extends XNumber>(props: { [K in keyof T as K & "x"]: T[K]; }) => T
+>props : { [K in keyof T as K & "x"]: T[K]; }
+
+  [K in keyof T as K & keyof XNumber]: T[K];
+}): T;
+const foo1 = foo({ x: 1, y: "foo" });
+>foo1 : { x: 1; }
+>foo({ x: 1, y: "foo" }) : { x: 1; }
+>foo : <T extends XNumber>(props: { [K in keyof T as K & "x"]: T[K]; }) => T
+>{ x: 1, y: "foo" } : { x: 1; y: string; }
+>x : 1
+>1 : 1
+>y : string
+>"foo" : "foo"
+
+const objFoo = { x: 1, y: "foo" };
+>objFoo : { x: number; y: string; }
+>{ x: 1, y: "foo" } : { x: number; y: string; }
+>x : number
+>1 : 1
+>y : string
+>"foo" : "foo"
+
+const foo2 = foo(objFoo);
+>foo2 : { x: number; }
+>foo(objFoo) : { x: number; }
+>foo : <T extends XNumber>(props: { [K in keyof T as K & "x"]: T[K]; }) => T
+>objFoo : { x: number; y: string; }
+
+const checkType =
+>checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+
+  <T,>() =>
+><T,>() =>  <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) =>    value : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+
+  <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) =>
+><U extends T>(value: { [K in keyof U & keyof T]: U[K] }) =>    value : <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+>value : { [K in keyof U & keyof T]: U[K]; }
+
+    value;
+>value : { [K in keyof U & keyof T]: U[K]; }
+
+const checked1 = checkType<{ x: number; y: string }>()({
+>checked1 : { x: number; y: "y"; }
+>checkType<{ x: number; y: string }>()({  x: 1 as number,  y: "y",  z: "z",}) : { x: number; y: "y"; }
+>checkType<{ x: number; y: string }>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
+>checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+>x : number
+>y : string
+>{  x: 1 as number,  y: "y",  z: "z",} : { x: number; y: "y"; z: string; }
+
+  x: 1 as number,
+>x : number
+>1 as number : number
+>1 : 1
+
+  y: "y",
+>y : "y"
+>"y" : "y"
+
+  z: "z",
+>z : string
+>"z" : "z"
+
+});
+const objChecked = {
+>objChecked : { x: number; y: string; z: string; }
+>{  x: 1,  y: "y",  z: "z",} : { x: number; y: string; z: string; }
+
+  x: 1,
+>x : number
+>1 : 1
+
+  y: "y",
+>y : string
+>"y" : "y"
+
+  z: "z",
+>z : string
+>"z" : "z"
+
+};
+const checked2 = checkType<{ x: number; y: string }>()(objChecked);
+>checked2 : { x: number; y: string; }
+>checkType<{ x: number; y: string }>()(objChecked) : { x: number; y: string; }
+>checkType<{ x: number; y: string }>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
+>checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
+>x : number
+>y : string
+>objChecked : { x: number; y: string; z: string; }
+

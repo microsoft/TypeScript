@@ -77,8 +77,8 @@ const inferred1 = extend({
 });
 
 const inferred2 = extend({
->inferred2 : { fullName: { last: boolean; doesntExist: boolean; }; }
->extend({  fullName: {    needs: {      last: true,      doesntExist: true // error    },    compute: (user) => {},  },}) : { fullName: { last: boolean; doesntExist: boolean; }; }
+>inferred2 : { fullName: { last: boolean; }; }
+>extend({  fullName: {    needs: {      last: true,      doesntExist: true // error    },    compute: (user) => {},  },}) : { fullName: { last: boolean; }; }
 >extend : <T>(input: { [K in keyof T]: { needs: AllowedNeeds<T[K]>; compute: (x: Pick<User, keyof T[K] & keyof User>) => any; }; }) => T
 >{  fullName: {    needs: {      last: true,      doesntExist: true // error    },    compute: (user) => {},  },} : { fullName: { needs: { last: true; doesntExist: boolean; }; compute: (user: Pick<User, "last">) => void; }; }
 

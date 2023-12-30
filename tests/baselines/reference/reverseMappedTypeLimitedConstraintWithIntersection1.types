@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/reverseMappedTypeLimitedConstraint.ts] ////
+//// [tests/cases/compiler/reverseMappedTypeLimitedConstraintWithIntersection1.ts] ////
 
-=== reverseMappedTypeLimitedConstraint.ts ===
+=== reverseMappedTypeLimitedConstraintWithIntersection1.ts ===
 type XNumber_ = { x: number }
 >XNumber_ : { x: number; }
 >x : number
@@ -50,3 +50,4 @@ const checked_ = checkType_<{x: number, y: string}>()({
 >"z" : "z"
 
 });
+
