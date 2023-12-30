@@ -916,6 +916,7 @@ export const enum JsxFlags {
 // dprint-ignore
 /** @internal */
 export const enum RelationComparisonResult {
+    None                = 0,
     Succeeded           = 1 << 0, // Should be truthy
     Failed              = 1 << 1,
     Reported            = 1 << 2,
@@ -5158,7 +5159,20 @@ export interface TypeChecker {
     /** @internal */ getPromiseLikeType(): Type;
     /** @internal */ getAsyncIterableType(): Type | undefined;
 
-    /** @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
+    /**
+     * Returns true if the "source" type is assignable to the "target" type.
+     *
+     * ```ts
+     * declare const abcLiteral: ts.Type; // Type of "abc"
+     * declare const stringType: ts.Type; // Type of string
+     *
+     * isTypeAssignableTo(abcLiteral, abcLiteral); // true; "abc" is assignable to "abc"
+     * isTypeAssignableTo(abcLiteral, stringType); // true; "abc" is assignable to string
+     * isTypeAssignableTo(stringType, abcLiteral); // false; string is not assignable to "abc"
+     * isTypeAssignableTo(stringType, stringType); // true; string is assignable to string
+     * ```
+     */
+    isTypeAssignableTo(source: Type, target: Type): boolean;
     /** @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;
     /** @internal */ createSignature(
         declaration: SignatureDeclaration | undefined,
@@ -5578,6 +5592,7 @@ export type LateVisibilityPaintedStatement =
 /** @internal */
 export interface SymbolVisibilityResult {
     accessibility: SymbolAccessibility;
+    bindingElementToMakeVisible?: BindingElement;
     aliasesToMakeVisible?: LateVisibilityPaintedStatement[]; // aliases that need to have this symbol visible
     errorSymbolName?: string; // Optional symbol name that results in error
     errorNode?: Node; // optional node that results in error
@@ -5811,7 +5826,7 @@ export interface Symbol {
     /** @internal */ constEnumOnlyModule: boolean | undefined; // True if module contains only const enums or other modules with only const enums
     /** @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
     /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
-    /** @internal */ isAssigned?: boolean;  // True if the symbol is a parameter with assignments
+    /** @internal */ isAssigned?: boolean; // True if the symbol is a parameter with assignments
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
 
@@ -8143,13 +8158,14 @@ export const enum ExternalEmitHelpers {
 
 // dprint-ignore
 export const enum EmitHint {
-    SourceFile,          // Emitting a SourceFile
-    Expression,          // Emitting an Expression
-    IdentifierName,      // Emitting an IdentifierName
-    MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
-    Unspecified,         // Emitting an otherwise unspecified node
-    EmbeddedStatement,   // Emitting an embedded statement
-    JsxAttributeValue,   // Emitting a JSX attribute value
+    SourceFile,              // Emitting a SourceFile
+    Expression,              // Emitting an Expression
+    IdentifierName,          // Emitting an IdentifierName
+    MappedTypeParameter,     // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
+    Unspecified,             // Emitting an otherwise unspecified node
+    EmbeddedStatement,       // Emitting an embedded statement
+    JsxAttributeValue,       // Emitting a JSX attribute value
+    ImportTypeNodeAttributes,// Emitting attributes as part of an ImportTypeNode
 }
 
 /** @internal */
@@ -9674,6 +9690,7 @@ export interface ModuleSpecifierResolutionHost {
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+    getCommonSourceDirectory(): string;
 }
 
 /** @internal */

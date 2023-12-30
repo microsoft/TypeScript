@@ -362,6 +362,7 @@ import {
     tokenToString,
     toPath,
     tryCast,
+    tryParseJson,
     Type,
     TypeChecker,
     TypeFlags,
@@ -2473,6 +2474,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
+        getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
     };
 }
 
@@ -3393,7 +3395,7 @@ export function quote(sourceFile: SourceFile, preferences: UserPreferences, text
     // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
     const quotePreference = getQuotePreference(sourceFile, preferences);
     const quoted = JSON.stringify(text);
-    return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, "\\'").replace(/\\"/g, '"')}'` : quoted;
+    return quotePreference === QuotePreference.Single ? `'${stripQuotes(quoted).replace(/'/g, () => "\\'").replace(/\\"/g, '"')}'` : quoted;
 }
 
 /** @internal */
@@ -3892,15 +3894,6 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
             return `${components[0]}/${components[1]}`;
         }
         return components[0];
-    }
-}
-
-function tryParseJson(text: string) {
-    try {
-        return JSON.parse(text);
-    }
-    catch {
-        return undefined;
     }
 }
 
