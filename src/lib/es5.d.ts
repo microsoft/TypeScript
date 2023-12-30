@@ -4409,13 +4409,21 @@ declare namespace Intl {
 
     var Collator: CollatorConstructor;
 
+    interface NumberFormatOptionsStyleRegistry {
+        decimal: any;
+        percent: any;
+        currency: any;
+    }
+
+    type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
+
     interface NumberFormatOptionsUseGroupingRegistry {}
 
     type NumberFormatOptionsUseGrouping = keyof NumberFormatOptionsUseGroupingRegistry | boolean;
 
     interface NumberFormatOptions {
-        localeMatcher?: string | undefined;
-        style?: string | undefined;
+        localeMatcher?: "lookup" | "best fit" | undefined;
+        style?: NumberFormatOptionsStyle | undefined;
         currency?: string | undefined;
         currencyDisplay?: string | undefined;
         useGrouping?: NumberFormatOptionsUseGrouping | undefined;
@@ -4429,7 +4437,7 @@ declare namespace Intl {
     interface ResolvedNumberFormatOptions {
         locale: string;
         numberingSystem: string;
-        style: string;
+        style: NumberFormatOptionsStyle;
         currency?: string;
         currencyDisplay?: string;
         minimumIntegerDigits: number;

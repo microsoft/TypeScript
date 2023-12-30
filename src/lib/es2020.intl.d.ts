@@ -223,6 +223,10 @@ declare namespace Intl {
         ): UnicodeBCP47LocaleIdentifier[];
     };
 
+    interface NumberFormatOptionsStyleRegistry {
+        unit: any;
+    }
+
     interface NumberFormatOptionsSignDisplayRegistry {
         auto: any;
         never: any;
