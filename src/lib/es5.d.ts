@@ -4419,7 +4419,8 @@ declare namespace Intl {
 
     interface NumberFormatOptionsUseGroupingRegistry {}
 
-    type NumberFormatOptionsUseGrouping = keyof NumberFormatOptionsUseGroupingRegistry | boolean;
+    type NumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | "true" | "false" | boolean;
+    type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry;
 
     interface NumberFormatOptions {
         localeMatcher?: "lookup" | "best fit" | undefined;
@@ -4445,7 +4446,7 @@ declare namespace Intl {
         maximumFractionDigits: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
-        useGrouping: NumberFormatOptionsUseGrouping;
+        useGrouping: ResolvedNumberFormatOptionsUseGrouping;
     }
 
     interface NumberFormat {

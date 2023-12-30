@@ -1,7 +1,5 @@
 declare namespace Intl {
     interface NumberFormatOptionsUseGroupingRegistry {
-        true: any;
-        false: any;
         min2: any;
         auto: any;
         always: any;
