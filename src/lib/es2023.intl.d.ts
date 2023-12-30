@@ -1,5 +1,5 @@
 declare namespace Intl {
-    interface NumberFormatUseGroupingRegistry {
+    interface NumberFormatOptionsUseGroupingRegistry {
         true: any;
         false: any;
         min2: any;
@@ -7,7 +7,7 @@ declare namespace Intl {
         always: any;
     }
 
-    interface NumberFormatSignDisplayRegistry {
+    interface NumberFormatOptionsSignDisplayRegistry {
         negative: any;
     }
 
