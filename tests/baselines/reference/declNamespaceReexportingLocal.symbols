@@ -1,0 +1,40 @@
+=== /a.d.ts ===
+declare namespace ns {
+>ns : Symbol(ns, Decl(a.d.ts, 0, 0))
+
+  class Local {}
+>Local : Symbol(Local, Decl(a.d.ts, 0, 22))
+
+  export {Local as ExportedAlias};
+>Local : Symbol(Local, Decl(a.d.ts, 0, 22))
+>ExportedAlias : Symbol(ExportedAlias, Decl(a.d.ts, 2, 10))
+
+  namespace _debugger {
+>_debugger : Symbol(_debugger, Decl(a.d.ts, 2, 34))
+
+    class Foo {}
+>Foo : Symbol(Foo, Decl(a.d.ts, 4, 23))
+  }
+  export {_debugger as debugger};
+>_debugger : Symbol(_debugger, Decl(a.d.ts, 2, 34))
+>debugger : Symbol(debugger, Decl(a.d.ts, 7, 10))
+
+  export function getFoo(): _debugger.Foo;
+>getFoo : Symbol(getFoo, Decl(a.d.ts, 7, 33))
+>_debugger : Symbol(_debugger, Decl(a.d.ts, 2, 34))
+>Foo : Symbol(_debugger.Foo, Decl(a.d.ts, 4, 23))
+}
+
+=== /b.ts ===
+export const NsExportedAlias = ns.ExportedAlias;
+>NsExportedAlias : Symbol(NsExportedAlias, Decl(b.ts, 0, 12))
+>ns.ExportedAlias : Symbol(ns.ExportedAlias, Decl(a.d.ts, 2, 10))
+>ns : Symbol(ns, Decl(a.d.ts, 0, 0))
+>ExportedAlias : Symbol(ns.ExportedAlias, Decl(a.d.ts, 2, 10))
+
+export const nsDebuggerFoo = ns.getFoo();
+>nsDebuggerFoo : Symbol(nsDebuggerFoo, Decl(b.ts, 1, 12))
+>ns.getFoo : Symbol(ns.getFoo, Decl(a.d.ts, 7, 33))
+>ns : Symbol(ns, Decl(a.d.ts, 0, 0))
+>getFoo : Symbol(ns.getFoo, Decl(a.d.ts, 7, 33))
+

@@ -5635,8 +5635,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
                     return getSymbolOfDeclaration(d.parent as Declaration);
                 }
-                // export ='d member of an ambient module
-                if (isModuleBlock(d.parent) && d.parent.parent && resolveExternalModuleSymbol(getSymbolOfDeclaration(d.parent.parent)) === symbol) {
+                // members of ambient modules
+                if (isModuleBlock(d.parent) && d.parent.parent && !isGlobalScopeAugmentation(d.parent.parent)) {
                     return getSymbolOfDeclaration(d.parent.parent);
                 }
             }
@@ -5651,7 +5651,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!length(candidates)) {
             return undefined;
         }
-        return mapDefined(candidates, candidate => getAliasForSymbolInContainer(candidate, symbol) ? candidate : undefined);
+        return mapDefined(deduplicate(candidates, equateValues), candidate => getAliasForSymbolInContainer(candidate, symbol) ? candidate : undefined);
 
         function fileSymbolIfFileSymbolExportEqualsContainer(d: Declaration) {
             return container && getFileSymbolIfFileSymbolExportEqualsContainer(d, container);

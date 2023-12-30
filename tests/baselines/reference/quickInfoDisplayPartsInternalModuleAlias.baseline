@@ -8,26 +8,26 @@
 //     import a1 = m;
 //            ^^
 // | ----------------------------------------------------------------------
-// | (alias) namespace a1
-// | import a1 = m
+// | (alias) namespace m2.a3
+// | import m2.a3 = m
 // | ----------------------------------------------------------------------
 //     new a1.m1.c();
 //         ^^
 // | ----------------------------------------------------------------------
-// | (alias) namespace a1
-// | import a1 = m
+// | (alias) namespace m2.a3
+// | import m2.a3 = m
 // | ----------------------------------------------------------------------
 //     import a2 = m.m1;
 //            ^^
 // | ----------------------------------------------------------------------
-// | (alias) namespace a2
-// | import a2 = m.m1
+// | (alias) namespace m2.a4
+// | import m2.a4 = m.m1
 // | ----------------------------------------------------------------------
 //     new a2.c();
 //         ^^
 // | ----------------------------------------------------------------------
-// | (alias) namespace a2
-// | import a2 = m.m1
+// | (alias) namespace m2.a4
+// | import m2.a4 = m.m1
 // | ----------------------------------------------------------------------
 //     export import a3 = m;
 //                   ^^
@@ -95,7 +95,15 @@
           "kind": "space"
         },
         {
-          "text": "a1",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a3",
           "kind": "aliasName"
         },
         {
@@ -111,7 +119,15 @@
           "kind": "space"
         },
         {
-          "text": "a1",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a3",
           "kind": "aliasName"
         },
         {
@@ -173,7 +189,15 @@
           "kind": "space"
         },
         {
-          "text": "a1",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a3",
           "kind": "aliasName"
         },
         {
@@ -189,7 +213,15 @@
           "kind": "space"
         },
         {
-          "text": "a1",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a3",
           "kind": "aliasName"
         },
         {
@@ -251,7 +283,15 @@
           "kind": "space"
         },
         {
-          "text": "a2",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a4",
           "kind": "aliasName"
         },
         {
@@ -267,7 +307,15 @@
           "kind": "space"
         },
         {
-          "text": "a2",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a4",
           "kind": "aliasName"
         },
         {
@@ -337,7 +385,15 @@
           "kind": "space"
         },
         {
-          "text": "a2",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a4",
           "kind": "aliasName"
         },
         {
@@ -353,7 +409,15 @@
           "kind": "space"
         },
         {
-          "text": "a2",
+          "text": "m2",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "a4",
           "kind": "aliasName"
         },
         {

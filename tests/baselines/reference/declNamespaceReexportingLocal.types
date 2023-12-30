@@ -1,0 +1,40 @@
+=== /a.d.ts ===
+declare namespace ns {
+>ns : typeof ns
+
+  class Local {}
+>Local : Local
+
+  export {Local as ExportedAlias};
+>Local : typeof Local
+>ExportedAlias : typeof Local
+
+  namespace _debugger {
+>_debugger : typeof _debugger
+
+    class Foo {}
+>Foo : Foo
+  }
+  export {_debugger as debugger};
+>_debugger : typeof _debugger
+>debugger : typeof _debugger
+
+  export function getFoo(): _debugger.Foo;
+>getFoo : () => _debugger.Foo
+>_debugger : any
+}
+
+=== /b.ts ===
+export const NsExportedAlias = ns.ExportedAlias;
+>NsExportedAlias : typeof ns.ExportedAlias
+>ns.ExportedAlias : typeof ns.ExportedAlias
+>ns : typeof ns
+>ExportedAlias : typeof ns.ExportedAlias
+
+export const nsDebuggerFoo = ns.getFoo();
+>nsDebuggerFoo : ns.debugger.Foo
+>ns.getFoo() : ns.debugger.Foo
+>ns.getFoo : () => ns.debugger.Foo
+>ns : typeof ns
+>getFoo : () => ns.debugger.Foo
+
