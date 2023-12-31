@@ -120,7 +120,7 @@ declare namespace Intl {
             value: string;
         }
         | {
-            type: Exclude<NumberFormatPartType, "literal">;
+            type: Exclude<NumberFormatPartTypes, "literal">;
             value: string;
             unit: RelativeTimeFormatUnitSingular;
         };

@@ -22,5 +22,5 @@ const { compactDisplay } = new Intl.NumberFormat('en-NZ', { notation: 'compact',
 // Sign display
 new Intl.NumberFormat('en-NZ', { signDisplay: 'always' });
 
-// New additions to NumberFormatPartType
-const types: Intl.NumberFormatPartType[] = [ 'compact', 'unit', 'unknown' ];
+// New additions to NumberFormatPartTypes
+const types: Intl.NumberFormatPartTypes[] = [ 'compact', 'unit', 'unknown' ];

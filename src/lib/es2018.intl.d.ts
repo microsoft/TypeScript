@@ -52,10 +52,10 @@ declare namespace Intl {
         currency: any;
     }
 
-    type NumberFormatPartType = keyof NumberFormatPartTypeRegistry;
+    type NumberFormatPartTypes = keyof NumberFormatPartTypeRegistry;
 
     interface NumberFormatPart {
-        type: NumberFormatPartType;
+        type: NumberFormatPartTypes;
         value: string;
     }
 

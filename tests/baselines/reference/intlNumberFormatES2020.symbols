@@ -69,9 +69,9 @@ new Intl.NumberFormat('en-NZ', { signDisplay: 'always' });
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >signDisplay : Symbol(signDisplay, Decl(intlNumberFormatES2020.ts, 19, 32))
 
-// New additions to NumberFormatPartType
-const types: Intl.NumberFormatPartType[] = [ 'compact', 'unit', 'unknown' ];
+// New additions to NumberFormatPartTypes
+const types: Intl.NumberFormatPartTypes[] = [ 'compact', 'unit', 'unknown' ];
 >types : Symbol(types, Decl(intlNumberFormatES2020.ts, 22, 5))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
->NumberFormatPartType : Symbol(Intl.NumberFormatPartType, Decl(lib.es2018.intl.d.ts, --, --))
+>NumberFormatPartTypes : Symbol(Intl.NumberFormatPartTypes, Decl(lib.es2018.intl.d.ts, --, --))
 
