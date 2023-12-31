@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2020
 
 // Intl.NumberFormat.formatToParts should support bigInt
 

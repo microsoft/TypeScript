@@ -22,6 +22,9 @@ const { compactDisplay } = new Intl.NumberFormat('en-NZ', { notation: 'compact',
 // Sign display
 new Intl.NumberFormat('en-NZ', { signDisplay: 'always' });
 
+// New additions to NumberFormatPartType
+const types: Intl.NumberFormatPartType[] = [ 'compact', 'unit', 'unknown' ];
+
 
 //// [intlNumberFormatES2020.js]
 "use strict";
@@ -39,3 +42,5 @@ const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', un
 const { compactDisplay } = new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions();
 // Sign display
 new Intl.NumberFormat('en-NZ', { signDisplay: 'always' });
+// New additions to NumberFormatPartType
+const types = ['compact', 'unit', 'unknown'];

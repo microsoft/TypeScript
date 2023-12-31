@@ -103,3 +103,12 @@ new Intl.NumberFormat('en-NZ', { signDisplay: 'always' });
 >signDisplay : "always"
 >'always' : "always"
 
+// New additions to NumberFormatPartType
+const types: Intl.NumberFormatPartType[] = [ 'compact', 'unit', 'unknown' ];
+>types : (keyof Intl.NumberFormatPartTypeRegistry)[]
+>Intl : any
+>[ 'compact', 'unit', 'unknown' ] : ("compact" | "unit" | "unknown")[]
+>'compact' : "compact"
+>'unit' : "unit"
+>'unknown' : "unknown"
+
