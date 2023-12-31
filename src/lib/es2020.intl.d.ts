@@ -120,7 +120,7 @@ declare namespace Intl {
             value: string;
         }
         | {
-            type: Exclude<NumberFormatPartTypes, "literal">;
+            type: Exclude<NumberFormatPartType, "literal">;
             value: string;
             unit: RelativeTimeFormatUnitSingular;
         };
@@ -257,6 +257,15 @@ declare namespace Intl {
         unit?: string;
         unitDisplay?: "short" | "long" | "narrow";
         currencySign?: "standard" | "accounting";
+    }
+
+    interface NumberFormatPartTypeRegistry {
+        compact: any;
+        exponentInteger: any;
+        exponentMinusSign: any;
+        exponentSeparator: any;
+        unit: any;
+        unknown: any;
     }
 
     interface DateTimeFormatOptions {
