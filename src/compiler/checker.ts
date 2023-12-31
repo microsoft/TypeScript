@@ -28816,7 +28816,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 forEachChild(node, markAssignments);
             }
         }
-     }
+    }
 
     function isConstantVariable(symbol: Symbol) {
         return symbol.flags & SymbolFlags.Variable && (getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Constant) !== 0;
