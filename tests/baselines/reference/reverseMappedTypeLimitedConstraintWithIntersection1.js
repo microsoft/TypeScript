@@ -171,6 +171,16 @@ const obj1 = {
 };
 const result1 = fn1(obj1);
 
+declare function fn2<T extends Record<string, number>>(obj: {
+  [K in (keyof T & "a") | "b"]: T[K];
+}): T;
+const obj2 = {
+  a: 42,
+  b: 100,
+  c: true,
+};
+const result2 = fn2(obj2);
+
 
 //// [reverseMappedTypeLimitedConstraintWithIntersection1.js]
 "use strict";
@@ -259,3 +269,9 @@ var obj1 = {
     b: true,
 };
 var result1 = fn1(obj1);
+var obj2 = {
+    a: 42,
+    b: 100,
+    c: true,
+};
+var result2 = fn2(obj2);

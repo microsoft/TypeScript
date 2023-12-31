@@ -472,3 +472,32 @@ const result1 = fn1(obj1);
 >fn1 : <T extends Record<string, number>>(obj: { [K in keyof T & "a"]: T[K]; }) => T
 >obj1 : { a: number; b: boolean; }
 
+declare function fn2<T extends Record<string, number>>(obj: {
+>fn2 : <T extends Record<string, number>>(obj: { [K in "b" | (keyof T & "a")]: T[K]; }) => T
+>obj : { [K in "b" | (keyof T & "a")]: T[K]; }
+
+  [K in (keyof T & "a") | "b"]: T[K];
+}): T;
+const obj2 = {
+>obj2 : { a: number; b: number; c: boolean; }
+>{  a: 42,  b: 100,  c: true,} : { a: number; b: number; c: boolean; }
+
+  a: 42,
+>a : number
+>42 : 42
+
+  b: 100,
+>b : number
+>100 : 100
+
+  c: true,
+>c : boolean
+>true : true
+
+};
+const result2 = fn2(obj2);
+>result2 : { a: number; b: number; }
+>fn2(obj2) : { a: number; b: number; }
+>fn2 : <T extends Record<string, number>>(obj: { [K in "b" | (keyof T & "a")]: T[K]; }) => T
+>obj2 : { a: number; b: number; c: boolean; }
+

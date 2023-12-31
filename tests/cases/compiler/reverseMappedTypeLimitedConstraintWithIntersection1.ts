@@ -170,3 +170,13 @@ const obj1 = {
   b: true,
 };
 const result1 = fn1(obj1);
+
+declare function fn2<T extends Record<string, number>>(obj: {
+  [K in (keyof T & "a") | "b"]: T[K];
+}): T;
+const obj2 = {
+  a: 42,
+  b: 100,
+  c: true,
+};
+const result2 = fn2(obj2);

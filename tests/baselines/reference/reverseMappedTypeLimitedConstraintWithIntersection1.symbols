@@ -494,3 +494,36 @@ const result1 = fn1(obj1);
 >fn1 : Symbol(fn1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 159, 3))
 >obj1 : Symbol(obj1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 164, 5))
 
+declare function fn2<T extends Record<string, number>>(obj: {
+>fn2 : Symbol(fn2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 168, 26))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 170, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 170, 55))
+
+  [K in (keyof T & "a") | "b"]: T[K];
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 171, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 170, 21))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 170, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 171, 3))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 170, 21))
+
+const obj2 = {
+>obj2 : Symbol(obj2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 173, 5))
+
+  a: 42,
+>a : Symbol(a, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 173, 14))
+
+  b: 100,
+>b : Symbol(b, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 174, 8))
+
+  c: true,
+>c : Symbol(c, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 175, 9))
+
+};
+const result2 = fn2(obj2);
+>result2 : Symbol(result2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 178, 5))
+>fn2 : Symbol(fn2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 168, 26))
+>obj2 : Symbol(obj2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 173, 5))
+
