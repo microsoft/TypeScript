@@ -116,7 +116,7 @@ function f4(x: string | undefined) {
 >doSomething : (cb: () => void) => void
 >() => x.length : () => number
 >x.length : number
->x : string | undefined
+>x : string
 >length : number
     }
 }

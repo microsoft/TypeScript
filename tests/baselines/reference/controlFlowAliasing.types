@@ -441,15 +441,15 @@ function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >isFoo : boolean
 
         obj.foo;  // Not narrowed because obj is mutable
->obj.foo : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->foo : any
+>obj.foo : string
+>obj : { kind: "foo"; foo: string; }
+>foo : string
     }
     else {
         obj.bar;  // Not narrowed because obj is mutable
->obj.bar : any
->obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->bar : any
+>obj.bar : number
+>obj : { kind: "bar"; bar: number; }
+>bar : number
     }
 }
 
