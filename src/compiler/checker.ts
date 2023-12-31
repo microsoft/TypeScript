@@ -2008,6 +2008,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var numberOrBigIntType = getUnionType([numberType, bigintType]);
     var templateConstraintType = getUnionType([stringType, numberType, booleanType, bigintType, nullType, undefinedType]) as UnionType;
     var numericStringType = getTemplateLiteralType(["", ""], [numberType]); // The `${number}` type
+    var keyofConstraintObject = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, [stringType, numberType, esSymbolType].map(t => createIndexInfo(t, unknownType, /*isReadonly*/ false))); // { [k: string | number | symbol]: unknown; }
 
     var restrictiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? getRestrictiveTypeParameter(t as TypeParameter) : t, () => "(restrictive mapper)");
     var permissiveMapper: TypeMapper = makeFunctionTypeMapper(t => t.flags & TypeFlags.TypeParameter ? wildcardType : t, () => "(permissive mapper)");
@@ -13674,12 +13675,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (constraint === type.constraintType) {
             return;
         }
-        const recordSymbol = getGlobalRecordSymbol();
-        if (!recordSymbol) {
-            return;
-        }
-        const keyofConstraintRecord = getTypeAliasInstantiation(recordSymbol, [keyofConstraintType, unknownType]);
-        const mapper = appendTypeMapping(type.mappedType.mapper, type.constraintType.type, keyofConstraintRecord);
+        const mapper = appendTypeMapping(type.mappedType.mapper, type.constraintType.type, keyofConstraintObject);
         return getBaseConstraintOrType(instantiateType(constraint, mapper));
     }
 
