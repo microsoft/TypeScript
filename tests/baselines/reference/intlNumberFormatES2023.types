@@ -9,13 +9,13 @@ const { roundingPriority, roundingMode, roundingIncrement, trailingZeroDisplay, 
 >trailingZeroDisplay : "auto" | "stripIfInteger"
 >useGrouping : false | keyof Intl.NumberFormatOptionsUseGroupingRegistry
 >new Intl.NumberFormat('en-GB').resolvedOptions() : Intl.ResolvedNumberFormatOptions
->new Intl.NumberFormat('en-GB').resolvedOptions : { (): Intl.ResolvedNumberFormatOptions; (): Intl.ResolvedNumberFormatOptions; }
+>new Intl.NumberFormat('en-GB').resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 >new Intl.NumberFormat('en-GB') : Intl.NumberFormat
 >Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
 >NumberFormat : Intl.NumberFormatConstructor
 >'en-GB' : "en-GB"
->resolvedOptions : { (): Intl.ResolvedNumberFormatOptions; (): Intl.ResolvedNumberFormatOptions; }
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 
 // Empty options
 new Intl.NumberFormat('en-GB', {});
@@ -45,7 +45,7 @@ new Intl.NumberFormat('en-GB', { roundingPriority: 'lessPrecision', roundingIncr
 const { signDisplay } = new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }).resolvedOptions();
 >signDisplay : keyof Intl.NumberFormatOptionsSignDisplayRegistry
 >new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
->new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }).resolvedOptions : { (): Intl.ResolvedNumberFormatOptions; (): Intl.ResolvedNumberFormatOptions; }
+>new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }).resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 >new Intl.NumberFormat('en-GB', { signDisplay: 'negative' }) : Intl.NumberFormat
 >Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
@@ -54,7 +54,7 @@ const { signDisplay } = new Intl.NumberFormat('en-GB', { signDisplay: 'negative'
 >{ signDisplay: 'negative' } : { signDisplay: "negative"; }
 >signDisplay : "negative"
 >'negative' : "negative"
->resolvedOptions : { (): Intl.ResolvedNumberFormatOptions; (): Intl.ResolvedNumberFormatOptions; }
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 
 // Changes to useGrouping
 new Intl.NumberFormat('en-GB', { useGrouping: true });
