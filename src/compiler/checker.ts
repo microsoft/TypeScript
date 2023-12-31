@@ -13668,7 +13668,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return instantiateType(instantiable, createTypeMapper([type.indexType, type.objectType], [getNumberLiteralType(0), createTupleType([replacement])]));
     }
 
-    // If the original mapped type had an union/intersection constraint 
+    // If the original mapped type had an union/intersection constraint
     // there is a chance that it includes an intersection that could limit what members are allowed
     function getReverseMappedTypeMembersLimitingConstraint(type: ReverseMappedType) {
         const constraint = getConstraintTypeFromMappedType(type.mappedType);
@@ -13696,7 +13696,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // which, in turn, could fail the check if the inferred type is assignable to its constraint
             //
             // inferring `{ a: number; b: string }` wouldn't satisfy T's constraint so b has to be skipped over here
-            // 
+            //
             // function fn<T extends Record<string, number>>({ [K in keyof T & "a"]: T[K] }): T
             // const obj = { a: 1, b: '2' };
             // fn(obj);
