@@ -29193,7 +29193,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // declaration container are the same).
         const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
             type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
-            isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
+                    isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||
             declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
             declaration.flags & NodeFlags.Ambient;
