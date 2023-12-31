@@ -241,7 +241,7 @@ declare namespace Intl {
     type NumberFormatOptionsSignDisplay = keyof NumberFormatOptionsSignDisplayRegistry;
 
     interface NumberFormatOptions {
-        numberingSystem: string | undefined;
+        numberingSystem?: string | undefined;
         compactDisplay?: "short" | "long" | undefined;
         notation?: "standard" | "scientific" | "engineering" | "compact" | undefined;
         signDisplay?: NumberFormatOptionsSignDisplay | undefined;
