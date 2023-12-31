@@ -13667,11 +13667,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return instantiateType(instantiable, createTypeMapper([type.indexType, type.objectType], [getNumberLiteralType(0), createTupleType([replacement])]));
     }
 
-    // If the original mapped type had an intersection constraint we extract its components,
-    // and we make an attempt to do so even if the intersection has been reduced to a union.
-    // This entire process allows us to possibly retrieve the filtering type literals.
-    // e.g. { [K in keyof U & ("a" | "b") ] } -> "a" | "b"
-    function getLimitedConstraint(type: ReverseMappedType) {
+    // If the original mapped type had an union/intersection constraint 
+    // there is a chance that it includes an intersection that could limit what members are allowed
+    function getReverseMappedTypeMembersLimitingConstraint(type: ReverseMappedType) {
         const constraint = getConstraintTypeFromMappedType(type.mappedType);
         if (constraint === type.constraintType) {
             return;
@@ -13692,16 +13690,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
         const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
-        const limitedConstraint = getLimitedConstraint(type);
+        const membersLimitingConstraint = getReverseMappedTypeMembersLimitingConstraint(type);
         const nameType = getNameTypeFromMappedType(type.mappedType);
 
         for (const prop of getPropertiesOfType(type.source)) {
-            // In case of a reverse mapped type with an intersection constraint, if we were able to
-            // extract the filtering type literals we skip those properties that are not assignable to them,
-            // because the extra properties wouldn't get through the application of the mapped type anyway
-            if (limitedConstraint || nameType) {
+            // we skip those properties that are not assignable to either of those "limiters"
+            // the extra properties wouldn't get through the application of the mapped type anyway
+            // and their inferred type might not satisfy the type parameter's constraint
+            // which, in turn, could fail the check if the inferred type is assignable to its constraint
+            //
+            // inferring `{ a: number; b: string }` wouldn't satisfy T's constraint so b has to be skipped over here
+            // 
+            // function fn<T extends Record<string, number>>({ [K in keyof T & "a"]: T[K] }): T
+            // const obj = { a: 1, b: '2' };
+            // fn(obj);
+            if (membersLimitingConstraint || nameType) {
                 const propertyNameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
-                if (limitedConstraint && !isTypeAssignableTo(propertyNameType, limitedConstraint)) {
+                if (membersLimitingConstraint && !isTypeAssignableTo(propertyNameType, membersLimitingConstraint)) {
                     continue;
                 }
                 if (nameType) {
