@@ -46,7 +46,7 @@ i.prop1;
 >i : One & Two
 >prop1 : "hello"
 
-// number | "hello"
+// string | number
 i.prop1 = 42;
 >i.prop1 = 42 : 42
 >i.prop1 : number | "hello"
@@ -67,7 +67,7 @@ i.prop2;
 >i : One & Two
 >prop2 : never
 
-// 42
+// string | number
 i.prop2 = 42;
 >i.prop2 = 42 : 42
 >i.prop2 : 42
@@ -75,7 +75,7 @@ i.prop2 = 42;
 >prop2 : 42
 >42 : 42
 
-i.prop2 = "hello"; // error
+i.prop2 = "hello";
 >i.prop2 = "hello" : "hello"
 >i.prop2 : 42
 >i : One & Two

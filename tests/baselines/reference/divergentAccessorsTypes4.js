@@ -21,15 +21,15 @@ declare const i: One & Two;
 
 // "hello"
 i.prop1;
-// number | "hello"
+// string | number
 i.prop1 = 42;
 i.prop1 = "hello";
 
 // never
 i.prop2;
-// 42
+// string | number
 i.prop2 = 42;
-i.prop2 = "hello"; // error
+i.prop2 = "hello";
 
 
 //// [divergentAccessorsTypes4.js]
@@ -63,11 +63,11 @@ var Two = /** @class */ (function () {
 }());
 // "hello"
 i.prop1;
-// number | "hello"
+// string | number
 i.prop1 = 42;
 i.prop1 = "hello";
 // never
 i.prop2;
-// 42
+// string | number
 i.prop2 = 42;
-i.prop2 = "hello"; // error
+i.prop2 = "hello";

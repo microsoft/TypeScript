@@ -22,15 +22,15 @@ divergentAccessorsTypes4.ts(29,1): error TS2322: Type '"hello"' is not assignabl
     
     // "hello"
     i.prop1;
-    // number | "hello"
+    // string | number
     i.prop1 = 42;
     i.prop1 = "hello";
     
     // never
     i.prop2;
-    // 42
+    // string | number
     i.prop2 = 42;
-    i.prop2 = "hello"; // error
+    i.prop2 = "hello";
     ~~~~~~~
 !!! error TS2322: Type '"hello"' is not assignable to type '42'.
     

@@ -1,0 +1,64 @@
+divergentAccessorsTypes-56894-b.ts(26,9): error TS2367: This comparison appears to be unintentional because the types '3' and '1' have no overlap.
+divergentAccessorsTypes-56894-b.ts(34,5): error TS2322: Type '1' is not assignable to type '2'.
+divergentAccessorsTypes-56894-b.ts(35,5): error TS2322: Type '1' is not assignable to type '2'.
+divergentAccessorsTypes-56894-b.ts(36,5): error TS2322: Type '1' is not assignable to type '2'.
+divergentAccessorsTypes-56894-b.ts(37,9): error TS2367: This comparison appears to be unintentional because the types '2' and '1' have no overlap.
+divergentAccessorsTypes-56894-b.ts(40,9): error TS2367: This comparison appears to be unintentional because the types '2' and '1' have no overlap.
+
+
+==== divergentAccessorsTypes-56894-b.ts (6 errors) ====
+    type T12 = {
+        a: 1|2;
+        set gsa(x: 1|2);
+        get gsa(): 1|2;
+        set sb(x: 1|2);
+        get gc(): 1|2;
+    };
+    type T23 = {
+        a: 2|3;
+        set gsa(x: 2|3);
+        get gsa(): 2|3;
+        set sb(x: 2|3);
+        get gc(): 2|3;
+    };
+    
+    function fu(u:T12|T23) {
+        u.a = 1;
+        u.sb = 1;
+        u.gsa = 1;
+        u.a = 2;
+        u.sb = 2;
+        u.gsa = 2;
+        u.a = 3;
+        u.sb = 3;
+        u.gsa = 3;
+        if (u.gsa === 1) {
+            ~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '3' and '1' have no overlap.
+            u.gsa;
+        }
+        if (u.gc === 1) {
+            u.gc;
+        }
+    }
+    function fi(i:T12&T23) {
+        i.a = 1; // error before & after
+        ~~~
+!!! error TS2322: Type '1' is not assignable to type '2'.
+        i.sb = 1; // error before & after
+        ~~~~
+!!! error TS2322: Type '1' is not assignable to type '2'.
+        i.gsa = 1; // error before & after
+        ~~~~~
+!!! error TS2322: Type '1' is not assignable to type '2'.
+        if (i.gsa === 1) { // error before & after
+            ~~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '2' and '1' have no overlap.
+            i.gsa;
+        }
+        if (i.gc === 1) { // error before & after
+            ~~~~~~~~~~
+!!! error TS2367: This comparison appears to be unintentional because the types '2' and '1' have no overlap.
+            i.gc;
+        }
+    }

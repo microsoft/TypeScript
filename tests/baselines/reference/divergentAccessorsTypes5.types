@@ -64,7 +64,7 @@ declare const i: One & Two & Three;
 >i : One & Two & Three
 
 // "hello"
-i.prop1 = 42; // error
+i.prop1 = 42;
 >i.prop1 = 42 : 42
 >i.prop1 : "hello"
 >i : One & Two & Three
@@ -86,7 +86,7 @@ i.prop2 = 42;
 >prop2 : 42
 >42 : 42
 
-i.prop2 = "hello"; // error
+i.prop2 = "hello";
 >i.prop2 = "hello" : "hello"
 >i.prop2 : 42
 >i : One & Two & Three

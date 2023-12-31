@@ -1,0 +1,69 @@
+//// [tests/cases/compiler/-da/divergentAccessorsTypes-56894-a.ts] ////
+
+=== divergentAccessorsTypes-56894-a.ts ===
+declare const id:<T>()=>T
+>id : Symbol(id, Decl(divergentAccessorsTypes-56894-a.ts, 0, 13))
+>T : Symbol(T, Decl(divergentAccessorsTypes-56894-a.ts, 0, 18))
+>T : Symbol(T, Decl(divergentAccessorsTypes-56894-a.ts, 0, 18))
+
+function f2(x: {f:((a:1|2)=>1|2)} | {f:((a:2|3)=>2|3)} ){
+>f2 : Symbol(f2, Decl(divergentAccessorsTypes-56894-a.ts, 0, 25))
+>x : Symbol(x, Decl(divergentAccessorsTypes-56894-a.ts, 2, 12))
+>f : Symbol(f, Decl(divergentAccessorsTypes-56894-a.ts, 2, 16))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-a.ts, 2, 20))
+>f : Symbol(f, Decl(divergentAccessorsTypes-56894-a.ts, 2, 37))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-a.ts, 2, 41))
+
+    const r = x.f(id())
+>r : Symbol(r, Decl(divergentAccessorsTypes-56894-a.ts, 3, 9))
+>x.f : Symbol(f, Decl(divergentAccessorsTypes-56894-a.ts, 2, 16), Decl(divergentAccessorsTypes-56894-a.ts, 2, 37))
+>x : Symbol(x, Decl(divergentAccessorsTypes-56894-a.ts, 2, 12))
+>f : Symbol(f, Decl(divergentAccessorsTypes-56894-a.ts, 2, 16), Decl(divergentAccessorsTypes-56894-a.ts, 2, 37))
+>id : Symbol(id, Decl(divergentAccessorsTypes-56894-a.ts, 0, 13))
+
+//                ^ const id: <2>() => 2,
+//        ^ const r: 1 | 2 | 3
+}
+
+function f3(f: ((a:1|2)=>1|2) | ((a:2|3)=>2|3) ){
+>f3 : Symbol(f3, Decl(divergentAccessorsTypes-56894-a.ts, 6, 1))
+>f : Symbol(f, Decl(divergentAccessorsTypes-56894-a.ts, 8, 12))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-a.ts, 8, 17))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-a.ts, 8, 34))
+
+    const r = f(id())
+>r : Symbol(r, Decl(divergentAccessorsTypes-56894-a.ts, 9, 9))
+>f : Symbol(f, Decl(divergentAccessorsTypes-56894-a.ts, 8, 12))
+>id : Symbol(id, Decl(divergentAccessorsTypes-56894-a.ts, 0, 13))
+
+//              ^ const id: <2>() => 2,
+//        ^ const r: 1 | 2 | 3
+}
+
+
+function f4(x: {set d(a:1|2); get r():1|2} | {set d(a:2|3); get r():2|3} ){
+>f4 : Symbol(f4, Decl(divergentAccessorsTypes-56894-a.ts, 12, 1))
+>x : Symbol(x, Decl(divergentAccessorsTypes-56894-a.ts, 15, 12))
+>d : Symbol(d, Decl(divergentAccessorsTypes-56894-a.ts, 15, 16))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-a.ts, 15, 22))
+>r : Symbol(r, Decl(divergentAccessorsTypes-56894-a.ts, 15, 29))
+>d : Symbol(d, Decl(divergentAccessorsTypes-56894-a.ts, 15, 46))
+>a : Symbol(a, Decl(divergentAccessorsTypes-56894-a.ts, 15, 52))
+>r : Symbol(r, Decl(divergentAccessorsTypes-56894-a.ts, 15, 59))
+
+//           ^ (parameter) x: { d: 1 | 2; readonly r: 1 | 2; } | { d: 2 | 3; readonly r: 2 | 3; }
+    x.d = id();
+>x.d : Symbol(d, Decl(divergentAccessorsTypes-56894-a.ts, 15, 16), Decl(divergentAccessorsTypes-56894-a.ts, 15, 46))
+>x : Symbol(x, Decl(divergentAccessorsTypes-56894-a.ts, 15, 12))
+>d : Symbol(d, Decl(divergentAccessorsTypes-56894-a.ts, 15, 16), Decl(divergentAccessorsTypes-56894-a.ts, 15, 46))
+>id : Symbol(id, Decl(divergentAccessorsTypes-56894-a.ts, 0, 13))
+
+//        ^ const id: <1 | 2 | 3>() => 1 | 2 | 3      (5.3.2)
+//        ^ const id: <2>() => 2      (expecting, if a setter was treated as a function)
+    x.r;
+>x.r : Symbol(r, Decl(divergentAccessorsTypes-56894-a.ts, 15, 29), Decl(divergentAccessorsTypes-56894-a.ts, 15, 59))
+>x : Symbol(x, Decl(divergentAccessorsTypes-56894-a.ts, 15, 12))
+>r : Symbol(r, Decl(divergentAccessorsTypes-56894-a.ts, 15, 29), Decl(divergentAccessorsTypes-56894-a.ts, 15, 59))
+
+//    ^    (property) r: 1 | 2 | 3
+}
