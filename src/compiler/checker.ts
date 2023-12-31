@@ -11979,7 +11979,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.writeType && links.deferralWriteConstituents) {
             Debug.assertIsDefined(links.deferralParent);
             Debug.assertIsDefined(links.deferralConstituents);
-            links.writeType = links.deferralParent.flags & TypeFlags.Union ? getUnionType(links.deferralWriteConstituents) : getIntersectionType(links.deferralWriteConstituents);
+            links.writeType = links.deferralParent.flags & TypeFlags.Union ? getIntersectionType(links.deferralWriteConstituents) : getUnionType(links.deferralWriteConstituents);
         }
         return links.writeType;
     }
@@ -14674,7 +14674,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             result.links.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
             if (writeTypes) {
-                result.links.writeType = isUnion ? getUnionType(writeTypes) : getIntersectionType(writeTypes);
+                result.links.writeType = isUnion ? getIntersectionType(writeTypes) : getUnionType(writeTypes);
             }
         }
         return result;

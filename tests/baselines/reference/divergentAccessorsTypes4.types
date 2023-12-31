@@ -49,16 +49,16 @@ i.prop1;
 // string | number
 i.prop1 = 42;
 >i.prop1 = 42 : 42
->i.prop1 : number | "hello"
+>i.prop1 : string | number
 >i : One & Two
->prop1 : number | "hello"
+>prop1 : string | number
 >42 : 42
 
 i.prop1 = "hello";
 >i.prop1 = "hello" : "hello"
->i.prop1 : number | "hello"
+>i.prop1 : string | number
 >i : One & Two
->prop1 : number | "hello"
+>prop1 : string | number
 >"hello" : "hello"
 
 // never
@@ -70,15 +70,15 @@ i.prop2;
 // string | number
 i.prop2 = 42;
 >i.prop2 = 42 : 42
->i.prop2 : 42
+>i.prop2 : string | number
 >i : One & Two
->prop2 : 42
+>prop2 : string | number
 >42 : 42
 
 i.prop2 = "hello";
 >i.prop2 = "hello" : "hello"
->i.prop2 : 42
+>i.prop2 : string | number
 >i : One & Two
->prop2 : 42
+>prop2 : string | number
 >"hello" : "hello"
 

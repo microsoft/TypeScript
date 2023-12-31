@@ -1,13 +1,16 @@
 divergentAccessorsTypes8.ts(20,1): error TS2322: Type 'CSSStyleDeclaration' is not assignable to type 'string'.
-divergentAccessorsTypes8.ts(86,1): error TS2322: Type 'number' is not assignable to type 'string'.
-divergentAccessorsTypes8.ts(124,1): error TS2322: Type '42' is not assignable to type '"hello"'.
-divergentAccessorsTypes8.ts(128,1): error TS2322: Type '"hello"' is not assignable to type '42'.
+divergentAccessorsTypes8.ts(68,1): error TS2322: Type 'number' is not assignable to type 'string'.
+divergentAccessorsTypes8.ts(71,1): error TS2322: Type 'number' is not assignable to type 'never'.
+divergentAccessorsTypes8.ts(72,1): error TS2322: Type 'string' is not assignable to type 'never'.
+divergentAccessorsTypes8.ts(73,1): error TS2322: Type 'boolean' is not assignable to type 'never'.
+divergentAccessorsTypes8.ts(75,1): error TS2322: Type 'number' is not assignable to type 'string'.
+divergentAccessorsTypes8.ts(77,1): error TS2322: Type 'boolean' is not assignable to type 'string'.
 divergentAccessorsTypes8.ts(146,1): error TS2322: Type 'number' is not assignable to type 'boolean'.
 divergentAccessorsTypes8.ts(148,1): error TS2322: Type 'string' is not assignable to type 'boolean'.
 divergentAccessorsTypes8.ts(149,1): error TS2322: Type 'null' is not assignable to type 'boolean'.
 
 
-==== divergentAccessorsTypes8.ts (7 errors) ====
+==== divergentAccessorsTypes8.ts (10 errors) ====
     export {}
     
     interface Serializer {
@@ -78,15 +81,27 @@ divergentAccessorsTypes8.ts(149,1): error TS2322: Type 'null' is not assignable 
     u1['prop1'] = "hello";
     
     u1['prop2'] = 42;
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     u1['prop2'] = "hello";
     
     u1['prop3'] = 42;
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'never'.
     u1['prop3'] = "hello";
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'never'.
     u1['prop3'] = true;
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'never'.
     
     u1['prop4'] = 42;
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     u1['prop4'] = "hello";
     u1['prop4'] = true;
+    ~~~~~~~~~~~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
     
     declare const i: One & Two;
     
@@ -96,8 +111,6 @@ divergentAccessorsTypes8.ts(149,1): error TS2322: Type 'null' is not assignable 
     
     const iv2 = i['prop2'];
     i['prop2'] = 42;
-    ~~~~~~~~~~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
     i['prop2'] = "hello";
     
     class Three {
@@ -136,14 +149,10 @@ divergentAccessorsTypes8.ts(149,1): error TS2322: Type 'null' is not assignable 
     declare const i2: Three & Four & Five;
     
     i2['prop1'] = 42;
-    ~~~~~~~~~~~
-!!! error TS2322: Type '42' is not assignable to type '"hello"'.
     i2['prop1'] = "hello";
     
     i2['prop2'] = 42;
     i2['prop2'] = "hello";
-    ~~~~~~~~~~~
-!!! error TS2322: Type '"hello"' is not assignable to type '42'.
     
     class Six {
       get prop1(): boolean | number {
