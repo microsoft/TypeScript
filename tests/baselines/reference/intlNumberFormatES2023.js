@@ -18,6 +18,12 @@ new Intl.NumberFormat('en-GB', { useGrouping: true });
 new Intl.NumberFormat('en-GB', { useGrouping: 'true' });
 new Intl.NumberFormat('en-GB', { useGrouping: 'always' });
 
+// formatRange
+new Intl.NumberFormat('en-GB').formatRange(10, 100);
+new Intl.NumberFormat('en-GB').formatRange(10n, 1000n);
+new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000)[0];
+new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
+
 
 //// [intlNumberFormatES2023.js]
 "use strict";
@@ -33,3 +39,8 @@ const { signDisplay } = new Intl.NumberFormat('en-GB', { signDisplay: 'negative'
 new Intl.NumberFormat('en-GB', { useGrouping: true });
 new Intl.NumberFormat('en-GB', { useGrouping: 'true' });
 new Intl.NumberFormat('en-GB', { useGrouping: 'always' });
+// formatRange
+new Intl.NumberFormat('en-GB').formatRange(10, 100);
+new Intl.NumberFormat('en-GB').formatRange(10n, 1000n);
+new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000)[0];
+new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
