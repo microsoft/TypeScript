@@ -125,3 +125,57 @@ const result1 = fn1(obj1);
 >fn1 : Symbol(fn1, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 23, 67))
 >obj1 : Symbol(obj1, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 28, 5))
 
+declare function fn2<T>(obj: {
+>fn2 : Symbol(fn2, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 32, 26))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 34, 21))
+>obj : Symbol(obj, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 34, 24))
+
+  [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K];
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 35, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 34, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 35, 3))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 35, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 34, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 35, 3))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 34, 21))
+
+const obj2 = { a: 1, b: 2, c: 3 };
+>obj2 : Symbol(obj2, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 37, 5))
+>a : Symbol(a, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 37, 14))
+>b : Symbol(b, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 37, 20))
+>c : Symbol(c, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 37, 26))
+
+const result2 = fn2(obj2);
+>result2 : Symbol(result2, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 38, 5))
+>fn2 : Symbol(fn2, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 32, 26))
+>obj2 : Symbol(obj2, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 37, 5))
+
+declare function fn3<T>(obj: {
+>fn3 : Symbol(fn3, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 38, 26))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 40, 21))
+>obj : Symbol(obj, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 40, 24))
+
+  [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K];
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 41, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 40, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 41, 3))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 41, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 40, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 41, 3))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 40, 21))
+
+const obj3 = { a: 1, b: 2, c: 3 };
+>obj3 : Symbol(obj3, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 43, 5))
+>a : Symbol(a, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 43, 14))
+>b : Symbol(b, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 43, 20))
+>c : Symbol(c, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 43, 26))
+
+const result3 = fn3(obj3);
+>result3 : Symbol(result3, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 44, 5))
+>fn3 : Symbol(fn3, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 38, 26))
+>obj3 : Symbol(obj3, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 43, 5))
+

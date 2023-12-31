@@ -122,3 +122,47 @@ const result1 = fn1(obj1);
 >fn1 : <T extends Record<string, number>>(obj: { [K in keyof T as K extends "a" ? K : never]: T[K]; }) => T
 >obj1 : { a: number; b: boolean; }
 
+declare function fn2<T>(obj: {
+>fn2 : <T>(obj: { [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K]; }) => T
+>obj : { [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K]; }
+
+  [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K];
+}): T;
+const obj2 = { a: 1, b: 2, c: 3 };
+>obj2 : { a: number; b: number; c: number; }
+>{ a: 1, b: 2, c: 3 } : { a: number; b: number; c: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>c : number
+>3 : 3
+
+const result2 = fn2(obj2);
+>result2 : { a: number; }
+>fn2(obj2) : { a: number; }
+>fn2 : <T>(obj: { [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K]; }) => T
+>obj2 : { a: number; b: number; c: number; }
+
+declare function fn3<T>(obj: {
+>fn3 : <T>(obj: { [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K]; }) => T
+>obj : { [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K]; }
+
+  [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K];
+}): T;
+const obj3 = { a: 1, b: 2, c: 3 };
+>obj3 : { a: number; b: number; c: number; }
+>{ a: 1, b: 2, c: 3 } : { a: number; b: number; c: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>c : number
+>3 : 3
+
+const result3 = fn3(obj3);
+>result3 : { a: number; }
+>fn3(obj3) : { a: number; }
+>fn3 : <T>(obj: { [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K]; }) => T
+>obj3 : { a: number; b: number; c: number; }
+

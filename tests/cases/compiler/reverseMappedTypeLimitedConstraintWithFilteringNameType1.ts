@@ -34,3 +34,15 @@ const obj1 = {
   b: true,
 };
 const result1 = fn1(obj1);
+
+declare function fn2<T>(obj: {
+  [K in keyof T & ("a" | "b") as K extends "a" | "c" ? K : never]: T[K];
+}): T;
+const obj2 = { a: 1, b: 2, c: 3 };
+const result2 = fn2(obj2);
+
+declare function fn3<T>(obj: {
+  [K in keyof T & ("a" | "c") as K extends "a" | "b" ? K : never]: T[K];
+}): T;
+const obj3 = { a: 1, b: 2, c: 3 };
+const result3 = fn3(obj3);
