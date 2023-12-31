@@ -13682,7 +13682,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const keyofConstraintRecord = getTypeAliasInstantiation(recordSymbol, [keyofConstraintType, unknownType]);
         const mapper = appendTypeMapping(type.mappedType.mapper, type.constraintType.type, keyofConstraintRecord);
-        return getBaseConstraintOfType(instantiateType(constraint, mapper));
+        return getBaseConstraintOrType(instantiateType(constraint, mapper));
     }
 
     function resolveReverseMappedTypeMembers(type: ReverseMappedType) {

@@ -1,56 +1,466 @@
 //// [tests/cases/compiler/reverseMappedTypeLimitedConstraintWithIntersection1.ts] ////
 
 === reverseMappedTypeLimitedConstraintWithIntersection1.ts ===
-type XNumber_ = { x: number }
->XNumber_ : Symbol(XNumber_, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 0))
->x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 17))
+type StateConfig<TAction extends string> = {
+>StateConfig : Symbol(StateConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 0))
+>TAction : Symbol(TAction, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 17))
 
-declare function foo_<T extends XNumber_>(props: {[K in keyof T & keyof XNumber_]: T[K]}): T;
->foo_ : Symbol(foo_, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 29))
->T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 2, 22))
->XNumber_ : Symbol(XNumber_, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 0))
->props : Symbol(props, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 2, 42))
->K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 2, 51))
->T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 2, 22))
->XNumber_ : Symbol(XNumber_, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 0))
->T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 2, 22))
->K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 2, 51))
->T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 2, 22))
+  entry?: TAction
+>entry : Symbol(entry, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 44))
+>TAction : Symbol(TAction, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 17))
 
-foo_({x: 1, y: 'foo'});
->foo_ : Symbol(foo_, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 29))
->x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 4, 6))
->y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 4, 11))
+  states?: Record<string, StateConfig<TAction>>;
+>states : Symbol(states, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 1, 17))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>StateConfig : Symbol(StateConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 0))
+>TAction : Symbol(TAction, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 17))
+
+};
+
+declare function createMachine<
+>createMachine : Symbol(createMachine, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 3, 2))
+
+  TConfig extends StateConfig<TAction>,
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 5, 31))
+>StateConfig : Symbol(StateConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 0))
+>TAction : Symbol(TAction, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 6, 39))
+
+  TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string,
+>TAction : Symbol(TAction, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 6, 39))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 5, 31))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 5, 31))
+
+>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K] }): [TAction, TConfig];
+>config : Symbol(config, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 2))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 13))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 5, 31))
+>StateConfig : Symbol(StateConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 0, 0))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 5, 31))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 13))
+>TAction : Symbol(TAction, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 6, 39))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 5, 31))
+
+const inferredParams1 = createMachine({
+>inferredParams1 : Symbol(inferredParams1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 10, 5))
+>createMachine : Symbol(createMachine, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 3, 2))
+
+  entry: "foo",
+>entry : Symbol(entry, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 10, 39))
+
+  states: {
+>states : Symbol(states, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 11, 15))
+
+    a: {
+>a : Symbol(a, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 12, 11))
+
+      entry: "bar",
+>entry : Symbol(entry, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 13, 8))
+
+    },
+  },
+  extra: 12,
+>extra : Symbol(extra, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 16, 4))
+
+});
+
+const inferredParams2 = createMachine({
+>inferredParams2 : Symbol(inferredParams2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 20, 5))
+>createMachine : Symbol(createMachine, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 3, 2))
+
+  entry: "foo",
+>entry : Symbol(entry, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 20, 39))
+
+  states: {
+>states : Symbol(states, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 21, 15))
+
+    a: {
+>a : Symbol(a, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 22, 11))
+
+      entry: "foo",
+>entry : Symbol(entry, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 23, 8))
+
+    },
+  },
+  extra: 12,
+>extra : Symbol(extra, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 26, 4))
+
+});
+
 
 // -----------------------------------------------------------------------------------------
 
-const checkType_ = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
->checkType_ : Symbol(checkType_, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 5))
->T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 20))
->U : Symbol(U, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 29))
->T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 20))
->value : Symbol(value, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 42))
->K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 52))
->U : Symbol(U, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 29))
->T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 20))
->U : Symbol(U, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 29))
->K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 52))
->value : Symbol(value, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 42))
+const checkType = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
+>checkType : Symbol(checkType, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 5))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 19))
+>U : Symbol(U, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 28))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 19))
+>value : Symbol(value, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 41))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 51))
+>U : Symbol(U, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 28))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 19))
+>U : Symbol(U, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 28))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 51))
+>value : Symbol(value, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 41))
 
-const checked_ = checkType_<{x: number, y: string}>()({
->checked_ : Symbol(checked_, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 10, 5))
->checkType_ : Symbol(checkType_, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 8, 5))
->x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 10, 29))
->y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 10, 39))
+const checked = checkType<{x: number, y: string}>()({
+>checked : Symbol(checked, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 35, 5))
+>checkType : Symbol(checkType, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 33, 5))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 35, 27))
+>y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 35, 37))
 
   x: 1 as number,
->x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 10, 55))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 35, 53))
 
   y: "y",
->y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 11, 17))
+>y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 36, 17))
 
-  z: "z",
->z : Symbol(z, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 12, 9))
+  z: "z", // undesirable property z is *not* allowed
+>z : Symbol(z, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 37, 9))
+
+});
+
+// -----------------------------------------------------------------------------------------
+
+interface Stuff {
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 39, 3))
+
+    field: number;
+>field : Symbol(Stuff.field, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 43, 17))
+
+    anotherField: string;
+>anotherField : Symbol(Stuff.anotherField, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 44, 18))
+}
+
+function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K] } ): T {
+>doStuffWithStuff : Symbol(doStuffWithStuff, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 46, 1))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 26))
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 39, 3))
+>s : Symbol(s, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 43))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 49))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 26))
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 39, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 26))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 49))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 26))
+
+    if(Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+      return s as T
+>s : Symbol(s, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 43))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 26))
+
+    } else {
+      return s
+>s : Symbol(s, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 48, 43))
+    }
+}
+
+const stuff1 = doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
+>stuff1 : Symbol(stuff1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 56, 5))
+>doStuffWithStuff : Symbol(doStuffWithStuff, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 46, 1))
+>field : Symbol(field, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 56, 33))
+>anotherField : Symbol(anotherField, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 56, 43))
+>extra : Symbol(extra, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 56, 62))
+
+function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K] }[]): T[] {
+>doStuffWithStuffArr : Symbol(doStuffWithStuffArr, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 56, 76))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 29))
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 39, 3))
+>arr : Symbol(arr, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 46))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 54))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 29))
+>Stuff : Symbol(Stuff, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 39, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 29))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 54))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 29))
+
+    if(Math.random() > 0.5) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+      return arr as T[]
+>arr : Symbol(arr, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 46))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 29))
+
+    } else {
+      return arr
+>arr : Symbol(arr, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 58, 46))
+    }
+}
+
+const stuff2 = doStuffWithStuffArr([
+>stuff2 : Symbol(stuff2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 66, 5))
+>doStuffWithStuffArr : Symbol(doStuffWithStuffArr, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 56, 76))
+
+    { field: 1, anotherField: 'a', extra: 123 },
+>field : Symbol(field, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 67, 5))
+>anotherField : Symbol(anotherField, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 67, 15))
+>extra : Symbol(extra, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 67, 34))
+
+])
+
+// -----------------------------------------------------------------------------------------
+
+type XNumber = { x: number }
+>XNumber : Symbol(XNumber, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 68, 2))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 72, 16))
+
+declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): T;
+>foo : Symbol(foo, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 72, 28))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 74, 21))
+>XNumber : Symbol(XNumber, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 68, 2))
+>props : Symbol(props, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 74, 40))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 74, 49))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 74, 21))
+>XNumber : Symbol(XNumber, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 68, 2))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 74, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 74, 49))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 74, 21))
+
+function bar(props: {x: number, y: string}) {
+>bar : Symbol(bar, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 74, 90))
+>props : Symbol(props, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 76, 13))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 76, 21))
+>y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 76, 31))
+
+  return foo(props); // no error because lack of excess property check by design
+>foo : Symbol(foo, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 72, 28))
+>props : Symbol(props, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 76, 13))
+}
+
+const foo1 = foo({x: 1, y: 'foo'});
+>foo1 : Symbol(foo1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 80, 5))
+>foo : Symbol(foo, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 72, 28))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 80, 18))
+>y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 80, 23))
+
+const foo2 = foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
+>foo2 : Symbol(foo2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 82, 5))
+>foo : Symbol(foo, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 72, 28))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 82, 22))
+>y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 82, 27))
+
+// -----------------------------------------------------------------------------------------
+
+type NoErrWithOptProps = { x: number, y?: string }
+>NoErrWithOptProps : Symbol(NoErrWithOptProps, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 82, 40))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 86, 26))
+>y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 86, 37))
+
+declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): T;
+>baz : Symbol(baz, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 86, 50))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 88, 21))
+>NoErrWithOptProps : Symbol(NoErrWithOptProps, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 82, 40))
+>props : Symbol(props, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 88, 50))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 88, 59))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 88, 21))
+>NoErrWithOptProps : Symbol(NoErrWithOptProps, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 82, 40))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 88, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 88, 59))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 88, 21))
+
+const baz1 = baz({x: 1});
+>baz1 : Symbol(baz1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 90, 5))
+>baz : Symbol(baz, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 86, 50))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 90, 18))
+
+const baz2 = baz({x: 1, z: 123});
+>baz2 : Symbol(baz2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 91, 5))
+>baz : Symbol(baz, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 86, 50))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 91, 18))
+>z : Symbol(z, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 91, 23))
+
+const baz3 = baz({x: 1, y: 'foo'});
+>baz3 : Symbol(baz3, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 92, 5))
+>baz : Symbol(baz, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 86, 50))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 92, 18))
+>y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 92, 23))
+
+const baz4 = baz({x: 1, y: 'foo', z: 123});
+>baz4 : Symbol(baz4, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 93, 5))
+>baz : Symbol(baz, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 86, 50))
+>x : Symbol(x, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 93, 18))
+>y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 93, 23))
+>z : Symbol(z, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 93, 33))
+
+// -----------------------------------------------------------------------------------------
+
+interface WithNestedProp {
+>WithNestedProp : Symbol(WithNestedProp, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 93, 43))
+
+  prop: string;
+>prop : Symbol(WithNestedProp.prop, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 97, 26))
+
+  nested: {
+>nested : Symbol(WithNestedProp.nested, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 98, 15))
+
+    prop: string;
+>prop : Symbol(prop, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 99, 11))
+  }
+}
+
+declare function withNestedProp<T extends WithNestedProp>(props: {[K in keyof T & keyof WithNestedProp]: T[K]}): T;
+>withNestedProp : Symbol(withNestedProp, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 102, 1))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 104, 32))
+>WithNestedProp : Symbol(WithNestedProp, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 93, 43))
+>props : Symbol(props, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 104, 58))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 104, 67))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 104, 32))
+>WithNestedProp : Symbol(WithNestedProp, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 93, 43))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 104, 32))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 104, 67))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 104, 32))
+
+const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
+>wnp : Symbol(wnp, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 106, 5))
+>withNestedProp : Symbol(withNestedProp, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 102, 1))
+>prop : Symbol(prop, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 106, 28))
+>nested : Symbol(nested, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 106, 40))
+>prop : Symbol(prop, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 106, 50))
+>extra : Symbol(extra, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 106, 65))
+
+// -----------------------------------------------------------------------------------------
+
+type IsLiteralString<T extends string> = string extends T ? false : true;
+>IsLiteralString : Symbol(IsLiteralString, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 106, 79))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 110, 21))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 110, 21))
+
+interface ProvidedActor {
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 110, 73))
+
+  src: string;
+>src : Symbol(ProvidedActor.src, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 112, 25))
+
+  logic: () => Promise<unknown>;
+>logic : Symbol(ProvidedActor.logic, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 113, 14))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+}
+
+type DistributeActors<TActor> = TActor extends { src: infer TSrc }
+>DistributeActors : Symbol(DistributeActors, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 115, 1))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 117, 22))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 117, 22))
+>src : Symbol(src, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 117, 48))
+>TSrc : Symbol(TSrc, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 117, 59))
+
+  ? {
+      src: TSrc;
+>src : Symbol(src, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 118, 5))
+>TSrc : Symbol(TSrc, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 117, 59))
+    }
+  : never;
+
+interface MachineConfig<TActor extends ProvidedActor> {
+>MachineConfig : Symbol(MachineConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 121, 10))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 123, 24))
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 110, 73))
+
+  types?: {
+>types : Symbol(MachineConfig.types, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 123, 55))
+
+    actors?: TActor;
+>actors : Symbol(actors, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 124, 11))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 123, 24))
+
+  };
+  invoke: IsLiteralString<TActor["src"]> extends true
+>invoke : Symbol(MachineConfig.invoke, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 126, 4))
+>IsLiteralString : Symbol(IsLiteralString, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 106, 79))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 123, 24))
+
+    ? DistributeActors<TActor>
+>DistributeActors : Symbol(DistributeActors, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 115, 1))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 123, 24))
+
+    : {
+        src: string;
+>src : Symbol(src, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 129, 7))
+
+      };
+}
+
+declare function createXMachine<
+>createXMachine : Symbol(createXMachine, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 132, 1))
+
+  const TConfig extends MachineConfig<TActor>,
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 134, 32))
+>MachineConfig : Symbol(MachineConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 121, 10))
+>TActor : Symbol(TActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 135, 46))
+
+  TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor} } ? TConfig["types"]["actors"] : ProvidedActor,
+>TActor : Symbol(TActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 135, 46))
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 110, 73))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 134, 32))
+>types : Symbol(types, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 136, 50))
+>actors : Symbol(actors, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 136, 59))
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 110, 73))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 134, 32))
+>ProvidedActor : Symbol(ProvidedActor, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 110, 73))
+
+>(config: {[K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K] }): TConfig;
+>config : Symbol(config, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 137, 2))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 137, 12))
+>MachineConfig : Symbol(MachineConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 121, 10))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 134, 32))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 134, 32))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 137, 12))
+>TConfig : Symbol(TConfig, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 134, 32))
+
+const child = () => Promise.resolve("foo");
+>child : Symbol(child, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 139, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+const config = createXMachine({
+>config : Symbol(config, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 141, 5))
+>createXMachine : Symbol(createXMachine, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 132, 1))
+
+  types: {} as {
+>types : Symbol(types, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 141, 31))
+
+    actors: {
+>actors : Symbol(actors, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 142, 16))
+
+      src: "str";
+>src : Symbol(src, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 143, 13))
+
+      logic: typeof child;
+>logic : Symbol(logic, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 144, 17))
+>child : Symbol(child, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 139, 5))
+
+    };
+  },
+  invoke: {
+>invoke : Symbol(invoke, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 147, 4))
+
+    src: "str",
+>src : Symbol(src, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 148, 11))
+
+  },
+  extra: 10
+>extra : Symbol(extra, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 150, 4))
+
+});
+
+const config2 = createXMachine({
+>config2 : Symbol(config2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 154, 5))
+>createXMachine : Symbol(createXMachine, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 132, 1))
+
+  invoke: {
+>invoke : Symbol(invoke, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 154, 32))
+
+    src: "whatever",
+>src : Symbol(src, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 155, 11))
+
+  },
+  extra: 10
+>extra : Symbol(extra, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 157, 4))
 
 });
 
