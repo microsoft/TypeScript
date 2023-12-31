@@ -93,3 +93,35 @@ const checked2 = checkType<{ x: number; y: string }>()(objChecked);
 >y : Symbol(y, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 23, 39))
 >objChecked : Symbol(objChecked, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 18, 5))
 
+declare function fn1<T extends Record<string, number>>(obj: {
+>fn1 : Symbol(fn1, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 23, 67))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 25, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 25, 55))
+
+  [K in keyof T as K extends "a" ? K : never]: T[K];
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 26, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 25, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 26, 3))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 26, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 25, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 26, 3))
+
+}): T;
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 25, 21))
+
+const obj1 = {
+>obj1 : Symbol(obj1, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 28, 5))
+
+  a: 42,
+>a : Symbol(a, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 28, 14))
+
+  b: true,
+>b : Symbol(b, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 29, 8))
+
+};
+const result1 = fn1(obj1);
+>result1 : Symbol(result1, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 32, 5))
+>fn1 : Symbol(fn1, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 23, 67))
+>obj1 : Symbol(obj1, Decl(reverseMappedTypeLimitedConstraintWithFilteringNameType1.ts, 28, 5))
+

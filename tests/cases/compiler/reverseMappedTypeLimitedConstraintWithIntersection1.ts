@@ -161,3 +161,12 @@ const config2 = createXMachine({
   },
   extra: 10
 });
+
+declare function fn1<T extends Record<string, number>>(obj: {
+  [K in keyof T & "a"]: T[K];
+}): T;
+const obj1 = {
+  a: 42,
+  b: true,
+};
+const result1 = fn1(obj1);

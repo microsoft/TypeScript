@@ -447,3 +447,28 @@ const config2 = createXMachine({
 
 });
 
+declare function fn1<T extends Record<string, number>>(obj: {
+>fn1 : <T extends Record<string, number>>(obj: { [K in keyof T & "a"]: T[K]; }) => T
+>obj : { [K in keyof T & "a"]: T[K]; }
+
+  [K in keyof T & "a"]: T[K];
+}): T;
+const obj1 = {
+>obj1 : { a: number; b: boolean; }
+>{  a: 42,  b: true,} : { a: number; b: boolean; }
+
+  a: 42,
+>a : number
+>42 : 42
+
+  b: true,
+>b : boolean
+>true : true
+
+};
+const result1 = fn1(obj1);
+>result1 : { a: number; }
+>fn1(obj1) : { a: number; }
+>fn1 : <T extends Record<string, number>>(obj: { [K in keyof T & "a"]: T[K]; }) => T
+>obj1 : { a: number; b: boolean; }
+

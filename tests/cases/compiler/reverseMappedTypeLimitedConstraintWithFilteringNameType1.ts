@@ -25,3 +25,12 @@ const objChecked = {
   z: "z",
 };
 const checked2 = checkType<{ x: number; y: string }>()(objChecked);
+
+declare function fn1<T extends Record<string, number>>(obj: {
+  [K in keyof T as K extends "a" ? K : never]: T[K];
+}): T;
+const obj1 = {
+  a: 42,
+  b: true,
+};
+const result1 = fn1(obj1);

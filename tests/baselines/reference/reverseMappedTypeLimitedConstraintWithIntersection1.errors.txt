@@ -208,3 +208,12 @@ reverseMappedTypeLimitedConstraintWithIntersection1.ts(159,3): error TS2353: Obj
 !!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ invoke: { readonly src: "whatever"; }; }'.
     });
     
+    declare function fn1<T extends Record<string, number>>(obj: {
+      [K in keyof T & "a"]: T[K];
+    }): T;
+    const obj1 = {
+      a: 42,
+      b: true,
+    };
+    const result1 = fn1(obj1);
+    
