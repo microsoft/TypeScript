@@ -1,9 +1,12 @@
 // @strict: true
-// @lib: esnext
 
 type StateConfig<TAction extends string> = {
   entry?: TAction
   states?: Record<string, StateConfig<TAction>>;
+};
+
+type StateSchema = {
+  states?: Record<string, StateSchema>;
 };
 
 declare function createMachine<
@@ -42,6 +45,8 @@ const checked = checkType<{x: number, y: string}>()({
   z: "z", // undesirable property z is *not* allowed
 });
 
+checked;
+
 // -----------------------------------------------------------------------------------------
 
 interface Stuff {
@@ -57,7 +62,7 @@ function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[
     }
 }
 
-const stuff1 = doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
+doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
 
 function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K] }[]): T[] {
     if(Math.random() > 0.5) {
@@ -67,7 +72,7 @@ function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff
     }
 }
 
-const stuff2 = doStuffWithStuffArr([
+doStuffWithStuffArr([
     { field: 1, anotherField: 'a', extra: 123 },
 ])
 
@@ -75,26 +80,26 @@ const stuff2 = doStuffWithStuffArr([
 
 type XNumber = { x: number }
 
-declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): T;
+declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): void;
 
 function bar(props: {x: number, y: string}) {
   return foo(props); // no error because lack of excess property check by design
 }
 
-const foo1 = foo({x: 1, y: 'foo'});
+foo({x: 1, y: 'foo'});
 
-const foo2 = foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
+foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
 
 // -----------------------------------------------------------------------------------------
 
 type NoErrWithOptProps = { x: number, y?: string }
 
-declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): T;
+declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): void;
 
-const baz1 = baz({x: 1});
-const baz2 = baz({x: 1, z: 123});
-const baz3 = baz({x: 1, y: 'foo'});
-const baz4 = baz({x: 1, y: 'foo', z: 123});
+baz({x: 1});
+baz({x: 1, z: 123});
+baz({x: 1, y: 'foo'});
+baz({x: 1, y: 'foo', z: 123});
 
 // -----------------------------------------------------------------------------------------
 
@@ -112,6 +117,8 @@ const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 // -----------------------------------------------------------------------------------------
 
 type IsLiteralString<T extends string> = string extends T ? false : true;
+
+type DeepWritable<T> = T extends Function ? T : { -readonly [K in keyof T]: DeepWritable<T[K]> }
 
 interface ProvidedActor {
   src: string;
@@ -133,6 +140,10 @@ interface MachineConfig<TActor extends ProvidedActor> {
     : {
         src: string;
       };
+}
+
+type NoExtra<T> = {
+  [K in keyof T]: K extends keyof MachineConfig<any> ? T[K] : never
 }
 
 declare function createXMachine<
@@ -161,22 +172,3 @@ const config2 = createXMachine({
   },
   extra: 10
 });
-
-declare function fn1<T extends Record<string, number>>(obj: {
-  [K in keyof T & "a"]: T[K];
-}): T;
-const obj1 = {
-  a: 42,
-  b: true,
-};
-const result1 = fn1(obj1);
-
-declare function fn2<T extends Record<string, number>>(obj: {
-  [K in (keyof T & "a") | "b"]: T[K];
-}): T;
-const obj2 = {
-  a: 42,
-  b: 100,
-  c: true,
-};
-const result2 = fn2(obj2);
