@@ -196,3 +196,34 @@ function fn6(): number {
 >"foo" : "foo"
 }
 
+((): { a: true } => ({}) satisfies unknown)();
+>((): { a: true } => ({}) satisfies unknown)() : { a: true; }
+>((): { a: true } => ({}) satisfies unknown) : () => {    a: true;}
+>(): { a: true } => ({}) satisfies unknown : () => {    a: true;}
+>a : true
+>true : true
+>({}) satisfies unknown : {}
+>({}) : {}
+>{} : {}
+
+((): { a: true } => ({ a: 1 }) satisfies unknown)();
+>((): { a: true } => ({ a: 1 }) satisfies unknown)() : { a: true; }
+>((): { a: true } => ({ a: 1 }) satisfies unknown) : () => {    a: true;}
+>(): { a: true } => ({ a: 1 }) satisfies unknown : () => {    a: true;}
+>a : true
+>true : true
+>({ a: 1 }) satisfies unknown : { a: number; }
+>({ a: 1 }) : { a: number; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+((): { a: true } => obj1 satisfies unknown)();
+>((): { a: true } => obj1 satisfies unknown)() : { a: true; }
+>((): { a: true } => obj1 satisfies unknown) : () => {    a: true;}
+>(): { a: true } => obj1 satisfies unknown : () => {    a: true;}
+>a : true
+>true : true
+>obj1 satisfies unknown : { a: number; }
+>obj1 : { a: number; }
+

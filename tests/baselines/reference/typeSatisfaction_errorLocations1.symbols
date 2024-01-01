@@ -118,3 +118,14 @@ function fn6(): number {
   return "foo" satisfies number;
 }
 
+((): { a: true } => ({}) satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 45, 6))
+
+((): { a: true } => ({ a: 1 }) satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 46, 6))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 46, 22))
+
+((): { a: true } => obj1 satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 47, 6))
+>obj1 : Symbol(obj1, Decl(typeSatisfaction_errorLocations1.ts, 0, 5))
+

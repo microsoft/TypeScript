@@ -45,3 +45,7 @@ function fn5(): number {
 function fn6(): number {
   return "foo" satisfies number;
 }
+
+((): { a: true } => ({}) satisfies unknown)();
+((): { a: true } => ({ a: 1 }) satisfies unknown)();
+((): { a: true } => obj1 satisfies unknown)();
