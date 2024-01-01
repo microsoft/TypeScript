@@ -37,7 +37,7 @@ implicitConstParameters.ts(44,27): error TS18048: 'x' is possibly 'undefined'.
     }
     
     function f4(x: string | undefined) {
-        x = "abc";  // causes x to be considered non-const
+        x = "abc";
         if (x) {
             doSomething(() => x.length);
         }
