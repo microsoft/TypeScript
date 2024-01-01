@@ -227,6 +227,43 @@ isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
 isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
 isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp;
 
+// Repro from #56144
+
+type Union =
+    | { type: 'a'; variant: 1 }
+    | { type: 'a'; variant: 2 }
+    | { type: 'b' };
+
+function example1(value: Union): { type: 'a'; variant: 2 } | null {
+    if (value.type !== 'a') {
+        return null;
+    }
+    if (value.variant === 1) {
+        return null;
+    }
+    return value;
+}
+
+function example2(value: Union): { type: 'a'; variant: 2 } | null {
+    if (value.type !== 'a') {
+        return null;
+    }
+    if (value.type === 'a' && value.variant === 1) {
+        return null;
+    }
+    return value;
+}
+
+function example3(value: Union): { type: 'a'; variant: 2 } | null {
+    if (value.type !== 'a') {
+        return null;
+    }
+    if (value.type && value.variant === 1) {
+        return null;
+    }
+    return value;
+}
+
 
 //// [narrowingUnionToUnion.js]
 "use strict";
@@ -387,6 +424,33 @@ function f1x(obj) {
 isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
 isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
 isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgain.aProp;
+function example1(value) {
+    if (value.type !== 'a') {
+        return null;
+    }
+    if (value.variant === 1) {
+        return null;
+    }
+    return value;
+}
+function example2(value) {
+    if (value.type !== 'a') {
+        return null;
+    }
+    if (value.type === 'a' && value.variant === 1) {
+        return null;
+    }
+    return value;
+}
+function example3(value) {
+    if (value.type !== 'a') {
+        return null;
+    }
+    if (value.type && value.variant === 1) {
+        return null;
+    }
+    return value;
+}
 
 
 //// [narrowingUnionToUnion.d.ts]
@@ -451,3 +515,24 @@ declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedU
 declare const working: unknown;
 declare const broken: Record<string, any> | undefined;
 declare const workingAgain: Record<string, any> | undefined | unknown;
+type Union = {
+    type: 'a';
+    variant: 1;
+} | {
+    type: 'a';
+    variant: 2;
+} | {
+    type: 'b';
+};
+declare function example1(value: Union): {
+    type: 'a';
+    variant: 2;
+} | null;
+declare function example2(value: Union): {
+    type: 'a';
+    variant: 2;
+} | null;
+declare function example3(value: Union): {
+    type: 'a';
+    variant: 2;
+} | null;

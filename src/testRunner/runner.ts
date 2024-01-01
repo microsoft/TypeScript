@@ -63,10 +63,6 @@ export function createRunner(kind: TestRunnerKind): RunnerBase {
             return new CompilerBaselineRunner(CompilerTestType.Regressions);
         case "fourslash":
             return new FourSlashRunner(FourSlash.FourSlashTestType.Native);
-        case "fourslash-shims":
-            return new FourSlashRunner(FourSlash.FourSlashTestType.Shims);
-        case "fourslash-shims-pp":
-            return new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess);
         case "fourslash-server":
             return new FourSlashRunner(FourSlash.FourSlashTestType.Server);
         case "project":
@@ -189,12 +185,6 @@ function handleTestConfig() {
                     case "fourslash":
                         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
                         break;
-                    case "fourslash-shims":
-                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Shims));
-                        break;
-                    case "fourslash-shims-pp":
-                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
-                        break;
                     case "fourslash-server":
                         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
                         break;
@@ -216,8 +206,6 @@ function handleTestConfig() {
 
         // language services
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
-        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Shims));
-        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
     }

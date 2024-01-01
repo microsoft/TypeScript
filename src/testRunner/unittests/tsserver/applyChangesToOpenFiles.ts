@@ -5,8 +5,7 @@ import {
 } from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -34,7 +33,7 @@ ${file.content}`;
             content: "let z = 1;",
         };
         const host = createServerHost([app, file3, commonFile1, commonFile2, libFile, configFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: app.path },

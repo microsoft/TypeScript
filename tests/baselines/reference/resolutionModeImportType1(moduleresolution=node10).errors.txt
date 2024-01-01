@@ -1,0 +1,40 @@
+error TS2688: Cannot find type definition file for 'foo'.
+  The file is in the program because:
+    Entry point for implicit type library 'foo'
+/app.ts(1,30): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+
+
+!!! error TS2688: Cannot find type definition file for 'foo'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point for implicit type library 'foo'
+==== /node_modules/@types/foo/package.json (0 errors) ====
+    {
+      "name": "@types/foo",
+      "version": "1.0.0",
+      "exports": {
+        ".": {
+          "import": "./index.d.mts",
+          "require": "./index.d.cts"
+        }
+      }
+    }
+    
+==== /node_modules/@types/foo/index.d.mts (0 errors) ====
+    export declare const x: "module";
+    
+==== /node_modules/@types/foo/index.d.cts (0 errors) ====
+    export declare const x: "script";
+    
+==== /app.ts (1 errors) ====
+    type Default = typeof import("foo").x;
+                                 ~~~~~
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+    type Import = typeof import("foo", { assert: { "resolution-mode": "import" } }).x;
+    type Require = typeof import("foo", { assert: { "resolution-mode": "require" } }).x;
+    // resolution-mode does not enforce file extension in `bundler`, just sets conditions
+    type ImportRelative = typeof import("./other", { assert: { "resolution-mode": "import" } }).x;
+    type RequireRelative = typeof import("./other", { assert: { "resolution-mode": "require" } }).x;
+    
+==== /other.ts (0 errors) ====
+    export const x = "other";
+    

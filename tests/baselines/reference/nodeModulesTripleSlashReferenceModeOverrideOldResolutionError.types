@@ -3,10 +3,26 @@
 === /index.ts ===
 /// <reference types="pkg" resolution-mode="require" />
 /// <reference types="pkg" resolution-mode="import" />
-foo; // `resolution-mode` is an error in old resolution settings, which resolves is arbitrary
->foo : any
+foo;
+>foo : number
 
 bar;
->bar : any
+>bar : number
 
 export {};
+=== /node_modules/pkg/import.d.ts ===
+export {};
+declare global {
+>global : typeof global
+
+    var foo: number;
+>foo : number
+}
+=== /node_modules/pkg/require.d.ts ===
+export {};
+declare global {
+>global : typeof global
+
+    var bar: number;
+>bar : number
+}

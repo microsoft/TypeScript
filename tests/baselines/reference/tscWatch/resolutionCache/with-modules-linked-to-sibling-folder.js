@@ -17,11 +17,26 @@ interface Array<T> { length: number; [n: number]: T; }
 import { Foo } from '@scoped/linked-package'
 
 //// [/user/username/projects/myproject/main/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","moduleResolution":"node","baseUrl":".","rootDir":"."},"files":["index.ts"]}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "rootDir": "."
+  },
+  "files": [
+    "index.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/main/node_modules/@scoped/linked-package] symlink(/user/username/projects/myproject/linked-package)
 //// [/user/username/projects/myproject/linked-package/package.json]
-{"name":"@scoped/linked-package","version":"0.0.1","types":"dist/index.d.ts","main":"dist/index.js"}
+{
+  "name": "@scoped/linked-package",
+  "version": "0.0.1",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js"
+}
 
 //// [/user/username/projects/myproject/linked-package/dist/index.d.ts]
 export * from './other';
@@ -39,26 +54,11 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/main/index.ts"]
-Program options: {"module":1,"moduleResolution":2,"baseUrl":"/user/username/projects/myproject/main","rootDir":"/user/username/projects/myproject/main","watch":true,"configFilePath":"/user/username/projects/myproject/main/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/linked-package/dist/other.d.ts
-/user/username/projects/myproject/linked-package/dist/index.d.ts
-/user/username/projects/myproject/main/index.ts
+//// [/user/username/projects/myproject/main/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/linked-package/dist/other.d.ts
-/user/username/projects/myproject/linked-package/dist/index.d.ts
-/user/username/projects/myproject/main/index.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/linked-package/dist/other.d.ts (used version)
-/user/username/projects/myproject/linked-package/dist/index.d.ts (used version)
-/user/username/projects/myproject/main/index.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/main/@scoped: *new*
@@ -90,10 +90,34 @@ FsWatchesRecursive::
 /user/username/projects/myproject/main/node_modules: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/main/index.ts"
+]
+Program options: {
+  "module": 1,
+  "moduleResolution": 2,
+  "baseUrl": "/user/username/projects/myproject/main",
+  "rootDir": "/user/username/projects/myproject/main",
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/main/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/linked-package/dist/other.d.ts
+/user/username/projects/myproject/linked-package/dist/index.d.ts
+/user/username/projects/myproject/main/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/linked-package/dist/other.d.ts
+/user/username/projects/myproject/linked-package/dist/index.d.ts
+/user/username/projects/myproject/main/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/linked-package/dist/other.d.ts (used version)
+/user/username/projects/myproject/linked-package/dist/index.d.ts (used version)
+/user/username/projects/myproject/main/index.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-

@@ -42,8 +42,32 @@ Output::
 
 
 
-Program root files: ["/a/b/c/app.ts"]
-Program options: {"watch":true}
+//// [/a/b/c/app.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var module_1 = require("./module");
+console.log(module_1.f);
+
+
+
+FsWatches::
+/a/b/c/app.ts: *new*
+  {}
+/a/b/c/module.d.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b/c: *new*
+  {}
+
+Program root files: [
+  "/a/b/c/app.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -60,24 +84,4 @@ Shape signatures in builder refreshed for::
 /a/b/c/module.d.ts (used version)
 /a/b/c/app.ts (used version)
 
-FsWatches::
-/a/b/c/app.ts: *new*
-  {}
-/a/b/c/module.d.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b/c: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/c/app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var module_1 = require("./module");
-console.log(module_1.f);
-
-
