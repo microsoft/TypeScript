@@ -63,6 +63,63 @@ Object.defineProperty(H.prototype, "x", {
 });
 
 
+export class I {}
+Object.defineProperty(I.prototype, "x", {
+    /**
+     * @param {number} v
+     */
+    set: (v) => {}
+});
+
+/**
+ * @param {number} v
+ */
+const jSetter = (v) => {}
+export class J {}
+Object.defineProperty(J.prototype, "x", {
+    set: jSetter
+});
+
+/**
+ * @param {number} v
+ */
+const kSetter1 = (v) => {}
+/**
+ * @param {number} v
+ */
+const kSetter2 = (v) => {}
+export class K {}
+Object.defineProperty(K.prototype, "x", {
+    set: Math.random() ? kSetter1 : kSetter2
+});
+
+/**
+ * @param {number} v
+ */
+const lSetter1 = (v) => {}
+/**
+ * @param {string} v
+ */
+const lSetter2 = (v) => {}
+export class L {}
+Object.defineProperty(L.prototype, "x", {
+    set: Math.random() ? lSetter1 : lSetter2
+});
+
+/**
+ * @param {number | boolean} v
+ */
+const mSetter1 = (v) => {}
+/**
+ * @param {string | boolean} v
+ */
+const mSetter2 = (v) => {}
+export class M {}
+Object.defineProperty(M.prototype, "x", {
+    set: Math.random() ? mSetter1 : mSetter2
+});
+
+
 //// [index.js]
 export class A {
     get x() {
@@ -122,6 +179,62 @@ export class H {
 Object.defineProperty(H.prototype, "x", {
     set() { }
 });
+export class I {
+}
+Object.defineProperty(I.prototype, "x", {
+    /**
+     * @param {number} v
+     */
+    set: (v) => { }
+});
+/**
+ * @param {number} v
+ */
+const jSetter = (v) => { };
+export class J {
+}
+Object.defineProperty(J.prototype, "x", {
+    set: jSetter
+});
+/**
+ * @param {number} v
+ */
+const kSetter1 = (v) => { };
+/**
+ * @param {number} v
+ */
+const kSetter2 = (v) => { };
+export class K {
+}
+Object.defineProperty(K.prototype, "x", {
+    set: Math.random() ? kSetter1 : kSetter2
+});
+/**
+ * @param {number} v
+ */
+const lSetter1 = (v) => { };
+/**
+ * @param {string} v
+ */
+const lSetter2 = (v) => { };
+export class L {
+}
+Object.defineProperty(L.prototype, "x", {
+    set: Math.random() ? lSetter1 : lSetter2
+});
+/**
+ * @param {number | boolean} v
+ */
+const mSetter1 = (v) => { };
+/**
+ * @param {string | boolean} v
+ */
+const mSetter2 = (v) => { };
+export class M {
+}
+Object.defineProperty(M.prototype, "x", {
+    set: Math.random() ? mSetter1 : mSetter2
+});
 
 
 //// [index.d.ts]
@@ -152,5 +265,20 @@ export class G {
     set x(args: number);
 }
 export class H {
+    set x(value: any);
+}
+export class I {
+    set x(value: number);
+}
+export class J {
+    set x(value: number);
+}
+export class K {
+    set x(value: number);
+}
+export class L {
+    set x(value: any);
+}
+export class M {
     set x(value: any);
 }

@@ -2,6 +2,9 @@ import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
@@ -17,7 +20,7 @@ describe("unittests:: tsbuild:: roots::", () => {
             loadProjectFromFiles({
                 "/src/file1.ts": `export const x = "hello";`,
                 "/src/file2.ts": `export const y = "world";`,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
@@ -42,7 +45,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 "/src/file2.ts": `export const y = "world";`,
                 "/src/file3.ts": `export const y = "world";`,
                 "/src/file4.ts": `export const y = "world";`,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
@@ -69,7 +72,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 import { random } from "./random";
                 export const y = "world";
             `,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["file*.ts"],
                 }),
@@ -109,7 +112,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 import { random } from "./random2";
                 export const nonConsecutive = "hello";
             `,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["file*.ts", "nonconsecutive*.ts", "asArray*.ts", "anotherNonConsecutive.ts"],
                 }),

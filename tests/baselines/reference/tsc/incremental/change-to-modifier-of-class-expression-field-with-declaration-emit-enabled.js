@@ -33,7 +33,11 @@ type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
 export default MessageablePerson;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"declaration":true}}
+{
+  "compilerOptions": {
+    "declaration": true
+  }
+}
 
 
 
@@ -152,6 +156,17 @@ var wrapper = function () { return Messageable(); };
 
 
 
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc -p src/project --incremental
+exitCode:: ExitStatus.Success
+
+
+
+
 Change:: modify public to protected
 Input::
 //// [/src/project/MessageablePerson.ts]
@@ -191,7 +206,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 //// [/src/project/main.js] file written with same contents
 //// [/src/project/MessageablePerson.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileInfos":[{"version":"5700251342-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"3462418372-const Messageable = () => {\n    return class MessageableClass {\n        protected message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-21450256696-declare const wrapper: () => {\n    new (): {\n        message: string;\n    };\n};\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;\n(116,7)Error4094: Property 'message' of exported class expression may not be private or protected."},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"declaration":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"./main.ts","start":131,"length":7,"messageText":"Property 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.","category":1,"code":2445}]],2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./messageableperson.ts","./main.ts"],"fileInfos":[{"version":"5700251342-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;\ntype InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;","affectsGlobalScope":true},{"version":"3462418372-const Messageable = () => {\n    return class MessageableClass {\n        protected message = 'hello';\n    }\n};\nconst wrapper = () => Messageable();\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;","signature":"-21450256696-declare const wrapper: () => {\n    new (): {\n        message: string;\n    };\n};\ntype MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;\nexport default MessageablePerson;\n(116,7)Error4094: Property 'message' of exported class expression may not be private or protected."},{"version":"4191603667-import MessageablePerson from './MessageablePerson.js';\nfunction logMessage( person: MessageablePerson ) {\n    console.log( person.message );\n}","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"declaration":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"./main.ts","start":131,"length":7,"messageText":"Property 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.","category":1,"code":2445}]],2],"emitDiagnosticsPerFile":[[2,[{"file":"./messageableperson.ts","start":116,"length":7,"messageText":"Property 'message' of exported class expression may not be private or protected.","category":1,"code":4094}]]]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -268,11 +283,53 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         ]
       ],
       "./messageableperson.ts"
+    ],
+    "emitDiagnosticsPerFile": [
+      [
+        "./messageableperson.ts",
+        [
+          {
+            "file": "./messageableperson.ts",
+            "start": 116,
+            "length": 7,
+            "messageText": "Property 'message' of exported class expression may not be private or protected.",
+            "category": 1,
+            "code": 4094
+          }
+        ]
+      ]
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1975
+  "size": 2187
 }
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc -p src/project --incremental
+[96msrc/project/main.ts[0m:[93m3[0m:[93m25[0m - [91merror[0m[90m TS2445: [0mProperty 'message' is protected and only accessible within class 'MessageableClass' and its subclasses.
+
+[7m3[0m     console.log( person.message );
+[7m [0m [91m                        ~~~~~~~[0m
+
+[96msrc/project/MessageablePerson.ts[0m:[93m6[0m:[93m7[0m - [91merror[0m[90m TS4094: [0mProperty 'message' of exported class expression may not be private or protected.
+
+[7m6[0m const wrapper = () => Messageable();
+[7m [0m [91m      ~~~~~~~[0m
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  src/project/main.ts[90m:3[0m
+     1  src/project/MessageablePerson.ts[90m:6[0m
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
 
 
 
@@ -370,4 +427,15 @@ exitCode:: ExitStatus.Success
   "version": "FakeTSVersion",
   "size": 1682
 }
+
+
+
+Change:: no-change-run
+Input::
+
+
+Output::
+/lib/tsc -p src/project --incremental
+exitCode:: ExitStatus.Success
+
 

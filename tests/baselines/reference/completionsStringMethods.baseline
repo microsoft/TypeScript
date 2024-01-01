@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionsStringMethods.ts ===
 // var s = "foo".
 //               ^

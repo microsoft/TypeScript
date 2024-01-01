@@ -133,5 +133,5 @@ export function isDefaultLibrary(path: string) {
 }
 
 export function isTsConfigFile(path: string): boolean {
-    return path.indexOf("tsconfig") !== -1 && path.indexOf("json") !== -1;
+    return path.includes("tsconfig") && path.includes("json");
 }

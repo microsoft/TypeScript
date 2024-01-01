@@ -19,7 +19,7 @@ overloadsWithProvisionalErrors.ts(8,17): error TS2304: Cannot find name 'blah'.
     };
     
     func(s => ({})); // Error for no applicable overload (object type is missing a and b)
-    ~~~~~~~~~~~~~~~
+    ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(s: string): number', gave the following error.
 !!! error TS2769:     Argument of type '(s: string) => {}' is not assignable to parameter of type 'string'.
@@ -30,7 +30,7 @@ overloadsWithProvisionalErrors.ts(8,17): error TS2304: Cannot find name 'blah'.
                     ~~~~
 !!! error TS2304: Cannot find name 'blah'.
     func(s => ({ a: blah })); // Two errors here, one for blah not being defined, and one for the overload since it would not be applicable anyway
-    ~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(s: string): number', gave the following error.
 !!! error TS2769:     Argument of type '(s: string) => { a: any; }' is not assignable to parameter of type 'string'.

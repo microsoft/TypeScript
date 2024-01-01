@@ -1,9 +1,7 @@
-import * as Harness from "../../_namespaces/Harness";
 import {
     getDirectoryPath,
 } from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import * as vpath from "../../_namespaces/vpath";
 import {
     libContent,
 } from "./contents";
@@ -19,19 +17,6 @@ function valueOfFsOptions(options: FsOptionsOrLibContentsToAppend | undefined, k
     return typeof options === "string" ?
         key === "libContentToAppend" ? options : undefined :
         options?.[key];
-}
-
-/**
- * Load project from disk into /src folder
- */
-export function loadProjectFromDisk(
-    root: string,
-    options?: FsOptionsOrLibContentsToAppend,
-): vfs.FileSystem {
-    const resolver = vfs.createResolver(Harness.IO);
-    return loadProjectFromFiles({
-        ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver),
-    }, options);
 }
 
 /**
@@ -60,7 +45,7 @@ export function replaceText(fs: vfs.FileSystem, path: string, oldText: string, n
         throw new Error(`File ${path} does not exist`);
     }
     const old = fs.readFileSync(path, "utf-8");
-    if (old.indexOf(oldText) < 0) {
+    if (!old.includes(oldText)) {
         throw new Error(`Text "${oldText}" does not exist in file ${path}`);
     }
     const newContent = old.replace(oldText, newText);

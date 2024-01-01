@@ -415,7 +415,7 @@ function mayDeleteParameter(checker: TypeChecker, sourceFile: SourceFile, parame
 }
 
 function isCallbackLike(checker: TypeChecker, sourceFile: SourceFile, name: Identifier): boolean {
-    return !!FindAllReferences.Core.eachSymbolReferenceInFile(name, checker, sourceFile, reference => isIdentifier(reference) && isCallExpression(reference.parent) && reference.parent.arguments.indexOf(reference) >= 0);
+    return !!FindAllReferences.Core.eachSymbolReferenceInFile(name, checker, sourceFile, reference => isIdentifier(reference) && isCallExpression(reference.parent) && reference.parent.arguments.includes(reference));
 }
 
 function isLastParameter(func: FunctionLikeDeclaration, parameter: ParameterDeclaration, isFixAll: boolean): boolean {

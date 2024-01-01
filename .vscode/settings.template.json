@@ -4,9 +4,12 @@
     // To use the locally built compiler, after 'npm run build':
     // "typescript.tsdk": "built/local"
 
-    "[typescript][javascript][yaml]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "dprint.dprint"
+    // Enables dprint formatting on all supported files. We explicitly list
+    // languages here to ensure that these are more specific than those in a
+    // user's settings.json so take precedence.
+    "[typescript][typescriptreact][javascript][javascriptreact][json][jsonc][yaml][github-actions-workflow]": {
+        "editor.defaultFormatter": "dprint.dprint",
+        "editor.formatOnSave": true
     },
 
     // To ignore commits listed in .git-blame-ignore-revs in GitLens:

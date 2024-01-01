@@ -39,7 +39,6 @@ import {
     resolveJSModule,
     some,
     startsWith,
-    stringContains,
     timestamp,
     unorderedRemoveItem,
     WatchDirectoryKind,
@@ -814,9 +813,9 @@ function createDirectoryWatcherSupportingRecursive({
     }
 
     function isInPath(path: string, searchPath: string) {
-        if (stringContains(path, searchPath)) return true;
+        if (path.includes(searchPath)) return true;
         if (useCaseSensitiveFileNames) return false;
-        return stringContains(toCanonicalFilePath(path), searchPath);
+        return toCanonicalFilePath(path).includes(searchPath);
     }
 }
 
@@ -915,6 +914,7 @@ export interface CreateSystemWatchFunctions {
     useNonPollingWatchers?: boolean;
     tscWatchDirectory: string | undefined;
     inodeWatching: boolean;
+    fsWatchWithTimestamp: boolean | undefined;
     sysLog: (s: string) => void;
 }
 
@@ -935,6 +935,7 @@ export function createSystemWatchFunctions({
     useNonPollingWatchers,
     tscWatchDirectory,
     inodeWatching,
+    fsWatchWithTimestamp,
     sysLog,
 }: CreateSystemWatchFunctions): { watchFile: HostWatchFile; watchDirectory: HostWatchDirectory; } {
     const pollingWatches = new Map<string, SingleFileWatcher<FileWatcherCallback>>();
@@ -1190,7 +1191,7 @@ export function createSystemWatchFunctions({
                 return watchPresentFileSystemEntryWithFsWatchFile();
             }
             try {
-                const presentWatcher = fsWatchWorker(
+                const presentWatcher = (!fsWatchWithTimestamp ? fsWatchWorker : fsWatchWorkerHandlingTimestamp)(
                     fileOrDirectory,
                     recursive,
                     inodeWatching ?
@@ -1286,6 +1287,18 @@ export function createSystemWatchFunctions({
                 fallbackOptions,
             );
         }
+    }
+
+    function fsWatchWorkerHandlingTimestamp(fileOrDirectory: string, recursive: boolean, callback: FsWatchCallback): FsWatchWorkerWatcher {
+        let modifiedTime = getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+        return fsWatchWorker(fileOrDirectory, recursive, (eventName, relativeFileName, currentModifiedTime) => {
+            if (eventName === "change") {
+                currentModifiedTime ||= getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+                if (currentModifiedTime.getTime() === modifiedTime.getTime()) return;
+            }
+            modifiedTime = currentModifiedTime || getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+            callback(eventName, relativeFileName, modifiedTime);
+        });
     }
 }
 
@@ -1483,7 +1496,8 @@ export let sys: System = (() => {
             from?(input: string, encoding?: string): any;
         } = require("buffer").Buffer;
 
-        const isLinuxOrMacOs = process.platform === "linux" || process.platform === "darwin";
+        const isMacOs = process.platform === "darwin";
+        const isLinuxOrMacOs = process.platform === "linux" || isMacOs;
 
         const platform: string = _os.platform();
         const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
@@ -1496,7 +1510,7 @@ export let sys: System = (() => {
         // Note that if we ever emit as files like cjs/mjs, this check will be wrong.
         const executingFilePath = __filename.endsWith("sys.js") ? _path.join(_path.dirname(__dirname), "__fake__.js") : __filename;
 
-        const fsSupportsRecursiveFsWatch = process.platform === "win32" || process.platform === "darwin";
+        const fsSupportsRecursiveFsWatch = process.platform === "win32" || isMacOs;
         const getCurrentDirectory = memoize(() => process.cwd());
         const { watchFile, watchDirectory } = createSystemWatchFunctions({
             pollingWatchFileWorker: fsWatchFileWorker,
@@ -1516,6 +1530,7 @@ export let sys: System = (() => {
             useNonPollingWatchers: !!process.env.TSC_NONPOLLING_WATCHER,
             tscWatchDirectory: process.env.TSC_WATCHDIRECTORY,
             inodeWatching: isLinuxOrMacOs,
+            fsWatchWithTimestamp: isMacOs,
             sysLog,
         });
         const nodeSystem: System = {

@@ -15,7 +15,6 @@ import {
     Path,
     some,
     startsWith,
-    stringContains,
 } from "./_namespaces/ts";
 
 /**
@@ -113,7 +112,7 @@ export function pathIsBareSpecifier(path: string): boolean {
 
 /** @internal */
 export function hasExtension(fileName: string): boolean {
-    return stringContains(getBaseFileName(fileName), ".");
+    return getBaseFileName(fileName).includes(".");
 }
 
 /** @internal */
@@ -524,7 +523,7 @@ export function getPathFromPathComponents<T extends string>(pathComponents: read
  * @internal
  */
 export function normalizeSlashes(path: string): string {
-    return path.indexOf("\\") !== -1
+    return path.includes("\\")
         ? path.replace(backslashRegExp, directorySeparator)
         : path;
 }

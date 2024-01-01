@@ -2,7 +2,9 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "types": [
-            "node", "mocha", "chai"
+            "node",
+            "mocha",
+            "chai"
         ]
     },
     "references": [
@@ -13,7 +15,7 @@
         { "path": "../server" },
         { "path": "../typingsInstallerCore" },
         { "path": "../deprecatedCompat" },
-        { "path": "../harness" },
+        { "path": "../harness" }
     ],
     "include": ["**/*"]
 }

@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionsCommentsClass.ts ===
 // /** This is class c2 without constructor*/
 // class c2 {

@@ -1,8 +1,9 @@
 import * as ts from "../../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     createSessionWithCustomEventHandler,
     openExternalProjectForSession,
     openFilesForSession,
@@ -65,7 +66,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 };
                 const configB: File = {
                     path: configBPath,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         extends: "../a/tsconfig.json",
                     }),
                 };
@@ -97,7 +98,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                     };
                     const aDTsMap: File = {
                         path: `/user/username/projects/a/a.d.ts.map`,
-                        content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`,
+                        content: jsonToReadableText({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["./a.ts"], names: [], mappings: "AAAA,qBAAa,CAAC;CAAI" }),
                     };
                     const bTs: File = {
                         path: bTsPath,
@@ -105,7 +106,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                     };
                     const configB: File = {
                         path: configBPath,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             ...(disableSourceOfProjectReferenceRedirect && {
                                 compilerOptions: {
                                     disableSourceOfProjectReferenceRedirect,
@@ -175,10 +176,6 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
         });
     }
 
-    verifyProjectLoadingStartAndFinish("when using event handler", host => createSessionWithCustomEventHandler(host));
-    verifyProjectLoadingStartAndFinish("when using default event handler", host =>
-        createSession(
-            host,
-            { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) },
-        ));
+    verifyProjectLoadingStartAndFinish("when using event handler", createSessionWithCustomEventHandler);
+    verifyProjectLoadingStartAndFinish("when using default event handler", host => new TestSession(host));
 });

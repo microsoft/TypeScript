@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/enums/enumErrorOnConstantBindingWithInitializer.ts] ////
+
+=== enumErrorOnConstantBindingWithInitializer.ts ===
+type Thing = {
+>Thing : Symbol(Thing, Decl(enumErrorOnConstantBindingWithInitializer.ts, 0, 0))
+
+  value?: string | number;
+>value : Symbol(value, Decl(enumErrorOnConstantBindingWithInitializer.ts, 0, 14))
+
+};
+
+declare const thing: Thing;
+>thing : Symbol(thing, Decl(enumErrorOnConstantBindingWithInitializer.ts, 4, 13))
+>Thing : Symbol(Thing, Decl(enumErrorOnConstantBindingWithInitializer.ts, 0, 0))
+
+const { value = "123" } = thing;
+>value : Symbol(value, Decl(enumErrorOnConstantBindingWithInitializer.ts, 5, 7))
+>thing : Symbol(thing, Decl(enumErrorOnConstantBindingWithInitializer.ts, 4, 13))
+
+enum E {
+>E : Symbol(E, Decl(enumErrorOnConstantBindingWithInitializer.ts, 5, 32))
+
+  test = value,
+>test : Symbol(E.test, Decl(enumErrorOnConstantBindingWithInitializer.ts, 7, 8))
+>value : Symbol(value, Decl(enumErrorOnConstantBindingWithInitializer.ts, 5, 7))
+}
+

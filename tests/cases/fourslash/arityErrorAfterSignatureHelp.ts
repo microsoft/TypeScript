@@ -3,9 +3,9 @@
 ////
 //// declare function f(x: string, y: number): any;
 ////
-//// /*1*/f(/*2*/)/*3*/
+//// /*1*/f/*2*/(/*3*/)
 
-goTo.marker("2");
+goTo.marker("3");
 verify.signatureHelp({
     triggerReason: {
         kind: "invoked"
@@ -19,4 +19,4 @@ verify.signatureHelp({
     }
 })
 verify.not.codeFixAvailable() // trigger typecheck
-verify.errorExistsBetweenMarkers("1", "3");
+verify.errorExistsBetweenMarkers("1", "2");

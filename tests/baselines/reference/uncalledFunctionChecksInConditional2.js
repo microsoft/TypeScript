@@ -61,6 +61,18 @@ declare let inBrowser: boolean;
   }
 };
 
+let _isMobile: boolean;
+function isMobile() {
+  if (_isMobile === undefined) {
+    const isMobileMatch =
+      typeof window !== 'undefined' &&
+      window.matchMedia && // no error
+      window.matchMedia('(max-device-width: 680px)');
+    _isMobile = isMobileMatch && isMobileMatch.matches;
+  }
+  return _isMobile;
+}
+
 
 //// [uncalledFunctionChecksInConditional2.js]
 var _a;
@@ -109,3 +121,13 @@ var _a;
     }
 }
 ;
+var _isMobile;
+function isMobile() {
+    if (_isMobile === undefined) {
+        var isMobileMatch = typeof window !== 'undefined' &&
+            window.matchMedia && // no error
+            window.matchMedia('(max-device-width: 680px)');
+        _isMobile = isMobileMatch && isMobileMatch.matches;
+    }
+    return _isMobile;
+}
