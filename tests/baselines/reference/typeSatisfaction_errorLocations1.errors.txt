@@ -23,9 +23,12 @@ typeSatisfaction_errorLocations1.ts(31,20): error TS1360: Type 'readonly [10, "2
   The type 'readonly [10, "20"]' is 'readonly' and cannot be assigned to the mutable type 'number[]'.
 typeSatisfaction_errorLocations1.ts(34,9): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 typeSatisfaction_errorLocations1.ts(36,9): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+typeSatisfaction_errorLocations1.ts(39,3): error TS2322: Type 'string' is not assignable to type 'number'.
+typeSatisfaction_errorLocations1.ts(43,3): error TS2322: Type 'string' is not assignable to type 'number'.
+typeSatisfaction_errorLocations1.ts(43,16): error TS1360: Type 'string' does not satisfy the expected type 'number'.
 
 
-==== typeSatisfaction_errorLocations1.ts (16 errors) ====
+==== typeSatisfaction_errorLocations1.ts (19 errors) ====
     const obj1 = { a: 1 };
     
     const fn1 = (s: { a: true }) => {};
@@ -107,4 +110,18 @@ typeSatisfaction_errorLocations1.ts(36,9): error TS2345: Argument of type 'strin
     fn4(10, ...(tuple3 satisfies readonly string[]));
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    
+    function fn5(): number {
+      return "foo" satisfies unknown;
+      ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    }
+    
+    function fn6(): number {
+      return "foo" satisfies number;
+      ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+                   ~~~~~~~~~
+!!! error TS1360: Type 'string' does not satisfy the expected type 'number'.
+    }
     

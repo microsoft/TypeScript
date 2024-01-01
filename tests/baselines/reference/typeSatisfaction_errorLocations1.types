@@ -180,3 +180,19 @@ fn4(10, ...(tuple3 satisfies readonly string[]));
 >tuple3 satisfies readonly string[] : readonly ["10", "20"]
 >tuple3 : readonly ["10", "20"]
 
+function fn5(): number {
+>fn5 : () => number
+
+  return "foo" satisfies unknown;
+>"foo" satisfies unknown : "foo"
+>"foo" : "foo"
+}
+
+function fn6(): number {
+>fn6 : () => number
+
+  return "foo" satisfies number;
+>"foo" satisfies number : "foo"
+>"foo" : "foo"
+}
+

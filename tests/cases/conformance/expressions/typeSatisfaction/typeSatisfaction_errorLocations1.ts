@@ -37,3 +37,11 @@ declare function fn4(...args: number[]): void;
 fn4(10, ...(["10", "20"] satisfies readonly string[]));
 const tuple3 = ["10", "20"] as const;
 fn4(10, ...(tuple3 satisfies readonly string[]));
+
+function fn5(): number {
+  return "foo" satisfies unknown;
+}
+
+function fn6(): number {
+  return "foo" satisfies number;
+}

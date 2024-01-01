@@ -106,3 +106,15 @@ fn4(10, ...(tuple3 satisfies readonly string[]));
 >fn4 : Symbol(fn4, Decl(typeSatisfaction_errorLocations1.ts, 30, 40))
 >tuple3 : Symbol(tuple3, Decl(typeSatisfaction_errorLocations1.ts, 34, 5))
 
+function fn5(): number {
+>fn5 : Symbol(fn5, Decl(typeSatisfaction_errorLocations1.ts, 35, 49))
+
+  return "foo" satisfies unknown;
+}
+
+function fn6(): number {
+>fn6 : Symbol(fn6, Decl(typeSatisfaction_errorLocations1.ts, 39, 1))
+
+  return "foo" satisfies number;
+}
+
