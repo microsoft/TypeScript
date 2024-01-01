@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/types/conditional/inferTypesBuiltinHelpers2.ts] ////
+
+=== inferTypesBuiltinHelpers2.ts ===
+// https://github.com/microsoft/TypeScript/pull/55714#issuecomment-1730223364
+
+type Test = Record<string, unknown>
+>Test : { [x: string]: unknown; }
+
+type Foo<D extends Test> = {
+>Foo : Foo<D>
+
+  [P in keyof Test]?: "whatever" extends D ? 1 : 0
+};
+
+type T0 = ReturnType<<D extends Test>(t: D) => Foo<D>>
+>T0 : Foo<Test>
+>t : D
+

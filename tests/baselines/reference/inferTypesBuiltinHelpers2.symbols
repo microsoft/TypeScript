@@ -1,0 +1,31 @@
+//// [tests/cases/conformance/types/conditional/inferTypesBuiltinHelpers2.ts] ////
+
+=== inferTypesBuiltinHelpers2.ts ===
+// https://github.com/microsoft/TypeScript/pull/55714#issuecomment-1730223364
+
+type Test = Record<string, unknown>
+>Test : Symbol(Test, Decl(inferTypesBuiltinHelpers2.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type Foo<D extends Test> = {
+>Foo : Symbol(Foo, Decl(inferTypesBuiltinHelpers2.ts, 2, 35))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers2.ts, 4, 9))
+>Test : Symbol(Test, Decl(inferTypesBuiltinHelpers2.ts, 0, 0))
+
+  [P in keyof Test]?: "whatever" extends D ? 1 : 0
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers2.ts, 5, 3))
+>Test : Symbol(Test, Decl(inferTypesBuiltinHelpers2.ts, 0, 0))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers2.ts, 4, 9))
+
+};
+
+type T0 = ReturnType<<D extends Test>(t: D) => Foo<D>>
+>T0 : Symbol(T0, Decl(inferTypesBuiltinHelpers2.ts, 6, 2))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers2.ts, 8, 22))
+>Test : Symbol(Test, Decl(inferTypesBuiltinHelpers2.ts, 0, 0))
+>t : Symbol(t, Decl(inferTypesBuiltinHelpers2.ts, 8, 38))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers2.ts, 8, 22))
+>Foo : Symbol(Foo, Decl(inferTypesBuiltinHelpers2.ts, 2, 35))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers2.ts, 8, 22))
+

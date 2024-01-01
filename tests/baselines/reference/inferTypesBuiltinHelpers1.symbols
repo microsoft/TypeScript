@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/types/conditional/inferTypesBuiltinHelpers1.ts] ////
+
+=== inferTypesBuiltinHelpers1.ts ===
+// https://github.com/microsoft/TypeScript/issues/55667
+type _1 = ReturnType<(...args: never) => 'foo'>;
+>_1 : Symbol(_1, Decl(inferTypesBuiltinHelpers1.ts, 0, 0))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(inferTypesBuiltinHelpers1.ts, 1, 22))
+
+type _2 = InstanceType<new (...args: never) => 'foo'>;
+>_2 : Symbol(_2, Decl(inferTypesBuiltinHelpers1.ts, 1, 48))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(inferTypesBuiltinHelpers1.ts, 2, 28))
+
+// https://github.com/microsoft/TypeScript/issues/56919
+type _3 = ReturnType<<T>(t: T) => keyof T>; 
+>_3 : Symbol(_3, Decl(inferTypesBuiltinHelpers1.ts, 2, 54))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers1.ts, 5, 22))
+>t : Symbol(t, Decl(inferTypesBuiltinHelpers1.ts, 5, 25))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers1.ts, 5, 22))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers1.ts, 5, 22))
+

@@ -1,0 +1,337 @@
+//// [tests/cases/conformance/types/conditional/inferTypesBuiltinHelpers3.ts] ////
+
+=== inferTypesBuiltinHelpers3.ts ===
+// https://github.com/microsoft/TypeScript/pull/55714#issuecomment-1715151081
+
+type IfAny<T, Y, N> = 0 extends 1 & T ? Y : N;
+>IfAny : Symbol(IfAny, Decl(inferTypesBuiltinHelpers3.ts, 0, 0))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 2, 11))
+>Y : Symbol(Y, Decl(inferTypesBuiltinHelpers3.ts, 2, 13))
+>N : Symbol(N, Decl(inferTypesBuiltinHelpers3.ts, 2, 16))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 2, 11))
+>Y : Symbol(Y, Decl(inferTypesBuiltinHelpers3.ts, 2, 13))
+>N : Symbol(N, Decl(inferTypesBuiltinHelpers3.ts, 2, 16))
+
+type Data = Record<string, unknown>;
+>Data : Symbol(Data, Decl(inferTypesBuiltinHelpers3.ts, 2, 46))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+type DefaultFactory<T> = (props: Data) => T | null | undefined;
+>DefaultFactory : Symbol(DefaultFactory, Decl(inferTypesBuiltinHelpers3.ts, 3, 36))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 4, 20))
+>props : Symbol(props, Decl(inferTypesBuiltinHelpers3.ts, 4, 26))
+>Data : Symbol(Data, Decl(inferTypesBuiltinHelpers3.ts, 2, 46))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 4, 20))
+
+type ComponentObjectPropsOptions<P = Data> = {
+>ComponentObjectPropsOptions : Symbol(ComponentObjectPropsOptions, Decl(inferTypesBuiltinHelpers3.ts, 4, 63))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 5, 33))
+>Data : Symbol(Data, Decl(inferTypesBuiltinHelpers3.ts, 2, 46))
+
+  [K in keyof P]: Prop<P[K]> | null;
+>K : Symbol(K, Decl(inferTypesBuiltinHelpers3.ts, 6, 3))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 5, 33))
+>Prop : Symbol(Prop, Decl(inferTypesBuiltinHelpers3.ts, 31, 61))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 5, 33))
+>K : Symbol(K, Decl(inferTypesBuiltinHelpers3.ts, 6, 3))
+
+};
+interface PropOptions<T = any, D = T> {
+>PropOptions : Symbol(PropOptions, Decl(inferTypesBuiltinHelpers3.ts, 7, 2))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 8, 22))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 8, 30))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 8, 22))
+
+  type?: PropType<T> | true | null;
+>type : Symbol(PropOptions.type, Decl(inferTypesBuiltinHelpers3.ts, 8, 39))
+>PropType : Symbol(PropType, Decl(inferTypesBuiltinHelpers3.ts, 30, 18))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 8, 22))
+
+  required?: boolean;
+>required : Symbol(PropOptions.required, Decl(inferTypesBuiltinHelpers3.ts, 9, 35))
+
+  default?: D | DefaultFactory<D> | null | undefined | object;
+>default : Symbol(PropOptions.default, Decl(inferTypesBuiltinHelpers3.ts, 10, 21))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 8, 30))
+>DefaultFactory : Symbol(DefaultFactory, Decl(inferTypesBuiltinHelpers3.ts, 3, 36))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 8, 30))
+
+  validator?(value: unknown): boolean;
+>validator : Symbol(PropOptions.validator, Decl(inferTypesBuiltinHelpers3.ts, 11, 62))
+>value : Symbol(value, Decl(inferTypesBuiltinHelpers3.ts, 12, 13))
+}
+type PropMethod<T, TConstructor = any> = [T] extends [
+>PropMethod : Symbol(PropMethod, Decl(inferTypesBuiltinHelpers3.ts, 13, 1))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 14, 16))
+>TConstructor : Symbol(TConstructor, Decl(inferTypesBuiltinHelpers3.ts, 14, 18))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 14, 16))
+
+  ((...args: any) => any) | undefined,
+>args : Symbol(args, Decl(inferTypesBuiltinHelpers3.ts, 15, 4))
+
+]
+  ? {
+      new (): TConstructor;
+>TConstructor : Symbol(TConstructor, Decl(inferTypesBuiltinHelpers3.ts, 14, 18))
+
+      (): T;
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 14, 16))
+
+      readonly prototype: TConstructor;
+>prototype : Symbol(prototype, Decl(inferTypesBuiltinHelpers3.ts, 19, 12))
+>TConstructor : Symbol(TConstructor, Decl(inferTypesBuiltinHelpers3.ts, 14, 18))
+    }
+  : never;
+type PropConstructor<T = any> =
+>PropConstructor : Symbol(PropConstructor, Decl(inferTypesBuiltinHelpers3.ts, 22, 10))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 23, 21))
+
+  | {
+      new (...args: any[]): T & {};
+>args : Symbol(args, Decl(inferTypesBuiltinHelpers3.ts, 25, 11))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 23, 21))
+    }
+  | {
+      (): T;
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 23, 21))
+    }
+  | PropMethod<T>;
+>PropMethod : Symbol(PropMethod, Decl(inferTypesBuiltinHelpers3.ts, 13, 1))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 23, 21))
+
+type PropType<T> = PropConstructor<T> | PropConstructor<T>[];
+>PropType : Symbol(PropType, Decl(inferTypesBuiltinHelpers3.ts, 30, 18))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 31, 14))
+>PropConstructor : Symbol(PropConstructor, Decl(inferTypesBuiltinHelpers3.ts, 22, 10))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 31, 14))
+>PropConstructor : Symbol(PropConstructor, Decl(inferTypesBuiltinHelpers3.ts, 22, 10))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 31, 14))
+
+type Prop<T, D = T> = PropOptions<T, D> | PropType<T>;
+>Prop : Symbol(Prop, Decl(inferTypesBuiltinHelpers3.ts, 31, 61))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 32, 10))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 32, 12))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 32, 10))
+>PropOptions : Symbol(PropOptions, Decl(inferTypesBuiltinHelpers3.ts, 7, 2))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 32, 10))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 32, 12))
+>PropType : Symbol(PropType, Decl(inferTypesBuiltinHelpers3.ts, 30, 18))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 32, 10))
+
+type InferPropType<T> = [T] extends [null]
+>InferPropType : Symbol(InferPropType, Decl(inferTypesBuiltinHelpers3.ts, 32, 54))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 33, 19))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 33, 19))
+
+  ? any // null & true would fail to infer
+  : [T] extends [{ type: null | true }]
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 33, 19))
+>type : Symbol(type, Decl(inferTypesBuiltinHelpers3.ts, 35, 18))
+
+  ? // As TS issue https://github.com/Microsoft/TypeScript/issues/14829
+    // somehow `ObjectConstructor` when inferred from { (): T } becomes `any`
+    // `BooleanConstructor` when inferred from PropConstructor(with PropMethod) becomes `Boolean`
+    any
+  : [T] extends [ObjectConstructor | { type: ObjectConstructor }]
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 33, 19))
+>ObjectConstructor : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+>type : Symbol(type, Decl(inferTypesBuiltinHelpers3.ts, 40, 38))
+>ObjectConstructor : Symbol(ObjectConstructor, Decl(lib.es5.d.ts, --, --))
+
+  ? Record<string, any>
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  : [T] extends [BooleanConstructor | { type: BooleanConstructor }]
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 33, 19))
+>BooleanConstructor : Symbol(BooleanConstructor, Decl(lib.es5.d.ts, --, --))
+>type : Symbol(type, Decl(inferTypesBuiltinHelpers3.ts, 42, 39))
+>BooleanConstructor : Symbol(BooleanConstructor, Decl(lib.es5.d.ts, --, --))
+
+  ? boolean
+  : [T] extends [DateConstructor | { type: DateConstructor }]
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 33, 19))
+>DateConstructor : Symbol(DateConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>type : Symbol(type, Decl(inferTypesBuiltinHelpers3.ts, 44, 36))
+>DateConstructor : Symbol(DateConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  ? Date
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  : [T] extends [(infer U)[] | { type: (infer U)[] }]
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 33, 19))
+>U : Symbol(U, Decl(inferTypesBuiltinHelpers3.ts, 46, 23), Decl(inferTypesBuiltinHelpers3.ts, 46, 45))
+>type : Symbol(type, Decl(inferTypesBuiltinHelpers3.ts, 46, 32))
+>U : Symbol(U, Decl(inferTypesBuiltinHelpers3.ts, 46, 23), Decl(inferTypesBuiltinHelpers3.ts, 46, 45))
+
+  ? U extends DateConstructor
+>U : Symbol(U, Decl(inferTypesBuiltinHelpers3.ts, 46, 23), Decl(inferTypesBuiltinHelpers3.ts, 46, 45))
+>DateConstructor : Symbol(DateConstructor, Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    ? Date | InferPropType<U>
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>InferPropType : Symbol(InferPropType, Decl(inferTypesBuiltinHelpers3.ts, 32, 54))
+>U : Symbol(U, Decl(inferTypesBuiltinHelpers3.ts, 46, 23), Decl(inferTypesBuiltinHelpers3.ts, 46, 45))
+
+    : InferPropType<U>
+>InferPropType : Symbol(InferPropType, Decl(inferTypesBuiltinHelpers3.ts, 32, 54))
+>U : Symbol(U, Decl(inferTypesBuiltinHelpers3.ts, 46, 23), Decl(inferTypesBuiltinHelpers3.ts, 46, 45))
+
+  : [T] extends [Prop<infer V, infer D>]
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 33, 19))
+>Prop : Symbol(Prop, Decl(inferTypesBuiltinHelpers3.ts, 31, 61))
+>V : Symbol(V, Decl(inferTypesBuiltinHelpers3.ts, 50, 27))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 50, 36))
+
+  ? unknown extends V
+>V : Symbol(V, Decl(inferTypesBuiltinHelpers3.ts, 50, 27))
+
+    ? IfAny<V, V, D>
+>IfAny : Symbol(IfAny, Decl(inferTypesBuiltinHelpers3.ts, 0, 0))
+>V : Symbol(V, Decl(inferTypesBuiltinHelpers3.ts, 50, 27))
+>V : Symbol(V, Decl(inferTypesBuiltinHelpers3.ts, 50, 27))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 50, 36))
+
+    : V
+>V : Symbol(V, Decl(inferTypesBuiltinHelpers3.ts, 50, 27))
+
+  : T;
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 33, 19))
+
+type PartialKeys<T> = { [P in keyof T]?: unknown };
+>PartialKeys : Symbol(PartialKeys, Decl(inferTypesBuiltinHelpers3.ts, 54, 6))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 56, 17))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 56, 25))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 56, 17))
+
+type AppendDefault<
+>AppendDefault : Symbol(AppendDefault, Decl(inferTypesBuiltinHelpers3.ts, 56, 51))
+
+  T extends ComponentObjectPropsOptions,
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+>ComponentObjectPropsOptions : Symbol(ComponentObjectPropsOptions, Decl(inferTypesBuiltinHelpers3.ts, 4, 63))
+
+  D extends PartialKeys<T>,
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 59, 40))
+>PartialKeys : Symbol(PartialKeys, Decl(inferTypesBuiltinHelpers3.ts, 54, 6))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+
+> = {
+  [P in keyof T]-?: unknown extends D[P]
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 59, 40))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+
+    ? T[P]
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+
+    : T[P] extends Record<string, unknown>
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+    ? Omit<T[P], "type" | "default"> & {
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+
+        type: PropType<MergeDefault<T[P], D[P]>>;
+>type : Symbol(type, Decl(inferTypesBuiltinHelpers3.ts, 65, 40))
+>PropType : Symbol(PropType, Decl(inferTypesBuiltinHelpers3.ts, 30, 18))
+>MergeDefault : Symbol(MergeDefault, Decl(inferTypesBuiltinHelpers3.ts, 73, 2))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 59, 40))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+
+        default: MergeDefault<T[P], D[P]>;
+>default : Symbol(default, Decl(inferTypesBuiltinHelpers3.ts, 66, 49))
+>MergeDefault : Symbol(MergeDefault, Decl(inferTypesBuiltinHelpers3.ts, 73, 2))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 59, 40))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+      }
+    : {
+        type: PropType<MergeDefault<T[P], D[P]>>;
+>type : Symbol(type, Decl(inferTypesBuiltinHelpers3.ts, 69, 7))
+>PropType : Symbol(PropType, Decl(inferTypesBuiltinHelpers3.ts, 30, 18))
+>MergeDefault : Symbol(MergeDefault, Decl(inferTypesBuiltinHelpers3.ts, 73, 2))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 59, 40))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+
+        default: MergeDefault<T[P], D[P]>;
+>default : Symbol(default, Decl(inferTypesBuiltinHelpers3.ts, 70, 49))
+>MergeDefault : Symbol(MergeDefault, Decl(inferTypesBuiltinHelpers3.ts, 73, 2))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 58, 19))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 59, 40))
+>P : Symbol(P, Decl(inferTypesBuiltinHelpers3.ts, 62, 3))
+
+      };
+};
+
+type MergeDefault<T, D> = unknown extends D
+>MergeDefault : Symbol(MergeDefault, Decl(inferTypesBuiltinHelpers3.ts, 73, 2))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 75, 18))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 75, 20))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 75, 20))
+
+  ? InferPropType<T>
+>InferPropType : Symbol(InferPropType, Decl(inferTypesBuiltinHelpers3.ts, 32, 54))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 75, 18))
+
+  : NonNullable<InferPropType<T>> | D;
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>InferPropType : Symbol(InferPropType, Decl(inferTypesBuiltinHelpers3.ts, 32, 54))
+>T : Symbol(T, Decl(inferTypesBuiltinHelpers3.ts, 75, 18))
+>D : Symbol(D, Decl(inferTypesBuiltinHelpers3.ts, 75, 20))
+
+declare const makeVSelectionControlProps: <
+>makeVSelectionControlProps : Symbol(makeVSelectionControlProps, Decl(inferTypesBuiltinHelpers3.ts, 79, 13))
+
+  Defaults extends PartialKeys<{
+>Defaults : Symbol(Defaults, Decl(inferTypesBuiltinHelpers3.ts, 79, 43))
+>PartialKeys : Symbol(PartialKeys, Decl(inferTypesBuiltinHelpers3.ts, 54, 6))
+
+    trueValue: null;
+>trueValue : Symbol(trueValue, Decl(inferTypesBuiltinHelpers3.ts, 80, 32))
+
+    falseValue: null;
+>falseValue : Symbol(falseValue, Decl(inferTypesBuiltinHelpers3.ts, 81, 20))
+
+    value: null;
+>value : Symbol(value, Decl(inferTypesBuiltinHelpers3.ts, 82, 21))
+
+  }> = {},
+>(
+  defaults?: Defaults | undefined,
+>defaults : Symbol(defaults, Decl(inferTypesBuiltinHelpers3.ts, 85, 2))
+>Defaults : Symbol(Defaults, Decl(inferTypesBuiltinHelpers3.ts, 79, 43))
+
+) => AppendDefault<
+>AppendDefault : Symbol(AppendDefault, Decl(inferTypesBuiltinHelpers3.ts, 56, 51))
+  {
+    trueValue: null;
+>trueValue : Symbol(trueValue, Decl(inferTypesBuiltinHelpers3.ts, 88, 3))
+
+    falseValue: null;
+>falseValue : Symbol(falseValue, Decl(inferTypesBuiltinHelpers3.ts, 89, 20))
+
+    value: null;
+>value : Symbol(value, Decl(inferTypesBuiltinHelpers3.ts, 90, 21))
+
+  },
+  Defaults
+>Defaults : Symbol(Defaults, Decl(inferTypesBuiltinHelpers3.ts, 79, 43))
+
+>;
+
+type Test1 = ReturnType<typeof makeVSelectionControlProps>;
+>Test1 : Symbol(Test1, Decl(inferTypesBuiltinHelpers3.ts, 94, 2))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>makeVSelectionControlProps : Symbol(makeVSelectionControlProps, Decl(inferTypesBuiltinHelpers3.ts, 79, 13))
+
