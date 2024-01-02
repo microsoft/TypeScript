@@ -87,8 +87,7 @@ function createNodeIO(): IO {
     function listFiles(path: string, spec: RegExp, options: { recursive?: boolean; } = {}) {
         function filesInFolder(folder: string): string[] {
             let paths: string[] = [];
-            const dir = fs.opendirSync(folder);
-            for (let entry = dir.readSync(); entry; entry = dir.readSync()) {
+            for (const entry of fs.readdirSync(folder, { withFileTypes: true })) {
                 const pathToFile = pathModule.join(folder, entry.name);
 
                 if (entry.isSymbolicLink() && !fs.existsSync(pathToFile)) continue; // ignore invalid symlinks
@@ -100,7 +99,6 @@ function createNodeIO(): IO {
                     paths.push(pathToFile);
                 }
             }
-            dir.closeSync();
             return paths;
         }
 
