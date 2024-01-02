@@ -7,7 +7,6 @@ import {
     createPrinter,
     createSourceMapGenerator,
     createTextWriter,
-    createTransformationContext,
     Debug,
     Diagnostic,
     EmitHost,
@@ -20,8 +19,10 @@ import {
     getRelativePathToDirectoryOrUrl,
     getRootLength,
     getSourceFilePathInNewDir,
+    IsolatedTransformationContext,
     normalizePath,
     normalizeSlashes,
+    nullTransformationContext,
     PrinterOptions,
     SourceFile,
     SourceMapGenerator,
@@ -47,7 +48,13 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
     };
     const emitResolver = createEmitDeclarationResolver(sourceFile);
     const diagnostics: Diagnostic[] = [];
-    const transformationContext = createTransformationContext(TransformationContextKind.IsolatedContext, compilerOptions, diagnostics, emitResolver);
+    const transformationContext: IsolatedTransformationContext = {
+        ...nullTransformationContext,
+        kind: TransformationContextKind.IsolatedContext,
+        getCompilerOptions: () => compilerOptions,
+        addDiagnostic: diag => diagnostics.push(diag),
+        getEmitResolver: () => emitResolver,
+    };
     const transformer = transformDeclarations(transformationContext);
     const result = transformer(sourceFile);
 

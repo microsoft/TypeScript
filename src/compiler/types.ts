@@ -5696,7 +5696,7 @@ export interface CoreEmitResolver {
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     tryFindAmbientModule(moduleReferenceExpression: Expression): Symbol | undefined;
-    getPropertiesOfContainerFunction(node: FunctionDeclaration | VariableDeclaration): Symbol[]
+    getPropertiesOfContainerFunction(node: FunctionDeclaration | VariableDeclaration): Symbol[];
 }
 /** @internal */
 export interface EmitResolver extends CoreEmitResolver {
@@ -9167,6 +9167,7 @@ export const enum LexicalEnvironmentFlags {
     VariablesHoistedInParameters = 1 << 1, // a temp variable was hoisted while visiting a parameter list
 }
 
+/** @internal */
 export const enum TransformationContextKind {
     FullContext = 0,
     IsolatedContext = 1,
@@ -9216,7 +9217,7 @@ export interface CoreTransformationContext {
 }
 
 export interface TransformationContext extends CoreTransformationContext {
-    kind: TransformationContextKind.FullContext;
+    /** @internal */ kind: TransformationContextKind.FullContext;
     /** @internal */ getEmitResolver(): EmitResolver;
     /** @internal */ getEmitHost(): EmitHost;
     /** @internal */ getEmitHelperFactory(): EmitHelperFactory;

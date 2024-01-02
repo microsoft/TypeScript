@@ -4,13 +4,11 @@ import {
     Bundle,
     chainBundle,
     CompilerOptions,
-    CoreEmitResolver,
     createEmitHelperFactory,
     CustomTransformer,
     CustomTransformerFactory,
     CustomTransformers,
     Debug,
-    Diagnostic,
     DiagnosticWithLocation,
     disposeEmitNodes,
     EmitFlags,
@@ -32,7 +30,6 @@ import {
     getUseDefineForClassFields,
     Identifier,
     isBundle,
-    IsolatedTransformationContext,
     isSourceFile,
     LexicalEnvironmentFlags,
     map,
@@ -42,7 +39,6 @@ import {
     NodeFactory,
     NodeFlags,
     noop,
-    notImplemented,
     NullTransformationContext,
     returnUndefined,
     ScriptTarget,
@@ -668,51 +664,22 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         }
     }
 }
+
 /** @internal */
-export function createTransformationContext(kind: TransformationContextKind.NullContext): NullTransformationContext;
-/** @internal */
-export function createTransformationContext(
-    kind: TransformationContextKind.IsolatedContext,
-    options: CompilerOptions,
-    diagnostics: Diagnostic[],
-    resolver: CoreEmitResolver,
-): IsolatedTransformationContext;
-export function createTransformationContext(
-    kind: TransformationContextKind.IsolatedContext | TransformationContextKind.NullContext,
-    options: CompilerOptions = {},
-    diagnostics?: Diagnostic[],
-    resolver?: EmitResolver | CoreEmitResolver,
-    host?: EmitHost,
-): NullTransformationContext | IsolatedTransformationContext | TransformationContext {
-    return {
-        kind,
-        factory: factory, // eslint-disable-line object-shorthand
-        getCompilerOptions: () => options,
-        getEmitResolver: !resolver ? notImplemented : () => resolver,
-        getEmitHost: !host ? notImplemented : () => host,
-        getEmitHelperFactory: notImplemented,
-        startLexicalEnvironment: noop,
-        resumeLexicalEnvironment: noop,
-        suspendLexicalEnvironment: noop,
-        endLexicalEnvironment: returnUndefined,
-        setLexicalEnvironmentFlags: noop,
-        getLexicalEnvironmentFlags: () => 0,
-        hoistVariableDeclaration: noop,
-        hoistFunctionDeclaration: noop,
-        addInitializationStatement: noop,
-        startBlockScope: noop,
-        endBlockScope: returnUndefined,
-        addBlockScopedVariable: noop,
-        requestEmitHelper: noop,
-        readEmitHelpers: notImplemented,
-        enableSubstitution: noop,
-        enableEmitNotification: noop,
-        isSubstitutionEnabled: notImplemented,
-        isEmitNotificationEnabled: notImplemented,
-        onSubstituteNode: noEmitSubstitution,
-        onEmitNode: noEmitNotification,
-        addDiagnostic: !diagnostics ? noop : (diag: Diagnostic) => diagnostics.push(diag),
-    };
-}
-/** @internal */
-export const nullTransformationContext: NullTransformationContext = createTransformationContext(TransformationContextKind.NullContext);
+export const nullTransformationContext: NullTransformationContext = {
+    kind: TransformationContextKind.NullContext,
+    factory: factory, // eslint-disable-line object-shorthand
+    getCompilerOptions: () => ({}),
+    startLexicalEnvironment: noop,
+    resumeLexicalEnvironment: noop,
+    suspendLexicalEnvironment: noop,
+    endLexicalEnvironment: returnUndefined,
+    setLexicalEnvironmentFlags: noop,
+    getLexicalEnvironmentFlags: () => 0,
+    hoistVariableDeclaration: noop,
+    hoistFunctionDeclaration: noop,
+    addInitializationStatement: noop,
+    startBlockScope: noop,
+    endBlockScope: returnUndefined,
+    addBlockScopedVariable: noop,
+};
