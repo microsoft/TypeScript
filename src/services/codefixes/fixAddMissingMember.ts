@@ -72,6 +72,7 @@ import {
     isTypeLiteralNode,
     JsxOpeningLikeElement,
     LanguageVariant,
+    lastOrUndefined,
     length,
     map,
     MethodDeclaration,
@@ -584,22 +585,15 @@ function addEnumMemberDeclaration(changes: textChanges.ChangeTracker, checker: T
         const type = checker.getTypeAtLocation(member);
         return !!(type && type.flags & TypeFlags.StringLike);
     });
-
+    const sourceFile = parentDeclaration.getSourceFile();
     const enumMember = factory.createEnumMember(token, hasStringInitializer ? factory.createStringLiteral(token.text) : undefined);
-    changes.replaceNode(
-        parentDeclaration.getSourceFile(),
-        parentDeclaration,
-        factory.updateEnumDeclaration(
-            parentDeclaration,
-            parentDeclaration.modifiers,
-            parentDeclaration.name,
-            concatenate(parentDeclaration.members, singleElementArray(enumMember)),
-        ),
-        {
-            leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
-        },
-    );
+    const last = lastOrUndefined(parentDeclaration.members);
+    if (last) {
+        changes.insertNodeInListAfter(sourceFile, last, enumMember, parentDeclaration.members);
+    }
+    else {
+        changes.insertMemberAtStart(sourceFile, parentDeclaration, enumMember);
+    }
 }
 
 function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo | SignatureInfo) {
