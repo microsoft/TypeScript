@@ -14,7 +14,7 @@ typeSatisfaction_errorLocations1.ts(16,5): error TS2345: Argument of type '[{ a:
   'T' could be instantiated with an arbitrary type which could be unrelated to '[{ a: boolean; }]'.
 typeSatisfaction_errorLocations1.ts(18,5): error TS2345: Argument of type '[{ a: true; }]' is not assignable to parameter of type 'T'.
   '[{ a: true; }]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ a: true; }[]'.
-typeSatisfaction_errorLocations1.ts(21,47): error TS2322: Type 'number' is not assignable to type 'boolean'.
+typeSatisfaction_errorLocations1.ts(21,43): error TS2322: Type 'number' is not assignable to type 'boolean'.
 typeSatisfaction_errorLocations1.ts(23,23): error TS2322: Type 'boolean' is not assignable to type 'number'.
 typeSatisfaction_errorLocations1.ts(25,20): error TS1360: Type 'number' does not satisfy the expected type 'boolean'.
 typeSatisfaction_errorLocations1.ts(26,7): error TS2322: Type '1' is not assignable to type 'true'.
@@ -83,7 +83,7 @@ typeSatisfaction_errorLocations1.ts(48,21): error TS2322: Type '{ a: number; }' 
     }
     
     const tuple1: [boolean, boolean] = [true, 100 satisfies unknown];
-                                                  ~~~~~~~~~
+                                              ~~~
 !!! error TS2322: Type 'number' is not assignable to type 'boolean'.
     
     const obj2 = { a: 10, b: true } satisfies Record<string, number>;

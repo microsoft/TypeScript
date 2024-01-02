@@ -20543,7 +20543,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const elem = node.elements[i];
             if (isOmittedExpression(elem)) continue;
             const nameType = getNumberLiteralType(i);
-            yield { errorNode: elem, innerExpression: elem, nameType };
+            const checkNode = getEffectiveCheckNode(elem);
+            yield { errorNode: checkNode, innerExpression: checkNode, nameType };
         }
     }
 
