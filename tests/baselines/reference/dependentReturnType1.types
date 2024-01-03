@@ -1184,3 +1184,105 @@ function indexedCComp2<T extends string | number>(x: T): CComp[T] {
     return 2; // Bad, unsafe
 >2 : 2
 }
+
+// From #33912
+abstract class Operation<T, R> {
+>Operation : Operation<T, R>
+
+    abstract perform(t: T): R;
+>perform : (t: T) => R
+>t : T
+}
+
+type ConditionalReturnType<T, R, EOp extends Operation<T, R> | undefined> =
+>ConditionalReturnType : ConditionalReturnType<T, R, EOp>
+
+    EOp extends Operation<T, R> ? R : EOp extends undefined ? T | R : T | R;
+
+class ConditionalOperation<T, R, EOp extends Operation<T, R> | undefined> extends Operation<T, ConditionalReturnType<T, R, EOp>> {
+>ConditionalOperation : ConditionalOperation<T, R, EOp>
+>Operation : Operation<T, ConditionalReturnType<T, R, EOp>>
+
+    constructor(
+        private predicate: (value: T) => boolean,
+>predicate : (value: T) => boolean
+>value : T
+
+        private thenOp: Operation<T, R>,
+>thenOp : Operation<T, R>
+
+        private elseOp?: EOp
+>elseOp : EOp | undefined
+
+    ) {
+        super();
+>super() : void
+>super : typeof Operation
+    }
+
+    perform(t: T): ConditionalReturnType<T, R, EOp> {
+>perform : (t: T) => ConditionalReturnType<T, R, EOp>
+>t : T
+
+        if (this.predicate(t)) {
+>this.predicate(t) : boolean
+>this.predicate : (value: T) => boolean
+>this : this
+>predicate : (value: T) => boolean
+>t : T
+
+            return this.thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
+>this.thenOp.perform(t) : R
+>this.thenOp.perform : (t: T) => R
+>this.thenOp : Operation<T, R>
+>this : this
+>thenOp : Operation<T, R>
+>perform : (t: T) => R
+>t : T
+
+        } else if (typeof this.elseOp !== 'undefined') {
+>typeof this.elseOp !== 'undefined' : boolean
+>typeof this.elseOp : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>this.elseOp : EOp | undefined
+>this : this
+>elseOp : EOp | undefined
+>'undefined' : "undefined"
+
+            return this.elseOp.perform(t); // Ok
+>this.elseOp.perform(t) : R
+>this.elseOp.perform : (t: T) => R
+>this.elseOp : Operation<T, R>
+>this : this
+>elseOp : Operation<T, R>
+>perform : (t: T) => R
+>t : T
+
+        } else {
+            return t; // Ok
+>t : T
+        }
+    }
+}
+
+// Optional tuple element
+function tupl<T extends true | false | undefined>(x: [string, some?: T]):
+>tupl : <T extends boolean | undefined>(x: [string, some?: T]) => T extends true ? 1 : T extends false | undefined ? 2 : 1 | 2
+>true : true
+>false : false
+>x : [string, some?: T | undefined]
+
+    T extends true ? 1 : T extends false | undefined ? 2 : 1 | 2 {
+>true : true
+>false : false
+
+    if (x[1]) {
+>x[1] : T | undefined
+>x : [string, some?: T | undefined]
+>1 : 1
+
+        return 1;
+>1 : 1
+    }
+    return 2;
+>2 : 2
+}

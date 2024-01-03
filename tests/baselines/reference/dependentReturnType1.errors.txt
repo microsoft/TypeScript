@@ -38,9 +38,10 @@ dependentReturnType1.ts(364,5): error TS2322: Type '""' is not assignable to typ
 dependentReturnType1.ts(389,15): error TS2322: Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
 dependentReturnType1.ts(391,11): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
 dependentReturnType1.ts(433,13): error TS2322: Type '2' is not assignable to type '1'.
+dependentReturnType1.ts(463,13): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
 
 
-==== dependentReturnType1.ts (35 errors) ====
+==== dependentReturnType1.ts (36 errors) ====
     interface A {
         1: number;
         2: string;
@@ -557,4 +558,43 @@ dependentReturnType1.ts(433,13): error TS2322: Type '2' is not assignable to typ
     
     function indexedCComp2<T extends string | number>(x: T): CComp[T] {
         return 2; // Bad, unsafe
+    }
+    
+    // From #33912
+    abstract class Operation<T, R> {
+        abstract perform(t: T): R;
+    }
+    
+    type ConditionalReturnType<T, R, EOp extends Operation<T, R> | undefined> =
+        EOp extends Operation<T, R> ? R : EOp extends undefined ? T | R : T | R;
+    
+    class ConditionalOperation<T, R, EOp extends Operation<T, R> | undefined> extends Operation<T, ConditionalReturnType<T, R, EOp>> {
+        constructor(
+            private predicate: (value: T) => boolean,
+            private thenOp: Operation<T, R>,
+            private elseOp?: EOp
+        ) {
+            super();
+        }
+    
+        perform(t: T): ConditionalReturnType<T, R, EOp> {
+            if (this.predicate(t)) {
+                return this.thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
+                ~~~~~~
+!!! error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
+            } else if (typeof this.elseOp !== 'undefined') {
+                return this.elseOp.perform(t); // Ok
+            } else {
+                return t; // Ok
+            }
+        }
+    }
+    
+    // Optional tuple element
+    function tupl<T extends true | false | undefined>(x: [string, some?: T]):
+        T extends true ? 1 : T extends false | undefined ? 2 : 1 | 2 {
+        if (x[1]) {
+            return 1;
+        }
+        return 2;
     }

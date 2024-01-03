@@ -44243,15 +44243,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const references: QueryReferences = [];
         const nodeId = getNodeId(container);
         if (!queryTypeParameterReferencesCache.has(nodeId)) {
-            const flowNodes = collectFlowNodes(container);
+            const flowNodes = collectFlowNodes(container); // >> TODO: collectFlowNodes may have duplicates
             // >> TODO: this will cause us to possibly visit the same flow nodes more than once.
             // >> Dedupe work.
-            flowNodes.forEach(flowNode => visitFlowNode(flowNode, collect));
+            flowNodes.forEach(flowNode => visitFlowNode(flowNode, collectNode));
             queryTypeParameterReferencesCache.set(nodeId, references);
         }
         return queryTypeParameterReferencesCache.get(nodeId)!;
 
-        function collect(flow: FlowNode) {
+        function collectNode(flow: FlowNode) {
             const flags = flow.flags;
             // Based on `getTypeAtFlowX` functions.
             let node;

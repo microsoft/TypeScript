@@ -444,3 +444,40 @@ function indexedCComp<T extends string | number>(x: T): CComp[T] {
 function indexedCComp2<T extends string | number>(x: T): CComp[T] {
     return 2; // Bad, unsafe
 }
+
+// From #33912
+abstract class Operation<T, R> {
+    abstract perform(t: T): R;
+}
+
+type ConditionalReturnType<T, R, EOp extends Operation<T, R> | undefined> =
+    EOp extends Operation<T, R> ? R : EOp extends undefined ? T | R : T | R;
+
+class ConditionalOperation<T, R, EOp extends Operation<T, R> | undefined> extends Operation<T, ConditionalReturnType<T, R, EOp>> {
+    constructor(
+        private predicate: (value: T) => boolean,
+        private thenOp: Operation<T, R>,
+        private elseOp?: EOp
+    ) {
+        super();
+    }
+
+    perform(t: T): ConditionalReturnType<T, R, EOp> {
+        if (this.predicate(t)) {
+            return this.thenOp.perform(t); // Bad: this is assignable to all of the branches of the conditional, but we still can't return it
+        } else if (typeof this.elseOp !== 'undefined') {
+            return this.elseOp.perform(t); // Ok
+        } else {
+            return t; // Ok
+        }
+    }
+}
+
+// Optional tuple element
+function tupl<T extends true | false | undefined>(x: [string, some?: T]):
+    T extends true ? 1 : T extends false | undefined ? 2 : 1 | 2 {
+    if (x[1]) {
+        return 1;
+    }
+    return 2;
+}
