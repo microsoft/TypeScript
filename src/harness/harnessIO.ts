@@ -319,6 +319,7 @@ export namespace Compiler {
         libFiles?: string;
         noTypesAndSymbols?: boolean;
         forceDtsEmit?: boolean;
+        skipErrorComparison?: boolean;
     }
 
     // Additional options not already in ts.optionDeclarations
@@ -493,7 +494,7 @@ export namespace Compiler {
         { fileSystem, compilerOptions, programFileNames, symlinks, typeScriptVersion }: HarnessCompilerEnvironment,
     ): compiler.CompilationResult {
         const host = new fakes.CompilerHost(fileSystem, compilerOptions);
-        const result = compiler.compileFiles(host, programFileNames, compilerOptions, typeScriptVersion, compilerOptions.forceDtsEmit);
+        const result = compiler.compileFiles(host, programFileNames, compilerOptions, typeScriptVersion, compilerOptions.forceDtsEmit, compilerOptions.skipErrorComparison);
         result.symlinks = symlinks;
         return result;
     }
