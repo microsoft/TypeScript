@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/genericFunctionInference3.ts] ////
+
+=== genericFunctionInference3.ts ===
+// https://github.com/microsoft/TypeScript/issues/56931
+
+declare function defineComponent<Props extends Record<string, any>>(
+>defineComponent : <Props extends Record<string, any>>(setup: (props: Props) => void, options?: {    props?: (keyof Props)[];}) => (props: Props) => unknown
+
+  setup: (props: Props) => void,
+>setup : (props: Props) => void
+>props : Props
+
+  options?: {
+>options : { props?: (keyof Props)[] | undefined; } | undefined
+
+    props?: (keyof Props)[];
+>props : (keyof Props)[] | undefined
+
+  },
+): (props: Props) => unknown;
+>props : Props
+
+const res1 = defineComponent(
+>res1 : <T extends string>(props: { msg: T; }) => unknown
+>defineComponent(  <T extends string>(_props: { msg: T }) => {    return () => {};  }) : <T extends string>(props: { msg: T; }) => unknown
+>defineComponent : <Props extends Record<string, any>>(setup: (props: Props) => void, options?: { props?: (keyof Props)[] | undefined; } | undefined) => (props: Props) => unknown
+
+  <T extends string>(_props: { msg: T }) => {
+><T extends string>(_props: { msg: T }) => {    return () => {};  } : <T extends string>(_props: {    msg: T;}) => () => void
+>_props : { msg: T; }
+>msg : T
+
+    return () => {};
+>() => {} : () => void
+  }
+);
+
+const res2 = defineComponent(
+>res2 : <T extends string>(props: { msg: T; }) => unknown
+>defineComponent(  <T extends string>(_props: { msg: T }) => {    return () => {};  },  {    props: ["msg"],  },) : <T extends string>(props: { msg: T; }) => unknown
+>defineComponent : <Props extends Record<string, any>>(setup: (props: Props) => void, options?: { props?: (keyof Props)[] | undefined; } | undefined) => (props: Props) => unknown
+
+  <T extends string>(_props: { msg: T }) => {
+><T extends string>(_props: { msg: T }) => {    return () => {};  } : <T extends string>(_props: {    msg: T;}) => () => void
+>_props : { msg: T; }
+>msg : T
+
+    return () => {};
+>() => {} : () => void
+
+  },
+  {
+>{    props: ["msg"],  } : { props: "msg"[]; }
+
+    props: ["msg"],
+>props : "msg"[]
+>["msg"] : "msg"[]
+>"msg" : "msg"
+
+  },
+);
+
