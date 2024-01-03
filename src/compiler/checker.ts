@@ -253,7 +253,6 @@ import {
     getContainingClassExcludingClassDecorators,
     getContainingClassStaticBlock,
     getContainingFunction,
-    getContainingFunctionDeclaration,
     getContainingFunctionOrClassStaticBlock,
     getDeclarationModifierFlagsFromSymbol,
     getDeclarationOfKind,
@@ -476,7 +475,6 @@ import {
     isCallLikeOrFunctionLikeExpression,
     isCallOrNewExpression,
     isCallSignatureDeclaration,
-    isCatchClause,
     isCatchClauseVariableDeclarationOrBindingElement,
     isCheckJsEnabledForFile,
     isClassDeclaration,
@@ -27451,7 +27449,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.Identifier:
                 if (!isThisInTypeQuery(node)) {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    return isConstantVariable(symbol) || isParameterOrLetOrCatchVariable(symbol) && !isSymbolAssigned(symbol);
+                    return isConstantVariable(symbol) || isParameterOrMutableVariable(symbol) && !isSymbolAssigned(symbol);
                 }
                 break;
             case SyntaxKind.PropertyAccessExpression:
@@ -28734,7 +28732,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Return true if there are no assignments to the given symbol or if the given location
     // is past the last assignment to the symbol.
     function isPastLastAssignment(symbol: Symbol, location: Node | undefined) {
-        const parent = findAncestor(symbol.valueDeclaration, isAssignmentMarkingContainer);
+        const parent = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
         if (!parent) {
             return false;
         }
@@ -28763,11 +28761,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasParentWithAssignmentsMarked(node: Node) {
-        return !!findAncestor(node.parent, node => isAssignmentMarkingContainer(node) && !!(getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked));
+        return !!findAncestor(node.parent, node => isFunctionOrSourceFile(node) && !!(getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked));
     }
 
-    function isAssignmentMarkingContainer(node: Node) {
-        return isFunctionLikeDeclaration(node) || isBlock(node) || isSourceFile(node) || isForStatement(node) || isForInOrOfStatement(node) || isCatchClause(node);
+    function isFunctionOrSourceFile(node: Node) {
+        return isFunctionLikeDeclaration(node) || isSourceFile(node);
     }
 
     // For all assignments within the given root node, record the last assignment source position for all
@@ -28783,9 +28781,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.Identifier:
                     if (isAssignmentTarget(node)) {
                         const symbol = getResolvedSymbol(node as Identifier);
-                        if (isParameterOrLetOrCatchVariable(symbol) && symbol.lastAssignmentPos !== Number.MAX_VALUE) {
-                            const referencingFunction = getContainingFunctionDeclaration(node) || getSourceFileOfNode(node);
-                            const declaringFunction = getContainingFunctionDeclaration(symbol.valueDeclaration!) || getSourceFileOfNode(node);
+                        if (isParameterOrMutableVariable(symbol) && symbol.lastAssignmentPos !== Number.MAX_VALUE) {
+                            const referencingFunction = findAncestor(node, isFunctionOrSourceFile);
+                            const declaringFunction = findAncestor(symbol.valueDeclaration, isFunctionOrSourceFile);
                             symbol.lastAssignmentPos = referencingFunction === declaringFunction ? statementEnd ?? node.pos : Number.MAX_VALUE;
                         }
                     }
@@ -28822,10 +28820,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return symbol.flags & SymbolFlags.Variable && (getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Constant) !== 0;
     }
 
-    function isParameterOrLetOrCatchVariable(symbol: Symbol) {
+    function isParameterOrMutableVariable(symbol: Symbol) {
         const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
         return !!(declaration && (isParameter(declaration) ||
-            isVariableDeclaration(declaration) && (declaration.parent.kind === SyntaxKind.CatchClause || declaration.parent.flags & NodeFlags.Let)));
+            isVariableDeclaration(declaration) && (declaration.parent.kind === SyntaxKind.CatchClause || !(declaration.parent.flags & NodeFlags.Constant))));
     }
 
     function parameterInitializerContainsUndefined(declaration: ParameterDeclaration): boolean {
@@ -29184,7 +29182,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         while (
             flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
                 flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethodOrAccessor(flowContainer)) &&
-            (isConstantVariable(localOrExportSymbol) && type !== autoArrayType || (isParameterOrLetOrCatchVariable(localOrExportSymbol)) && isPastLastAssignment(localOrExportSymbol, node))
+            (isConstantVariable(localOrExportSymbol) && type !== autoArrayType || (isParameterOrMutableVariable(localOrExportSymbol)) && isPastLastAssignment(localOrExportSymbol, node))
         ) {
             flowContainer = getControlFlowContainer(flowContainer);
         }
