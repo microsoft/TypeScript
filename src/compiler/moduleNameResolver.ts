@@ -3,6 +3,7 @@ import {
     appendIfUnique,
     arrayIsEqualTo,
     changeAnyExtension,
+    changeFullExtension,
     CharacterCodes,
     combinePaths,
     CommandLineOption,
@@ -2290,9 +2291,7 @@ function loadEntrypointsFromExportMap(
                     extensionsToExtensionsArray(extensions),
                     /*excludes*/ undefined,
                     [
-                        isDeclarationFileName(target)
-                            ? changeAnyExtension(replaceFirstStar(target, "**/*"), ".*", supportedDeclarationExtensions, /*ignoreCase*/ true)
-                            : changeAnyExtension(replaceFirstStar(target, "**/*"), ".*"),
+                        changeFullExtension(replaceFirstStar(target, "**/*"), ".*"),
                     ],
                 ).forEach(entry => {
                     entrypoints = appendIfUnique(entrypoints, {
