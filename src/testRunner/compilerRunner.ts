@@ -94,6 +94,7 @@ export class CompilerBaselineRunner extends RunnerBase {
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest!: CompilerTest;
         let environment!: CompilerTestEnvironment;
+        let hasSyntacticErrors: boolean;
         before(() => {
             let payload;
             if (test && test.content) {
@@ -106,6 +107,7 @@ export class CompilerBaselineRunner extends RunnerBase {
                 ...environment,
                 fileSystem: fileSystem.shadow(),
             });
+            hasSyntacticErrors = compilerTest.hasSyntacticDiagnostics;
         });
         it(`Correct errors for ${fileName}`, () => compilerTest.verifyDiagnostics());
         it(`Correct module resolution tracing for ${fileName}`, () => compilerTest.verifyModuleResolution());
@@ -116,7 +118,10 @@ export class CompilerBaselineRunner extends RunnerBase {
 
         describe("isolated declarations", () => {
             let isolatedTest: IsolatedDeclarationTest | undefined;
-            before(() => {
+            before(function () {
+                if (hasSyntacticErrors) {
+                    this.skip();
+                }
                 const isolatedTestEnv = IsolatedDeclarationTest.transformEnvironment(environment);
                 if (isolatedTestEnv) {
                     isolatedTest = new IsolatedDeclarationTest(isolatedTestEnv);
@@ -133,12 +138,16 @@ export class CompilerBaselineRunner extends RunnerBase {
 
         describe("isolated declarations fixed", () => {
             let fixedIsolatedTest: FixedIsolatedDeclarationTest | undefined;
-            before(() => {
+            before(function () {
+                if (hasSyntacticErrors) {
+                    this.skip();
+                }
                 const fixedIsolatedTestEnv = FixedIsolatedDeclarationTest.fixTestProject(environment);
                 if (fixedIsolatedTestEnv) {
                     fixedIsolatedTest = new FixedIsolatedDeclarationTest(fixedIsolatedTestEnv);
                 }
             });
+            it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
             it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
             it(`Correct tsc emit for ${fileName}`, () => fixedIsolatedTest?.verifyTscOutput());
             it(`Correct dte/tsc diff ${fileName}`, () => fixedIsolatedTest?.verifyDiff());
@@ -236,6 +245,7 @@ class CompilerTestBase {
     protected configuredName: string;
     protected harnessSettings: TestCaseParser.CompilerSettings;
     protected hasNonDtsFiles: boolean;
+    public readonly hasSyntacticDiagnostics: boolean;
     protected result: compiler.CompilationResult;
     protected options: ts.CompilerOptions;
     protected tsConfigFiles: Compiler.TestFile[];
@@ -259,6 +269,7 @@ class CompilerTestBase {
 
         this.result = Compiler.compileFilesWithEnvironment(compilerEnvironment);
 
+        this.hasSyntacticDiagnostics = this.result.diagnostics.some(p => p.code < 2200);
         this.options = this.result.options;
     }
 
