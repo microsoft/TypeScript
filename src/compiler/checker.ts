@@ -44241,9 +44241,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const nodeId = getNodeId(container);
         if (!queryTypeParameterReferencesCache.has(nodeId)) {
             const flowNodes = collectFlowNodes(container); // >> TODO: collectFlowNodes may have duplicates
-            // >> TODO: this will cause us to possibly visit the same flow nodes more than once.
-            // >> Dedupe work.
-            flowNodes.forEach(flowNode => visitFlowNode(flowNode, collectNode));
+            visitFlowNodes(flowNodes, collectNode);
             queryTypeParameterReferencesCache.set(nodeId, references);
         }
         return queryTypeParameterReferencesCache.get(nodeId)!;
@@ -44431,18 +44429,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(flow.flags & (FlowFlags.Assignment | FlowFlags.Condition | FlowFlags.SwitchClause | FlowFlags.ArrayMutation | FlowFlags.Call | FlowFlags.ReduceLabel));
     }
 
-    function visitFlowNode(flow: FlowNode, visit: (n: FlowNode) => void): void {
-        visit(flow);
-        const flags = flow.flags;
-        if (flags & FlowFlags.Label) {
-            return (flow as FlowLabel).antecedents?.forEach(f => visitFlowNode(f, visit));
-        }
-        if (flags & FlowFlags.ReduceLabel) {
-            (flow as FlowReduceLabel).antecedents.forEach(f => visitFlowNode(f, visit));
-            // >> TODO: also visit flow.target?
-        }
-        if (hasFlowAntecedent(flow)) {
-            return visitFlowNode((flow as HasFlowAntecedent).antecedent, visit);
+    function visitFlowNodes(flowNodes: FlowNode[], visit: (n: FlowNode) => void): void {
+        const visited = new Set<number>();
+        flowNodes.forEach(visitFlowNode);
+        function visitFlowNode(flow: FlowNode): void {
+            const id = getFlowNodeId(flow);
+            if (visited.has(id)) return;
+            visited.add(id);
+
+            visit(flow);
+            const flags = flow.flags;
+            if (flags & FlowFlags.Label) {
+                return (flow as FlowLabel).antecedents?.forEach(visitFlowNode);
+            }
+            if (flags & FlowFlags.ReduceLabel) {
+                (flow as FlowReduceLabel).antecedents.forEach(visitFlowNode);
+                // >> TODO: also visit flow.target?
+            }
+            if (hasFlowAntecedent(flow)) {
+                return visitFlowNode((flow as HasFlowAntecedent).antecedent);
+            }
         }
     }
 
