@@ -4176,6 +4176,14 @@
         "category": "Error",
         "code": 4124
     },
+    "Each declaration of '{0}.{1}' differs in its value, where '{2}' was expected but '{3}' was given.": {
+        "category": "Error",
+        "code": 4125
+    },
+    "One value of '{0}.{1}' is the string '{2}', and the other is assumed to be an unknown numeric value.": {
+        "category": "Error",
+        "code": 4126
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
