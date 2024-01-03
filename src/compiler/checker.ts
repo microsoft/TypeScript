@@ -44158,15 +44158,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             getNodeLinks(narrowReference).resolvedSymbol = symbol;
                             setParent(narrowReference, narrowPosition.parent);
                             setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
-                            // >> TODO: get rid of this cast?
                             narrowReference.flowNode = narrowPosition.flowNode;
                             const exprType = getTypeOfExpression(narrowReference);
+                            // Try to detect if the type of the reference was not narrowed.
                             // >> TODO: is there a better way of detecting that narrowing will be useless?
-                            if (getConstraintOfTypeParameter(tp)) {
-                                const narrowableConstraintType = mapType(tp.constraint!, getBaseConstraintOrType);
-                                if (narrowableConstraintType === exprType) {
-                                    return undefined; // Don't narrow if narrowing didn't do anything but default to constraints
-                                }
+                            if (exprType === tp || exprType === mapType(tp, getBaseConstraintOrType)) {
+                                return undefined; // Don't narrow if narrowing didn't do anything but default to the type parameter or its constraint.
                             }
                             return [tp, exprType];
                         });
