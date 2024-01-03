@@ -38,5 +38,5 @@ var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same ty
 >o.key : string
 >o : { key: string; }
 >key : string
->enumValue : MyEnumType
+>enumValue : MyEnumType.foo
 
