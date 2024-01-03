@@ -39,6 +39,7 @@ import {
     NodeFactory,
     NodeFlags,
     noop,
+    notImplemented,
     NullTransformationContext,
     returnUndefined,
     ScriptTarget,
@@ -665,11 +666,15 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     }
 }
 
-/** @internal */
-export const nullTransformationContext: NullTransformationContext = {
+// NullTransformationContext does not have all members of TransformationContext and nullTransformationContext should only be used as a CoreTransformationContext
+// To ensure backward compatibility, nullTransformationContext will continue to have all members of TransformationContext (with unsupported methods throwing errors)
+const _nullTransformationContext: Omit<TransformationContext, 'kind'> & { kind: TransformationContextKind.NullContext } = {
     kind: TransformationContextKind.NullContext,
     factory: factory, // eslint-disable-line object-shorthand
     getCompilerOptions: () => ({}),
+    getEmitResolver: notImplemented,
+    getEmitHost: notImplemented,
+    getEmitHelperFactory: notImplemented,
     startLexicalEnvironment: noop,
     resumeLexicalEnvironment: noop,
     suspendLexicalEnvironment: noop,
@@ -682,4 +687,16 @@ export const nullTransformationContext: NullTransformationContext = {
     startBlockScope: noop,
     endBlockScope: returnUndefined,
     addBlockScopedVariable: noop,
+    requestEmitHelper: noop,
+    readEmitHelpers: notImplemented,
+    enableSubstitution: noop,
+    enableEmitNotification: noop,
+    isSubstitutionEnabled: notImplemented,
+    isEmitNotificationEnabled: notImplemented,
+    onSubstituteNode: noEmitSubstitution,
+    onEmitNode: noEmitNotification,
+    addDiagnostic: noop,
 };
+
+/** @internal */
+export const nullTransformationContext: NullTransformationContext = _nullTransformationContext
