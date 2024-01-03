@@ -883,5 +883,17 @@
     "Loading module '@typescript/lib-dom/iterable' from 'node_modules' folder, target file types: JavaScript.",
     "Searching all ancestor node_modules directories for fallback extensions: JavaScript.",
     "Directory '/node_modules' does not exist, skipping all lookups in it.",
-    "======== Module name '@typescript/lib-dom/iterable' was not resolved. ========"
+    "======== Module name '@typescript/lib-dom/iterable' was not resolved. ========",
+    "======== Resolving module '@typescript/lib-dom/asynciterable' from '/.src/__lib_node_modules_lookup_lib.dom.asynciterable.d.ts__.ts'. ========",
+    "Explicitly specified module resolution kind: 'Node10'.",
+    "Loading module '@typescript/lib-dom/asynciterable' from 'node_modules' folder, target file types: TypeScript, Declaration.",
+    "Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.",
+    "Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.",
+    "Scoped package detected, looking in 'typescript__lib-dom/asynciterable'",
+    "Directory '/node_modules' does not exist, skipping all lookups in it.",
+    "Scoped package detected, looking in 'typescript__lib-dom/asynciterable'",
+    "Loading module '@typescript/lib-dom/asynciterable' from 'node_modules' folder, target file types: JavaScript.",
+    "Searching all ancestor node_modules directories for fallback extensions: JavaScript.",
+    "Directory '/node_modules' does not exist, skipping all lookups in it.",
+    "======== Module name '@typescript/lib-dom/asynciterable' was not resolved. ========"
 ]

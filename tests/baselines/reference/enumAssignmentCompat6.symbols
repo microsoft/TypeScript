@@ -1,0 +1,202 @@
+//// [tests/cases/compiler/enumAssignmentCompat6.ts] ////
+
+=== f.ts ===
+// @filename a.ts
+namespace numerics {
+>numerics : Symbol(numerics, Decl(f.ts, 0, 0))
+
+    export enum DiagnosticCategory {
+>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 1, 20))
+
+        Warning,
+>Warning : Symbol(DiagnosticCategory.Warning, Decl(f.ts, 2, 36))
+
+        Error,
+>Error : Symbol(DiagnosticCategory.Error, Decl(f.ts, 3, 16))
+
+        Suggestion,
+>Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(f.ts, 4, 14))
+
+        Message,
+>Message : Symbol(DiagnosticCategory.Message, Decl(f.ts, 5, 19))
+    }
+
+    export enum DiagnosticCategory2 {
+>DiagnosticCategory2 : Symbol(DiagnosticCategory2, Decl(f.ts, 7, 5))
+
+        Warning,
+>Warning : Symbol(DiagnosticCategory2.Warning, Decl(f.ts, 9, 37))
+
+        Error,
+>Error : Symbol(DiagnosticCategory2.Error, Decl(f.ts, 10, 16))
+
+        Suggestion,
+>Suggestion : Symbol(DiagnosticCategory2.Suggestion, Decl(f.ts, 11, 14))
+
+        Message,
+>Message : Symbol(DiagnosticCategory2.Message, Decl(f.ts, 12, 19))
+    }
+}
+
+namespace strings {
+>strings : Symbol(strings, Decl(f.ts, 15, 1))
+
+    export enum DiagnosticCategory {
+>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 17, 19))
+
+        Warning = "Warning",
+>Warning : Symbol(DiagnosticCategory.Warning, Decl(f.ts, 18, 36))
+
+        Error = "Error",
+>Error : Symbol(DiagnosticCategory.Error, Decl(f.ts, 19, 28))
+
+        Suggestion = "Suggestion",
+>Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(f.ts, 20, 24))
+
+        Message = "Message",
+>Message : Symbol(DiagnosticCategory.Message, Decl(f.ts, 21, 34))
+    }
+}
+
+declare namespace ambients {
+>ambients : Symbol(ambients, Decl(f.ts, 24, 1))
+
+    export enum DiagnosticCategory {
+>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 26, 28))
+
+        Warning,
+>Warning : Symbol(DiagnosticCategory.Warning, Decl(f.ts, 27, 36))
+
+        Error,
+>Error : Symbol(DiagnosticCategory.Error, Decl(f.ts, 28, 16))
+
+        Suggestion,
+>Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(f.ts, 29, 14))
+
+        Message,
+>Message : Symbol(DiagnosticCategory.Message, Decl(f.ts, 30, 19))
+    }
+}
+
+function f(x: numerics.DiagnosticCategory, y: strings.DiagnosticCategory) {
+>f : Symbol(f, Decl(f.ts, 33, 1))
+>x : Symbol(x, Decl(f.ts, 35, 11))
+>numerics : Symbol(numerics, Decl(f.ts, 0, 0))
+>DiagnosticCategory : Symbol(numerics.DiagnosticCategory, Decl(f.ts, 1, 20))
+>y : Symbol(y, Decl(f.ts, 35, 42))
+>strings : Symbol(strings, Decl(f.ts, 15, 1))
+>DiagnosticCategory : Symbol(strings.DiagnosticCategory, Decl(f.ts, 17, 19))
+
+    x = y;
+>x : Symbol(x, Decl(f.ts, 35, 11))
+>y : Symbol(y, Decl(f.ts, 35, 42))
+
+    y = x;
+>y : Symbol(y, Decl(f.ts, 35, 42))
+>x : Symbol(x, Decl(f.ts, 35, 11))
+}
+
+function g(x: numerics.DiagnosticCategory2, y: strings.DiagnosticCategory) {
+>g : Symbol(g, Decl(f.ts, 38, 1))
+>x : Symbol(x, Decl(f.ts, 40, 11))
+>numerics : Symbol(numerics, Decl(f.ts, 0, 0))
+>DiagnosticCategory2 : Symbol(numerics.DiagnosticCategory2, Decl(f.ts, 7, 5))
+>y : Symbol(y, Decl(f.ts, 40, 43))
+>strings : Symbol(strings, Decl(f.ts, 15, 1))
+>DiagnosticCategory : Symbol(strings.DiagnosticCategory, Decl(f.ts, 17, 19))
+
+    x = y;
+>x : Symbol(x, Decl(f.ts, 40, 11))
+>y : Symbol(y, Decl(f.ts, 40, 43))
+
+    y = x;
+>y : Symbol(y, Decl(f.ts, 40, 43))
+>x : Symbol(x, Decl(f.ts, 40, 11))
+}
+
+function h(x: numerics.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+>h : Symbol(h, Decl(f.ts, 43, 1))
+>x : Symbol(x, Decl(f.ts, 45, 11))
+>numerics : Symbol(numerics, Decl(f.ts, 0, 0))
+>DiagnosticCategory : Symbol(numerics.DiagnosticCategory, Decl(f.ts, 1, 20))
+>y : Symbol(y, Decl(f.ts, 45, 42))
+>ambients : Symbol(ambients, Decl(f.ts, 24, 1))
+>DiagnosticCategory : Symbol(ambients.DiagnosticCategory, Decl(f.ts, 26, 28))
+
+    x = y;
+>x : Symbol(x, Decl(f.ts, 45, 11))
+>y : Symbol(y, Decl(f.ts, 45, 42))
+
+    y = x;
+>y : Symbol(y, Decl(f.ts, 45, 42))
+>x : Symbol(x, Decl(f.ts, 45, 11))
+}
+
+function i(x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+>i : Symbol(i, Decl(f.ts, 48, 1))
+>x : Symbol(x, Decl(f.ts, 50, 11))
+>strings : Symbol(strings, Decl(f.ts, 15, 1))
+>DiagnosticCategory : Symbol(strings.DiagnosticCategory, Decl(f.ts, 17, 19))
+>y : Symbol(y, Decl(f.ts, 50, 41))
+>ambients : Symbol(ambients, Decl(f.ts, 24, 1))
+>DiagnosticCategory : Symbol(ambients.DiagnosticCategory, Decl(f.ts, 26, 28))
+
+    x = y;
+>x : Symbol(x, Decl(f.ts, 50, 11))
+>y : Symbol(y, Decl(f.ts, 50, 41))
+
+    y = x;
+>y : Symbol(y, Decl(f.ts, 50, 41))
+>x : Symbol(x, Decl(f.ts, 50, 11))
+}
+
+export enum DiagnosticCategory {
+>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 53, 1))
+
+    Warning,
+>Warning : Symbol(DiagnosticCategory.Warning, Decl(f.ts, 55, 32))
+
+    Error,
+>Error : Symbol(DiagnosticCategory.Error, Decl(f.ts, 56, 12))
+
+    Suggestion,
+>Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(f.ts, 57, 10))
+
+    Message,
+>Message : Symbol(DiagnosticCategory.Message, Decl(f.ts, 58, 15))
+}
+
+export let x: DiagnosticCategory;
+>x : Symbol(x, Decl(f.ts, 62, 10))
+>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 53, 1))
+
+(() => {
+    enum DiagnosticCategory {
+>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 64, 8))
+
+        Warning = "Warning",
+>Warning : Symbol(DiagnosticCategory.Warning, Decl(f.ts, 65, 29))
+
+        Error = "Error",
+>Error : Symbol(DiagnosticCategory.Error, Decl(f.ts, 66, 28))
+
+        Suggestion = "Suggestion",
+>Suggestion : Symbol(DiagnosticCategory.Suggestion, Decl(f.ts, 67, 24))
+
+        Message = "Message",
+>Message : Symbol(DiagnosticCategory.Message, Decl(f.ts, 68, 34))
+    }
+    function f(y: DiagnosticCategory) {
+>f : Symbol(f, Decl(f.ts, 70, 5))
+>y : Symbol(y, Decl(f.ts, 71, 15))
+>DiagnosticCategory : Symbol(DiagnosticCategory, Decl(f.ts, 64, 8))
+
+        x = y;
+>x : Symbol(x, Decl(f.ts, 62, 10))
+>y : Symbol(y, Decl(f.ts, 71, 15))
+
+        y = x;
+>y : Symbol(y, Decl(f.ts, 71, 15))
+>x : Symbol(x, Decl(f.ts, 62, 10))
+    }
+})()
