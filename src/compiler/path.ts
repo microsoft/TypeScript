@@ -771,7 +771,7 @@ export function changeFullExtension(path: string, newExtension: string) {
     const declarationExtension = getDeclarationFileExtension(path);
     if (declarationExtension) {
         return path.slice(0, path.length - declarationExtension.length) +
-            startsWith(newExtension, ".") ? newExtension : ("." + newExtension);
+            (startsWith(newExtension, ".") ? newExtension : ("." + newExtension));
     }
     return changeAnyExtension(path, newExtension);
 }
