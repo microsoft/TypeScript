@@ -94,7 +94,6 @@ export class CompilerBaselineRunner extends RunnerBase {
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest!: CompilerTest;
         let environment!: CompilerTestEnvironment;
-        let hasSyntacticErrors: boolean;
         before(() => {
             let payload;
             if (test && test.content) {
@@ -107,7 +106,6 @@ export class CompilerBaselineRunner extends RunnerBase {
                 ...environment,
                 fileSystem: fileSystem.shadow(),
             });
-            hasSyntacticErrors = compilerTest.hasSyntacticDiagnostics;
         });
         it(`Correct errors for ${fileName}`, () => compilerTest.verifyDiagnostics());
         it(`Correct module resolution tracing for ${fileName}`, () => compilerTest.verifyModuleResolution());
@@ -119,12 +117,11 @@ export class CompilerBaselineRunner extends RunnerBase {
         describe("isolated declarations", () => {
             let isolatedTest: IsolatedDeclarationTest | undefined;
             before(function () {
-                if (hasSyntacticErrors) {
-                    this.skip();
-                }
                 const isolatedTestEnv = IsolatedDeclarationTest.transformEnvironment(environment);
                 if (isolatedTestEnv) {
                     isolatedTest = new IsolatedDeclarationTest(isolatedTestEnv);
+                } else {
+                    this.skip();
                 }
             });
             it(`Correct dte emit for ${fileName}`, () => isolatedTest?.verifyDteOutput());
@@ -139,12 +136,11 @@ export class CompilerBaselineRunner extends RunnerBase {
         describe("isolated declarations fixed", () => {
             let fixedIsolatedTest: FixedIsolatedDeclarationTest | undefined;
             before(function () {
-                if (hasSyntacticErrors) {
-                    this.skip();
-                }
                 const fixedIsolatedTestEnv = FixedIsolatedDeclarationTest.fixTestProject(environment);
                 if (fixedIsolatedTestEnv) {
                     fixedIsolatedTest = new FixedIsolatedDeclarationTest(fixedIsolatedTestEnv);
+                } else {
+                    this.skip();
                 }
             });
             it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
@@ -245,7 +241,6 @@ class CompilerTestBase {
     protected configuredName: string;
     protected harnessSettings: TestCaseParser.CompilerSettings;
     protected hasNonDtsFiles: boolean;
-    public readonly hasSyntacticDiagnostics: boolean;
     protected result: compiler.CompilationResult;
     protected options: ts.CompilerOptions;
     protected tsConfigFiles: Compiler.TestFile[];
@@ -269,7 +264,6 @@ class CompilerTestBase {
 
         this.result = Compiler.compileFilesWithEnvironment(compilerEnvironment);
 
-        this.hasSyntacticDiagnostics = this.result.diagnostics.some(p => p.code < 2200);
         this.options = this.result.options;
     }
 
@@ -490,11 +484,10 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         // Exclude tests some tests
         // - those explicitly not opting into isolatedDeclarations
         // - those that do not usually emit output anyway
-        if (options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols) {
+        if (options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols || !options.declaration) {
             return undefined;
         }
         const clonedOptions: ts.CompilerOptions & Compiler.HarnessOptions = ts.cloneCompilerOptions(compilerEnvironment.compilerOptions);
-        clonedOptions.declaration = true;
         if (clonedOptions.isolatedDeclarations === undefined) {
             clonedOptions.isolatedDeclarations = true;
         }
@@ -514,7 +507,6 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             ...compilerEnvironment.testCaseContent.settings,
             allowJS: "false",
             checkJS: "false",
-            declaration: "true",
             isolatedDeclarations: "true",
             forceDtsEmit: "true",
             skipLibCheck: "true",
