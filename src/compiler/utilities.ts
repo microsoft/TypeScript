@@ -2295,7 +2295,7 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
         Debug.assert(pos <= errorNode.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
     }
 
-    return createTextSpanFromBounds(pos, errorNode.end); // >> TODO: this might fail if the node is synthetic: don't error then
+    return createTextSpanFromBounds(pos, errorNode.end);
 }
 
 /** @internal */

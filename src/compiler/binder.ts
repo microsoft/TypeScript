@@ -540,6 +540,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     var preSwitchCaseFlow: FlowNode | undefined;
     var activeLabelList: ActiveLabel | undefined;
     var hasExplicitReturn: boolean;
+    var inReturnStatement: boolean;
 
     // state used for emit helpers
     var emitFlags: NodeFlags;
@@ -616,6 +617,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentExceptionTarget = undefined;
         activeLabelList = undefined;
         hasExplicitReturn = false;
+        inReturnStatement = false;
         inAssignmentPattern = false;
         emitFlags = NodeFlags.None;
     }
@@ -1546,7 +1548,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
+        const oldInReturnStatement = inReturnStatement;
+        inReturnStatement = true;
         bind(node.expression);
+        inReturnStatement = oldInReturnStatement;
         if (node.kind === SyntaxKind.ReturnStatement) {
             hasExplicitReturn = true;
             if (currentReturnTarget) {
@@ -1977,13 +1982,13 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindConditionalExpressionFlow(node: ConditionalExpression) {
-        const isInReturnStatement = isConditionalExpressionInReturnStatement(node);
+        const isConditionalInReturn = inReturnStatement && isConditionalExpressionInReturnStatement(node);
         const trueLabel = createBranchLabel();
         const falseLabel = createBranchLabel();
         const postExpressionLabel = createBranchLabel();
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
-        if (isInReturnStatement) {
+        if (isConditionalInReturn) {
             const expr = skipParentheses(node.whenTrue);
             (expr as Node as FlowContainer).flowNode = currentFlow;
         }
@@ -1991,7 +1996,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         bind(node.whenTrue);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
-        if (isInReturnStatement) {
+        if (isConditionalInReturn) {
             const expr = skipParentheses(node.whenFalse);
             (expr as Node as FlowContainer).flowNode = currentFlow;
         }
