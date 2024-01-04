@@ -156,7 +156,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         case SyntaxKind.CaseKeyword:
             const switchStatement = findAncestor(node.parent, isSwitchStatement);
             if (switchStatement) {
-                return [createDefinitionInfoFromStatement(switchStatement, sourceFile, "switch")];
+                return [createDefinitionInfoFromSwitch(switchStatement, sourceFile)];
             }
             break;
     }
@@ -657,6 +657,24 @@ function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declara
     };
 }
 
+function createDefinitionInfoFromSwitch(statement: SwitchStatement, sourceFile: SourceFile): DefinitionInfo {
+    const keyword = FindAllReferences.getContextNode(statement)!;
+    const textSpan = createTextSpanFromNode(isContextWithStartAndEndNode(keyword) ? keyword.start : keyword, sourceFile);
+    return {
+        fileName: sourceFile.fileName,
+        textSpan,
+        kind: ScriptElementKind.keyword,
+        name: "switch",
+        containerKind: undefined!,
+        containerName: "",
+        ...FindAllReferences.toContextSpan(textSpan, sourceFile, keyword),
+        isLocal: true,
+        isAmbient: false,
+        unverified: false,
+        failedAliasResolution: undefined,
+    };
+}
+
 function isDefinitionVisible(checker: TypeChecker, declaration: Declaration): boolean {
     if (checker.isDeclarationVisible(declaration)) return true;
     if (!declaration.parent) return false;
@@ -733,22 +751,3 @@ function isConstructorLike(node: Node): boolean {
             return false;
     }
 }
-
-function createDefinitionInfoFromStatement(statement: SwitchStatement, sourceFile: SourceFile, name: string): DefinitionInfo {
-    const keyword = FindAllReferences.getContextNode(statement)!;
-    const textSpan = createTextSpanFromNode(isContextWithStartAndEndNode(keyword) ? keyword.start : keyword, sourceFile)
-    return {
-        fileName: sourceFile.fileName,
-        textSpan,
-        kind: ScriptElementKind.keyword,
-        name,
-        containerKind: undefined!,
-        containerName: "",
-        ...FindAllReferences.toContextSpan(textSpan, sourceFile, keyword),
-        isLocal: true,
-        isAmbient: false,
-        unverified: false,
-        failedAliasResolution: undefined,
-    };
-}
-
