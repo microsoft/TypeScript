@@ -666,9 +666,8 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
     }
 }
 
-// NullTransformationContext does not have all members of TransformationContext and nullTransformationContext should only be used as a CoreTransformationContext
-// To ensure backward compatibility, nullTransformationContext will continue to have all members of TransformationContext (with unsupported methods throwing errors)
-const _nullTransformationContext: Omit<TransformationContext, 'kind'> & { kind: TransformationContextKind.NullContext } = {
+/** @internal */
+export const nullTransformationContext: NullTransformationContext = {
     kind: TransformationContextKind.NullContext,
     factory: factory, // eslint-disable-line object-shorthand
     getCompilerOptions: () => ({}),
@@ -697,6 +696,3 @@ const _nullTransformationContext: Omit<TransformationContext, 'kind'> & { kind: 
     onEmitNode: noEmitNotification,
     addDiagnostic: noop,
 };
-
-/** @internal */
-export const nullTransformationContext: NullTransformationContext = _nullTransformationContext

@@ -9276,8 +9276,14 @@ export interface IsolatedTransformationContext extends CoreTransformationContext
     addDiagnostic(diag: Diagnostic): void;
 }
 /** @internal */
-export interface NullTransformationContext extends CoreTransformationContext {
+export interface NullTransformationContext extends Omit<TransformationContext, 'kind'> {
     kind: TransformationContextKind.NullContext;
+    getEmitResolver(): never;
+    getEmitHost(): never;
+    getEmitHelperFactory(): never;
+    readEmitHelpers(): never;
+    isSubstitutionEnabled(): never;
+    isEmitNotificationEnabled(): never;
 }
 
 export interface TransformationResult<T extends Node> {
