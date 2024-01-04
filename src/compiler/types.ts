@@ -916,6 +916,7 @@ export const enum JsxFlags {
 // dprint-ignore
 /** @internal */
 export const enum RelationComparisonResult {
+    None                = 0,
     Succeeded           = 1 << 0, // Should be truthy
     Failed              = 1 << 1,
     Reported            = 1 << 2,
@@ -5591,6 +5592,7 @@ export type LateVisibilityPaintedStatement =
 /** @internal */
 export interface SymbolVisibilityResult {
     accessibility: SymbolAccessibility;
+    bindingElementToMakeVisible?: BindingElement;
     aliasesToMakeVisible?: LateVisibilityPaintedStatement[]; // aliases that need to have this symbol visible
     errorSymbolName?: string; // Optional symbol name that results in error
     errorNode?: Node; // optional node that results in error
@@ -9688,6 +9690,7 @@ export interface ModuleSpecifierResolutionHost {
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+    getCommonSourceDirectory(): string;
 }
 
 /** @internal */

@@ -171,9 +171,10 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 5 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 6 root files in 1 dependencies in * ms
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/a/a1.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/b/b1.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/b/b2.d.mts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/c/c1.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/c/subfolder/c2.d.mts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/d/d1.d.mts 500 undefined WatchType: Closed Script info
@@ -183,9 +184,10 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/b/pa
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/pkg/c/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 	/node_modules/pkg/a/a1.d.ts Text-1 "export const a1: number;"
 	/node_modules/pkg/b/b1.d.ts Text-1 "export const b1: number;"
+	/node_modules/pkg/b/b2.d.mts Text-1 "export const NOT_REACHABLE: number;"
 	/node_modules/pkg/c/c1.d.ts Text-1 "export const c1: number;"
 	/node_modules/pkg/c/subfolder/c2.d.mts Text-1 "export const c2: number;"
 	/node_modules/pkg/d/d1.d.mts Text-1 "export const d1: number;"
@@ -197,6 +199,8 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	node_modules/pkg/b/b1.d.ts
 	  Root file specified for compilation
 	  File is CommonJS module because 'node_modules/pkg/package.json' does not have field "type"
+	node_modules/pkg/b/b2.d.mts
+	  Root file specified for compilation
 	node_modules/pkg/c/c1.d.ts
 	  Root file specified for compilation
 	  File is CommonJS module because 'node_modules/pkg/package.json' does not have field "type"
@@ -231,7 +235,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -256,6 +260,8 @@ watchedFiles::
 /node_modules/pkg/a/package.json: *new*
   {"pollingInterval":2000}
 /node_modules/pkg/b/b1.d.ts: *new*
+  {"pollingInterval":500}
+/node_modules/pkg/b/b2.d.mts: *new*
   {"pollingInterval":500}
 /node_modules/pkg/b/package.json: *new*
   {"pollingInterval":2000}
@@ -315,7 +321,7 @@ Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 5 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 5 module specifiers, plus 0 ambient and 1 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -1107,6 +1113,8 @@ watchedFiles::
 /node_modules/pkg/a/package.json:
   {"pollingInterval":2000}
 /node_modules/pkg/b/b1.d.ts:
+  {"pollingInterval":500}
+/node_modules/pkg/b/b2.d.mts:
   {"pollingInterval":500}
 /node_modules/pkg/b/package.json:
   {"pollingInterval":2000}
