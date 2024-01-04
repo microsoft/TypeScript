@@ -20136,7 +20136,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isNarrowableReturnType(type: Type) {
         // >> TODO: also check if generic?
-        return type.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional);
+        return type.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional) && couldContainTypeVariables(type);
     }
 
     function instantiateReverseMappedType(type: ReverseMappedType, mapper: TypeMapper) {
