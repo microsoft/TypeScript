@@ -38830,9 +38830,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
-        const filteredContextualType = filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
+        contextualType = filterContextualTypeForLiteralExpressionOfObject(node, contextualType);
         const contextNode = getContextNode(node);
-        pushContextualType(contextNode, filteredContextualType, /*isCache*/ false);
+        pushContextualType(contextNode, contextualType, /*isCache*/ false);
         pushInferenceContext(contextNode, inferenceContext);
         const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
         // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
@@ -38843,7 +38843,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We strip literal freshness when an appropriate contextual type is present such that contextually typed
         // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
         // here would be to not mark contextually typed literals as fresh in the first place.
-        const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(filteredContextualType, node, /*contextFlags*/ undefined)) ?
+        const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ?
             getRegularTypeOfLiteralType(type) : type;
         popInferenceContext();
         popContextualType();
