@@ -95,27 +95,8 @@ export function fixProjectInternal(
             let diagnostics = getIsolatedDeclarationsErrors(file.fileName);
 
             if (diagnostics.length === 0) continue;
-            let lastFixedDiagnostic: ts.Diagnostic | undefined;
-            let stuckCount = 0;
-            let skipCount = 0;
-            while (diagnostics.length > skipCount) {
-                const diag = diagnostics[diagnostics.length - 1 - skipCount];
-                // Ensure we break out of a unfixable loop
-                if (lastFixedDiagnostic?.start === diag.start) {
-                    stuckCount++;
-                }
-                else {
-                    stuckCount = 0;
-                }
-                if (stuckCount === 3) {
-                    return { success: false } as const;
-                }
-                const fixes = service.getCodeFixesAtPosition(file.fileName, diag.start, diag.start + diag.length, [diag.code], defaultFormatOptions, userPreferences);
-                if (fixes.length === 0) {
-                    skipCount++;
-                    continue;
-                }
-                const fix = fixes[0];
+            while (diagnostics.length > 0) {
+                const fix = service.getCombinedCodeFix({ type: "file", fileName: file.fileName }, "fixMissingTypeAnnotationOnExports", defaultFormatOptions, userPreferences);
                 const changedFiles: {
                     file: string;
                     old: VersionedScriptSnapshot;
@@ -132,7 +113,6 @@ export function fixProjectInternal(
                         old: snapshot,
                     });
                 }
-                lastFixedDiagnostic = diag;
                 diagnostics = getIsolatedDeclarationsErrors(file.fileName);
             }
         }
