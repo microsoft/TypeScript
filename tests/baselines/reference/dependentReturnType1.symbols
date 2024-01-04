@@ -966,7 +966,7 @@ function g<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string :
         let x: number = Math.random() ? 1 : 2;
 >x : Symbol(x, Decl(dependentReturnType1.ts, 340, 11))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
         if (x === 1) {
@@ -992,7 +992,7 @@ function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string :
         let x: number = Math.random() ? 1 : 2;
 >x : Symbol(x, Decl(dependentReturnType1.ts, 350, 11))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
         if (x === 1) {
@@ -1028,3 +1028,58 @@ const withInferResult = withInfer(["a"] as const); // The type says it returns `
 >withInfer : Symbol(withInfer, Decl(dependentReturnType1.ts, 357, 1))
 >const : Symbol(const)
 
+// Ok
+async function abool<T extends true | false>(x: T): Promise<T extends true ? 1 : T extends false ? 2 : 1 | 2> {
+>abool : Symbol(abool, Decl(dependentReturnType1.ts, 366, 50))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 369, 21))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 369, 45))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 369, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 369, 21))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 369, 21))
+
+    if (x) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 369, 45))
+
+        return 1;
+    }
+    return 2;
+}
+
+// Ok
+function* bbool<T extends true | false>(x: T): Generator<number, T extends true ? 1 : T extends false ? 2 : 1 | 2, unknown> {
+>bbool : Symbol(bbool, Decl(dependentReturnType1.ts, 374, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 377, 16))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 377, 40))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 377, 16))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 377, 16))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 377, 16))
+
+    yield 3;
+    if (x) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 377, 40))
+
+        return 1;
+    }
+    return 2;
+}
+
+// We don't do the same type of narrowing for `yield` statements
+function* cbool<T extends true | false>(x: T): Generator<T extends true ? 1 : T extends false ? 2 : 1 | 2, number, unknown> {
+>cbool : Symbol(cbool, Decl(dependentReturnType1.ts, 383, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 386, 16))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 386, 40))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 386, 16))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 386, 16))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 386, 16))
+
+    if (x) {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 386, 40))
+
+        yield 1;
+    }
+    yield 2;
+    return 0;
+}

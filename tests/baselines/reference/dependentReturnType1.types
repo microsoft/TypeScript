@@ -1017,3 +1017,68 @@ const withInferResult = withInfer(["a"] as const); // The type says it returns `
 >["a"] : ["a"]
 >"a" : "a"
 
+// Ok
+async function abool<T extends true | false>(x: T): Promise<T extends true ? 1 : T extends false ? 2 : 1 | 2> {
+>abool : <T extends boolean>(x: T) => Promise<T extends true ? 1 : T extends false ? 2 : 1 | 2>
+>true : true
+>false : false
+>x : T
+>true : true
+>false : false
+
+    if (x) {
+>x : T
+
+        return 1;
+>1 : 1
+    }
+    return 2;
+>2 : 2
+}
+
+// Ok
+function* bbool<T extends true | false>(x: T): Generator<number, T extends true ? 1 : T extends false ? 2 : 1 | 2, unknown> {
+>bbool : <T extends boolean>(x: T) => Generator<number, T extends true ? 1 : T extends false ? 2 : 1 | 2, unknown>
+>true : true
+>false : false
+>x : T
+>true : true
+>false : false
+
+    yield 3;
+>yield 3 : unknown
+>3 : 3
+
+    if (x) {
+>x : T
+
+        return 1;
+>1 : 1
+    }
+    return 2;
+>2 : 2
+}
+
+// We don't do the same type of narrowing for `yield` statements
+function* cbool<T extends true | false>(x: T): Generator<T extends true ? 1 : T extends false ? 2 : 1 | 2, number, unknown> {
+>cbool : <T extends boolean>(x: T) => Generator<T extends true ? 1 : T extends false ? 2 : 1 | 2, number, unknown>
+>true : true
+>false : false
+>x : T
+>true : true
+>false : false
+
+    if (x) {
+>x : T
+
+        yield 1;
+>yield 1 : unknown
+>1 : 1
+    }
+    yield 2;
+>yield 2 : unknown
+>2 : 2
+
+    return 0;
+>0 : 0
+}

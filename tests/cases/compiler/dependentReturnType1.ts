@@ -1,5 +1,6 @@
 // @strict: true
 // @noEmit: true
+// @target: ES2022
 
 interface A {
     1: number;
@@ -368,3 +369,29 @@ function withInfer<T extends [string] | number>(x: T): T extends [infer R] ? R :
 }
 
 const withInferResult = withInfer(["a"] as const); // The type says it returns `"a"`, but the function actually returns `""`.
+
+// Ok
+async function abool<T extends true | false>(x: T): Promise<T extends true ? 1 : T extends false ? 2 : 1 | 2> {
+    if (x) {
+        return 1;
+    }
+    return 2;
+}
+
+// Ok
+function* bbool<T extends true | false>(x: T): Generator<number, T extends true ? 1 : T extends false ? 2 : 1 | 2, unknown> {
+    yield 3;
+    if (x) {
+        return 1;
+    }
+    return 2;
+}
+
+// We don't do the same type of narrowing for `yield` statements
+function* cbool<T extends true | false>(x: T): Generator<T extends true ? 1 : T extends false ? 2 : 1 | 2, number, unknown> {
+    if (x) {
+        yield 1;
+    }
+    yield 2;
+    return 0;
+}
