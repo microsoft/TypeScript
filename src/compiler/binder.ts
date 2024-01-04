@@ -140,7 +140,6 @@ import {
     isBooleanLiteral,
     isCallExpression,
     isClassStaticBlockDeclaration,
-    isConditionalExpressionInReturnStatement,
     isConditionalTypeNode,
     IsContainer,
     isDeclaration,
@@ -1982,13 +1981,12 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindConditionalExpressionFlow(node: ConditionalExpression) {
-        const isConditionalInReturn = inReturnStatement && isConditionalExpressionInReturnStatement(node);
         const trueLabel = createBranchLabel();
         const falseLabel = createBranchLabel();
         const postExpressionLabel = createBranchLabel();
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
-        if (isConditionalInReturn) {
+        if (inReturnStatement) {
             const expr = skipParentheses(node.whenTrue);
             (expr as Node as FlowContainer).flowNode = currentFlow;
         }
@@ -1996,7 +1994,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         bind(node.whenTrue);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
-        if (isConditionalInReturn) {
+        if (inReturnStatement) {
             const expr = skipParentheses(node.whenFalse);
             (expr as Node as FlowContainer).flowNode = currentFlow;
         }

@@ -253,7 +253,6 @@ import {
     isClassStaticBlockDeclaration,
     isCommaListExpression,
     isComputedPropertyName,
-    isConditionalExpression,
     isConstructorDeclaration,
     isDeclaration,
     isDecorator,
@@ -333,7 +332,6 @@ import {
     isPropertyName,
     isPropertySignature,
     isQualifiedName,
-    isReturnStatement,
     isRootedDiskPath,
     isSetAccessorDeclaration,
     isShiftOperatorOrHigher,
@@ -4158,21 +4156,6 @@ function getNestedModuleDeclaration(node: Node): Node | undefined {
             node.body.kind === SyntaxKind.ModuleDeclaration
         ? node.body
         : undefined;
-}
-
-/** @internal */
-export function isConditionalExpressionInReturnStatement(node: Expression) {
-    let n: Node = node;
-    while (n) {
-        if (isReturnStatement(n)) {
-            return true;
-        }
-        if (!isConditionalExpression(n)) {
-            return false;
-        }
-        n = walkUpParenthesizedExpressions(n.parent);
-    }
-    return false;
 }
 
 /** @internal */
