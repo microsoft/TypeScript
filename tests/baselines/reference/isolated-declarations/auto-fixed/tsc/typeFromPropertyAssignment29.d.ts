@@ -20,7 +20,7 @@ const ExpandoExpr: {
         x?: undefined;
     };
     m(n: number): number;
-} = function (n: number) {
+} = function (n: number): string {
     return n.toString();
 }
 ExpandoExpr.prop = { x: 2 }
@@ -34,7 +34,7 @@ const ExpandoArrow: {
     (n: number): string;
     prop: number;
     m(n: number): number;
-} = (n: number) => n.toString();
+} = (n: number): string => n.toString();
 ExpandoArrow.prop = 2
 ExpandoArrow.m = function(n: number) {
     return n + 1;
@@ -208,7 +208,7 @@ typeFromPropertyAssignment29.ts(101,42): error TS2339: Property 'm' does not exi
             x?: undefined;
         };
         m(n: number): number;
-    } = function (n: number) {
+    } = function (n: number): string {
         return n.toString();
     }
     ExpandoExpr.prop = { x: 2 }
@@ -222,7 +222,7 @@ typeFromPropertyAssignment29.ts(101,42): error TS2339: Property 'm' does not exi
         (n: number): string;
         prop: number;
         m(n: number): number;
-    } = (n: number) => n.toString();
+    } = (n: number): string => n.toString();
     ExpandoArrow.prop = 2
     ExpandoArrow.m = function(n: number) {
         return n + 1;
@@ -274,9 +274,9 @@ typeFromPropertyAssignment29.ts(101,42): error TS2339: Property 'm' does not exi
         return n + 1;
     }
     var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length
-                         ~~~~
+                                 ~~~~
 !!! error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
-                                             ~
+                                                     ~
 !!! error TS2339: Property 'm' does not exist on type '(n: number) => string'.
     
     // Should not work in typescript -- classes already have statics
@@ -292,9 +292,9 @@ typeFromPropertyAssignment29.ts(101,42): error TS2339: Property 'm' does not exi
         return n + 1;
     }
     var n = ExpandoClass.prop + ExpandoClass.m(12) + new ExpandoClass().n
-                         ~~~~
+                                 ~~~~
 !!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
-                                             ~
+                                                     ~
 !!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
     
     // Class expressions shouldn't work in typescript either
@@ -310,9 +310,9 @@ typeFromPropertyAssignment29.ts(101,42): error TS2339: Property 'm' does not exi
         return n + 1;
     }
     var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n
-                         ~~~~
+                                 ~~~~
 !!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
-                                             ~
+                                                     ~
 !!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
     
     

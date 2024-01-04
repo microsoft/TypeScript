@@ -95,24 +95,38 @@ export function fixProjectInternal(
             let diagnostics = getIsolatedDeclarationsErrors(file.fileName);
 
             if (diagnostics.length === 0) continue;
-            while (diagnostics.length > 0) {
-                const fix = service.getCombinedCodeFix({ type: "file", fileName: file.fileName }, "fixMissingTypeAnnotationOnExports", defaultFormatOptions, userPreferences);
-                const changedFiles: {
-                    file: string;
-                    old: VersionedScriptSnapshot;
-                    new: VersionedScriptSnapshot;
-                }[] = [];
 
-                for (const fileChanges of fix.changes) {
-                    const snapshot = snapShotRegistry.getSnapshot(fileChanges.fileName)!;
-                    const newSnapShot = applyChangesSnapShot(snapshot, fileChanges.textChanges);
-                    snapShotRegistry.setSnapshot(fileChanges.fileName, newSnapShot);
-                    changedFiles.push({
-                        file: fileChanges.fileName,
-                        new: newSnapShot,
-                        old: snapshot,
-                    });
+            // Try to fix all
+            const fixAll = service.getCombinedCodeFix({ type: "file", fileName: file.fileName }, "fixMissingTypeAnnotationOnExports", defaultFormatOptions, userPreferences);
+            applyFix(fixAll.changes);
+
+            // Some fixes need to be applied individually such as fixing `export =`
+            diagnostics = getIsolatedDeclarationsErrors(file.fileName);
+            let lastFixedDiagnostic: ts.Diagnostic | undefined;
+            let stuckCount = 0;
+            let skipCount = 0;
+            while (diagnostics.length > skipCount) {
+                const diag = diagnostics[diagnostics.length - 1 - skipCount];
+                // Ensure we break out of a unfixable loop
+                if (lastFixedDiagnostic?.start === diag.start) {
+                    stuckCount++;
                 }
+                else {
+                    stuckCount = 0;
+                }
+                if (stuckCount === 3) {
+                    return { success: false } as const;
+                }
+                const fixes = service.getCodeFixesAtPosition(file.fileName, diag.start, diag.start + diag.length, [diag.code], defaultFormatOptions, userPreferences);
+                // Un-fixable error
+                if (fixes.length === 0) {
+                    skipCount++;
+                    continue;
+                }
+                const fix = fixes[0];
+
+                if (fix.changes.length === 0) break;
+                lastFixedDiagnostic = diag;
                 diagnostics = getIsolatedDeclarationsErrors(file.fileName);
             }
         }
@@ -120,6 +134,13 @@ export function fixProjectInternal(
     }
     finally {
         service.dispose();
+    }
+    function applyFix(changes: readonly ts.FileTextChanges[]) {
+        for (const fileChanges of changes) {
+            const snapshot = snapShotRegistry.getSnapshot(fileChanges.fileName)!;
+            const newSnapShot = applyChangesSnapShot(snapshot, fileChanges.textChanges);
+            snapShotRegistry.setSnapshot(fileChanges.fileName, newSnapShot);
+        }
     }
     function getIsolatedDeclarationsErrors(fileName?: string) {
         const program = service.getProgram();
