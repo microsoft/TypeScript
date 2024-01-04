@@ -254,6 +254,7 @@ import {
     parseJsonSourceFileConfigFileContent,
     parseNodeFactory,
     Path,
+    pathContainsNodeModules,
     pathIsAbsolute,
     pathIsRelative,
     Program,
@@ -326,7 +327,6 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
-    pathContainsNodeModules,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
