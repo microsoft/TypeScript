@@ -65,7 +65,6 @@ import {
     Expression,
     ExpressionStatement,
     findAncestor,
-    FlowContainer,
     FlowFlags,
     FlowLabel,
     FlowNode,
@@ -1988,7 +1987,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentFlow = finishFlowLabel(trueLabel);
         if (inReturnStatement) {
             const expr = skipParentheses(node.whenTrue);
-            (expr as Node as FlowContainer).flowNode = currentFlow;
+            expr.flowNode = currentFlow;
         }
         bind(node.questionToken);
         bind(node.whenTrue);
@@ -1996,7 +1995,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         currentFlow = finishFlowLabel(falseLabel);
         if (inReturnStatement) {
             const expr = skipParentheses(node.whenFalse);
-            (expr as Node as FlowContainer).flowNode = currentFlow;
+            expr.flowNode = currentFlow;
         }
         bind(node.colonToken);
         bind(node.whenFalse);
