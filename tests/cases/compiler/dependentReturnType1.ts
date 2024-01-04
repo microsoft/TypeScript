@@ -359,3 +359,12 @@ function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string :
     }
     return 0; // Ok
 }
+
+function withInfer<T extends [string] | number>(x: T): T extends [infer R] ? R : T extends number ? boolean : string | boolean {
+    if (typeof x === "number") {
+        return true;
+    }
+    return "";
+}
+
+const withInferResult = withInfer(["a"] as const); // The type says it returns `"a"`, but the function actually returns `""`.

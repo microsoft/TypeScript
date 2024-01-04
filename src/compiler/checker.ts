@@ -18854,7 +18854,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 }
             }
-            // Return a deferred type for a check that is neither definitely true nor definitely false
+            // Return a deferred type for a check that is not definitely true
             result = createType(TypeFlags.Conditional) as ConditionalType;
             result.root = originalRoot;
             result.checkType = instantiateType(originalRoot.checkType, mapper);
@@ -20071,7 +20071,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNarrowableCheckTypeVariable(root: ConditionalRoot, mapper: TypeMapper | undefined): TypeParameter | undefined {
-        if (!root.isDistributive) {
+        if (!root.isDistributive || root.inferTypeParameters) {
             return;
         }
         const checkType = mapper ? getMappedType(root.checkType, mapper) : root.checkType;

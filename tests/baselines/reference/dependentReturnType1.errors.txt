@@ -33,9 +33,11 @@ dependentReturnType1.ts(335,5): error TS2322: Type '1' is not assignable to type
 dependentReturnType1.ts(343,13): error TS2322: Type 'number' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : 1 | 2'.
 dependentReturnType1.ts(345,9): error TS2322: Type 'string' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : 1 | 2'.
 dependentReturnType1.ts(353,13): error TS2322: Type 'number' is not assignable to type 'string'.
+dependentReturnType1.ts(362,9): error TS2322: Type 'true' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : string | boolean'.
+dependentReturnType1.ts(364,5): error TS2322: Type '""' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : string | boolean'.
 
 
-==== dependentReturnType1.ts (30 errors) ====
+==== dependentReturnType1.ts (32 errors) ====
     interface A {
         1: number;
         2: string;
@@ -459,3 +461,16 @@ dependentReturnType1.ts(353,13): error TS2322: Type 'number' is not assignable t
         }
         return 0; // Ok
     }
+    
+    function withInfer<T extends [string] | number>(x: T): T extends [infer R] ? R : T extends number ? boolean : string | boolean {
+        if (typeof x === "number") {
+            return true;
+            ~~~~~~
+!!! error TS2322: Type 'true' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : string | boolean'.
+        }
+        return "";
+        ~~~~~~
+!!! error TS2322: Type '""' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : string | boolean'.
+    }
+    
+    const withInferResult = withInfer(["a"] as const); // The type says it returns `"a"`, but the function actually returns `""`.

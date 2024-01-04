@@ -1004,3 +1004,27 @@ function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string :
     }
     return 0; // Ok
 }
+
+function withInfer<T extends [string] | number>(x: T): T extends [infer R] ? R : T extends number ? boolean : string | boolean {
+>withInfer : Symbol(withInfer, Decl(dependentReturnType1.ts, 357, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 359, 19))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 359, 48))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 359, 19))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 359, 19))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 359, 71))
+>R : Symbol(R, Decl(dependentReturnType1.ts, 359, 71))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 359, 19))
+
+    if (typeof x === "number") {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 359, 48))
+
+        return true;
+    }
+    return "";
+}
+
+const withInferResult = withInfer(["a"] as const); // The type says it returns `"a"`, but the function actually returns `""`.
+>withInferResult : Symbol(withInferResult, Decl(dependentReturnType1.ts, 366, 5))
+>withInfer : Symbol(withInfer, Decl(dependentReturnType1.ts, 357, 1))
+>const : Symbol(const)
+
