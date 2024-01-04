@@ -85,6 +85,17 @@ Directory '/users/username/projects/node_modules' does not exist, skipping all l
 Directory '/users/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/users/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
+Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/users/username/projects/project/node_modules/pkg1.ts' does not exist.
+File '/users/username/projects/project/node_modules/pkg1.tsx' does not exist.
+File '/users/username/projects/project/node_modules/pkg1.d.ts' does not exist.
+Directory '/users/username/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/users/username/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/users/username/node_modules' does not exist, skipping all lookups in it.
+Directory '/users/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/pkg0/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/fileWithTypeRefs.ts 250 undefined Source file

@@ -86,6 +86,16 @@ Resolution:: {
     "/node_modules/a.js",
     "/node_modules/a.jsx",
     "/node_modules/a/index.js",
-    "/node_modules/a/index.jsx"
+    "/node_modules/a/index.jsx",
+    "/node_modules/a/package.json",
+    "/node_modules/a.ts",
+    "/node_modules/a.tsx",
+    "/node_modules/a.d.ts",
+    "/node_modules/a/index.ts",
+    "/node_modules/a/index.tsx",
+    "/node_modules/a/index.d.ts",
+    "/node_modules/@types/a/package.json",
+    "/node_modules/@types/a.d.ts",
+    "/node_modules/@types/a/index.d.ts"
   ]
 }

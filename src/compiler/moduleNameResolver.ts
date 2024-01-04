@@ -1856,10 +1856,8 @@ function nodeModuleNameResolverWorker(
         result = tryResolve(extensions, state);
     }
 
-    // For non-relative names that resolved to JS but no types in modes that look up an "import" condition in package.json "exports",
-    // try again with "exports" disabled to try to detect if this is likely a configuration error in a dependency's package.json.
     let alternateResult;
-    if (!isConfigLookup && !isExternalModuleNameRelative(moduleName)) {
+    if (!isConfigLookup && !isExternalModuleNameRelative(moduleName) && !startsWith(moduleName, "@typescript/")) {
         const wantedTypesButGotJs = result?.value
             && extensions & (Extensions.TypeScript | Extensions.Declaration)
             && !extensionIsOk(Extensions.TypeScript | Extensions.Declaration, result.value.resolved.extension);

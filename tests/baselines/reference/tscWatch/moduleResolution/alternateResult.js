@@ -985,7 +985,7 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-Change:: add the ndoe10Result in package/types
+Change:: add the alternateResult in package/types
 
 Input::
 //// [/home/src/projects/project/node_modules/foo/index.d.ts]
