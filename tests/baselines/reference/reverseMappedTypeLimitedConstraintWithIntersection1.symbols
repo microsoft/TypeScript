@@ -527,3 +527,152 @@ const result2 = fn2(obj2);
 >fn2 : Symbol(fn2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 168, 26))
 >obj2 : Symbol(obj2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 173, 5))
 
+declare function fn3<T1, T2>(obj: {
+>fn3 : Symbol(fn3, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 178, 26))
+>T1 : Symbol(T1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 180, 21))
+>T2 : Symbol(T2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 180, 24))
+>obj : Symbol(obj, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 180, 29))
+
+  [K in keyof T1 & keyof T2]: {
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 181, 3))
+>T1 : Symbol(T1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 180, 21))
+>T2 : Symbol(T2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 180, 24))
+
+    v1: T1[K];
+>v1 : Symbol(v1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 181, 31))
+>T1 : Symbol(T1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 180, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 181, 3))
+
+    v2: T2[K];
+>v2 : Symbol(v2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 182, 14))
+>T2 : Symbol(T2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 180, 24))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 181, 3))
+
+  };
+}): [T1, T2];
+>T1 : Symbol(T1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 180, 21))
+>T2 : Symbol(T2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 180, 24))
+
+const result3 = fn3({
+>result3 : Symbol(result3, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 187, 5))
+>fn3 : Symbol(fn3, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 178, 26))
+
+  a: {
+>a : Symbol(a, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 187, 21))
+
+    v1: "foo",
+>v1 : Symbol(v1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 188, 6))
+
+    v2: 100,
+>v2 : Symbol(v2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 189, 14))
+
+  },
+  b: {
+>b : Symbol(b, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 191, 4))
+
+    v1: true,
+>v1 : Symbol(v1, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 192, 6))
+
+    v2: null,
+>v2 : Symbol(v2, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 193, 13))
+
+  },
+});
+
+declare function fn4<T, E extends Record<string, number>>(arg: {
+>fn4 : Symbol(fn4, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 196, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 21))
+>E : Symbol(E, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 23))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 58))
+
+  [K in keyof T & keyof E]: {
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 199, 3))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 21))
+>E : Symbol(E, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 23))
+
+    data: T[K];
+>data : Symbol(data, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 199, 29))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 199, 3))
+
+    onSuccess: (data: T[K]) => void;
+>onSuccess : Symbol(onSuccess, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 200, 15))
+>data : Symbol(data, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 201, 16))
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 21))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 199, 3))
+
+    error: E[K];
+>error : Symbol(error, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 201, 36))
+>E : Symbol(E, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 23))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 199, 3))
+
+    onError: (data: E[K]) => void;
+>onError : Symbol(onError, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 202, 16))
+>data : Symbol(data, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 203, 14))
+>E : Symbol(E, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 23))
+>K : Symbol(K, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 199, 3))
+
+  };
+}): [T, E];
+>T : Symbol(T, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 21))
+>E : Symbol(E, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 198, 23))
+
+const result4 = fn4({
+>result4 : Symbol(result4, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 207, 5))
+>fn4 : Symbol(fn4, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 196, 3))
+
+  a: {
+>a : Symbol(a, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 207, 21))
+
+    data: "foo",
+>data : Symbol(data, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 208, 6))
+
+    onSuccess: (dataArg) => {
+>onSuccess : Symbol(onSuccess, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 209, 16))
+>dataArg : Symbol(dataArg, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 210, 16))
+
+      dataArg;
+>dataArg : Symbol(dataArg, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 210, 16))
+
+    },
+    error: 404,
+>error : Symbol(error, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 212, 6))
+
+    onError: (errorArg) => {
+>onError : Symbol(onError, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 213, 15))
+>errorArg : Symbol(errorArg, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 214, 14))
+
+      errorArg;
+>errorArg : Symbol(errorArg, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 214, 14))
+
+    },
+  },
+  b: {
+>b : Symbol(b, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 217, 4))
+
+    data: true,
+>data : Symbol(data, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 218, 6))
+
+    onSuccess: (dataArg) => {
+>onSuccess : Symbol(onSuccess, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 219, 15))
+>dataArg : Symbol(dataArg, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 220, 16))
+
+      dataArg;
+>dataArg : Symbol(dataArg, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 220, 16))
+
+    },
+    error: 500,
+>error : Symbol(error, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 222, 6))
+
+    onError: (errorArg) => {
+>onError : Symbol(onError, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 223, 15))
+>errorArg : Symbol(errorArg, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 224, 14))
+
+      errorArg;
+>errorArg : Symbol(errorArg, Decl(reverseMappedTypeLimitedConstraintWithIntersection1.ts, 224, 14))
+
+    },
+  },
+});
+

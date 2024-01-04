@@ -501,3 +501,142 @@ const result2 = fn2(obj2);
 >fn2 : <T extends Record<string, number>>(obj: { [K in "b" | (keyof T & "a")]: T[K]; }) => T
 >obj2 : { a: number; b: number; c: boolean; }
 
+declare function fn3<T1, T2>(obj: {
+>fn3 : <T1, T2>(obj: { [K in keyof T1 & keyof T2]: { v1: T1[K]; v2: T2[K]; }; }) => [T1, T2]
+>obj : { [K in keyof T1 & keyof T2]: { v1: T1[K]; v2: T2[K]; }; }
+
+  [K in keyof T1 & keyof T2]: {
+    v1: T1[K];
+>v1 : T1[K]
+
+    v2: T2[K];
+>v2 : T2[K]
+
+  };
+}): [T1, T2];
+
+const result3 = fn3({
+>result3 : [{ a: string; b: boolean; }, { a: number; b: null; }]
+>fn3({  a: {    v1: "foo",    v2: 100,  },  b: {    v1: true,    v2: null,  },}) : [{ a: string; b: boolean; }, { a: number; b: null; }]
+>fn3 : <T1, T2>(obj: { [K in keyof T1 & keyof T2]: { v1: T1[K]; v2: T2[K]; }; }) => [T1, T2]
+>{  a: {    v1: "foo",    v2: 100,  },  b: {    v1: true,    v2: null,  },} : { a: { v1: string; v2: number; }; b: { v1: true; v2: null; }; }
+
+  a: {
+>a : { v1: string; v2: number; }
+>{    v1: "foo",    v2: 100,  } : { v1: string; v2: number; }
+
+    v1: "foo",
+>v1 : string
+>"foo" : "foo"
+
+    v2: 100,
+>v2 : number
+>100 : 100
+
+  },
+  b: {
+>b : { v1: true; v2: null; }
+>{    v1: true,    v2: null,  } : { v1: true; v2: null; }
+
+    v1: true,
+>v1 : true
+>true : true
+
+    v2: null,
+>v2 : null
+
+  },
+});
+
+declare function fn4<T, E extends Record<string, number>>(arg: {
+>fn4 : <T, E extends Record<string, number>>(arg: { [K in keyof T & keyof E]: { data: T[K]; onSuccess: (data: T[K]) => void; error: E[K]; onError: (data: E[K]) => void; }; }) => [T, E]
+>arg : { [K in keyof T & keyof E]: { data: T[K]; onSuccess: (data: T[K]) => void; error: E[K]; onError: (data: E[K]) => void; }; }
+
+  [K in keyof T & keyof E]: {
+    data: T[K];
+>data : T[K]
+
+    onSuccess: (data: T[K]) => void;
+>onSuccess : (data: T[K]) => void
+>data : T[K]
+
+    error: E[K];
+>error : E[K]
+
+    onError: (data: E[K]) => void;
+>onError : (data: E[K]) => void
+>data : E[K]
+
+  };
+}): [T, E];
+
+const result4 = fn4({
+>result4 : [{ a: string; b: boolean; }, { a: 404; b: 500; }]
+>fn4({  a: {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  b: {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },}) : [{ a: string; b: boolean; }, { a: 404; b: 500; }]
+>fn4 : <T, E extends Record<string, number>>(arg: { [K in keyof T & keyof E]: { data: T[K]; onSuccess: (data: T[K]) => void; error: E[K]; onError: (data: E[K]) => void; }; }) => [T, E]
+>{  a: {    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  },  b: {    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  },} : { a: { data: string; onSuccess: (dataArg: string) => void; error: 404; onError: (errorArg: 404) => void; }; b: { data: true; onSuccess: (dataArg: boolean) => void; error: 500; onError: (errorArg: 500) => void; }; }
+
+  a: {
+>a : { data: string; onSuccess: (dataArg: string) => void; error: 404; onError: (errorArg: 404) => void; }
+>{    data: "foo",    onSuccess: (dataArg) => {      dataArg;    },    error: 404,    onError: (errorArg) => {      errorArg;    },  } : { data: string; onSuccess: (dataArg: string) => void; error: 404; onError: (errorArg: 404) => void; }
+
+    data: "foo",
+>data : string
+>"foo" : "foo"
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: string) => void
+>(dataArg) => {      dataArg;    } : (dataArg: string) => void
+>dataArg : string
+
+      dataArg;
+>dataArg : string
+
+    },
+    error: 404,
+>error : 404
+>404 : 404
+
+    onError: (errorArg) => {
+>onError : (errorArg: 404) => void
+>(errorArg) => {      errorArg;    } : (errorArg: 404) => void
+>errorArg : 404
+
+      errorArg;
+>errorArg : 404
+
+    },
+  },
+  b: {
+>b : { data: true; onSuccess: (dataArg: boolean) => void; error: 500; onError: (errorArg: 500) => void; }
+>{    data: true,    onSuccess: (dataArg) => {      dataArg;    },    error: 500,    onError: (errorArg) => {      errorArg;    },  } : { data: true; onSuccess: (dataArg: boolean) => void; error: 500; onError: (errorArg: 500) => void; }
+
+    data: true,
+>data : true
+>true : true
+
+    onSuccess: (dataArg) => {
+>onSuccess : (dataArg: boolean) => void
+>(dataArg) => {      dataArg;    } : (dataArg: boolean) => void
+>dataArg : boolean
+
+      dataArg;
+>dataArg : boolean
+
+    },
+    error: 500,
+>error : 500
+>500 : 500
+
+    onError: (errorArg) => {
+>onError : (errorArg: 500) => void
+>(errorArg) => {      errorArg;    } : (errorArg: 500) => void
+>errorArg : 500
+
+      errorArg;
+>errorArg : 500
+
+    },
+  },
+});
+

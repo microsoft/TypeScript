@@ -181,6 +181,56 @@ const obj2 = {
 };
 const result2 = fn2(obj2);
 
+declare function fn3<T1, T2>(obj: {
+  [K in keyof T1 & keyof T2]: {
+    v1: T1[K];
+    v2: T2[K];
+  };
+}): [T1, T2];
+
+const result3 = fn3({
+  a: {
+    v1: "foo",
+    v2: 100,
+  },
+  b: {
+    v1: true,
+    v2: null,
+  },
+});
+
+declare function fn4<T, E extends Record<string, number>>(arg: {
+  [K in keyof T & keyof E]: {
+    data: T[K];
+    onSuccess: (data: T[K]) => void;
+    error: E[K];
+    onError: (data: E[K]) => void;
+  };
+}): [T, E];
+
+const result4 = fn4({
+  a: {
+    data: "foo",
+    onSuccess: (dataArg) => {
+      dataArg;
+    },
+    error: 404,
+    onError: (errorArg) => {
+      errorArg;
+    },
+  },
+  b: {
+    data: true,
+    onSuccess: (dataArg) => {
+      dataArg;
+    },
+    error: 500,
+    onError: (errorArg) => {
+      errorArg;
+    },
+  },
+});
+
 
 //// [reverseMappedTypeLimitedConstraintWithIntersection1.js]
 "use strict";
@@ -275,3 +325,35 @@ var obj2 = {
     c: true,
 };
 var result2 = fn2(obj2);
+var result3 = fn3({
+    a: {
+        v1: "foo",
+        v2: 100,
+    },
+    b: {
+        v1: true,
+        v2: null,
+    },
+});
+var result4 = fn4({
+    a: {
+        data: "foo",
+        onSuccess: function (dataArg) {
+            dataArg;
+        },
+        error: 404,
+        onError: function (errorArg) {
+            errorArg;
+        },
+    },
+    b: {
+        data: true,
+        onSuccess: function (dataArg) {
+            dataArg;
+        },
+        error: 500,
+        onError: function (errorArg) {
+            errorArg;
+        },
+    },
+});
