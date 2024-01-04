@@ -139,18 +139,18 @@ export function createKatexMessageRendering<T extends true | false>(
 >(message: IMessage): IMessage => instance.renderMessage(message) : (message: IMessage) => IMessage
 >message : IMessage
 >instance.renderMessage(message) : IMessage
->instance.renderMessage : <T extends string | IMessage>(message: T) => T extends string ? string : T extends IMessage ? IMessage : string | IMessage
+>instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : string | IMessage
 >instance : NewKatex
->renderMessage : <T extends string | IMessage>(message: T) => T extends string ? string : T extends IMessage ? IMessage : string | IMessage
+>renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : string | IMessage
 >message : IMessage
     }
     return (message: string): string => instance.renderMessage(message); // Ok
 >(message: string): string => instance.renderMessage(message) : (message: string) => string
 >message : string
 >instance.renderMessage(message) : string
->instance.renderMessage : <T extends string | IMessage>(message: T) => T extends string ? string : T extends IMessage ? IMessage : string | IMessage
+>instance.renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : string | IMessage
 >instance : NewKatex
->renderMessage : <T extends string | IMessage>(message: T) => T extends string ? string : T extends IMessage ? IMessage : string | IMessage
+>renderMessage : <T_1 extends string | IMessage>(message: T_1) => T_1 extends string ? string : T_1 extends IMessage ? IMessage : string | IMessage
 >message : string
 }
 
