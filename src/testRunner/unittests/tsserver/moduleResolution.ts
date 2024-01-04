@@ -6,14 +6,14 @@ import {
     jsonToReadableText,
 } from "../helpers";
 import {
-    libContent,
-} from "../helpers/contents";
-import {
     getFsConentsForAlternateResultAtTypesPackageJson,
     getFsContentsForAlternateResult,
     getFsContentsForAlternateResultDts,
     getFsContentsForAlternateResultPackageJson,
 } from "../helpers/alternateResult";
+import {
+    libContent,
+} from "../helpers/contents";
 import {
     solutionBuildWithBaseline,
 } from "../helpers/solutionBuilder";
