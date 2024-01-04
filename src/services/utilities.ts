@@ -2979,10 +2979,11 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
     }
     else {
         const symbol = checker?.getSymbolAtLocation(link.name);
+        const targetSymbol = symbol && checker ? getSymbolTarget(symbol, checker) : undefined;
         const suffix = findLinkNameEnd(link.text);
         const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
         const text = skipSeparatorFromLinkText(link.text.slice(suffix));
-        const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
+        const decl = targetSymbol?.valueDeclaration || targetSymbol?.declarations?.[0];
         if (decl) {
             parts.push(linkNamePart(name, decl));
             if (text) parts.push(linkTextPart(text));
