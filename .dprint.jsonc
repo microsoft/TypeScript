@@ -30,6 +30,7 @@
         "importDeclaration.sortNamedImports": "maintain"
     },
     "prettier": {
+        "newLineKind": "lf",
         "associations": [
             "**/*.{yaml,yml}"
         ],
