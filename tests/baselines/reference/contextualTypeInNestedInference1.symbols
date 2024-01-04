@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/contextualTypeInNestedInference1.ts] ////
+
+=== contextualTypeInNestedInference1.ts ===
+// https://github.com/microsoft/TypeScript/issues/56912
+
+interface NameBag<Names extends Record<string, any> = {}> {
+>NameBag : Symbol(NameBag, Decl(contextualTypeInNestedInference1.ts, 0, 0))
+>Names : Symbol(Names, Decl(contextualTypeInNestedInference1.ts, 2, 18))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  addName<Name extends string>(options: {
+>addName : Symbol(NameBag.addName, Decl(contextualTypeInNestedInference1.ts, 2, 59))
+>Name : Symbol(Name, Decl(contextualTypeInNestedInference1.ts, 3, 10))
+>options : Symbol(options, Decl(contextualTypeInNestedInference1.ts, 3, 31))
+
+    name: Name;
+>name : Symbol(name, Decl(contextualTypeInNestedInference1.ts, 3, 41))
+>Name : Symbol(Name, Decl(contextualTypeInNestedInference1.ts, 3, 10))
+
+  }): NameBag<
+>NameBag : Symbol(NameBag, Decl(contextualTypeInNestedInference1.ts, 0, 0))
+
+    Names & {
+>Names : Symbol(Names, Decl(contextualTypeInNestedInference1.ts, 2, 18))
+
+      [key in Name]: { name: true };
+>key : Symbol(key, Decl(contextualTypeInNestedInference1.ts, 7, 7))
+>Name : Symbol(Name, Decl(contextualTypeInNestedInference1.ts, 3, 10))
+>name : Symbol(name, Decl(contextualTypeInNestedInference1.ts, 7, 22))
+    }
+  >;
+}
+
+const emptyBag: NameBag = null as any;
+>emptyBag : Symbol(emptyBag, Decl(contextualTypeInNestedInference1.ts, 12, 5))
+>NameBag : Symbol(NameBag, Decl(contextualTypeInNestedInference1.ts, 0, 0))
+
+const standalone = emptyBag.addName({ name: "hey!" });
+>standalone : Symbol(standalone, Decl(contextualTypeInNestedInference1.ts, 14, 5))
+>emptyBag.addName : Symbol(NameBag.addName, Decl(contextualTypeInNestedInference1.ts, 2, 59))
+>emptyBag : Symbol(emptyBag, Decl(contextualTypeInNestedInference1.ts, 12, 5))
+>addName : Symbol(NameBag.addName, Decl(contextualTypeInNestedInference1.ts, 2, 59))
+>name : Symbol(name, Decl(contextualTypeInNestedInference1.ts, 14, 37))
+
+function wrapper1<Schema extends Record<string, NameBag>>(
+>wrapper1 : Symbol(wrapper1, Decl(contextualTypeInNestedInference1.ts, 14, 54))
+>Schema : Symbol(Schema, Decl(contextualTypeInNestedInference1.ts, 16, 18))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>NameBag : Symbol(NameBag, Decl(contextualTypeInNestedInference1.ts, 0, 0))
+
+  schema: Schema,
+>schema : Symbol(schema, Decl(contextualTypeInNestedInference1.ts, 16, 58))
+>Schema : Symbol(Schema, Decl(contextualTypeInNestedInference1.ts, 16, 18))
+
+): Schema {
+>Schema : Symbol(Schema, Decl(contextualTypeInNestedInference1.ts, 16, 18))
+
+  return schema;
+>schema : Symbol(schema, Decl(contextualTypeInNestedInference1.ts, 16, 58))
+}
+
+const bagOfBags1 = wrapper1({
+>bagOfBags1 : Symbol(bagOfBags1, Decl(contextualTypeInNestedInference1.ts, 22, 5))
+>wrapper1 : Symbol(wrapper1, Decl(contextualTypeInNestedInference1.ts, 14, 54))
+
+  prop: emptyBag.addName({ name: "hey!" }),
+>prop : Symbol(prop, Decl(contextualTypeInNestedInference1.ts, 22, 29))
+>emptyBag.addName : Symbol(NameBag.addName, Decl(contextualTypeInNestedInference1.ts, 2, 59))
+>emptyBag : Symbol(emptyBag, Decl(contextualTypeInNestedInference1.ts, 12, 5))
+>addName : Symbol(NameBag.addName, Decl(contextualTypeInNestedInference1.ts, 2, 59))
+>name : Symbol(name, Decl(contextualTypeInNestedInference1.ts, 23, 26))
+
+});
+
+function wrapper2<Schema extends Record<string, NameBag<Record<string, any>>>>(
+>wrapper2 : Symbol(wrapper2, Decl(contextualTypeInNestedInference1.ts, 24, 3))
+>Schema : Symbol(Schema, Decl(contextualTypeInNestedInference1.ts, 26, 18))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>NameBag : Symbol(NameBag, Decl(contextualTypeInNestedInference1.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  schema: Schema,
+>schema : Symbol(schema, Decl(contextualTypeInNestedInference1.ts, 26, 79))
+>Schema : Symbol(Schema, Decl(contextualTypeInNestedInference1.ts, 26, 18))
+
+): Schema {
+>Schema : Symbol(Schema, Decl(contextualTypeInNestedInference1.ts, 26, 18))
+
+  return schema;
+>schema : Symbol(schema, Decl(contextualTypeInNestedInference1.ts, 26, 79))
+}
+
+const bagOfBags2 = wrapper2({
+>bagOfBags2 : Symbol(bagOfBags2, Decl(contextualTypeInNestedInference1.ts, 32, 5))
+>wrapper2 : Symbol(wrapper2, Decl(contextualTypeInNestedInference1.ts, 24, 3))
+
+  prop: emptyBag.addName({ name: "hey!" }),
+>prop : Symbol(prop, Decl(contextualTypeInNestedInference1.ts, 32, 29))
+>emptyBag.addName : Symbol(NameBag.addName, Decl(contextualTypeInNestedInference1.ts, 2, 59))
+>emptyBag : Symbol(emptyBag, Decl(contextualTypeInNestedInference1.ts, 12, 5))
+>addName : Symbol(NameBag.addName, Decl(contextualTypeInNestedInference1.ts, 2, 59))
+>name : Symbol(name, Decl(contextualTypeInNestedInference1.ts, 33, 26))
+
+});
+

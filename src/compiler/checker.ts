@@ -30619,9 +30619,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // the 'boolean' type from the contextual type such that contextually typed boolean
                 // literals actually end up widening to 'boolean' (see #48363).
                 const type = instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
+                // nothing is gained from contextual 'never' type so the uninstantiated type is kept
+                if (type.flags & TypeFlags.Never) {
+                    return contextualType;
+                }
                 return type.flags & TypeFlags.Union && containsType((type as UnionType).types, regularFalseType) && containsType((type as UnionType).types, regularTrueType) ?
                     filterType(type, t => t !== regularFalseType && t !== regularTrueType) :
-                    type;
+                    // intersecting helps to avoid widening when contextual type is a type parameter constrained to a primitive
+                    // and when the instantiated by the returnMapper type is that primitive type
+                    getIntersectionType([contextualType, type]);
             }
         }
         return contextualType;

@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/contextualTypeInNestedInference1.ts] ////
+
+=== contextualTypeInNestedInference1.ts ===
+// https://github.com/microsoft/TypeScript/issues/56912
+
+interface NameBag<Names extends Record<string, any> = {}> {
+  addName<Name extends string>(options: {
+>addName : <Name extends string>(options: {    name: Name;}) => NameBag<Names & { [key in Name]: { name: true; }; }>
+>options : { name: Name; }
+
+    name: Name;
+>name : Name
+
+  }): NameBag<
+    Names & {
+      [key in Name]: { name: true };
+>name : true
+>true : true
+    }
+  >;
+}
+
+const emptyBag: NameBag = null as any;
+>emptyBag : NameBag<{}>
+>null as any : any
+
+const standalone = emptyBag.addName({ name: "hey!" });
+>standalone : NameBag<{ "hey!": { name: true; }; }>
+>emptyBag.addName({ name: "hey!" }) : NameBag<{ "hey!": { name: true; }; }>
+>emptyBag.addName : <Name extends string>(options: { name: Name; }) => NameBag<{ [key in Name]: { name: true; }; }>
+>emptyBag : NameBag<{}>
+>addName : <Name extends string>(options: { name: Name; }) => NameBag<{ [key in Name]: { name: true; }; }>
+>{ name: "hey!" } : { name: "hey!"; }
+>name : "hey!"
+>"hey!" : "hey!"
+
+function wrapper1<Schema extends Record<string, NameBag>>(
+>wrapper1 : <Schema extends Record<string, NameBag<{}>>>(schema: Schema) => Schema
+
+  schema: Schema,
+>schema : Schema
+
+): Schema {
+  return schema;
+>schema : Schema
+}
+
+const bagOfBags1 = wrapper1({
+>bagOfBags1 : { prop: NameBag<{ "hey!": { name: true; }; }>; }
+>wrapper1({  prop: emptyBag.addName({ name: "hey!" }),}) : { prop: NameBag<{ "hey!": { name: true; }; }>; }
+>wrapper1 : <Schema extends Record<string, NameBag<{}>>>(schema: Schema) => Schema
+>{  prop: emptyBag.addName({ name: "hey!" }),} : { prop: NameBag<{ "hey!": { name: true; }; }>; }
+
+  prop: emptyBag.addName({ name: "hey!" }),
+>prop : NameBag<{ "hey!": { name: true; }; }>
+>emptyBag.addName({ name: "hey!" }) : NameBag<{ "hey!": { name: true; }; }>
+>emptyBag.addName : <Name extends string>(options: { name: Name; }) => NameBag<{ [key in Name]: { name: true; }; }>
+>emptyBag : NameBag<{}>
+>addName : <Name extends string>(options: { name: Name; }) => NameBag<{ [key in Name]: { name: true; }; }>
+>{ name: "hey!" } : { name: "hey!"; }
+>name : "hey!"
+>"hey!" : "hey!"
+
+});
+
+function wrapper2<Schema extends Record<string, NameBag<Record<string, any>>>>(
+>wrapper2 : <Schema extends Record<string, NameBag<Record<string, any>>>>(schema: Schema) => Schema
+
+  schema: Schema,
+>schema : Schema
+
+): Schema {
+  return schema;
+>schema : Schema
+}
+
+const bagOfBags2 = wrapper2({
+>bagOfBags2 : { prop: NameBag<{ "hey!": { name: true; }; }>; }
+>wrapper2({  prop: emptyBag.addName({ name: "hey!" }),}) : { prop: NameBag<{ "hey!": { name: true; }; }>; }
+>wrapper2 : <Schema extends Record<string, NameBag<Record<string, any>>>>(schema: Schema) => Schema
+>{  prop: emptyBag.addName({ name: "hey!" }),} : { prop: NameBag<{ "hey!": { name: true; }; }>; }
+
+  prop: emptyBag.addName({ name: "hey!" }),
+>prop : NameBag<{ "hey!": { name: true; }; }>
+>emptyBag.addName({ name: "hey!" }) : NameBag<{ "hey!": { name: true; }; }>
+>emptyBag.addName : <Name extends string>(options: { name: Name; }) => NameBag<{ [key in Name]: { name: true; }; }>
+>emptyBag : NameBag<{}>
+>addName : <Name extends string>(options: { name: Name; }) => NameBag<{ [key in Name]: { name: true; }; }>
+>{ name: "hey!" } : { name: "hey!"; }
+>name : "hey!"
+>"hey!" : "hey!"
+
+});
+
