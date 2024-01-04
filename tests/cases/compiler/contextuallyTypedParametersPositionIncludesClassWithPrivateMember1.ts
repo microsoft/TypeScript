@@ -16,3 +16,15 @@ declare function useIt(arg: Foo | FooLike): void;
 useIt({
   doStuff: (arg) => {},
 });
+
+declare function useIt2(arg: Foo): void;
+
+useIt2({
+  doStuff: (arg) => {},
+});
+
+declare function useIt3(arg: FooLike): void;
+
+useIt3({
+  doStuff: (arg) => {},
+});
