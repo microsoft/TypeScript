@@ -74,7 +74,6 @@ import {
     isTypeAliasDeclaration,
     isTypeReferenceNode,
     isVariableDeclaration,
-    KeywordSyntaxKind,
     last,
     map,
     mapDefined,
@@ -109,6 +108,9 @@ import {
     TypeReference,
     unescapeLeadingUnderscores,
 } from "./_namespaces/ts";
+import {
+    isContextWithStartAndEndNode,
+} from "./_namespaces/ts.FindAllReferences";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
@@ -154,14 +156,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         case SyntaxKind.CaseKeyword:
             const switchStatement = findAncestor(node.parent, isSwitchStatement);
             if (switchStatement) {
-                return [
-                    createDefinitionInfoFromStatement(
-                        switchStatement,
-                        SyntaxKind.SwitchKeyword,
-                        sourceFile,
-                        "switch",
-                    ),
-                ];
+                return [createDefinitionInfoFromStatement(switchStatement, sourceFile, "switch")];
             }
             break;
     }
@@ -739,24 +734,21 @@ function isConstructorLike(node: Node): boolean {
     }
 }
 
-function createDefinitionInfoFromStatement(
-    statement: SwitchStatement,
-    keywordKind: KeywordSyntaxKind,
-    sourceFile: SourceFile,
-    name: string,
-): DefinitionInfo {
-    const keyword = find(statement.getChildren(sourceFile), node => node.kind === keywordKind)!;
+function createDefinitionInfoFromStatement(statement: SwitchStatement, sourceFile: SourceFile, name: string): DefinitionInfo {
+    const keyword = FindAllReferences.getContextNode(statement)!;
+    const textSpan = createTextSpanFromNode(isContextWithStartAndEndNode(keyword) ? keyword.start : keyword, sourceFile)
     return {
         fileName: sourceFile.fileName,
-        textSpan: createTextSpanFromNode(keyword, sourceFile),
+        textSpan,
         kind: ScriptElementKind.keyword,
         name,
         containerKind: undefined!,
         containerName: "",
-        contextSpan: createTextSpanFromBounds(keyword.getStart(sourceFile), statement.caseBlock.getFullStart()),
+        ...FindAllReferences.toContextSpan(textSpan, sourceFile, keyword),
         isLocal: true,
         isAmbient: false,
         unverified: false,
         failedAliasResolution: undefined,
     };
 }
+
