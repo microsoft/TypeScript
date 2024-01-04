@@ -290,7 +290,7 @@ function createResolvedModuleWithFailedLookupLocations(
         failedLookupLocations: initializeResolutionField(failedLookupLocations),
         affectingLocations: initializeResolutionField(affectingLocations),
         resolutionDiagnostics: initializeResolutionField(diagnostics),
-        node10Result: legacyResult,
+        alternateResult: legacyResult,
     };
 }
 function initializeResolutionField<T>(value: T[]): T[] | undefined {

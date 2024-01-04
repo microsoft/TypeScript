@@ -765,18 +765,18 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
             oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
             oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
             packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId) &&
-            oldResolution.node10Result === newResolution.node10Result;
+            oldResolution.alternateResult === newResolution.alternateResult;
 }
 
 /** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
-    const node10Result = host.getResolvedModule(sourceFile, moduleReference, mode)?.node10Result;
-    const result = node10Result
+    const alternateResult = host.getResolvedModule(sourceFile, moduleReference, mode)?.alternateResult;
+    const result = alternateResult
         ? chainDiagnosticMessages(
             /*details*/ undefined,
             Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
-            node10Result,
-            node10Result.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
+            alternateResult,
+            alternateResult.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
         )
         : host.typesPackageExists(packageName)
         ? chainDiagnosticMessages(
