@@ -5447,6 +5447,14 @@
         "category": "Message",
         "code": 6278
     },
+    "Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.": {
+        "category": "Message",
+        "code": 6279
+    },
+    "There are types at '{0}', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.": {
+        "category": "Message",
+        "code": 6280
+    },
 
     "Enable project compilation": {
         "category": "Message",

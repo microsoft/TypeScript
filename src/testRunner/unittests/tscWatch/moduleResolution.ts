@@ -571,7 +571,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
             },
             {
-                caption: "add the ndoe10Result in package/types",
+                caption: "add the alternateResult in package/types",
                 edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();

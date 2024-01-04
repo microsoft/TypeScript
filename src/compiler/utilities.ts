@@ -771,12 +771,17 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
 /** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
     const alternateResult = host.getResolvedModule(sourceFile, moduleReference, mode)?.alternateResult;
-    const result = alternateResult
+    const alternateResultMessage = alternateResult && (getEmitModuleResolutionKind(host.getCompilerOptions()) === ModuleResolutionKind.Node10
+        ? [Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_under_your_current_moduleResolution_setting_Consider_updating_to_node16_nodenext_or_bundler, [alternateResult]] as const
+        : [
+            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+            [alternateResult, alternateResult.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName],
+        ] as const);
+    const result = alternateResultMessage
         ? chainDiagnosticMessages(
             /*details*/ undefined,
-            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
-            alternateResult,
-            alternateResult.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
+            alternateResultMessage[0],
+            ...alternateResultMessage[1],
         )
         : host.typesPackageExists(packageName)
         ? chainDiagnosticMessages(
