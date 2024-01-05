@@ -79,3 +79,68 @@ const result = setup({
   },
 });
 
+declare function foo<
+>foo : <T extends Record<PropertyKey, U>, U extends number | boolean>(a: { [K in keyof T]: (arg: T[K]) => void; }, b: U) => T
+
+  T extends Record<PropertyKey, U>,
+  U extends number | boolean,
+>(
+  a: {
+>a : { [K in keyof T]: (arg: T[K]) => void; }
+
+    [K in keyof T]: (arg: T[K]) => void;
+>arg : T[K]
+
+  },
+  b: U,
+>b : U
+
+): T;
+
+declare const num: number;
+>num : number
+
+const result1 = foo(
+>result1 : { a: number; b: number; }
+>foo(  {    a: (arg) => {},    b: () => {},  },  num,) : { a: number; b: number; }
+>foo : <T extends Record<PropertyKey, U>, U extends number | boolean>(a: { [K in keyof T]: (arg: T[K]) => void; }, b: U) => T
+  {
+>{    a: (arg) => {},    b: () => {},  } : { a: (arg: number) => void; b: () => void; }
+
+    a: (arg) => {},
+>a : (arg: number) => void
+>(arg) => {} : (arg: number) => void
+>arg : number
+
+    b: () => {},
+>b : () => void
+>() => {} : () => void
+
+  },
+  num,
+>num : number
+
+);
+
+const result2 = foo(
+>result2 : { a: 100; b: number; }
+>foo(  {    a: (arg: 100) => {},    b: () => {},  },  num,) : { a: 100; b: number; }
+>foo : <T extends Record<PropertyKey, U>, U extends number | boolean>(a: { [K in keyof T]: (arg: T[K]) => void; }, b: U) => T
+  {
+>{    a: (arg: 100) => {},    b: () => {},  } : { a: (arg: 100) => void; b: () => void; }
+
+    a: (arg: 100) => {},
+>a : (arg: 100) => void
+>(arg: 100) => {} : (arg: 100) => void
+>arg : 100
+
+    b: () => {},
+>b : () => void
+>() => {} : () => void
+
+  },
+  num,
+>num : number
+
+);
+

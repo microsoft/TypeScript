@@ -31,3 +31,31 @@ const result = setup({
     alwaysTrue: (_) => true,
   },
 });
+
+declare function foo<
+  T extends Record<PropertyKey, U>,
+  U extends number | boolean,
+>(
+  a: {
+    [K in keyof T]: (arg: T[K]) => void;
+  },
+  b: U,
+): T;
+
+declare const num: number;
+
+const result1 = foo(
+  {
+    a: (arg) => {},
+    b: () => {},
+  },
+  num,
+);
+
+const result2 = foo(
+  {
+    a: (arg: 100) => {},
+    b: () => {},
+  },
+  num,
+);

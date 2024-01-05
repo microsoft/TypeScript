@@ -13689,7 +13689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const modifiers = getMappedTypeModifiers(type.mappedType);
         const readonlyMask = modifiers & MappedTypeModifiers.IncludeReadonly ? false : true;
         const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
-        const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly)] : emptyArray;
+        const indexInfos = indexInfo ? [createIndexInfo(stringType, inferReverseMappedType(indexInfo.keyType, indexInfo.type, type.mappedType, type.constraintType, type.inferenceMapper), readonlyMask && indexInfo.isReadonly)] : emptyArray;
         const members = createSymbolTable();
         const limitedConstraint = getLimitedConstraint(type);
         for (const prop of getPropertiesOfType(type.source)) {
@@ -13723,6 +13723,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 inferredProp.links.mappedType = type.mappedType;
                 inferredProp.links.constraintType = type.constraintType;
+            }
+            if (type.inferenceMapper) {
+                inferredProp.links.inferenceMapper = type.inferenceMapper;
             }
             members.set(prop.escapedName, inferredProp);
         }
@@ -13993,13 +13996,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if ((type as ObjectType).objectFlags & ObjectFlags.ClassOrInterface) {
                     resolveClassOrInterfaceMembers(type as InterfaceType);
                 }
-                else if ((type as ReverseMappedType).objectFlags & ObjectFlags.ReverseMapped) {
+                else if ((type as ObjectType).objectFlags & ObjectFlags.ReverseMapped) {
                     resolveReverseMappedTypeMembers(type as ReverseMappedType);
                 }
                 else if ((type as ObjectType).objectFlags & ObjectFlags.Anonymous) {
                     resolveAnonymousTypeMembers(type as AnonymousType);
                 }
-                else if ((type as MappedType).objectFlags & ObjectFlags.Mapped) {
+                else if ((type as ObjectType).objectFlags & ObjectFlags.Mapped) {
                     resolveMappedTypeMembers(type as MappedType);
                 }
                 else {
@@ -25065,10 +25068,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
         // applied to the element type(s).
         if (isArrayType(source)) {
-            return createArrayType(inferReverseMappedType(getTypeArguments(source)[0], target, constraint), isReadonlyArrayType(source));
+            return createArrayType(inferReverseMappedType(numberType, getTypeArguments(source)[0], target, constraint), isReadonlyArrayType(source));
         }
         if (isTupleType(source)) {
-            const elementTypes = map(getElementTypes(source), t => inferReverseMappedType(t, target, constraint));
+            const elementTypes = map(getElementTypes(source), (t, i) => inferReverseMappedType(getStringLiteralType("" + i), t, target, constraint));
             const elementFlags = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
                 sameMap(source.target.elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
                 source.target.elementFlags;
@@ -25086,17 +25089,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol) {
         const links = getSymbolLinks(symbol);
         if (!links.type) {
-            links.type = inferReverseMappedType(symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType);
+            const propertyNameType = getStringLiteralType(unescapeLeadingUnderscores(symbol.escapedName));
+            links.type = inferReverseMappedType(propertyNameType, symbol.links.propertyType, symbol.links.mappedType, symbol.links.constraintType, symbol.links.inferenceMapper);
         }
         return links.type;
     }
 
-    function inferReverseMappedType(sourceType: Type, target: MappedType, constraint: IndexType): Type {
+    function inferReverseMappedType(propertyNameType: Type, sourceType: Type, target: MappedType, constraint: IndexType, inferenceMapper?: TypeMapper): Type {
         const typeParameter = getIndexedAccessType(constraint.type, getTypeParameterFromMappedType(target)) as TypeParameter;
         const templateType = getTemplateTypeFromMappedType(target);
         const inference = createInferenceInfo(typeParameter);
         inferTypes([inference], sourceType, templateType);
-        return getTypeFromInference(inference) || getBaseConstraintOfType(typeParameter) || unknownType;
+        const inferredType = getTypeFromInference(inference);
+        if (inferredType) {
+            return inferredType;
+        }
+        if (!inferenceMapper) {
+            return getBaseConstraintOfType(typeParameter) || unknownType;
+        }
+
+        return instantiateType(getConstraintOfType(getIndexedAccessType(constraint.type, propertyNameType)), inferenceMapper) || unknownType;
     }
 
     function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol> {
@@ -26185,9 +26197,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfTypeParameter(inference.typeParameter);
             if (constraint) {
                 const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
+                // TODO: decide what to do about fallback type
+                if (inferredType && inferredType.flags & TypeFlags.Object && (inferredType as ObjectType).objectFlags & ObjectFlags.ReverseMapped) {
+                    (inferredType as ReverseMappedType).inferenceMapper = context.nonFixingMapper;
+                }
                 if (!inferredType || !context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                     // If the fallback type satisfies the constraint, we pick it. Otherwise, we pick the constraint.
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
+                }
+                if (inferredType && inferredType.flags & TypeFlags.Object && (inferredType as ObjectType).objectFlags & ObjectFlags.ReverseMapped) {
+                    (inferredType as ReverseMappedType).inferenceMapper = undefined;
                 }
             }
         }

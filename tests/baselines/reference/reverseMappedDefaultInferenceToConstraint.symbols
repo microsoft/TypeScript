@@ -84,3 +84,71 @@ const result = setup({
   },
 });
 
+declare function foo<
+>foo : Symbol(foo, Decl(reverseMappedDefaultInferenceToConstraint.ts, 29, 3))
+
+  T extends Record<PropertyKey, U>,
+>T : Symbol(T, Decl(reverseMappedDefaultInferenceToConstraint.ts, 31, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(reverseMappedDefaultInferenceToConstraint.ts, 32, 35))
+
+  U extends number | boolean,
+>U : Symbol(U, Decl(reverseMappedDefaultInferenceToConstraint.ts, 32, 35))
+
+>(
+  a: {
+>a : Symbol(a, Decl(reverseMappedDefaultInferenceToConstraint.ts, 34, 2))
+
+    [K in keyof T]: (arg: T[K]) => void;
+>K : Symbol(K, Decl(reverseMappedDefaultInferenceToConstraint.ts, 36, 5))
+>T : Symbol(T, Decl(reverseMappedDefaultInferenceToConstraint.ts, 31, 21))
+>arg : Symbol(arg, Decl(reverseMappedDefaultInferenceToConstraint.ts, 36, 21))
+>T : Symbol(T, Decl(reverseMappedDefaultInferenceToConstraint.ts, 31, 21))
+>K : Symbol(K, Decl(reverseMappedDefaultInferenceToConstraint.ts, 36, 5))
+
+  },
+  b: U,
+>b : Symbol(b, Decl(reverseMappedDefaultInferenceToConstraint.ts, 37, 4))
+>U : Symbol(U, Decl(reverseMappedDefaultInferenceToConstraint.ts, 32, 35))
+
+): T;
+>T : Symbol(T, Decl(reverseMappedDefaultInferenceToConstraint.ts, 31, 21))
+
+declare const num: number;
+>num : Symbol(num, Decl(reverseMappedDefaultInferenceToConstraint.ts, 41, 13))
+
+const result1 = foo(
+>result1 : Symbol(result1, Decl(reverseMappedDefaultInferenceToConstraint.ts, 43, 5))
+>foo : Symbol(foo, Decl(reverseMappedDefaultInferenceToConstraint.ts, 29, 3))
+  {
+    a: (arg) => {},
+>a : Symbol(a, Decl(reverseMappedDefaultInferenceToConstraint.ts, 44, 3))
+>arg : Symbol(arg, Decl(reverseMappedDefaultInferenceToConstraint.ts, 45, 8))
+
+    b: () => {},
+>b : Symbol(b, Decl(reverseMappedDefaultInferenceToConstraint.ts, 45, 19))
+
+  },
+  num,
+>num : Symbol(num, Decl(reverseMappedDefaultInferenceToConstraint.ts, 41, 13))
+
+);
+
+const result2 = foo(
+>result2 : Symbol(result2, Decl(reverseMappedDefaultInferenceToConstraint.ts, 51, 5))
+>foo : Symbol(foo, Decl(reverseMappedDefaultInferenceToConstraint.ts, 29, 3))
+  {
+    a: (arg: 100) => {},
+>a : Symbol(a, Decl(reverseMappedDefaultInferenceToConstraint.ts, 52, 3))
+>arg : Symbol(arg, Decl(reverseMappedDefaultInferenceToConstraint.ts, 53, 8))
+
+    b: () => {},
+>b : Symbol(b, Decl(reverseMappedDefaultInferenceToConstraint.ts, 53, 24))
+
+  },
+  num,
+>num : Symbol(num, Decl(reverseMappedDefaultInferenceToConstraint.ts, 41, 13))
+
+);
+
