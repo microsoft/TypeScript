@@ -1541,20 +1541,24 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 initializer = injectPendingInitializers(classInfo, /*isStatic*/ true, initializer);
                 if (extraInitializersName) {
                     classInfo.pendingStaticInitializers ??= [];
-                    classInfo.pendingStaticInitializers.push(emitHelpers().createRunInitializersHelper(
-                        classInfo.classThis ?? factory.createThis(),
-                        extraInitializersName
-                    ));
+                    classInfo.pendingStaticInitializers.push(
+                        emitHelpers().createRunInitializersHelper(
+                            classInfo.classThis ?? factory.createThis(),
+                            extraInitializersName,
+                        ),
+                    );
                 }
             }
             else {
                 initializer = injectPendingInitializers(classInfo, /*isStatic*/ false, initializer);
                 if (extraInitializersName) {
                     classInfo.pendingInstanceInitializers ??= [];
-                    classInfo.pendingInstanceInitializers.push(emitHelpers().createRunInitializersHelper(
-                        factory.createThis(),
-                        extraInitializersName
-                    ));
+                    classInfo.pendingInstanceInitializers.push(
+                        emitHelpers().createRunInitializersHelper(
+                            factory.createThis(),
+                            extraInitializersName,
+                        ),
+                    );
                 }
             }
         }
@@ -2225,7 +2229,8 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         if (result !== expression) {
             if (isStatic) {
                 classInfo.pendingStaticInitializers = undefined;
-            } else {
+            }
+            else {
                 classInfo.pendingInstanceInitializers = undefined;
             }
         }
