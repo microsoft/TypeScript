@@ -37,9 +37,10 @@ dependentReturnType1.ts(362,9): error TS2322: Type 'true' is not assignable to t
 dependentReturnType1.ts(364,5): error TS2322: Type '""' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : string | boolean'.
 dependentReturnType1.ts(389,15): error TS2322: Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
 dependentReturnType1.ts(391,11): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
+dependentReturnType1.ts(433,13): error TS2322: Type '2' is not assignable to type '1'.
 
 
-==== dependentReturnType1.ts (34 errors) ====
+==== dependentReturnType1.ts (35 errors) ====
     interface A {
         1: number;
         2: string;
@@ -505,4 +506,55 @@ dependentReturnType1.ts(391,11): error TS2322: Type '2' is not assignable to typ
               ~
 !!! error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
         return 0;
+    }
+    
+    // Indexed access tests
+    interface F {
+        "t": number,
+        "f": boolean,
+    }
+    
+    // Ok
+    function depLikeFun<T extends "t" | "f">(str: T): F[T] {
+        if (str === "t") {
+            return 1;
+        } else {
+            return true;
+        }
+    }
+    
+    depLikeFun("t"); // has type number
+    depLikeFun("f"); // has type boolean
+    
+    type IndirectF<T extends keyof F> = F[T];
+    
+    // Ok
+    function depLikeFun2<T extends "t" | "f">(str: T): IndirectF<T> {
+        if (str === "t") {
+            return 1;
+        } else {
+            return true;
+        }
+    }
+    
+    
+    interface CComp {
+        foo: 1;
+        [s: string]: 1 | 2;
+    }
+    
+    function indexedCComp<T extends string | number>(x: T): CComp[T] {
+        if (x === "foo") {
+            if (Math.random()) {
+                return 2; // Error
+                ~~~~~~
+!!! error TS2322: Type '2' is not assignable to type '1'.
+            }
+            return 1; // Ok
+        }
+        return 2; // Ok
+    }
+    
+    function indexedCComp2<T extends string | number>(x: T): CComp[T] {
+        return 2; // Bad, unsafe
     }

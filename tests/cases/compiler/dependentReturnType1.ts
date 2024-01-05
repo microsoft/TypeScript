@@ -395,3 +395,52 @@ function* cbool<T extends true | false>(x: T): Generator<T extends true ? 1 : T 
     yield 2;
     return 0;
 }
+
+// Indexed access tests
+interface F {
+    "t": number,
+    "f": boolean,
+}
+
+// Ok
+function depLikeFun<T extends "t" | "f">(str: T): F[T] {
+    if (str === "t") {
+        return 1;
+    } else {
+        return true;
+    }
+}
+
+depLikeFun("t"); // has type number
+depLikeFun("f"); // has type boolean
+
+type IndirectF<T extends keyof F> = F[T];
+
+// Ok
+function depLikeFun2<T extends "t" | "f">(str: T): IndirectF<T> {
+    if (str === "t") {
+        return 1;
+    } else {
+        return true;
+    }
+}
+
+
+interface CComp {
+    foo: 1;
+    [s: string]: 1 | 2;
+}
+
+function indexedCComp<T extends string | number>(x: T): CComp[T] {
+    if (x === "foo") {
+        if (Math.random()) {
+            return 2; // Error
+        }
+        return 1; // Ok
+    }
+    return 2; // Ok
+}
+
+function indexedCComp2<T extends string | number>(x: T): CComp[T] {
+    return 2; // Bad, unsafe
+}

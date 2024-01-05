@@ -1083,3 +1083,108 @@ function* cbool<T extends true | false>(x: T): Generator<T extends true ? 1 : T 
     yield 2;
     return 0;
 }
+
+// Indexed access tests
+interface F {
+>F : Symbol(F, Decl(dependentReturnType1.ts, 392, 1))
+
+    "t": number,
+>"t" : Symbol(F["t"], Decl(dependentReturnType1.ts, 395, 13))
+
+    "f": boolean,
+>"f" : Symbol(F["f"], Decl(dependentReturnType1.ts, 396, 16))
+}
+
+// Ok
+function depLikeFun<T extends "t" | "f">(str: T): F[T] {
+>depLikeFun : Symbol(depLikeFun, Decl(dependentReturnType1.ts, 398, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 401, 20))
+>str : Symbol(str, Decl(dependentReturnType1.ts, 401, 41))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 401, 20))
+>F : Symbol(F, Decl(dependentReturnType1.ts, 392, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 401, 20))
+
+    if (str === "t") {
+>str : Symbol(str, Decl(dependentReturnType1.ts, 401, 41))
+
+        return 1;
+    } else {
+        return true;
+    }
+}
+
+depLikeFun("t"); // has type number
+>depLikeFun : Symbol(depLikeFun, Decl(dependentReturnType1.ts, 398, 1))
+
+depLikeFun("f"); // has type boolean
+>depLikeFun : Symbol(depLikeFun, Decl(dependentReturnType1.ts, 398, 1))
+
+type IndirectF<T extends keyof F> = F[T];
+>IndirectF : Symbol(IndirectF, Decl(dependentReturnType1.ts, 410, 16))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 412, 15))
+>F : Symbol(F, Decl(dependentReturnType1.ts, 392, 1))
+>F : Symbol(F, Decl(dependentReturnType1.ts, 392, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 412, 15))
+
+// Ok
+function depLikeFun2<T extends "t" | "f">(str: T): IndirectF<T> {
+>depLikeFun2 : Symbol(depLikeFun2, Decl(dependentReturnType1.ts, 412, 41))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 415, 21))
+>str : Symbol(str, Decl(dependentReturnType1.ts, 415, 42))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 415, 21))
+>IndirectF : Symbol(IndirectF, Decl(dependentReturnType1.ts, 410, 16))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 415, 21))
+
+    if (str === "t") {
+>str : Symbol(str, Decl(dependentReturnType1.ts, 415, 42))
+
+        return 1;
+    } else {
+        return true;
+    }
+}
+
+
+interface CComp {
+>CComp : Symbol(CComp, Decl(dependentReturnType1.ts, 421, 1))
+
+    foo: 1;
+>foo : Symbol(CComp.foo, Decl(dependentReturnType1.ts, 424, 17))
+
+    [s: string]: 1 | 2;
+>s : Symbol(s, Decl(dependentReturnType1.ts, 426, 5))
+}
+
+function indexedCComp<T extends string | number>(x: T): CComp[T] {
+>indexedCComp : Symbol(indexedCComp, Decl(dependentReturnType1.ts, 427, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 429, 22))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 429, 49))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 429, 22))
+>CComp : Symbol(CComp, Decl(dependentReturnType1.ts, 421, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 429, 22))
+
+    if (x === "foo") {
+>x : Symbol(x, Decl(dependentReturnType1.ts, 429, 49))
+
+        if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+            return 2; // Error
+        }
+        return 1; // Ok
+    }
+    return 2; // Ok
+}
+
+function indexedCComp2<T extends string | number>(x: T): CComp[T] {
+>indexedCComp2 : Symbol(indexedCComp2, Decl(dependentReturnType1.ts, 437, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 439, 23))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 439, 50))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 439, 23))
+>CComp : Symbol(CComp, Decl(dependentReturnType1.ts, 421, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 439, 23))
+
+    return 2; // Bad, unsafe
+}
