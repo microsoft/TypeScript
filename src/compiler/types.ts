@@ -3663,11 +3663,27 @@ export interface ImportClause extends NamedDeclaration {
 /** @deprecated */
 export type AssertionKey = ImportAttributeName;
 
-/** @deprecated */
-export interface AssertEntry extends ImportAttribute {}
+// The following two types are copied and pasted versions of ImportAttribute and ImportAttributes,
+// preserved for backwards compatibility with downstream users which "patch" our public API
+// like `interface AssertEntry extends Node {}` to ensure both are available.
+// Eventually, these should be removed.
 
 /** @deprecated */
-export interface AssertClause extends ImportAttributes {}
+export interface AssertEntry extends Node {
+    readonly kind: SyntaxKind.AssertEntry;
+    readonly parent: AssertClause;
+    readonly name: ImportAttributeName;
+    readonly value: Expression;
+}
+
+/** @deprecated */
+export interface AssertClause extends Node {
+    readonly token: SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword;
+    readonly kind: SyntaxKind.AssertClause;
+    readonly parent: ImportDeclaration | ExportDeclaration;
+    readonly elements: NodeArray<AssertEntry>;
+    readonly multiLine?: boolean;
+}
 
 export type ImportAttributeName = Identifier | StringLiteral;
 

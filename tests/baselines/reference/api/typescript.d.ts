@@ -6021,10 +6021,19 @@ declare namespace ts {
     /** @deprecated */
     type AssertionKey = ImportAttributeName;
     /** @deprecated */
-    interface AssertEntry extends ImportAttribute {
+    interface AssertEntry extends Node {
+        readonly kind: SyntaxKind.AssertEntry;
+        readonly parent: AssertClause;
+        readonly name: ImportAttributeName;
+        readonly value: Expression;
     }
     /** @deprecated */
-    interface AssertClause extends ImportAttributes {
+    interface AssertClause extends Node {
+        readonly token: SyntaxKind.WithKeyword | SyntaxKind.AssertKeyword;
+        readonly kind: SyntaxKind.AssertClause;
+        readonly parent: ImportDeclaration | ExportDeclaration;
+        readonly elements: NodeArray<AssertEntry>;
+        readonly multiLine?: boolean;
     }
     type ImportAttributeName = Identifier | StringLiteral;
     interface ImportAttribute extends Node {
