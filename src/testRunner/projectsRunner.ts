@@ -54,7 +54,7 @@ export class ProjectRunner extends Harness.RunnerBase {
         describe("projects tests", () => {
             const tests = this.tests.length === 0 ? this.enumerateTestFiles() : this.tests;
             for (const test of tests) {
-                this.runProjectTestCase(typeof test === "string" ? test : test.file);
+                this.runProjectTestCase(test);
             }
         });
     }

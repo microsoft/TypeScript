@@ -25,7 +25,7 @@ export interface IO {
     fileExists(fileName: string): boolean;
     directoryExists(path: string): boolean;
     deleteFile(fileName: string): void;
-    enumerateTestFiles(runner: RunnerBase): (string | FileBasedTest)[];
+    enumerateTestFiles(runner: RunnerBase): string[];
     listFiles(path: string, filter?: RegExp, options?: { recursive?: boolean; }): string[];
     log(text: string): void;
     args(): string[];
