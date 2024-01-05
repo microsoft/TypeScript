@@ -4490,7 +4490,7 @@ declare namespace Intl {
         timeZoneName?: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric" | undefined;
         formatMatcher?: "best fit" | "basic" | undefined;
         hour12?: boolean | undefined;
-        timeZone?: string | undefined;
+        timeZone?: string | (typeof globalThis extends { Temporal: { TimeZoneProtocol: infer T; }; } ? T : undefined) | undefined;
     }
 
     interface ResolvedDateTimeFormatOptions {
