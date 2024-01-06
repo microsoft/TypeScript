@@ -44159,6 +44159,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (queryTypeParameters && narrowPosition.flowNode) {
                             const narrowed: [TypeParameter, Type][] = mapDefined(queryTypeParameters, ([tp, symbol, reference]) => {
                                 const narrowReference = factory.cloneNode(reference); // Construct a reference that can be narrowed.
+                                // Don't reuse the original reference's node id,
+                                // because that could cause us to get a type that was cached for the original reference.
+                                narrowReference.id = undefined;
                                 // Set the symbol of the synthetic reference.
                                 // This allows us to get the type of the reference at a location where the reference is possibly shadowed.
                                 getNodeLinks(narrowReference).resolvedSymbol = symbol;
