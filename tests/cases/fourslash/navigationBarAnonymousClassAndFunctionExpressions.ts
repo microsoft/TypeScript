@@ -18,7 +18,7 @@
 ////    // These will only show up as childItems.
 ////    function z() {}
 ////    console.log(function() {})
-////    describe("this", 'function', `is a function`, `but this ${"wont"} show`, () => {});
+////    describe("this", 'function', `is a function`, `with template literal ${"a"}`, () => {});
 ////    [].map(() => {});
 ////})
 ////(function classes() {
@@ -77,11 +77,11 @@ verify.navigationTree({
                     "kind": "function"
                 },
                 {
-                    "text": `describe("this", 'function', \`is a function\`) callback`,
+                    "text": "describe(\"this\", 'function', `is a function`, `with template literal ${\"a\"}`) callback",
                     "kind": "function"
                 },
                 {
-                    "text": `map() callback`,
+                    "text": "map() callback",
                     "kind": "function"
                 },
                 {
@@ -199,11 +199,11 @@ verify.navigationBar([
                 "kind": "function"
             },
             {
-                "text": `describe("this", 'function', \`is a function\`) callback`,
+                "text": "describe(\"this\", 'function', `is a function`, `with template literal ${\"a\"}`) callback",
                 "kind": "function"
             },
             {
-                "text": `map() callback`,
+                "text": "map() callback",
                 "kind": "function"
             },
             {
