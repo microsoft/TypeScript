@@ -8,8 +8,8 @@ import tsInternal = require("typescript-internal");
 >tsInternal : typeof tsInternal
 
 import tsserverlibrary = require("tsserverlibrary");
->tsserverlibrary : typeof tsserverlibrary
+>tsserverlibrary : typeof ts
 
 import tsserverlibraryInternal = require("tsserverlibrary-internal");
->tsserverlibraryInternal : typeof tsserverlibraryInternal
+>tsserverlibraryInternal : typeof tsInternal
 

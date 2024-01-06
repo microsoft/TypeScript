@@ -19,7 +19,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
-        if (typeof value !== "object") throw new TypeError("Object expected.");
+        if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
         var dispose;
         if (async) {
             if (!Symbol.asyncDispose) throw new TypeError("Symbol.asyncDispose is not defined.");
@@ -70,8 +70,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function main() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, e_1, _b, _c;
         try {
             for (var _d = true, _e = __asyncValues([{ [Symbol.dispose]() { } }, null, undefined]), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
                 _c = _f.value;

@@ -59,10 +59,11 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Annotate_with_type_from_JSDoc, fixId, Diagnostics.Annotate_everything_with_types_from_JSDoc)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const decl = getDeclaration(diag.file, diag.start);
-        if (decl) doChange(changes, diag.file, decl);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const decl = getDeclaration(diag.file, diag.start);
+            if (decl) doChange(changes, diag.file, decl);
+        }),
 });
 
 function getDeclaration(file: SourceFile, pos: number): DeclarationWithType | undefined {
@@ -155,7 +156,8 @@ function transformJSDocTypeLiteral(node: JSDocTypeLiteral) {
             /*modifiers*/ undefined,
             isIdentifier(tag.name) ? tag.name : tag.name.right,
             isOptionalJSDocPropertyLikeTag(tag) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-            tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword))));
+            tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+        )));
     setEmitFlags(typeNode, EmitFlags.SingleLine);
     return typeNode;
 }
@@ -225,7 +227,8 @@ function transformJSDocIndexSignature(node: TypeReferenceNode) {
         node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
         /*questionToken*/ undefined,
         factory.createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
-        /*initializer*/ undefined);
+        /*initializer*/ undefined,
+    );
     const indexSignature = factory.createTypeLiteralNode([factory.createIndexSignature(/*modifiers*/ undefined, [index], node.typeArguments![1])]);
     setEmitFlags(indexSignature, EmitFlags.SingleLine);
     return indexSignature;

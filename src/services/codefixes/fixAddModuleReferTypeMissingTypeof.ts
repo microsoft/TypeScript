@@ -27,8 +27,7 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_typeof, fixId, Diagnostics.Add_missing_typeof)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-        doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start))),
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, context.sourceFile, getImportTypeNode(diag.file, diag.start))),
 });
 
 function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode {
@@ -39,6 +38,6 @@ function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode 
 }
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importType: ImportTypeNode) {
-    const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.assertions, importType.qualifier, importType.typeArguments, /*isTypeOf*/ true);
+    const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.attributes, importType.qualifier, importType.typeArguments, /*isTypeOf*/ true);
     changes.replaceNode(sourceFile, importType, newTypeNode);
 }

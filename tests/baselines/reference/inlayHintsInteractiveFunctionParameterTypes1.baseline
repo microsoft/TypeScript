@@ -1,0 +1,589 @@
+// === Inlay Hints ===
+ const f1: F1 = (a, b) => { }
+                  ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "string"
+    }
+  ],
+  "position": 60,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ const f1: F1 = (a, b) => { }
+                     ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    }
+  ],
+  "position": 63,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ const f2: F1 = (a, b: number) => { }
+                  ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "string"
+    }
+  ],
+  "position": 90,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ foo1((a) => { })
+        ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "string"
+    }
+  ],
+  "position": 162,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ foo2((a) => { })
+        ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "2"
+    },
+    {
+      "text": " | "
+    },
+    {
+      "text": "3"
+    }
+  ],
+  "position": 239,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ foo3(a => {
+       ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": "c"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": "d"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "2"
+    },
+    {
+      "text": " | "
+    },
+    {
+      "text": "3"
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": " => "
+    },
+    {
+      "text": "void"
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": " => "
+    },
+    {
+      "text": "void"
+    }
+  ],
+  "position": 340,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+     a(d => {})
+        ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "2"
+    },
+    {
+      "text": " | "
+    },
+    {
+      "text": "3"
+    }
+  ],
+  "position": 354,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ foo4(1, a => { })
+          ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    }
+  ],
+  "position": 422,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ const foo5: F2 = (a) => { }
+                    ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "{"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "<"
+    },
+    {
+      "text": "X",
+      "span": {
+        "start": 599,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": ", "
+    },
+    {
+      "text": "Y",
+      "span": {
+        "start": 602,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": ">"
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": "x"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "X",
+      "span": {
+        "start": 599,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "Y",
+      "span": {
+        "start": 602,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "["
+    },
+    {
+      "text": "i"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "]"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "a"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "b"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "readonly"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "c"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "boolean"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "d"
+    },
+    {
+      "text": "?"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "e"
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "f"
+    },
+    {
+      "text": "?"
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "boolean"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "g"
+    },
+    {
+      "text": "<"
+    },
+    {
+      "text": "T",
+      "span": {
+        "start": 562,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": ">"
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "T",
+      "span": {
+        "start": 562,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": "; "
+    },
+    {
+      "text": "h"
+    },
+    {
+      "text": "?"
+    },
+    {
+      "text": "<"
+    },
+    {
+      "text": "X",
+      "span": {
+        "start": 578,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": ", "
+    },
+    {
+      "text": "Y",
+      "span": {
+        "start": 581,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": ">"
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": "x"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "X",
+      "span": {
+        "start": 578,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "Y",
+      "span": {
+        "start": 581,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "}"
+    }
+  ],
+  "position": 671,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ const foo6: F3 = (a) => { }
+                    ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": " => "
+    },
+    {
+      "text": "42"
+    }
+  ],
+  "position": 741,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+foo4(p => {})
+      ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "Thing",
+      "span": {
+        "start": 760,
+        "length": 5
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveFunctionParameterTypes1.ts"
+    }
+  ],
+  "position": 826,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ const foo5: F4 = (a) => { }
+                    ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "{"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "["
+    },
+    {
+      "text": "x"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "string"
+    },
+    {
+      "text": "]"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "number"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "}"
+    }
+  ],
+  "position": 910,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

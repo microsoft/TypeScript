@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/declarationEmitPropertyNumericStringKey.ts] ////
+
+=== declarationEmitPropertyNumericStringKey.ts ===
+// https://github.com/microsoft/TypeScript/issues/55292
+
+const STATUS = {
+>STATUS : Symbol(STATUS, Decl(declarationEmitPropertyNumericStringKey.ts, 2, 5))
+
+    ["404"]: "not found",
+>["404"] : Symbol(["404"], Decl(declarationEmitPropertyNumericStringKey.ts, 2, 16))
+>"404" : Symbol(["404"], Decl(declarationEmitPropertyNumericStringKey.ts, 2, 16))
+
+} as const;
+>const : Symbol(const)
+
+const hundredStr = "100";
+>hundredStr : Symbol(hundredStr, Decl(declarationEmitPropertyNumericStringKey.ts, 6, 5))
+
+const obj = { [hundredStr]: "foo" };
+>obj : Symbol(obj, Decl(declarationEmitPropertyNumericStringKey.ts, 7, 5))
+>[hundredStr] : Symbol([hundredStr], Decl(declarationEmitPropertyNumericStringKey.ts, 7, 13))
+>hundredStr : Symbol(hundredStr, Decl(declarationEmitPropertyNumericStringKey.ts, 6, 5))
+
+const hundredNum = 100;
+>hundredNum : Symbol(hundredNum, Decl(declarationEmitPropertyNumericStringKey.ts, 9, 5))
+
+const obj2 = { [hundredNum]: "bar" };
+>obj2 : Symbol(obj2, Decl(declarationEmitPropertyNumericStringKey.ts, 10, 5))
+>[hundredNum] : Symbol([hundredNum], Decl(declarationEmitPropertyNumericStringKey.ts, 10, 14))
+>hundredNum : Symbol(hundredNum, Decl(declarationEmitPropertyNumericStringKey.ts, 9, 5))
+

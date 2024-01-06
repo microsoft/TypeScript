@@ -4,28 +4,22 @@ import * as path from "path";
 import {
     combinePaths,
     createGetCanonicalFileName,
-    Debug,
-    forEachAncestorDirectory,
     getDirectoryPath,
     MapLike,
     normalizePath,
     normalizeSlashes,
-    stringContains,
     sys,
     toPath,
     version,
 } from "./_namespaces/ts";
 import {
-    ActionPackageInstalled,
     Arguments,
-    EventTypesRegistry,
     findArgument,
     hasArgument,
     InitializationFailedResponse,
     InstallTypingHost,
     nowString,
-    PackageInstalledResponse,
-    TypesRegistryResponse,
+    stringifyIndented,
     TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
 } from "./_namespaces/ts.server";
@@ -118,11 +112,12 @@ export class NodeTypingsInstaller extends TypingsInstaller {
             typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
             typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", libDirectory, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
             throttleLimit,
-            log);
+            log,
+        );
         this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0], validateDefaultNpmLocation, this.installTypingHost);
 
         // If the NPM path contains spaces and isn't wrapped in quotes, do so.
-        if (stringContains(this.npmPath, " ") && this.npmPath[0] !== `"`) {
+        if (this.npmPath.includes(" ") && this.npmPath[0] !== `"`) {
             this.npmPath = `"${this.npmPath}"`;
         }
         if (this.log.isEnabled()) {
@@ -158,52 +153,18 @@ export class NodeTypingsInstaller extends TypingsInstaller {
         this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
     }
 
-    handleRequest(req: TypingInstallerRequestUnion) {
+    override handleRequest(req: TypingInstallerRequestUnion) {
         if (this.delayedInitializationError) {
             // report initializationFailed error
             this.sendResponse(this.delayedInitializationError);
             this.delayedInitializationError = undefined;
         }
-        switch (req.kind) {
-            case "discover":
-                this.install(req);
-                break;
-            case "closeProject":
-                this.closeProject(req);
-                break;
-            case "typesRegistry": {
-                const typesRegistry: { [key: string]: MapLike<string> } = {};
-                this.typesRegistry.forEach((value, key) => {
-                    typesRegistry[key] = value;
-                });
-                const response: TypesRegistryResponse = { kind: EventTypesRegistry, typesRegistry };
-                this.sendResponse(response);
-                break;
-            }
-            case "installPackage": {
-                const { fileName, packageName, projectName, projectRootPath } = req;
-                const cwd = getDirectoryOfPackageJson(fileName, this.installTypingHost) || projectRootPath;
-                if (cwd) {
-                    this.installWorker(-1, [packageName], cwd, success => {
-                        const message = success ? `Package ${packageName} installed.` : `There was an error installing ${packageName}.`;
-                        const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success, message };
-                        this.sendResponse(response);
-                    });
-                }
-                else {
-                    const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
-                    this.sendResponse(response);
-                }
-                break;
-            }
-            default:
-                Debug.assertNever(req);
-        }
+        super.handleRequest(req);
     }
 
     protected sendResponse(response: TypingInstallerResponseUnion) {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`Sending response:\n    ${JSON.stringify(response)}`);
+            this.log.writeLine(`Sending response:${stringifyIndented(response)}`);
         }
         process.send!(response); // TODO: GH#18217
         if (this.log.isEnabled()) {
@@ -213,7 +174,7 @@ export class NodeTypingsInstaller extends TypingsInstaller {
 
     protected installWorker(requestId: number, packageNames: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void {
         if (this.log.isEnabled()) {
-            this.log.writeLine(`#${requestId} with arguments'${JSON.stringify(packageNames)}'.`);
+            this.log.writeLine(`#${requestId} with cwd: ${cwd} arguments: ${JSON.stringify(packageNames)}`);
         }
         const start = Date.now();
         const hasError = installNpmPackages(this.npmPath, version, packageNames, command => this.execSyncAndLog(command, { cwd }));
@@ -243,14 +204,6 @@ export class NodeTypingsInstaller extends TypingsInstaller {
     }
 }
 
-function getDirectoryOfPackageJson(fileName: string, host: InstallTypingHost): string | undefined {
-    return forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
-        if (host.fileExists(combinePaths(directory, "package.json"))) {
-            return directory;
-        }
-    });
-}
-
 const logFilePath = findArgument(Arguments.LogFile);
 const globalTypingsCacheLocation = findArgument(Arguments.GlobalCacheLocation);
 const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
@@ -272,7 +225,7 @@ process.on("disconnect", () => {
 });
 let installer: NodeTypingsInstaller | undefined;
 process.on("message", (req: TypingInstallerRequestUnion) => {
-    installer ??= new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/5, log); // TODO: GH#18217
+    installer ??= new NodeTypingsInstaller(globalTypingsCacheLocation!, typingSafeListLocation!, typesMapLocation!, npmLocation, validateDefaultNpmLocation, /*throttleLimit*/ 5, log); // TODO: GH#18217
     installer.handleRequest(req);
 });
 

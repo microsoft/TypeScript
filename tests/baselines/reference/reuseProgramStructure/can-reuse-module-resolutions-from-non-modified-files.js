@@ -3,43 +3,31 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 /// <reference path="a1.ts"/>
@@ -48,7 +36,7 @@ File: f1.ts
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -57,7 +45,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs1: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -75,7 +63,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -92,7 +80,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -141,43 +129,31 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 /// <reference path="a1.ts"/>
@@ -185,7 +161,7 @@ File: f1.ts
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -194,7 +170,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs1: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -212,7 +188,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -229,7 +205,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -254,7 +230,9 @@ Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old p
 Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.
 Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -268,50 +246,38 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 /// <reference path="a1.ts"/>
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -320,7 +286,6 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -328,7 +293,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -345,7 +310,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -365,7 +330,9 @@ Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old p
 Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.
 Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -379,50 +346,38 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 
 import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -431,7 +386,6 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -439,7 +393,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -456,7 +410,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -476,7 +430,9 @@ Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old p
 Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.
 Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -490,49 +446,37 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 
 import { B } from './b1';
 declare module './b1' { interface B { y: string; } }
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -541,7 +485,6 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -549,7 +492,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -566,7 +509,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -583,7 +526,9 @@ Explicitly specified module resolution kind: 'Classic'.
 File 'b1.ts' exists - use it as a name resolution result.
 ======== Module name './b1' was successfully resolved to 'b1.ts'. ========
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -598,49 +543,37 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 
 import { B } from './b1';
 
-resolvedModules: 
+resolvedModules:
 ./b1: {
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
@@ -649,7 +582,6 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -657,7 +589,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -674,7 +606,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -694,7 +626,9 @@ Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old p
 Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.
 Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
@@ -709,50 +643,36 @@ File: a1.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: a2.ts
 
 
 let x = 1;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b1.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: b2.ts
 
 export class B { x: number; }
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs1/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: node_modules/@types/typerefs2/index.d.ts
 
 
 declare let z: string;
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f1.ts
 
 
 
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
 /// <reference path="a2.ts"/>
@@ -760,7 +680,7 @@ File: f2.ts
 import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
-resolvedModules: 
+resolvedModules:
 ./b2: {
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
@@ -777,7 +697,7 @@ resolvedModules:
     "resolvedUsingTsExtension": false
   }
 }
-resolvedTypeReferenceDirectiveNames: 
+resolvedTypeReferenceDirectiveNames:
 typerefs2: {
   "resolvedTypeReferenceDirective": {
     "primary": true,
@@ -793,7 +713,9 @@ Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old p
 Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.
 Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 a1.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.
 a2.ts(3,5): error TS2451: Cannot redeclare block-scoped variable 'x'.

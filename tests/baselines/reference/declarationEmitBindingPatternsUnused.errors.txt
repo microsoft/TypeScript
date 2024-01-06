@@ -1,0 +1,132 @@
+declarationEmitBindingPatternsUnused.ts(85,35): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(89,41): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(95,11): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(96,15): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(97,16): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+declarationEmitBindingPatternsUnused.ts(98,12): error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+
+
+==== declarationEmitBindingPatternsUnused.ts (6 errors) ====
+    type Named = { name: string }
+    function notReferenced({ name: alias }: Named) {
+    
+    }
+    function notReferencedNestedAlias({ p: { name: alias } }: { p: Named }) {
+    }
+    function notReferencedArrayAlias([a, b, { name: alias }]: Named[]) {
+    }
+    
+    
+    
+    function referencedInCode({ name: alias }: Named) {
+        return alias;
+    }
+    
+    function referencedInSignarture({ name: alias }: Named): typeof alias {
+        return alias;
+    }
+    
+    function referencedInSignartureKeyword({ function: alias }: { function: string }): typeof alias {
+        return null!;
+    }
+    
+    function referencedInInferredType({ name: alias }: Named) {
+        type Named2 = { name: typeof alias }
+        return null! as Named2
+    }
+    
+    function referencedInNestedFunction({ name: alias }: Named) {
+        return function(p: typeof alias) {
+    
+        }
+    }
+    
+    function referencedNestedAlias({ p: { name: alias } }: { p: Named }): typeof alias {
+    	return alias;
+    }
+    
+    function referencedArrayAlias([a, b, { name: alias }]: Named[]): typeof alias {
+    	return alias;
+    }
+    
+    
+    class NotReferencedClass {
+    	constructor({ name: alias }: Named) {
+    	}
+    	set x({ name: alias }: Named) {
+            console.log(alias);
+        }
+    	m({ name: alias }: Named) {
+            console.log(alias);
+        }
+    }
+    
+    class ReferencedInCodeClas {
+    	constructor({ name: alias }: Named) {
+    		console.log(alias);
+    	}
+    	set x({ name: alias }: Named) {
+            console.log(alias);
+        }
+    	m({ name: alias }: Named) {
+            console.log(alias);
+        }
+    }
+    
+    class ReferencedInSignartureClass {
+    	constructor({ name: alias }: Named, p: typeof alias) {
+    		console.log(alias);
+    	}
+    	set x({ name: alias }: Named & { o: typeof alias }) {
+            
+        }
+    	mReturnType({ name: alias }: Named): typeof alias {
+            return null!
+        }
+    	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias> {
+            return null!
+        }
+        mParameter({ name: alias }: Named, p: typeof alias) {
+            return null!
+        }
+    }
+    
+    let notReferencedFnType: ({ name: alias }: Named) => void;
+                                      ~~~~~
+!!! error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+    let referencedInSignartureReturnTypeFnType: ({ name: alias }: Named) => typeof alias;
+    let referencedInSignartureParamTypeFnType: ({ name: alias }: Named, p: typeof alias) => void;
+    
+    let notReferencedCtorType: new ({ name: alias }: Named) => void;
+                                            ~~~~~
+!!! error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+    let referencedInSignartureReturnTypeCtorType: new ({ name: alias }: Named) => typeof alias;
+    let referencedInSignartureParamTypeCtorType: new  ({ name: alias }: Named, p: typeof alias) => void;
+    
+    
+    interface NotReferencedInterface {
+    	({ name: alias }: Named): void
+    	         ~~~~~
+!!! error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+    	new ({ name: alias }: Named): void
+    	             ~~~~~
+!!! error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+    	set x({ name: alias }: Named);
+    	              ~~~~~
+!!! error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+    	m({ name: alias }: Named);
+    	          ~~~~~
+!!! error TS2842: 'alias' is an unused renaming of 'name'. Did you intend to use it as a type annotation?
+    }
+    
+    interface ReferencedInSignartureInterface {
+    	({ name: alias }: Named, p: typeof alias): void
+    	({ name: alias }: Named): typeof alias
+    	
+    	new ({ name: alias }: Named, p: typeof alias): void
+    	new ({ name: alias }: Named): typeof alias
+    	set x({ name: alias }: Named & { o: typeof alias })
+    	mReturnType({ name: alias }: Named): typeof alias;
+    	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias>;
+        mParameter({ name: alias }: Named, p: typeof alias);
+    }

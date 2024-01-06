@@ -40,10 +40,8 @@ keyofAndIndexedAccessErrors.ts(87,5): error TS2322: Type 'keyof T | keyof U' is 
   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
 keyofAndIndexedAccessErrors.ts(103,9): error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
   'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
-    Type 'string & keyof T' is not assignable to type 'K'.
-      'string & keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
-        Type 'string' is not assignable to type 'K'.
-          'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+    Type 'string' is not assignable to type 'K'.
+      'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
 keyofAndIndexedAccessErrors.ts(105,9): error TS2322: Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'.
   Type 'Extract<keyof T, string>' is not assignable to type 'K'.
     'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
@@ -247,10 +245,8 @@ keyofAndIndexedAccessErrors.ts(165,5): error TS2322: Type 'number' is not assign
             ~
 !!! error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
 !!! error TS2322:   'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:     Type 'string & keyof T' is not assignable to type 'K'.
-!!! error TS2322:       'string & keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:         Type 'string' is not assignable to type 'K'.
-!!! error TS2322:           'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:     Type 'string' is not assignable to type 'K'.
+!!! error TS2322:       'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
             t[key] = tk; // ok, T[K] ==> T[keyof T]
             tk = t[key]; // error, T[keyof T] =/=> T[K]
             ~~

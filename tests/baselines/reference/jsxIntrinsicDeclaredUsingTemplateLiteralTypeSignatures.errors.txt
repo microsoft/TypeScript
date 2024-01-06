@@ -1,0 +1,26 @@
+jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx(11,9): error TS2322: Type 'number' is not assignable to type 'string'.
+jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx(14,12): error TS2322: Type '"smth"' is not assignable to type '"literal"'.
+
+
+==== jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55240
+    
+    declare namespace JSX {
+      interface IntrinsicElements {
+        [k: `foo${string}`]: { prop: string };
+        [k: `foobar${string}`]: { prop: 'literal' };
+      }
+    }
+    
+    <foobaz prop="smth" />;
+    <foobaz prop={10} />;
+            ~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6500 jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx:5:28: The expected type comes from property 'prop' which is declared here on type '{ prop: string; }'
+    
+    <foobarbaz prop="literal"/>;
+    <foobarbaz prop="smth"/>;
+               ~~~~
+!!! error TS2322: Type '"smth"' is not assignable to type '"literal"'.
+!!! related TS6500 jsxIntrinsicDeclaredUsingTemplateLiteralTypeSignatures.tsx:5:28: The expected type comes from property 'prop' which is declared here on type '{ prop: string; } & { prop: "literal"; }'
+    

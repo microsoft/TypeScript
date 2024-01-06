@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/emitMethodCalledNew.ts] ////
+
+=== emitMethodCalledNew.ts ===
+// https://github.com/microsoft/TypeScript/issues/55075
+
+export const a = {
+>a : Symbol(a, Decl(emitMethodCalledNew.ts, 2, 12))
+
+  new(x: number) { return x + 1 }
+>new : Symbol(new, Decl(emitMethodCalledNew.ts, 2, 18))
+>x : Symbol(x, Decl(emitMethodCalledNew.ts, 3, 6))
+>x : Symbol(x, Decl(emitMethodCalledNew.ts, 3, 6))
+}
+export const b = {
+>b : Symbol(b, Decl(emitMethodCalledNew.ts, 5, 12))
+
+  "new"(x: number) { return x + 1 }
+>"new" : Symbol("new", Decl(emitMethodCalledNew.ts, 5, 18))
+>x : Symbol(x, Decl(emitMethodCalledNew.ts, 6, 8))
+>x : Symbol(x, Decl(emitMethodCalledNew.ts, 6, 8))
+}
+export const c = {
+>c : Symbol(c, Decl(emitMethodCalledNew.ts, 8, 12))
+
+  ["new"](x: number) { return x + 1 }
+>["new"] : Symbol(["new"], Decl(emitMethodCalledNew.ts, 8, 18))
+>"new" : Symbol(["new"], Decl(emitMethodCalledNew.ts, 8, 18))
+>x : Symbol(x, Decl(emitMethodCalledNew.ts, 9, 10))
+>x : Symbol(x, Decl(emitMethodCalledNew.ts, 9, 10))
+}
+

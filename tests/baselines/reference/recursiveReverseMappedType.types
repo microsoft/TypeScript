@@ -27,7 +27,7 @@ function a<T>(l: Recur<T>[]): void {
     const x: Recur<T> | undefined = join(l);
 >x : Recur<T> | undefined
 >join(l) : Recur<T>
->join : <T>(l: Recur<T>[]) => Recur<T>
+>join : <T_1>(l: Recur<T_1>[]) => Recur<T_1>
 >l : Recur<T>[]
 }
 

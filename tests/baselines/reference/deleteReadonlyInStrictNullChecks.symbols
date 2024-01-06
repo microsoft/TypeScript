@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/deleteReadonlyInStrictNullChecks.ts] ////
+
+=== deleteReadonlyInStrictNullChecks.ts ===
+interface Function { readonly name: string; }
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(deleteReadonlyInStrictNullChecks.ts, 0, 0))
+>name : Symbol(Function.name, Decl(deleteReadonlyInStrictNullChecks.ts, 0, 20))
+
+class Foo {}
+>Foo : Symbol(Foo, Decl(deleteReadonlyInStrictNullChecks.ts, 0, 45))
+
+delete Foo.name;
+>Foo.name : Symbol(Function.name, Decl(deleteReadonlyInStrictNullChecks.ts, 0, 20))
+>Foo : Symbol(Foo, Decl(deleteReadonlyInStrictNullChecks.ts, 0, 45))
+>name : Symbol(Function.name, Decl(deleteReadonlyInStrictNullChecks.ts, 0, 20))
+

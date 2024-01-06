@@ -24,7 +24,13 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"module":"commonjs","noEmit":true,"strict":true}}
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noEmit": true,
+    "strict": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -36,23 +42,6 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/a.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/b.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -74,8 +63,34 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
-exitCode:: ExitStatus.undefined
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
 
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/b.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+
+exitCode:: ExitStatus.undefined
 
 Change:: Changed x type to string
 
@@ -87,8 +102,12 @@ function test(x: string, y: number) {
 export default test;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -103,8 +122,19 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -120,7 +150,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Changed x type to number
 
@@ -132,8 +161,12 @@ function test(x: number, y: number) {
 export default test;
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -143,8 +176,19 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -161,7 +205,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: Changed y type to string
 
 Input::
@@ -172,8 +215,12 @@ function test(x: number, y: string) {
 export default test;
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -193,8 +240,19 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -210,7 +268,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Changed y type to number
 
@@ -222,8 +279,12 @@ function test(x: number, y: number) {
 export default test;
 
 
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -233,8 +294,19 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"module":1,"noEmit":true,"strict":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "module": 1,
+  "noEmit": true,
+  "strict": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -250,4 +322,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
