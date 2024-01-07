@@ -5971,6 +5971,7 @@ export const enum InternalSymbolName {
     Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
     This = "this",
     InstantiationExpression = "__instantiationExpression", // Instantiation expressions
+    ImportAttributes = "__importAttributes",
 }
 
 /**
