@@ -325,6 +325,7 @@ import {
     getModeForUsageLocation,
     getModifiers,
     getModuleInstanceState,
+    getNameFromImportAttribute,
     getNameFromIndexInfo,
     getNameOfDeclaration,
     getNameOfExpando,
@@ -553,6 +554,7 @@ import {
     isIdentifierTypePredicate,
     isIdentifierTypeReference,
     isIfStatement,
+    isImportAttributes,
     isImportCall,
     isImportClause,
     isImportDeclaration,
@@ -11541,7 +11543,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const symbol = createSymbol(SymbolFlags.ObjectLiteral, InternalSymbolName.ImportAttributes);
             const members = createSymbolTable();
             forEach(node.elements, attr => {
-                const member = createSymbol(SymbolFlags.Property, isIdentifier(attr.name) ? attr.name.escapedText : escapeLeadingUnderscores(attr.name.text));
+                const member = createSymbol(SymbolFlags.Property, getNameFromImportAttribute(attr));
                 member.parent = symbol;
                 member.links.type = checkImportAttribute(attr);
                 member.links.target = member;
@@ -30765,6 +30767,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxSelfClosingElement:
                 return getContextualJsxElementAttributesType(parent as JsxOpeningLikeElement, contextFlags);
+            case SyntaxKind.ImportAttribute:
+                return getContextualImportAttributeType(parent as ImportAttribute);
         }
         return undefined;
     }
@@ -30809,6 +30813,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return inferenceContexts[i];
             }
         }
+    }
+
+    function getContextualImportAttributeType(node: ImportAttribute) {
+        return getTypeOfPropertyOfContextualType(getGlobalImportAttributesType(/*reportErrors*/ false), getNameFromImportAttribute(node));
     }
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
@@ -47568,6 +47576,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (isMetaProperty(node.parent) && node.parent.keywordToken === node.kind) {
             return checkMetaPropertyKeyword(node.parent);
+        }
+
+        if (isImportAttributes(node)) {
+            return getGlobalImportAttributesType(/*reportErrors*/ false);
         }
 
         return errorType;
