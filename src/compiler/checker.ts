@@ -20849,6 +20849,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isEmptyAnonymousObjectType(type: Type) {
+        if (getObjectFlags(type) & ObjectFlags.Mapped && !isGenericMappedType(type)) {
+            return isEmptyResolvedType(resolveStructuredTypeMembers(type as ObjectType));
+        }
         return !!(getObjectFlags(type) & ObjectFlags.Anonymous && (
             (type as ResolvedType).members && isEmptyResolvedType(type as ResolvedType) ||
             type.symbol && type.symbol.flags & SymbolFlags.TypeLiteral && getMembersOfSymbol(type.symbol).size === 0
