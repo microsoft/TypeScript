@@ -28,11 +28,10 @@ verify.codeFix({
   description: "Implement interface 'Base'",
   newFileContent:
 `import { Base } from './interface';
-import A from './types1';
 import { B, C, D } from './types2';
 
 export class C implements Base {
-    a: Readonly<A> & { kind: 'a'; };
+    a: { kind: 'a'; };
     b<T extends B = B>(p1: C): D<C> {
         throw new Error('Method not implemented.');
     }

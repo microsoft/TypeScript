@@ -15,6 +15,6 @@
 
 verify.completions({ marker: "1", includes: ["a", "b", "c"] });
 verify.completions({ marker: "2", includes: ["0", "1", "2"], isNewIdentifierLocation: true });
-verify.completions({ marker: "3", includes: ["a", "b", "c"] });
+verify.completions({ marker: "3", exact: [] });
 verify.completions({ marker: "4", exact: [] });
-verify.completions({ marker: "5", includes: ["a", "b", "c"] });
+verify.completions({ marker: "5", exact: [] });

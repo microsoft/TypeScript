@@ -216,7 +216,7 @@ type Foo1 = { x: string } & { [x: number]: Foo1 };
 >x : number
 
 type Foo2 = { x: string } & { [K in number]: Foo2 };
->Foo2 : any
+>Foo2 : { x: string; } & { [x: number]: Foo2; }
 >x : string
 
 // Repro from #40239
