@@ -25979,7 +25979,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     else if ((targetInfo = getInferenceInfoForType(elementTypes[startLength + 1]))?.impliedArity !== undefined) {
                                         // Infer slices from source based on implied arity of U.
                                         inferFromTypes(sliceTupleType(source, startLength, endLength + targetInfo!.impliedArity), elementTypes[startLength]);
-                                        inferFromTypes(sliceTupleType(source, startLength + sourceArity - targetInfo!.impliedArity, endLength), elementTypes[startLength + 1]);
+                                        inferFromTypes(sliceTupleType(source, startLength + sourceArity - endLength - targetInfo!.impliedArity, endLength), elementTypes[startLength + 1]);
                                     }
                                 }
                                 else if (elementFlags[startLength] & ElementFlags.Variadic && elementFlags[startLength + 1] & ElementFlags.Rest) {

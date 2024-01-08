@@ -3,8 +3,8 @@
 === variadicTuples3.ts ===
 // https://github.com/microsoft/TypeScript/issues/56970
 
-function partialCallRev<T extends readonly any[], U extends readonly any[], R>(
->partialCallRev : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [...U, ...T]) => R, ...tailArgs: T) => (...headArgs: U) => R
+function partialCall1<T extends readonly any[], U extends readonly any[], R>(
+>partialCall1 : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [...U, ...T]) => R, ...tailArgs: T) => (...headArgs: U) => R
 
   f: (...args: [...U, ...T]) => R,
 >f : (...args: [...U, ...T]) => R
@@ -25,8 +25,8 @@ function partialCallRev<T extends readonly any[], U extends readonly any[], R>(
 >tailArgs : T
 }
 
-function te(a: number, b: number, c: number): number {
->te : (a: number, b: number, c: number) => number
+function source1(a: number, b: number, c: number): number {
+>source1 : (a: number, b: number, c: number) => number
 >a : number
 >b : number
 >c : number
@@ -39,10 +39,106 @@ function te(a: number, b: number, c: number): number {
 >c : number
 }
 
-const fn = partialCallRev(te, 1);
->fn : (a: number, b: number) => number
->partialCallRev(te, 1) : (a: number, b: number) => number
->partialCallRev : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [...U, ...T]) => R, ...tailArgs: T) => (...headArgs: U) => R
->te : (a: number, b: number, c: number) => number
+const result1 = partialCall1(source1, 1);
+>result1 : (a: number, b: number) => number
+>partialCall1(source1, 1) : (a: number, b: number) => number
+>partialCall1 : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [...U, ...T]) => R, ...tailArgs: T) => (...headArgs: U) => R
+>source1 : (a: number, b: number, c: number) => number
 >1 : 1
+
+function partialCall2<T extends readonly any[], U extends readonly any[], R>(
+>partialCall2 : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [number, ...U, ...T]) => R, ...tailArgs: T) => (...headArgs: U) => R
+
+  f: (...args: [number, ...U, ...T]) => R,
+>f : (...args: [number, ...U, ...T]) => R
+>args : [number, ...U, ...T]
+
+  ...tailArgs: T
+>tailArgs : T
+
+) {
+  return (...headArgs: U) => f(0, ...headArgs, ...tailArgs);
+>(...headArgs: U) => f(0, ...headArgs, ...tailArgs) : (...headArgs: U) => R
+>headArgs : U
+>f(0, ...headArgs, ...tailArgs) : R
+>f : (...args: [number, ...U, ...T]) => R
+>0 : 0
+>...headArgs : any
+>headArgs : U
+>...tailArgs : any
+>tailArgs : T
+}
+
+function source2(a: number, b: number, c: number, d: number): number {
+>source2 : (a: number, b: number, c: number, d: number) => number
+>a : number
+>b : number
+>c : number
+>d : number
+
+  return a + b + c + d;
+>a + b + c + d : number
+>a + b + c : number
+>a + b : number
+>a : number
+>b : number
+>c : number
+>d : number
+}
+
+const result2 = partialCall2(source2, 1);
+>result2 : (b: number, c: number) => number
+>partialCall2(source2, 1) : (b: number, c: number) => number
+>partialCall2 : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [number, ...U, ...T]) => R, ...tailArgs: T) => (...headArgs: U) => R
+>source2 : (a: number, b: number, c: number, d: number) => number
+>1 : 1
+
+function partialCall3<T extends readonly any[], U extends readonly any[], R>(
+>partialCall3 : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [...U, ...T, number]) => R, ...tailArgs: T) => (...headArgs: U) => R
+
+  f: (...args: [...U, ...T, number]) => R,
+>f : (...args: [...U, ...T, number]) => R
+>args : [...U, ...T, number]
+
+  ...tailArgs: T
+>tailArgs : T
+
+) {
+  return (...headArgs: U) => f(...headArgs, ...tailArgs, 100);
+>(...headArgs: U) => f(...headArgs, ...tailArgs, 100) : (...headArgs: U) => R
+>headArgs : U
+>f(...headArgs, ...tailArgs, 100) : R
+>f : (...args: [...U, ...T, number]) => R
+>...headArgs : any
+>headArgs : U
+>...tailArgs : any
+>tailArgs : T
+>100 : 100
+}
+
+function source3(a: number, b: number, c: number, d: number): number {
+>source3 : (a: number, b: number, c: number, d: number) => number
+>a : number
+>b : number
+>c : number
+>d : number
+
+  return a + b + c + d;
+>a + b + c + d : number
+>a + b + c : number
+>a + b : number
+>a : number
+>b : number
+>c : number
+>d : number
+}
+
+const result3 = partialCall3(source3, 1);
+>result3 : (a: number, b: number) => number
+>partialCall3(source3, 1) : (a: number, b: number) => number
+>partialCall3 : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [...U, ...T, number]) => R, ...tailArgs: T) => (...headArgs: U) => R
+>source3 : (a: number, b: number, c: number, d: number) => number
+>1 : 1
+
+export {}
 
