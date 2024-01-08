@@ -65,6 +65,27 @@ function f5(x: string | number, cond: () => boolean) {
     action(() => { x /* number */ });
 }
 
+function f5a(cond: boolean) {
+    if (cond) {
+        let x: number | undefined;
+        x = 1;
+        action(() => { x /* number */ });
+    }
+    else {
+        let x: number | undefined;
+        x = 2;
+        action(() => { x /* number */ });
+    }
+}
+
+function f5b() {
+    for (let x = 0; x < 10; x++) {
+        if (x === 1 || x === 2) {
+            action(() => { x /* 1 | 2 */ })
+        }
+    }
+}
+
 // Implicit any variables have a known type following last assignment
 
 function f6() {
@@ -85,6 +106,23 @@ function f7() {
             let f = () => { e /* Error */ }
         }
     }
+}
+
+// Narrowings are not preserved for global variables
+
+let g: string | number;
+g = "abc";
+action(() => { g /* string | number */ });
+
+// Narrowings are not preserved for exported namespace members
+
+namespace Foo {
+    export let x: string | number;
+    x = "abc";
+    action(() => { x /* string | number */ });
+    let y: string | number;
+    y = "abc";
+    action(() => { y /* string */ });
 }
 
 // Repros from #35124
@@ -108,10 +146,12 @@ function f11() {
 
 // Repro from #52104
 
-const fooMap: Map<string,Array<number>> = new Map()
-const values = [1, 2, 3, 4, 5];
-let foo = fooMap.get("a");
-if (foo == null) {
-    foo = [];
+function f12() {
+    const fooMap: Map<string,Array<number>> = new Map()
+    const values = [1, 2, 3, 4, 5];
+    let foo = fooMap.get("a");
+    if (foo == null) {
+        foo = [];
+    }
+    values.forEach(v => foo.push(v));
 }
-values.forEach(v => foo.push(v));
