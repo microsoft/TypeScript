@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/dependentReturnType4.ts] ////
+
+=== dependentReturnType4.ts ===
+// Test narrowing through `hasOwnProperty` calls
+declare const rand: { a?: never };
+>rand : { a?: never; }
+>a : undefined
+
+type MissingType = typeof rand.a;
+>MissingType : undefined
+>rand.a : undefined
+>rand : { a?: never; }
+>a : undefined
+
+declare function takesString(x: string): void;
+>takesString : (x: string) => void
+>x : string
+
+function hasOwnP<T extends string | MissingType>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
+>hasOwnP : <T extends string | undefined>(obj: {    a?: T;}) => T extends string ? 1 : T extends undefined ? 2 : 1 | 2
+>obj : { a?: T; }
+>a : T | undefined
+
+    if (obj.hasOwnProperty("a")) {
+>obj.hasOwnProperty("a") : boolean
+>obj.hasOwnProperty : (v: PropertyKey) => boolean
+>obj : { a?: T; }
+>hasOwnProperty : (v: PropertyKey) => boolean
+>"a" : "a"
+
+        takesString(obj.a);
+>takesString(obj.a) : void
+>takesString : (x: string) => void
+>obj.a : string
+>obj : { a?: T; }
+>a : string
+
+        return 1;
+>1 : 1
+    }
+    return 2;
+>2 : 2
+}

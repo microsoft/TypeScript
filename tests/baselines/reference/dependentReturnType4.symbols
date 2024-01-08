@@ -1,0 +1,43 @@
+//// [tests/cases/compiler/dependentReturnType4.ts] ////
+
+=== dependentReturnType4.ts ===
+// Test narrowing through `hasOwnProperty` calls
+declare const rand: { a?: never };
+>rand : Symbol(rand, Decl(dependentReturnType4.ts, 1, 13))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 1, 21))
+
+type MissingType = typeof rand.a;
+>MissingType : Symbol(MissingType, Decl(dependentReturnType4.ts, 1, 34))
+>rand.a : Symbol(a, Decl(dependentReturnType4.ts, 1, 21))
+>rand : Symbol(rand, Decl(dependentReturnType4.ts, 1, 13))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 1, 21))
+
+declare function takesString(x: string): void;
+>takesString : Symbol(takesString, Decl(dependentReturnType4.ts, 2, 33))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 3, 29))
+
+function hasOwnP<T extends string | MissingType>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
+>hasOwnP : Symbol(hasOwnP, Decl(dependentReturnType4.ts, 3, 46))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 4, 17))
+>MissingType : Symbol(MissingType, Decl(dependentReturnType4.ts, 1, 34))
+>obj : Symbol(obj, Decl(dependentReturnType4.ts, 4, 49))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 4, 55))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 4, 17))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 4, 17))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 4, 17))
+
+    if (obj.hasOwnProperty("a")) {
+>obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(dependentReturnType4.ts, 4, 49))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+        takesString(obj.a);
+>takesString : Symbol(takesString, Decl(dependentReturnType4.ts, 2, 33))
+>obj.a : Symbol(a, Decl(dependentReturnType4.ts, 4, 55))
+>obj : Symbol(obj, Decl(dependentReturnType4.ts, 4, 49))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 4, 55))
+
+        return 1;
+    }
+    return 2;
+}
