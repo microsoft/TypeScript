@@ -45046,7 +45046,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(member.name, Diagnostics.Enum_member_must_have_initializer);
             return undefined;
         }
-        if (compilerOptions.isolatedModules && previous?.initializer && !evaluatesToNumericLiteral(previous.initializer)) {
+        if (getIsolatedModules(compilerOptions) && previous?.initializer && !isSyntacticallyNumeric(previous.initializer)) {
             error(
                 member.name,
                 Diagnostics.Enum_member_following_a_non_literal_numeric_member_must_have_an_initializer_when_isolatedModules_is_enabled,
@@ -45068,7 +45068,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         Diagnostics.const_enum_member_initializer_was_evaluated_to_a_non_finite_value,
                 );
             }
-            else if (compilerOptions.isolatedModules && typeof value === "string" && !evaluatesToStringLiteral(initializer)) {
+            else if (getIsolatedModules(compilerOptions) && typeof value === "string" && !isSyntacticallyString(initializer)) {
                 error(
                     initializer,
                     Diagnostics.A_member_initializer_in_a_enum_declaration_for_a_string_value_must_be_a_string_literal_when_isolatedModules_is_enabled,
@@ -45087,37 +45087,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return value;
     }
 
-    function evaluatesToNumericLiteral(expr: Expression): boolean {
+    function isSyntacticallyNumeric(expr: Expression): boolean {
         switch (expr.kind) {
             case SyntaxKind.PrefixUnaryExpression:
-                return evaluatesToNumericLiteral((expr as PrefixUnaryExpression).operand);
+                return isSyntacticallyNumeric((expr as PrefixUnaryExpression).operand);
             case SyntaxKind.BinaryExpression:
-                return evaluatesToNumericLiteral((expr as BinaryExpression).left) && evaluatesToNumericLiteral((expr as BinaryExpression).right);
+                return isSyntacticallyNumeric((expr as BinaryExpression).left) && isSyntacticallyNumeric((expr as BinaryExpression).right);
             case SyntaxKind.ParenthesizedExpression:
-                return evaluatesToNumericLiteral((expr as ParenthesizedExpression).expression);
+                return isSyntacticallyNumeric((expr as ParenthesizedExpression).expression);
             case SyntaxKind.NumericLiteral:
                 return true;
         }
         return false;
     }
 
-    function evaluatesToStringLiteral(expr: Expression): boolean {
+    function isSyntacticallyString(expr: Expression): boolean {
         switch (expr.kind) {
             case SyntaxKind.BinaryExpression:
                 const left = (expr as BinaryExpression).left;
                 const right = (expr as BinaryExpression).right;
-                const leftIsNumeric = evaluatesToNumericLiteral(left);
-                const rightIsNumeric = evaluatesToNumericLiteral(right);
+                const leftIsNumeric = isSyntacticallyNumeric(left);
+                const rightIsNumeric = isSyntacticallyNumeric(right);
                 return (
                     !(leftIsNumeric && rightIsNumeric) &&
-                    (evaluatesToStringLiteral(left) || leftIsNumeric) &&
-                    (evaluatesToStringLiteral(right) || rightIsNumeric) &&
+                    (isSyntacticallyString(left) || leftIsNumeric) &&
+                    (isSyntacticallyString(right) || rightIsNumeric) &&
                     (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken
                 );
             case SyntaxKind.TemplateExpression:
-                return (expr as TemplateExpression).templateSpans.every(span => evaluatesToStringLiteral(span.expression));
+                return (expr as TemplateExpression).templateSpans.every(span => isSyntacticallyString(span.expression));
             case SyntaxKind.ParenthesizedExpression:
-                return evaluatesToStringLiteral((expr as ParenthesizedExpression).expression);
+                return isSyntacticallyString((expr as ParenthesizedExpression).expression);
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return true;
