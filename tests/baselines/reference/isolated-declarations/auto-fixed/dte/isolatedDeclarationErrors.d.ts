@@ -13,7 +13,7 @@ errorOnAssignmentBelow.a = "";
 const errorOnMissingReturn: {
     (): void;
     a: string;
-} = () => {}
+} = (): void => {}
 errorOnMissingReturn.a = "";
 
 
@@ -52,6 +52,6 @@ isolatedDeclarationErrors.ts(2,1): error TS9023: Assigning properties to functio
     const errorOnMissingReturn: {
         (): void;
         a: string;
-    } = () => {}
+    } = (): void => {}
     errorOnMissingReturn.a = "";
     
