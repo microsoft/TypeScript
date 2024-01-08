@@ -50,5 +50,5 @@
 
 goTo.marker("1");
 edit.insert(`x`)
-verify.completions({ exact: ["FOO", "BAR"] });
+verify.completions({ exact: ["BARx", "FOO", "BAR"] });
 verify.baselineSyntacticAndSemanticDiagnostics()
