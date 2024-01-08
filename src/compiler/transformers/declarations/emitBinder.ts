@@ -62,7 +62,6 @@ import {
     isVarConst,
     isVariableDeclaration,
     MappedTypeNode,
-    MemberKey,
     MethodDeclaration,
     MethodSignature,
     ModifierFlags,
@@ -815,6 +814,11 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         }
     }
 }
+
+/** @internal */
+export type MemberKey = string & {
+    __memberKey: void;
+};
 
 /**
  * Gets the symbolic name for a member from its type.

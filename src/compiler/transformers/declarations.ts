@@ -23,6 +23,7 @@ import {
     ConstructorTypeNode,
     ConstructSignatureDeclaration,
     contains,
+    CoreEmitResolver,
     createDiagnosticForNode,
     createDiagnosticForRange,
     createEmptyExports,
@@ -46,7 +47,6 @@ import {
     EnumDeclaration,
     ExportAssignment,
     ExportDeclaration,
-    Expression,
     ExpressionWithTypeArguments,
     factory,
     FileReference,
@@ -139,7 +139,7 @@ import {
     isMethodSignature,
     isModifier,
     isModuleDeclaration,
-    IsolatedEmitResolver,
+    IsolatedTransformationContext,
     isOmittedExpression,
     isPrivateIdentifier,
     isPropertySignature,
@@ -167,7 +167,6 @@ import {
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
     length,
-    LocalInferenceResolver,
     map,
     mapDefined,
     MethodDeclaration,
@@ -221,6 +220,7 @@ import {
     SyntaxKind,
     toFileNameLowerCase,
     TransformationContext,
+    TransformationContextKind,
     transformNodes,
     tryCast,
     tryGetModuleSpecifierFromDeclaration,
@@ -293,7 +293,7 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
  *
  * @internal
  */
-export function transformDeclarations(context: TransformationContext, _useTscEmit = true) {
+export function transformDeclarations(context: TransformationContext | IsolatedTransformationContext) {
     const throwDiagnostic = () => Debug.fail("Diagnostic emitted without context");
     let getSymbolAccessibilityDiagnostic: GetSymbolAccessibilityDiagnostic = throwDiagnostic;
     let needsDeclare = true;
@@ -318,70 +318,42 @@ export function transformDeclarations(context: TransformationContext, _useTscEmi
     let refs: Map<NodeId, SourceFile>;
     let libs: Map<string, boolean>;
     let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
-    const { localInferenceResolver, isolatedDeclarations, host, resolver, symbolTracker, ensureNoInitializer, useTscEmit } = createTransformerServices();
+    const { localInferenceResolver, isolatedDeclarations, host, resolver, symbolTracker, ensureNoInitializer, useLocalInferenceTypePrint } = createTransformerServices();
     const options = context.getCompilerOptions();
     const { noResolve, stripInternal } = options;
     return transformRoot;
 
-    function createTransformerServices(): {
-        isolatedDeclarations: true;
-        useTscEmit: false;
-        resolver: IsolatedEmitResolver;
-        localInferenceResolver: LocalInferenceResolver;
-        host: undefined;
-        symbolTracker: undefined;
-        ensureNoInitializer: (node: CanHaveLiteralInitializer) => Expression | undefined;
-    } | {
-        isolatedDeclarations: true;
-        useTscEmit: true;
-        resolver: EmitResolver;
-        localInferenceResolver: LocalInferenceResolver;
-        host: EmitHost;
-        symbolTracker: SymbolTracker;
-        ensureNoInitializer: (node: CanHaveLiteralInitializer) => Expression | undefined;
-    } | {
-        isolatedDeclarations: false;
-        useTscEmit: false;
-        resolver: EmitResolver;
-        localInferenceResolver: undefined;
-        host: EmitHost;
-        symbolTracker: SymbolTracker;
-        ensureNoInitializer: (node: CanHaveLiteralInitializer) => Expression | undefined;
-    } {
-        const { isolatedDeclarations, resolver: localInferenceResolver } = createLocalInferenceResolver({
-            ensureParameter,
-            context,
-            visitDeclarationSubtree,
-            setEnclosingDeclarations(node) {
-                const oldNode = enclosingDeclaration;
-                enclosingDeclaration = node;
-                return oldNode;
-            },
-            checkEntityNameVisibility(name, container) {
-                return checkEntityNameVisibility(name, container ?? enclosingDeclaration);
-            },
-        });
+    function createTransformerServices() {
+        const isolatedDeclarations = context.getCompilerOptions().isolatedDeclarations;
 
         if (isolatedDeclarations) {
-            if (!_useTscEmit) {
-                const resolver: IsolatedEmitResolver = context.getEmitResolver();
+            const localInferenceResolver = createLocalInferenceResolver({
+                ensureParameter,
+                context,
+                visitDeclarationSubtree,
+                setEnclosingDeclarations(node) {
+                    const oldNode = enclosingDeclaration;
+                    enclosingDeclaration = node;
+                    return oldNode;
+                },
+                checkEntityNameVisibility(name, container) {
+                    return checkEntityNameVisibility(name, container ?? enclosingDeclaration);
+                },
+            });
+            if (context.kind === TransformationContextKind.IsolatedContext) {
+                const resolver: CoreEmitResolver = context.getEmitResolver();
                 // Ideally nothing should require the symbol tracker in isolated declarations mode.
                 // createLiteralConstValue is the one exception
                 const emptySymbolTracker = {};
                 return {
                     isolatedDeclarations,
-                    useTscEmit: false,
+                    useLocalInferenceTypePrint: true,
                     resolver,
                     localInferenceResolver,
                     symbolTracker: undefined,
                     host: undefined,
-                    ensureNoInitializer: (node: CanHaveLiteralInitializer) => {
-                        if (shouldPrintWithInitializer(node)) {
-                            return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, emptySymbolTracker); // TODO: Make safe
-                        }
-                        return undefined;
-                    },
-                };
+                    ensureNoInitializer: createEnsureNoInitializer(emptySymbolTracker),
+                } as const;
             }
             else {
                 const host = context.getEmitHost();
@@ -389,37 +361,37 @@ export function transformDeclarations(context: TransformationContext, _useTscEmi
                 const symbolTracker = createSymbolTracker(resolver, host);
                 return {
                     isolatedDeclarations,
-                    useTscEmit: true,
+                    useLocalInferenceTypePrint: false,
                     resolver,
                     localInferenceResolver,
                     symbolTracker,
                     host,
-                    ensureNoInitializer: (node: CanHaveLiteralInitializer) => {
-                        if (shouldPrintWithInitializer(node)) {
-                            return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
-                        }
-                        return undefined;
-                    },
-                };
+                    ensureNoInitializer: createEnsureNoInitializer(symbolTracker),
+                } as const;
             }
         }
         else {
+            Debug.assert(context.kind === TransformationContextKind.FullContext);
             const host = context.getEmitHost();
             const resolver = context.getEmitResolver();
             const symbolTracker: SymbolTracker = createSymbolTracker(resolver, host);
             return {
-                isolatedDeclarations,
-                useTscEmit: false,
-                localInferenceResolver,
+                isolatedDeclarations: false,
+                useLocalInferenceTypePrint: false,
+                localInferenceResolver: undefined,
                 resolver,
                 symbolTracker,
                 host,
-                ensureNoInitializer: (node: CanHaveLiteralInitializer) => {
-                    if (shouldPrintWithInitializer(node)) {
-                        return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
-                    }
-                    return undefined;
-                },
+                ensureNoInitializer: createEnsureNoInitializer(symbolTracker),
+            } as const;
+        }
+
+        function createEnsureNoInitializer(symbolTracker: SymbolTracker) {
+            return function ensureNoInitializer(node: CanHaveLiteralInitializer) {
+                if (shouldPrintWithInitializer(node)) {
+                    return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
+                }
+                return undefined;
             };
         }
     }
@@ -659,6 +631,7 @@ export function transformDeclarations(context: TransformationContext, _useTscEmi
             libs = new Map();
             existingTypeReferencesSources = node.sourceFiles;
             let hasNoDefaultLib = false;
+            Debug.assert(!isolatedDeclarations, "Bundles are not supported in isolated declarations");
             const bundle = factory.createBundle(
                 map(node.sourceFiles, sourceFile => {
                     if (sourceFile.isDeclarationFile) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
@@ -681,7 +654,7 @@ export function transformDeclarations(context: TransformationContext, _useTscEmi
                             sourceFile,
                             [factory.createModuleDeclaration(
                                 [factory.createModifier(SyntaxKind.DeclareKeyword)],
-                                factory.createStringLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
+                                factory.createStringLiteral(getResolvedExternalModuleName(host, sourceFile)),
                                 factory.createModuleBlock(setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), sourceFile.statements)),
                             )],
                             /*isDeclarationFile*/ true,
@@ -952,7 +925,7 @@ export function transformDeclarations(context: TransformationContext, _useTscEmi
         }
         if (isolatedDeclarations) {
             const { typeNode, isInvalid } = localInferenceResolver.fromInitializer(node, type, currentSourceFile);
-            if (!useTscEmit || isInvalid) {
+            if (useLocalInferenceTypePrint || isInvalid) {
                 return typeNode;
             }
         }
@@ -1121,7 +1094,7 @@ export function transformDeclarations(context: TransformationContext, _useTscEmi
             if (isBundledEmit) {
                 // Bundle emit not supported for isolatedDeclarations
                 if (!isolatedDeclarations) {
-                    const newName = getExternalModuleNameFromDeclaration(context.getEmitHost(), resolver, parent);
+                    const newName = getExternalModuleNameFromDeclaration(host, resolver, parent);
                     if (newName) {
                         return factory.createStringLiteral(newName);
                     }

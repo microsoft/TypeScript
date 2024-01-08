@@ -11,7 +11,6 @@ import {
     Diagnostic,
     EmitHost,
     ensureTrailingDirectorySeparator,
-    factory,
     getAreDeclarationMapsEnabled,
     getBaseFileName,
     getDeclarationEmitOutputFilePathWorker,
@@ -20,75 +19,42 @@ import {
     getRelativePathToDirectoryOrUrl,
     getRootLength,
     getSourceFilePathInNewDir,
+    IsolatedTransformationContext,
     normalizePath,
     normalizeSlashes,
+    nullTransformationContext,
     PrinterOptions,
     SourceFile,
     SourceMapGenerator,
     sys,
-    TransformationContext,
+    TransformationContextKind,
     transformDeclarations,
     TranspileDeclarationsOptions,
     TranspileDeclarationsOutput,
 } from "../../_namespaces/ts";
-
-function createEmitDeclarationHost(options: TranspileDeclarationsOptions): EmitHost {
-    const throws = () => Debug.fail("Function should not be called in isolated declarations emit");
-    return {
-        getCurrentDirectory: () => options.currentDirectory ?? ".",
-        getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames),
-        useCaseSensitiveFileNames: () => !!options.useCaseSensitiveFileNames,
-        getCompilerOptions: () => options.compilerOptions,
-        getCommonSourceDirectory: () => ensureTrailingDirectorySeparator(options.commonSourceDirectory ?? "."),
-        get redirectTargetsMap(): never {
-            Debug.fail("redirectTargetsMap should not be used in isolated declarations");
-            return undefined!; // Need return despite fail call GH#52214
-        },
-        directoryExists: throws,
-        fileExists: throws,
-        readFile: throws,
-        realpath: throws,
-        getLibFileFromReference: throws,
-        getSourceFileFromReference: throws,
-        isSourceOfProjectReferenceRedirect: throws,
-
-        getSourceFiles: throws,
-        isEmitBlocked: throws,
-        getPrependNodes: throws,
-        writeFile: throws,
-        getBuildInfo: throws,
-        getSourceFile: throws,
-        getSourceFileByPath: throws,
-        getProjectReferenceRedirect: throws,
-        getFileIncludeReasons: throws,
-        isSourceFileFromExternalLibrary: throws,
-        getResolvedProjectReferenceToRedirect: throws,
-    };
-}
 
 export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: TranspileDeclarationsOptions): TranspileDeclarationsOutput {
     const compilerOptions: CompilerOptions = {
         ...transpileOptions.compilerOptions,
         isolatedDeclarations: true,
     };
-    const emitHost = createEmitDeclarationHost(transpileOptions);
+    const emitHost = {
+        getCurrentDirectory: () => transpileOptions.currentDirectory ?? ".",
+        getCanonicalFileName: createGetCanonicalFileName(!!compilerOptions.useCaseSensitiveFileNames),
+        useCaseSensitiveFileNames: () => !!compilerOptions.useCaseSensitiveFileNames,
+        getCompilerOptions: () => compilerOptions.compilerOptions,
+        getCommonSourceDirectory: () => ensureTrailingDirectorySeparator(transpileOptions.commonSourceDirectory ?? "."),
+    };
     const emitResolver = createEmitDeclarationResolver(sourceFile);
     const diagnostics: Diagnostic[] = [];
-    const transformer = transformDeclarations({
-        getEmitHost() {
-            return emitHost;
-        },
-        getEmitResolver() {
-            return emitResolver;
-        },
-        getCompilerOptions() {
-            return emitHost.getCompilerOptions();
-        },
-        factory,
-        addDiagnostic(diag: any) {
-            diagnostics.push(diag);
-        },
-    } as TransformationContext, /*useTscEmit*/ false);
+    const transformationContext: IsolatedTransformationContext = {
+        ...nullTransformationContext,
+        kind: TransformationContextKind.IsolatedContext,
+        getCompilerOptions: () => compilerOptions,
+        addDiagnostic: diag => diagnostics.push(diag),
+        getEmitResolver: () => emitResolver,
+    };
+    const transformer = transformDeclarations(transformationContext);
     const result = transformer(sourceFile);
 
     const printer = createPrinter({
