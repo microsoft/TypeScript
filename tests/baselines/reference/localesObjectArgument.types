@@ -42,6 +42,12 @@ const str = "";
 >str : ""
 >"" : ""
 
+const readonlyLocales: Readonly<string[]> = ['de-DE', 'ja-JP'];
+>readonlyLocales : readonly string[]
+>['de-DE', 'ja-JP'] : string[]
+>'de-DE' : "de-DE"
+>'ja-JP' : "ja-JP"
+
 now.toLocaleString(enUS);
 >now.toLocaleString(enUS) : string
 >now.toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string; }
@@ -188,25 +194,41 @@ new Intl.PluralRules([deDE, jaJP]);
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
 
-Intl.PluralRules.supportedLocalesOf(enUS);
->Intl.PluralRules.supportedLocalesOf(enUS) : string[]
->Intl.PluralRules.supportedLocalesOf : { (locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+new Intl.PluralRules(readonlyLocales);
+>new Intl.PluralRules(readonlyLocales) : Intl.PluralRules
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >Intl : typeof Intl
 >PluralRules : Intl.PluralRulesConstructor
->supportedLocalesOf : { (locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>readonlyLocales : readonly string[]
+
+Intl.PluralRules.supportedLocalesOf(enUS);
+>Intl.PluralRules.supportedLocalesOf(enUS) : string[]
+>Intl.PluralRules.supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>Intl : typeof Intl
+>PluralRules : Intl.PluralRulesConstructor
+>supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
 >enUS : Intl.Locale
 
 Intl.PluralRules.supportedLocalesOf([deDE, jaJP]);
 >Intl.PluralRules.supportedLocalesOf([deDE, jaJP]) : string[]
->Intl.PluralRules.supportedLocalesOf : { (locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>Intl.PluralRules.supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >Intl : typeof Intl
 >PluralRules : Intl.PluralRulesConstructor
->supportedLocalesOf : { (locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
 >[deDE, jaJP] : Intl.Locale[]
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
+
+Intl.PluralRules.supportedLocalesOf(readonlyLocales);
+>Intl.PluralRules.supportedLocalesOf(readonlyLocales) : string[]
+>Intl.PluralRules.supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>Intl.PluralRules : Intl.PluralRulesConstructor
+>Intl : typeof Intl
+>PluralRules : Intl.PluralRulesConstructor
+>supportedLocalesOf : { (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; (locales: Intl.LocalesArgument, options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>readonlyLocales : readonly string[]
 
 new Intl.RelativeTimeFormat(enUS);
 >new Intl.RelativeTimeFormat(enUS) : Intl.RelativeTimeFormat
@@ -223,6 +245,13 @@ new Intl.RelativeTimeFormat([deDE, jaJP]);
 >[deDE, jaJP] : Intl.Locale[]
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
+
+new Intl.RelativeTimeFormat(readonlyLocales);
+>new Intl.RelativeTimeFormat(readonlyLocales) : Intl.RelativeTimeFormat
+>Intl.RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): string[]; }
+>Intl : typeof Intl
+>RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): string[]; }
+>readonlyLocales : readonly string[]
 
 Intl.RelativeTimeFormat.supportedLocalesOf(enUS);
 >Intl.RelativeTimeFormat.supportedLocalesOf(enUS) : string[]
@@ -244,6 +273,15 @@ Intl.RelativeTimeFormat.supportedLocalesOf([deDE, jaJP]);
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
 
+Intl.RelativeTimeFormat.supportedLocalesOf(readonlyLocales);
+>Intl.RelativeTimeFormat.supportedLocalesOf(readonlyLocales) : string[]
+>Intl.RelativeTimeFormat.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions) => string[]
+>Intl.RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): string[]; }
+>Intl : typeof Intl
+>RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): string[]; }
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions) => string[]
+>readonlyLocales : readonly string[]
+
 new Intl.Collator(enUS);
 >new Intl.Collator(enUS) : Intl.Collator
 >Intl.Collator : Intl.CollatorConstructor
@@ -259,6 +297,13 @@ new Intl.Collator([deDE, jaJP]);
 >[deDE, jaJP] : Intl.Locale[]
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
+
+new Intl.Collator(readonlyLocales);
+>new Intl.Collator(readonlyLocales) : Intl.Collator
+>Intl.Collator : Intl.CollatorConstructor
+>Intl : typeof Intl
+>Collator : Intl.CollatorConstructor
+>readonlyLocales : readonly string[]
 
 Intl.Collator.supportedLocalesOf(enUS);
 >Intl.Collator.supportedLocalesOf(enUS) : string[]
@@ -296,6 +341,13 @@ new Intl.DateTimeFormat([deDE, jaJP]);
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
 
+new Intl.DateTimeFormat(readonlyLocales);
+>new Intl.DateTimeFormat(readonlyLocales) : Intl.DateTimeFormat
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>Intl : typeof Intl
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>readonlyLocales : readonly string[]
+
 Intl.DateTimeFormat.supportedLocalesOf(enUS);
 >Intl.DateTimeFormat.supportedLocalesOf(enUS) : string[]
 >Intl.DateTimeFormat.supportedLocalesOf : { (locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; (locales: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
@@ -316,6 +368,15 @@ Intl.DateTimeFormat.supportedLocalesOf([deDE, jaJP]);
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
 
+Intl.DateTimeFormat.supportedLocalesOf(readonlyLocales);
+>Intl.DateTimeFormat.supportedLocalesOf(readonlyLocales) : string[]
+>Intl.DateTimeFormat.supportedLocalesOf : { (locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; (locales: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
+>Intl : typeof Intl
+>DateTimeFormat : Intl.DateTimeFormatConstructor
+>supportedLocalesOf : { (locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; (locales: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string[]; }
+>readonlyLocales : readonly string[]
+
 new Intl.NumberFormat(enUS);
 >new Intl.NumberFormat(enUS) : Intl.NumberFormat
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -332,6 +393,13 @@ new Intl.NumberFormat([deDE, jaJP]);
 >deDE : Intl.Locale
 >jaJP : Intl.Locale
 
+new Intl.NumberFormat(readonlyLocales);
+>new Intl.NumberFormat(readonlyLocales) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>Intl : typeof Intl
+>NumberFormat : Intl.NumberFormatConstructor
+>readonlyLocales : readonly string[]
+
 Intl.NumberFormat.supportedLocalesOf(enUS);
 >Intl.NumberFormat.supportedLocalesOf(enUS) : string[]
 >Intl.NumberFormat.supportedLocalesOf : { (locales: string | string[], options?: Intl.NumberFormatOptions): string[]; (locales: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string[]; }
@@ -341,14 +409,12 @@ Intl.NumberFormat.supportedLocalesOf(enUS);
 >supportedLocalesOf : { (locales: string | string[], options?: Intl.NumberFormatOptions): string[]; (locales: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string[]; }
 >enUS : Intl.Locale
 
-Intl.NumberFormat.supportedLocalesOf([deDE, jaJP]);
->Intl.NumberFormat.supportedLocalesOf([deDE, jaJP]) : string[]
+Intl.NumberFormat.supportedLocalesOf(readonlyLocales);
+>Intl.NumberFormat.supportedLocalesOf(readonlyLocales) : string[]
 >Intl.NumberFormat.supportedLocalesOf : { (locales: string | string[], options?: Intl.NumberFormatOptions): string[]; (locales: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string[]; }
 >Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
 >NumberFormat : Intl.NumberFormatConstructor
 >supportedLocalesOf : { (locales: string | string[], options?: Intl.NumberFormatOptions): string[]; (locales: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string[]; }
->[deDE, jaJP] : Intl.Locale[]
->deDE : Intl.Locale
->jaJP : Intl.Locale
+>readonlyLocales : readonly string[]
 

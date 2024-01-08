@@ -25,6 +25,8 @@ import {
     EmitHint,
     EmitTextWriter,
     endsWith,
+    EnumDeclaration,
+    EnumMember,
     Expression,
     factory,
     FileTextChanges,
@@ -843,7 +845,7 @@ export class ChangeTracker {
         });
     }
 
-    public insertMemberAtStart(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, newElement: ClassElement | PropertySignature | MethodSignature): void {
+    public insertMemberAtStart(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode | EnumDeclaration, newElement: ClassElement | PropertySignature | MethodSignature | EnumMember): void {
         this.insertNodeAtStartWorker(sourceFile, node, newElement);
     }
 
@@ -851,7 +853,7 @@ export class ChangeTracker {
         this.insertNodeAtStartWorker(sourceFile, obj, newElement);
     }
 
-    private insertNodeAtStartWorker(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode, newElement: ClassElement | ObjectLiteralElementLike | PropertySignature | MethodSignature): void {
+    private insertNodeAtStartWorker(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration, newElement: ClassElement | ObjectLiteralElementLike | PropertySignature | MethodSignature | EnumMember): void {
         const indentation = this.guessIndentationFromExistingMembers(sourceFile, node) ?? this.computeIndentationForNewMember(sourceFile, node);
         this.insertNodeAt(sourceFile, getMembersOrProperties(node).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, node, indentation));
     }
@@ -860,7 +862,7 @@ export class ChangeTracker {
      * Tries to guess the indentation from the existing members of a class/interface/object. All members must be on
      * new lines and must share the same indentation.
      */
-    private guessIndentationFromExistingMembers(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode) {
+    private guessIndentationFromExistingMembers(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration) {
         let indentation: number | undefined;
         let lastRange: TextRange = node;
         for (const member of getMembersOrProperties(node)) {
@@ -882,13 +884,13 @@ export class ChangeTracker {
         return indentation;
     }
 
-    private computeIndentationForNewMember(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode) {
+    private computeIndentationForNewMember(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration) {
         const nodeStart = node.getStart(sourceFile);
         return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(nodeStart, sourceFile), nodeStart, sourceFile, this.formatContext.options)
             + (this.formatContext.options.indentSize ?? 4);
     }
 
-    private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode, indentation: number): InsertNodeOptions {
+    private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration, indentation: number): InsertNodeOptions {
         // Rules:
         // - Always insert leading newline.
         // - For object literals:
@@ -1093,7 +1095,10 @@ export class ChangeTracker {
                 const afterMinusOneStartLinePosition = getLineStartPositionForPosition(containingList[index - 1].getStart(sourceFile), sourceFile);
                 multilineList = afterMinusOneStartLinePosition !== afterStartLinePosition;
             }
-            if (hasCommentsBeforeLineBreak(sourceFile.text, after.end)) {
+            if (
+                hasCommentsBeforeLineBreak(sourceFile.text, after.end)
+                || !positionsAreOnSameLine(containingList.pos, containingList.end, sourceFile)
+            ) {
                 // in this case we'll always treat containing list as multiline
                 multilineList = true;
             }
@@ -1246,7 +1251,7 @@ function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclarat
     const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
     return [open?.end, close?.end];
 }
-function getMembersOrProperties(node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode): NodeArray<Node> {
+function getMembersOrProperties(node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode | EnumDeclaration): NodeArray<Node> {
     return isObjectLiteralExpression(node) ? node.properties : node.members;
 }
 

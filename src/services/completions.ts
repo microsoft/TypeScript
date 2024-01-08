@@ -3943,7 +3943,7 @@ function getCompletionData(
                         isFunctionLikeKind(parentKind);
 
                 case SyntaxKind.EqualsToken:
-                    return parentKind === SyntaxKind.TypeAliasDeclaration;
+                    return parentKind === SyntaxKind.TypeAliasDeclaration || parentKind === SyntaxKind.TypeParameter;
 
                 case SyntaxKind.AsKeyword:
                     return parentKind === SyntaxKind.AsExpression;

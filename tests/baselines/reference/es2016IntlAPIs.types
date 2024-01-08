@@ -9,9 +9,9 @@ console.log(Intl.getCanonicalLocales('EN-US'));
 >console : Console
 >log : (...data: any[]) => void
 >Intl.getCanonicalLocales('EN-US') : string[]
->Intl.getCanonicalLocales : (locale?: string | string[]) => string[]
+>Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
 >Intl : typeof Intl
->getCanonicalLocales : (locale?: string | string[]) => string[]
+>getCanonicalLocales : (locale?: string | readonly string[]) => string[]
 >'EN-US' : "EN-US"
 
 // Expected output: Array ["en-US"]
@@ -22,9 +22,9 @@ console.log(Intl.getCanonicalLocales(['EN-US', 'Fr']));
 >console : Console
 >log : (...data: any[]) => void
 >Intl.getCanonicalLocales(['EN-US', 'Fr']) : string[]
->Intl.getCanonicalLocales : (locale?: string | string[]) => string[]
+>Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
 >Intl : typeof Intl
->getCanonicalLocales : (locale?: string | string[]) => string[]
+>getCanonicalLocales : (locale?: string | readonly string[]) => string[]
 >['EN-US', 'Fr'] : string[]
 >'EN-US' : "EN-US"
 >'Fr' : "Fr"
@@ -34,9 +34,9 @@ console.log(Intl.getCanonicalLocales(['EN-US', 'Fr']));
 try {
   Intl.getCanonicalLocales('EN_US');
 >Intl.getCanonicalLocales('EN_US') : string[]
->Intl.getCanonicalLocales : (locale?: string | string[]) => string[]
+>Intl.getCanonicalLocales : (locale?: string | readonly string[]) => string[]
 >Intl : typeof Intl
->getCanonicalLocales : (locale?: string | string[]) => string[]
+>getCanonicalLocales : (locale?: string | readonly string[]) => string[]
 >'EN_US' : "EN_US"
 
 } catch (err) {

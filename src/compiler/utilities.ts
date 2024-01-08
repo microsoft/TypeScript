@@ -7510,6 +7510,16 @@ export function readJson(path: string, host: { readFile(fileName: string): strin
 }
 
 /** @internal */
+export function tryParseJson(text: string) {
+    try {
+        return JSON.parse(text);
+    }
+    catch {
+        return undefined;
+    }
+}
+
+/** @internal */
 export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean; }): boolean {
     // if host does not support 'directoryExists' assume that directory will exist
     return !host.directoryExists || host.directoryExists(directoryName);
@@ -10933,12 +10943,16 @@ export function createEntityVisibilityChecker<T extends { flags: SymbolFlags; de
 }) {
     function hasVisibleDeclarations(symbol: T, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
         let aliasesToMakeVisible: LateVisibilityPaintedStatement[] | undefined;
+        let bindingElementToMakeVisible: BindingElement | undefined;
         if (!every(filter(symbol.declarations, d => d.kind !== SyntaxKind.Identifier), getIsDeclarationVisible)) {
             return undefined;
         }
-        return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible };
+        return { accessibility: SymbolAccessibility.Accessible, aliasesToMakeVisible, bindingElementToMakeVisible };
 
         function getIsDeclarationVisible(declaration: Declaration) {
+            if (isBindingElement(declaration) && findAncestor(declaration, isParameter)) {
+                bindingElementToMakeVisible = declaration;
+            }
             if (!isDeclarationVisible(declaration)) {
                 // Mark the unexported alias as visible if its parent is visible
                 // because these kind of aliases can be used to name types in declaration file
