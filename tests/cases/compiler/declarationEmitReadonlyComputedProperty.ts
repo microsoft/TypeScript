@@ -1,6 +1,6 @@
 // @declaration: true
 // @lib: es2015
-// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed. Symbol in computed property not imported.
+// @isolatedDeclarationFixedDiffReason: There will be separate TS error on 'spread', but fixer does not know about this so it'll try to fix the missing type.
 
 // @filename: bug.ts
 export const SYMBOL = Symbol()

@@ -1,7 +1,7 @@
 // @strict: true
 // @declaration: true
 // @filename: a.d.ts
-// @isolatedDeclarationFixedDiffReason: TODO File is not auto-fixed. Symbol is not imported.
+// @isolatedDeclarationFixedDiffReason: There will be separate TS error on 'timestamp', but fixer does not know about this so it'll try to fix the missing type.
 export declare const timestampSymbol: unique symbol;
 
 export declare const Timestamp: {

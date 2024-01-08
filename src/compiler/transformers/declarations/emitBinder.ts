@@ -212,6 +212,9 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
 
             const memberSymbol = symbol.exports?.get(getMemberKey(name));
             if (!memberSymbol || !(memberSymbol.flags & meaning)) {
+                if (symbol.valueDeclaration && isModuleDeclaration(symbol.valueDeclaration)) {
+                    return getNodeLinks(symbol.valueDeclaration)?.locals?.get(getMemberKey(name));
+                }
                 return undefined;
             }
             return memberSymbol;
@@ -454,7 +457,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                     if (!fn) return;
 
                     const parentLocals = target.parent?.valueDeclaration && getNodeLinks(target.parent.valueDeclaration).locals;
-                    if (currentFunctionLocalSymbolTable !== parentLocals) return;
+                    if (currentFunctionLocalSymbolTable !== parentLocals && target.parent?.valueDeclaration?.kind !== SyntaxKind.ModuleDeclaration) return;
 
                     target.exports ??= new Map();
                     if (target.exportSymbol) {
