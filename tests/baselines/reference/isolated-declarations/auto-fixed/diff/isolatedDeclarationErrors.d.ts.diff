@@ -44,7 +44,7 @@
 +    const errorOnMissingReturn: {
 +        (): void;
 +        a: string;
-+    } = () => {}
++    } = (): void => {}
 +    errorOnMissingReturn.a = "";
 +    
 \ No newline at end of file

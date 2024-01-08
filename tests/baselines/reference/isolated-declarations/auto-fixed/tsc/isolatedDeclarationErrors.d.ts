@@ -13,7 +13,7 @@ errorOnAssignmentBelow.a = "";
 const errorOnMissingReturn: {
     (): void;
     a: string;
-} = () => {}
+} = (): void => {}
 errorOnMissingReturn.a = "";
 
 

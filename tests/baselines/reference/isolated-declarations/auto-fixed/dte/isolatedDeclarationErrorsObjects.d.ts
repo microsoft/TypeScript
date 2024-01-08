@@ -37,10 +37,10 @@ export let oWithMethods: {
     bad(): void;
     e: number;
 } = {
-    method() { },
+    method(): void { },
     okMethod(): void { },
     a: 1,
-    bad() { },
+    bad(): void { },
     e: V,
 }
 export let oWithMethodsNested = {
@@ -258,10 +258,10 @@ isolatedDeclarationErrorsObjects.ts(111,14): error TS2451: Cannot redeclare bloc
         bad(): void;
         e: number;
     } = {
-        method() { },
+        method(): void { },
         okMethod(): void { },
         a: 1,
-        bad() { },
+        bad(): void { },
         e: V,
     }
     export let oWithMethodsNested = {

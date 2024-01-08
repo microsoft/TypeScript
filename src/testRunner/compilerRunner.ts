@@ -116,10 +116,12 @@ export class CompilerBaselineRunner extends RunnerBase {
 
         describe("isolated declarations", () => {
             let isolatedTest: IsolatedDeclarationTest | undefined;
-            before(() => {
+            before(function () {
                 const isolatedTestEnv = IsolatedDeclarationTest.transformEnvironment(environment);
                 if (isolatedTestEnv) {
                     isolatedTest = new IsolatedDeclarationTest(isolatedTestEnv);
+                } else {
+                    this.skip();
                 }
             });
             it(`Correct dte emit for ${fileName}`, () => isolatedTest?.verifyDteOutput());
@@ -133,10 +135,12 @@ export class CompilerBaselineRunner extends RunnerBase {
 
         describe("isolated declarations fixed", () => {
             let fixedIsolatedTest: FixedIsolatedDeclarationTest | undefined;
-            before(() => {
+            before(function () {
                 const fixedIsolatedTestEnv = FixedIsolatedDeclarationTest.fixTestProject(environment);
                 if (fixedIsolatedTestEnv) {
                     fixedIsolatedTest = new FixedIsolatedDeclarationTest(fixedIsolatedTestEnv);
+                } else {
+                    this.skip();
                 }
             });
             it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
@@ -479,11 +483,10 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         // Exclude tests some tests
         // - those explicitly not opting into isolatedDeclarations
         // - those that do not usually emit output anyway
-        if (options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols) {
+        if (options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols || !options.declaration) {
             return undefined;
         }
         const clonedOptions: ts.CompilerOptions & Compiler.HarnessOptions = ts.cloneCompilerOptions(compilerEnvironment.compilerOptions);
-        clonedOptions.declaration = true;
         if (clonedOptions.isolatedDeclarations === undefined) {
             clonedOptions.isolatedDeclarations = true;
         }
@@ -503,7 +506,6 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             ...compilerEnvironment.testCaseContent.settings,
             allowJS: "false",
             checkJS: "false",
-            declaration: "true",
             isolatedDeclarations: "true",
             forceDtsEmit: "true",
             skipLibCheck: "true",
