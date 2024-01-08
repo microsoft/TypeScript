@@ -184,13 +184,13 @@ var r3 = foo3(a); // any
 >a : any
 
 declare function foo13(x: <T>(x: T) => T): <T>(x: T) => T;
->foo13 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: any): any; }
+>foo13 : { (x: <T>(x: T) => T): <T_1>(x: T_1) => T_1; (x: any): any; }
 >x : <T>(x: T) => T
 >x : T
 >x : T
 
 declare function foo13(x: any): any;
->foo13 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: any): any; }
+>foo13 : { (x: <T>(x: T) => T): <T_1>(x: T_1) => T_1; (x: any): any; }
 >x : any
 
 var r3 = foo3(a); // any

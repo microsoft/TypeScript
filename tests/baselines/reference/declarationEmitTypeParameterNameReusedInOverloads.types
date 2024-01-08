@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/declarationEmitTypeParameterNameReusedInOverloads.ts] ////
+
+=== declarationEmitTypeParameterNameReusedInOverloads.ts ===
+export class Base { foo: string; }
+>Base : Base
+>foo : string
+
+export class Derived extends Base { bar: string; }
+>Derived : Derived
+>Base : Base
+>bar : string
+
+export class Derived2 extends Derived { baz: string; }
+>Derived2 : Derived2
+>Derived : Derived
+>baz : string
+
+export type Foo = {
+>Foo : { new (x: { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }): any[]; new (x: { new <T_2 extends Derived2>(a: T_2): T_2; new <T_3 extends Base>(a: T_3): T_3; }): any[]; }
+
+    new (x: {
+>x : { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }
+
+        new <T extends Derived>(a: T): T;
+>a : T
+
+        new <T extends Base>(a: T): T;
+>a : T
+
+    }): any[];
+    new (x: {
+>x : { new <T extends Derived2>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }
+
+        new <T extends Derived2>(a: T): T;
+>a : T
+
+            new <T extends Base>(a: T): T;
+>a : T
+
+    }): any[];
+}
+

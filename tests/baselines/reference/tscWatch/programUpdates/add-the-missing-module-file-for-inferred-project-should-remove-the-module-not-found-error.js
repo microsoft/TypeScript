@@ -31,8 +31,30 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts"]
-Program options: {"watch":true}
+//// [/users/username/projects/project/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var T = require("./moduleFile");
+T.bar();
+
+
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/file1.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/file1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -46,25 +68,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /users/username/projects/project/file1.ts (used version)
 
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/file1.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var T = require("./moduleFile");
-T.bar();
-
-
 
 Change:: Create module file
 
@@ -73,12 +77,20 @@ Input::
 export function bar() { }
 
 
+Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions *new*
+
 Before running Timeout callback:: count: 1
 1: timerToInvalidateFailedLookupResolutions
+
 After running Timeout callback:: count: 1
-2: timerToUpdateProgram
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -88,8 +100,35 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/file1.ts"]
-Program options: {"watch":true}
+//// [/users/username/projects/project/file1.js] file written with same contents
+//// [/users/username/projects/project/moduleFile.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = void 0;
+function bar() { }
+exports.bar = bar;
+
+
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/file1.ts:
+  {}
+/users/username/projects/project/moduleFile.ts: *new*
+  {}
+
+FsWatchesRecursive *deleted*::
+/users/username/projects:
+  {}
+
+
+Program root files: [
+  "/users/username/projects/project/file1.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -104,26 +143,4 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/modulefile.ts (computed .d.ts)
 /users/username/projects/project/file1.ts (computed .d.ts)
 
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/project/file1.ts:
-  {}
-/users/username/projects/project/modulefile.ts: *new*
-  {}
-
-FsWatchesRecursive *deleted*::
-/users/username/projects:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/file1.js] file written with same contents
-//// [/users/username/projects/project/moduleFile.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = void 0;
-function bar() { }
-exports.bar = bar;
-
-

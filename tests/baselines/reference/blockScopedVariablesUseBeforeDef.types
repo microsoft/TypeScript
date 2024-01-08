@@ -320,3 +320,44 @@ function foo17() {
 >1 : 1
 }
 
+// #30907
+function wrapI1() {
+>wrapI1 : () => void
+
+    const iter = (function* foo() {
+>iter : Generator<number, void, unknown>
+>(function* foo() {        iter;        yield 1;    })() : Generator<number, void, unknown>
+>(function* foo() {        iter;        yield 1;    }) : () => Generator<number, void, unknown>
+>function* foo() {        iter;        yield 1;    } : () => Generator<number, void, unknown>
+>foo : () => Generator<number, void, unknown>
+
+        iter;
+>iter : Generator<number, void, unknown>
+
+        yield 1;
+>yield 1 : any
+>1 : 1
+
+    })();
+}
+
+function wrapI2() {
+>wrapI2 : () => void
+
+    const iter = (async function* foo() {
+>iter : AsyncGenerator<number, void, unknown>
+>(async function* foo() {        iter;        yield 1;    })() : AsyncGenerator<number, void, unknown>
+>(async function* foo() {        iter;        yield 1;    }) : () => AsyncGenerator<number, void, unknown>
+>async function* foo() {        iter;        yield 1;    } : () => AsyncGenerator<number, void, unknown>
+>foo : () => AsyncGenerator<number, void, unknown>
+
+        iter;
+>iter : AsyncGenerator<number, void, unknown>
+
+        yield 1;
+>yield 1 : any
+>1 : 1
+
+    })();
+}
+

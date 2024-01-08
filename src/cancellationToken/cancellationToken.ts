@@ -39,7 +39,7 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
     // in this case pipe name will be build dynamically as <cancellationPipeName><request_seq>.
     if (cancellationPipeName.charAt(cancellationPipeName.length - 1) === "*") {
         const namePrefix = cancellationPipeName.slice(0, -1);
-        if (namePrefix.length === 0 || namePrefix.indexOf("*") >= 0) {
+        if (namePrefix.length === 0 || namePrefix.includes("*")) {
             throw new Error("Invalid name for template cancellation pipe: it should have length greater than 2 characters and contain only one '*'.");
         }
         let perRequestPipeName: string | undefined;

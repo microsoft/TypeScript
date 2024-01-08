@@ -27,18 +27,18 @@ function log(locale: string) {
 >new Intl.DateTimeFormat(locale).format(date) : string
 >new Intl.DateTimeFormat(locale).format : (date?: number | Date) => string
 >new Intl.DateTimeFormat(locale) : Intl.DateTimeFormat
->Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >Intl : typeof Intl
->DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
+>DateTimeFormat : Intl.DateTimeFormatConstructor
 >locale : string
 >format : (date?: number | Date) => string
 >date : Date
 >new Intl.NumberFormat(locale).format(count) : string
 >new Intl.NumberFormat(locale).format : { (value: number): string; (value: number | bigint): string; }
 >new Intl.NumberFormat(locale) : Intl.NumberFormat
->Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; readonly prototype: Intl.NumberFormat; }
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; readonly prototype: Intl.NumberFormat; }
+>NumberFormat : Intl.NumberFormatConstructor
 >locale : string
 >format : { (value: number): string; (value: number | bigint): string; }
 >count : 26254.39
@@ -64,9 +64,9 @@ log("de-DE");
 const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
 >rtf1 : Intl.RelativeTimeFormat
 >new Intl.RelativeTimeFormat('en', { style: 'narrow' }) : Intl.RelativeTimeFormat
->Intl.RelativeTimeFormat : { new (locales?: string | string[], options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: string | string[], options?: Intl.RelativeTimeFormatOptions): string[]; }
+>Intl.RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): string[]; }
 >Intl : typeof Intl
->RelativeTimeFormat : { new (locales?: string | string[], options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: string | string[], options?: Intl.RelativeTimeFormatOptions): string[]; }
+>RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): string[]; }
 >'en' : "en"
 >{ style: 'narrow' } : { style: "narrow"; }
 >style : "narrow"
@@ -104,9 +104,9 @@ console.log(rtf1.format(-1, 'day'));
 const rtf2 = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
 >rtf2 : Intl.RelativeTimeFormat
 >new Intl.RelativeTimeFormat('es', { numeric: 'auto' }) : Intl.RelativeTimeFormat
->Intl.RelativeTimeFormat : { new (locales?: string | string[], options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: string | string[], options?: Intl.RelativeTimeFormatOptions): string[]; }
+>Intl.RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): string[]; }
 >Intl : typeof Intl
->RelativeTimeFormat : { new (locales?: string | string[], options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: string | string[], options?: Intl.RelativeTimeFormatOptions): string[]; }
+>RelativeTimeFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): Intl.RelativeTimeFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Intl.RelativeTimeFormatOptions): string[]; }
 >'es' : "es"
 >{ numeric: 'auto' } : { numeric: "auto"; }
 >numeric : "auto"
