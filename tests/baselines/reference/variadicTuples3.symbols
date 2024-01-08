@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples3.ts] ////
+
+=== variadicTuples3.ts ===
+// https://github.com/microsoft/TypeScript/issues/56970
+
+function partialCallRev<T extends readonly any[], U extends readonly any[], R>(
+>partialCallRev : Symbol(partialCallRev, Decl(variadicTuples3.ts, 0, 0))
+>T : Symbol(T, Decl(variadicTuples3.ts, 2, 24))
+>U : Symbol(U, Decl(variadicTuples3.ts, 2, 49))
+>R : Symbol(R, Decl(variadicTuples3.ts, 2, 75))
+
+  f: (...args: [...U, ...T]) => R,
+>f : Symbol(f, Decl(variadicTuples3.ts, 2, 79))
+>args : Symbol(args, Decl(variadicTuples3.ts, 3, 6))
+>U : Symbol(U, Decl(variadicTuples3.ts, 2, 49))
+>T : Symbol(T, Decl(variadicTuples3.ts, 2, 24))
+>R : Symbol(R, Decl(variadicTuples3.ts, 2, 75))
+
+  ...tailArgs: T
+>tailArgs : Symbol(tailArgs, Decl(variadicTuples3.ts, 3, 34))
+>T : Symbol(T, Decl(variadicTuples3.ts, 2, 24))
+
+) {
+  return (...headArgs: U) => f(...headArgs, ...tailArgs);
+>headArgs : Symbol(headArgs, Decl(variadicTuples3.ts, 6, 10))
+>U : Symbol(U, Decl(variadicTuples3.ts, 2, 49))
+>f : Symbol(f, Decl(variadicTuples3.ts, 2, 79))
+>headArgs : Symbol(headArgs, Decl(variadicTuples3.ts, 6, 10))
+>tailArgs : Symbol(tailArgs, Decl(variadicTuples3.ts, 3, 34))
+}
+
+function te(a: number, b: number, c: number): number {
+>te : Symbol(te, Decl(variadicTuples3.ts, 7, 1))
+>a : Symbol(a, Decl(variadicTuples3.ts, 9, 12))
+>b : Symbol(b, Decl(variadicTuples3.ts, 9, 22))
+>c : Symbol(c, Decl(variadicTuples3.ts, 9, 33))
+
+  return a + b + c;
+>a : Symbol(a, Decl(variadicTuples3.ts, 9, 12))
+>b : Symbol(b, Decl(variadicTuples3.ts, 9, 22))
+>c : Symbol(c, Decl(variadicTuples3.ts, 9, 33))
+}
+
+const fn = partialCallRev(te, 1);
+>fn : Symbol(fn, Decl(variadicTuples3.ts, 13, 5))
+>partialCallRev : Symbol(partialCallRev, Decl(variadicTuples3.ts, 0, 0))
+>te : Symbol(te, Decl(variadicTuples3.ts, 7, 1))
+

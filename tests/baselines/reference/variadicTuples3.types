@@ -1,0 +1,48 @@
+//// [tests/cases/conformance/types/tuple/variadicTuples3.ts] ////
+
+=== variadicTuples3.ts ===
+// https://github.com/microsoft/TypeScript/issues/56970
+
+function partialCallRev<T extends readonly any[], U extends readonly any[], R>(
+>partialCallRev : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [...U, ...T]) => R, ...tailArgs: T) => (...headArgs: U) => R
+
+  f: (...args: [...U, ...T]) => R,
+>f : (...args: [...U, ...T]) => R
+>args : [...U, ...T]
+
+  ...tailArgs: T
+>tailArgs : T
+
+) {
+  return (...headArgs: U) => f(...headArgs, ...tailArgs);
+>(...headArgs: U) => f(...headArgs, ...tailArgs) : (...headArgs: U) => R
+>headArgs : U
+>f(...headArgs, ...tailArgs) : R
+>f : (...args: [...U, ...T]) => R
+>...headArgs : any
+>headArgs : U
+>...tailArgs : any
+>tailArgs : T
+}
+
+function te(a: number, b: number, c: number): number {
+>te : (a: number, b: number, c: number) => number
+>a : number
+>b : number
+>c : number
+
+  return a + b + c;
+>a + b + c : number
+>a + b : number
+>a : number
+>b : number
+>c : number
+}
+
+const fn = partialCallRev(te, 1);
+>fn : (a: number, b: number) => number
+>partialCallRev(te, 1) : (a: number, b: number) => number
+>partialCallRev : <T extends readonly any[], U extends readonly any[], R>(f: (...args: [...U, ...T]) => R, ...tailArgs: T) => (...headArgs: U) => R
+>te : (a: number, b: number, c: number) => number
+>1 : 1
+

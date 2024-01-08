@@ -25970,11 +25970,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             if (middleLength === 2) {
                                 if (elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic) {
                                     // Middle of target is [...T, ...U] and source is tuple type
-                                    const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
+                                    let targetInfo = getInferenceInfoForType(elementTypes[startLength]);
                                     if (targetInfo && targetInfo.impliedArity !== undefined) {
                                         // Infer slices from source based on implied arity of T.
                                         inferFromTypes(sliceTupleType(source, startLength, endLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
                                         inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, endLength), elementTypes[startLength + 1]);
+                                    }
+                                    else if ((targetInfo = getInferenceInfoForType(elementTypes[startLength + 1]))?.impliedArity !== undefined) {
+                                        // Infer slices from source based on implied arity of U.
+                                        inferFromTypes(sliceTupleType(source, startLength, endLength + targetInfo!.impliedArity), elementTypes[startLength]);
+                                        inferFromTypes(sliceTupleType(source, startLength + sourceArity - targetInfo!.impliedArity, endLength), elementTypes[startLength + 1]);
                                     }
                                 }
                                 else if (elementFlags[startLength] & ElementFlags.Variadic && elementFlags[startLength + 1] & ElementFlags.Rest) {
