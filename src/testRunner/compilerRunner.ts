@@ -144,7 +144,6 @@ export class CompilerBaselineRunner extends RunnerBase {
                 }
             });
             it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
-            it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
             it(`Correct tsc emit for ${fileName}`, () => fixedIsolatedTest?.verifyTscOutput());
             it(`Correct dte/tsc diff ${fileName}`, () => fixedIsolatedTest?.verifyDiff());
             it(`Correct dte map emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteMapOutput());

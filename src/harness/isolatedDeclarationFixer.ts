@@ -96,7 +96,6 @@ export function fixProjectInternal(
 
             if (diagnostics.length === 0) continue;
 
-            // Try to fix all
             const fixAll = service.getCombinedCodeFix({ type: "file", fileName: file.fileName }, "fixMissingTypeAnnotationOnExports", defaultFormatOptions, userPreferences);
             applyFix(fixAll.changes);
 
