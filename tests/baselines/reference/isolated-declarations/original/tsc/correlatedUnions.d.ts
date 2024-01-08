@@ -473,21 +473,21 @@ declare function getValueConcrete<K extends keyof Foo1>(o: Partial<Foo1>, k: K):
 
 /// [Errors] ////
 
-correlatedUnions.ts(10,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(36,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(37,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(44,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(76,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(113,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(123,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(128,21): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(142,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(166,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(170,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(175,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(180,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(218,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+correlatedUnions.ts(10,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(36,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(37,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(44,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(76,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(113,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(123,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+correlatedUnions.ts(128,21): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+correlatedUnions.ts(142,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(166,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(170,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(175,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(180,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(218,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+correlatedUnions.ts(231,20): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 ==== correlatedUnions.ts (15 errors) ====
@@ -502,7 +502,8 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     
     function processRecord<K extends keyof RecordMap>(rec: UnionRecord<K>) {
              ~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:10:10: Add a return type to the function declaration.
         rec.f(rec.v);
     }
     
@@ -530,10 +531,12 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     
     function renderTextField(props: TextFieldData) {}
              ~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:36:10: Add a return type to the function declaration.
     function renderSelectField(props: SelectFieldData) {}
              ~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:37:10: Add a return type to the function declaration.
     
     const renderFuncs: RenderFuncMap = {
         text: renderTextField,
@@ -542,7 +545,8 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     
     function renderField<K extends keyof FieldMap>(field: FormField<K>) {
              ~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:44:10: Add a return type to the function declaration.
         const renderFn = renderFuncs[field.type];
         renderFn(field.data);
     }
@@ -576,7 +580,8 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     
     function process<K extends Keys>(data: DataEntry<K>[]) {
              ~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:76:10: Add a return type to the function declaration.
         data.forEach(block => {
             if (block.type in handlers) {
                 handlers[block.type](block.data)
@@ -615,7 +620,8 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     
     function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
              ~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:113:10: Add a return type to the function declaration.
         for (const event of events) {
             document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
         }
@@ -633,7 +639,8 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     });
     ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 correlatedUnions.ts:123:7: Add a type annotation to the variable clickEvent.
     
     const scrollEvent = createEventListener({
                         ~~~~~~~~~~~~~~~~~~~~~
@@ -643,7 +650,8 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     });
     ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 correlatedUnions.ts:128:7: Add a type annotation to the variable scrollEvent.
     
     processEvents([clickEvent, scrollEvent]);
     
@@ -656,7 +664,8 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     
     function ff1() {
              ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:142:10: Add a return type to the function declaration.
         type ArgMap = {
             sum: [a: number, b: number],
             concat: [a: string, b: string, c: string]
@@ -682,27 +691,31 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     
     function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
              ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:166:10: Add a return type to the function declaration.
         funcs[key](arg);
     }
     
     function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
              ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:170:10: Add a return type to the function declaration.
         const func = funcs[key];  // Type Funcs[K]
         func(arg);
     }
     
     function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
              ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:175:10: Add a return type to the function declaration.
         const func: Func<K> = funcs[key];
         func(arg);
     }
     
     function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
              ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:180:10: Add a return type to the function declaration.
         x = y;
     }
     
@@ -742,7 +755,8 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     
     function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
              ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 correlatedUnions.ts:218:10: Add a return type to the function declaration.
         bar(f[prop]);
     }
     
@@ -757,7 +771,8 @@ correlatedUnions.ts(231,20): error TS9007: Declaration emit for this file requir
     
     const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 correlatedUnions.ts:231:7: Add a type annotation to the variable BAR_LOOKUP.
     
     type BarLookup = typeof BAR_LOOKUP;
     

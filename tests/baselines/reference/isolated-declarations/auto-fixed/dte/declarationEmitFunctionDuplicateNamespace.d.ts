@@ -20,7 +20,7 @@ declare function f(a: 1): 1;
 //# sourceMappingURL=declarationEmitFunctionDuplicateNamespace.d.ts.map
 /// [Errors] ////
 
-declarationEmitFunctionDuplicateNamespace.ts(7,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+declarationEmitFunctionDuplicateNamespace.ts(7,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 
 
 ==== declarationEmitFunctionDuplicateNamespace.ts (1 errors) ====
@@ -32,5 +32,5 @@ declarationEmitFunctionDuplicateNamespace.ts(7,1): error TS9009: Assigning prope
     
     f.x = 2;
     ~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     

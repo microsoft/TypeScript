@@ -17,18 +17,15 @@ class C {
 declare var methodName: string;
 declare var accessorName: string;
 declare class C {
-    [methodName](v: string): invalid;
-    [methodName](): invalid;
-    [methodName](v?: string): invalid;
 }
 
 /// [Errors] ////
 
 computedPropertyNamesOnOverloads_ES6.ts(4,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
-computedPropertyNamesOnOverloads_ES6.ts(4,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertyNamesOnOverloads_ES6.ts(4,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 computedPropertyNamesOnOverloads_ES6.ts(5,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
-computedPropertyNamesOnOverloads_ES6.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-computedPropertyNamesOnOverloads_ES6.ts(6,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+computedPropertyNamesOnOverloads_ES6.ts(5,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+computedPropertyNamesOnOverloads_ES6.ts(6,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 
 
 ==== computedPropertyNamesOnOverloads_ES6.ts (5 errors) ====
@@ -39,13 +36,13 @@ computedPropertyNamesOnOverloads_ES6.ts(6,5): error TS9007: Declaration emit for
         ~~~~~~~~~~~~
 !!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         ~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         [methodName]();
         ~~~~~~~~~~~~
 !!! error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
         ~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
         [methodName](v?: string) { }
         ~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
     }

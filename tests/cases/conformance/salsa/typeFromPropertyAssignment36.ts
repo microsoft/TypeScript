@@ -1,6 +1,4 @@
 // @strict: true
-// @isolatedDeclarationFixedDiffReason: TODO Need to fix DTE looking recursively for assigned members.
-// @isolatedDeclarationDiffReason: TODO Need to fix DTE looking recursively for assigned members.
 
 function f(b: boolean) {
     function d() {

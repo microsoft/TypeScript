@@ -112,7 +112,7 @@ export {};
 //# sourceMappingURL=uniqueSymbolsDeclarationsErrors.d.ts.map
 /// [Errors] ////
 
-uniqueSymbolsDeclarationsErrors.ts(15,32): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+uniqueSymbolsDeclarationsErrors.ts(15,32): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
 
 
 ==== uniqueSymbolsDeclarationsErrors.ts (1 errors) ====
@@ -132,7 +132,7 @@ uniqueSymbolsDeclarationsErrors.ts(15,32): error TS9011: Declaration emit for cl
     
     export const classExpression = class {
                                    ~~~~~
-!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+!!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
         method1(p: typeof s): typeof s {
             return p;
         }

@@ -29,7 +29,7 @@ export declare function getStyles(): invalid;
 //# sourceMappingURL=index.d.ts.map
 /// [Errors] ////
 
-Folder/monorepo/core/index.ts(3,17): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+Folder/monorepo/core/index.ts(3,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 
 
 ==== Folder/monorepo/core/index.ts (1 errors) ====
@@ -37,7 +37,8 @@ Folder/monorepo/core/index.ts(3,17): error TS9007: Declaration emit for this fil
     
     export function getStyles() {
                     ~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 Folder/monorepo/core/index.ts:3:17: Add a return type to the function declaration.
     	return styles;
     }
     

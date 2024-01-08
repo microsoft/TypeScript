@@ -9,7 +9,7 @@ module M {
         [Symbol.isConcatSpreadable](): I {
             return undefined
         }
-        get [Symbol.toPrimitive](): I { return undefined; }
+        get [Symbol.toPrimitive]() { return undefined; }
         set [Symbol.toPrimitive](x: I) { }
     }
 }
@@ -46,7 +46,7 @@ symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.t
             [Symbol.isConcatSpreadable](): I {
                 return undefined
             }
-            get [Symbol.toPrimitive](): I { return undefined; }
+            get [Symbol.toPrimitive]() { return undefined; }
                 ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
             set [Symbol.toPrimitive](x: I) { }

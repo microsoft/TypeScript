@@ -2,6 +2,7 @@ import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     AssertionExpression,
+    BinaryExpression,
     BindingElement,
     BindingPattern,
     ClassDeclaration,
@@ -10,10 +11,12 @@ import {
     CodeFixContext,
     createPrinter,
     Debug,
+    Declaration,
     defaultMaximumTruncationLength,
     DiagnosticAndArguments,
     DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
+    ElementAccessExpression,
     EmitFlags,
     EmitHint,
     EntityName,
@@ -34,6 +37,7 @@ import {
     isArrayBindingPattern,
     isArrayLiteralExpression,
     isAssertionExpression,
+    isBinaryExpression,
     isBindingPattern,
     isCallExpression,
     isComputedPropertyName,
@@ -42,7 +46,9 @@ import {
     isDeclaration,
     isEntityNameExpression,
     isEnumMember,
+    isExpandoPropertyDeclaration,
     isExpression,
+    isFunctionExpressionOrArrowFunction,
     isHeritageClause,
     isIdentifier,
     isIdentifierText,
@@ -50,6 +56,7 @@ import {
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isOmittedExpression,
+    isParameter,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
     isPropertyAssignment,
@@ -69,10 +76,12 @@ import {
     ObjectBindingPattern,
     ObjectLiteralExpression,
     ParameterDeclaration,
+    PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
     setEmitFlags,
     SignatureDeclaration,
+    some,
     SourceFile,
     SpreadAssignment,
     SpreadElement,
@@ -101,9 +110,25 @@ const addAnnotationFix = "add-annotation";
 const addInlineTypeAssertion = "add-type-assertion";
 const extractExpression = "extract-expression";
 const errorCodes = [
-    Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
-    Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
-];
+    Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+    Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+    Diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations,
+    Diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations,
+    Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations,
+    Diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations,
+    Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations,
+    Diagnostics.Objects_that_contain_shorthand_properties_can_t_be_inferred_with_isolatedDeclarations,
+    Diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations,
+    Diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations,
+    Diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations,
+    Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations,
+    Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+].map(d => d.code);
+
 const canHaveExplicitTypeAnnotation = new Set<SyntaxKind>([
     SyntaxKind.GetAccessor,
     SyntaxKind.MethodDeclaration,
@@ -209,7 +234,7 @@ function withChanges<T>(
 
     function addFullAnnotation(span: TextSpan) {
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
-        const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag);
+        const nodeWithNoType = findNearestParentWithTypeAnnotation(nodeWithDiag) ?? findExpandoFunction(nodeWithDiag);
         if (nodeWithNoType) {
             return fixupForIsolatedDeclarations(nodeWithNoType);
         }
@@ -231,10 +256,17 @@ function withChanges<T>(
 
     function addInlineAnnotation(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
-        const targetNode = findTargetErrorNode(nodeWithDiag, span) as Expression;
+        const expandoFunction = findExpandoFunction(nodeWithDiag);
+        // No inline assertions for expando members
+        if (expandoFunction) return;
+        const targetNode = findTargetErrorNode(nodeWithDiag, span);
         if (!targetNode || isValueSignatureDeclaration(targetNode) || isValueSignatureDeclaration(targetNode.parent)) return;
         const isExpressionTarget = isExpression(targetNode);
+        const isShorthandPropertyAssignmentTarget = isShorthandPropertyAssignment(targetNode);
 
+        if (!isShorthandPropertyAssignmentTarget && isDeclaration(targetNode)) {
+            return undefined;
+        }
         // No inline assertions on binding patterns
         if (findAncestor(targetNode, isBindingPattern)) {
             return undefined;
@@ -263,7 +295,6 @@ function withChanges<T>(
             return undefined;
         }
 
-        const isShorthandPropertyAssignmentTarget = isIdentifier(targetNode) && isShorthandPropertyAssignment(targetNode.parent);
         if (!(isExpressionTarget || isShorthandPropertyAssignmentTarget)) return undefined;
 
         const { typeNode, mutatedTarget } = inferNodeType(targetNode);
@@ -274,7 +305,7 @@ function withChanges<T>(
                 sourceFile,
                 targetNode.end,
                 createAsExpression(
-                    getSynthesizedDeepClone(targetNode),
+                    getSynthesizedDeepClone(targetNode.name),
                     typeNode,
                 ),
                 {
@@ -452,20 +483,44 @@ function withChanges<T>(
         ) {
             node = node.parent;
         }
+        while (node.parent.pos === node.pos && node.parent.end === node.end) {
+            node = node.parent;
+        }
         return node;
     }
     // Currently, the diagnostics for the error is not given in the exact node of which that needs type annotation.
     // If this is coming from an ill-formed AST with syntax errors, you cannot assume that it'll find a node
     // to annotate types, this will return undefined - meaning that it couldn't find the node to annotate types.
     function findNearestParentWithTypeAnnotation(node: Node): Node | undefined {
-        while (
-            node &&
-            (((isObjectBindingPattern(node) || isArrayBindingPattern(node)) &&
-                !isVariableDeclaration(node.parent)) || !canHaveExplicitTypeAnnotation.has(node.kind))
-        ) {
-            node = node.parent;
+        return findAncestor(node, n =>
+            canHaveExplicitTypeAnnotation.has(n.kind)
+            && ((!isObjectBindingPattern(n) && !isArrayBindingPattern(n)) || isVariableDeclaration(n.parent)));
+    }
+
+    function findExpandoFunction(node: Node) {
+        // Expando property
+        const expandoDeclaration = findAncestor(node, n => isStatement(n) ? "quit" : isExpandoPropertyDeclaration(n as Declaration)) as PropertyAccessExpression | ElementAccessExpression | BinaryExpression;
+
+        if (expandoDeclaration && isExpandoPropertyDeclaration(expandoDeclaration)) {
+            let assignmentTarget = expandoDeclaration;
+
+            // Some late bound expando members use thw whole expression as the declaration.
+            if (isBinaryExpression(assignmentTarget)) {
+                assignmentTarget = assignmentTarget.left as PropertyAccessExpression | ElementAccessExpression;
+                if (!isExpandoPropertyDeclaration(assignmentTarget)) return undefined;
+            }
+            const targetType = typeChecker.getTypeAtLocation(assignmentTarget.expression);
+            if (!targetType) return;
+
+            const properties = typeChecker.getPropertiesOfType(targetType);
+            if (some(properties, p => p.valueDeclaration === expandoDeclaration || p.valueDeclaration === expandoDeclaration.parent)) {
+                const fn = targetType.symbol.valueDeclaration;
+                if (fn && isFunctionExpressionOrArrowFunction(fn) && isVariableDeclaration(fn.parent)) {
+                    return fn.parent;
+                }
+            }
         }
-        return node;
+        return undefined;
     }
 
     /**
@@ -953,6 +1008,9 @@ function withChanges<T>(
     }
 
     function relativeType(node: Node): InferenceResult {
+        if (isParameter(node)) {
+            return emptyInferenceResult;
+        }
         if (isEntityNameExpression(node)) {
             return {
                 typeNode: createTypeOfFromEntityNameExpression(node),

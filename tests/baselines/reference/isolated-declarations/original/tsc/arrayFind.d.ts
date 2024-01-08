@@ -26,7 +26,7 @@ declare const readonlyFoundNumber: number | undefined;
 
 /// [Errors] ////
 
-arrayFind.ts(6,42): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+arrayFind.ts(6,42): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
 
 
 ==== arrayFind.ts (1 errors) ====
@@ -37,7 +37,8 @@ arrayFind.ts(6,42): error TS9007: Declaration emit for this file requires type r
     
     const arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true];
                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+!!! related TS9027 arrayFind.ts:6:7: Add a type annotation to the variable arrayOfStringsNumbersAndBooleans.
     const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(isNumber);
     
     const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean>;

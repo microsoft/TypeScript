@@ -14,7 +14,7 @@ declare var v: invalid;
 
 /// [Errors] ////
 
-parserComputedPropertyName37.ts(2,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parserComputedPropertyName37.ts(2,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
 parserComputedPropertyName37.ts(2,6): error TS2304: Cannot find name 'public'.
 
 
@@ -22,7 +22,8 @@ parserComputedPropertyName37.ts(2,6): error TS2304: Cannot find name 'public'.
     var v = {
         [public]: 0
         ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+!!! related TS9027 parserComputedPropertyName37.ts:1:5: Add a type annotation to the variable v.
          ~~~~~~
 !!! error TS2304: Cannot find name 'public'.
     };

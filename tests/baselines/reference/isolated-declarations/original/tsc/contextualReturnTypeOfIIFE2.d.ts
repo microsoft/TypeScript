@@ -24,7 +24,7 @@ declare namespace app {
 
 /// [Errors] ////
 
-contextualReturnTypeOfIIFE2.ts(5,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+contextualReturnTypeOfIIFE2.ts(5,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 
 
 ==== contextualReturnTypeOfIIFE2.ts (1 errors) ====
@@ -34,7 +34,7 @@ contextualReturnTypeOfIIFE2.ts(5,1): error TS9009: Assigning properties to funct
     
     app.foo.bar = (function () {
     ~~~~~~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
       const someFun = (arg: number) => {};
       return { someFun };
     })();

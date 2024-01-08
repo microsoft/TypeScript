@@ -35,8 +35,8 @@ declare enum E1 {
 
 forwardRefInEnum.ts(4,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 forwardRefInEnum.ts(5,10): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
-forwardRefInEnum.ts(7,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-forwardRefInEnum.ts(8,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+forwardRefInEnum.ts(7,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
+forwardRefInEnum.ts(8,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 
 
 ==== forwardRefInEnum.ts (4 errors) ====
@@ -52,10 +52,10 @@ forwardRefInEnum.ts(8,5): error TS9007: Declaration emit for this file requires 
         // forward reference to the element of the same enum
         Y = E1.Z,
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
         Y1 = E1["Z"]
         ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
     }
     
     enum E1 {

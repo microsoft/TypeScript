@@ -33,7 +33,7 @@ export default _default;
 
 /// [Errors] ////
 
-other.ts(7,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+other.ts(7,16): error TS9037: Default exports can't be inferred with --isolatedDeclarations.
 
 
 ==== other.ts (1 errors) ====
@@ -49,7 +49,8 @@ other.ts(7,16): error TS9007: Declaration emit for this file requires type resol
     ~~~~~~~~~~~~~~~
     });
     ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9037: Default exports can't be inferred with --isolatedDeclarations.
+!!! related TS9036 other.ts:7:1: Move the expression in default export to a variable and add a type annotation to it.
     
 ==== main.ts (0 errors) ====
     import other from "./other";

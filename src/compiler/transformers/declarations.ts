@@ -155,7 +155,6 @@ import {
     isTupleTypeNode,
     isTypeAliasDeclaration,
     isTypeElement,
-    isTypeLiteralNode,
     isTypeNode,
     isTypeParameterDeclaration,
     isTypeQueryNode,
@@ -395,13 +394,6 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
             };
         }
     }
-    function reportIsolatedDeclarationError(node: Node) {
-        const message = createDiagnosticForNode(
-            node,
-            Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit,
-        );
-        context.addDiagnostic(message);
-    }
     function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined, requestingNode: Node | undefined): void {
         if (!typeReferenceDirectives) {
             return;
@@ -446,21 +438,21 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
             context.addDiagnostic(createDiagnosticForRange(
                 file,
                 ref,
-                Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+                Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations,
             ));
         });
         file.typeReferenceDirectives.forEach(ref => {
             context.addDiagnostic(createDiagnosticForRange(
                 file,
                 ref,
-                Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+                Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations,
             ));
         });
         file.referencedFiles.forEach(ref => {
             context.addDiagnostic(createDiagnosticForRange(
                 file,
                 ref,
-                Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode,
+                Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations,
             ));
         });
     }
@@ -473,7 +465,7 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
         if (!existingDirective) {
             context.addDiagnostic(createDiagnosticForNode(
                 requestingNode,
-                Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit,
+                Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_which_are_not_supported_with_isolatedDeclarations,
                 typeReferenceDirective[0],
             ));
         }
@@ -1195,9 +1187,7 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
         // Augmentation of export depends on import
         if (resolver.isImportRequiredByAugmentation(decl)) {
             if (isolatedDeclarations) {
-                // TODO: Should report better error here. Suggest we add the syntax import type '....'
-                // Also add a test for this.
-                reportIsolatedDeclarationError(decl);
+                context.addDiagnostic(createDiagnosticForNode(decl, Diagnostics.Declaration_emit_for_this_file_requires_preserving_this_import_for_augmentations_This_is_not_supported_with_isolatedDeclarations));
                 return undefined;
             }
             return factory.updateImportDeclaration(
@@ -1275,16 +1265,19 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
             if (isDeclarationAndNotVisible(input)) return;
             if (hasDynamicName(input) && !resolver.isLateBound(getParseTreeNode(input) as Declaration)) {
                 if (
-                    isolatedDeclarations && hasIdentifierComputedName(input) &&
-                    // When --noImplicitAny is off, it's automatically 'any' type so we shouldn't complain.
-                    // when it's on, it should be an error on the noImplicitAny side, so we also shouldn't complain.
-                    !isInterfaceDeclaration(input.parent) && !isTypeLiteralNode(input.parent)
+                    isolatedDeclarations
+                    // Classes usually elide properties with computed names that are not of a literal type
+                    // In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
+                    // The
+                    && isClassDeclaration(input.parent)
+                    && isEntityNameExpression(input.name.expression)
+                    // If the symbol is not accessible we get another TS error no need to add to that
+                    && resolver.isEntityNameVisible(input.name.expression, input.parent).accessibility === SymbolAccessibility.Accessible
+                    && !resolver.isLiteralComputedName(input.name)
                 ) {
-                    reportIsolatedDeclarationError(input);
+                    context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
                 }
-                else {
-                    return;
-                }
+                return;
             }
         }
 
@@ -1742,14 +1735,8 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                             return undefined; // unique symbol or non-identifier name - omit, since there's no syntax that can preserve it
                         }
                         getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
-                        let type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
+                        const type = resolver.createTypeOfDeclaration(p.valueDeclaration, fakespace, declarationEmitNodeBuilderFlags, symbolTracker);
                         getSymbolAccessibilityDiagnostic = oldDiag;
-
-                        if (isolatedDeclarations) {
-                            reportIsolatedDeclarationError(p.valueDeclaration);
-                            type = factory.createTypeReferenceNode("invalid");
-                        }
-
                         const isNonContextualKeywordName = isStringANonContextualKeyword(nameStr);
                         const name = isNonContextualKeywordName ? factory.getGeneratedNameForNode(p.valueDeclaration) : factory.createIdentifier(nameStr);
                         if (isNonContextualKeywordName) {
@@ -1946,7 +1933,7 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                             extendsClause.expression.kind !== SyntaxKind.FalseKeyword &&
                             extendsClause.expression.kind !== SyntaxKind.TrueKeyword
                         ) {
-                            reportIsolatedDeclarationError(extendsClause);
+                            context.addDiagnostic(createDiagnosticForNode(extendsClause, Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations));
                         }
                         return cleanup(factory.updateClassDeclaration(
                             input,
@@ -2022,7 +2009,7 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                             // This will be its own compiler error instead, so don't report.
                             !isComputedPropertyName(m.name)
                         ) {
-                            reportIsolatedDeclarationError(m);
+                            context.addDiagnostic(createDiagnosticForNode(m, Diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations));
                         }
                         const newInitializer = constValue === undefined ? undefined
                             : typeof constValue === "string" ? factory.createStringLiteral(constValue)

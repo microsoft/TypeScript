@@ -379,7 +379,6 @@ export declare class ExportedStaticLengthFn {
     [FunctionPropertyNames.length](): invalid;
 }
 export declare class ExportedStaticPrototype {
-    static [FunctionPropertyNames.prototype]: number;
     [FunctionPropertyNames.prototype]: string;
 }
 export declare class ExportedStaticPrototypeFn {
@@ -454,46 +453,45 @@ staticPropertyNameConflicts.ts(228,16): error TS2699: Static property 'name' con
 staticPropertyNameConflicts.ts(234,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'ExportedStaticName'.
 staticPropertyNameConflicts.ts(240,16): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'.
 staticPropertyNameConflicts.ts(246,12): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'ExportedStaticNameFn'.
-staticPropertyNameConflicts.ts(246,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-staticPropertyNameConflicts.ts(247,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+staticPropertyNameConflicts.ts(246,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+staticPropertyNameConflicts.ts(247,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 staticPropertyNameConflicts.ts(252,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(253,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'.
 staticPropertyNameConflicts.ts(259,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'ExportedStaticLength'.
 staticPropertyNameConflicts.ts(264,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(265,16): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'.
 staticPropertyNameConflicts.ts(271,12): error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'ExportedStaticLengthFn'.
-staticPropertyNameConflicts.ts(271,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-staticPropertyNameConflicts.ts(272,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+staticPropertyNameConflicts.ts(271,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+staticPropertyNameConflicts.ts(272,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 staticPropertyNameConflicts.ts(277,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(278,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
 staticPropertyNameConflicts.ts(284,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototype'.
-staticPropertyNameConflicts.ts(284,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 staticPropertyNameConflicts.ts(289,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(290,16): error TS2300: Duplicate identifier 'prototype'.
 staticPropertyNameConflicts.ts(290,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
 staticPropertyNameConflicts.ts(296,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
 staticPropertyNameConflicts.ts(296,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototypeFn'.
-staticPropertyNameConflicts.ts(296,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-staticPropertyNameConflicts.ts(297,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+staticPropertyNameConflicts.ts(296,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+staticPropertyNameConflicts.ts(297,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 staticPropertyNameConflicts.ts(302,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(303,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'.
 staticPropertyNameConflicts.ts(309,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'ExportedStaticCaller'.
 staticPropertyNameConflicts.ts(314,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(315,16): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'.
 staticPropertyNameConflicts.ts(321,12): error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'ExportedStaticCallerFn'.
-staticPropertyNameConflicts.ts(321,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-staticPropertyNameConflicts.ts(322,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+staticPropertyNameConflicts.ts(321,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+staticPropertyNameConflicts.ts(322,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 staticPropertyNameConflicts.ts(327,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(328,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'.
 staticPropertyNameConflicts.ts(334,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArguments'.
 staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(340,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
 staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArgumentsFn'.
-staticPropertyNameConflicts.ts(346,12): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-staticPropertyNameConflicts.ts(347,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+staticPropertyNameConflicts.ts(346,12): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+staticPropertyNameConflicts.ts(347,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 
 
-==== staticPropertyNameConflicts.ts (85 errors) ====
+==== staticPropertyNameConflicts.ts (84 errors) ====
     const FunctionPropertyNames = {
         name: 'name',
         length: 'length',
@@ -837,10 +835,12 @@ staticPropertyNameConflicts.ts(347,5): error TS9007: Declaration emit for this f
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'ExportedStaticNameFn'.
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:246:12: Add a return type to the method
         [FunctionPropertyNames.name]() {} // ok
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:247:5: Add a return type to the method
     }
     
     // length
@@ -878,10 +878,12 @@ staticPropertyNameConflicts.ts(347,5): error TS9007: Declaration emit for this f
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'ExportedStaticLengthFn'.
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:271:12: Add a return type to the method
         [FunctionPropertyNames.length]() {} // ok
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:272:5: Add a return type to the method
     }
     
     // prototype
@@ -900,8 +902,6 @@ staticPropertyNameConflicts.ts(347,5): error TS9007: Declaration emit for this f
         static [FunctionPropertyNames.prototype]: number; // always an error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototype'.
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         [FunctionPropertyNames.prototype]: string; // ok
     }
     
@@ -925,10 +925,12 @@ staticPropertyNameConflicts.ts(347,5): error TS9007: Declaration emit for this f
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototypeFn'.
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:296:12: Add a return type to the method
         [FunctionPropertyNames.prototype]() {} // ok
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:297:5: Add a return type to the method
     }
     
     // caller
@@ -966,10 +968,12 @@ staticPropertyNameConflicts.ts(347,5): error TS9007: Declaration emit for this f
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'ExportedStaticCallerFn'.
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:321:12: Add a return type to the method
         [FunctionPropertyNames.caller]() {} // ok
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:322:5: Add a return type to the method
     }
     
     // arguments
@@ -1007,8 +1011,10 @@ staticPropertyNameConflicts.ts(347,5): error TS9007: Declaration emit for this f
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArgumentsFn'.
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:346:12: Add a return type to the method
         [FunctionPropertyNames.arguments]() {} // ok
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 staticPropertyNameConflicts.ts:347:5: Add a return type to the method
     }

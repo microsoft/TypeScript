@@ -1,0 +1,28 @@
+// [[Reason: TS normalizes types]] ////
+
+//// [tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -10,18 +10,14 @@
+ };
+ declare class Base {
+     a: typeof x;
+     b(a: typeof x): invalid;
+-    get c(): {
+-        foo: string;
+-    };
++    get c(): typeof x;
+     set c(v: typeof x);
+     d: (a: typeof x) => void;
+     static r: typeof x;
+     static s(a: typeof x): invalid;
+-    static get t(): {
+-        foo: string;
+-    };
++    static get t(): typeof x;
+     static set t(v: typeof x);
+     static u: (a: typeof x) => void;
+     constructor(a: typeof x);
+ }

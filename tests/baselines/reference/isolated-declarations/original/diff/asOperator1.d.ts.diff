@@ -15,4 +15,4 @@
  
  /// [Errors] ////
  
- asOperator1.ts(3,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+ asOperator1.ts(3,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.

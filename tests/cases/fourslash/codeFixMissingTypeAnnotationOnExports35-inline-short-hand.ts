@@ -8,8 +8,6 @@
 ////  x
 ////};
 
-goTo.file("/code.ts");
-
 verify.codeFix({
     description: "Add inline type assertion to 'number'",
     index: 1,

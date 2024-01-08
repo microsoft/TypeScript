@@ -40,11 +40,10 @@ indexSignatureMustHaveTypeAnnotation.ts(3,6): error TS2304: Cannot find name 'x'
 indexSignatureMustHaveTypeAnnotation.ts(4,5): error TS1021: An index signature must have a type annotation.
 indexSignatureMustHaveTypeAnnotation.ts(9,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 indexSignatureMustHaveTypeAnnotation.ts(9,6): error TS2304: Cannot find name 'x'.
-indexSignatureMustHaveTypeAnnotation.ts(9,6): error TS4031: Public property '[x]' of exported class has or is using private name 'x'.
 indexSignatureMustHaveTypeAnnotation.ts(14,5): error TS1021: An index signature must have a type annotation.
 
 
-==== indexSignatureMustHaveTypeAnnotation.ts (7 errors) ====
+==== indexSignatureMustHaveTypeAnnotation.ts (6 errors) ====
     interface I {
         // Used to be indexer, now it is a computed property
         [x]: string;
@@ -64,8 +63,6 @@ indexSignatureMustHaveTypeAnnotation.ts(14,5): error TS1021: An index signature 
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
          ~
 !!! error TS2304: Cannot find name 'x'.
-         ~
-!!! error TS4031: Public property '[x]' of exported class has or is using private name 'x'.
         
     }
     

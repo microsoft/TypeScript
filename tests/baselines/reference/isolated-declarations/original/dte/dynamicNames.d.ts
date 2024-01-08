@@ -197,10 +197,10 @@ export declare type T3 = {
 
 /// [Errors] ////
 
-main.ts(109,22): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-main.ts(110,22): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-main.ts(111,22): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-module.ts(3,19): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+main.ts(109,22): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+main.ts(110,22): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+main.ts(111,22): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+module.ts(3,19): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 
 
 ==== module.ts (1 errors) ====
@@ -208,7 +208,8 @@ module.ts(3,19): error TS9007: Declaration emit for this file requires type reso
     export const c1 = 1;
     export const s0 = Symbol();
                       ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 module.ts:3:14: Add a type annotation to the variable s0.
     export interface T0 {
         [c0]: number;
         [c1]: string;
@@ -338,13 +339,16 @@ module.ts(3,19): error TS9007: Declaration emit for this file requires type reso
     // check element access types
     export const o1_c4 = o1[c4];
                          ~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 main.ts:109:14: Add a type annotation to the variable o1_c4.
     export const o1_c5 = o1[c5];
                          ~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 main.ts:110:14: Add a type annotation to the variable o1_c5.
     export const o1_s2 = o1[s2];
                          ~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 main.ts:111:14: Add a type annotation to the variable o1_s2.
     
     export const o2: T0 = o1;
     

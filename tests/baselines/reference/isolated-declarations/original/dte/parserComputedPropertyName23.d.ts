@@ -17,14 +17,11 @@ declare class C {
 /// [Errors] ////
 
 parserComputedPropertyName23.ts(2,10): error TS2304: Cannot find name 'e'.
-parserComputedPropertyName23.ts(2,10): error TS4031: Public property '[e]' of exported class has or is using private name 'e'.
 
 
-==== parserComputedPropertyName23.ts (2 errors) ====
+==== parserComputedPropertyName23.ts (1 errors) ====
     declare class C {
         get [e](): number 
              ~
 !!! error TS2304: Cannot find name 'e'.
-             ~
-!!! error TS4031: Public property '[e]' of exported class has or is using private name 'e'.
     }

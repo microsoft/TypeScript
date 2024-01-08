@@ -23,8 +23,8 @@
  //# sourceMappingURL=templateLiteralTypes4.d.ts.map
  /// [Errors] ////
  
-+templateLiteralTypes4.ts(43,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-+templateLiteralTypes4.ts(43,60): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++templateLiteralTypes4.ts(43,29): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
++templateLiteralTypes4.ts(43,60): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
  templateLiteralTypes4.ts(285,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
  templateLiteralTypes4.ts(289,12): error TS2345: Argument of type '2' is not assignable to parameter of type '0 | 1'.
  
@@ -41,9 +41,9 @@
      // infer from non-literal enums
      const enum NonLiteralEnum { Zero = NumberLiteralEnum.Zero, One = NumberLiteralEnum.One }
 +                                ~~~~
-+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 +                                                               ~~~
-+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
      type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : never; // 0
      
      // infer using priority:

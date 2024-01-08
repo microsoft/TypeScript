@@ -83,7 +83,7 @@ declare enum T7 {
 //# sourceMappingURL=enumConstantMemberWithTemplateLiteralsEmitDeclaration.d.ts.map
 /// [Errors] ////
 
-enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts(32,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts(32,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 
 
 ==== enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts (1 errors) ====
@@ -120,7 +120,7 @@ enumConstantMemberWithTemplateLiteralsEmitDeclaration.ts(32,5): error TS9007: De
         a = 1,
         b = `12`.length
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
     }
     
     declare enum T7 {
