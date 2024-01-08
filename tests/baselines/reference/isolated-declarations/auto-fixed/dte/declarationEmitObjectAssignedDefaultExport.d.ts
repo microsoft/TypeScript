@@ -53,7 +53,7 @@ export default _default;
 /// [Errors] ////
 
 index.ts(7,1): error TS2742: The inferred type of 'default' cannot be named without a reference to 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
-index.ts(7,16): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+index.ts(7,16): error TS9037: Default exports can't be inferred with --isolatedDeclarations.
 
 
 ==== node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts (0 errors) ====
@@ -103,5 +103,6 @@ index.ts(7,16): error TS9007: Declaration emit for this file requires type resol
     ~~~
 !!! error TS2742: The inferred type of 'default' cannot be named without a reference to 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
     ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9037: Default exports can't be inferred with --isolatedDeclarations.
+!!! related TS9036 index.ts:7:1: Move the expression in default export to a variable and add a type annotation to it.
     

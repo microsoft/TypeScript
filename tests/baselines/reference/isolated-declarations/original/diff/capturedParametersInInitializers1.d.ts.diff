@@ -16,3 +16,31 @@
  declare function foo4(y?: invalid, z?: number): invalid;
  declare function foo5(y?: invalid, z?: number): invalid;
  declare function foo6(y?: () => invalid, z?: number): invalid;
+@@ -35,13 +35,12 @@
+ capturedParametersInInitializers1.ts(34,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+ capturedParametersInInitializers1.ts(34,19): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+ capturedParametersInInitializers1.ts(38,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+ capturedParametersInInitializers1.ts(38,20): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+-capturedParametersInInitializers1.ts(38,20): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ capturedParametersInInitializers1.ts(38,21): error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
+ 
+ 
+-==== capturedParametersInInitializers1.ts (22 errors) ====
++==== capturedParametersInInitializers1.ts (21 errors) ====
+     // ok - usage is deferred
+     function foo1(y = class {c = x}, x = 1) {
+              ~~~~
+ !!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+@@ -139,11 +138,8 @@
+                        ~~~
+ !!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+ !!! related TS9028 capturedParametersInInitializers1.ts:38:15: Add a type annotation to the parameter y.
+ !!! related TS9034 capturedParametersInInitializers1.ts:38:20: Add a return type to the method
+-                       ~~~
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-!!! related TS9028 capturedParametersInInitializers1.ts:38:15: Add a type annotation to the parameter y.
+                         ~
+ !!! error TS2373: Parameter 'y' cannot reference identifier 'z' declared after it.
+     }
+     
+\ No newline at end of file

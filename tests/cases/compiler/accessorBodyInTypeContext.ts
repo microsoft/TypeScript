@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: Syntactically invalid.
 type A = {
     get foo() { return 0 }
 };

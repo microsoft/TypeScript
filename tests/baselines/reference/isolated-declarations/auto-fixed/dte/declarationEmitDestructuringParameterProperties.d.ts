@@ -51,30 +51,15 @@ declare class C3 {
 /// [Errors] ////
 
 declarationEmitDestructuringParameterProperties.ts(2,17): error TS1187: A parameter property may not be declared using a binding pattern.
-declarationEmitDestructuringParameterProperties.ts(2,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitDestructuringParameterProperties.ts(2,28): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitDestructuringParameterProperties.ts(2,31): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 declarationEmitDestructuringParameterProperties.ts(8,17): error TS1187: A parameter property may not be declared using a binding pattern.
-declarationEmitDestructuringParameterProperties.ts(8,25): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitDestructuringParameterProperties.ts(8,28): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitDestructuringParameterProperties.ts(8,31): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 declarationEmitDestructuringParameterProperties.ts(14,17): error TS1187: A parameter property may not be declared using a binding pattern.
-declarationEmitDestructuringParameterProperties.ts(14,26): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitDestructuringParameterProperties.ts(14,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-declarationEmitDestructuringParameterProperties.ts(14,32): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
 
 
-==== declarationEmitDestructuringParameterProperties.ts (12 errors) ====
+==== declarationEmitDestructuringParameterProperties.ts (3 errors) ====
     class C1 {
         constructor(public [x, y, z]: string[]) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1187: A parameter property may not be declared using a binding pattern.
-                            ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                               ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                                  ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         }
     }
     
@@ -83,12 +68,6 @@ declarationEmitDestructuringParameterProperties.ts(14,32): error TS9007: Declara
         constructor(public [x, y, z]: TupleType1) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1187: A parameter property may not be declared using a binding pattern.
-                            ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                               ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                                  ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         }
     }
     
@@ -97,11 +76,5 @@ declarationEmitDestructuringParameterProperties.ts(14,32): error TS9007: Declara
         constructor(public { x, y, z }: ObjType1) {
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1187: A parameter property may not be declared using a binding pattern.
-                             ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                                ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-                                   ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
         }
     }

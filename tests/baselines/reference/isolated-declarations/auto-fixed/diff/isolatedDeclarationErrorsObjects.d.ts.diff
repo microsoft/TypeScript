@@ -1,0 +1,19 @@
+// [[Reason: Accessors are not unified in DTE]] ////
+
+//// [tests/cases/compiler/isolatedDeclarationErrorsObjects.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -38,9 +38,10 @@
+     singleSetterBad: any;
+     getSetBad: number;
+     getSetOk: number;
+     getSetOk2: number;
+-    getSetOk3: number;
++    get getSetOk3(): number;
++    set getSetOk3(value: number);
+ };
+ declare const s: unique symbol;
+ declare enum E {
+     V = 10

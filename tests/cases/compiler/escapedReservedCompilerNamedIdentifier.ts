@@ -1,5 +1,4 @@
 //@declaration: true
-// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 // double underscores
 var __proto__ = 10;
 var o = {

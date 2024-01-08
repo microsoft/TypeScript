@@ -14,7 +14,7 @@ declare var v: invalid;
 
 asyncFunctionDeclaration8_es6.ts(1,12): error TS2304: Cannot find name 'await'.
 asyncFunctionDeclaration8_es6.ts(1,20): error TS2304: Cannot find name 'foo'.
-asyncFunctionDeclaration8_es6.ts(1,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+asyncFunctionDeclaration8_es6.ts(1,20): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 
 
 ==== asyncFunctionDeclaration8_es6.ts (3 errors) ====
@@ -24,4 +24,6 @@ asyncFunctionDeclaration8_es6.ts(1,20): error TS9007: Declaration emit for this 
                        ~~~
 !!! error TS2304: Cannot find name 'foo'.
                        ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9027 asyncFunctionDeclaration8_es6.ts:1:5: Add a type annotation to the variable v.
+!!! related TS9035 asyncFunctionDeclaration8_es6.ts:1:20: Add a type assertion to this expression to make type type explicit.

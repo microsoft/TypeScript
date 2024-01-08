@@ -86,7 +86,7 @@ export {};
 
 emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'p' of exported class expression may not be private or protected.
 emitClassExpressionInDeclarationFile2.ts(1,12): error TS4094: Property 'ps' of exported class expression may not be private or protected.
-emitClassExpressionInDeclarationFile2.ts(1,25): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+emitClassExpressionInDeclarationFile2.ts(1,25): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
 emitClassExpressionInDeclarationFile2.ts(25,5): error TS2322: Type '{ new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T' is not assignable to type '{ new (...args: any[]): { tags(): void; foo(): void; name?: string; property: string; }; getTags(): void; } & T'.
   Type '{ new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T' is not assignable to type '{ new (...args: any[]): { tags(): void; foo(): void; name?: string; property: string; }; getTags(): void; }'.
     Type '(Anonymous class) & FooItem' is not assignable to type '{ tags(): void; foo(): void; name?: string; property: string; }'.
@@ -103,7 +103,7 @@ emitClassExpressionInDeclarationFile2.ts(45,6): error TS2339: Property 'tags' do
                ~~~~~~~~~~
 !!! error TS4094: Property 'ps' of exported class expression may not be private or protected.
                             ~~~~~
-!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+!!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
         static getTags() { }
         tags() { }
         private static ps = -1

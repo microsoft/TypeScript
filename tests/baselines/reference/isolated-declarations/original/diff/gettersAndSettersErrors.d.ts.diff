@@ -8,7 +8,7 @@
 @@ -3,9 +3,9 @@
  //// [gettersAndSettersErrors.d.ts]
  declare class C {
-     get Foo(): invalid;
+     get Foo(): string;
      set Foo(foo: string);
 -    Foo: string;
 +    Foo: number;

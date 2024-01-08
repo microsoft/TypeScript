@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration3_es6.ts] ////
+
+//// [MemberFunctionDeclaration3_es6.ts]
+class C {
+   *[foo]() { }
+}
+
+/// [Declarations] ////
+
+
+
+//// [MemberFunctionDeclaration3_es6.d.ts]
+declare class C {
+}
+
+/// [Errors] ////
+
+MemberFunctionDeclaration3_es6.ts(2,6): error TS2304: Cannot find name 'foo'.
+
+
+==== MemberFunctionDeclaration3_es6.ts (1 errors) ====
+    class C {
+       *[foo]() { }
+         ~~~
+!!! error TS2304: Cannot find name 'foo'.
+    }

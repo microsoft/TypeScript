@@ -356,10 +356,10 @@ declare var x: B;
 
 /// [Errors] ////
 
-contextualTyping.ts(146,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-contextualTyping.ts(156,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+contextualTyping.ts(146,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+contextualTyping.ts(156,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-contextualTyping.ts(193,11): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+contextualTyping.ts(193,11): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' but required in type 'B'.
 
 
@@ -511,7 +511,8 @@ contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' b
     // CONTEXT: Function call
     function c9t5(f: (n: number) => IFoo) {};
              ~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 contextualTyping.ts:146:10: Add a return type to the function declaration.
     c9t5(function(n) {
         return <IFoo>({});
     });
@@ -523,7 +524,8 @@ contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' b
     class C11t5 { constructor(f: (n: number) => IFoo) { } };
     var i = new C11t5(function(n) { return <IFoo>({}) });
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 contextualTyping.ts:156:5: Add a type annotation to the variable i.
     
     // CONTEXT: Type annotated expression
     var c12t1 = <(s: string) => string> (function(s) { return s });
@@ -564,7 +566,8 @@ contextualTyping.ts(223,5): error TS2741: Property 'x' is missing in type '{}' b
     
     var efv = EF1(1,2);
               ~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 contextualTyping.ts:193:5: Add a type annotation to the variable efv.
     
     
     // contextually typing from ambient class declarations

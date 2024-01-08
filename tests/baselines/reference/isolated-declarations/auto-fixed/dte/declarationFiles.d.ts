@@ -101,9 +101,9 @@ declare class C4 {
 
 declarationFiles.ts(4,20): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 declarationFiles.ts(36,5): error TS2527: The inferred type of 'f1' references an inaccessible 'this' type. A type annotation is necessary.
-declarationFiles.ts(36,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+declarationFiles.ts(36,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 declarationFiles.ts(42,5): error TS2527: The inferred type of 'f3' references an inaccessible 'this' type. A type annotation is necessary.
-declarationFiles.ts(42,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+declarationFiles.ts(42,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 
 
 ==== declarationFiles.ts (5 errors) ====
@@ -148,7 +148,8 @@ declarationFiles.ts(42,5): error TS9007: Declaration emit for this file requires
         ~~
 !!! error TS2527: The inferred type of 'f1' references an inaccessible 'this' type. A type annotation is necessary.
         ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 declarationFiles.ts:36:5: Add a return type to the method
             return { a: this };
         }
         f2(): this[] {
@@ -158,7 +159,8 @@ declarationFiles.ts(42,5): error TS9007: Declaration emit for this file requires
         ~~
 !!! error TS2527: The inferred type of 'f3' references an inaccessible 'this' type. A type annotation is necessary.
         ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9034 declarationFiles.ts:42:5: Add a return type to the method
             return [{ a: this }];
         }
         f4(): () => this {

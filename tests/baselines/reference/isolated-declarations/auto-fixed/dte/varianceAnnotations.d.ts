@@ -357,8 +357,8 @@ varianceAnnotations.ts(160,68): error TS2345: Argument of type 'ActionObject<{ t
           Types of property '_storedEvent' are incompatible.
             Type '{ type: "PLAY"; value: number; } | { type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
               Type '{ type: "RESET"; }' is not assignable to type '{ type: "PLAY"; value: number; }'.
-varianceAnnotations.ts(164,12): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
-varianceAnnotations.ts(170,20): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+varianceAnnotations.ts(164,12): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
+varianceAnnotations.ts(170,20): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
 
 
 ==== varianceAnnotations.ts (33 errors) ====
@@ -624,7 +624,7 @@ varianceAnnotations.ts(170,20): error TS9011: Declaration emit for class express
     
     let Anon = class <out T> {
                ~~~~~
-!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+!!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
         foo(): InstanceType<(typeof Anon<T>)> {
             return this;
         }
@@ -632,7 +632,7 @@ varianceAnnotations.ts(170,20): error TS9011: Declaration emit for class express
     
     let OuterC = class C<out T> {
                        ~
-!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+!!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
         foo(): C<T> {
             return this;
         }

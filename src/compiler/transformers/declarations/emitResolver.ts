@@ -394,4 +394,4 @@ export function createEmitDeclarationResolver(file: SourceFile): CoreEmitResolve
 
         return false;
     }
-        }
+}

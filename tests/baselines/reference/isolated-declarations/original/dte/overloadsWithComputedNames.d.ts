@@ -111,7 +111,7 @@ interface I3 {
 /// [Errors] ////
 
 overloadsWithComputedNames.ts(4,5): error TS2389: Function implementation name must be '["B"]'.
-overloadsWithComputedNames.ts(8,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+overloadsWithComputedNames.ts(8,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 overloadsWithComputedNames.ts(14,5): error TS2391: Function implementation is missing or not immediately following the declaration.
 overloadsWithComputedNames.ts(16,5): error TS2389: Function implementation name must be '["bar"]'.
 overloadsWithComputedNames.ts(28,5): error TS1168: A computed property name in a method overload must refer to an expression whose type is a literal type or a 'unique symbol' type.
@@ -134,7 +134,8 @@ overloadsWithComputedNames.ts(52,5): error TS2391: Function implementation is mi
     }
     let p = new Person();
             ~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 overloadsWithComputedNames.ts:8:5: Add a type annotation to the variable p.
     p.A(0)
     p.B(0)
     

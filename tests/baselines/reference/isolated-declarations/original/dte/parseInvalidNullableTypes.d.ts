@@ -53,13 +53,13 @@ parseInvalidNullableTypes.ts(1,30): error TS2677: A type predicate's type must b
   Type 'string | null' is not assignable to type 'string'.
     Type 'null' is not assignable to type 'string'.
 parseInvalidNullableTypes.ts(1,30): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-parseInvalidNullableTypes.ts(5,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parseInvalidNullableTypes.ts(5,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 parseInvalidNullableTypes.ts(5,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
-parseInvalidNullableTypes.ts(6,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parseInvalidNullableTypes.ts(6,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 parseInvalidNullableTypes.ts(6,16): error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
-parseInvalidNullableTypes.ts(8,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parseInvalidNullableTypes.ts(8,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 parseInvalidNullableTypes.ts(8,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
-parseInvalidNullableTypes.ts(9,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+parseInvalidNullableTypes.ts(9,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 parseInvalidNullableTypes.ts(9,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
 parseInvalidNullableTypes.ts(11,25): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
 parseInvalidNullableTypes.ts(12,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
@@ -86,23 +86,27 @@ parseInvalidNullableTypes.ts(24,8): error TS17019: '?' at the end of a type is n
     
     function f2(a: string?) {}
              ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 parseInvalidNullableTypes.ts:5:10: Add a return type to the function declaration.
                    ~~~~~~~
 !!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'string | undefined'?
     function f3(a: number?) {}
              ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 parseInvalidNullableTypes.ts:6:10: Add a return type to the function declaration.
                    ~~~~~~~
 !!! error TS17019: '?' at the end of a type is not valid TypeScript syntax. Did you mean to write 'number | undefined'?
     
     function f4(a: ?string) {}
              ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 parseInvalidNullableTypes.ts:8:10: Add a return type to the function declaration.
                    ~~~~~~~
 !!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'string | null | undefined'?
     function f5(a: ?number) {}
              ~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 parseInvalidNullableTypes.ts:9:10: Add a return type to the function declaration.
                    ~~~~~~~
 !!! error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
     

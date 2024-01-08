@@ -34,7 +34,7 @@ declare function foo<T>(arr: T[], depth: number): invalid;
 /// [Errors] ////
 
 arrayFakeFlatNoCrashInferenceDeclarations.ts(13,10): error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
-arrayFakeFlatNoCrashInferenceDeclarations.ts(13,10): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+arrayFakeFlatNoCrashInferenceDeclarations.ts(13,10): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 
 
 ==== arrayFakeFlatNoCrashInferenceDeclarations.ts (2 errors) ====
@@ -54,6 +54,7 @@ arrayFakeFlatNoCrashInferenceDeclarations.ts(13,10): error TS9007: Declaration e
              ~~~
 !!! error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
              ~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9031 arrayFakeFlatNoCrashInferenceDeclarations.ts:13:10: Add a return type to the function declaration.
         return flat(arr, depth);
     }
