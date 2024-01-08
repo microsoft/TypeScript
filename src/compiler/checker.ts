@@ -28842,14 +28842,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
         return !!declaration && (
             isParameter(declaration) ||
-            isVariableDeclaration(declaration) && (isCatchClause(declaration.parent) || isMutableLocalVariableDeclaration(declaration)));
+            isVariableDeclaration(declaration) && (isCatchClause(declaration.parent) || isMutableLocalVariableDeclaration(declaration))
+        );
     }
 
     function isMutableLocalVariableDeclaration(declaration: VariableDeclaration) {
         // Return true if symbol is a non-exported and non-global `let` variable
         return !!(declaration.parent.flags & NodeFlags.Let) && !(
             getCombinedModifierFlags(declaration) & ModifierFlags.Export ||
-            declaration.parent.parent.kind === SyntaxKind.VariableStatement && isGlobalSourceFile(declaration.parent.parent.parent));
+            declaration.parent.parent.kind === SyntaxKind.VariableStatement && isGlobalSourceFile(declaration.parent.parent.parent)
+        );
     }
 
     function parameterInitializerContainsUndefined(declaration: ParameterDeclaration): boolean {
