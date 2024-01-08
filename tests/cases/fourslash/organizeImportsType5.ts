@@ -1,33 +1,29 @@
 /// <reference path="fourslash.ts" />
 
-//// import { a, type A, b } from "foo";
-//// interface Use extends A {}
-//// console.log(a, b);
+//// import {
+////     d, 
+////     type d as D,
+////     type c,
+////     c as C,
+////     b,
+////     b as B,
+////     type A,
+////     a
+//// } from './foo';
+//// console.log(A, a, B, b, c, C, d, D);
 
 verify.organizeImports(
-`import { a, type A, b } from "foo";
-interface Use extends A {}
-console.log(a, b);`,
+`import {
+    type A,
+    b as B,
+    c as C,
+    type d as D,
+    a,
+    b,
+    type c,
+    d
+} from './foo';
+console.log(A, a, B, b, c, C, d, D);`,
     /*mode*/ undefined,
-    { organizeImportsTypeOrder: "inline" });
-
-verify.organizeImports(
-`import { a, type A, b } from "foo";
-interface Use extends A {}
-console.log(a, b);`,
-    /*mode*/ undefined,
-    { organizeImportsIgnoreCase: "auto", organizeImportsTypeOrder: "inline" });
-
-verify.organizeImports(
-`import { a, type A, b } from "foo";
-interface Use extends A {}
-console.log(a, b);`,
-    /*mode*/ undefined,
-    { organizeImportsIgnoreCase: true, organizeImportsTypeOrder: "inline"});
-
-verify.organizeImports(
-`import { type A, a, b } from "foo";
-interface Use extends A {}
-console.log(a, b);`,
-    /*mode*/ undefined,
-    { organizeImportsIgnoreCase: false, organizeImportsTypeOrder: "inline" });
+    { organizeImportsIgnoreCase: "auto", organizeImportsTypeOrder: "inline" }
+);

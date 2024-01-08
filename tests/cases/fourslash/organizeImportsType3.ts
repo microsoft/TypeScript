@@ -1,7 +1,5 @@
 /// <reference path="fourslash.ts" />
 
-// Regression test for bug #41417
-
 //// import {
 ////     d, 
 ////     type d as D,
@@ -29,20 +27,3 @@ console.log(A, a, B, b, c, C, d, D);`,
     /*mode*/ undefined,
     { organizeImportsIgnoreCase: false, organizeImportsTypeOrder: "inline" }
 );
-
-verify.organizeImports(
-`import {
-    type A,
-    a,
-    b as B,
-    b,
-    c as C,
-    type c,
-    type d as D,
-    d
-} from './foo';
-console.log(A, a, B, b, c, C, d, D);`,
-    /*mode*/ undefined,
-    { organizeImportsIgnoreCase: true, organizeImportsTypeOrder: "inline" }
-);
-

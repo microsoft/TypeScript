@@ -23,6 +23,7 @@ import {
     flatMap,
     formatting,
     getNewLineOrDefaultFromHost,
+    getStringComparer,
     getUILocale,
     group,
     Identifier,
@@ -67,9 +68,6 @@ import {
     UserPreferences,
 } from "./_namespaces/ts";
 
-// todo: change to "last", keeping inline for testing purposes
-// const DEFAULT_TYPE_ORDER_PREFERENCE = undefined;
-
 /**
  * Organize imports by:
  *   1) Removing unused imports
@@ -107,8 +105,7 @@ export function organizeImports(
     // Exports are always used
     if (mode !== OrganizeImportsMode.RemoveUnused) {
         // All of the old ExportDeclarations in the file, in syntactic order.
-        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl =>
-            organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer, preferences)));
+        getTopLevelExportGroups(sourceFile).forEach(exportGroupDecl => organizeImportsWorker(exportGroupDecl, group => coalesceExportsWorker(group, comparer, preferences)));
     }
 
     for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
@@ -379,7 +376,7 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
 
         const sortedImportSpecifiers = factory.createNodeArray(
             sortSpecifiers(newImportSpecifiers, comparer, preferences),
-            firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma
+            firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma,
         );
 
         const newNamedImports = sortedImportSpecifiers.length === 0
@@ -592,7 +589,7 @@ function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly 
 
 /** @internal */
 export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>, preferences?: UserPreferences): Comparison {
-    switch (preferences?.organizeImportsTypeOrder){
+    switch (preferences?.organizeImportsTypeOrder) {
         case "first":
             return compareBooleans(s2.isTypeOnly, s1.isTypeOnly) || comparer(s1.name.text, s2.name.text);
         case "inline":
@@ -733,10 +730,25 @@ class ImportSpecifierSortingCache implements MemoizeCache<[readonly ImportSpecif
 export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly ImportSpecifier[], preferences: UserPreferences): SortKind => {
     // If types are not sorted as specified, then imports are assumed to be unsorted.
     // If there is no type sorting specification, we default to "last" and move on to case sensitivity detection.
-    if (preferences.organizeImportsTypeOrder === "first" && !arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s2.isTypeOnly, s1.isTypeOnly))
-        || preferences.organizeImportsTypeOrder !== "inline" && !arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))) {
-        return SortKind.None;
+    switch (preferences.organizeImportsTypeOrder) {
+        case "first":
+            if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s2.isTypeOnly, s1.isTypeOnly))) return SortKind.None;
+            break;
+        case "inline":
+            if (
+                !arrayIsSorted(specifiers, (s1, s2) => {
+                    const comparer = getStringComparer(/*ignoreCase*/ true);
+                    return comparer(s1.name.text, s2.name.text);
+                })
+            ) {
+                return SortKind.None;
+            }
+            break;
+        default:
+            if (!arrayIsSorted(specifiers, (s1, s2) => compareBooleans(s1.isTypeOnly, s2.isTypeOnly))) return SortKind.None;
+            break;
     }
+
     const collateCaseSensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
     const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
 
