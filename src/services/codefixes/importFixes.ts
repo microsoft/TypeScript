@@ -1414,7 +1414,7 @@ function promoteFromTypeOnly(
                         return aliasDeclaration;
                     }
                 }
-                changes.deleteRange(sourceFile, aliasDeclaration.getFirstToken()!);
+                changes.deleteRange(sourceFile, { pos: getTokenPosOfNode(aliasDeclaration.getFirstToken()!), end: getTokenPosOfNode(aliasDeclaration.propertyName ?? aliasDeclaration.name) });
                 return aliasDeclaration;
             }
             else {
