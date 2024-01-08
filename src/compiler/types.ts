@@ -8197,17 +8197,19 @@ export interface SourceFileMayBeEmittedHost {
     getCanonicalFileName: GetCanonicalFileName;
     useCaseSensitiveFileNames(): boolean;
 }
+/** @internal */
+export interface CoreEmitHost {
+    getCurrentDirectory(): string;
+    getCommonSourceDirectory(): string;
+    getCanonicalFileName(fileName: string): string;    
+} 
 
 /** @internal */
-export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost {
+export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost, CoreEmitHost {
     getSourceFiles(): readonly SourceFile[];
     useCaseSensitiveFileNames(): boolean;
-    getCurrentDirectory(): string;
 
     getLibFileFromReference(ref: FileReference): SourceFile | undefined;
-
-    getCommonSourceDirectory(): string;
-    getCanonicalFileName(fileName: string): string;
 
     isEmitBlocked(emitFileName: string): boolean;
 
@@ -9679,6 +9681,16 @@ export interface SourceMapGenerator {
      * Gets the string representation of the source map.
      */
     toString(): string;
+}
+
+/** @internal */
+export interface SourceMapOptions {
+    sourceMap?: boolean;
+    inlineSourceMap?: boolean;
+    inlineSources?: boolean;
+    sourceRoot?: string;
+    mapRoot?: string;
+    extendedDiagnostics?: boolean;
 }
 
 /** @internal */
