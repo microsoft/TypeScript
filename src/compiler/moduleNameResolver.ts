@@ -3044,9 +3044,6 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
     let rootPackageInfo: PackageJsonInfo | undefined;
     // First look for a nested package.json, as in `node_modules/foo/bar/package.json`.
     let packageInfo = getPackageJsonInfo(candidate, !nodeModulesDirectoryExists, state);
-    if (packageInfo) {
-        state.resolvedPackageDirectory = true;
-    }
     // But only if we're not respecting export maps (if we are, we might redirect around this location)
     if (
         rest !== "" && packageInfo && (
@@ -3096,6 +3093,9 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
     if (rest !== "") {
         // Previous `packageInfo` may have been from a nested package.json; ensure we have the one from the package root now.
         packageInfo = rootPackageInfo ?? getPackageJsonInfo(packageDirectory, !nodeModulesDirectoryExists, state);
+    }
+    if (packageInfo) {
+        state.resolvedPackageDirectory = true;
     }
     // package exports are higher priority than file/directory/typesVersions lookups and (and, if there's exports present, blocks them)
     if (packageInfo && packageInfo.contents.packageJsonContent.exports && state.features & NodeResolutionFeatures.Exports) {
