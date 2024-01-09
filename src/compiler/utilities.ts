@@ -10347,6 +10347,11 @@ export function isInfinityOrNaNString(name: string | __String): boolean {
 }
 
 /** @internal */
+export function isCatchClauseVariableDeclaration(node: Node) {
+    return node.kind === SyntaxKind.VariableDeclaration && node.parent.kind === SyntaxKind.CatchClause;
+}
+
+/** @internal */
 export function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
     return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
 }
