@@ -3,6 +3,7 @@ import {
     appendIfUnique,
     arrayIsEqualTo,
     changeAnyExtension,
+    changeFullExtension,
     CharacterCodes,
     combinePaths,
     CommandLineOption,
@@ -41,7 +42,6 @@ import {
     GetCanonicalFileName,
     getCommonSourceDirectory,
     getCompilerOptionValue,
-    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     GetEffectiveTypeRootsHost,
     getEmitModuleKind,
@@ -2291,9 +2291,7 @@ function loadEntrypointsFromExportMap(
                     extensionsToExtensionsArray(extensions),
                     /*excludes*/ undefined,
                     [
-                        isDeclarationFileName(target)
-                            ? replaceFirstStar(target, "**/*")
-                            : changeAnyExtension(replaceFirstStar(target, "**/*"), getDeclarationEmitExtensionForPath(target)),
+                        changeFullExtension(replaceFirstStar(target, "**/*"), ".*"),
                     ],
                 ).forEach(entry => {
                     entrypoints = appendIfUnique(entrypoints, {

@@ -59,7 +59,7 @@
         "chalk": "^4.1.2",
         "chokidar": "^3.5.3",
         "diff": "^5.1.0",
-        "dprint": "^0.42.3",
+        "dprint": "^0.45.0",
         "esbuild": "^0.19.0",
         "eslint": "^8.22.0",
         "eslint-formatter-autolinkable-stylish": "^1.2.0",
