@@ -23,16 +23,16 @@ console.log(A, D);`],
     /*errorCode*/ undefined,
     { organizeImportsIgnoreCase: true, organizeImportsTypeOrder : "last" });
 
-// verify.importFixAtPosition([
-// `import { A, type B, type C, D } from './foo';
-// const b: B | C;
-// console.log(A, D);`],
-//     /*errorCode*/ undefined,
-//     { organizeImportsIgnoreCase: true, organizeImportsTypeOrder : "inline" });
+verify.importFixAtPosition([
+`import { A, type B, type C, D } from './foo';
+const b: B | C;
+console.log(A, D);`],
+    /*errorCode*/ undefined,
+    { organizeImportsIgnoreCase: true, organizeImportsTypeOrder : "inline" });
 
-// verify.importFixAtPosition([
-// `import { A, type B, type C, D } from './foo';
-// const b: B | C;
-// console.log(A, D);`],
-//     /*errorCode*/ undefined,
-//     { organizeImportsIgnoreCase: true, organizeImportsTypeOrder : "first" });
+verify.importFixAtPosition([
+`import { A, type B, type C, D } from './foo';
+const b: B | C;
+console.log(A, D);`],
+    /*errorCode*/ undefined,
+    { organizeImportsIgnoreCase: true, organizeImportsTypeOrder : "first" });

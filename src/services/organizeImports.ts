@@ -26,6 +26,7 @@ import {
     getStringComparer,
     getUILocale,
     group,
+    groupBy,
     Identifier,
     identity,
     ImportClause,
@@ -753,11 +754,11 @@ export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly 
     const collateCaseInsensitive = getOrganizeImportsComparer(preferences, /*ignoreCase*/ true);
 
     if (preferences.organizeImportsTypeOrder !== "inline") {
-        const { regularImports, typeImports } = getCategorizedSpecifiers(specifiers);
-        const regularCaseSensitivity = regularImports.length
+        const { type: regularImports, regular: typeImports } = groupBy(specifiers, s => s.isTypeOnly ? "type" : "regular");
+        const regularCaseSensitivity = regularImports?.length
             ? detectSortCaseSensitivity(regularImports, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive)
             : undefined;
-        const typeCaseSensitivity = typeImports.length
+        const typeCaseSensitivity = typeImports?.length
             ? detectSortCaseSensitivity(typeImports, specifier => specifier.name.text ?? "", collateCaseSensitive, collateCaseInsensitive)
             : undefined;
         if (regularCaseSensitivity === undefined) {
@@ -775,20 +776,6 @@ export const detectImportSpecifierSorting = memoizeCached((specifiers: readonly 
     // else inline
     return detectSortCaseSensitivity(specifiers, specifier => specifier.name.text, collateCaseSensitive, collateCaseInsensitive);
 }, new ImportSpecifierSortingCache());
-
-function getCategorizedSpecifiers(specifiers: readonly ImportSpecifier[]) {
-    const regularImports: ImportSpecifier[] = [];
-    const typeImports: ImportSpecifier[] = [];
-    for (const s of specifiers) {
-        if (s.isTypeOnly) {
-            typeImports.push(s);
-        }
-        else {
-            regularImports.push(s);
-        }
-    }
-    return { regularImports, typeImports };
-}
 
 /** @internal */
 export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyImportOrRequireStatement[], newImport: AnyImportOrRequireStatement, comparer: Comparer<string>) {
