@@ -6,6 +6,7 @@
 //         "resolution-mode": "import"
 //     }
 // }
+// const str = "hello";
 // 
 // import * as t1 from "./a" with {  };
 //                                  ^
@@ -14,7 +15,7 @@
 // | (property) ImportAttributes.type: "json"
 // | ----------------------------------------------------------------------
 // import * as t2 from "./a" with { type: "" };
-//                                         
+//                                         ^
 // | ----------------------------------------------------------------------
 // | json
 // | ----------------------------------------------------------------------
@@ -23,12 +24,18 @@
 // | ----------------------------------------------------------------------
 // | (property) ImportAttributes["resolution-mode"]: "import"
 // | ----------------------------------------------------------------------
+// import * as t4 from "./a" with { type:  };
+//                                        ^
+// | ----------------------------------------------------------------------
+// | "json"
+// | (property) ImportAttributes["resolution-mode"]: "import"
+// | ----------------------------------------------------------------------
 
 [
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/./b.ts",
-      "position": 150,
+      "position": 171,
       "name": "1"
     },
     "item": {
@@ -145,7 +152,7 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/./b.ts",
-      "position": 194,
+      "position": 215,
       "name": "2"
     },
     "item": {
@@ -153,7 +160,7 @@
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
       "optionalReplacementSpan": {
-        "start": 194,
+        "start": 215,
         "length": 0
       },
       "entries": [
@@ -163,7 +170,7 @@
           "kind": "string",
           "sortText": "11",
           "replacementSpan": {
-            "start": 194,
+            "start": 215,
             "length": 0
           },
           "displayParts": [
@@ -179,7 +186,7 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/./b.ts",
-      "position": 246,
+      "position": 267,
       "name": "3"
     },
     "item": {
@@ -188,6 +195,86 @@
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
       "entries": [
+        {
+          "name": "resolution-mode",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportAttributes",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\"resolution-mode\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"import\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./b.ts",
+      "position": 310,
+      "name": "4"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "\"json\"",
+          "kind": "string",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "\"json\"",
+              "kind": "stringLiteral"
+            }
+          ]
+        },
         {
           "name": "resolution-mode",
           "kind": "property",

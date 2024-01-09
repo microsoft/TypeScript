@@ -4464,9 +4464,8 @@ function getCompletionData(
     function tryGetImportAttributesCompletionSymbols(): GlobalsSearch {
         if (contextToken === undefined) return GlobalsSearch.Continue;
 
-        const importAttributes = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken
-            ? tryCast(contextToken.parent, isImportAttributes)
-            : undefined;
+        const importAttributes = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken ? tryCast(contextToken.parent, isImportAttributes) :
+            contextToken.kind === SyntaxKind.ColonToken ? tryCast(contextToken.parent.parent, isImportAttributes) : undefined;
         if (importAttributes === undefined) return GlobalsSearch.Continue;
 
         const existing = new Set(importAttributes.elements.map(getNameFromImportAttribute));
