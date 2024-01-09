@@ -99,6 +99,7 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Signatu
         signature.declaration &&
         isConvertibleSignatureDeclaration(signature.declaration)
     ) {
+        // find a non-overload signature
         const declaration = (signature.declaration.body === undefined ? find(signature.declaration.symbol.declarations, d => isConvertibleSignatureDeclaration(d) && !!d.body) : signature.declaration) as ConvertibleSignatureDeclaration;
         if (declaration === undefined) {
             return undefined;
