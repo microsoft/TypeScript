@@ -3523,7 +3523,7 @@ export class TestState {
             // Undo changes to perform next fix
             for (const textChange of change.textChanges) {
                 const span = textChange.span;
-                const deletedText = originalContent.slice(span.start, textChange.span.length);
+                const deletedText = originalContent.slice(span.start, span.start + textChange.span.length);
                 const insertedText = textChange.newText;
                 this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
             }
