@@ -1,0 +1,15 @@
+// [[Reason: #56992 Type printer preserves binding element aliases.]] ////
+
+//// [tests/cases/compiler/declarationEmitBindingPatternWithReservedWord.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -9,6 +9,6 @@
+     default: ConvertLocaleConfig<T>;
+     config?: LocaleConfig<T> | undefined;
+     name?: string;
+ }
+-export declare const getLocales: <T extends LocaleData>({ app, name, default: defaultLocalesConfig, config: userLocalesConfig, }: GetLocalesOptions<T>) => ConvertLocaleConfig<T>;
++export declare const getLocales: <T extends LocaleData>({ app, name, default: defaultLocalesConfig, config, }: GetLocalesOptions<T>) => ConvertLocaleConfig<T>;
+ export {};
