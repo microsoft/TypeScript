@@ -8,9 +8,7 @@ import esbuild from "esbuild";
 import {
     EventEmitter,
 } from "events";
-import fs, {
-    watch,
-} from "fs";
+import fs from "fs";
 import _glob from "glob";
 import {
     task,
