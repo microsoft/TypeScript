@@ -1,13 +1,13 @@
-const fs = require("fs");
-const path = require("path");
-const crypto = require("crypto");
-const cp = require("child_process");
+import fs = require("fs");
+import path = require("path");
+import crypto = require("crypto");
+import cp = require("child_process");
 
-const [exeArg, ...args] = process.argv.slice(2);
+const args = process.argv.slice(2);
 
 const doBuildSnapshot = process.env.TYPESCRIPT_BUILD_SNAPSHOT === "true";
 
-function checksumFile(path) {
+function checksumFile(path: string) {
     // Benchmarking shows that sha1 is the fastest hash.
     // It is theoretically insecure, but we're just using it to detect file mismatches.
     // TODO(jakebailey): If sha1 is ever removed, this will fail; we should try catch
@@ -18,7 +18,7 @@ function checksumFile(path) {
     return hash.digest("hex");
 }
 
-const exe = path.resolve(exeArg);
+const exe = path.join(__dirname, "tscReal.js");
 const exeHash = checksumFile(exe);
 const blobName = `${exe}.${process.version}.${exeHash}.blob`;
 // const blobName = `${exe}.${process.version}.blob`;
@@ -37,21 +37,21 @@ if (doBuildSnapshot) {
     catch {
         // If the rename fails, it's because another process beat us to it.
     }
-    return;
+    process.exit(0);
 }
 
 if (!fs.existsSync(blobName)) {
     cp.spawn(
         process.execPath,
-        [__filename, exeArg],
+        [__filename],
         {
             detached: true,
             stdio: "ignore",
-            env: { ...process.env, TYPESCRIPT_BUILD_SNAPSHOT: true },
+            env: { ...process.env, TYPESCRIPT_BUILD_SNAPSHOT: "true" },
         },
     ).unref();
     require(exe);
-    return;
+    throw new Error("unreachable");
 }
 
 try {
