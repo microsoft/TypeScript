@@ -1158,7 +1158,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "moduleFormatInterop",
         type: new Map(Object.entries({
-            babel: ModuleFormatInteropKind.Bundler,
+            bundler: ModuleFormatInteropKind.Bundler,
             bundlernode: ModuleFormatInteropKind.BundlerNode,
             node16: ModuleFormatInteropKind.Node16,
             nodenext: ModuleFormatInteropKind.NodeNext,
