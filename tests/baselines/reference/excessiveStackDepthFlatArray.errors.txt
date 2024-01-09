@@ -1,5 +1,4 @@
-index.tsx(35,13): error TS2322: Type '{ key: string; }' is not assignable to type 'HTMLAttributes<HTMLLIElement>'.
-  Property 'key' does not exist on type 'HTMLAttributes<HTMLLIElement>'.
+index.tsx(35,13): error TS2339: Property 'key' does not exist on type 'HTMLAttributes<HTMLLIElement>'.
 
 
 ==== index.tsx (1 errors) ====
@@ -39,8 +38,7 @@ index.tsx(35,13): error TS2322: Type '{ key: string; }' is not assignable to typ
           {categories.map((category) => (
             <li key={category}>{category}</li> // Error about 'key' only
                 ~~~
-!!! error TS2322: Type '{ key: string; }' is not assignable to type 'HTMLAttributes<HTMLLIElement>'.
-!!! error TS2322:   Property 'key' does not exist on type 'HTMLAttributes<HTMLLIElement>'.
+!!! error TS2339: Property 'key' does not exist on type 'HTMLAttributes<HTMLLIElement>'.
           ))}
         </ul>
       );

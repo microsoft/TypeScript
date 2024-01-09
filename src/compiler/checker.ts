@@ -21711,10 +21711,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 const suggestionSymbol = getSuggestedSymbolForNonexistentJSXAttribute(propName, errorTarget);
                                 const suggestion = suggestionSymbol ? symbolToString(suggestionSymbol) : undefined;
                                 if (suggestion) {
-                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(errorTarget), suggestion);
+                                    reportParentSkippedError(Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, propName, typeToString(errorTarget), suggestion);
                                 }
                                 else {
-                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(errorTarget));
+                                    reportParentSkippedError(Diagnostics.Property_0_does_not_exist_on_type_1, propName, typeToString(errorTarget));
                                 }
                             }
                             else {
