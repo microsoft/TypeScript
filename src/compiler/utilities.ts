@@ -282,6 +282,7 @@ import {
     isJSDoc,
     isJSDocAugmentsTag,
     isJSDocFunctionType,
+    isJSDocImplementsTag,
     isJSDocLinkLike,
     isJSDocMemberName,
     isJSDocNameReference,
@@ -2452,7 +2453,7 @@ export function isPartOfTypeNode(node: Node): boolean {
         case SyntaxKind.VoidKeyword:
             return node.parent.kind !== SyntaxKind.VoidExpression;
         case SyntaxKind.ExpressionWithTypeArguments:
-            return isHeritageClause(node.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(node);
+            return isPartOfTypeExpressionWithTypeArguments(node);
         case SyntaxKind.TypeParameter:
             return node.parent.kind === SyntaxKind.MappedType || node.parent.kind === SyntaxKind.InferType;
 
@@ -2491,7 +2492,7 @@ export function isPartOfTypeNode(node: Node): boolean {
             }
             switch (parent.kind) {
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    return isHeritageClause(parent.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                    return isPartOfTypeExpressionWithTypeArguments(parent);
                 case SyntaxKind.TypeParameter:
                     return node === (parent as TypeParameterDeclaration).constraint;
                 case SyntaxKind.JSDocTemplateTag:
@@ -2525,6 +2526,12 @@ export function isPartOfTypeNode(node: Node): boolean {
     }
 
     return false;
+}
+
+function isPartOfTypeExpressionWithTypeArguments(node: Node) {
+    return isJSDocImplementsTag(node.parent)
+        || isJSDocAugmentsTag(node.parent)
+        || isHeritageClause(node.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 }
 
 /** @internal */
