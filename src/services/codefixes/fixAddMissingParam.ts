@@ -67,7 +67,7 @@ registerCodeFix({
         }),
 });
 
-type ConvertableSignatureDeclaration =
+type ConvertibleSignatureDeclaration =
     | FunctionDeclaration
     | FunctionExpression
     | ArrowFunction
@@ -76,8 +76,8 @@ type ConvertableSignatureDeclaration =
 interface SignatureInfo {
     readonly description: DiagnosticOrDiagnosticAndArguments;
     readonly newParameters: ParameterInfo[];
-    readonly declarations: ConvertableSignatureDeclaration[];
-    readonly overload: ConvertableSignatureDeclaration | undefined;
+    readonly declarations: ConvertibleSignatureDeclaration[];
+    readonly overload: ConvertibleSignatureDeclaration | undefined;
 }
 
 interface ParameterInfo {
@@ -97,14 +97,16 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Signatu
     if (
         signature &&
         signature.declaration &&
-        isConvertableSignatureDeclaration(signature.declaration)
+        isConvertibleSignatureDeclaration(signature.declaration)
     ) {
-        const declaration = (signature.declaration.body === undefined ? find(signature.declaration.symbol.declarations, d => isConvertableSignatureDeclaration(d) && !!d.body) : signature.declaration) as ConvertableSignatureDeclaration;
+        const declaration = (signature.declaration.body === undefined ? find(signature.declaration.symbol.declarations, d => isConvertibleSignatureDeclaration(d) && !!d.body) : signature.declaration) as ConvertibleSignatureDeclaration;
         if (declaration === undefined) {
             return undefined;
         }
 
-        isSourceFileFromLibrary(program, declaration.getSourceFile());
+        if (isSourceFileFromLibrary(program, declaration.getSourceFile())) {
+            return undefined;
+        }
 
         const overload = signature.declaration.body === undefined ? signature.declaration : undefined;
         if (overload && length(overload.parameters) !== length(declaration.parameters)) return undefined;
@@ -112,7 +114,7 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Signatu
         const name = tryGetName(declaration);
         if (name === undefined) return undefined;
 
-        const declarations: ConvertableSignatureDeclaration[] = append([declaration], overload);
+        const declarations: ConvertibleSignatureDeclaration[] = append([declaration], overload);
         const newParameters: ParameterInfo[] = [];
         const parametersLength = length(declaration.parameters);
         const argumentsLength = length(callExpression.arguments);
@@ -173,8 +175,7 @@ function tryGetName(node: FunctionLikeDeclaration) {
 }
 
 function typeToTypeNode(checker: TypeChecker, type: Type, enclosingDeclaration: Node) {
-    const typeNode = checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation);
-    return typeNode ? typeNode : factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+    return checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation) ?? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
 }
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { declarations, newParameters }: SignatureInfo) {
@@ -206,7 +207,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { 
     });
 }
 
-function isConvertableSignatureDeclaration(node: Node): node is ConvertableSignatureDeclaration {
+function isConvertibleSignatureDeclaration(node: Node): node is ConvertibleSignatureDeclaration {
     switch (node.kind) {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.FunctionExpression:
@@ -218,7 +219,7 @@ function isConvertableSignatureDeclaration(node: Node): node is ConvertableSigna
     }
 }
 
-function updateParameters(node: ConvertableSignatureDeclaration, newParameters: readonly ParameterInfo[]) {
+function updateParameters(node: ConvertibleSignatureDeclaration, newParameters: readonly ParameterInfo[]) {
     const parameters = map(node.parameters, p =>
         factory.createParameterDeclaration(
             p.modifiers,
