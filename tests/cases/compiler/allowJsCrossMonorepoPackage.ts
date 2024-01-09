@@ -1,4 +1,5 @@
-// @noTypesAndSymbols: true
+// @Filename: /node_modules/pkg/index.d.ts
+export declare function pkg(): "pkg";
 
 // @Filename: /packages/shared/package.json
 {
@@ -9,11 +10,11 @@
 }
 
 // @Filename: /packages/shared/utils.js
-export function f() {}
+export { pkg } from "pkg";
 
 // @Filename: /packages/shared/index.js
-import { f } from "./utils.js";
-export const x = f();
+import { pkg } from "./utils.js";
+export const x = pkg();
 
 // @Filename: /packages/main/package.json
 {
