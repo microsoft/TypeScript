@@ -5,7 +5,7 @@ const cp = require("child_process");
 
 const [exeArg, ...args] = process.argv.slice(2);
 
-const doBuildSnapshot = process.env.BUILD_SNAPSHOT === "true";
+const doBuildSnapshot = process.env.TYPESCRIPT_BUILD_SNAPSHOT === "true";
 
 function checksumFile(path) {
     // Benchmarking shows that sha1 is the fastest hash.
@@ -16,31 +16,45 @@ function checksumFile(path) {
     return hash.digest("hex");
 }
 
-function main() {
-    const exe = path.resolve(exeArg);
-    const exeHash = checksumFile(exe);
-    const blobName = `${exe}.${process.version}.${exeHash}.blob`;
-    // const blobName = `${exe}.${process.version}.blob`;
+const exe = path.resolve(exeArg);
+const exeHash = checksumFile(exe);
+const blobName = `${exe}.${process.version}.${exeHash}.blob`;
+// const blobName = `${exe}.${process.version}.blob`;
 
-    if (doBuildSnapshot) {
-        const tmpName = `${blobName}.tmp`;
-        cp.execFileSync(process.execPath, ["--snapshot-blob", tmpName, "--build-snapshot", exe], { stdio: "ignore" });
-        fs.renameSync(tmpName, blobName);
-        return;
-    }
-
-    if (!fs.existsSync(blobName)) {
-        cp.spawn(process.execPath, [__filename, exeArg], { detached: true, stdio: "ignore", env: { ...process.env, BUILD_SNAPSHOT: true } }).unref();
-        require(exe);
-        return;
-    }
-
+if (doBuildSnapshot) {
+    // Build and atomic rename.
+    const tmpName = `${blobName}.${process.pid}.tmp`;
+    cp.execFileSync(
+        process.execPath,
+        ["--snapshot-blob", tmpName, "--build-snapshot", exe],
+        { stdio: "ignore" },
+    );
     try {
-        cp.execFileSync(process.execPath, ["--snapshot-blob", blobName, "--", ...args], { stdio: "inherit" });
+        fs.renameSync(tmpName, blobName);
     }
-    catch (e) {
-        process.exitCode = e.status;
+    catch {
+        // If the rename fails, it's because another process beat us to it.
     }
+    return;
 }
 
-main();
+if (!fs.existsSync(blobName)) {
+    cp.spawn(
+        process.execPath,
+        [__filename, exeArg],
+        {
+            detached: true,
+            stdio: "ignore",
+            env: { ...process.env, TYPESCRIPT_BUILD_SNAPSHOT: true },
+        },
+    ).unref();
+    require(exe);
+    return;
+}
+
+try {
+    cp.execFileSync(process.execPath, ["--snapshot-blob", blobName, "--", ...args], { stdio: "inherit" });
+}
+catch (e) {
+    process.exitCode = e.status;
+}
