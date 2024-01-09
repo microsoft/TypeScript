@@ -38,7 +38,7 @@ export declare const useCsvParser: () => invalid;
 //# sourceMappingURL=index.d.ts.map
 /// [Errors] ////
 
-/p1/index.ts(7,29): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+/p1/index.ts(7,29): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 
 
 ==== /p1/node_modules/csv-parse/lib/index.d.ts (0 errors) ====
@@ -62,7 +62,9 @@ export declare const useCsvParser: () => invalid;
     }
     export const useCsvParser = () => {
                                 ~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
+!!! related TS9027 /p1/index.ts:7:14: Add a type annotation to the variable useCsvParser.
+!!! related TS9030 /p1/index.ts:7:29: Add a return type to the function expression.
         const parserRef = useRef<typeof import("csv-parse")>(null);
         return parserRef;
     };

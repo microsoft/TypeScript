@@ -26,13 +26,13 @@ export interface A {
 
 /// [Errors] ////
 
-/app.ts(1,23): error TS9010: Reference directives are not supported in isolated declaration mode.
+/app.ts(1,23): error TS9025: Reference directives are not supported with --isolatedDeclarations.
 
 
 ==== /app.ts (1 errors) ====
     /// <reference types="lib"/>
                           ~~~
-!!! error TS9010: Reference directives are not supported in isolated declaration mode.
+!!! error TS9025: Reference directives are not supported with --isolatedDeclarations.
     import {$} from "./ref";
     export interface A {
         x: () => typeof $

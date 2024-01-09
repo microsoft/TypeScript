@@ -81,20 +81,20 @@ export {};
 //# sourceMappingURL=emitClassExpressionInDeclarationFile.d.ts.map
 /// [Errors] ////
 
-emitClassExpressionInDeclarationFile.ts(1,28): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
-emitClassExpressionInDeclarationFile.ts(5,38): error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+emitClassExpressionInDeclarationFile.ts(1,28): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
+emitClassExpressionInDeclarationFile.ts(5,38): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
 
 
 ==== emitClassExpressionInDeclarationFile.ts (2 errors) ====
     export var simpleExample = class {
                                ~~~~~
-!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+!!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
         static getTags() { }
         tags() { }
     }
     export var circularReference = class C {
                                          ~
-!!! error TS9011: Declaration emit for class expressions are not supported with --isolatedDeclarations.
+!!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
         static getTags(c: C): C { return c }
         tags(c: C): C { return c }
     }

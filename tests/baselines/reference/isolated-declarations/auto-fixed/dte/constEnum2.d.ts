@@ -30,11 +30,11 @@ declare const enum D {
 //# sourceMappingURL=constEnum2.d.ts.map
 /// [Errors] ////
 
-constEnum2.ts(10,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+constEnum2.ts(10,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 constEnum2.ts(10,9): error TS2474: const enum member initializers must be constant expressions.
-constEnum2.ts(11,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+constEnum2.ts(11,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 constEnum2.ts(11,9): error TS2474: const enum member initializers must be constant expressions.
-constEnum2.ts(12,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+constEnum2.ts(12,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 constEnum2.ts(12,9): error TS2474: const enum member initializers must be constant expressions.
 
 
@@ -50,17 +50,17 @@ constEnum2.ts(12,9): error TS2474: const enum member initializers must be consta
         d = 10,
         e = 199 * Math.floor(Math.random() * 1000),
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2474: const enum member initializers must be constant expressions.
         f = d - (100 * Math.floor(Math.random() % 8)),
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2474: const enum member initializers must be constant expressions.
         g = CONST,
         ~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
             ~~~~~
 !!! error TS2474: const enum member initializers must be constant expressions.
     }

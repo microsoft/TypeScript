@@ -20,7 +20,7 @@ const ExpandoExpr: {
         x?: undefined;
     };
     m(n: number): number;
-} = function (n: number) {
+} = function (n: number): string {
     return n.toString();
 }
 ExpandoExpr.prop = { x: 2 }
@@ -34,7 +34,7 @@ const ExpandoArrow: {
     (n: number): string;
     prop: number;
     m(n: number): number;
-} = (n: number) => n.toString();
+} = (n: number): string => n.toString();
 ExpandoArrow.prop = 2
 ExpandoArrow.m = function(n: number) {
     return n + 1;
@@ -208,7 +208,7 @@ typeFromPropertyAssignment29.ts(101,42): error TS2339: Property 'm' does not exi
             x?: undefined;
         };
         m(n: number): number;
-    } = function (n: number) {
+    } = function (n: number): string {
         return n.toString();
     }
     ExpandoExpr.prop = { x: 2 }
@@ -222,7 +222,7 @@ typeFromPropertyAssignment29.ts(101,42): error TS2339: Property 'm' does not exi
         (n: number): string;
         prop: number;
         m(n: number): number;
-    } = (n: number) => n.toString();
+    } = (n: number): string => n.toString();
     ExpandoArrow.prop = 2
     ExpandoArrow.m = function(n: number) {
         return n + 1;

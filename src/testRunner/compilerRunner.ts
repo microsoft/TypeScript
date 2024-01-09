@@ -116,10 +116,12 @@ export class CompilerBaselineRunner extends RunnerBase {
 
         describe("isolated declarations", () => {
             let isolatedTest: IsolatedDeclarationTest | undefined;
-            before(() => {
+            before(function () {
                 const isolatedTestEnv = IsolatedDeclarationTest.transformEnvironment(environment);
                 if (isolatedTestEnv) {
                     isolatedTest = new IsolatedDeclarationTest(isolatedTestEnv);
+                } else {
+                    this.skip();
                 }
             });
             it(`Correct dte emit for ${fileName}`, () => isolatedTest?.verifyDteOutput());
@@ -133,10 +135,12 @@ export class CompilerBaselineRunner extends RunnerBase {
 
         describe("isolated declarations fixed", () => {
             let fixedIsolatedTest: FixedIsolatedDeclarationTest | undefined;
-            before(() => {
+            before(function () {
                 const fixedIsolatedTestEnv = FixedIsolatedDeclarationTest.fixTestProject(environment);
                 if (fixedIsolatedTestEnv) {
                     fixedIsolatedTest = new FixedIsolatedDeclarationTest(fixedIsolatedTestEnv);
+                } else {
+                    this.skip();
                 }
             });
             it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
@@ -479,11 +483,10 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         // Exclude tests some tests
         // - those explicitly not opting into isolatedDeclarations
         // - those that do not usually emit output anyway
-        if (options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols) {
+        if (options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols || !options.declaration) {
             return undefined;
         }
         const clonedOptions: ts.CompilerOptions & Compiler.HarnessOptions = ts.cloneCompilerOptions(compilerEnvironment.compilerOptions);
-        clonedOptions.declaration = true;
         if (clonedOptions.isolatedDeclarations === undefined) {
             clonedOptions.isolatedDeclarations = true;
         }
@@ -495,19 +498,22 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         }
         delete clonedOptions.outFile;
         delete clonedOptions.out;
-        delete clonedOptions.declarationMap;
+        if (clonedOptions.declarationMap !== false) {
+            delete clonedOptions.declarationMap;
+        }
 
         const clonedSettings: TestCaseParser.CompilerSettings = {
             ...compilerEnvironment.testCaseContent.settings,
             allowJS: "false",
             checkJS: "false",
-            declaration: "true",
             isolatedDeclarations: "true",
             forceDtsEmit: "true",
             skipLibCheck: "true",
         };
         delete clonedSettings.outFile;
-        delete clonedSettings.declarationMap;
+        if (clonedSettings.declarationMap !== "false") {
+            delete clonedSettings.declarationMap;
+        }
         delete clonedSettings.outfile;
         delete clonedSettings.out;
 
@@ -574,12 +580,27 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             });
     }
     private static dteDiagnosticErrors = new Set([
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_type_resolution_An_explicit_type_annotation_may_unblock_declaration_emit.code,
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
-        ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function.code,
-        ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
-        ts.Diagnostics.Declaration_emit_for_class_expressions_are_not_supported_with_isolatedDeclarations.code,
-    ]);
+        ts.Diagnostics.Function_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Method_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Variable_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Parameter_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Property_must_have_an_explicit_type_annotation_with_isolatedDeclarations,
+        ts.Diagnostics.Expression_type_can_t_be_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Binding_elements_can_t_be_exported_directly_with_isolatedDeclarations,
+        ts.Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations,
+        ts.Diagnostics.Enum_member_initializers_must_be_computable_without_references_to_external_symbols_with_isolatedDeclarations,
+        ts.Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations,
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_which_are_not_supported_with_isolatedDeclarations,
+        ts.Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+        ts.Diagnostics.Objects_that_contain_shorthand_properties_can_t_be_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Objects_that_contain_spread_assignments_can_t_be_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Arrays_with_spread_elements_can_t_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Only_const_arrays_can_be_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Default_exports_can_t_be_inferred_with_isolatedDeclarations,
+        ts.Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations,
+        ts.Diagnostics.Inference_from_class_expressions_is_not_supported_with_isolatedDeclarations,
+    ].map(d => d.code));
     protected get baselinePath() {
         return "isolated-declarations/original";
     }
@@ -636,7 +657,12 @@ class IsolatedDeclarationTest extends CompilerTestBase {
     }
 
     verifyDiff() {
-        if (this.isOutputEquivalent && this.isDiagnosticEquivalent) return;
+        if (this.isOutputEquivalent && this.isDiagnosticEquivalent) {
+            if (this.isOutputMapEquivalent) {
+                ts.Debug.assert(this.diffReason === undefined, "Should not have a diff reason if everything is equivalent");
+            }
+            return;
+        }
         Compiler.doDeclarationDiffBaseline(
             this.configuredName,
             this.baselinePath + "/diff",
@@ -684,51 +710,22 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         }
 
         env.compilerOptions.isolatedDeclarations = false;
-        env.compilerOptions.declarationMap = true;
+        if (env.compilerOptions.declarationMap === undefined) {
+            env.compilerOptions.declarationMap = true;
+        }
         env.compilerOptions.forceDtsEmit = false;
 
-        const autoFixCacheTest = ts.combinePaths("tests/auto-fixed", compilerEnvironment.configuredName);
-        const existingTransformedTest = IO.readFile(autoFixCacheTest);
-        const hash = ts.sys.createHash!(env.testCaseContent.sourceCode);
-        const fixedTest = existingTransformedTest && TestCaseParser.makeUnitsFromTest(existingTransformedTest, compilerEnvironment.fileName);
-        let transformSucceeded = true;
-        let hasReferenceDirectiveErrors = false;
-        if (fixedTest && fixedTest.settings.hash === hash) {
-            transformSucceeded = fixedTest.settings.succeeded !== "false";
-            hasReferenceDirectiveErrors = fixedTest.settings.hasReferenceDirectiveErrors !== "false";
-            if (transformSucceeded) {
-                env.allFiles = env.allFiles.map(f => {
-                    const testUnit = fixedTest.testUnitData.find(t => t.name === f.unitName);
-                    ts.Debug.assert(testUnit, "All files should be in the cached auto fixed version of the test");
-                    env.fileSystem.writeFileSync(testUnit.name, testUnit.content);
-                    return this.createHarnessTestFile(testUnit);
-                });
-                env.otherFiles = env.otherFiles.map(o => env.allFiles.find(f => f.unitName === o.unitName)!);
-                env.toBeCompiled = env.toBeCompiled.map(o => env.allFiles.find(f => f.unitName === o.unitName)!);
-            }
+        const fixerOptions = ts.cloneCompilerOptions(env.compilerOptions);
+        fixerOptions.isolatedDeclarations = true;
+        const fixResults = fixTestFiles(env.fileSystem, env.programFileNames, fixerOptions);
+
+        const hasReferenceDirectiveErrors = fixResults.success && fixResults.unfixedDiagnostics.some(d => FixedIsolatedDeclarationTest.referenceDirectiveErrors.has(d.code));
+        for (const file of env.allFiles) {
+            const content = env.fileSystem.readFileSync(file.unitName, "utf-8");
+            file.content = content;
         }
-        else {
-            const fixerOptions = ts.cloneCompilerOptions(env.compilerOptions);
-            fixerOptions.isolatedDeclarations = true;
-            const fixResults = fixTestFiles(env.fileSystem, env.programFileNames, fixerOptions);
-            let cachedTest = "// @hash: " + hash + "\n";
-            if (!fixResults.success) {
-                transformSucceeded = false;
-                cachedTest += "// @succeeded: false\n";
-            }
-            else {
-                hasReferenceDirectiveErrors = fixResults.unfixedDiagnostics.some(d => FixedIsolatedDeclarationTest.referenceDirectiveErrors.has(d.code));
-                cachedTest += "// @hasReferenceDirectiveErrors: " + hasReferenceDirectiveErrors + "\n";
-                for (const file of env.allFiles) {
-                    cachedTest += "\n// @fileName: " + file.unitName + "\n";
-                    const content = env.fileSystem.readFileSync(file.unitName, "utf-8");
-                    file.content = content;
-                    cachedTest += content;
-                }
-            }
-            IO.writeFile(autoFixCacheTest, cachedTest);
-        }
-        if (!transformSucceeded || hasReferenceDirectiveErrors) {
+
+        if (!fixResults.success || hasReferenceDirectiveErrors) {
             return undefined;
         }
         env.fileSystem.makeReadonly();
@@ -736,15 +733,15 @@ class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
         return env;
     }
     private static referenceDirectiveErrors = new Set([
-        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_Add_a_type_reference_directive_to_0_to_unblock_declaration_emit.code,
-        ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code,
+        ts.Diagnostics.Declaration_emit_for_this_file_requires_adding_a_type_reference_directive_which_are_not_supported_with_isolatedDeclarations.code,
+        ts.Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations.code,
     ]);
     constructor(compilerEnvironment: CompilerTestEnvironment) {
         super(compilerEnvironment);
 
         // Suppress diff for tests with reference directives.
         if (
-            this.dteDiagnostics.some(d => d.code === ts.Diagnostics.Reference_directives_are_not_supported_in_isolated_declaration_mode.code)
+            this.dteDiagnostics.some(d => d.code === ts.Diagnostics.Reference_directives_are_not_supported_with_isolatedDeclarations.code)
         ) {
             this.isOutputMapEquivalent = true;
             this.isDiagnosticEquivalent = true;

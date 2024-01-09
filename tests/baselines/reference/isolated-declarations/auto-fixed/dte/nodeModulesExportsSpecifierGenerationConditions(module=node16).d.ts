@@ -44,7 +44,7 @@ export declare const a: invalid;
 
 error TS2468: Cannot find global value 'Promise'.
 index.ts(2,23): error TS2307: Cannot find module 'inner/other.js' or its corresponding type declarations.
-index.ts(3,18): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+index.ts(3,18): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 index.ts(3,19): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
 index.ts(3,25): error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 
@@ -57,7 +57,8 @@ index.ts(3,25): error TS2712: A dynamic import call in ES5/ES3 requires the 'Pro
 !!! error TS2307: Cannot find module 'inner/other.js' or its corresponding type declarations.
     export const a = (await import("inner")).x();
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 index.ts:3:14: Add a type annotation to the variable a.
                       ~~~~~
 !!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.
                             ~~~~~~~~~~~~~~~

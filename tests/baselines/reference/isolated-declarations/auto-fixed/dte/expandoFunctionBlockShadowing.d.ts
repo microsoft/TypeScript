@@ -30,7 +30,7 @@ export declare function Y(): void;
 //# sourceMappingURL=expandoFunctionBlockShadowing.d.ts.map
 /// [Errors] ////
 
-expandoFunctionBlockShadowing.ts(10,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+expandoFunctionBlockShadowing.ts(10,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 
 
 ==== expandoFunctionBlockShadowing.ts (1 errors) ====
@@ -45,7 +45,7 @@ expandoFunctionBlockShadowing.ts(10,1): error TS9009: Assigning properties to fu
     export function Y(): void {}
     Y.test = "foo";
     ~~~~~~
-!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
+!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
     const aliasTopY = Y;
     if (Math.random()) {
       const Y = function Y() {}

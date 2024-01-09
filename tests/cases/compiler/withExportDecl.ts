@@ -1,6 +1,5 @@
 //@module: amd
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 var simpleVar;
 export var exportedSimpleVar;
 

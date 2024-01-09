@@ -47,16 +47,16 @@
 +//# sourceMappingURL=declarationEmitLateBoundAssignments2.d.ts.map
 +/// [Errors] ////
 +
-+declarationEmitLateBoundAssignments2.ts(10,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+declarationEmitLateBoundAssignments2.ts(13,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+declarationEmitLateBoundAssignments2.ts(16,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+declarationEmitLateBoundAssignments2.ts(19,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+declarationEmitLateBoundAssignments2.ts(22,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+declarationEmitLateBoundAssignments2.ts(25,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+declarationEmitLateBoundAssignments2.ts(28,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+declarationEmitLateBoundAssignments2.ts(31,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+declarationEmitLateBoundAssignments2.ts(34,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
-+declarationEmitLateBoundAssignments2.ts(37,1): error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(10,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(13,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(16,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(19,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(22,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(25,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(28,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(31,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(34,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++declarationEmitLateBoundAssignments2.ts(37,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +
 +
 +==== declarationEmitLateBoundAssignments2.ts (10 errors) ====
@@ -71,111 +71,111 @@
 +    export function decl(): void {}
 +    decl["B"] = 'foo'
 +    ~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export function decl2(): void {}
 +    decl2[c] = 0
 +    ~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export function decl3(): void {}
 +    decl3[77] = 0
 +    ~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export function decl4(): void {}
 +    decl4[num] = 0
 +    ~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export function decl5(): void {}
 +    decl5["101"] = 0
 +    ~~~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export function decl6(): void {}
 +    decl6[numStr] = 0
 +    ~~~~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export function decl7(): void {}
 +    decl7["qwe rty"] = 0
 +    ~~~~~~~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export function decl8(): void {}
 +    decl8[withWhitespace] = 0
 +    ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export function decl9(): void {}
 +    decl9["🤪"] = 0
 +    ~~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export function decl10(): void {}
 +    decl10[emoji] = 0
 +    ~~~~~~~~~~~~~
-+!!! error TS9009: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 +    
 +    export const arrow: {
 +        (): void
 +        B: string
-+    } = () => {}
++    } = (): void => {}
 +    arrow["B"] = 'bar'
 +    
 +    export const arrow2: {
 +        (): void
 +        C: number
-+    } = () => {}
++    } = (): void => {}
 +    arrow2[c] = 100
 +    
 +    export const arrow3: {
 +        (): void
 +        77: number
-+    } = () => {}
++    } = (): void => {}
 +    arrow3[77] = 0
 +    
 +    export const arrow4: {
 +        (): void
 +        1: number
-+    } = () => {}
++    } = (): void => {}
 +    arrow4[num] = 0
 +    
 +    export const arrow5: {
 +        (): void
 +        "101": number
-+    } = () => {}
++    } = (): void => {}
 +    arrow5["101"] = 0
 +    
 +    export const arrow6: {
 +        (): void
 +        "10": number
-+    } = () => {}
++    } = (): void => {}
 +    arrow6[numStr] = 0
 +    
 +    export const arrow7: {
 +        (): void
 +        "qwe rty": number
-+    } = () => {}
++    } = (): void => {}
 +    arrow7["qwe rty"] = 0
 +    
 +    export const arrow8: {
 +        (): void
 +        "foo bar": number
-+    } = () => {}
++    } = (): void => {}
 +    arrow8[withWhitespace] = 0
 +    
 +    export const arrow9: {
 +        (): void
 +        "🤪": number
-+    } = () => {}
++    } = (): void => {}
 +    arrow9["🤪"] = 0
 +    
 +    export const arrow10: {
 +        (): void
 +        "🤷‍♂️": number
-+    } = () => {}
++    } = (): void => {}
 +    arrow10[emoji] = 0
 +    
 \ No newline at end of file

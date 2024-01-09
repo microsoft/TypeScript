@@ -1,0 +1,40 @@
+// [[Reason: Invalid computed property can only be detected by TSC]] ////
+
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty2.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,15 +1,18 @@
+ 
+ 
+ //// [ES5SymbolProperty2.d.ts]
+ declare namespace M {
+-    class C {
++    var Symbol: any;
++    export class C {
++        [Symbol.iterator](): invalid;
+     }
++    export {};
+ }
+ 
+ /// [Errors] ////
+ 
+-ES5SymbolProperty2.ts(5,9): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
++ES5SymbolProperty2.ts(5,9): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
+ ES5SymbolProperty2.ts(10,11): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+ 
+ 
+ ==== ES5SymbolProperty2.ts (2 errors) ====
+@@ -18,9 +21,10 @@
+     
+         export class C {
+             [Symbol.iterator]() { }
+             ~~~~~~~~~~~~~~~~~
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
++!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
++!!! related TS9034 ES5SymbolProperty2.ts:5:9: Add a return type to the method
+         }
+         (new C)[Symbol.iterator];
+     }
+     

@@ -35,7 +35,7 @@
  declare const uu: unique symbol;
  export declare let o6: {
      [uu]: number;
-@@ -23,31 +29,28 @@
+@@ -23,32 +29,28 @@
  declare let E: {
      readonly A: 1;
  };
@@ -48,13 +48,13 @@
  
  /// [Errors] ////
  
--computedPropertiesNarrowed.ts(5,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
- computedPropertiesNarrowed.ts(18,20): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
--computedPropertiesNarrowed.ts(22,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
-+computedPropertiesNarrowed.ts(20,9): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
- computedPropertiesNarrowed.ts(26,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
- computedPropertiesNarrowed.ts(37,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
- computedPropertiesNarrowed.ts(47,5): error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+-computedPropertiesNarrowed.ts(5,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ computedPropertiesNarrowed.ts(18,20): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-computedPropertiesNarrowed.ts(22,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
++computedPropertiesNarrowed.ts(20,9): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+ computedPropertiesNarrowed.ts(26,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ computedPropertiesNarrowed.ts(37,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ computedPropertiesNarrowed.ts(47,5): error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
  
  
 -==== computedPropertiesNarrowed.ts (6 errors) ====
@@ -65,22 +65,25 @@
      export let o = {
          [x]: 1 // error narrow type !== declared type
 -        ~~~
--!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-!!! related TS9027 computedPropertiesNarrowed.ts:4:12: Add a type annotation to the variable o.
      }
      
      
      const y: 0 = 0
-@@ -63,12 +66,12 @@
-                        ~~~~~
- !!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+@@ -65,13 +67,13 @@
+ !!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+ !!! related TS9027 computedPropertiesNarrowed.ts:18:12: Add a type annotation to the variable o32.
      
      let u = Symbol();
 +            ~~~~~~~~
-+!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
++!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
++!!! related TS9027 computedPropertiesNarrowed.ts:20:5: Add a type annotation to the variable u.
      export let o4 = {
          [u]: 1 // Should error, nut a unique symbol
 -        ~~~
--!!! error TS9007: Declaration emit for this file requires type resolution. An explicit type annotation may unblock declaration emit.
+-!!! error TS9014: Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.
+-!!! related TS9027 computedPropertiesNarrowed.ts:21:12: Add a type annotation to the variable o4.
      }
      
      export let o5  ={
