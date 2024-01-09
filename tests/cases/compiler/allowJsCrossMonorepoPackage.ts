@@ -8,8 +8,12 @@
     "exports": "./index.js"
 }
 
+// @Filename: /packages/shared/utils.js
+export function f() {}
+
 // @Filename: /packages/shared/index.js
-export const x = 0;
+import { f } from "./utils.js";
+export const x = f();
 
 // @Filename: /packages/main/package.json
 {
@@ -28,7 +32,8 @@ export const x = 0;
         "checkJs": true,
         "strict": true,
         "module": "esnext",
-        "moduleResolution": "bundler"
+        "moduleResolution": "bundler",
+        "traceResolution": true,
     }
 }
 
