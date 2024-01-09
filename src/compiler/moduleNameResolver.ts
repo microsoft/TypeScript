@@ -1860,7 +1860,7 @@ function nodeModuleNameResolverWorker(
     }
 
     let alternateResult;
-    if (state.resolvedPackageDirectory && !isConfigLookup && !isExternalModuleNameRelative(moduleName) && !startsWith(moduleName, "@typescript/")) {
+    if (state.resolvedPackageDirectory && !isConfigLookup && !isExternalModuleNameRelative(moduleName)) {
         const wantedTypesButGotJs = result?.value
             && extensions & (Extensions.TypeScript | Extensions.Declaration)
             && !extensionIsOk(Extensions.TypeScript | Extensions.Declaration, result.value.resolved.extension);
@@ -3040,13 +3040,13 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
     const candidate = normalizePath(combinePaths(nodeModulesDirectory, moduleName));
     const { packageName, rest } = parsePackageName(moduleName);
     const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
-    if (nodeModulesDirectoryExists) {
-        state.resolvedPackageDirectory = true;
-    }
 
     let rootPackageInfo: PackageJsonInfo | undefined;
     // First look for a nested package.json, as in `node_modules/foo/bar/package.json`.
     let packageInfo = getPackageJsonInfo(candidate, !nodeModulesDirectoryExists, state);
+    if (packageInfo) {
+        state.resolvedPackageDirectory = true;
+    }
     // But only if we're not respecting export maps (if we are, we might redirect around this location)
     if (
         rest !== "" && packageInfo && (

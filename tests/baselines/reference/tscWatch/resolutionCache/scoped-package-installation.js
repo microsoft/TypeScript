@@ -254,21 +254,6 @@ Directory '/user/username/projects/node_modules' does not exist, skipping all lo
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
 ======== Module name '@myapp/ts-types' was not resolved. ========
 [96mlib/app.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2307: [0mCannot find module '@myapp/ts-types' or its corresponding type declarations.
 
@@ -388,24 +373,6 @@ Directory '/user/username/projects/node_modules' does not exist, skipping all lo
 Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.d.ts' does not exist.
-Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/user/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'myapp__ts-types'
 ======== Module name '@myapp/ts-types' was not resolved. ========
 [96mlib/app.ts[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2307: [0mCannot find module '@myapp/ts-types' or its corresponding type declarations.
 
