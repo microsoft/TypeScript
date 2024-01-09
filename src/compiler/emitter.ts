@@ -3607,7 +3607,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function willEmitLeadingNewLine(node: Expression): boolean {
         if (!currentSourceFile) return false;
-        if (some(getLeadingCommentRanges(currentSourceFile.text, node.pos), commentWillEmitNewLine)) return true;
+        const leadingCommentRanges = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+        if (leadingCommentRanges) {
+            const parseNode = getParseTreeNode(node);
+            if (parseNode && isParenthesizedExpression(parseNode.parent)) {
+                return true;
+            }
+        }
+        if (some(leadingCommentRanges, commentWillEmitNewLine)) return true;
         if (some(getSyntheticLeadingComments(node), commentWillEmitNewLine)) return true;
         if (isPartiallyEmittedExpression(node)) {
             if (node.pos !== node.expression.pos) {
