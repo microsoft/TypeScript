@@ -7,21 +7,20 @@ const [exeArg, ...args] = process.argv.slice(2);
 
 const doBuildSnapshot = process.env.BUILD_SNAPSHOT === "true";
 
-function checksumFile(hashName, path) {
-    return new Promise((resolve, reject) => {
-        const hash = crypto.createHash(hashName);
-        const stream = fs.createReadStream(path);
-        stream.on("error", err => reject(err));
-        stream.on("data", chunk => hash.update(chunk));
-        stream.on("end", () => resolve(hash.digest("hex")));
-    });
+function checksumFile(path) {
+    // Benchmarking shows that sha1 is the fastest hash.
+    // It is theoretically insecure, but we're just using it to detect file mismatches.
+    const hash = crypto.createHash("sha1");
+    const file = fs.readFileSync(path);
+    hash.update(file);
+    return hash.digest("hex");
 }
 
-async function main() {
+function main() {
     const exe = path.resolve(exeArg);
-    // const exeHash = await checksumFile("md5", exe);
-    // const blobName = `${exe}.${exeHash}.blob`;
-    const blobName = `${exe}.${process.version}.blob`;
+    const exeHash = checksumFile(exe);
+    const blobName = `${exe}.${process.version}.${exeHash}.blob`;
+    // const blobName = `${exe}.${process.version}.blob`;
 
     if (doBuildSnapshot) {
         const tmpName = `${blobName}.tmp`;
