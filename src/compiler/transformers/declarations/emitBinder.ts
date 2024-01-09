@@ -9,6 +9,7 @@ import {
     ComputedPropertyName,
     ConditionalTypeNode,
     ConstructorDeclaration,
+    ConstructorTypeNode,
     ConstructSignatureDeclaration,
     Declaration,
     EnumDeclaration,
@@ -556,6 +557,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.FunctionType:
+                case SyntaxKind.ConstructorType:
                     bindFunctionLikeContainer(node as FunctionLikeContainer);
                     break;
                 case SyntaxKind.ClassExpression:
@@ -669,7 +671,8 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
             | FunctionDeclaration
             | CallSignatureDeclaration
             | ConstructSignatureDeclaration
-            | FunctionTypeNode;
+            | FunctionTypeNode
+            | ConstructorTypeNode;
         function bindFunctionLikeContainer(node: FunctionLikeContainer) {
             const isExported = hasSyntacticModifier(node, ModifierFlags.Export);
             const declarationFlags = tryGetSymbolFlagsForNode(node);

@@ -1,5 +1,5 @@
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
+// @isolatedDeclarationFixedDiffReason: #56992 Type printer preserves binding element aliases.
 
 const k = ({x: z = 'y'}) => { }
 

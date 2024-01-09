@@ -1,5 +1,5 @@
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: Aliases are preserved for binding patterns GH#55654
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 interface a { a }
 interface b { b }

@@ -1,5 +1,6 @@
 // @declaration: true
-// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
+// @isolatedDeclarationFixedDiffReason: #56992 Type printer preserves binding element aliases.
+// @isolatedDeclarationDiffReason: #56992 Type printer preserves binding element aliases.
 type LocaleData = Record<string, never>
 type ConvertLocaleConfig<T extends LocaleData = LocaleData> = Record<
   string,
