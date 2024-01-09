@@ -1,0 +1,28 @@
+//// [tests/cases/compiler/parenthesizedJSDocCastDoesNotNarrow.ts] ////
+
+=== index.js ===
+let value = "";
+>value : Symbol(value, Decl(index.js, 0, 3))
+
+switch (/** @type {"foo" | "bar"} */ (value)) {
+>value : Symbol(value, Decl(index.js, 0, 3))
+
+  case "bar":
+    value;
+>value : Symbol(value, Decl(index.js, 0, 3))
+
+    break;
+
+  case "foo":
+    value;
+>value : Symbol(value, Decl(index.js, 0, 3))
+
+    break;
+
+  case "invalid":
+    value;
+>value : Symbol(value, Decl(index.js, 0, 3))
+
+    break;
+}
+

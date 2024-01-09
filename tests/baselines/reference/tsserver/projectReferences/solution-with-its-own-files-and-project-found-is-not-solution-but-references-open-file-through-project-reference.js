@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -238,10 +238,32 @@ Info seq  [hh:mm:ss:mss] getDefaultProject for /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
 Before request
 //// [/user/username/projects/myproject/tsconfig-src.json]
-{"compilerOptions":{"composite":true,"outDir":"./target/","baseUrl":"./src/"},"include":["./src/**/*"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./target/",
+    "baseUrl": "./src/"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"outDir":"./target/","baseUrl":"./src/"},"references":[{"path":"./tsconfig-src.json"}],"files":["./own/main.ts"]}
+{
+  "compilerOptions": {
+    "outDir": "./target/",
+    "baseUrl": "./src/"
+  },
+  "references": [
+    {
+      "path": "./tsconfig-src.json"
+    }
+  ],
+  "files": [
+    "./own/main.ts"
+  ]
+}
 
 //// [/user/username/projects/myproject/src/main.ts]
 import { foo } from 'helpers/functions';
@@ -272,17 +294,39 @@ export { foo };
 //# sourceMappingURL=main.d.ts.map
 
 //// [/user/username/projects/myproject/target/src/main.d.ts.map]
-{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"}
+{
+  "version": 3,
+  "file": "main.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../../src/main.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"
+}
 
 //// [/user/username/projects/myproject/target/src/helpers/functions.d.ts]
 export declare const foo = 1;
 //# sourceMappingURL=functions.d.ts.map
 
 //// [/user/username/projects/myproject/target/src/helpers/functions.d.ts.map]
-{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"}
+{
+  "version": 3,
+  "file": "functions.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../../../src/helpers/functions.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"
+}
 
 //// [/user/username/projects/myproject/indirect3/tsconfig.json]
-{"compilerOptions":{"baseUrl":"../target/src/"}}
+{
+  "compilerOptions": {
+    "baseUrl": "../target/src/"
+  }
+}
 
 //// [/user/username/projects/myproject/indirect3/main.ts]
 import { foo } from 'main';
@@ -335,6 +379,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -350,6 +397,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
@@ -364,7 +414,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -957,6 +1009,8 @@ FsWatchesRecursive::
 FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/src:
   {}
+
+Timeout callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] request:
     {

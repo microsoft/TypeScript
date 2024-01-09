@@ -1869,6 +1869,7 @@ export interface VerifyCodeFixAllOptions {
     fixAllDescription: string;
     newFileContent: NewFileContent;
     commands: readonly {}[];
+    preferences?: ts.UserPreferences;
 }
 
 export interface VerifyRefactorOptions {

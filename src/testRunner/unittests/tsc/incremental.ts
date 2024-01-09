@@ -2,9 +2,15 @@ import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     compilerOptionsToConfigJson,
     libContent,
 } from "../helpers/contents";
+import {
+    getFsForNoEmitOnError,
+} from "../helpers/noEmitOnError";
 import {
     noChangeOnlyRuns,
     noChangeRun,
@@ -13,7 +19,6 @@ import {
 } from "../helpers/tsc";
 import {
     appendText,
-    loadProjectFromDisk,
     loadProjectFromFiles,
     prependText,
     replaceText,
@@ -116,7 +121,7 @@ describe("unittests:: tsc:: incremental::", () => {
     describe("with noEmitOnError", () => {
         let projFs: vfs.FileSystem;
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/noEmitOnError");
+            projFs = getFsForNoEmitOnError();
         });
         after(() => {
             projFs = undefined!;
@@ -127,7 +132,7 @@ describe("unittests:: tsc:: incremental::", () => {
                 scenario: "incremental",
                 subScenario,
                 fs: () => projFs,
-                commandLineArgs: ["--incremental", "-p", "src"],
+                commandLineArgs: ["--incremental"],
                 modifyFs,
                 edits: [
                     noChangeRun,
@@ -144,7 +149,7 @@ describe("unittests:: tsc:: incremental::", () => {
             "with noEmitOnError syntax errors",
             fs =>
                 fs.writeFileSync(
-                    "/src/src/main.ts",
+                    "src/main.ts",
                     `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
@@ -157,14 +162,14 @@ const a = {
             "with noEmitOnError semantic errors",
             fs =>
                 fs.writeFileSync(
-                    "/src/src/main.ts",
+                    "src/main.ts",
                     `import { A } from "../shared/types/db";
 const a: string = "hello";`,
                     "utf-8",
                 ),
             fs =>
                 fs.writeFileSync(
-                    "/src/src/main.ts",
+                    "src/main.ts",
                     `import { A } from "../shared/types/db";
 const a: string = 10;`,
                     "utf-8",
@@ -295,7 +300,7 @@ const a: string = 10;`,
                     "/src/project/src/noChangeFileWithEmitSpecificError.ts": Utils.dedent`
                             function someFunc(arguments: boolean, ...rest: any[]) {
                             }`,
-                    "/src/project/tsconfig.json": JSON.stringify({ compilerOptions }),
+                    "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions }),
                 });
             }
         }
@@ -317,7 +322,7 @@ const a: string = 10;`,
                     function anotherFileWithSameReferenes() { }
                 `,
                 "/src/project/src/filePresent.ts": `function something() { return 10; }`,
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["src/**/*.ts"],
                 }),
@@ -382,7 +387,7 @@ declare global {
                     "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                    "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
+                    "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
                 }),
             commandLineArgs: ["--p", "src/project"],
         });
@@ -395,7 +400,7 @@ declare global {
                     "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                     "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                     "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                    "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
+                    "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
                 }),
             commandLineArgs: ["--p", "src/project", "--strict"],
         });
@@ -407,7 +412,7 @@ declare global {
         commandLineArgs: ["-i", "-p", `src/projects/project2`],
         fs: () =>
             loadProjectFromFiles({
-                "/src/projects/project1/tsconfig.json": JSON.stringify({
+                "/src/projects/project1/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -416,7 +421,7 @@ declare global {
                 }),
                 "/src/projects/project1/class1.ts": `class class1 {}`,
                 "/src/projects/project1/class1.d.ts": `declare class class1 {}`,
-                "/src/projects/project2/tsconfig.json": JSON.stringify({
+                "/src/projects/project2/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -468,7 +473,7 @@ declare global {
         commandLineArgs: ["-noEmit", "-p", `src/project`],
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
                         strict: true,
@@ -486,7 +491,7 @@ declare global {
         commandLineArgs: ["-p", `src/project`],
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
                         strict: true,
@@ -550,7 +555,7 @@ declare global {
         commandLineArgs: ["-p", `src/project`],
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true } }),
+                "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
                 "/src/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
                 "/src/project/constants.ts": "export default 1;",
@@ -568,7 +573,7 @@ console.log(a);`,
         commandLineArgs: ["-p", `src/project`],
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true } }),
+                "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { composite: true } }),
                 "/src/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
                 "/src/project/constants.ts": "export default 1;",
@@ -588,7 +593,7 @@ console.log(a);`,
             commandLineArgs: ["-p", "src/project", "--incremental"],
             fs: () =>
                 loadProjectFromFiles({
-                    "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { declaration } }),
+                    "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: { declaration } }),
                     "/src/project/main.ts": Utils.dedent`
                         import MessageablePerson from './MessageablePerson.js';
                         function logMessage( person: MessageablePerson ) {
@@ -613,14 +618,17 @@ console.log(a);`,
                     type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`,
                 ),
             edits: [
+                noChangeRun,
                 {
                     caption: "modify public to protected",
                     edit: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "public", "protected"),
                 },
+                noChangeRun,
                 {
                     caption: "modify protected to public",
                     edit: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "protected", "public"),
                 },
+                noChangeRun,
             ],
         });
     }
@@ -632,7 +640,7 @@ console.log(a);`,
         subScenario: `when declarationMap changes`,
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         noEmitOnError: true,
                         declaration: true,
@@ -667,7 +675,7 @@ console.log(a);`,
         subScenario: `when declarationMap changes with outFile`,
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         noEmitOnError: true,
                         declaration: true,
@@ -750,7 +758,7 @@ console.log(a);`,
         }
         function fs(options: ts.CompilerOptions) {
             return loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: compilerOptionsToConfigJson(options) }),
+                "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
                 "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
                 "/src/project/b.ts": `export const b = 10;const bLocal = 10;`,
                 "/src/project/c.ts": `import { a } from "./a";export const c = a;`,
@@ -763,7 +771,7 @@ console.log(a);`,
                 edit: fs => {
                     const config = JSON.parse(fs.readFileSync("/src/project/tsconfig.json", "utf-8"));
                     config.compilerOptions.declarationMap = true;
-                    fs.writeFileSync("/src/project/tsconfig.json", JSON.stringify(config));
+                    fs.writeFileSync("/src/project/tsconfig.json", jsonToReadableText(config));
                 },
             };
         }
@@ -865,7 +873,7 @@ console.log(a);`,
         commandLineArgs: ["-p", `/src/project`],
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         composite: true,
                         outDir: "outDir",
@@ -887,7 +895,7 @@ console.log(a);`,
         subScenario: "file deleted before fixing error with noEmitOnError",
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "outDir",
                         noEmitOnError: true,
@@ -902,5 +910,101 @@ console.log(a);`,
             edit: fs => fs.unlinkSync("/src/project/file2.ts"),
         }],
         baselinePrograms: true,
+    });
+
+    verifyTsc({
+        scenario: "incremental",
+        subScenario: "generates typerefs correctly",
+        commandLineArgs: ["-p", `/src/project`],
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "outDir",
+                        checkJs: true,
+                    },
+                    include: ["src"],
+                }),
+                "/src/project/src/box.ts": Utils.dedent`
+                    export interface Box<T> {
+                        unbox(): T
+                    }
+                `,
+                "/src/project/src/bug.js": Utils.dedent`
+                    import * as B from "./box.js"
+                    import * as W from "./wrap.js"
+
+                    /**
+                     * @template {object} C
+                     * @param {C} source
+                     * @returns {W.Wrap<C>}
+                     */
+                    const wrap = source => {
+                    throw source
+                    }
+
+                    /**
+                     * @returns {B.Box<number>}
+                     */
+                    const box = (n = 0) => ({ unbox: () => n })
+
+                    export const bug = wrap({ n: box(1) });
+                `,
+                "/src/project/src/wrap.ts": Utils.dedent`
+                    export type Wrap<C> = {
+                        [K in keyof C]: { wrapped: C[K] }
+                    }
+                `,
+            }),
+        edits: [{
+            caption: "modify js file",
+            edit: fs => appendText(fs, "/src/project/src/bug.js", `export const something = 1;`),
+        }],
+    });
+
+    verifyTsc({
+        scenario: "incremental",
+        subScenario: "reports dts generation errors",
+        commandLineArgs: ["-p", `/src/project`, "--explainFiles", "--listEmittedFiles"],
+        fs: () =>
+            loadProjectFromFiles({
+                "/src/project/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        module: "NodeNext",
+                        moduleResolution: "NodeNext",
+                        composite: true,
+                        skipLibCheck: true,
+                        skipDefaultLibCheck: true,
+                    },
+                }),
+                "/src/project/index.ts": Utils.dedent`
+                    import ky from 'ky';
+                    export const api = ky.extend({});
+                `,
+                "/src/project/package.json": jsonToReadableText({
+                    type: "module",
+                }),
+                "/src/project/node_modules/ky/distribution/index.d.ts": Utils.dedent`
+                   type KyInstance = {
+                        extend(options: Record<string,unknown>): KyInstance;
+                    }
+                    declare const ky: KyInstance;
+                    export default ky;
+                `,
+                "/src/project/node_modules/ky/package.json": jsonToReadableText({
+                    name: "ky",
+                    type: "module",
+                    main: "./distribution/index.js",
+                }),
+                "/lib/lib.esnext.full.d.ts": libContent,
+            }),
+        edits: [
+            noChangeRun,
+            {
+                ...noChangeRun,
+                commandLineArgs: ["-b", `/src/project`, "--explainFiles", "--listEmittedFiles", "-v"],
+            },
+        ],
     });
 });

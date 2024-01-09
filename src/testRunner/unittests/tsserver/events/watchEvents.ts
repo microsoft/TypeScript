@@ -1,6 +1,6 @@
 import {
     createLoggerWithInMemoryLogs,
-    Logger,
+    LoggerWithInMemoryLogs,
 } from "../../../../harness/tsserverLogger";
 import {
     createWatchUtils,
@@ -10,7 +10,6 @@ import * as ts from "../../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createSession,
     createSessionWithCustomEventHandler,
     openFilesForSession,
     TestSession,
@@ -32,14 +31,18 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
     }
 
     function createTestServerHostWithCustomWatch(
-        logger: Logger,
+        logger: LoggerWithInMemoryLogs,
     ) {
         const idToClose = new Map<number, () => void>();
         const host = logger.host as TestServerHostWithCustomWatch;
         const originalSerializeWatches = host.serializeWatches;
         host.serializeWatches = serializeWatches;
         host.factoryData = {
-            watchUtils: createWatchUtils<ts.server.protocol.CreateFileWatcherEventBody, ts.server.protocol.CreateDirectoryWatcherEventBody>(`Custom WatchedFiles`, `Custom WatchedDirectories`),
+            watchUtils: createWatchUtils<ts.server.protocol.CreateFileWatcherEventBody, ts.server.protocol.CreateDirectoryWatcherEventBody>(
+                "Custom WatchedFiles",
+                "Custom WatchedDirectories",
+                host.getCanonicalFileName,
+            ),
             watchFile,
             watchDirectory,
             closeWatcher,
@@ -89,32 +92,36 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
     function updateFileOnHost(session: TestSession, file: string, log: string) {
         // Change b.ts
         session.logger.log(log);
-        session.testhost.writeFile(file, session.testhost.readFile("/user/username/projects/myproject/a.ts")!);
-        session.testhost.runQueuedTimeoutCallbacks();
+        session.host.writeFile(file, session.host.readFile("/user/username/projects/myproject/a.ts")!);
+        session.host.runQueuedTimeoutCallbacks();
     }
 
     function addFile(session: TestSession, path: string) {
         updateFileOnHost(session, path, "Add file");
         session.logger.log("Custom watch");
-        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.fsWatchesRecursive.get("/user/username/projects/myproject")?.forEach(data =>
-            session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
-                command: ts.server.protocol.CommandTypes.WatchChange,
-                arguments: { id: data.id, path, eventType: "create" },
-            })
+        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.fsWatchesRecursive.forEach(
+            "/user/username/projects/myproject",
+            data =>
+                session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.WatchChange,
+                    arguments: { id: data.id, path, eventType: "create" },
+                }),
         );
-        session.testhost.runQueuedTimeoutCallbacks();
+        session.host.runQueuedTimeoutCallbacks();
     }
 
     function changeFile(session: TestSession, path: string) {
         updateFileOnHost(session, path, "Change File");
         session.logger.log("Custom watch");
-        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.pollingWatches.get(path)?.forEach(data =>
-            session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
-                command: ts.server.protocol.CommandTypes.WatchChange,
-                arguments: { id: data.id, path, eventType: "update" },
-            })
+        (session.logger.host as TestServerHostWithCustomWatch).factoryData.watchUtils.pollingWatches.forEach(
+            path,
+            data =>
+                session.executeCommandSeq<ts.server.protocol.WatchChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.WatchChange,
+                    arguments: { id: data.id, path, eventType: "update" },
+                }),
         );
-        session.testhost.runQueuedTimeoutCallbacks();
+        session.host.runQueuedTimeoutCallbacks();
     }
 
     function setup() {
@@ -131,7 +138,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
 
     it("canUseWatchEvents", () => {
         const { host, logger } = setup();
-        const session = createSessionWithCustomEventHandler(host, { canUseWatchEvents: true, logger }, handleWatchEvents);
+        const session = createSessionWithCustomEventHandler({ host, canUseWatchEvents: true, logger }, handleWatchEvents);
         openFilesForSession(["/user/username/projects/myproject/a.ts"], session);
 
         // Directory watcher
@@ -166,7 +173,7 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
 
     it("canUseWatchEvents without canUseEvents", () => {
         const { host, logger } = setup();
-        const session = createSession(host, { canUseEvents: false, logger });
+        const session = new TestSession({ host, canUseEvents: false, canUseWatchEvents: true, logger });
         openFilesForSession(["/user/username/projects/myproject/a.ts"], session);
 
         // Directory watcher

@@ -12,9 +12,9 @@ Fs::
 configFileName:: jsconfig.json
 TypeAcquisition::
 {
- "enable": true,
- "include": [],
- "exclude": []
+  "enable": true,
+  "include": [],
+  "exclude": []
 }
 Errors::
 

@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/src/main.ts]
 import * as _a from '@angular/core';
@@ -196,6 +196,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -210,6 +213,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
@@ -239,7 +245,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -297,11 +305,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/core-js-db53158d :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/tsconfig.json Detected ignored path: /user/username/projects/myproject/node_modules/.staging/core-js-db53158d
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/core-js-db53158d :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 3
-6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
-7: /user/username/projects/myproject/tsconfig.json
-8: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -329,7 +333,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Before request
+Timeout callback:: count: 3
+6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *new*
+7: /user/username/projects/myproject/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -348,6 +355,12 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 4
+6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+7: /user/username/projects/myproject/tsconfig.json
+8: *ensureProjectForOpenFiles*
+9: checkOne *new*
 
 Before running Timeout callback:: count: 4
 6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
@@ -376,8 +389,15 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
+
+Timeout callback:: count: 2
+6: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *deleted*
+8: *ensureProjectForOpenFiles* *deleted*
 7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles*
+10: *ensureProjectForOpenFiles* *new*
+
+Immedidate callback:: count: 1
+3: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -407,7 +427,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-4: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 4: suggestionCheck
@@ -468,18 +490,13 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/tsconfig.json Detected ignored path: /user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Timeout callback:: count: 2
-7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+Before request
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts]
 export const x = 10;
 
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts]
 export const y = 10;
 
-
-Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -499,6 +516,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 3
+7: /user/username/projects/myproject/tsconfig.json
+10: *ensureProjectForOpenFiles*
+11: checkOne *new*
+
 Before running Timeout callback:: count: 3
 7: /user/username/projects/myproject/tsconfig.json
 10: *ensureProjectForOpenFiles*
@@ -516,8 +538,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
-7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles*
+
+Immedidate callback:: count: 1
+5: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
@@ -547,7 +570,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-6: suggestionCheck
+
+Immedidate callback:: count: 1
+6: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 6: suggestionCheck
@@ -573,15 +598,10 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
-Timeout callback:: count: 2
-7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles*
-Immedidate callback:: count: 0
+Before request
 //// [/user/username/projects/myproject/node_modules/@angular/core/index.d.ts]
 export const y = 10;
 
-
-Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -601,6 +621,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 3
+7: /user/username/projects/myproject/tsconfig.json
+10: *ensureProjectForOpenFiles*
+12: checkOne *new*
+
 Before running Timeout callback:: count: 3
 7: /user/username/projects/myproject/tsconfig.json
 10: *ensureProjectForOpenFiles*
@@ -618,8 +643,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
-7: /user/username/projects/myproject/tsconfig.json
-10: *ensureProjectForOpenFiles*
+
+Immedidate callback:: count: 1
+7: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 7: semanticCheck
@@ -649,7 +675,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-8: suggestionCheck
+
+Immedidate callback:: count: 1
+8: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 8: suggestionCheck
@@ -739,12 +767,23 @@ Before running Timeout callback:: count: 3
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/cli-c1e44b05/models/analytics.d.ts] deleted
 //// [/user/username/projects/myproject/node_modules/.staging/@angular/core-0963aebf/index.d.ts] deleted
 
+Timeout callback:: count: 3
+7: /user/username/projects/myproject/tsconfig.json *deleted*
+10: *ensureProjectForOpenFiles* *deleted*
+13: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation *new*
+14: /user/username/projects/myproject/tsconfig.json *new*
+15: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
-16: /user/username/projects/myproject/tsconfig.json
-17: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+14: /user/username/projects/myproject/tsconfig.json *deleted*
+15: *ensureProjectForOpenFiles* *deleted*
+16: /user/username/projects/myproject/tsconfig.json *new*
+17: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
 16: /user/username/projects/myproject/tsconfig.json
@@ -789,7 +828,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/main.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/main.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -801,8 +840,7 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-After running Timeout callback:: count: 1
-18: checkOne
+After running Timeout callback:: count: 0
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -848,8 +886,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+18: checkOne *new*
+
 Before running Timeout callback:: count: 1
-19: checkOne
+18: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -862,6 +903,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+9: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 9: semanticCheck
@@ -877,7 +921,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-10: suggestionCheck
+
+Immedidate callback:: count: 1
+10: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 10: suggestionCheck

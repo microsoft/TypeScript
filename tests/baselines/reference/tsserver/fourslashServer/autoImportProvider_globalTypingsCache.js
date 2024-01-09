@@ -328,8 +328,8 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /library/caches/typescript/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /library/caches/typescript/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 1 module specifiers, plus 0 ambient and 0 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
@@ -935,6 +935,7 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /Library/Caches/typescript/node_modules:
   {}
+  {} *new*
 /Library/Caches/typescript/node_modules/@types:
   {}
 /Library/Caches/typescript/node_modules/@types/node_modules/@types:
@@ -944,8 +945,6 @@ watchedDirectoriesRecursive::
 /Library/Caches/typescript/node_modules/@types/react-router-dom/node_modules/@types:
   {}
 /Library/Caches/typescript/node_modules/node_modules/@types:
-  {}
-/library/caches/typescript/node_modules: *new*
   {}
 /project:
   {}

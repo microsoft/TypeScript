@@ -31,7 +31,7 @@ interface Refinement<A, B extends A> {
 }
 
 declare const filter: {
->filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: readonly A[]) => readonly B[]; <A>(predicate: Predicate<A>): <B extends A>(bs: readonly B[]) => readonly B[]; <A>(predicate: Predicate<A>): (as: readonly A[]) => readonly A[]; }
+>filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>; <A_1>(predicate: Predicate<A_1>): <B_1 extends A_1>(bs: readonly B_1[]) => readonly B_1[]; <A_2>(predicate: Predicate<A_2>): (as: readonly A_2[]) => readonly A_2[]; }
 
     <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>
 >refinement : Refinement<A, B>
@@ -67,7 +67,7 @@ const x = pipe(es, filter(exists((n) => n > 0)))
 >pipe : <A, B>(a: A, ab: (a: A) => B) => B
 >es : Either<string, number>[]
 >filter(exists((n) => n > 0)) : (as: readonly Either<string, number>[]) => readonly Either<string, number>[]
->filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: readonly A[]) => readonly B[]; <A>(predicate: Predicate<A>): <B extends A>(bs: readonly B[]) => readonly B[]; <A>(predicate: Predicate<A>): (as: readonly A[]) => readonly A[]; }
+>filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: readonly A[]) => readonly B[]; <A_1>(predicate: Predicate<A_1>): <B_1 extends A_1>(bs: readonly B_1[]) => readonly B_1[]; <A_2>(predicate: Predicate<A_2>): (as: readonly A_2[]) => readonly A_2[]; }
 >exists((n) => n > 0) : <E>(ma: Either<E, number>) => boolean
 >exists : <A>(predicate: Predicate<A>) => <E>(ma: Either<E, A>) => boolean
 >(n) => n > 0 : (n: number) => boolean

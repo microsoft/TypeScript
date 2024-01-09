@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/narrowingPastLastAssignmentInModule.ts] ////
+
+=== narrowingPastLastAssignmentInModule.ts ===
+function action(f: Function) {}
+>action : Symbol(action, Decl(narrowingPastLastAssignmentInModule.ts, 0, 0))
+>f : Symbol(f, Decl(narrowingPastLastAssignmentInModule.ts, 0, 16))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+// Narrowings are not preserved for exported mutable variables
+
+export let x1: string | number;
+>x1 : Symbol(x1, Decl(narrowingPastLastAssignmentInModule.ts, 4, 10))
+
+x1 = "abc";
+>x1 : Symbol(x1, Decl(narrowingPastLastAssignmentInModule.ts, 4, 10))
+
+action(() => { x1 /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignmentInModule.ts, 0, 0))
+>x1 : Symbol(x1, Decl(narrowingPastLastAssignmentInModule.ts, 4, 10))
+
+export { x2 };
+>x2 : Symbol(x2, Decl(narrowingPastLastAssignmentInModule.ts, 8, 8))
+
+let x2: string | number;
+>x2 : Symbol(x2, Decl(narrowingPastLastAssignmentInModule.ts, 9, 3))
+
+x2 = "abc";
+>x2 : Symbol(x2, Decl(narrowingPastLastAssignmentInModule.ts, 9, 3))
+
+action(() => { x2 /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignmentInModule.ts, 0, 0))
+>x2 : Symbol(x2, Decl(narrowingPastLastAssignmentInModule.ts, 9, 3))
+
+export { x3 as foo };
+>x3 : Symbol(x3, Decl(narrowingPastLastAssignmentInModule.ts, 14, 3))
+>foo : Symbol(foo, Decl(narrowingPastLastAssignmentInModule.ts, 13, 8))
+
+let x3: string | number;
+>x3 : Symbol(x3, Decl(narrowingPastLastAssignmentInModule.ts, 14, 3))
+
+x3 = "abc";
+>x3 : Symbol(x3, Decl(narrowingPastLastAssignmentInModule.ts, 14, 3))
+
+action(() => { x3 /* string | number */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignmentInModule.ts, 0, 0))
+>x3 : Symbol(x3, Decl(narrowingPastLastAssignmentInModule.ts, 14, 3))
+
+let x4: string | number;
+>x4 : Symbol(x4, Decl(narrowingPastLastAssignmentInModule.ts, 18, 3))
+
+x4 = "abc";
+>x4 : Symbol(x4, Decl(narrowingPastLastAssignmentInModule.ts, 18, 3))
+
+action(() => { x4 /* string */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignmentInModule.ts, 0, 0))
+>x4 : Symbol(x4, Decl(narrowingPastLastAssignmentInModule.ts, 18, 3))
+
+export default x4;
+>x4 : Symbol(x4, Decl(narrowingPastLastAssignmentInModule.ts, 18, 3))
+
+let x5: string | number;
+>x5 : Symbol(x5, Decl(narrowingPastLastAssignmentInModule.ts, 23, 3))
+
+x5 = "abc";
+>x5 : Symbol(x5, Decl(narrowingPastLastAssignmentInModule.ts, 23, 3))
+
+action(() => { x5 /* string */ });
+>action : Symbol(action, Decl(narrowingPastLastAssignmentInModule.ts, 0, 0))
+>x5 : Symbol(x5, Decl(narrowingPastLastAssignmentInModule.ts, 23, 3))
+

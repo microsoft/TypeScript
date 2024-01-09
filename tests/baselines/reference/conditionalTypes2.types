@@ -82,7 +82,7 @@ function getFunction<T>(item: T) {
 
     if (isFunction(item)) {
 >isFunction(item) : boolean
->isFunction : <T>(value: T) => value is Extract<T, Function>
+>isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
 >item : T
 
         return item;
@@ -99,7 +99,7 @@ function f10<T>(x: T) {
 
     if (isFunction(x)) {
 >isFunction(x) : boolean
->isFunction : <T>(value: T) => value is Extract<T, Function>
+>isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
 >x : T
 
         const f: Function = x;
@@ -249,7 +249,7 @@ class Vector<T> implements Seq<T> {
 >x : T
 
     partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
->partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>partition2 : { <U_1 extends T>(predicate: (v: T) => v is U_1): [Vector<U_1>, Vector<Exclude<T, U_1>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
 >predicate : (v: T) => boolean
 >v : T
 
@@ -290,7 +290,7 @@ function foo<T>(value: T) {
 
     if (isFunction(value)) {
 >isFunction(value) : boolean
->isFunction : <T>(value: T) => value is Extract<T, Function>
+>isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
 >value : T
 
         toString1(value);
