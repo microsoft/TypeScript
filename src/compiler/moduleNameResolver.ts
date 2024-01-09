@@ -325,6 +325,7 @@ export interface ModuleResolutionState {
     reportDiagnostic: DiagnosticReporter;
     isConfigLookup: boolean;
     candidateIsFromPackageJsonField: boolean;
+    resolvedPackageDirectory: boolean;
 }
 
 /** Just the fields that we use for module resolution.
@@ -602,6 +603,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
     let resolved = primaryLookup();
     let primary = true;
@@ -1839,6 +1841,7 @@ function nodeModuleNameResolverWorker(
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
     if (traceEnabled && moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
         trace(host, Diagnostics.Resolving_in_0_mode_with_conditions_1, features & NodeResolutionFeatures.EsmMode ? "ESM" : "CJS", state.conditions.map(c => `'${c}'`).join(", "));
@@ -1857,7 +1860,7 @@ function nodeModuleNameResolverWorker(
     }
 
     let alternateResult;
-    if (!isConfigLookup && !isExternalModuleNameRelative(moduleName) && !startsWith(moduleName, "@typescript/")) {
+    if (state.resolvedPackageDirectory && !isConfigLookup && !isExternalModuleNameRelative(moduleName) && !startsWith(moduleName, "@typescript/")) {
         const wantedTypesButGotJs = result?.value
             && extensions & (Extensions.TypeScript | Extensions.Declaration)
             && !extensionIsOk(Extensions.TypeScript | Extensions.Declaration, result.value.resolved.extension);
@@ -2368,6 +2371,7 @@ export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJ
         reportDiagnostic: noop,
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
 }
 
@@ -3036,6 +3040,9 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
     const candidate = normalizePath(combinePaths(nodeModulesDirectory, moduleName));
     const { packageName, rest } = parsePackageName(moduleName);
     const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
+    if (nodeModulesDirectoryExists) {
+        state.resolvedPackageDirectory = true;
+    }
 
     let rootPackageInfo: PackageJsonInfo | undefined;
     // First look for a nested package.json, as in `node_modules/foo/bar/package.json`.
@@ -3220,6 +3227,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
 
     const resolved = tryResolve(Extensions.TypeScript | Extensions.Declaration) ||
@@ -3320,6 +3328,7 @@ export function loadModuleFromGlobalCache(moduleName: string, projectName: strin
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
         candidateIsFromPackageJsonField: false,
+        resolvedPackageDirectory: false,
     };
     const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.Declaration, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
     return createResolvedModuleWithFailedLookupLocations(

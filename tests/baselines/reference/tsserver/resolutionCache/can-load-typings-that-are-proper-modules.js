@@ -53,12 +53,6 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for fal
 Info seq  [hh:mm:ss:mss] Directory '/a/b/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/a/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Info seq  [hh:mm:ss:mss] Loading module 'lib' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Info seq  [hh:mm:ss:mss] Directory '/a/b/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/a/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'lib' was not resolved. ========
 Info seq  [hh:mm:ss:mss] Auto discovery for typings is enabled in project '/dev/null/inferredProject1*'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.
 Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/lib.d.ts' does not exist.
