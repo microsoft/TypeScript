@@ -16,6 +16,8 @@
 
 goTo.marker("");
 
+// importFixes should only place the import in sorted position if the existing imports are sorted as specified,
+//     otherwise the import should be placed at the end 
 verify.importFixAtPosition([
 `import { A, type B, type C, D } from './foo';
 const b: B | C;
