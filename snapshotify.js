@@ -10,6 +10,8 @@ const doBuildSnapshot = process.env.TYPESCRIPT_BUILD_SNAPSHOT === "true";
 function checksumFile(path) {
     // Benchmarking shows that sha1 is the fastest hash.
     // It is theoretically insecure, but we're just using it to detect file mismatches.
+    // TODO(jakebailey): If sha1 is ever removed, this will fail; we should try catch
+    // and fall back to something from crypto.getHashes() if it does.
     const hash = crypto.createHash("sha1");
     const file = fs.readFileSync(path);
     hash.update(file);
