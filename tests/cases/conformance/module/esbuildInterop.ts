@@ -1,6 +1,5 @@
 // @module: esnext
 // @moduleResolution: bundler
-// @moduleFormatDetection: bundler
 // @moduleFormatInterop: bundlernode
 
 // @Filename: /node_modules/dep/package.json

@@ -402,7 +402,6 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleDetectionKind,
-    ModuleFormatDetectionKind,
     ModuleFormatInteropKind,
     ModuleKind,
     ModuleResolutionKind,
@@ -8852,6 +8851,8 @@ export const getEmitModuleResolutionKind = computedOptions.moduleResolution.comp
 /** @internal */
 export const getEmitModuleDetectionKind = computedOptions.moduleDetection.computeValue;
 /** @internal */
+export const getModuleFormatInteropKind = computedOptions.moduleFormatInterop.computeValue;
+/** @internal */
 export const getIsolatedModules = computedOptions.isolatedModules.computeValue;
 /** @internal */
 export const getESModuleInterop = computedOptions.esModuleInterop.computeValue;
@@ -8879,6 +8880,13 @@ export const getUseDefineForClassFields = computedOptions.useDefineForClassField
 /** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
     return moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext;
+}
+
+/** @internal */
+export function shouldComputeImpliedNodeFormat(compilerOptions: CompilerOptions) {
+    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+    return ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
+        || getModuleFormatInteropKind(compilerOptions) !== ModuleFormatInteropKind.Bundler;
 }
 
 /** @internal */
