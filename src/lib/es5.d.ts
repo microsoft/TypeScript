@@ -626,6 +626,7 @@ interface ImportCallOptions {
 
 /**
  * The type for the `assert` property of the optional second argument to `import()`.
+ * @deprecated
  */
 interface ImportAssertions {
     [key: string]: string;
