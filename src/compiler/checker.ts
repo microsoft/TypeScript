@@ -6842,7 +6842,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
                     if (isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                         const newConstraintParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
-                        const newTypeParam = createTypeParameter(typeParameter.symbol);
+                        const newTypeParam = cloneTypeParameter(typeParameter);
                         const name = typeParameterToName(newConstraintParam, context);
                         const target = type.target as MappedType;
                         typeParameter = newTypeParam;
