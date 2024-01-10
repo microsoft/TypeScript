@@ -39041,8 +39041,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         for (let i = 0; i < target.length; i++) {
             if (areOverlapping ? hasInferenceCandidates(source[i]) && hasInferenceCandidates(target[i]) && source[i].priority! < (target[i].priority! & ~InferencePriority.ReturnType) : hasInferenceCandidates(source[i])) {
-                target[i] = source[i];
-                target[i].priority = InferencePriority.None;
+                const clonedInferenceInfo = cloneInferenceInfo(source[i]);
+                clonedInferenceInfo.priority = InferencePriority.None;
+                target[i] = clonedInferenceInfo;
                 merged = true;
             }
         }
