@@ -149,6 +149,7 @@ const jsDocTagNames = [
     "module",
     "name",
     "namespace",
+    "nonnull",
     "overload",
     "override",
     "package",

@@ -98,6 +98,7 @@ import {
     JSDocNamepathType,
     JSDocNameReference,
     JSDocNonNullableType,
+    JSDocNonNullTag,
     JSDocNullableType,
     JSDocOptionalType,
     JSDocOverloadTag,
@@ -1136,6 +1137,10 @@ export function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag {
 
 export function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag {
     return node.kind === SyntaxKind.JSDocReadonlyTag;
+}
+
+export function isJSDocNonNullTag(node: Node): node is JSDocNonNullTag {
+    return node.kind === SyntaxKind.JSDocNonNullTag;
 }
 
 export function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag {

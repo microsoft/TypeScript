@@ -587,6 +587,7 @@ import {
     isJSDocNameReference,
     isJSDocNode,
     isJSDocNonNullableType,
+    isJSDocNonNullExpression,
     isJSDocNullableType,
     isJSDocOptionalParameter,
     isJSDocOptionalType,
@@ -39396,6 +39397,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (isJSDocTypeAssertion(node)) {
                 return checkAssertionWorker(node, checkMode);
+            }
+            if (isJSDocNonNullExpression(node)) {
+                return getNonNullableType(checkExpression(node.expression));
             }
         }
         return checkExpression(node.expression, checkMode);

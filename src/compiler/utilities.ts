@@ -169,6 +169,7 @@ import {
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
     getJSDocImplementsTags,
+    getJSDocNonNullTag,
     getJSDocOverrideTagNoCache,
     getJSDocParameterTags,
     getJSDocParameterTagsNoCache,
@@ -356,6 +357,7 @@ import {
     JSDocCallbackTag,
     JSDocEnumTag,
     JSDocMemberName,
+    JSDocNonNullExpression,
     JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
@@ -10577,6 +10579,11 @@ export function getJSDocSatisfiesExpressionType(node: JSDocSatisfiesExpression) 
 export function tryGetJSDocSatisfiesTypeNode(node: Node) {
     const tag = getJSDocSatisfiesTag(node);
     return tag && tag.typeExpression && tag.typeExpression.type;
+}
+
+/** @internal */
+export function isJSDocNonNullExpression(node: Node): node is JSDocNonNullExpression {
+    return isInJSFile(node) && isParenthesizedExpression(node) && hasJSDocNodes(node) && !!getJSDocNonNullTag(node);
 }
 
 /** @internal */

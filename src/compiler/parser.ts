@@ -182,6 +182,7 @@ import {
     JSDocNameReference,
     JSDocNamespaceDeclaration,
     JSDocNonNullableType,
+    JSDocNonNullTag,
     JSDocNullableType,
     JSDocOptionalType,
     JSDocOverloadTag,
@@ -1125,6 +1126,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocReadonlyTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocDeprecatedTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocOverrideTag]: forEachChildInJSDocTag,
+    [SyntaxKind.JSDocNonNullTag]: forEachChildInJSDocTag,
     [SyntaxKind.PartiallyEmittedExpression]: forEachChildInPartiallyEmittedExpression,
 };
 
@@ -1209,7 +1211,7 @@ function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode |
     return visitNode(cbNode, node.name);
 }
 
-function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag | JSDocOverrideTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag | JSDocOverrideTag | JSDocNonNullTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName)
         || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
@@ -9065,6 +9067,9 @@ namespace Parser {
                         break;
                     case "satisfies":
                         tag = parseSatisfiesTag(start, tagName, margin, indentText);
+                        break;
+                    case "nonnull":
+                        tag = parseSimpleTag(start, factory.createJSDocNonNullTag, tagName, margin, indentText);
                         break;
                     case "see":
                         tag = parseSeeTag(start, tagName, margin, indentText);

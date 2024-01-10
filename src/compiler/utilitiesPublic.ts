@@ -133,6 +133,7 @@ import {
     isJSDocEnumTag,
     isJSDocFunctionType,
     isJSDocImplementsTag,
+    isJSDocNonNullTag,
     isJSDocOverloadTag,
     isJSDocOverrideTag,
     isJSDocParameterTag,
@@ -182,6 +183,7 @@ import {
     JSDocLinkCode,
     JSDocLinkPlain,
     JSDocNamespaceBody,
+    JSDocNonNullTag,
     JSDocOverrideTag,
     JSDocParameterTag,
     JSDocPrivateTag,
@@ -1091,6 +1093,11 @@ export function getJSDocProtectedTagNoCache(node: Node): JSDocProtectedTag | und
 /** Gets the JSDoc protected tag for the node if present */
 export function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined {
     return getFirstJSDocTag(node, isJSDocReadonlyTag);
+}
+
+/** Gets the JSDoc `nonnull` tag for the node if present */
+export function getJSDocNonNullTag(node: Node): JSDocNonNullTag | undefined {
+    return getFirstJSDocTag(node, isJSDocNonNullTag);
 }
 
 /** @internal */
