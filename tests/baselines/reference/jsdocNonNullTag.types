@@ -1,0 +1,232 @@
+//// [tests/cases/conformance/jsdoc/jsdocNonNullTag.ts] ////
+
+=== file1.js ===
+/** @type {(x: string | null | undefined) => string} */
+export function fn1(x) {
+>fn1 : (x: string | null | undefined) => string
+>x : string | null | undefined
+
+    const nonNulledX = /** @nonnull */ (x);
+>nonNulledX : string | null | undefined
+>(x) : string | null | undefined
+>x : string | null | undefined
+
+    return nonNulledX.toUpperCase();
+>nonNulledX.toUpperCase() : string
+>nonNulledX.toUpperCase : () => string
+>nonNulledX : string | null | undefined
+>toUpperCase : () => string
+}
+
+
+=== file2.js ===
+/** @type {(x: string | null | undefined) => string} */
+export function fn2(x) {
+>fn2 : (x: string | null | undefined) => string
+>x : string | null | undefined
+
+    return (/** @nonnull */ (x)).toUpperCase();
+>(/** @nonnull */ (x)).toUpperCase() : string
+>(/** @nonnull */ (x)).toUpperCase : () => string
+>(/** @nonnull */ (x)) : string | null | undefined
+>(x) : string | null | undefined
+>x : string | null | undefined
+>toUpperCase : () => string
+}
+
+
+=== file3.js ===
+/** @type {(x: string | null) => string} */
+export function fn3(x) {
+>fn3 : (x: string | null) => string
+>x : string | null
+
+    return (/** @nonnull */ (x)).toUpperCase();
+>(/** @nonnull */ (x)).toUpperCase() : string
+>(/** @nonnull */ (x)).toUpperCase : () => string
+>(/** @nonnull */ (x)) : string | null
+>(x) : string | null
+>x : string | null
+>toUpperCase : () => string
+}
+
+
+=== file4.js ===
+/** @type {(x: string | undefined) => string} */
+export function fn4(x) {
+>fn4 : (x: string | undefined) => string
+>x : string | undefined
+
+    return (/** @nonnull */ (x)).toUpperCase();
+>(/** @nonnull */ (x)).toUpperCase() : string
+>(/** @nonnull */ (x)).toUpperCase : () => string
+>(/** @nonnull */ (x)) : string | undefined
+>(x) : string | undefined
+>x : string | undefined
+>toUpperCase : () => string
+}
+
+
+=== file5.js ===
+/**
+ * @nonnull
+ * @type {string}
+ */
+export const var5;
+>var5 : string
+
+const p5 = Promise.resolve(true);
+>p5 : Promise<boolean>
+>Promise.resolve(true) : Promise<boolean>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>true : true
+
+p5.then(() => {
+>p5.then(() => {    var5 = "hello!";}) : Promise<void>
+>p5.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>p5 : Promise<boolean>
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>() => {    var5 = "hello!";} : () => void
+
+    var5 = "hello!";
+>var5 = "hello!" : "hello!"
+>var5 : any
+>"hello!" : "hello!"
+
+});
+p5.then(() => {
+>p5.then(() => {    return var5.toUpperCase();}) : Promise<string>
+>p5.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>p5 : Promise<boolean>
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>() => {    return var5.toUpperCase();} : () => string
+
+    return var5.toUpperCase();
+>var5.toUpperCase() : string
+>var5.toUpperCase : () => string
+>var5 : string
+>toUpperCase : () => string
+
+});
+
+
+=== file6.js ===
+/**
+ * @nonnull
+ * @type {string | undefined}
+ */
+export const var6;
+>var6 : string | undefined
+
+const p6 = Promise.resolve(true);
+>p6 : Promise<boolean>
+>Promise.resolve(true) : Promise<boolean>
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
+>true : true
+
+p6.then(() => {
+>p6.then(() => {    var6 = "hello!";}) : Promise<void>
+>p6.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>p6 : Promise<boolean>
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>() => {    var6 = "hello!";} : () => void
+
+    var6 = "hello!";
+>var6 = "hello!" : "hello!"
+>var6 : any
+>"hello!" : "hello!"
+
+});
+p6.then(() => {
+>p6.then(() => {    return var5.toUpperCase();}) : Promise<any>
+>p6.then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>p6 : Promise<boolean>
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>() => {    return var5.toUpperCase();} : () => any
+
+    return var5.toUpperCase();
+>var5.toUpperCase() : any
+>var5.toUpperCase : any
+>var5 : any
+>toUpperCase : any
+
+});
+
+
+=== file7.js ===
+/**
+ * @nonnull
+ * @type {string | undefined}
+ */
+export class Class7 {
+>Class7 : Class7
+
+    /**
+     * @nonnull
+     * @type {string}
+     */
+    abc;
+>abc : string
+
+    /**
+     * @param {string} abc
+     */
+    constructor(abc) {
+>abc : string
+
+        this.abc = abc;
+>this.abc = abc : string
+>this.abc : string
+>this : this
+>abc : string
+>abc : string
+    }
+}
+
+
+=== file8.js ===
+/**
+ * @nonnull
+ * @type {string | undefined}
+ */
+export class Class8 {
+>Class8 : Class8
+
+    /**
+     * @param {string} abc
+     */
+    constructor(abc) {
+>abc : string
+
+        /** @private */
+        this.abc = abc;
+>this.abc = abc : string
+>this.abc : any
+>this : this
+>abc : any
+>abc : string
+    }
+}
+
+
+=== file9.js ===
+/** @type {() => string | null} */
+export const tryGetString9 = () => {
+>tryGetString9 : () => string | null
+>() => {    throw "Not implemented!";} : () => string | null
+
+    throw "Not implemented!";
+>"Not implemented!" : "Not implemented!"
+}
+
+/** @nonull */
+export const someString9 = tryGetString9();
+>someString9 : string | null
+>tryGetString9() : string | null
+>tryGetString9 : () => string | null
+
+

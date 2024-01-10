@@ -1,0 +1,194 @@
+//// [tests/cases/conformance/jsdoc/jsdocNonNullTag.ts] ////
+
+=== file1.js ===
+/** @type {(x: string | null | undefined) => string} */
+export function fn1(x) {
+>fn1 : Symbol(fn1, Decl(file1.js, 0, 0))
+>x : Symbol(x, Decl(file1.js, 1, 20))
+
+    const nonNulledX = /** @nonnull */ (x);
+>nonNulledX : Symbol(nonNulledX, Decl(file1.js, 2, 9))
+>x : Symbol(x, Decl(file1.js, 1, 20))
+
+    return nonNulledX.toUpperCase();
+>nonNulledX.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>nonNulledX : Symbol(nonNulledX, Decl(file1.js, 2, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+
+
+=== file2.js ===
+/** @type {(x: string | null | undefined) => string} */
+export function fn2(x) {
+>fn2 : Symbol(fn2, Decl(file2.js, 0, 0))
+>x : Symbol(x, Decl(file2.js, 1, 20))
+
+    return (/** @nonnull */ (x)).toUpperCase();
+>(/** @nonnull */ (x)).toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(file2.js, 1, 20))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+
+
+=== file3.js ===
+/** @type {(x: string | null) => string} */
+export function fn3(x) {
+>fn3 : Symbol(fn3, Decl(file3.js, 0, 0))
+>x : Symbol(x, Decl(file3.js, 1, 20))
+
+    return (/** @nonnull */ (x)).toUpperCase();
+>(/** @nonnull */ (x)).toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(file3.js, 1, 20))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+
+
+=== file4.js ===
+/** @type {(x: string | undefined) => string} */
+export function fn4(x) {
+>fn4 : Symbol(fn4, Decl(file4.js, 0, 0))
+>x : Symbol(x, Decl(file4.js, 1, 20))
+
+    return (/** @nonnull */ (x)).toUpperCase();
+>(/** @nonnull */ (x)).toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(file4.js, 1, 20))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+
+
+=== file5.js ===
+/**
+ * @nonnull
+ * @type {string}
+ */
+export const var5;
+>var5 : Symbol(var5, Decl(file5.js, 4, 12))
+
+const p5 = Promise.resolve(true);
+>p5 : Symbol(p5, Decl(file5.js, 6, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+p5.then(() => {
+>p5.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p5 : Symbol(p5, Decl(file5.js, 6, 5))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+    var5 = "hello!";
+>var5 : Symbol(var5, Decl(file5.js, 4, 12))
+
+});
+p5.then(() => {
+>p5.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p5 : Symbol(p5, Decl(file5.js, 6, 5))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+    return var5.toUpperCase();
+>var5.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>var5 : Symbol(var5, Decl(file5.js, 4, 12))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+});
+
+
+=== file6.js ===
+/**
+ * @nonnull
+ * @type {string | undefined}
+ */
+export const var6;
+>var6 : Symbol(var6, Decl(file6.js, 4, 12))
+
+const p6 = Promise.resolve(true);
+>p6 : Symbol(p6, Decl(file6.js, 6, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+p6.then(() => {
+>p6.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p6 : Symbol(p6, Decl(file6.js, 6, 5))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+    var6 = "hello!";
+>var6 : Symbol(var6, Decl(file6.js, 4, 12))
+
+});
+p6.then(() => {
+>p6.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>p6 : Symbol(p6, Decl(file6.js, 6, 5))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+
+    return var5.toUpperCase();
+});
+
+
+=== file7.js ===
+/**
+ * @nonnull
+ * @type {string | undefined}
+ */
+export class Class7 {
+>Class7 : Symbol(Class7, Decl(file7.js, 0, 0))
+
+    /**
+     * @nonnull
+     * @type {string}
+     */
+    abc;
+>abc : Symbol(Class7.abc, Decl(file7.js, 4, 21))
+
+    /**
+     * @param {string} abc
+     */
+    constructor(abc) {
+>abc : Symbol(abc, Decl(file7.js, 14, 16))
+
+        this.abc = abc;
+>this.abc : Symbol(Class7.abc, Decl(file7.js, 4, 21))
+>this : Symbol(Class7, Decl(file7.js, 0, 0))
+>abc : Symbol(Class7.abc, Decl(file7.js, 4, 21))
+>abc : Symbol(abc, Decl(file7.js, 14, 16))
+    }
+}
+
+
+=== file8.js ===
+/**
+ * @nonnull
+ * @type {string | undefined}
+ */
+export class Class8 {
+>Class8 : Symbol(Class8, Decl(file8.js, 0, 0))
+
+    /**
+     * @param {string} abc
+     */
+    constructor(abc) {
+>abc : Symbol(abc, Decl(file8.js, 8, 16))
+
+        /** @private */
+        this.abc = abc;
+>this.abc : Symbol(Class8.abc, Decl(file8.js, 8, 22))
+>this : Symbol(Class8, Decl(file8.js, 0, 0))
+>abc : Symbol(Class8.abc, Decl(file8.js, 8, 22))
+>abc : Symbol(abc, Decl(file8.js, 8, 16))
+    }
+}
+
+
+=== file9.js ===
+/** @type {() => string | null} */
+export const tryGetString9 = () => {
+>tryGetString9 : Symbol(tryGetString9, Decl(file9.js, 1, 12))
+
+    throw "Not implemented!";
+}
+
+/** @nonull */
+export const someString9 = tryGetString9();
+>someString9 : Symbol(someString9, Decl(file9.js, 6, 12))
+>tryGetString9 : Symbol(tryGetString9, Decl(file9.js, 1, 12))
+
+
