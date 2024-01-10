@@ -10074,6 +10074,7 @@ export interface UserPreferences {
     readonly organizeImportsNumericCollation?: boolean;
     readonly organizeImportsAccentCollation?: boolean;
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+    readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
     readonly excludeLibrarySymbolsInNavTo?: boolean;
 }
 
