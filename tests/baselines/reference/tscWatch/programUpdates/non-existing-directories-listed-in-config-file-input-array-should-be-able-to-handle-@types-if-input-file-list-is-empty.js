@@ -43,6 +43,11 @@ Output::
 
 
 
+
+FsWatches::
+/a/tsconfig.json: *new*
+  {}
+
 Program root files: []
 Program options: {
   "watch": true,
@@ -56,9 +61,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-FsWatches::
-/a/tsconfig.json: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-

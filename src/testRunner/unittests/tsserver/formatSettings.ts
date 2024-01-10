@@ -1,14 +1,11 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -21,7 +18,7 @@ describe("unittests:: tsserver:: formatSettings", () => {
             content: "let x;",
         };
         const host = createServerHost([f1]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([f1], session);
 
         const defaultSettings = session.getProjectService().getFormatCodeOptions(f1.path as ts.server.NormalizedPath);

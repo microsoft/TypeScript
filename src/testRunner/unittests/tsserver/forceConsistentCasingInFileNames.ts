@@ -1,6 +1,3 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
@@ -8,9 +5,9 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createSession,
     openFilesForSession,
     protocolTextSpanFromSubstring,
+    TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
@@ -51,7 +48,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         };
 
         const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         openFilesForSession([file1], session);
         session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
@@ -80,7 +77,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         };
 
         const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([{ file: loggerFile, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, files: [loggerFile] });
 
@@ -129,7 +126,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         };
 
         const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([{ file: anotherFile, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, files: [anotherFile] });
 

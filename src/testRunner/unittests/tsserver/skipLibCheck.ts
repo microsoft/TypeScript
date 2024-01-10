@@ -1,15 +1,12 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     jsonToReadableText,
 } from "../helpers";
 import {
     baselineTsserverLogs,
-    createSession,
     openExternalProjectForSession,
     openFilesForSession,
+    TestSession,
     toExternalFiles,
 } from "../helpers/tsserver";
 import {
@@ -35,7 +32,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
                 };`,
         };
         const host = createServerHost([file1, file2]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1, file2], session);
 
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
@@ -77,7 +74,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
                 };`,
         };
         const host = createServerHost([jsFile, dTsFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         openExternalProjectForSession({
             projectFileName: "project1",
@@ -108,7 +105,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
                 };`,
         };
         const host = createServerHost([jsFile, dTsFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         openExternalProjectForSession({
             projectFileName: "project1",
@@ -143,7 +140,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
                 declare var x: string;`,
         };
         const host = createServerHost([jsconfigFile, jsFile, dTsFile1, dTsFile2]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([jsFile], session);
 
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
@@ -168,7 +165,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         };
 
         const host = createServerHost([jsFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([jsFile], session);
 
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
@@ -194,7 +191,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         };
 
         const host = createServerHost([jsconfigFile, jsFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([jsFile], session);
 
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
@@ -221,7 +218,7 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         };
 
         const host = createServerHost([jsconfigFile, jsFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([jsFile], session);
 
         session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({

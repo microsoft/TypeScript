@@ -5,6 +5,7 @@ import {
     ArrayBindingElement,
     ArrayBindingOrAssignmentElement,
     ArrayBindingOrAssignmentPattern,
+    ArrowFunction,
     AssertionExpression,
     AssignmentDeclarationKind,
     AssignmentPattern,
@@ -67,6 +68,7 @@ import {
     ForInitializer,
     ForInOrOfStatement,
     FunctionBody,
+    FunctionExpression,
     FunctionLikeDeclaration,
     FunctionTypeNode,
     GeneratedIdentifier,
@@ -126,6 +128,7 @@ import {
     isExportSpecifier,
     isFunctionBlock,
     isFunctionExpression,
+    isFunctionExpressionOrArrowFunction,
     isFunctionTypeNode,
     isIdentifier,
     isImportSpecifier,
@@ -1938,8 +1941,8 @@ export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAcc
 }
 
 /** @internal */
-export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | SignatureDeclaration {
-    return isCallLikeExpression(node) || isFunctionLike(node);
+export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | FunctionExpression | ArrowFunction {
+    return isCallLikeExpression(node) || isFunctionExpressionOrArrowFunction(node);
 }
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {

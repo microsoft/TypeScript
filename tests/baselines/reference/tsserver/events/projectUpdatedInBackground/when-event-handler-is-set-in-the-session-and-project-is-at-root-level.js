@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/project/file1.ts]
 import a from "file2"
@@ -183,6 +183,10 @@ Before running Timeout callback:: count: 2
 //// [/a/b/project/file3.ts]
 export class c { }export class d {}
 
+
+Timeout callback:: count: 2
+1: /a/b/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/project/tsconfig.json

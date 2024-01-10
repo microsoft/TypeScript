@@ -47,46 +47,6 @@ Output::
 
 
 
-Program root files: [
-  "/a.ts",
-  "/b.ts",
-  "/a/lib/lib.d.ts"
-]
-Program options: {
-  "target": 2,
-  "importsNotUsedAsValues": 2,
-  "watch": true,
-  "configFilePath": "/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
-
-No cached semantic diagnostics in the builder::
-
-Shape signatures in builder refreshed for::
-/b.ts (used version)
-/a.ts (used version)
-/a/lib/lib.d.ts (used version)
-
-FsWatches::
-/a.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/b.ts: *new*
-  {}
-/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/b.js]
 export class B {
 }
@@ -154,6 +114,46 @@ export { A };
 
 
 
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/b.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
+Program root files: [
+  "/a.ts",
+  "/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "importsNotUsedAsValues": 2,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/b.ts
+/a.ts
+/a/lib/lib.d.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/b.ts (used version)
+/a.ts (used version)
+/a/lib/lib.d.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Enable experimentalDecorators
 
 Input::
@@ -167,8 +167,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -181,6 +185,26 @@ Output::
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:30 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/b.js] file written with same contents
+//// [/a.js]
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+import './b';
+let A = class A {
+    constructor(p) { }
+};
+A = __decorate([
+    ((_) => { })
+], A);
+export { A };
+
 
 
 
@@ -208,25 +232,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/b.js] file written with same contents
-//// [/a.js]
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-import './b';
-let A = class A {
-    constructor(p) { }
-};
-A = __decorate([
-    ((_) => { })
-], A);
-export { A };
-
-
-
 Change:: Enable emitDecoratorMetadata
 
 Input::
@@ -241,8 +246,12 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -255,6 +264,30 @@ Output::
 [7m [0m [91m    ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/b.js] file written with same contents
+//// [/a.js]
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+import { B } from './b';
+let A = class A {
+    constructor(p) { }
+};
+A = __decorate([
+    ((_) => { }),
+    __metadata("design:paramtypes", [B])
+], A);
+export { A };
+
 
 
 
@@ -282,26 +315,3 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/b.js] file written with same contents
-//// [/a.js]
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-import { B } from './b';
-let A = class A {
-    constructor(p) { }
-};
-A = __decorate([
-    ((_) => { }),
-    __metadata("design:paramtypes", [B])
-], A);
-export { A };
-
-

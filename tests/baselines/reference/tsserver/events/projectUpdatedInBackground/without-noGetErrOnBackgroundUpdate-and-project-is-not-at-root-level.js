@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/rootfolder/otherfolder/a/b/project/file1.ts]
 import a from "file2"
@@ -203,6 +203,10 @@ Before running Timeout callback:: count: 2
 export class c { }export class d {}
 
 
+Timeout callback:: count: 2
+1: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -230,7 +234,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -243,7 +248,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-3: checkOne
+
+Timeout callback:: count: 1
+3: checkOne *new*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
@@ -289,6 +296,10 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/project:
   {}
 
+Timeout callback:: count: 2
+3: checkOne
+6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -329,7 +340,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-7: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /user/username/rootfolder/otherfolder/a/b/project/node_modules:
@@ -357,6 +367,13 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/project:
   {}
 
+Timeout callback:: count: 1
+6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation *deleted*
+7: *ensureProjectForOpenFiles* *new*
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Timeout callback:: count: 1
 7: *ensureProjectForOpenFiles*
 
@@ -377,7 +394,8 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -390,4 +408,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 1
-8: checkOne
+
+Timeout callback:: count: 1
+8: checkOne *new*
+
+Immedidate callback:: count: 0
+1: semanticCheck *deleted*

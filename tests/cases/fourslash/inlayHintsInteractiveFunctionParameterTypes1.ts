@@ -28,6 +28,7 @@
 ////     g<T>(): T
 ////     h?<X, Y>(x: X): Y
 ////     <X, Y>(x: X): Y
+////     [i: string]: number
 //// }) => void
 //// const foo5: F2 = (a) => { }
 
@@ -40,6 +41,11 @@
 ////interface Thing {}
 ////function foo4(callback: (thing: Thing) => void) {}
 ////foo4(p => {})
+
+//// type F4 = (a: {
+////     [i in string]: number
+//// }) => void
+//// const foo5: F4 = (a) => { }
 
 verify.baselineInlayHints(undefined, {
     includeInlayFunctionParameterTypeHints: true,

@@ -1,13 +1,10 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
@@ -43,10 +40,10 @@ import { something } from "something";
             content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, {
+        const session = new TestSession({
+            host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
             useSingleInferredProject: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
         return { host, session, file1, file2, file3, something, configFile };
     }
@@ -105,10 +102,10 @@ import { something } from "something";
         const expectedErrorMessage = "')' expected.";
 
         const host = createServerHost([file1, libFile, configFile]);
-        const session = createSession(host, {
+        const session = new TestSession({
+            host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
             useSingleInferredProject: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
 
         const service = session.getProjectService();
@@ -170,10 +167,10 @@ function fooB() { }`,
             content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, {
+        const session = new TestSession({
+            host,
             serverMode: ts.LanguageServiceMode.PartialSemantic,
             useSingleInferredProject: true,
-            logger: createLoggerWithInMemoryLogs(host),
         });
         openFilesForSession([file1], session);
         baselineTsserverLogs("partialSemanticServer", "should not include referenced files from unopened files", session);
@@ -214,7 +211,7 @@ function fooB() { }`,
             content: "",
         };
         const host = createServerHost([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs, libFile]);
-        const session = createSession(host, { serverMode: ts.LanguageServiceMode.PartialSemantic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
         const service = session.getProjectService();
         openFilesForSession([indexTs], session);
         const project = service.inferredProjects[0];
