@@ -1799,7 +1799,21 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 // position 0 because UTF-8 decode will fail and produce U+FFFD.
                 // If that happens, just issue one error and refuse to try to scan further;
                 // this is likely a binary file that cannot be parsed
-                if (ch === CharacterCodes.replacementCharacter) {
+                let isBinary = ch === CharacterCodes.replacementCharacter;
+                // See if this is an MPEG Transport Stream, where every 188th byte is "G" and the rest is garbage.
+                if (!isBinary && ch === CharacterCodes.G) {
+                    const end = Math.min(text.length, pos + 188);
+                    let i = pos + charSize(ch);
+                    while (i < end) {
+                        const ch = codePointAt(text, i);
+                        if (codePointAt(text, i) === CharacterCodes.replacementCharacter) {
+                            isBinary = true;
+                            break;
+                        }
+                        i += charSize(ch);
+                    }
+                }
+                if (isBinary) {
                     // Jump to the end of the file and fail.
                     error(Diagnostics.File_appears_to_be_binary);
                     pos = end;
