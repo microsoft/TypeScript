@@ -45071,7 +45071,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (getIsolatedModules(compilerOptions) && typeof value === "string" && !isSyntacticallyString(initializer)) {
                 error(
                     initializer,
-                    Diagnostics.A_member_initializer_in_a_enum_declaration_for_a_string_value_must_be_a_string_literal_when_isolatedModules_is_enabled,
+                    Diagnostics.A_string_member_initializer_in_a_enum_declaration_can_only_use_constant_expressions_when_isolatedModules_is_enabled,
                 );
             }
         }

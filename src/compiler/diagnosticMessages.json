@@ -7937,7 +7937,7 @@
         "category": "Error",
         "code": 18054
     },
-    "A member initializer in a enum declaration for a string value must be a string literal when 'isolatedModules' is enabled.": {
+    "A string member initializer in a enum declaration can only use constant expressions when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 18055
     },

@@ -1,4 +1,4 @@
-bad.ts(3,8): error TS18055: A member initializer in a enum declaration for a string value must be a string literal when 'isolatedModules' is enabled.
+bad.ts(3,8): error TS18055: A string member initializer in a enum declaration can only use constant expressions when 'isolatedModules' is enabled.
 
 
 ==== ./helpers.ts (0 errors) ====
@@ -9,7 +9,7 @@ bad.ts(3,8): error TS18055: A member initializer in a enum declaration for a str
     enum A {
        a = `${foo}`
            ~~~~~~~~
-!!! error TS18055: A member initializer in a enum declaration for a string value must be a string literal when 'isolatedModules' is enabled.
+!!! error TS18055: A string member initializer in a enum declaration can only use constant expressions when 'isolatedModules' is enabled.
     }
     
 ==== ./good.ts (0 errors) ====
