@@ -3,6 +3,7 @@ import {
     appendIfUnique,
     arrayIsEqualTo,
     changeAnyExtension,
+    changeFullExtension,
     CharacterCodes,
     combinePaths,
     CommandLineOption,
@@ -41,7 +42,6 @@ import {
     GetCanonicalFileName,
     getCommonSourceDirectory,
     getCompilerOptionValue,
-    getDeclarationEmitExtensionForPath,
     getDirectoryPath,
     GetEffectiveTypeRootsHost,
     getEmitModuleKind,
@@ -913,6 +913,11 @@ export type PackageJsonInfoCacheEntry = PackageJsonInfo | MissingPackageJsonInfo
 /** @internal */
 export function isPackageJsonInfo(entry: PackageJsonInfoCacheEntry | undefined): entry is PackageJsonInfo {
     return !!(entry as PackageJsonInfo | undefined)?.contents;
+}
+
+/** @internal */
+export function isMissingPackageJsonInfo(entry: PackageJsonInfoCacheEntry | undefined): entry is MissingPackageJsonInfo {
+    return !!entry && !(entry as PackageJsonInfo).contents;
 }
 
 export interface PackageJsonInfoCache {
@@ -2286,9 +2291,7 @@ function loadEntrypointsFromExportMap(
                     extensionsToExtensionsArray(extensions),
                     /*excludes*/ undefined,
                     [
-                        isDeclarationFileName(target)
-                            ? replaceFirstStar(target, "**/*")
-                            : changeAnyExtension(replaceFirstStar(target, "**/*"), getDeclarationEmitExtensionForPath(target)),
+                        changeFullExtension(replaceFirstStar(target, "**/*"), ".*"),
                     ],
                 ).forEach(entry => {
                     entrypoints = appendIfUnique(entrypoints, {
