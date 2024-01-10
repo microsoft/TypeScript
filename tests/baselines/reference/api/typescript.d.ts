@@ -2934,7 +2934,7 @@ declare namespace ts {
                  */
                 readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
                 /**
-                 * Indicates where named type-only imports should sort. "inline" sorts imports without regard to if the import is
+                 * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is
                  * type-only.
                  *
                  * Default: `last`
