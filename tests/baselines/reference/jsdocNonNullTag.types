@@ -7,14 +7,14 @@ export function fn1(x) {
 >x : string | null | undefined
 
     const nonNulledX = /** @nonnull */ (x);
->nonNulledX : string | null | undefined
->(x) : string | null | undefined
+>nonNulledX : string
+>(x) : string
 >x : string | null | undefined
 
     return nonNulledX.toUpperCase();
 >nonNulledX.toUpperCase() : string
 >nonNulledX.toUpperCase : () => string
->nonNulledX : string | null | undefined
+>nonNulledX : string
 >toUpperCase : () => string
 }
 
@@ -28,8 +28,8 @@ export function fn2(x) {
     return (/** @nonnull */ (x)).toUpperCase();
 >(/** @nonnull */ (x)).toUpperCase() : string
 >(/** @nonnull */ (x)).toUpperCase : () => string
->(/** @nonnull */ (x)) : string | null | undefined
->(x) : string | null | undefined
+>(/** @nonnull */ (x)) : string
+>(x) : string
 >x : string | null | undefined
 >toUpperCase : () => string
 }
@@ -44,8 +44,8 @@ export function fn3(x) {
     return (/** @nonnull */ (x)).toUpperCase();
 >(/** @nonnull */ (x)).toUpperCase() : string
 >(/** @nonnull */ (x)).toUpperCase : () => string
->(/** @nonnull */ (x)) : string | null
->(x) : string | null
+>(/** @nonnull */ (x)) : string
+>(x) : string
 >x : string | null
 >toUpperCase : () => string
 }
@@ -60,8 +60,8 @@ export function fn4(x) {
     return (/** @nonnull */ (x)).toUpperCase();
 >(/** @nonnull */ (x)).toUpperCase() : string
 >(/** @nonnull */ (x)).toUpperCase : () => string
->(/** @nonnull */ (x)) : string | undefined
->(x) : string | undefined
+>(/** @nonnull */ (x)) : string
+>(x) : string
 >x : string | undefined
 >toUpperCase : () => string
 }

@@ -1,7 +1,3 @@
-file1.js(4,12): error TS18049: 'nonNulledX' is possibly 'null' or 'undefined'.
-file2.js(3,12): error TS2533: Object is possibly 'null' or 'undefined'.
-file3.js(3,12): error TS2531: Object is possibly 'null'.
-file4.js(3,12): error TS2532: Object is possibly 'undefined'.
 file5.js(5,14): error TS1155: 'const' declarations must be initialized.
 file5.js(10,5): error TS2588: Cannot assign to 'var5' because it is a constant.
 file6.js(5,14): error TS1155: 'const' declarations must be initialized.
@@ -9,40 +5,32 @@ file6.js(10,5): error TS2588: Cannot assign to 'var6' because it is a constant.
 file6.js(13,12): error TS2304: Cannot find name 'var5'.
 
 
-==== file1.js (1 errors) ====
+==== file1.js (0 errors) ====
     /** @type {(x: string | null | undefined) => string} */
     export function fn1(x) {
         const nonNulledX = /** @nonnull */ (x);
         return nonNulledX.toUpperCase();
-               ~~~~~~~~~~
-!!! error TS18049: 'nonNulledX' is possibly 'null' or 'undefined'.
     }
     
     
-==== file2.js (1 errors) ====
+==== file2.js (0 errors) ====
     /** @type {(x: string | null | undefined) => string} */
     export function fn2(x) {
         return (/** @nonnull */ (x)).toUpperCase();
-               ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2533: Object is possibly 'null' or 'undefined'.
     }
     
     
-==== file3.js (1 errors) ====
+==== file3.js (0 errors) ====
     /** @type {(x: string | null) => string} */
     export function fn3(x) {
         return (/** @nonnull */ (x)).toUpperCase();
-               ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2531: Object is possibly 'null'.
     }
     
     
-==== file4.js (1 errors) ====
+==== file4.js (0 errors) ====
     /** @type {(x: string | undefined) => string} */
     export function fn4(x) {
         return (/** @nonnull */ (x)).toUpperCase();
-               ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
     }
     
     

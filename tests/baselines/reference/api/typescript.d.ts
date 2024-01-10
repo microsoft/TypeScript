@@ -4534,12 +4534,13 @@ declare namespace ts {
         JSDocPropertyTag = 355,
         JSDocThrowsTag = 356,
         JSDocSatisfiesTag = 357,
-        SyntaxList = 358,
-        NotEmittedStatement = 359,
-        PartiallyEmittedExpression = 360,
-        CommaListExpression = 361,
-        SyntheticReferenceExpression = 362,
-        Count = 363,
+        JSDocNonNullTag = 358,
+        SyntaxList = 359,
+        NotEmittedStatement = 360,
+        PartiallyEmittedExpression = 361,
+        CommaListExpression = 362,
+        SyntheticReferenceExpression = 363,
+        Count = 364,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -4568,9 +4569,9 @@ declare namespace ts {
         LastStatement = 259,
         FirstNode = 166,
         FirstJSDocNode = 316,
-        LastJSDocNode = 357,
+        LastJSDocNode = 358,
         FirstJSDocTagNode = 334,
-        LastJSDocTagNode = 357,
+        LastJSDocTagNode = 358,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -6375,6 +6376,14 @@ declare namespace ts {
     interface JSDocSatisfiesTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocSatisfiesTag;
         readonly typeExpression: JSDocTypeExpression;
+    }
+    /**
+     * NOTE: this is different from {@link JSDocNonNullableType}
+     * which is its own kind of type node. This is a tag that acts
+     * like the `!` postfix operator in TypeScript.
+     */
+    interface JSDocNonNullTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocNonNullTag;
     }
     enum FlowFlags {
         Unreachable = 1,
@@ -8320,6 +8329,8 @@ declare namespace ts {
         updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
         createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
         updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
+        createJSDocNonNullTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocNonNullTag;
+        updateJSDocNonNullTag(node: JSDocNonNullTag, tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocNonNullTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -9068,6 +9079,8 @@ declare namespace ts {
     function getJSDocProtectedTag(node: Node): JSDocProtectedTag | undefined;
     /** Gets the JSDoc protected tag for the node if present */
     function getJSDocReadonlyTag(node: Node): JSDocReadonlyTag | undefined;
+    /** Gets the JSDoc `nonnull` tag for the node if present */
+    function getJSDocNonNullTag(node: Node): JSDocNonNullTag | undefined;
     function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined;
     /** Gets the JSDoc deprecated tag for the node if present */
     function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined;
@@ -9528,6 +9541,7 @@ declare namespace ts {
     function isJSDocPrivateTag(node: Node): node is JSDocPrivateTag;
     function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag;
     function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag;
+    function isJSDocNonNullTag(node: Node): node is JSDocNonNullTag;
     function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag;
     function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag;
     function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag;
