@@ -1801,7 +1801,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 // this is likely a binary file that cannot be parsed
                 let isBinary = ch === CharacterCodes.replacementCharacter;
                 // See if this is an MPEG Transport Stream, where every 188th byte is "G" and the rest is garbage.
-                if (!isBinary && ch === CharacterCodes.G) {
+                if (ch === CharacterCodes.G) {
                     const end = Math.min(text.length, pos + 188);
                     let i = pos + charSize(ch);
                     while (i < end) {
