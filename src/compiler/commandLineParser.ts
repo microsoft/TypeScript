@@ -15,6 +15,7 @@ import {
     CommandLineOptionOfListType,
     CompilerOptions,
     CompilerOptionsValue,
+    computedOptions,
     ConfigFileSpecs,
     containsPath,
     convertToRelativePath,
@@ -103,6 +104,7 @@ import {
     removeTrailingDirectorySeparator,
     returnTrue,
     ScriptTarget,
+    some,
     startsWith,
     StringLiteral,
     SyntaxKind,
@@ -160,9 +162,11 @@ const libEntries: [string, string][] = [
     // Host only
     ["dom", "lib.dom.d.ts"],
     ["dom.iterable", "lib.dom.iterable.d.ts"],
+    ["dom.asynciterable", "lib.dom.asynciterable.d.ts"],
     ["webworker", "lib.webworker.d.ts"],
     ["webworker.importscripts", "lib.webworker.importscripts.d.ts"],
     ["webworker.iterable", "lib.webworker.iterable.d.ts"],
+    ["webworker.asynciterable", "lib.webworker.asynciterable.d.ts"],
     ["scripthost", "lib.scripthost.d.ts"],
     // ES2015 Or ESNext By-feature options
     ["es2015.core", "lib.es2015.core.d.ts"],
@@ -2475,9 +2479,10 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
         ),
         f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), getNormalizedAbsolutePath(f, host.getCurrentDirectory()), getCanonicalFileName),
     );
-    const optionMap = serializeCompilerOptions(configParseResult.options, { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames });
+    const pathOptions = { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames };
+    const optionMap = serializeCompilerOptions(configParseResult.options, pathOptions);
     const watchOptionMap = configParseResult.watchOptions && serializeWatchOptions(configParseResult.watchOptions);
-    const config = {
+    const config: TSConfig & { watchOptions?: object; } = {
         compilerOptions: {
             ...optionMapToObject(optionMap),
             showConfig: undefined,
@@ -2500,6 +2505,19 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
         } : {}),
         compileOnSave: !!configParseResult.compileOnSave ? true : undefined,
     };
+
+    const providedKeys = new Set(optionMap.keys());
+    const impliedCompilerOptions: Record<string, CompilerOptionsValue> = {};
+    for (const option in computedOptions) {
+        if (!providedKeys.has(option) && some(computedOptions[option as keyof typeof computedOptions].dependencies, dep => providedKeys.has(dep))) {
+            const implied = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
+            const defaultValue = computedOptions[option as keyof typeof computedOptions].computeValue({});
+            if (implied !== defaultValue) {
+                impliedCompilerOptions[option] = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
+            }
+        }
+    }
+    assign(config.compilerOptions, optionMapToObject(serializeCompilerOptions(impliedCompilerOptions, pathOptions)));
     return config;
 }
 

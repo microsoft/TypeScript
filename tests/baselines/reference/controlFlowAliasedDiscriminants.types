@@ -376,3 +376,41 @@ type Nested = {
     }    
 }
 
+function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {
+>bindingPatternInParameter : ({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) => void
+>data : any
+>data1 : number | undefined
+>isSuccess : any
+>isSuccess1 : boolean
+
+  const { data: data2, isSuccess: isSuccess2 } = useQuery();
+>data : any
+>data2 : number | undefined
+>isSuccess : any
+>isSuccess2 : boolean
+>useQuery() : UseQueryResult<number>
+>useQuery : () => UseQueryResult<number>
+
+  const areSuccess = isSuccess1 && isSuccess2;
+>areSuccess : boolean
+>isSuccess1 && isSuccess2 : boolean
+>isSuccess1 : boolean
+>isSuccess2 : boolean
+
+  if (areSuccess) {
+>areSuccess : boolean
+
+    data1.toExponential();
+>data1.toExponential() : string
+>data1.toExponential : (fractionDigits?: number | undefined) => string
+>data1 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+    data2.toExponential();
+>data2.toExponential() : string
+>data2.toExponential : (fractionDigits?: number | undefined) => string
+>data2 : number
+>toExponential : (fractionDigits?: number | undefined) => string
+  }
+}
+
