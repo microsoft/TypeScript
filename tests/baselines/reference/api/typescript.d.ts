@@ -7076,6 +7076,7 @@ declare namespace ts {
         Default = "default",
         This = "this",
         InstantiationExpression = "__instantiationExpression",
+        ImportAttributes = "__importAttributes",
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
