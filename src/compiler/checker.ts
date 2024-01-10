@@ -11583,7 +11583,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // to preserve this type. In fact, we need to _prefer_ that type, but it won't
             // be assigned until contextual typing is complete, so we need to defer in
             // cases where contextual typing may take place.
-            if (!links.type && !isParameterOfContextSensitiveSignature(symbol) && !(checkMode !== CheckMode.Normal && checkMode)) {
+            if (!links.type && !isParameterOfContextSensitiveSignature(symbol) && !checkMode) {
                 links.type = type;
             }
             return type;
