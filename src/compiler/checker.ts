@@ -9268,7 +9268,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let exports = arrayFrom(getExportsOfSymbol(symbol).values());
                 const merged = getMergedSymbol(symbol);
                 if (merged !== symbol) {
-                    exports = concatenate(exports, filter(arrayFrom(getExportsOfSymbol(merged).values()), m => !(getSymbolFlags(resolveSymbol(m)) & SymbolFlags.Value)));
+                    const membersSet = new Set(exports);
+                    for (const exported of getExportsOfSymbol(merged).values()) {
+                        if (!(getSymbolFlags(resolveSymbol(exported)) & SymbolFlags.Value)) {
+                            membersSet.add(exported);
+                        }
+                    }
+                    exports = arrayFrom(membersSet);
                 }
                 return filter(exports, m => isNamespaceMember(m) && isIdentifierText(m.escapedName as string, ScriptTarget.ESNext));
             }
