@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/module/importESMPackage.ts] ////
+
+=== /node_modules/dep/index.d.ts ===
+export declare const foo: string;
+>foo : Symbol(foo, Decl(index.d.ts, 0, 20))
+
+=== /index.ts ===
+import dep from "dep"; // Error
+>dep : Symbol(dep, Decl(index.ts, 0, 6))
+
+dep.foo;
+>dep : Symbol(dep, Decl(index.ts, 0, 6))
+

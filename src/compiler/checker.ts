@@ -4083,6 +4083,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // Declaration files (and ambient modules)
         if (!file || file.isDeclarationFile) {
+            // Unambiguously ESM files do not have a synthetic default
+            if (file?.impliedNodeFormat === ModuleKind.ESNext) {
+                return false;
+            }
             // Definitely cannot have a synthetic default if they have a syntactic default member specified
             const defaultExportSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, /*sourceNode*/ undefined, /*dontResolveAlias*/ true); // Dont resolve alias because we want the immediately exported symbol's declaration
             if (defaultExportSymbol && some(defaultExportSymbol.declarations, isSyntacticDefault)) {
