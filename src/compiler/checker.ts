@@ -19689,11 +19689,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 ) {
                                     return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable, t, mapper));
                                 }
-                                if (isGenericTupleType(t)) {
-                                    return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
-                                }
                                 if (isTupleType(t)) {
-                                    return instantiateMappedTupleType(t, type, prependTypeMapping(typeVariable, t, mapper));
+                                    return instantiateMappedTupleType(t, type, typeVariable, mapper);
                                 }
                             }
                             return instantiateAnonymousType(type, prependTypeMapping(typeVariable, t, mapper));
@@ -19713,44 +19710,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return modifiers & MappedTypeModifiers.IncludeReadonly ? true : modifiers & MappedTypeModifiers.ExcludeReadonly ? false : state;
     }
 
-    function instantiateMappedGenericTupleType(tupleType: TupleTypeReference, mappedType: MappedType, typeVariable: TypeVariable, mapper: TypeMapper) {
-        // When a tuple type is generic (i.e. when it contains variadic elements), we want to eagerly map the
-        // non-generic elements and defer mapping the generic elements. In order to facilitate this, we transform
-        // M<[A, B?, ...T, ...C[]] into [...M<[A]>, ...M<[B?]>, ...M<T>, ...M<C[]>] and then rely on tuple type
-        // normalization to resolve the non-generic parts of the resulting tuple.
+    function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, typeVariable: TypeVariable, mapper: TypeMapper) {
+        // We apply the mapped type's template type to each of the fixed part elements. For variadic elements, we
+        // apply the mapped type itself to the variadic element type. For other elements in the variable part of the
+        // tuple, we surround the element type with an array type and apply the mapped type to that. This ensures
+        // that we get sequential property key types ("0", "1", "2", etc.) for the fixed part of the tuple, and
+        // property key type number for the remaining elements.
         const elementFlags = tupleType.target.elementFlags;
-        const elementTypes = map(getElementTypes(tupleType), (t, i) => {
-            const singleton = elementFlags[i] & ElementFlags.Variadic ? t :
-                elementFlags[i] & ElementFlags.Rest ? createArrayType(t) :
-                createTupleType([t], [elementFlags[i]]);
-            // avoid infinite recursion, if the singleton is the type variable itself
-            // then we'd just get back here with the same arguments from within instantiateMappedType
-            if (singleton === typeVariable) {
-                return mappedType;
-            }
-            // The singleton is never a generic tuple type, so it is safe to recurse here.
-            return instantiateMappedType(mappedType, prependTypeMapping(typeVariable, singleton, mapper));
+        const fixedLength = tupleType.target.fixedLength;
+        const fixedMapper = fixedLength ? prependTypeMapping(typeVariable, tupleType, mapper) : mapper;
+        const newElementTypes = map(getElementTypes(tupleType), (type, i) => {
+            const flags = elementFlags[i];
+            return i < fixedLength ? instantiateMappedTypeTemplate(mappedType, getStringLiteralType("" + i), !!(flags & ElementFlags.Optional), fixedMapper) :
+                flags & ElementFlags.Variadic ? instantiateType(mappedType, prependTypeMapping(typeVariable, type, mapper)) :
+                getElementTypeOfArrayType(instantiateType(mappedType, prependTypeMapping(typeVariable, createArrayType(type), mapper))) || unknownType;
         });
+        const modifiers = getMappedTypeModifiers(mappedType);
+        const newElementFlags = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
+            modifiers & MappedTypeModifiers.ExcludeOptional ? map(elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
+            elementFlags;
         const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, getMappedTypeModifiers(mappedType));
-        return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly);
+        return contains(newElementTypes, errorType) ? errorType :
+            createTupleType(newElementTypes, newElementFlags, newReadonly, tupleType.target.labeledElementDeclarations);
     }
 
     function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
         const elementType = instantiateMappedTypeTemplate(mappedType, numberType, /*isOptional*/ true, mapper);
         return isErrorType(elementType) ? errorType :
             createArrayType(elementType, getModifiedReadonlyState(isReadonlyArrayType(arrayType), getMappedTypeModifiers(mappedType)));
-    }
-
-    function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
-        const elementFlags = tupleType.target.elementFlags;
-        const elementTypes = map(getElementTypes(tupleType), (_, i) => instantiateMappedTypeTemplate(mappedType, getStringLiteralType("" + i), !!(elementFlags[i] & ElementFlags.Optional), mapper));
-        const modifiers = getMappedTypeModifiers(mappedType);
-        const newTupleModifiers = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
-            modifiers & MappedTypeModifiers.ExcludeOptional ? map(elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
-            elementFlags;
-        const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, modifiers);
-        return contains(elementTypes, errorType) ? errorType :
-            createTupleType(elementTypes, newTupleModifiers, newReadonly, tupleType.target.labeledElementDeclarations);
     }
 
     function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
