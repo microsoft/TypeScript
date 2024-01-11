@@ -20,13 +20,10 @@ incompatibleTypes.ts(42,5): error TS2769: No overload matches this call.
         Type 'string' is not assignable to type 'number'.
 incompatibleTypes.ts(49,7): error TS2769: No overload matches this call.
   Overload 1 of 2, '(n: { a: { a: string; }; b: string; }): number', gave the following error.
-    Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ a: { a: string; }; b: string; }'.
-      Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
+    Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
   Overload 2 of 2, '(s: { c: { b: string; }; d: string; }): string', gave the following error.
-    Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ c: { b: string; }; d: string; }'.
-      Object literal may only specify known properties, and 'e' does not exist in type '{ c: { b: string; }; d: string; }'.
-incompatibleTypes.ts(66,47): error TS2322: Type '{ e: number; f: number; }' is not assignable to type '{ a: { a: string; }; b: string; }'.
-  Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
+    Object literal may only specify known properties, and 'e' does not exist in type '{ c: { b: string; }; d: string; }'.
+incompatibleTypes.ts(66,47): error TS2353: Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
 incompatibleTypes.ts(72,5): error TS2322: Type 'number' is not assignable to type '() => string'.
 incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) => number' is not assignable to type '() => any'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
@@ -111,11 +108,9 @@ incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) => number' is not assig
           ~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(n: { a: { a: string; }; b: string; }): number', gave the following error.
-!!! error TS2769:     Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ a: { a: string; }; b: string; }'.
-!!! error TS2769:       Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
+!!! error TS2769:     Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
 !!! error TS2769:   Overload 2 of 2, '(s: { c: { b: string; }; d: string; }): string', gave the following error.
-!!! error TS2769:     Argument of type '{ e: number; f: number; }' is not assignable to parameter of type '{ c: { b: string; }; d: string; }'.
-!!! error TS2769:       Object literal may only specify known properties, and 'e' does not exist in type '{ c: { b: string; }; d: string; }'.
+!!! error TS2769:     Object literal may only specify known properties, and 'e' does not exist in type '{ c: { b: string; }; d: string; }'.
 !!! related TS2793 incompatibleTypes.ts:47:10: The call would have succeeded against this implementation, but implementation signatures of overloads are not externally visible.
     
     interface IMap {
@@ -135,8 +130,7 @@ incompatibleTypes.ts(74,5): error TS2322: Type '(a: any) => number' is not assig
     
     var o1: { a: { a: string; }; b: string; } = { e: 0, f: 0 };
                                                   ~
-!!! error TS2322: Type '{ e: number; f: number; }' is not assignable to type '{ a: { a: string; }; b: string; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'e' does not exist in type '{ a: { a: string; }; b: string; }'.
     
     var a1 = [{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }];
     

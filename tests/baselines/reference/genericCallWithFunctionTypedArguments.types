@@ -128,7 +128,7 @@ function other<T, U>(t: T, u: U) {
     var r10 = foo2(1, (x: T) => ''); // error
 >r10 : string
 >foo2(1, (x: T) => '') : string
->foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>foo2 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1) => U_1
 >1 : 1
 >(x: T) => '' : (x: T) => string
 >x : T
@@ -137,7 +137,7 @@ function other<T, U>(t: T, u: U) {
     var r10 = foo2(1, (x) => ''); // string
 >r10 : string
 >foo2(1, (x) => '') : string
->foo2 : <T, U>(x: T, cb: (a: T) => U) => U
+>foo2 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1) => U_1
 >1 : 1
 >(x) => '' : (x: number) => string
 >x : number
@@ -146,7 +146,7 @@ function other<T, U>(t: T, u: U) {
     var r11 = foo3(1, (x: T) => '', ''); // error
 >r11 : string
 >foo3(1, (x: T) => '', '') : string
->foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>foo3 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1, y: U_1) => U_1
 >1 : 1
 >(x: T) => '' : (x: T) => string
 >x : T
@@ -156,7 +156,7 @@ function other<T, U>(t: T, u: U) {
     var r11b = foo3(1, (x: T) => '', 1); // error
 >r11b : string
 >foo3(1, (x: T) => '', 1) : string
->foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>foo3 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1, y: U_1) => U_1
 >1 : 1
 >(x: T) => '' : (x: T) => string
 >x : T
@@ -166,7 +166,7 @@ function other<T, U>(t: T, u: U) {
     var r12 = foo3(1, function (a) { return '' }, 1); // error
 >r12 : number
 >foo3(1, function (a) { return '' }, 1) : 1
->foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
+>foo3 : <T_1, U_1>(x: T_1, cb: (a: T_1) => U_1, y: U_1) => U_1
 >1 : 1
 >function (a) { return '' } : (a: number) => string
 >a : number

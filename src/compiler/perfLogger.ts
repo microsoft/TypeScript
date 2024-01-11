@@ -22,7 +22,6 @@ export interface PerfLogger {
     logStopScheduledOperation(): void;
 }
 
-
 // Load optional module to enable Event Tracing for Windows
 // See https://github.com/microsoft/typescript-etw for more information
 let etwModule: typeof import("@microsoft/typescript-etw") | undefined;

@@ -40,7 +40,7 @@ type SubTup2VariadicAndRest<T extends unknown[]> = T extends [
     : never;
 
 type SubTup2VariadicAndRestTest = SubTup2VariadicAndRest<[a: 0, b: 1, ...c: 2[]]>;
->SubTup2VariadicAndRestTest : [0, 1, 2]
+>SubTup2VariadicAndRestTest : [a: 0, b: 1, 2]
 
 type SubTup2TrailingVariadic<T extends unknown[]> = T extends [
 >SubTup2TrailingVariadic : SubTup2TrailingVariadic<T>
@@ -67,7 +67,7 @@ type SubTup2RestAndTrailingVariadic2<T extends unknown[]> = T extends [
     : never;
 
 type SubTup2RestAndTrailingVariadic2Test = SubTup2RestAndTrailingVariadic2<[...a: 0[], b: 1, c: 2]>;
->SubTup2RestAndTrailingVariadic2Test : [0, 1, 2]
+>SubTup2RestAndTrailingVariadic2Test : [0, b: 1, c: 2]
 
 type SubTup2VariadicWithLeadingFixedElements<T extends unknown[]> = T extends [
 >SubTup2VariadicWithLeadingFixedElements : SubTup2VariadicWithLeadingFixedElements<T>

@@ -3,12 +3,12 @@
 === objectLiteralParameterResolution.ts ===
 interface Foo{
     extend<T>(target: T, ...objs: any[]): T;
->extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>extend : { <T>(target: T, ...objs: any[]): T; <T_1>(deep: boolean, target: T_1, ...objs: any[]): T_1; }
 >target : T
 >objs : any[]
 
     extend<T>(deep: boolean, target: T, ...objs: any[]): T;
->extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>extend : { <T_1>(target: T_1, ...objs: any[]): T_1; <T>(deep: boolean, target: T, ...objs: any[]): T; }
 >deep : boolean
 >target : T
 >objs : any[]
@@ -19,9 +19,9 @@ declare var $: Foo;
 var s = $.extend({
 >s : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
 >$.extend({    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    }, "") : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
->$.extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>$.extend : { <T>(target: T, ...objs: any[]): T; <T_1>(deep: boolean, target: T_1, ...objs: any[]): T_1; }
 >$ : Foo
->extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>extend : { <T>(target: T, ...objs: any[]): T; <T_1>(deep: boolean, target: T_1, ...objs: any[]): T_1; }
 >{    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    } : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: true; timeout: number; }
 
     type: "GET" ,

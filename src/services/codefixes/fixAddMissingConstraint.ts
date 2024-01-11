@@ -76,7 +76,7 @@ registerCodeFix({
                 return undefined;
             });
         }));
-    }
+    },
 });
 
 interface Info {

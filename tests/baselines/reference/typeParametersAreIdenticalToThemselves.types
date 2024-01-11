@@ -4,27 +4,27 @@
 // type parameters from the same declaration are identical to themself
 
 function foo1<T>(x: T);
->foo1 : { <T>(x: T): any; <T>(x: T): any; }
+>foo1 : { <T>(x: T): any; <T_1>(x: T_1): any; }
 >x : T
 
 function foo1<T>(x: T); // no error, different declaration for each T
->foo1 : { <T>(x: T): any; <T>(x: T): any; }
+>foo1 : { <T_1>(x: T_1): any; <T>(x: T): any; }
 >x : T
 
 function foo1<T>(x: T) { }
->foo1 : { <T>(x: T): any; <T>(x: T): any; }
+>foo1 : { <T_1>(x: T_1): any; <T_2>(x: T_2): any; }
 >x : T
 
 function foo2<T, U>(x: T);
->foo2 : { <T, U>(x: T): any; <T, U>(x: T): any; }
+>foo2 : { <T, U>(x: T): any; <T_1, U_1>(x: T_1): any; }
 >x : T
 
 function foo2<T, U>(x: T); // no error, different declaration for each T
->foo2 : { <T, U>(x: T): any; <T, U>(x: T): any; }
+>foo2 : { <T_1, U_1>(x: T_1): any; <T, U>(x: T): any; }
 >x : T
 
 function foo2<T, U>(x: T) { }
->foo2 : { <T, U>(x: T): any; <T, U>(x: T): any; }
+>foo2 : { <T_1, U_1>(x: T_1): any; <T_2, U_2>(x: T_2): any; }
 >x : T
 
 function foo3<T, U>(x: T, y: U) {
@@ -45,15 +45,15 @@ function foo3<T, U>(x: T, y: U) {
 >x : T
 
     function inner2(x: T);
->inner2 : { (x: T): any; <T>(x: T): any; }
+>inner2 : { (x: T): any; <T_1>(x: T_1): any; }
 >x : T
 
     function inner2<T>(x: T); // no error, different T
->inner2 : { (x: T): any; <T>(x: T): any; }
+>inner2 : { (x: T): any; <T_1>(x: T_1): any; }
 >x : T
 
     function inner2(x: any) { }
->inner2 : { (x: T): any; <T>(x: T): any; }
+>inner2 : { (x: T): any; <T_1>(x: T_1): any; }
 >x : any
 }
 
@@ -73,42 +73,42 @@ class C<T> {
 >x : T
 
     foo2<U>(a: T, x: U);
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U>(a: T, x: U): any; <U_1>(a: T, x: U_1): any; }
 >a : T
 >x : U
 
     foo2<U>(a: T, x: U); // no error, different declaration for each U
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U_1>(a: T, x: U_1): any; <U>(a: T, x: U): any; }
 >a : T
 >x : U
 
     foo2<U>(a: T, x: U) { }
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U_1>(a: T, x: U_1): any; <U_2>(a: T, x: U_2): any; }
 >a : T
 >x : U
 
     foo3<T>(x: T);
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T>(x: T): any; <T_1>(x: T_1): any; }
 >x : T
 
     foo3<T>(x: T); // no error, different declaration for each T
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T_1>(x: T_1): any; <T>(x: T): any; }
 >x : T
 
     foo3<T>(x: T) { }
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T_1>(x: T_1): any; <T_2>(x: T_2): any; }
 >x : T
 
     foo4<T extends Date>(x: T);
->foo4 : { <T extends Date>(x: T): any; <T extends Date>(x: T): any; }
+>foo4 : { <T extends Date>(x: T): any; <T_1 extends Date>(x: T_1): any; }
 >x : T
 
     foo4<T extends Date>(x: T); // no error, different declaration for each T
->foo4 : { <T extends Date>(x: T): any; <T extends Date>(x: T): any; }
+>foo4 : { <T_1 extends Date>(x: T_1): any; <T extends Date>(x: T): any; }
 >x : T
 
     foo4<T extends Date>(x: T) { }
->foo4 : { <T extends Date>(x: T): any; <T extends Date>(x: T): any; }
+>foo4 : { <T_1 extends Date>(x: T_1): any; <T_2 extends Date>(x: T_2): any; }
 >x : T
 }
 
@@ -128,30 +128,30 @@ class C2<T extends Date> {
 >x : T
 
     foo2<U>(a: T, x: U);
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U>(a: T, x: U): any; <U_1>(a: T, x: U_1): any; }
 >a : T
 >x : U
 
     foo2<U>(a: T, x: U); // no error, different declaration for each U
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U_1>(a: T, x: U_1): any; <U>(a: T, x: U): any; }
 >a : T
 >x : U
 
     foo2<U>(a: T, x: U) { }
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U_1>(a: T, x: U_1): any; <U_2>(a: T, x: U_2): any; }
 >a : T
 >x : U
 
     foo3<T>(x: T);
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T>(x: T): any; <T_1>(x: T_1): any; }
 >x : T
 
     foo3<T>(x: T); // no error, different declaration for each T
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T_1>(x: T_1): any; <T>(x: T): any; }
 >x : T
 
     foo3<T>(x: T) { }
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T_1>(x: T_1): any; <T_2>(x: T_2): any; }
 >x : T
 }
 
@@ -165,29 +165,29 @@ interface I<T> {
 >x : T
 
     foo2<U>(a: T, x: U);
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U>(a: T, x: U): any; <U_1>(a: T, x: U_1): any; }
 >a : T
 >x : U
 
     foo2<U>(a: T, x: U); // no error, different declaration for each U
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U_1>(a: T, x: U_1): any; <U>(a: T, x: U): any; }
 >a : T
 >x : U
 
     foo3<T>(x: T);
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T>(x: T): any; <T_1>(x: T_1): any; }
 >x : T
 
     foo3<T>(x: T); // no error, different declaration for each T
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T_1>(x: T_1): any; <T>(x: T): any; }
 >x : T
 
     foo4<T extends Date>(x: T);
->foo4 : { <T extends Date>(x: T): any; <T extends Date>(x: T): any; }
+>foo4 : { <T extends Date>(x: T): any; <T_1 extends Date>(x: T_1): any; }
 >x : T
 
     foo4<T extends Date>(x: T); // no error, different declaration for each T
->foo4 : { <T extends Date>(x: T): any; <T extends Date>(x: T): any; }
+>foo4 : { <T_1 extends Date>(x: T_1): any; <T extends Date>(x: T): any; }
 >x : T
 }
 
@@ -201,20 +201,20 @@ interface I2<T extends Date> {
 >x : T
 
     foo2<U>(a: T, x: U);
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U>(a: T, x: U): any; <U_1>(a: T, x: U_1): any; }
 >a : T
 >x : U
 
     foo2<U>(a: T, x: U); // no error, different declaration for each U
->foo2 : { <U>(a: T, x: U): any; <U>(a: T, x: U): any; }
+>foo2 : { <U_1>(a: T, x: U_1): any; <U>(a: T, x: U): any; }
 >a : T
 >x : U
 
     foo3<T>(x: T);
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T>(x: T): any; <T_1>(x: T_1): any; }
 >x : T
 
     foo3<T>(x: T); // no error, different declaration for each T
->foo3 : { <T>(x: T): any; <T>(x: T): any; }
+>foo3 : { <T_1>(x: T_1): any; <T>(x: T): any; }
 >x : T
 }

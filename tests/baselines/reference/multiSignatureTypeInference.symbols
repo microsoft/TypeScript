@@ -1,0 +1,203 @@
+//// [tests/cases/compiler/multiSignatureTypeInference.ts] ////
+
+=== multiSignatureTypeInference.ts ===
+declare function f1(arg: boolean): string;
+>f1 : Symbol(f1, Decl(multiSignatureTypeInference.ts, 0, 0), Decl(multiSignatureTypeInference.ts, 0, 42), Decl(multiSignatureTypeInference.ts, 1, 56))
+>arg : Symbol(arg, Decl(multiSignatureTypeInference.ts, 0, 20))
+
+declare function f1(arg1: number, arg2: number): number;
+>f1 : Symbol(f1, Decl(multiSignatureTypeInference.ts, 0, 0), Decl(multiSignatureTypeInference.ts, 0, 42), Decl(multiSignatureTypeInference.ts, 1, 56))
+>arg1 : Symbol(arg1, Decl(multiSignatureTypeInference.ts, 1, 20))
+>arg2 : Symbol(arg2, Decl(multiSignatureTypeInference.ts, 1, 33))
+
+declare function f1(...args: string[]): string[];
+>f1 : Symbol(f1, Decl(multiSignatureTypeInference.ts, 0, 0), Decl(multiSignatureTypeInference.ts, 0, 42), Decl(multiSignatureTypeInference.ts, 1, 56))
+>args : Symbol(args, Decl(multiSignatureTypeInference.ts, 2, 20))
+
+declare function f2(arg: unknown): unknown;
+>f2 : Symbol(f2, Decl(multiSignatureTypeInference.ts, 2, 49))
+>arg : Symbol(arg, Decl(multiSignatureTypeInference.ts, 4, 20))
+
+declare function f3(): string;
+>f3 : Symbol(f3, Decl(multiSignatureTypeInference.ts, 4, 43))
+
+type AllParams<T> =
+>AllParams : Symbol(AllParams, Decl(multiSignatureTypeInference.ts, 6, 30))
+>T : Symbol(T, Decl(multiSignatureTypeInference.ts, 8, 15))
+
+    T extends { (...a: infer A1): any, (...a: infer A2): any, (...a: infer A3): any, (...a: infer A4): any } ? A1 | A2 | A3 | A4 : never;
+>T : Symbol(T, Decl(multiSignatureTypeInference.ts, 8, 15))
+>a : Symbol(a, Decl(multiSignatureTypeInference.ts, 9, 17))
+>A1 : Symbol(A1, Decl(multiSignatureTypeInference.ts, 9, 28))
+>a : Symbol(a, Decl(multiSignatureTypeInference.ts, 9, 40))
+>A2 : Symbol(A2, Decl(multiSignatureTypeInference.ts, 9, 51))
+>a : Symbol(a, Decl(multiSignatureTypeInference.ts, 9, 63))
+>A3 : Symbol(A3, Decl(multiSignatureTypeInference.ts, 9, 74))
+>a : Symbol(a, Decl(multiSignatureTypeInference.ts, 9, 86))
+>A4 : Symbol(A4, Decl(multiSignatureTypeInference.ts, 9, 97))
+>A1 : Symbol(A1, Decl(multiSignatureTypeInference.ts, 9, 28))
+>A2 : Symbol(A2, Decl(multiSignatureTypeInference.ts, 9, 51))
+>A3 : Symbol(A3, Decl(multiSignatureTypeInference.ts, 9, 74))
+>A4 : Symbol(A4, Decl(multiSignatureTypeInference.ts, 9, 97))
+
+type AllReturns<T> =
+>AllReturns : Symbol(AllReturns, Decl(multiSignatureTypeInference.ts, 9, 137))
+>T : Symbol(T, Decl(multiSignatureTypeInference.ts, 11, 16))
+
+    T extends { (...a: any[]): infer R1, (...a: any[]): infer R2, (...a: any[]): infer R3, (...a: any[]): infer R4 } ? R1 | R2 | R3 | R4 : never;
+>T : Symbol(T, Decl(multiSignatureTypeInference.ts, 11, 16))
+>a : Symbol(a, Decl(multiSignatureTypeInference.ts, 12, 17))
+>R1 : Symbol(R1, Decl(multiSignatureTypeInference.ts, 12, 36))
+>a : Symbol(a, Decl(multiSignatureTypeInference.ts, 12, 42))
+>R2 : Symbol(R2, Decl(multiSignatureTypeInference.ts, 12, 61))
+>a : Symbol(a, Decl(multiSignatureTypeInference.ts, 12, 67))
+>R3 : Symbol(R3, Decl(multiSignatureTypeInference.ts, 12, 86))
+>a : Symbol(a, Decl(multiSignatureTypeInference.ts, 12, 92))
+>R4 : Symbol(R4, Decl(multiSignatureTypeInference.ts, 12, 111))
+>R1 : Symbol(R1, Decl(multiSignatureTypeInference.ts, 12, 36))
+>R2 : Symbol(R2, Decl(multiSignatureTypeInference.ts, 12, 61))
+>R3 : Symbol(R3, Decl(multiSignatureTypeInference.ts, 12, 86))
+>R4 : Symbol(R4, Decl(multiSignatureTypeInference.ts, 12, 111))
+
+type Params1 = AllParams<typeof f1>;  // string[] | [arg: boolean] | [arg1: number, arg2: number]
+>Params1 : Symbol(Params1, Decl(multiSignatureTypeInference.ts, 12, 145))
+>AllParams : Symbol(AllParams, Decl(multiSignatureTypeInference.ts, 6, 30))
+>f1 : Symbol(f1, Decl(multiSignatureTypeInference.ts, 0, 0), Decl(multiSignatureTypeInference.ts, 0, 42), Decl(multiSignatureTypeInference.ts, 1, 56))
+
+type Params2 = AllParams<typeof f2>;  // [arg: unknown]
+>Params2 : Symbol(Params2, Decl(multiSignatureTypeInference.ts, 14, 36))
+>AllParams : Symbol(AllParams, Decl(multiSignatureTypeInference.ts, 6, 30))
+>f2 : Symbol(f2, Decl(multiSignatureTypeInference.ts, 2, 49))
+
+type Params3 = AllParams<typeof f3>;  // []
+>Params3 : Symbol(Params3, Decl(multiSignatureTypeInference.ts, 15, 36))
+>AllParams : Symbol(AllParams, Decl(multiSignatureTypeInference.ts, 6, 30))
+>f3 : Symbol(f3, Decl(multiSignatureTypeInference.ts, 4, 43))
+
+type Returns1 = AllReturns<typeof f1>  // string | number | string[]
+>Returns1 : Symbol(Returns1, Decl(multiSignatureTypeInference.ts, 16, 36))
+>AllReturns : Symbol(AllReturns, Decl(multiSignatureTypeInference.ts, 9, 137))
+>f1 : Symbol(f1, Decl(multiSignatureTypeInference.ts, 0, 0), Decl(multiSignatureTypeInference.ts, 0, 42), Decl(multiSignatureTypeInference.ts, 1, 56))
+
+type Returns2 = AllReturns<typeof f2>;  // unknown
+>Returns2 : Symbol(Returns2, Decl(multiSignatureTypeInference.ts, 18, 37))
+>AllReturns : Symbol(AllReturns, Decl(multiSignatureTypeInference.ts, 9, 137))
+>f2 : Symbol(f2, Decl(multiSignatureTypeInference.ts, 2, 49))
+
+type Returns3 = AllReturns<typeof f3>;  // string
+>Returns3 : Symbol(Returns3, Decl(multiSignatureTypeInference.ts, 19, 38))
+>AllReturns : Symbol(AllReturns, Decl(multiSignatureTypeInference.ts, 9, 137))
+>f3 : Symbol(f3, Decl(multiSignatureTypeInference.ts, 4, 43))
+
+// Repro from #28867
+
+type InferTwoOverloads<F extends Function> = 
+>InferTwoOverloads : Symbol(InferTwoOverloads, Decl(multiSignatureTypeInference.ts, 20, 38))
+>F : Symbol(F, Decl(multiSignatureTypeInference.ts, 24, 23))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  F extends { (...a1: infer A1): infer R1, (...a0: infer A0): infer R0 } ? 
+>F : Symbol(F, Decl(multiSignatureTypeInference.ts, 24, 23))
+>a1 : Symbol(a1, Decl(multiSignatureTypeInference.ts, 25, 15))
+>A1 : Symbol(A1, Decl(multiSignatureTypeInference.ts, 25, 27))
+>R1 : Symbol(R1, Decl(multiSignatureTypeInference.ts, 25, 38))
+>a0 : Symbol(a0, Decl(multiSignatureTypeInference.ts, 25, 44))
+>A0 : Symbol(A0, Decl(multiSignatureTypeInference.ts, 25, 56))
+>R0 : Symbol(R0, Decl(multiSignatureTypeInference.ts, 25, 67))
+
+    [(...a1: A1) => R1, (...a0: A0) => R0] : 
+>a1 : Symbol(a1, Decl(multiSignatureTypeInference.ts, 26, 6))
+>A1 : Symbol(A1, Decl(multiSignatureTypeInference.ts, 25, 27))
+>R1 : Symbol(R1, Decl(multiSignatureTypeInference.ts, 25, 38))
+>a0 : Symbol(a0, Decl(multiSignatureTypeInference.ts, 26, 25))
+>A0 : Symbol(A0, Decl(multiSignatureTypeInference.ts, 25, 56))
+>R0 : Symbol(R0, Decl(multiSignatureTypeInference.ts, 25, 67))
+
+    never;
+
+type Expected = InferTwoOverloads<((x: string) => number) & (() => string)>;  // [(x: string) => number, () => string]    
+>Expected : Symbol(Expected, Decl(multiSignatureTypeInference.ts, 27, 10))
+>InferTwoOverloads : Symbol(InferTwoOverloads, Decl(multiSignatureTypeInference.ts, 20, 38))
+>x : Symbol(x, Decl(multiSignatureTypeInference.ts, 29, 36))
+
+type JustOneSignature = InferTwoOverloads<((x: string) => number)>;  // [(x: string) => number, (x: string) => number]
+>JustOneSignature : Symbol(JustOneSignature, Decl(multiSignatureTypeInference.ts, 29, 76))
+>InferTwoOverloads : Symbol(InferTwoOverloads, Decl(multiSignatureTypeInference.ts, 20, 38))
+>x : Symbol(x, Decl(multiSignatureTypeInference.ts, 31, 44))
+
+type JustTheOtherSignature = InferTwoOverloads<(() => string)>;  // [() => string, () => string]
+>JustTheOtherSignature : Symbol(JustTheOtherSignature, Decl(multiSignatureTypeInference.ts, 31, 67))
+>InferTwoOverloads : Symbol(InferTwoOverloads, Decl(multiSignatureTypeInference.ts, 20, 38))
+
+// Repro from #28867
+
+type Overloads<F> =
+>Overloads : Symbol(Overloads, Decl(multiSignatureTypeInference.ts, 33, 63))
+>F : Symbol(F, Decl(multiSignatureTypeInference.ts, 37, 15))
+
+    F extends {
+>F : Symbol(F, Decl(multiSignatureTypeInference.ts, 37, 15))
+
+          (...args: infer A1): infer R1
+>args : Symbol(args, Decl(multiSignatureTypeInference.ts, 39, 11))
+>A1 : Symbol(A1, Decl(multiSignatureTypeInference.ts, 39, 25))
+>R1 : Symbol(R1, Decl(multiSignatureTypeInference.ts, 39, 36))
+
+          (...args: infer A2): infer R2;
+>args : Symbol(args, Decl(multiSignatureTypeInference.ts, 40, 11))
+>A2 : Symbol(A2, Decl(multiSignatureTypeInference.ts, 40, 25))
+>R2 : Symbol(R2, Decl(multiSignatureTypeInference.ts, 40, 36))
+
+      } ? {rule: 2, variants: [A1, R1] | [A2, R2]} :
+>rule : Symbol(rule, Decl(multiSignatureTypeInference.ts, 41, 11))
+>variants : Symbol(variants, Decl(multiSignatureTypeInference.ts, 41, 19))
+>A1 : Symbol(A1, Decl(multiSignatureTypeInference.ts, 39, 25))
+>R1 : Symbol(R1, Decl(multiSignatureTypeInference.ts, 39, 36))
+>A2 : Symbol(A2, Decl(multiSignatureTypeInference.ts, 40, 25))
+>R2 : Symbol(R2, Decl(multiSignatureTypeInference.ts, 40, 36))
+
+    F extends {
+>F : Symbol(F, Decl(multiSignatureTypeInference.ts, 37, 15))
+
+          (...args: infer A1): infer R1;
+>args : Symbol(args, Decl(multiSignatureTypeInference.ts, 43, 11))
+>A1 : Symbol(A1, Decl(multiSignatureTypeInference.ts, 43, 25))
+>R1 : Symbol(R1, Decl(multiSignatureTypeInference.ts, 43, 36))
+
+      } ? {rule: 1, variants: [A1, R1]} :
+>rule : Symbol(rule, Decl(multiSignatureTypeInference.ts, 44, 11))
+>variants : Symbol(variants, Decl(multiSignatureTypeInference.ts, 44, 19))
+>A1 : Symbol(A1, Decl(multiSignatureTypeInference.ts, 43, 25))
+>R1 : Symbol(R1, Decl(multiSignatureTypeInference.ts, 43, 36))
+
+    never;
+
+declare const ok1: Overloads<(x: number) => boolean>;  // {rule: 2, variants: [[number], boolean]}
+>ok1 : Symbol(ok1, Decl(multiSignatureTypeInference.ts, 47, 13))
+>Overloads : Symbol(Overloads, Decl(multiSignatureTypeInference.ts, 33, 63))
+>x : Symbol(x, Decl(multiSignatureTypeInference.ts, 47, 30))
+
+declare const ok2: Overloads<{(): 1; (x: number): 2}>;  // {rule: 2, variants: [[], 1] | [[number], 2]}
+>ok2 : Symbol(ok2, Decl(multiSignatureTypeInference.ts, 49, 13))
+>Overloads : Symbol(Overloads, Decl(multiSignatureTypeInference.ts, 33, 63))
+>x : Symbol(x, Decl(multiSignatureTypeInference.ts, 49, 38))
+
+declare const ok3: Overloads<() => boolean>;  // {rule: 2, variants: [[], boolean] }
+>ok3 : Symbol(ok3, Decl(multiSignatureTypeInference.ts, 51, 13))
+>Overloads : Symbol(Overloads, Decl(multiSignatureTypeInference.ts, 33, 63))
+
+declare const ok4: Overloads<(...args: unknown[]) => boolean>;  // {rule: 2, variants: [unknown[], boolean] }
+>ok4 : Symbol(ok4, Decl(multiSignatureTypeInference.ts, 53, 13))
+>Overloads : Symbol(Overloads, Decl(multiSignatureTypeInference.ts, 33, 63))
+>args : Symbol(args, Decl(multiSignatureTypeInference.ts, 53, 30))
+
+declare const ok5: Overloads<(x: unknown) => boolean>;  // {rule: 2, variants: [[unknown], boolean] }
+>ok5 : Symbol(ok5, Decl(multiSignatureTypeInference.ts, 55, 13))
+>Overloads : Symbol(Overloads, Decl(multiSignatureTypeInference.ts, 33, 63))
+>x : Symbol(x, Decl(multiSignatureTypeInference.ts, 55, 30))
+
+declare const ok6: Overloads<(x: any) => boolean>;  // {rule: 2, variants: [[any], boolean] }
+>ok6 : Symbol(ok6, Decl(multiSignatureTypeInference.ts, 57, 13))
+>Overloads : Symbol(Overloads, Decl(multiSignatureTypeInference.ts, 33, 63))
+>x : Symbol(x, Decl(multiSignatureTypeInference.ts, 57, 30))
+

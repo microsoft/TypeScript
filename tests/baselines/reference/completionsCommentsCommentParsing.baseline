@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/completionsCommentsCommentParsing.ts ===
 // /// This is simple /// comments
 // function simple() {

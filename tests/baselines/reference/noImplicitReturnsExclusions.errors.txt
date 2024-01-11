@@ -4,9 +4,10 @@ noImplicitReturnsExclusions.ts(40,10): error TS7030: Not all code paths return a
 noImplicitReturnsExclusions.ts(44,10): error TS7030: Not all code paths return a value.
 noImplicitReturnsExclusions.ts(48,10): error TS7030: Not all code paths return a value.
 noImplicitReturnsExclusions.ts(53,10): error TS7030: Not all code paths return a value.
+noImplicitReturnsExclusions.ts(88,53): error TS7030: Not all code paths return a value.
 
 
-==== noImplicitReturnsExclusions.ts (6 errors) ====
+==== noImplicitReturnsExclusions.ts (7 errors) ====
     // Functions with a return type of any, undefined, or a type that includes void are excluded
     // from --noImplicitReturns checks.
     
@@ -75,4 +76,42 @@ noImplicitReturnsExclusions.ts(53,10): error TS7030: Not all code paths return a
         if (b) return 42;
         if (b) return;
     }
+    
+    declare class HistoryItem {
+      input: {
+        location: {
+          uri: string;
+        };
+      };
+    }
+    
+    interface Thenable<T> {
+      then<TResult>(
+        onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+        onrejected?: (reason: any) => TResult | Thenable<TResult>
+      ): Thenable<TResult>;
+      then<TResult>(
+        onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+        onrejected?: (reason: any) => void
+      ): Thenable<TResult>;
+    }
+    
+    export declare function executeCommand<T = unknown>(
+      command: string,
+      ...rest: any[]
+    ): Thenable<T>;
+    
+    export declare function registerCommand(
+      command: string,
+      callback: (...args: any[]) => any,
+      thisArg?: any
+    ): void;
+    
+    registerCommand("_references-view.showHistoryItem", async (item) => { // Error, contextual return type of Promise<unknown>
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+      if (item instanceof HistoryItem) {
+        return executeCommand("vscode.open", item.input.location.uri);
+      }
+    });
     

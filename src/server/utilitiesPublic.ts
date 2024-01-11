@@ -16,7 +16,7 @@ export enum LogLevel {
     terse,
     normal,
     requestTime,
-    verbose
+    verbose,
 }
 
 export const emptyArray: SortedReadonlyArray<never> = createSortedArray<never>();
@@ -50,7 +50,7 @@ export function createInstallTypingsRequest(project: Project, typeAcquisition: T
         unresolvedImports,
         projectRootPath: project.getCurrentDirectory() as Path,
         cachePath,
-        kind: "discover"
+        kind: "discover",
     };
 }
 
@@ -66,7 +66,7 @@ export namespace Errors {
     }
 }
 
-export type NormalizedPath = string & { __normalizedPathTag: any };
+export type NormalizedPath = string & { __normalizedPathTag: any; };
 
 export function toNormalizedPath(fileName: string): NormalizedPath {
     return normalizePath(fileName) as NormalizedPath;
@@ -102,7 +102,7 @@ export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
         },
         remove(path) {
             map.delete(path);
-        }
+        },
     };
 }
 

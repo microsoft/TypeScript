@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/templateExpressionNoInlininingOfConstantBindingWithInitializer.ts] ////
+
+=== templateExpressionNoInlininingOfConstantBindingWithInitializer.ts ===
+type Params = {
+>Params : Symbol(Params, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 0, 0))
+
+  value?: string | number
+>value : Symbol(value, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 0, 15))
+}
+
+function example(parameters: Params) {
+>example : Symbol(example, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 2, 1))
+>parameters : Symbol(parameters, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 4, 17))
+>Params : Symbol(Params, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 0, 0))
+
+  const { value = '123' } = parameters
+>value : Symbol(value, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 5, 9))
+>parameters : Symbol(parameters, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 4, 17))
+
+  return `${value}` === '345'
+>value : Symbol(value, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 5, 9))
+}
+
+function example2(parameters: Params) {
+>example2 : Symbol(example2, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 7, 1))
+>parameters : Symbol(parameters, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 9, 18))
+>Params : Symbol(Params, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 0, 0))
+
+  const { value = '123' } = parameters
+>value : Symbol(value, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 10, 9))
+>parameters : Symbol(parameters, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 9, 18))
+
+  const b = `${value}`;
+>b : Symbol(b, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 11, 7))
+>value : Symbol(value, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 10, 9))
+
+  return b;
+>b : Symbol(b, Decl(templateExpressionNoInlininingOfConstantBindingWithInitializer.ts, 11, 7))
+}
+

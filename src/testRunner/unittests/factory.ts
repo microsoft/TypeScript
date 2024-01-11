@@ -82,5 +82,4 @@ describe("unittests:: FactoryAPI", () => {
             checkRhs(ts.SyntaxKind.QuestionQuestionEqualsToken, /*expectParens*/ false);
         });
     });
-
 });

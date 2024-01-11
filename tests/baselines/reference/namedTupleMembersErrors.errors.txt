@@ -1,9 +1,3 @@
-namedTupleMembersErrors.ts(1,41): error TS5084: Tuple members must all have names or all not have names.
-namedTupleMembersErrors.ts(2,25): error TS5084: Tuple members must all have names or all not have names.
-namedTupleMembersErrors.ts(4,32): error TS5084: Tuple members must all have names or all not have names.
-namedTupleMembersErrors.ts(5,22): error TS5084: Tuple members must all have names or all not have names.
-namedTupleMembersErrors.ts(7,32): error TS5084: Tuple members must all have names or all not have names.
-namedTupleMembersErrors.ts(8,22): error TS5084: Tuple members must all have names or all not have names.
 namedTupleMembersErrors.ts(10,29): error TS5086: A labeled tuple element is declared as optional with a question mark after the name and before the colon, rather than after the type.
 namedTupleMembersErrors.ts(12,46): error TS5087: A labeled tuple element is declared as rest with a '...' before the name, rather than before the type.
 namedTupleMembersErrors.ts(14,49): error TS5087: A labeled tuple element is declared as rest with a '...' before the name, rather than before the type.
@@ -14,27 +8,15 @@ namedTupleMembersErrors.ts(20,13): error TS2456: Type alias 'RecusiveRestUnlabel
 namedTupleMembersErrors.ts(21,13): error TS2456: Type alias 'RecusiveRest' circularly references itself.
 
 
-==== namedTupleMembersErrors.ts (14 errors) ====
-    export type Segment1 = [length: number, number]; // partially named, disallowed
-                                            ~~~~~~
-!!! error TS5084: Tuple members must all have names or all not have names.
-    export type Segment2 = [number, size: number]; // partially named, disallowed
-                            ~~~~~~
-!!! error TS5084: Tuple members must all have names or all not have names.
+==== namedTupleMembersErrors.ts (8 errors) ====
+    export type Segment1 = [length: number, number];
+    export type Segment2 = [number, size: number];
     
-    export type List = [item: any, ...any];  // partially named, disallowed
-                                   ~~~~~~
-!!! error TS5084: Tuple members must all have names or all not have names.
-    export type List2 = [any, ...remainder: any];  // partially named, disallowed
-                         ~~~
-!!! error TS5084: Tuple members must all have names or all not have names.
+    export type List = [item: any, ...any]; 
+    export type List2 = [any, ...remainder: any]; 
     
-    export type Pair = [item: any, any?];  // partially named, disallowed
-                                   ~~~~
-!!! error TS5084: Tuple members must all have names or all not have names.
-    export type Pair2 = [any, last?: any];  // partially named, disallowed
-                         ~~~
-!!! error TS5084: Tuple members must all have names or all not have names.
+    export type Pair = [item: any, any?]; 
+    export type Pair2 = [any, last?: any]; 
     
     export type Opt = [element: string?]; // question mark on element disallowed
                                 ~~~~~~~
