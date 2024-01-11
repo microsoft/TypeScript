@@ -325,6 +325,7 @@ import {
     getModeForUsageLocation,
     getModifiers,
     getModuleInstanceState,
+    getNameFromImportAttribute,
     getNameFromIndexInfo,
     getNameOfDeclaration,
     getNameOfExpando,
@@ -407,6 +408,7 @@ import {
     IdentifierTypePredicate,
     idText,
     IfStatement,
+    ImportAttribute,
     ImportAttributes,
     ImportCall,
     ImportClause,
@@ -553,6 +555,7 @@ import {
     isIdentifierTypePredicate,
     isIdentifierTypeReference,
     isIfStatement,
+    isImportAttributes,
     isImportCall,
     isImportClause,
     isImportDeclaration,
@@ -872,7 +875,6 @@ import {
     NonNullExpression,
     not,
     noTruncationMaximumTruncationLength,
-    nullTransformationContext,
     NumberLiteralType,
     NumericLiteral,
     objectAllocator,
@@ -2179,6 +2181,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var deferredGlobalImportMetaType: ObjectType;
     var deferredGlobalImportMetaExpressionType: ObjectType;
     var deferredGlobalImportCallOptionsType: ObjectType | undefined;
+    var deferredGlobalImportAttributesType: ObjectType | undefined;
     var deferredGlobalDisposableType: ObjectType | undefined;
     var deferredGlobalAsyncDisposableType: ObjectType | undefined;
     var deferredGlobalExtractSymbol: Symbol | undefined;
@@ -2361,7 +2364,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function markAsSynthetic<T extends Node>(node: T): VisitResult<T> {
         setTextRangePosEnd(node, -1, -1);
-        return visitEachChild(node, markAsSynthetic, nullTransformationContext);
+        return visitEachChild(node, markAsSynthetic, /*context*/ undefined);
     }
 
     function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
@@ -7028,7 +7031,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!nodeIsSynthesized(node) && getParseTreeNode(node) === node) {
                         return node;
                     }
-                    return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext, deepCloneOrReuseNodes)), node);
+                    return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, /*context*/ undefined, deepCloneOrReuseNodes)), node);
                 }
 
                 function deepCloneOrReuseNodes(
@@ -7822,7 +7825,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (context.tracker.canTrackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
                         trackComputedName(node.expression, context.enclosingDeclaration, context);
                     }
-                    let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
+                    let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, /*context*/ undefined, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
                     if (isBindingElement(visited)) {
                         visited = factory.updateBindingElement(
                             visited,
@@ -8659,7 +8662,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     setEmitFlags(node, EmitFlags.SingleLine);
                 }
 
-                return visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);
+                return visitEachChild(node, visitExistingNodeTreeSymbols, /*context*/ undefined);
 
                 function getEffectiveDotDotDotForParameter(p: ParameterDeclaration) {
                     return p.dotDotDotToken || (p.type && isJSDocVariadicType(p.type) ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined);
@@ -8754,7 +8757,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             });
             let addingDeclare = !bundled;
             const exportEquals = symbolTable.get(InternalSymbolName.ExportEquals);
-            if (exportEquals && symbolTable.size > 1 && exportEquals.flags & SymbolFlags.Alias) {
+            if (exportEquals && symbolTable.size > 1 && exportEquals.flags & (SymbolFlags.Alias | SymbolFlags.Module)) {
                 symbolTable = createSymbolTable();
                 // Remove extraneous elements from root symbol table (they'll be mixed back in when the target of the `export=` is looked up)
                 symbolTable.set(InternalSymbolName.ExportEquals, exportEquals);
@@ -9287,8 +9290,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function getNamespaceMembersForSerialization(symbol: Symbol) {
-                const exports = getExportsOfSymbol(symbol);
-                return !exports ? [] : filter(arrayFrom(exports.values()), m => isNamespaceMember(m) && isIdentifierText(m.escapedName as string, ScriptTarget.ESNext));
+                let exports = arrayFrom(getExportsOfSymbol(symbol).values());
+                const merged = getMergedSymbol(symbol);
+                if (merged !== symbol) {
+                    const membersSet = new Set(exports);
+                    for (const exported of getExportsOfSymbol(merged).values()) {
+                        if (!(getSymbolFlags(resolveSymbol(exported)) & SymbolFlags.Value)) {
+                            membersSet.add(exported);
+                        }
+                    }
+                    exports = arrayFrom(membersSet);
+                }
+                return filter(exports, m => isNamespaceMember(m) && isIdentifierText(m.escapedName as string, ScriptTarget.ESNext));
             }
 
             function isTypeOnlyNamespace(symbol: Symbol) {
@@ -11460,7 +11473,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // contextual type or, if the element itself is a binding pattern, with the type implied by that binding
             // pattern.
             const contextualType = isBindingPattern(element.name) ? getTypeFromBindingPattern(element.name, /*includePatternInType*/ true, /*reportErrors*/ false) : unknownType;
-            return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, contextualType)));
+            return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, reportErrors ? CheckMode.Normal : CheckMode.Contextual, contextualType)));
         }
         if (isBindingPattern(element.name)) {
             return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
@@ -11555,6 +11568,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return widenTypeForVariableLikeDeclaration(getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true, CheckMode.Normal), declaration, reportErrors);
     }
 
+    function getTypeFromImportAttributes(node: ImportAttributes): Type {
+        const links = getNodeLinks(node);
+        if (!links.resolvedType) {
+            const symbol = createSymbol(SymbolFlags.ObjectLiteral, InternalSymbolName.ImportAttributes);
+            const members = createSymbolTable();
+            forEach(node.elements, attr => {
+                const member = createSymbol(SymbolFlags.Property, getNameFromImportAttribute(attr));
+                member.parent = symbol;
+                member.links.type = checkImportAttribute(attr);
+                member.links.target = member;
+                members.set(member.escapedName, member);
+            });
+            const type = createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
+            type.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.NonInferrableType;
+            links.resolvedType = type;
+        }
+        return links.resolvedType;
+    }
+
     function isGlobalSymbolConstructor(node: Node) {
         const symbol = getSymbolOfNode(node);
         const globalSymbol = getGlobalESSymbolConstructorTypeSymbol(/*reportErrors*/ false);
@@ -11618,16 +11650,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
+    function getTypeOfVariableOrParameterOrProperty(symbol: Symbol, checkMode?: CheckMode): Type {
         const links = getSymbolLinks(symbol);
         if (!links.type) {
-            const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol);
+            const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol, checkMode);
             // For a contextually typed parameter it is possible that a type has already
             // been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
             // to preserve this type. In fact, we need to _prefer_ that type, but it won't
             // be assigned until contextual typing is complete, so we need to defer in
             // cases where contextual typing may take place.
-            if (!links.type && !isParameterOfContextSensitiveSignature(symbol)) {
+            if (!links.type && !isParameterOfContextSensitiveSignature(symbol) && !checkMode) {
                 links.type = type;
             }
             return type;
@@ -11635,7 +11667,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.type;
     }
 
-    function getTypeOfVariableOrParameterOrPropertyWorker(symbol: Symbol): Type {
+    function getTypeOfVariableOrParameterOrPropertyWorker(symbol: Symbol, checkMode?: CheckMode): Type {
         // Handle prototype property
         if (symbol.flags & SymbolFlags.Prototype) {
             return getTypeOfPrototypeProperty(symbol);
@@ -11677,6 +11709,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
             if (symbol.flags & SymbolFlags.ValueModule && !(symbol.flags & SymbolFlags.Assignment)) {
                 return getTypeOfFuncClassEnumModule(symbol);
+            }
+
+            // When trying to get the *contextual* type of a binding element, it's possible to fall in a loop and therefore
+            // end up in a circularity-like situation. This is not a true circularity so we should not report such an error.
+            // For example, here the looping could happen when trying to get the type of `a` (binding element):
+            //
+            //   const { a, b = a } = { a: 0 }
+            //
+            if (isBindingElement(declaration) && checkMode === CheckMode.Contextual) {
+                return errorType;
             }
             return reportCircularityError(symbol);
         }
@@ -11749,6 +11791,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
             if (symbol.flags & SymbolFlags.ValueModule && !(symbol.flags & SymbolFlags.Assignment)) {
                 return getTypeOfFuncClassEnumModule(symbol);
+            }
+
+            // When trying to get the *contextual* type of a binding element, it's possible to fall in a loop and therefore
+            // end up in a circularity-like situation. This is not a true circularity so we should not report such an error.
+            // For example, here the looping could happen when trying to get the type of `a` (binding element):
+            //
+            //   const { a, b = a } = { a: 0 }
+            //
+            if (isBindingElement(declaration) && checkMode === CheckMode.Contextual) {
+                return type;
             }
             return reportCircularityError(symbol);
         }
@@ -12032,7 +12084,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getTypeOfSymbol(symbol);
     }
 
-    function getTypeOfSymbol(symbol: Symbol): Type {
+    function getTypeOfSymbol(symbol: Symbol, checkMode?: CheckMode): Type {
         const checkFlags = getCheckFlags(symbol);
         if (checkFlags & CheckFlags.DeferredType) {
             return getTypeOfSymbolWithDeferredType(symbol);
@@ -12047,7 +12099,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTypeOfReverseMappedSymbol(symbol as ReverseMappedSymbol);
         }
         if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
-            return getTypeOfVariableOrParameterOrProperty(symbol);
+            return getTypeOfVariableOrParameterOrProperty(symbol, checkMode);
         }
         if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
             return getTypeOfFuncClassEnumModule(symbol);
@@ -16395,6 +16447,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getGlobalImportCallOptionsType(reportErrors: boolean) {
         return (deferredGlobalImportCallOptionsType ||= getGlobalType("ImportCallOptions" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
+    }
+
+    function getGlobalImportAttributesType(reportErrors: boolean) {
+        return (deferredGlobalImportAttributesType ||= getGlobalType("ImportAttributes" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
     }
 
     function getGlobalESSymbolConstructorSymbol(reportErrors: boolean): Symbol | undefined {
@@ -29056,8 +29112,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier) {
-        const type = getTypeOfSymbol(symbol);
+    function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier, checkMode?: CheckMode) {
+        const type = getTypeOfSymbol(symbol, checkMode);
         const declaration = symbol.valueDeclaration;
         if (declaration) {
             // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
@@ -29220,7 +29276,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         checkNestedBlockScopedBinding(node, symbol);
 
-        let type = getNarrowedTypeOfSymbol(localOrExportSymbol, node);
+        let type = getNarrowedTypeOfSymbol(localOrExportSymbol, node, checkMode);
         const assignmentKind = getAssignmentTargetKind(node);
 
         if (assignmentKind) {
@@ -30871,6 +30927,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JsxOpeningElement:
             case SyntaxKind.JsxSelfClosingElement:
                 return getContextualJsxElementAttributesType(parent as JsxOpeningLikeElement, contextFlags);
+            case SyntaxKind.ImportAttribute:
+                return getContextualImportAttributeType(parent as ImportAttribute);
         }
         return undefined;
     }
@@ -30915,6 +30973,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return inferenceContexts[i];
             }
         }
+    }
+
+    function getContextualImportAttributeType(node: ImportAttribute) {
+        return getTypeOfPropertyOfContextualType(getGlobalImportAttributesType(/*reportErrors*/ false), getNameFromImportAttribute(node));
     }
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
@@ -45958,6 +46020,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkImportAttributes(declaration: ImportDeclaration | ExportDeclaration) {
         const node = declaration.attributes;
         if (node) {
+            const importAttributesType = getGlobalImportAttributesType(/*reportErrors*/ true);
+            if (importAttributesType !== emptyObjectType) {
+                checkTypeAssignableTo(getTypeFromImportAttributes(node), getNullableType(importAttributesType, TypeFlags.Undefined), node);
+            }
+
             const validForTypeAttributes = isExclusivelyTypeOnlyImportOrExport(declaration);
             const override = getResolutionModeOverride(node, validForTypeAttributes ? grammarErrorOnNode : undefined);
             const isImportAttributes = declaration.attributes.token === SyntaxKind.WithKeyword;
@@ -45985,6 +46052,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return grammarErrorOnNode(node, Diagnostics.resolution_mode_can_only_be_set_for_type_only_imports);
             }
         }
+    }
+
+    function checkImportAttribute(node: ImportAttribute) {
+        return getRegularTypeOfLiteralType(checkExpressionCached(node.value));
     }
 
     function checkImportDeclaration(node: ImportDeclaration) {
@@ -47665,6 +47736,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (isMetaProperty(node.parent) && node.parent.keywordToken === node.kind) {
             return checkMetaPropertyKeyword(node.parent);
+        }
+
+        if (isImportAttributes(node)) {
+            return getGlobalImportAttributesType(/*reportErrors*/ false);
         }
 
         return errorType;

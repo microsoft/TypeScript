@@ -294,7 +294,6 @@ import {
     normalizePath,
     NoSubstitutionTemplateLiteral,
     notImplemented,
-    nullTransformationContext,
     NumericLiteral,
     or,
     OrganizeImports,
@@ -3175,7 +3174,7 @@ function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (n
     const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
         ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
         : ns => ns && getSynthesizedDeepClones(ns);
-    const visited = visitEachChild(node, nodeClone, nullTransformationContext, nodesClone, nodeClone);
+    const visited = visitEachChild(node, nodeClone, /*context*/ undefined, nodesClone, nodeClone);
 
     if (visited === node) {
         // This only happens for leaf nodes - internal nodes always see their children change.
