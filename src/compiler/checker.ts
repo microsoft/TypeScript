@@ -1509,8 +1509,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         | ImportMetaProperty
         | SuperExpression
         | ThisExpression;
-    type QueryReferences = [Symbol, QueryReference, TypeParameter][];
-    var queryTypeParameterReferencesCache: Map<NodeId, QueryReferences> = new Map();
+    type QueryReferences = Map<TypeId, Map<SymbolId, [Symbol, QueryReference]>>;
+    var queryTypeParameterReferencesCache = new Map<NodeId, QueryReferences>();
     // for public members that accept a Node or one of its subtypes, we must guard against
     // synthetic nodes created during transformations by calling `getParseTreeNode`.
     // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -44224,19 +44224,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function filterQueryTypeParameters(container: SignatureDeclaration, typeParameters: TypeParameter[]): [TypeParameter, Symbol, QueryReference][] | undefined {
         const queryTypeParameterReferences = collectQueryTypeParameterReferences(container);
-        const paramToReferences: Map<TypeId, Map<SymbolId, [Symbol, QueryReference]>> = new Map();
-        for (const [symbol, reference, typeParam] of queryTypeParameterReferences) {
-            const id = getTypeId(typeParam);
-            if (!paramToReferences.has(id)) {
-                paramToReferences.set(id, new Map());
-            }
-            const symbolMap = paramToReferences.get(id)!;
-            symbolMap.set(getSymbolId(symbol), [symbol, reference]);
-        }
         const queryParameters: [TypeParameter, Symbol, QueryReference][] = [];
         for (const typeParam of typeParameters) {
             const id = getTypeId(typeParam);
-            const symbolMap = paramToReferences.get(id);
+            const symbolMap = queryTypeParameterReferences.get(id);
             if (!symbolMap) continue;
             if (symbolMap.size === 1) {
                 const [symbol, reference] = firstIterator(symbolMap.values());
@@ -44247,16 +44238,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function collectQueryTypeParameterReferences(container: SignatureDeclaration): QueryReferences {
-        const references: QueryReferences = [];
+        const references: QueryReferences = new Map();
         const nodeId = getNodeId(container);
         if (!queryTypeParameterReferencesCache.has(nodeId)) {
-            const flowNodes = collectFlowNodes(container); // >> TODO: collectFlowNodes may have duplicates
-            visitFlowNodes(flowNodes, collectNode);
             queryTypeParameterReferencesCache.set(nodeId, references);
+            const flowNodes = collectReturnStatementFlowNodes(container); // >> TODO: collectFlowNodes may have duplicates
+            visitFlowNodes(flowNodes, getNodeFromFlowNode);
         }
         return queryTypeParameterReferencesCache.get(nodeId)!;
 
-        function collectNode(flow: FlowNode) {
+        // Get the node from the flow node that could have references used for narrowing.
+        function getNodeFromFlowNode(flow: FlowNode) {
             const flags = flow.flags;
             // Based on `getTypeAtFlowX` functions.
             let node;
@@ -44278,21 +44270,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     (callNode.expression as PropertyAccessExpression).expression :
                     (callNode.left as ElementAccessExpression).expression;
             }
-            if (node) getReferences(node);
+            if (node) getReferencesFromNode(node);
         }
 
         // >> TODO: Based on `isMatchingReference`?
         // >> TODO: needs to be based on `narrowType` as well.
         // If `node` came from a flow condition's condition, then it is going to be analyzed by
         // `narrowType`.
-        function getReferences(node: Node): void {
+        function getReferencesFromNode(node: Node): void {
             switch (node.kind) {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
-                    return getReferences((node as NonNullExpression | ParenthesizedExpression).expression);
+                    return getReferencesFromNode((node as NonNullExpression | ParenthesizedExpression).expression);
                 case SyntaxKind.BinaryExpression:
-                    getReferences((node as BinaryExpression).left);
-                    getReferences((node as BinaryExpression).right);
+                    getReferencesFromNode((node as BinaryExpression).left);
+                    getReferencesFromNode((node as BinaryExpression).right);
                     return;
                 case SyntaxKind.CallExpression:
                     let callAccess;
@@ -44306,16 +44298,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         setParent(synthPropertyAccess, node.parent);
                         addReference(synthPropertyAccess);
                     }
-                    getReferences((node as CallExpression).expression); // >> TODO: do we need this?
+                    getReferencesFromNode((node as CallExpression).expression); // >> TODO: do we need this?
                     // This is relevant for type predicate-based narrowing.
-                    (node as CallExpression).arguments.forEach(getReferences);
+                    (node as CallExpression).arguments.forEach(getReferencesFromNode);
                     return;
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression: // >> TODO: do we need this?
-                    getReferences((node as PrefixUnaryExpression | PostfixUnaryExpression).operand);
+                    getReferencesFromNode((node as PrefixUnaryExpression | PostfixUnaryExpression).operand);
                     return;
                 case SyntaxKind.TypeOfExpression:
-                    getReferences((node as TypeOfExpression).expression);
+                    getReferencesFromNode((node as TypeOfExpression).expression);
                     return;
                 case SyntaxKind.VoidExpression:
                 case SyntaxKind.AwaitExpression:
@@ -44355,7 +44347,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        // >> TODO: can reference be a synthetic node?
         function addReference(reference: QueryReference): void {
             const symbol = getSymbolForExpression(reference);
             const type = symbol && getTypeOfSymbol(symbol);
@@ -44364,33 +44355,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In this case, its type can be `T | undefined`,
             // and if `T` allows for the undefined type, then we can still narrow `T`.
             if (((symbol.valueDeclaration && isOptionalDeclaration(symbol.valueDeclaration))
-                || isOptionalTupleElementSymbol(symbol))
+                    || isOptionalTupleElementSymbol(symbol))
                 && type.flags & TypeFlags.Union
                 && (type as UnionType).types[0] === undefinedOrMissingType
                 && (type as UnionType).types[1].flags & TypeFlags.TypeParameter) {
                 const typeParam = (type as UnionType).types[1] as TypeParameter;
                 const constraint = getConstraintOfTypeParameter(typeParam);
                 if (!constraint || containsUndefinedType(constraint)) {
-                    references.push([symbol, reference, typeParam]);
+                    add(typeParam, symbol, reference);
                 }
             }
             else if (type.flags & TypeFlags.TypeParameter) {
-                references.push([symbol, reference, type as TypeParameter]);
+                add(type, symbol, reference);
+            }
+
+            function add(type: Type, symbol: Symbol, reference: QueryReference) {
+                const typeId = getTypeId(type);
+                const symbolId = getSymbolId(symbol);
+                if (!references.has(typeId)) {
+                    references.set(typeId, new Map());
+                }
+                references.get(typeId)!.set(symbolId, [symbol, reference]);
             }
         }
     }
 
-    function isOptionalTupleElementSymbol(symbol: Symbol): boolean {
-        if (isTransientSymbol(symbol)
-            && symbol.links.target
-            && isTransientSymbol(symbol.links.target)
-            && symbol.links.target.links.tupleLabelDeclaration) {
-            return !!symbol.links.target.links.tupleLabelDeclaration?.questionToken
-        }
-        return false;
-    }
-
-    function collectFlowNodes(container: SignatureDeclaration): FlowNode[] {
+    function collectReturnStatementFlowNodes(container: SignatureDeclaration): FlowNode[] {
         const flowNodes = [];
         visit(container);
         if (isFunctionLikeDeclaration(container) && container.endFlowNode) {
@@ -44459,6 +44449,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return visitFlowNode((flow as HasFlowAntecedent).antecedent);
             }
         }
+    }
+
+    function isOptionalTupleElementSymbol(symbol: Symbol): boolean {
+        if (
+            isTransientSymbol(symbol)
+            && symbol.links.target
+            && isTransientSymbol(symbol.links.target)
+            && symbol.links.target.links.tupleLabelDeclaration
+        ) {
+            return !!symbol.links.target.links.tupleLabelDeclaration?.questionToken;
+        }
+        return false;
     }
 
     function checkWithStatement(node: WithStatement) {
