@@ -1986,16 +1986,20 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         bindCondition(node.condition, trueLabel, falseLabel);
         currentFlow = finishFlowLabel(trueLabel);
         if (inReturnStatement) {
-            /*const expr =*/ skipParentheses(node.whenTrue);
+            // const expr = skipParentheses(node.whenTrue);
             // expr.flowNode = currentFlow;
+            node.whenTrue.flowNode = currentFlow;
+
         }
         bind(node.questionToken);
         bind(node.whenTrue);
         addAntecedent(postExpressionLabel, currentFlow);
         currentFlow = finishFlowLabel(falseLabel);
         if (inReturnStatement) {
-            /*const expr =*/ skipParentheses(node.whenFalse);
+            // const expr = skipParentheses(node.whenFalse);
             // expr.flowNode = currentFlow;
+            node.whenFalse.flowNode = currentFlow;
+
         }
         bind(node.colonToken);
         bind(node.whenFalse);
