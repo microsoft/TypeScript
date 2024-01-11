@@ -650,7 +650,7 @@ export class FileSystem {
      * NOTE: do not rename this method as it is intended to align with the same named export of the "fs" module.
      */
     public readFileSync(path: string, encoding?: BufferEncoding | null): string | Buffer;
-    public readFileSync(path: string, encoding: BufferEncoding | null | undefined = undefined) { // eslint-disable-line no-null/no-null
+    public readFileSync(path: string, encoding: BufferEncoding | null = null) { // eslint-disable-line no-null/no-null
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
         if (isDirectory(node)) throw createIOError("EISDIR");
