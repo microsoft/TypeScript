@@ -18831,7 +18831,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
                 if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
-                    // >> TODO: I don't think this can ever happen -- we wouldn't narrow the check type to `any` because we don't narrow anything to `any`
                     Debug.assert(!(checkType.flags & TypeFlags.Any));
                     // If falseType is an immediately nested conditional type that has an
                     // identical checkType, switch to that type and loop.
@@ -44167,10 +44166,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
                                 narrowReference.flowNode = narrowPosition.flowNode;
                                 const exprType = getTypeOfExpression(narrowReference);
-                                // Try to detect if the type of the reference was not narrowed.
-                                // >> TODO: is there a better way of detecting that narrowing will be useless?
-                                if (exprType === tp || exprType === mapType(tp, getBaseConstraintOrType)) {
-                                    return undefined; // Don't narrow if narrowing didn't do anything but default to the type parameter or its constraint.
+                                // Don't narrow the return type if narrowing didn't produce a narrower type for the expression.
+                                if (isTypeAny(exprType) || isErrorType(exprType) || exprType === tp || exprType === mapType(tp, getBaseConstraintOrType)) {
+                                    return undefined;
                                 }
                                 return [tp, exprType];
                             });
