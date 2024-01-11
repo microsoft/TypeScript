@@ -1500,8 +1500,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var lastGetCombinedModifierFlagsNode: Declaration | undefined;
     var lastGetCombinedModifierFlagsResult = ModifierFlags.None;
 
-    type NodeId = number;
-    // >> TODO: this could just be `Expression`
     type QueryReference =
         | Identifier
         | PropertyAccessExpression
@@ -1509,8 +1507,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         | ImportMetaProperty
         | SuperExpression
         | ThisExpression;
-    type QueryReferences = Map<TypeId, Map<SymbolId, [Symbol, QueryReference]>>;
-    var queryTypeParameterReferencesCache = new Map<NodeId, QueryReferences>();
+    type QueryReferences = Map<TypeParameter, Map<Symbol, QueryReference>>;
+    var queryTypeParameterReferencesCache = new Map<SignatureDeclaration, QueryReferences>();
     // for public members that accept a Node or one of its subtypes, we must guard against
     // synthetic nodes created during transformations by calling `getParseTreeNode`.
     // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -44226,11 +44224,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const queryTypeParameterReferences = collectQueryTypeParameterReferences(container);
         const queryParameters: [TypeParameter, Symbol, QueryReference][] = [];
         for (const typeParam of typeParameters) {
-            const id = getTypeId(typeParam);
-            const symbolMap = queryTypeParameterReferences.get(id);
+            const symbolMap = queryTypeParameterReferences.get(typeParam);
             if (!symbolMap) continue;
             if (symbolMap.size === 1) {
-                const [symbol, reference] = firstIterator(symbolMap.values());
+                const [symbol, reference] = firstIterator(symbolMap.entries());
                 queryParameters.push([typeParam, symbol, reference]);
             }
         }
@@ -44239,13 +44236,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function collectQueryTypeParameterReferences(container: SignatureDeclaration): QueryReferences {
         const references: QueryReferences = new Map();
-        const nodeId = getNodeId(container);
-        if (!queryTypeParameterReferencesCache.has(nodeId)) {
-            queryTypeParameterReferencesCache.set(nodeId, references);
-            const flowNodes = collectReturnStatementFlowNodes(container); // >> TODO: collectFlowNodes may have duplicates
+        if (!queryTypeParameterReferencesCache.has(container)) {
+            queryTypeParameterReferencesCache.set(container, references);
+            const flowNodes = collectReturnStatementFlowNodes(container);
             visitFlowNodes(flowNodes, getNodeFromFlowNode);
         }
-        return queryTypeParameterReferencesCache.get(nodeId)!;
+        return queryTypeParameterReferencesCache.get(container)!;
 
         // Get the node from the flow node that could have references used for narrowing.
         function getNodeFromFlowNode(flow: FlowNode) {
@@ -44366,16 +44362,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else if (type.flags & TypeFlags.TypeParameter) {
-                add(type, symbol, reference);
+                add(type as TypeParameter, symbol, reference);
             }
 
-            function add(type: Type, symbol: Symbol, reference: QueryReference) {
-                const typeId = getTypeId(type);
-                const symbolId = getSymbolId(symbol);
-                if (!references.has(typeId)) {
-                    references.set(typeId, new Map());
+            function add(type: TypeParameter, symbol: Symbol, reference: QueryReference) {
+                if (!references.has(type)) {
+                    references.set(type, new Map());
                 }
-                references.get(typeId)!.set(symbolId, [symbol, reference]);
+                references.get(type)!.set(symbol, reference);
             }
         }
     }
