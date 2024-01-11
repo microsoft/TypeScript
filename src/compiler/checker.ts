@@ -875,7 +875,6 @@ import {
     NonNullExpression,
     not,
     noTruncationMaximumTruncationLength,
-    nullTransformationContext,
     NumberLiteralType,
     NumericLiteral,
     objectAllocator,
@@ -2365,7 +2364,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function markAsSynthetic<T extends Node>(node: T): VisitResult<T> {
         setTextRangePosEnd(node, -1, -1);
-        return visitEachChild(node, markAsSynthetic, nullTransformationContext);
+        return visitEachChild(node, markAsSynthetic, /*context*/ undefined);
     }
 
     function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
@@ -7032,7 +7031,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!nodeIsSynthesized(node) && getParseTreeNode(node) === node) {
                         return node;
                     }
-                    return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext, deepCloneOrReuseNodes)), node);
+                    return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, /*context*/ undefined, deepCloneOrReuseNodes)), node);
                 }
 
                 function deepCloneOrReuseNodes(
@@ -7826,7 +7825,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (context.tracker.canTrackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
                         trackComputedName(node.expression, context.enclosingDeclaration, context);
                     }
-                    let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
+                    let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, /*context*/ undefined, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
                     if (isBindingElement(visited)) {
                         visited = factory.updateBindingElement(
                             visited,
@@ -8663,7 +8662,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     setEmitFlags(node, EmitFlags.SingleLine);
                 }
 
-                return visitEachChild(node, visitExistingNodeTreeSymbols, nullTransformationContext);
+                return visitEachChild(node, visitExistingNodeTreeSymbols, /*context*/ undefined);
 
                 function getEffectiveDotDotDotForParameter(p: ParameterDeclaration) {
                     return p.dotDotDotToken || (p.type && isJSDocVariadicType(p.type) ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined);
