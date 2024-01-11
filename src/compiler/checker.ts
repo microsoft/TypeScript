@@ -30754,7 +30754,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // replaced with their constraints similar to the apparent type.
             if (
                 inferenceContext &&
-                (contextFlags! & ContextFlags.Signature || maybeTypeOfKind(contextualType, TypeFlags.Simplifiable)) &&
+                (contextFlags! & ContextFlags.Signature || maybeTypeOfKind(contextualType, TypeFlags.Conditional)) &&
                 some(inferenceContext.inferences, hasInferenceCandidatesOrDefault)
             ) {
                 // For contextual signatures we incorporate all inferences made so far, e.g. from return

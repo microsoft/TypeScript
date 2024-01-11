@@ -1,5 +1,5 @@
-reverseMappedTypeIntersectionConstraint.ts(22,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: string; states: { a: { entry: string; }; }; }'.
-reverseMappedTypeIntersectionConstraint.ts(32,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: string; states: { a: { entry: string; }; }; }'.
+reverseMappedTypeIntersectionConstraint.ts(19,7): error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+reverseMappedTypeIntersectionConstraint.ts(32,3): error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: "foo"; states: { a: { entry: "foo"; }; }; }'.
 reverseMappedTypeIntersectionConstraint.ts(43,3): error TS2353: Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: "y"; }'.
 reverseMappedTypeIntersectionConstraint.ts(59,7): error TS2322: Type '{ [K in keyof T & keyof Stuff]: T[K]; }' is not assignable to type 'T'.
   '{ [K in keyof T & keyof Stuff]: T[K]; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Stuff'.
@@ -37,11 +37,12 @@ reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal 
       states: {
         a: {
           entry: "bar",
+          ~~~~~
+!!! error TS2322: Type '"bar"' is not assignable to type '"foo"'.
+!!! related TS6500 reverseMappedTypeIntersectionConstraint.ts:2:3: The expected type comes from property 'entry' which is declared here on type 'StateConfig<"foo">'
         },
       },
       extra: 12,
-      ~~~~~
-!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: string; states: { a: { entry: string; }; }; }'.
     });
     
     const inferredParams2 = createMachine({
@@ -53,7 +54,7 @@ reverseMappedTypeIntersectionConstraint.ts(171,3): error TS2353: Object literal 
       },
       extra: 12,
       ~~~~~
-!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: string; states: { a: { entry: string; }; }; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'extra' does not exist in type '{ entry: "foo"; states: { a: { entry: "foo"; }; }; }'.
     });
     
     

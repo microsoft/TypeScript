@@ -29,25 +29,25 @@ declare function createMachine<
 >config : { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }
 
 const inferredParams1 = createMachine({
->inferredParams1 : [string, { entry: string; states: { a: { entry: string; }; }; }]
->createMachine({  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,}) : [string, { entry: string; states: { a: { entry: string; }; }; }]
+>inferredParams1 : ["foo", StateConfig<"foo">]
+>createMachine({  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,}) : ["foo", StateConfig<"foo">]
 >createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
->{  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,} : { entry: string; states: { a: { entry: string; }; }; extra: number; }
+>{  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "bar"; }; }; extra: number; }
 
   entry: "foo",
->entry : string
+>entry : "foo"
 >"foo" : "foo"
 
   states: {
->states : { a: { entry: string; }; }
->{    a: {      entry: "bar",    },  } : { a: { entry: string; }; }
+>states : { a: { entry: "bar"; }; }
+>{    a: {      entry: "bar",    },  } : { a: { entry: "bar"; }; }
 
     a: {
->a : { entry: string; }
->{      entry: "bar",    } : { entry: string; }
+>a : { entry: "bar"; }
+>{      entry: "bar",    } : { entry: "bar"; }
 
       entry: "bar",
->entry : string
+>entry : "bar"
 >"bar" : "bar"
 
     },
@@ -59,25 +59,25 @@ const inferredParams1 = createMachine({
 });
 
 const inferredParams2 = createMachine({
->inferredParams2 : [string, { entry: string; states: { a: { entry: string; }; }; }]
->createMachine({  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,}) : [string, { entry: string; states: { a: { entry: string; }; }; }]
+>inferredParams2 : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; }]
+>createMachine({  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,}) : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; }]
 >createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
->{  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,} : { entry: string; states: { a: { entry: string; }; }; extra: number; }
+>{  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }
 
   entry: "foo",
->entry : string
+>entry : "foo"
 >"foo" : "foo"
 
   states: {
->states : { a: { entry: string; }; }
->{    a: {      entry: "foo",    },  } : { a: { entry: string; }; }
+>states : { a: { entry: "foo"; }; }
+>{    a: {      entry: "foo",    },  } : { a: { entry: "foo"; }; }
 
     a: {
->a : { entry: string; }
->{      entry: "foo",    } : { entry: string; }
+>a : { entry: "foo"; }
+>{      entry: "foo",    } : { entry: "foo"; }
 
       entry: "foo",
->entry : string
+>entry : "foo"
 >"foo" : "foo"
 
     },
