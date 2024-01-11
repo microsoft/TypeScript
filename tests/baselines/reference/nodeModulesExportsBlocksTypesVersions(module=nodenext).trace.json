@@ -22,6 +22,7 @@
     "Using 'exports' subpath './foo' with target './dist/foo.js'.",
     "File name '/node_modules/exports-and-types-versions/dist/foo.js' has a '.js' extension - stripping it.",
     "File '/node_modules/exports-and-types-versions/dist/foo.js' exists - use it as a name resolution result.",
+    "'package.json' does not have a 'peerDependencies' field.",
     "Resolving real path for '/node_modules/exports-and-types-versions/dist/foo.js', result '/node_modules/exports-and-types-versions/dist/foo.js'.",
     "======== Module name 'exports-and-types-versions/foo' was successfully resolved to '/node_modules/exports-and-types-versions/dist/foo.js' with Package ID 'exports-and-types-versions/dist/foo.js@1.0.0'. ========",
     "======== Resolving module 'exports-and-types-versions/nope' from '/main.cts'. ========",
