@@ -7791,6 +7791,7 @@ declare namespace ts {
         subModuleName: string;
         /** Version of the package, e.g. "1.2.3" */
         version: string;
+        peerDependencies?: string;
     }
     enum Extension {
         Ts = ".ts",

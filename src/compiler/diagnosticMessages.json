@@ -5447,6 +5447,22 @@
         "category": "Message",
         "code": 6278
     },
+    "'package.json' has a 'peerDependencies' field.": {
+        "category": "Message",
+        "code": 6279
+    },
+    "Package is not installed using pnpm, skipping peerDependencies version resolution.": {
+        "category": "Message",
+        "code": 6280
+    },
+    "Found peerDependency '{0}' with '{1}' version.": {
+        "category": "Message",
+        "code": 6281
+    },
+    "Failed to find peerDependency '{0}'.": {
+        "category": "Message",
+        "code": 6282
+    },
 
     "Enable project compilation": {
         "category": "Message",

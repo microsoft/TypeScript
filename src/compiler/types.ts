@@ -7724,6 +7724,7 @@ export interface PackageId {
     subModuleName: string;
     /** Version of the package, e.g. "1.2.3" */
     version: string;
+    peerDependencies?: string;
 }
 
 export const enum Extension {

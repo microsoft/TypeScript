@@ -200,6 +200,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -252,6 +253,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -283,6 +285,7 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
 ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
@@ -300,6 +303,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -329,6 +333,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -500,6 +505,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -552,6 +558,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -613,6 +620,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -642,6 +650,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -720,6 +729,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -785,6 +795,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -846,6 +857,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -875,6 +887,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -955,6 +968,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1020,6 +1034,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1051,6 +1066,7 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
 ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
@@ -1068,6 +1084,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -1097,6 +1114,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -1177,6 +1195,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1229,6 +1248,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1260,6 +1280,7 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar/index.mjs', result '/home/src/projects/project/node_modules/bar/index.mjs'.
 ======== Module name 'bar' was successfully resolved to '/home/src/projects/project/node_modules/bar/index.mjs' with Package ID 'bar/index.mjs@1.0.0'. ========
 ======== Resolving module 'foo2' from '/home/src/projects/project/index.mts'. ========
@@ -1277,6 +1298,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -1306,6 +1328,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -1396,6 +1419,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -1438,6 +1462,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -1457,6 +1482,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -1486,6 +1512,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -1659,6 +1686,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -1688,6 +1716,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -1707,6 +1736,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -1736,6 +1766,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
@@ -1920,6 +1951,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -1949,6 +1981,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -1968,6 +2001,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo2/index.d.ts', result '/home/src/projects/project/node_modules/foo2/index.d.ts'.
@@ -2007,6 +2041,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2038,6 +2073,7 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
@@ -2207,6 +2243,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -2236,6 +2273,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -2271,6 +2309,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2323,6 +2362,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2354,6 +2394,7 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
@@ -2496,6 +2537,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -2525,6 +2567,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -2560,6 +2603,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2612,6 +2656,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2716,6 +2761,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -2745,6 +2791,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -2780,6 +2827,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2845,6 +2893,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -2951,6 +3000,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -2980,6 +3030,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -3015,6 +3066,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -3080,6 +3132,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -3111,6 +3164,7 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.
@@ -3173,6 +3227,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/foo/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/foo/index.d.ts', result '/home/src/projects/project/node_modules/foo/index.d.ts'.
@@ -3202,6 +3257,7 @@ Entering conditional exports.
 Matched 'exports' condition 'types'.
 Using 'exports' subpath '.' with target './index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'types'.
 Exiting conditional exports.
 Resolving real path for '/home/src/projects/project/node_modules/@types/bar/index.d.ts', result '/home/src/projects/project/node_modules/@types/bar/index.d.ts'.
@@ -3237,6 +3293,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/foo2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -3289,6 +3346,7 @@ Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
 File '/home/src/projects/project/node_modules/bar2/index.mjs' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.
@@ -3320,6 +3378,7 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 'package.json' does not have a 'typings' field.
 'package.json' has 'types' field 'index.d.ts' that references '/home/src/projects/project/node_modules/@types/bar2/index.d.ts'.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/bar2/index.mjs', result '/home/src/projects/project/node_modules/bar2/index.mjs'.
 ======== Module name 'bar2' was successfully resolved to '/home/src/projects/project/node_modules/bar2/index.mjs' with Package ID 'bar2/index.mjs@1.0.0'. ========
 File '/home/src/projects/project/node_modules/foo/package.json' exists according to earlier cached lookups.

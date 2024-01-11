@@ -168,6 +168,7 @@ File '/home/src/projects/component-type-checker/packages/app/node_modules/@compo
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field './src/index.ts' that references '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk/src/index.ts'.
 File '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk/src/index.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/sdk/src/index.ts', result '/home/src/projects/component-type-checker/packages/sdk/src/index.ts'.
 ======== Module name '@component-type-checker/sdk' was successfully resolved to '/home/src/projects/component-type-checker/packages/sdk/src/index.ts' with Package ID '@component-type-checker/sdk1/src/index.ts@0.0.2'. ========
 ======== Resolving module '@component-type-checker/components' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
@@ -188,8 +189,12 @@ File '/home/src/projects/component-type-checker/packages/app/node_modules/@compo
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field './src/index.ts' that references '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components/src/index.ts'.
 File '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components/src/index.ts' exists - use it as a name resolution result.
+'package.json' has a 'peerDependencies' field.
+Resolving real path for '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components'.
+Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/package.json'.
+Found peerDependency '@component-type-checker/button' with '0.0.2' version.
 Resolving real path for '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts'.
-======== Module name '@component-type-checker/components' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts' with Package ID '@component-type-checker/components/src/index.ts@0.0.1'. ========
+======== Module name '@component-type-checker/components' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts' with Package ID '@component-type-checker/components/src/index.ts@0.0.1+@component-type-checker/button@0.0.2'. ========
 ======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
 Explicitly specified module resolution kind: 'Node10'.
 'baseUrl' option is set to '/home/src/projects/component-type-checker/packages/app', using this value to resolve non-relative module name '@component-type-checker/button'.
@@ -208,6 +213,7 @@ File '/home/src/projects/component-type-checker/packages/app/node_modules/@compo
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field './src/index.ts' that references '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button/src/index.ts'.
 File '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button/src/index.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts'.
 ======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button/src/index.ts@0.0.2'. ========
 ======== Resolving module '@component-type-checker/components' from '/home/src/projects/component-type-checker/packages/sdk/src/index.ts'. ========
@@ -228,8 +234,12 @@ File '/home/src/projects/component-type-checker/packages/sdk/node_modules/@compo
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field './src/index.ts' that references '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/components/src/index.ts'.
 File '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/components/src/index.ts' exists - use it as a name resolution result.
+'package.json' has a 'peerDependencies' field.
+Resolving real path for '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/components', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components'.
+Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/package.json'.
+Found peerDependency '@component-type-checker/button' with '0.0.1' version.
 Resolving real path for '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/components/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts'.
-======== Module name '@component-type-checker/components' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts' with Package ID '@component-type-checker/components/src/index.ts@0.0.1'. ========
+======== Module name '@component-type-checker/components' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts' with Package ID '@component-type-checker/components/src/index.ts@0.0.1+@component-type-checker/button@0.0.1'. ========
 ======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 'baseUrl' option is set to '/home/src/projects/component-type-checker/packages/app', using this value to resolve non-relative module name '@component-type-checker/button'.
@@ -243,7 +253,7 @@ Directory '/home/src/projects/component-type-checker/node_modules/.pnpm/@compone
 Scoped package detected, looking in 'component-type-checker__button'
 Directory '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'component-type-checker__button'
-Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/package.json'.
+File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button.ts' does not exist.
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button.tsx' does not exist.
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button.d.ts' does not exist.
@@ -252,8 +262,34 @@ File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-ty
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field './src/index.ts' that references '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts'.
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts'.
 ======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button/src/index.ts@0.0.1'. ========
+======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+'baseUrl' option is set to '/home/src/projects/component-type-checker/packages/app', using this value to resolve non-relative module name '@component-type-checker/button'.
+Resolving module name '@component-type-checker/button' relative to base url '/home/src/projects/component-type-checker/packages/app' - '/home/src/projects/component-type-checker/packages/app/@component-type-checker/button'.
+Loading module as file / folder, candidate module location '/home/src/projects/component-type-checker/packages/app/@component-type-checker/button', target file types: TypeScript, Declaration.
+Loading module '@component-type-checker/button' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'component-type-checker__button'
+Directory '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'component-type-checker__button'
+Directory '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'component-type-checker__button'
+File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button.ts' does not exist.
+File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button.tsx' does not exist.
+File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button.d.ts' does not exist.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' has 'main' field './src/index.ts' that references '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts'.
+File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
+Resolving real path for '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts'.
+======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button/src/index.ts@0.0.2'. ========
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/component-type-checker/packages/app/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-es5' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -280,34 +316,21 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name '@typescript/lib-es5' was not resolved. ========
-[96msrc/app.tsx[0m:[93m4[0m:[93m7[0m - [91merror[0m[90m TS2741: [0mProperty 'b' is missing in type 'import("/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index").Button' but required in type 'import("/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index").Button'.
-
-[7m4[0m const button: Button = createButton();
-[7m [0m [91m      ~~~~~~[0m
-
-  [96m../../node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts[0m:[93m3[0m:[93m5[0m
-    [7m3[0m     b: number;
-    [7m [0m [96m    ~[0m
-    'b' is declared here.
-
 ../../../../../../a/lib/lib.es5.d.ts
   Library 'lib.es5.d.ts' specified in compilerOptions
 ../../node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
   Imported via "@component-type-checker/button" from file '../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts' with packageId '@component-type-checker/button/src/index.ts@0.0.1'
 ../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts
-  Imported via "@component-type-checker/components" from file '../sdk/src/index.ts' with packageId '@component-type-checker/components/src/index.ts@0.0.1'
+  Imported via "@component-type-checker/components" from file '../sdk/src/index.ts' with packageId '@component-type-checker/components/src/index.ts@0.0.1+@component-type-checker/button@0.0.1'
 ../sdk/src/index.ts
   Imported via "@component-type-checker/sdk" from file 'src/app.tsx' with packageId '@component-type-checker/sdk1/src/index.ts@0.0.2'
-../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts
-  Imported via "@component-type-checker/components" from file 'src/app.tsx' with packageId '@component-type-checker/components/src/index.ts@0.0.1'
-  File redirects to file '../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts'
 ../../node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts
+  Imported via "@component-type-checker/button" from file '../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts' with packageId '@component-type-checker/button/src/index.ts@0.0.2'
   Imported via "@component-type-checker/button" from file 'src/app.tsx' with packageId '@component-type-checker/button/src/index.ts@0.0.2'
+../../node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts
+  Imported via "@component-type-checker/components" from file 'src/app.tsx' with packageId '@component-type-checker/components/src/index.ts@0.0.1+@component-type-checker/button@0.0.2'
 src/app.tsx
   Matched by include pattern 'src' in 'tsconfig.json'
-
-Found 1 error in src/app.tsx[90m:4[0m
-
 
 
 //// [/home/src/projects/component-type-checker/packages/app/dist/app.js]
@@ -338,8 +361,8 @@ Program files::
 /home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
 /home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts
 /home/src/projects/component-type-checker/packages/sdk/src/index.ts
-/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts
 /home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts
+/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts
 /home/src/projects/component-type-checker/packages/app/src/app.tsx
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
