@@ -1,6 +1,9 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineParseConfig,
 } from "./helpers";
 
@@ -10,7 +13,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
             scenario: "convertTypeAcquisitionFromJson",
             subScenario,
             input: () => {
-                const jsonText = JSON.stringify(json, undefined, " ");
+                const jsonText = jsonToReadableText(json);
                 return [{
                     createHost: () =>
                         new fakes.ParseConfigHost(
@@ -29,7 +32,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                     jsonText,
                     configFileName,
                     basePath: "/apath",
-                    baselineParsed: (baseline, parsed) => baseline.push("TypeAcquisition::", JSON.stringify(parsed.typeAcquisition, undefined, " ")),
+                    baselineParsed: (baseline, parsed) => baseline.push("TypeAcquisition::", jsonToReadableText(parsed.typeAcquisition)),
                 }];
             },
         });

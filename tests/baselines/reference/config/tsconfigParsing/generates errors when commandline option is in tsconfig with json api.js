@@ -3,7 +3,11 @@ Fs::
 
 
 //// [/apath/tsconfig.json]
-{"compilerOptions":{"help":true}}
+{
+  "compilerOptions": {
+    "help": true
+  }
+}
 
 
 configFileName:: /apath/tsconfig.json

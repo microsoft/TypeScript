@@ -97,7 +97,7 @@ module WinJS {
 >oncancel : any
 
         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
->then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
+>then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => U_1, progress?: ProgressCallback): TPromise<U_1>; <U_2>(success?: (value: V) => U_2, error?: (err: any) => TPromise<U_2>, progress?: ProgressCallback): TPromise<U_2>; <U_3>(success?: (value: V) => U_3, error?: (err: any) => U_3, progress?: ProgressCallback): TPromise<U_3>; }
 >success : (value: V) => TPromise<U>
 >value : V
 >error : (err: any) => TPromise<U>
@@ -105,7 +105,7 @@ module WinJS {
 >progress : ProgressCallback
 
         public then<U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
->then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
+>then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U_2>(success?: (value: V) => U_2, error?: (err: any) => TPromise<U_2>, progress?: ProgressCallback): TPromise<U_2>; <U_3>(success?: (value: V) => U_3, error?: (err: any) => U_3, progress?: ProgressCallback): TPromise<U_3>; }
 >success : (value: V) => TPromise<U>
 >value : V
 >error : (err: any) => U
@@ -113,7 +113,7 @@ module WinJS {
 >progress : ProgressCallback
 
         public then<U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>;
->then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
+>then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_2>(success?: (value: V) => TPromise<U_2>, error?: (err: any) => U_2, progress?: ProgressCallback): TPromise<U_2>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U_3>(success?: (value: V) => U_3, error?: (err: any) => U_3, progress?: ProgressCallback): TPromise<U_3>; }
 >success : (value: V) => U
 >value : V
 >error : (err: any) => TPromise<U>
@@ -121,7 +121,7 @@ module WinJS {
 >progress : ProgressCallback
 
         public then<U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>;
->then : { <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => TPromise<U>, progress?: ProgressCallback): TPromise<U>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
+>then : { <U_1>(success?: (value: V) => TPromise<U_1>, error?: (err: any) => TPromise<U_1>, progress?: ProgressCallback): TPromise<U_1>; <U_2>(success?: (value: V) => TPromise<U_2>, error?: (err: any) => U_2, progress?: ProgressCallback): TPromise<U_2>; <U_3>(success?: (value: V) => U_3, error?: (err: any) => TPromise<U_3>, progress?: ProgressCallback): TPromise<U_3>; <U>(success?: (value: V) => U, error?: (err: any) => U, progress?: ProgressCallback): TPromise<U>; }
 >success : (value: V) => U
 >value : V
 >error : (err: any) => U

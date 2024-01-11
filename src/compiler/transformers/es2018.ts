@@ -63,6 +63,7 @@ import {
     isPropertyAccessExpression,
     isPropertyName,
     isQuestionToken,
+    isSimpleParameterList,
     isStatement,
     isSuperProperty,
     isVariableDeclarationList,
@@ -103,7 +104,6 @@ import {
     VariableStatement,
     visitEachChild,
     visitIterationBody,
-    visitLexicalEnvironment,
     visitNode,
     visitNodes,
     visitParameterList,
@@ -1050,11 +1050,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             visitNode(node.name, visitor, isPropertyName),
             visitNode(/*node*/ undefined, visitor, isQuestionToken),
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, parameterVisitor, context),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
+                transformAsyncGeneratorFunctionParameterList(node) :
+                visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
-                ? transformAsyncGeneratorFunctionBody(node)
-                : transformFunctionBody(node),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
+                transformAsyncGeneratorFunctionBody(node) :
+                transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -1076,11 +1078,13 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 : node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, parameterVisitor, context),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
+                transformAsyncGeneratorFunctionParameterList(node) :
+                visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
-                ? transformAsyncGeneratorFunctionBody(node)
-                : transformFunctionBody(node),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
+                transformAsyncGeneratorFunctionBody(node) :
+                transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
@@ -1121,27 +1125,53 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 : node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, parameterVisitor, context),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
+                transformAsyncGeneratorFunctionParameterList(node) :
+                visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
-                ? transformAsyncGeneratorFunctionBody(node)
-                : transformFunctionBody(node),
+            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator ?
+                transformAsyncGeneratorFunctionBody(node) :
+                transformFunctionBody(node),
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
         parametersWithPrecedingObjectRestOrSpread = savedParametersWithPrecedingObjectRestOrSpread;
         return updated;
     }
 
+    function transformAsyncGeneratorFunctionParameterList(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression) {
+        if (isSimpleParameterList(node.parameters)) {
+            return visitParameterList(node.parameters, visitor, context);
+        }
+        // Add fixed parameters to preserve the function's `length` property.
+        const newParameters: ParameterDeclaration[] = [];
+        for (const parameter of node.parameters) {
+            if (parameter.initializer || parameter.dotDotDotToken) {
+                break;
+            }
+            const newParameter = factory.createParameterDeclaration(
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                factory.getGeneratedNameForNode(parameter.name, GeneratedIdentifierFlags.ReservedInNestedScopes),
+            );
+            newParameters.push(newParameter);
+        }
+        const newParametersArray = factory.createNodeArray(newParameters);
+        setTextRange(newParametersArray, node.parameters);
+        return newParametersArray;
+    }
+
     function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
+        const innerParameters = !isSimpleParameterList(node.parameters) ? visitParameterList(node.parameters, visitor, context) : undefined;
         resumeLexicalEnvironment();
-        const statements: Statement[] = [];
-        const statementOffset = factory.copyPrologue(node.body!.statements, statements, /*ensureUseStrict*/ false, visitor);
-        appendObjectRestAssignmentsIfNeeded(statements, node);
 
         const savedCapturedSuperProperties = capturedSuperProperties;
         const savedHasSuperElementAccess = hasSuperElementAccess;
         capturedSuperProperties = new Set();
         hasSuperElementAccess = false;
+
+        const outerStatements: Statement[] = [];
+        let asyncBody = factory.updateBlock(node.body!, visitNodes(node.body!.statements, visitor, isStatement));
+        asyncBody = factory.updateBlock(asyncBody, factory.mergeLexicalEnvironment(asyncBody.statements, appendObjectRestAssignmentsIfNeeded(endLexicalEnvironment(), node)));
 
         const returnStatement = factory.createReturnStatement(
             emitHelpers().createAsyncGeneratorHelper(
@@ -1150,12 +1180,9 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     factory.createToken(SyntaxKind.AsteriskToken),
                     node.name && factory.getGeneratedNameForNode(node.name),
                     /*typeParameters*/ undefined,
-                    /*parameters*/ [],
+                    innerParameters ?? [],
                     /*type*/ undefined,
-                    factory.updateBlock(
-                        node.body!,
-                        visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset),
-                    ),
+                    asyncBody,
                 ),
                 !!(hierarchyFacts & HierarchyFacts.HasLexicalThis),
             ),
@@ -1164,19 +1191,16 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
         // This step isn't needed if we eventually transform this to ES5.
         const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
-
         if (emitSuperHelpers) {
             enableSubstitutionForAsyncMethodsWithSuper();
             const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
             substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-            insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+            insertStatementsAfterStandardPrologue(outerStatements, [variableStatement]);
         }
 
-        statements.push(returnStatement);
+        outerStatements.push(returnStatement);
 
-        insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
-        const block = factory.updateBlock(node.body!, statements);
-
+        const block = factory.updateBlock(node.body!, outerStatements);
         if (emitSuperHelpers && hasSuperElementAccess) {
             if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
                 addEmitHelper(block, advancedAsyncSuperHelper);

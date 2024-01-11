@@ -1,4 +1,4 @@
-for-of39.ts(1,11): error TS2769: No overload matches this call.
+for-of39.ts(1,15): error TS2769: No overload matches this call.
   Overload 1 of 4, '(iterable?: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
     Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'Iterable<readonly [string, boolean]>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
@@ -15,7 +15,7 @@ for-of39.ts(1,11): error TS2769: No overload matches this call.
 
 ==== for-of39.ts (1 errors) ====
     var map = new Map([["", true], ["", 0]]);
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 4, '(iterable?: Iterable<readonly [string, boolean]>): Map<string, boolean>', gave the following error.
 !!! error TS2769:     Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'Iterable<readonly [string, boolean]>'.

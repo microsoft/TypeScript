@@ -84,11 +84,11 @@ export interface BuilderState {
      */
     hasCalledUpdateShapeSignature?: Set<Path>;
     /**
-     * Stores signatures before before the update till affected file is commited
+     * Stores signatures before before the update till affected file is committed
      */
     oldSignatures?: Map<Path, string | false>;
     /**
-     * Stores exportedModulesMap before the update till affected file is commited
+     * Stores exportedModulesMap before the update till affected file is committed
      */
     oldExportedModulesMap?: Map<Path, ReadonlySet<Path> | false>;
     /**
@@ -238,17 +238,15 @@ export namespace BuilderState {
         }
 
         // Handle type reference directives
-        if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames.forEach(({ resolvedTypeReferenceDirective }) => {
-                if (!resolvedTypeReferenceDirective) {
-                    return;
-                }
+        program.forEachResolvedTypeReferenceDirective(({ resolvedTypeReferenceDirective }) => {
+            if (!resolvedTypeReferenceDirective) {
+                return;
+            }
 
-                const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
-                const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory, getCanonicalFileName);
-                addReferencedFile(typeFilePath);
-            });
-        }
+            const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
+            const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory, getCanonicalFileName);
+            addReferencedFile(typeFilePath);
+        }, sourceFile);
 
         // Add module augmentation as references
         if (sourceFile.moduleAugmentations.length) {

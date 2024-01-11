@@ -1,10 +1,16 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    dedent,
+} from "../../_namespaces/Utils";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
+    closeFilesForSession,
     openFilesForSession,
     protocolLocationFromSubstring,
+    TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
@@ -24,7 +30,7 @@ describe("unittests:: tsserver:: symLinks", () => {
         };
         const aTsconfig: File = {
             path: `${folderA}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { module: "commonjs" } }),
+            content: jsonToReadableText({ compilerOptions: { module: "commonjs" } }),
         };
         const aC: SymLink = {
             path: `${folderA}/c`,
@@ -39,7 +45,7 @@ describe("unittests:: tsserver:: symLinks", () => {
         };
         const bTsconfig: File = {
             path: `${folderB}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { module: "commonjs" } }),
+            content: jsonToReadableText({ compilerOptions: { module: "commonjs" } }),
         };
         const bC: SymLink = {
             path: `${folderB}/c`,
@@ -55,7 +61,7 @@ describe("unittests:: tsserver:: symLinks", () => {
 
         const files = [cFile, libFile, aFile, aTsconfig, aC, bFile, bTsconfig, bC];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(
             [
                 { file: aFile, projectRootPath: folderA },
@@ -88,13 +94,13 @@ new C();`,
         const recognizerDateTimeTsconfigPath = `${recognizersDateTime}/tsconfig.json`;
         const recognizerDateTimeTsconfigWithoutPathMapping: File = {
             path: recognizerDateTimeTsconfigPath,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 include: ["src"],
             }),
         };
         const recognizerDateTimeTsconfigWithPathMapping: File = {
             path: recognizerDateTimeTsconfigPath,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     rootDir: "src",
                     baseUrl: "./",
@@ -119,13 +125,13 @@ new C();`,
         };
         const recongnizerTextPackageJson: File = {
             path: `${recognizersText}/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 typings: "dist/types/recognizers-text.d.ts",
             }),
         };
 
         function createSessionAndOpenFile(host: TestServerHost) {
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
                 command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
@@ -155,7 +161,7 @@ new C();`,
                     const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
                     host.writeFile(
                         recognizerDateTimeTsconfigPath,
-                        JSON.stringify({
+                        jsonToReadableText({
                             ...config,
                             compilerOptions: { ...config.compilerOptions, resolveJsonModule: true },
                         }),
@@ -203,5 +209,63 @@ new C();`,
 
         verifyModuleResolution(/*withPathMapping*/ false);
         verifyModuleResolution(/*withPathMapping*/ true);
+    });
+
+    it("when not symlink but differs in casing", () => {
+        const host = createServerHost({
+            "C:/temp/replay/axios-src/lib/core/AxiosHeaders.js": dedent`
+                export const b = 10;
+
+            `,
+            "C:/temp/replay/axios-src/lib/core/dispatchRequest.js": dedent`
+                import { b } from "./AxiosHeaders.js";
+                import { b2 } from "./settle.js";
+                import { x } from "follow-redirects";
+                export const y = 10;
+            `,
+            "C:/temp/replay/axios-src/lib/core/mergeConfig.js": dedent`
+                import { b } from "./AxiosHeaders.js";
+                export const y = 10;
+            `,
+            "C:/temp/replay/axios-src/lib/core/settle.js": dedent`
+                export const b2 = 10;
+            `,
+            "C:/temp/replay/axios-src/package.json": jsonToReadableText({
+                name: "axios",
+                version: "1.4.0",
+                dependencies: { "follow-redirects": "^1.15.0" },
+            }),
+            "C:/temp/replay/axios-src/node_modules/follow-redirects/package.json": jsonToReadableText({
+                name: "follow-redirects",
+                version: "1.15.0",
+            }),
+            "C:/temp/replay/axios-src/node_modules/follow-redirects/index.js": "export const x = 10;",
+        }, { windowsStyleRoot: "C:/" });
+        const session = new TestSession({ host, disableAutomaticTypingAcquisition: true });
+        openFilesForSession(["c:/temp/replay/axios-src/lib/core/AxiosHeaders.js"], session); // Creates InferredProject1 and AutoImportProvider1
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({ // Different content from disk
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
+            arguments: {
+                changedFiles: [{
+                    fileName: "c:/temp/replay/axios-src/lib/core/AxiosHeaders.js",
+                    textChanges: [{
+                        newText: "//comment",
+                        start: { line: 2, offset: 1 },
+                        end: { line: 2, offset: 1 },
+                    }],
+                }],
+            },
+        });
+        // This will create InferredProject2, but will not create AutoImportProvider as it includes follow-redirect import,
+        // contains the file we will be opening after closing changed file
+        // It will also close InferredProject1 and AutoImportProvider1
+        openFilesForSession(["c:/temp/replay/axios-src/lib/core/dispatchRequest.js"], session);
+        // This creates InferredProject3 and AutoImportProvider2
+        openFilesForSession(["c:/temp/replay/axios-src/lib/core/mergeConfig.js"], session);
+        // Closing this file will schedule update for InferredProject2, InferredProject3
+        closeFilesForSession(["c:/temp/replay/axios-src/lib/core/AxiosHeaders.js"], session);
+        // When we open this file, we will update InferredProject2 which contains this file and the follow-redirect will be resolved again
+        openFilesForSession(["c:/temp/replay/axios-src/lib/core/settle.js"], session);
+        baselineTsserverLogs("symLinks", "when not symlink but differs in casing", session);
     });
 });

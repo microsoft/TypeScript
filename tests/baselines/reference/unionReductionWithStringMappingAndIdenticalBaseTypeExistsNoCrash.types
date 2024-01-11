@@ -1,0 +1,175 @@
+//// [tests/cases/compiler/unionReductionWithStringMappingAndIdenticalBaseTypeExistsNoCrash.tsx] ////
+
+=== node_modules/@types/react/index.d.ts ===
+// https://github.com/microsoft/TypeScript/issues/56688
+
+
+export = React;
+>React : typeof React
+
+export as namespace React;
+>React : typeof React
+
+declare namespace React {
+>React : typeof React
+
+  type ReactNode =
+>ReactNode : string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined
+
+    | ReactElement
+    | string
+    | number
+    | Iterable<ReactNode>
+    | boolean
+    | null
+    | undefined;
+  type JSXElementConstructor<P> = (props: P) => ReactNode;
+>JSXElementConstructor : JSXElementConstructor<P>
+>props : P
+
+  interface ReactElement<
+    P = any,
+    T extends string | JSXElementConstructor<any> =
+      | string
+      | JSXElementConstructor<any>,
+  > {
+    type: T;
+>type : T
+
+    props: P;
+>props : P
+
+    key: string | null;
+>key : string | null
+  }
+
+  type ComponentProps<T extends JSXElementConstructor<any>> =
+>ComponentProps : ComponentProps<T>
+
+    T extends JSXElementConstructor<infer P> ? P : never;
+
+  interface ExoticComponent<P = {}> {
+    (props: P): ReactNode;
+>props : P
+
+    readonly $$typeof: symbol;
+>$$typeof : symbol
+  }
+
+  type LazyExoticComponent<T extends JSXElementConstructor<any>> =
+>LazyExoticComponent : LazyExoticComponent<T>
+
+    ExoticComponent<ComponentProps<T>> & {
+      readonly _result: T;
+>_result : T
+
+    };
+
+  function createElement(): void;
+>createElement : () => void
+
+  namespace JSX {
+    interface Element extends GlobalJSXElement {}
+    interface ElementChildrenAttribute
+      extends GlobalJSXElementChildrenAttribute {}
+    type LibraryManagedAttributes<C, P> = GlobalJSXLibraryManagedAttributes<
+>LibraryManagedAttributes : LibraryManagedAttributes<C, P>
+
+      C,
+      P
+    >;
+    interface IntrinsicElements extends GlobalJSXIntrinsicElements {}
+  }
+}
+
+type ReactManagedAttributes<C, P> = C extends { defaultProps: infer D }
+>ReactManagedAttributes : ReactManagedAttributes<C, P>
+>defaultProps : D
+
+  ? P & D
+  : P;
+
+declare global {
+>global : any
+
+  namespace JSX {
+    interface Element extends React.ReactElement<any, any> {}
+>React : typeof React
+
+    interface ElementChildrenAttribute {
+      children: {};
+>children : {}
+    }
+    type LibraryManagedAttributes<C, P> = C extends React.LazyExoticComponent<
+>LibraryManagedAttributes : LibraryManagedAttributes<C, P>
+>React : any
+
+      infer T
+    >
+      ? ReactManagedAttributes<T, P>
+      : ReactManagedAttributes<C, P>;
+    interface IntrinsicElements {
+      div: {};
+>div : {}
+
+      span: {};
+>span : {}
+    }
+  }
+}
+
+interface GlobalJSXElement extends JSX.Element {}
+>JSX : any
+
+interface GlobalJSXElementChildrenAttribute
+  extends JSX.ElementChildrenAttribute {}
+>JSX : any
+
+type GlobalJSXLibraryManagedAttributes<C, P> = JSX.LibraryManagedAttributes<
+>GlobalJSXLibraryManagedAttributes : GlobalJSXLibraryManagedAttributes<C, P>
+>JSX : any
+
+  C,
+  P
+>;
+interface GlobalJSXIntrinsicElements extends JSX.IntrinsicElements {}
+>JSX : any
+
+=== src/index.tsx ===
+import React from 'react'
+>React : typeof React
+
+declare function upperFirst<T extends string>(str: T): Capitalize<T>
+>upperFirst : <T extends string>(str: T) => Capitalize<T>
+>str : T
+
+const displayEnum = (value: string) => upperFirst(value.toLowerCase())
+>displayEnum : (value: string) => Capitalize<string>
+>(value: string) => upperFirst(value.toLowerCase()) : (value: string) => Capitalize<string>
+>value : string
+>upperFirst(value.toLowerCase()) : Capitalize<string>
+>upperFirst : <T extends string>(str: T) => Capitalize<T>
+>value.toLowerCase() : string
+>value.toLowerCase : () => string
+>value : string
+>toLowerCase : () => string
+
+function Comp() {
+>Comp : () => React.JSX.Element
+
+  return <div>
+><div>    <span>Scope:</span> {displayEnum("VALUE")}  </div> : React.JSX.Element
+>div : any
+
+    <span>Scope:</span> {displayEnum("VALUE")}
+><span>Scope:</span> : React.JSX.Element
+>span : any
+>span : any
+>displayEnum("VALUE") : Capitalize<string>
+>displayEnum : (value: string) => Capitalize<string>
+>"VALUE" : "VALUE"
+
+  </div>
+>div : any
+}
+

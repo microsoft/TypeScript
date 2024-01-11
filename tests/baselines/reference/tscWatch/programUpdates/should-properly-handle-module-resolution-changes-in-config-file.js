@@ -40,8 +40,31 @@ Output::
 
 
 
-Program root files: ["/a/b/file1.ts"]
-Program options: {"moduleResolution":2,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/file1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+FsWatches::
+/a/b/file1.ts: *new*
+  {}
+/a/b/node_modules/module1.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/b/file1.ts"
+]
+Program options: {
+  "moduleResolution": 2,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -58,23 +81,7 @@ Shape signatures in builder refreshed for::
 /a/b/node_modules/module1.ts (used version)
 /a/b/file1.ts (used version)
 
-FsWatches::
-/a/b/file1.ts: *new*
-  {}
-/a/b/node_modules/module1.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: Change module resolution to classic
 
@@ -88,8 +95,12 @@ Input::
                     }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -99,21 +110,12 @@ Output::
 
 
 
-Program root files: ["/a/b/file1.ts"]
-Program options: {"moduleResolution":1,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/module1.ts
-/a/b/file1.ts
+//// [/a/b/file1.js] file written with same contents
+//// [/a/module1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
-Semantic diagnostics in builder refreshed for::
-/a/module1.ts
-/a/b/file1.ts
 
-Shape signatures in builder refreshed for::
-/a/module1.ts (computed .d.ts)
-/a/b/file1.ts (computed .d.ts)
 
 FsWatches::
 /a/b/file1.ts:
@@ -129,11 +131,28 @@ FsWatches *deleted*::
 /a/b/node_modules/module1.ts:
   {}
 
+
+Program root files: [
+  "/a/b/file1.ts"
+]
+Program options: {
+  "moduleResolution": 1,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/module1.ts
+/a/b/file1.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/module1.ts
+/a/b/file1.ts
+
+Shape signatures in builder refreshed for::
+/a/module1.ts (computed .d.ts)
+/a/b/file1.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/file1.js] file written with same contents
-//// [/a/module1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-

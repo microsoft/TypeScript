@@ -19,8 +19,8 @@ const parameterFn = (props:{store:string}) => alert(props.store)
 >store : string
 
 const brokenFunction = <OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o
->brokenFunction : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
-><OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o : <OwnProps>(f: (p: { dispatch: number; } & OwnProps) => void) => (o: OwnProps) => OwnProps
+>brokenFunction : <OwnProps>(f: (p: {    dispatch: number;} & OwnProps) => void) => (o: OwnProps) => OwnProps
+><OwnProps>(f: (p: {dispatch: number} & OwnProps) => void) => (o: OwnProps) => o : <OwnProps>(f: (p: {    dispatch: number;} & OwnProps) => void) => (o: OwnProps) => OwnProps
 >f : (p: {    dispatch: number;} & OwnProps) => void
 >p : { dispatch: number; } & OwnProps
 >dispatch : number
