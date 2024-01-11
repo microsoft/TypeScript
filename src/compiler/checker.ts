@@ -13676,7 +13676,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (constraint === type.constraintType) {
             return;
         }
-        const mapper = appendTypeMapping(type.mappedType.mapper, type.constraintType.type, keyofConstraintObjectType);
+        const mapper = appendTypeMapping(type.mappedType.mapper, type.constraintType.type, getIntersectionType([type.constraintType.type, keyofConstraintObjectType]));
         return getBaseConstraintOrType(instantiateType(constraint, mapper));
     }
 
