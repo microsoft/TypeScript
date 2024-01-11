@@ -2415,19 +2415,17 @@ function readPackageJsonPeerDependencies(packageJsonInfo: PackageJsonInfo, state
     }
     const nodeModules = packageDirectory.substring(0, packageDirectory.lastIndexOf("node_modules") + "node_modules".length) + directorySeparator;
     let result = "";
-    if (state.traceEnabled) {
-        for (const key in peerDependencies) {
-            if (hasProperty(peerDependencies, key)) {
-                const peerPackageJson = getPackageJsonInfo(nodeModules + key, /*onlyRecordFailures*/ false, state);
-                if (peerPackageJson) {
-                    const version = (peerPackageJson.contents.packageJsonContent as PackageJson).version;
-                    result += `+${key}@${version}`;
-                    if (state.traceEnabled) trace(state.host, Diagnostics.Found_peerDependency_0_with_1_version, key, version);
-                }
-                else {
-                    // Read the dependency version
-                    if (state.traceEnabled) trace(state.host, Diagnostics.Failed_to_find_peerDependency_0, key);
-                }
+    for (const key in peerDependencies) {
+        if (hasProperty(peerDependencies, key)) {
+            const peerPackageJson = getPackageJsonInfo(nodeModules + key, /*onlyRecordFailures*/ false, state);
+            if (peerPackageJson) {
+                const version = (peerPackageJson.contents.packageJsonContent as PackageJson).version;
+                result += `+${key}@${version}`;
+                if (state.traceEnabled) trace(state.host, Diagnostics.Found_peerDependency_0_with_1_version, key, version);
+            }
+            else {
+                // Read the dependency version
+                if (state.traceEnabled) trace(state.host, Diagnostics.Failed_to_find_peerDependency_0, key);
             }
         }
     }
