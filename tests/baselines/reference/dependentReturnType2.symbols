@@ -1,298 +1,43 @@
 //// [tests/cases/compiler/dependentReturnType2.ts] ////
 
 === dependentReturnType2.ts ===
-// ---5
-type SettingComposedValue<T extends SettingValue = SettingValue> = { key: string; value: T };
->SettingComposedValue : Symbol(SettingComposedValue, Decl(dependentReturnType2.ts, 0, 0))
->T : Symbol(T, Decl(dependentReturnType2.ts, 1, 26))
->SettingValue : Symbol(SettingValue, Decl(dependentReturnType2.ts, 2, 89))
->SettingValue : Symbol(SettingValue, Decl(dependentReturnType2.ts, 2, 89))
->key : Symbol(key, Decl(dependentReturnType2.ts, 1, 68))
->value : Symbol(value, Decl(dependentReturnType2.ts, 1, 81))
->T : Symbol(T, Decl(dependentReturnType2.ts, 1, 26))
+declare function q(x: object): x is { b: number };
+>q : Symbol(q, Decl(dependentReturnType2.ts, 0, 0))
+>x : Symbol(x, Decl(dependentReturnType2.ts, 0, 19))
+>x : Symbol(x, Decl(dependentReturnType2.ts, 0, 19))
+>b : Symbol(b, Decl(dependentReturnType2.ts, 0, 37))
 
-type SettingCallback = (key: string, value: SettingValue, initialLoad?: boolean) => void;
->SettingCallback : Symbol(SettingCallback, Decl(dependentReturnType2.ts, 1, 93))
->key : Symbol(key, Decl(dependentReturnType2.ts, 2, 24))
->value : Symbol(value, Decl(dependentReturnType2.ts, 2, 36))
->SettingValue : Symbol(SettingValue, Decl(dependentReturnType2.ts, 2, 89))
->initialLoad : Symbol(initialLoad, Decl(dependentReturnType2.ts, 2, 57))
+function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: string } ? number : (string | number) {
+>foo : Symbol(foo, Decl(dependentReturnType2.ts, 0, 50))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 2, 13))
+>a : Symbol(a, Decl(dependentReturnType2.ts, 2, 24))
+>b : Symbol(b, Decl(dependentReturnType2.ts, 2, 40))
+>x : Symbol(x, Decl(dependentReturnType2.ts, 2, 54))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 2, 13))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 2, 13))
+>a : Symbol(a, Decl(dependentReturnType2.ts, 2, 72))
 
-type SettingValue = object;
->SettingValue : Symbol(SettingValue, Decl(dependentReturnType2.ts, 2, 89))
+    if (q(x)) {
+>q : Symbol(q, Decl(dependentReturnType2.ts, 0, 0))
+>x : Symbol(x, Decl(dependentReturnType2.ts, 2, 54))
 
-declare const Meteor: { settings: { [s: string]: any } };
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->s : Symbol(s, Decl(dependentReturnType2.ts, 5, 37))
+        x.b;
+>x.b : Symbol(b, Decl(dependentReturnType2.ts, 2, 40))
+>x : Symbol(x, Decl(dependentReturnType2.ts, 2, 54))
+>b : Symbol(b, Decl(dependentReturnType2.ts, 2, 40))
 
-declare const _: { isRegExp(x: unknown): x is RegExp; };
->_ : Symbol(_, Decl(dependentReturnType2.ts, 6, 13))
->isRegExp : Symbol(isRegExp, Decl(dependentReturnType2.ts, 6, 18))
->x : Symbol(x, Decl(dependentReturnType2.ts, 6, 28))
->x : Symbol(x, Decl(dependentReturnType2.ts, 6, 28))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-
-type HelperCond<T, A, R1, B, R2> =
->HelperCond : Symbol(HelperCond, Decl(dependentReturnType2.ts, 6, 56))
->T : Symbol(T, Decl(dependentReturnType2.ts, 8, 16))
->A : Symbol(A, Decl(dependentReturnType2.ts, 8, 18))
->R1 : Symbol(R1, Decl(dependentReturnType2.ts, 8, 21))
->B : Symbol(B, Decl(dependentReturnType2.ts, 8, 25))
->R2 : Symbol(R2, Decl(dependentReturnType2.ts, 8, 28))
-
-    T extends A
->T : Symbol(T, Decl(dependentReturnType2.ts, 8, 16))
->A : Symbol(A, Decl(dependentReturnType2.ts, 8, 18))
-
-        ? R1
->R1 : Symbol(R1, Decl(dependentReturnType2.ts, 8, 21))
-
-        : T extends B
->T : Symbol(T, Decl(dependentReturnType2.ts, 8, 16))
->B : Symbol(B, Decl(dependentReturnType2.ts, 8, 25))
-
-            ? R2
->R2 : Symbol(R2, Decl(dependentReturnType2.ts, 8, 28))
-
-            : (R1 | R2);
->R1 : Symbol(R1, Decl(dependentReturnType2.ts, 8, 21))
->R2 : Symbol(R2, Decl(dependentReturnType2.ts, 8, 28))
-
-declare function takesRegExp(x: RegExp): void;
->takesRegExp : Symbol(takesRegExp, Decl(dependentReturnType2.ts, 13, 24), Decl(dependentReturnType2.ts, 79, 1))
->x : Symbol(x, Decl(dependentReturnType2.ts, 15, 29))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-
-declare function takesString(x: string): void;
->takesString : Symbol(takesString, Decl(dependentReturnType2.ts, 15, 46))
->x : Symbol(x, Decl(dependentReturnType2.ts, 16, 29))
-
-class NewSettingsBase {
->NewSettingsBase : Symbol(NewSettingsBase, Decl(dependentReturnType2.ts, 16, 46))
-
-    public newGet<C extends SettingCallback | undefined, I extends string | RegExp, T extends SettingValue = SettingValue>(
->newGet : Symbol(NewSettingsBase.newGet, Decl(dependentReturnType2.ts, 18, 23))
->C : Symbol(C, Decl(dependentReturnType2.ts, 19, 18))
->SettingCallback : Symbol(SettingCallback, Decl(dependentReturnType2.ts, 1, 93))
->I : Symbol(I, Decl(dependentReturnType2.ts, 19, 56))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(dependentReturnType2.ts, 19, 83))
->SettingValue : Symbol(SettingValue, Decl(dependentReturnType2.ts, 2, 89))
->SettingValue : Symbol(SettingValue, Decl(dependentReturnType2.ts, 2, 89))
-
-        _id: I,
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
->I : Symbol(I, Decl(dependentReturnType2.ts, 19, 56))
-
-        callback?: C,
->callback : Symbol(callback, Decl(dependentReturnType2.ts, 20, 15))
->C : Symbol(C, Decl(dependentReturnType2.ts, 19, 18))
-
-    ): HelperCond<C,
->HelperCond : Symbol(HelperCond, Decl(dependentReturnType2.ts, 6, 56))
->C : Symbol(C, Decl(dependentReturnType2.ts, 19, 18))
-
-        SettingCallback, void,
->SettingCallback : Symbol(SettingCallback, Decl(dependentReturnType2.ts, 1, 93))
-
-        undefined, HelperCond<I,
->HelperCond : Symbol(HelperCond, Decl(dependentReturnType2.ts, 6, 56))
->I : Symbol(I, Decl(dependentReturnType2.ts, 19, 56))
-
-            string, T | undefined,
->T : Symbol(T, Decl(dependentReturnType2.ts, 19, 83))
-
-            RegExp, SettingComposedValue<T>[]>> {
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->SettingComposedValue : Symbol(SettingComposedValue, Decl(dependentReturnType2.ts, 0, 0))
->T : Symbol(T, Decl(dependentReturnType2.ts, 19, 83))
-
-        if (callback !== undefined) {
->callback : Symbol(callback, Decl(dependentReturnType2.ts, 20, 15))
->undefined : Symbol(undefined)
-
-            // this.onload(_id, callback);
-            if (!Meteor.settings) {
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
-
-                return;
-            }
-            if (_id === '*') {
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
-
-                return Object.keys(Meteor.settings).forEach((key) => {
->Object.keys(Meteor.settings).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->key : Symbol(key, Decl(dependentReturnType2.ts, 33, 61))
-
-                    const value = Meteor.settings[key];
->value : Symbol(value, Decl(dependentReturnType2.ts, 34, 25))
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->key : Symbol(key, Decl(dependentReturnType2.ts, 33, 61))
-
-                    callback(key, value);
->callback : Symbol(callback, Decl(dependentReturnType2.ts, 20, 15))
->key : Symbol(key, Decl(dependentReturnType2.ts, 33, 61))
->value : Symbol(value, Decl(dependentReturnType2.ts, 34, 25))
-
-                });
-            }
-            if (_.isRegExp(_id) && Meteor.settings) {
->_.isRegExp : Symbol(isRegExp, Decl(dependentReturnType2.ts, 6, 18))
->_ : Symbol(_, Decl(dependentReturnType2.ts, 6, 13))
->isRegExp : Symbol(isRegExp, Decl(dependentReturnType2.ts, 6, 18))
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
-
-                return Object.keys(Meteor.settings).forEach((key) => {
->Object.keys(Meteor.settings).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->key : Symbol(key, Decl(dependentReturnType2.ts, 39, 61))
-
-                    if (!_id.test(key)) {
->_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
->key : Symbol(key, Decl(dependentReturnType2.ts, 39, 61))
-
-                        return;
-                    }
-                    const value = Meteor.settings[key];
->value : Symbol(value, Decl(dependentReturnType2.ts, 43, 25))
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->key : Symbol(key, Decl(dependentReturnType2.ts, 39, 61))
-
-                    callback(key, value);
->callback : Symbol(callback, Decl(dependentReturnType2.ts, 20, 15))
->key : Symbol(key, Decl(dependentReturnType2.ts, 39, 61))
->value : Symbol(value, Decl(dependentReturnType2.ts, 43, 25))
-
-                });
-            }
-
-            if (typeof _id === 'string') {
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
-
-                const value = Meteor.settings[_id];
->value : Symbol(value, Decl(dependentReturnType2.ts, 49, 21))
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
-
-                if (value != null) {
->value : Symbol(value, Decl(dependentReturnType2.ts, 49, 21))
-
-                    callback(_id, Meteor.settings[_id]);
->callback : Symbol(callback, Decl(dependentReturnType2.ts, 20, 15))
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
-                }
-                return;
-            }
-
-            return; // Needed to add this for exhaustiveness
-        }
-
-        if (!Meteor.settings) { // Wrong: we don't know that _id is string here, cannot return undefined
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
-
-            return undefined;
->undefined : Symbol(undefined)
-        }
-
-        if (_.isRegExp(_id)) {
->_.isRegExp : Symbol(isRegExp, Decl(dependentReturnType2.ts, 6, 18))
->_ : Symbol(_, Decl(dependentReturnType2.ts, 6, 13))
->isRegExp : Symbol(isRegExp, Decl(dependentReturnType2.ts, 6, 18))
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
-
-            takesRegExp(_id);
->takesRegExp : Symbol(takesRegExp, Decl(dependentReturnType2.ts, 13, 24), Decl(dependentReturnType2.ts, 79, 1))
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
-
-            return Object.keys(Meteor.settings).reduce((items: SettingComposedValue<T>[], key) => {
->Object.keys(Meteor.settings).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->items : Symbol(items, Decl(dependentReturnType2.ts, 65, 56))
->SettingComposedValue : Symbol(SettingComposedValue, Decl(dependentReturnType2.ts, 0, 0))
->T : Symbol(T, Decl(dependentReturnType2.ts, 19, 83))
->key : Symbol(key, Decl(dependentReturnType2.ts, 65, 89))
-
-                const value = Meteor.settings[key];
->value : Symbol(value, Decl(dependentReturnType2.ts, 66, 21))
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->key : Symbol(key, Decl(dependentReturnType2.ts, 65, 89))
-
-                if (_id.test(key)) {
->_id.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
->key : Symbol(key, Decl(dependentReturnType2.ts, 65, 89))
-
-                    items.push({
->items.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->items : Symbol(items, Decl(dependentReturnType2.ts, 65, 56))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
-
-                        key,
->key : Symbol(key, Decl(dependentReturnType2.ts, 68, 32))
-
-                        value,
->value : Symbol(value, Decl(dependentReturnType2.ts, 69, 28))
-
-                    });
-                }
-                return items;
->items : Symbol(items, Decl(dependentReturnType2.ts, 65, 56))
-
-            }, []);
-        }
-
-        return Meteor.settings?.[_id]; // The indexing doesn't work
->Meteor.settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->Meteor : Symbol(Meteor, Decl(dependentReturnType2.ts, 5, 13))
->settings : Symbol(settings, Decl(dependentReturnType2.ts, 5, 23))
->_id : Symbol(_id, Decl(dependentReturnType2.ts, 19, 123))
+        return "";
     }
 }
 
-declare function takesRegExp(x: RegExp): void;
->takesRegExp : Symbol(takesRegExp, Decl(dependentReturnType2.ts, 13, 24), Decl(dependentReturnType2.ts, 79, 1))
->x : Symbol(x, Decl(dependentReturnType2.ts, 81, 29))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+let y = { a: "", b: 1 }
+>y : Symbol(y, Decl(dependentReturnType2.ts, 9, 3))
+>a : Symbol(a, Decl(dependentReturnType2.ts, 9, 9))
+>b : Symbol(b, Decl(dependentReturnType2.ts, 9, 16))
+
+const r = foo<{ a: string }>(y); // number
+>r : Symbol(r, Decl(dependentReturnType2.ts, 10, 5))
+>foo : Symbol(foo, Decl(dependentReturnType2.ts, 0, 50))
+>a : Symbol(a, Decl(dependentReturnType2.ts, 10, 15))
+>y : Symbol(y, Decl(dependentReturnType2.ts, 9, 3))
 

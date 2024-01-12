@@ -1,284 +1,45 @@
 //// [tests/cases/compiler/dependentReturnType2.ts] ////
 
 === dependentReturnType2.ts ===
-// ---5
-type SettingComposedValue<T extends SettingValue = SettingValue> = { key: string; value: T };
->SettingComposedValue : SettingComposedValue<T>
->key : string
->value : T
+declare function q(x: object): x is { b: number };
+>q : (x: object) => x is { b: number; }
+>x : object
+>b : number
 
-type SettingCallback = (key: string, value: SettingValue, initialLoad?: boolean) => void;
->SettingCallback : (key: string, value: SettingValue, initialLoad?: boolean) => void
->key : string
->value : object
->initialLoad : boolean | undefined
+function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: string } ? number : (string | number) {
+>foo : <T extends { a: string; } | { b: number; }>(x: T) => T extends {    a: string;} ? number : (string | number)
+>a : string
+>b : number
+>x : T
+>a : string
 
-type SettingValue = object;
->SettingValue : object
+    if (q(x)) {
+>q(x) : boolean
+>q : (x: object) => x is { b: number; }
+>x : { a: string; } | { b: number; }
 
-declare const Meteor: { settings: { [s: string]: any } };
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->s : string
+        x.b;
+>x.b : number
+>x : { b: number; }
+>b : number
 
-declare const _: { isRegExp(x: unknown): x is RegExp; };
->_ : { isRegExp(x: unknown): x is RegExp; }
->isRegExp : (x: unknown) => x is RegExp
->x : unknown
-
-type HelperCond<T, A, R1, B, R2> =
->HelperCond : HelperCond<T, A, R1, B, R2>
-
-    T extends A
-        ? R1
-        : T extends B
-            ? R2
-            : (R1 | R2);
-
-declare function takesRegExp(x: RegExp): void;
->takesRegExp : { (x: RegExp): void; (x: RegExp): void; }
->x : RegExp
-
-declare function takesString(x: string): void;
->takesString : (x: string) => void
->x : string
-
-class NewSettingsBase {
->NewSettingsBase : NewSettingsBase
-
-    public newGet<C extends SettingCallback | undefined, I extends string | RegExp, T extends SettingValue = SettingValue>(
->newGet : <C extends SettingCallback | undefined, I extends string | RegExp, T extends object = object>(_id: I, callback?: C) => HelperCond<C, SettingCallback, void, undefined, HelperCond<I, string, T | undefined, RegExp, SettingComposedValue<T>[]>>
-
-        _id: I,
->_id : I
-
-        callback?: C,
->callback : C | undefined
-
-    ): HelperCond<C,
-        SettingCallback, void,
-        undefined, HelperCond<I,
-            string, T | undefined,
-            RegExp, SettingComposedValue<T>[]>> {
-        if (callback !== undefined) {
->callback !== undefined : boolean
->callback : C | undefined
->undefined : undefined
-
-            // this.onload(_id, callback);
-            if (!Meteor.settings) {
->!Meteor.settings : false
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
-
-                return;
-            }
-            if (_id === '*') {
->_id === '*' : boolean
->_id : I
->'*' : "*"
-
-                return Object.keys(Meteor.settings).forEach((key) => {
->Object.keys(Meteor.settings).forEach((key) => {                    const value = Meteor.settings[key];                    callback(key, value);                }) : void
->Object.keys(Meteor.settings).forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->Object.keys(Meteor.settings) : string[]
->Object.keys : (o: object) => string[]
->Object : ObjectConstructor
->keys : (o: object) => string[]
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->(key) => {                    const value = Meteor.settings[key];                    callback(key, value);                } : (key: string) => void
->key : string
-
-                    const value = Meteor.settings[key];
->value : any
->Meteor.settings[key] : any
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->key : string
-
-                    callback(key, value);
->callback(key, value) : void
->callback : SettingCallback
->key : string
->value : any
-
-                });
-            }
-            if (_.isRegExp(_id) && Meteor.settings) {
->_.isRegExp(_id) && Meteor.settings : false | { [s: string]: any; }
->_.isRegExp(_id) : boolean
->_.isRegExp : (x: unknown) => x is RegExp
->_ : { isRegExp(x: unknown): x is RegExp; }
->isRegExp : (x: unknown) => x is RegExp
->_id : string | RegExp
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
-
-                return Object.keys(Meteor.settings).forEach((key) => {
->Object.keys(Meteor.settings).forEach((key) => {                    if (!_id.test(key)) {                        return;                    }                    const value = Meteor.settings[key];                    callback(key, value);                }) : void
->Object.keys(Meteor.settings).forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->Object.keys(Meteor.settings) : string[]
->Object.keys : (o: object) => string[]
->Object : ObjectConstructor
->keys : (o: object) => string[]
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->(key) => {                    if (!_id.test(key)) {                        return;                    }                    const value = Meteor.settings[key];                    callback(key, value);                } : (key: string) => void
->key : string
-
-                    if (!_id.test(key)) {
->!_id.test(key) : boolean
->_id.test(key) : boolean
->_id.test : (string: string) => boolean
->_id : RegExp
->test : (string: string) => boolean
->key : string
-
-                        return;
-                    }
-                    const value = Meteor.settings[key];
->value : any
->Meteor.settings[key] : any
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->key : string
-
-                    callback(key, value);
->callback(key, value) : void
->callback : SettingCallback
->key : string
->value : any
-
-                });
-            }
-
-            if (typeof _id === 'string') {
->typeof _id === 'string' : boolean
->typeof _id : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->_id : I
->'string' : "string"
-
-                const value = Meteor.settings[_id];
->value : any
->Meteor.settings[_id] : any
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->_id : I & string
-
-                if (value != null) {
->value != null : boolean
->value : any
-
-                    callback(_id, Meteor.settings[_id]);
->callback(_id, Meteor.settings[_id]) : void
->callback : SettingCallback
->_id : string
->Meteor.settings[_id] : any
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->_id : I & string
-                }
-                return;
-            }
-
-            return; // Needed to add this for exhaustiveness
-        }
-
-        if (!Meteor.settings) { // Wrong: we don't know that _id is string here, cannot return undefined
->!Meteor.settings : false
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
-
-            return undefined;
->undefined : undefined
-        }
-
-        if (_.isRegExp(_id)) {
->_.isRegExp(_id) : boolean
->_.isRegExp : (x: unknown) => x is RegExp
->_ : { isRegExp(x: unknown): x is RegExp; }
->isRegExp : (x: unknown) => x is RegExp
->_id : string | RegExp
-
-            takesRegExp(_id);
->takesRegExp(_id) : void
->takesRegExp : { (x: RegExp): void; (x: RegExp): void; }
->_id : RegExp
-
-            return Object.keys(Meteor.settings).reduce((items: SettingComposedValue<T>[], key) => {
->Object.keys(Meteor.settings).reduce((items: SettingComposedValue<T>[], key) => {                const value = Meteor.settings[key];                if (_id.test(key)) {                    items.push({                        key,                        value,                    });                }                return items;            }, []) : SettingComposedValue<T>[]
->Object.keys(Meteor.settings).reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
->Object.keys(Meteor.settings) : string[]
->Object.keys : (o: object) => string[]
->Object : ObjectConstructor
->keys : (o: object) => string[]
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
->(items: SettingComposedValue<T>[], key) => {                const value = Meteor.settings[key];                if (_id.test(key)) {                    items.push({                        key,                        value,                    });                }                return items;            } : (items: SettingComposedValue<T>[], key: string) => SettingComposedValue<T>[]
->items : SettingComposedValue<T>[]
->key : string
-
-                const value = Meteor.settings[key];
->value : any
->Meteor.settings[key] : any
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->key : string
-
-                if (_id.test(key)) {
->_id.test(key) : boolean
->_id.test : (string: string) => boolean
->_id : RegExp
->test : (string: string) => boolean
->key : string
-
-                    items.push({
->items.push({                        key,                        value,                    }) : number
->items.push : (...items: SettingComposedValue<T>[]) => number
->items : SettingComposedValue<T>[]
->push : (...items: SettingComposedValue<T>[]) => number
->{                        key,                        value,                    } : { key: string; value: any; }
-
-                        key,
->key : string
-
-                        value,
->value : any
-
-                    });
-                }
-                return items;
->items : SettingComposedValue<T>[]
-
-            }, []);
->[] : never[]
-        }
-
-        return Meteor.settings?.[_id]; // The indexing doesn't work
->Meteor.settings?.[_id] : any
->Meteor.settings : { [s: string]: any; }
->Meteor : { settings: { [s: string]: any; }; }
->settings : { [s: string]: any; }
->_id : I
+        return "";
+>"" : ""
     }
 }
 
-declare function takesRegExp(x: RegExp): void;
->takesRegExp : { (x: RegExp): void; (x: RegExp): void; }
->x : RegExp
+let y = { a: "", b: 1 }
+>y : { a: string; b: number; }
+>{ a: "", b: 1 } : { a: string; b: number; }
+>a : string
+>"" : ""
+>b : number
+>1 : 1
+
+const r = foo<{ a: string }>(y); // number
+>r : number
+>foo<{ a: string }>(y) : number
+>foo : <T extends { a: string; } | { b: number; }>(x: T) => T extends { a: string; } ? number : string | number
+>a : string
+>y : { a: string; b: number; }
 
