@@ -120,7 +120,8 @@ export class CompilerBaselineRunner extends RunnerBase {
                 const isolatedTestEnv = IsolatedDeclarationTest.transformEnvironment(environment);
                 if (isolatedTestEnv) {
                     isolatedTest = new IsolatedDeclarationTest(isolatedTestEnv);
-                } else {
+                }
+                else {
                     this.skip();
                 }
             });
@@ -139,7 +140,8 @@ export class CompilerBaselineRunner extends RunnerBase {
                 const fixedIsolatedTestEnv = FixedIsolatedDeclarationTest.fixTestProject(environment);
                 if (fixedIsolatedTestEnv) {
                     fixedIsolatedTest = new FixedIsolatedDeclarationTest(fixedIsolatedTestEnv);
-                } else {
+                }
+                else {
                     this.skip();
                 }
             });

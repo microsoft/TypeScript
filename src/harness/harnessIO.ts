@@ -1139,7 +1139,6 @@ export namespace Compiler {
         Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts`), code.length > 0 ? code : null);
     }
 
-
     export function doDeclarationMapBaseline(
         baselinePath: string,
         type: string,

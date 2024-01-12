@@ -10727,7 +10727,6 @@ export function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
     }
 }
 
-
 /** @internal */
 export function isGlobalSourceFile(node: Node) {
     return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(node as SourceFile);

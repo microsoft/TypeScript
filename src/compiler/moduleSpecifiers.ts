@@ -933,41 +933,41 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
 
 function tryGetModuleNameFromExports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[]): { moduleFileToTry: string; } | undefined {
     if (typeof exports === "object" && exports !== null && !Array.isArray(exports) && allKeysStartWithDot(exports as MapLike<unknown>)) { // eslint-disable-line no-null/no-null
-            // sub-mappings
-            // 3 cases:
-            // * directory mappings (legacyish, key ends with / (technically allows index/extension resolution under cjs mode))
-            // * pattern mappings (contains a *)
-            // * exact mappings (no *, does not end with /)
-            return forEach(getOwnKeys(exports as MapLike<unknown>), k => {
-                const subPackageName = getNormalizedAbsolutePath(combinePaths(packageName, k), /*currentDirectory*/ undefined);
-                const mode = endsWith(k, "/") ? MatchingMode.Directory
-                    : k.includes("*") ? MatchingMode.Pattern
-                    : MatchingMode.Exact;
+        // sub-mappings
+        // 3 cases:
+        // * directory mappings (legacyish, key ends with / (technically allows index/extension resolution under cjs mode))
+        // * pattern mappings (contains a *)
+        // * exact mappings (no *, does not end with /)
+        return forEach(getOwnKeys(exports as MapLike<unknown>), k => {
+            const subPackageName = getNormalizedAbsolutePath(combinePaths(packageName, k), /*currentDirectory*/ undefined);
+            const mode = endsWith(k, "/") ? MatchingMode.Directory
+                : k.includes("*") ? MatchingMode.Pattern
+                : MatchingMode.Exact;
             return tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode, /*isImports*/ false);
-            });
-        }
+        });
+    }
     return tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, exports, conditions, MatchingMode.Exact, /*isImports*/ false);
-                    }
+}
 
 function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDirectory: string, options: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode) {
     if (!host.readFile || !getResolvePackageJsonImports(options)) {
         return undefined;
-                }
+    }
 
     const ancestorDirectoryWithPackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory);
     if (!ancestorDirectoryWithPackageJson) {
         return undefined;
-            }
+    }
     const packageJsonPath = combinePaths(ancestorDirectoryWithPackageJson, "package.json");
     const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
     if (isMissingPackageJsonInfo(cachedPackageJson) || !host.fileExists(packageJsonPath)) {
         return undefined;
-        }
+    }
     const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || tryParseJson(host.readFile(packageJsonPath)!);
     const imports = packageJsonContent?.imports;
     if (!imports) {
-    return undefined;
-}
+        return undefined;
+    }
     const conditions = getConditions(options, importMode);
     return forEach(getOwnKeys(imports as MapLike<unknown>), k => {
         if (!startsWith(k, "#") || k === "#" || startsWith(k, "#/")) return undefined;

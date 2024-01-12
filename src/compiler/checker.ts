@@ -14905,7 +14905,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-
         if (node.initializer) {
             const signature = getSignatureFromDeclaration(node.parent);
             const parameterIndex = node.parent.parameters.indexOf(node);

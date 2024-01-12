@@ -5680,7 +5680,6 @@ export enum TypeReferenceSerializationKind {
     ObjectType,
 }
 
-
 /** @internal */
 export interface CoreEmitResolver {
     isLiteralComputedName(node: ComputedPropertyName): boolean;
@@ -8204,8 +8203,8 @@ export interface SourceFileMayBeEmittedHost {
 export interface CoreEmitHost {
     getCurrentDirectory(): string;
     getCommonSourceDirectory(): string;
-    getCanonicalFileName(fileName: string): string;    
-} 
+    getCanonicalFileName(fileName: string): string;
+}
 
 /** @internal */
 export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost, CoreEmitHost {
@@ -9281,7 +9280,7 @@ export interface IsolatedTransformationContext extends CoreTransformationContext
     addDiagnostic(diag: Diagnostic): void;
 }
 /** @internal */
-export interface NullTransformationContext extends Omit<TransformationContext, 'kind'> {
+export interface NullTransformationContext extends Omit<TransformationContext, "kind"> {
     kind: TransformationContextKind.NullContext;
     getEmitResolver(): never;
     getEmitHost(): never;

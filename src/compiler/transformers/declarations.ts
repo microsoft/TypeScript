@@ -1496,9 +1496,9 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                         input,
                         factory.updateConstructSignature(
                             input,
-                        ensureTypeParams(input, input.typeParameters),
-                        updateParamsList(input, input.parameters),
-                        ensureType(input, input.type),
+                            ensureTypeParams(input, input.typeParameters),
+                            updateParamsList(input, input.parameters),
+                            ensureType(input, input.type),
                         ),
                     ));
                 case SyntaxKind.Constructor: {
@@ -1506,9 +1506,9 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                     const ctor = ensureBindingAliasesInParameterList(
                         input,
                         factory.createConstructorDeclaration(
-                        /*modifiers*/ ensureModifiers(input),
-                        updateParamsList(input, input.parameters, ModifierFlags.None),
-                        /*body*/ undefined,
+                            /*modifiers*/ ensureModifiers(input),
+                            updateParamsList(input, input.parameters, ModifierFlags.None),
+                            /*body*/ undefined,
                         ),
                     );
                     return cleanup(ctor);
@@ -1520,14 +1520,14 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                     const sig = ensureBindingAliasesInParameterList(
                         input,
                         factory.createMethodDeclaration(
-                        ensureModifiers(input),
-                        /*asteriskToken*/ undefined,
-                        input.name,
-                        input.questionToken,
-                        ensureTypeParams(input, input.typeParameters),
-                        updateParamsList(input, input.parameters),
-                        ensureType(input, input.type),
-                        /*body*/ undefined,
+                            ensureModifiers(input),
+                            /*asteriskToken*/ undefined,
+                            input.name,
+                            input.questionToken,
+                            ensureTypeParams(input, input.typeParameters),
+                            updateParamsList(input, input.parameters),
+                            ensureType(input, input.type),
+                            /*body*/ undefined,
                         ),
                     );
                     return cleanup(sig);
@@ -1543,11 +1543,11 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                         input,
                         factory.updateGetAccessorDeclaration(
                             input,
-                        ensureModifiers(input),
-                        input.name,
-                        updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
-                        ensureType(input, accessorType),
-                        /*body*/ undefined,
+                            ensureModifiers(input),
+                            input.name,
+                            updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
+                            ensureType(input, accessorType),
+                            /*body*/ undefined,
                         ),
                     ));
                 }
@@ -1559,10 +1559,10 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                         input,
                         factory.updateSetAccessorDeclaration(
                             input,
-                        ensureModifiers(input),
-                        input.name,
-                        updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
-                        /*body*/ undefined,
+                            ensureModifiers(input),
+                            input.name,
+                            updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
+                            /*body*/ undefined,
                         ),
                     ));
                 }
@@ -1597,12 +1597,12 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                         input,
                         factory.updateMethodSignature(
                             input,
-                        ensureModifiers(input),
-                        input.name,
-                        input.questionToken,
-                        ensureTypeParams(input, input.typeParameters),
-                        updateParamsList(input, input.parameters),
-                        ensureType(input, input.type),
+                            ensureModifiers(input),
+                            input.name,
+                            input.questionToken,
+                            ensureTypeParams(input, input.typeParameters),
+                            updateParamsList(input, input.parameters),
+                            ensureType(input, input.type),
                         ),
                     ));
                 }
@@ -1611,9 +1611,9 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                         input,
                         factory.updateCallSignature(
                             input,
-                        ensureTypeParams(input, input.typeParameters),
-                        updateParamsList(input, input.parameters),
-                        ensureType(input, input.type),
+                            ensureTypeParams(input, input.typeParameters),
+                            updateParamsList(input, input.parameters),
+                            ensureType(input, input.type),
                         ),
                     ));
                 }
@@ -1890,13 +1890,13 @@ export function transformDeclarations(context: TransformationContext | IsolatedT
                     input,
                     factory.updateFunctionDeclaration(
                         input,
-                    ensureModifiers(input),
-                    /*asteriskToken*/ undefined,
-                    input.name,
-                    ensureTypeParams(input, input.typeParameters),
-                    updateParamsList(input, input.parameters),
-                    ensureType(input, input.type),
-                    /*body*/ undefined,
+                        ensureModifiers(input),
+                        /*asteriskToken*/ undefined,
+                        input.name,
+                        ensureTypeParams(input, input.typeParameters),
+                        updateParamsList(input, input.parameters),
+                        ensureType(input, input.type),
+                        /*body*/ undefined,
                     ),
                 ));
                 if (clean && resolver.isExpandoFunction(input) && shouldEmitFunctionProperties(input)) {
