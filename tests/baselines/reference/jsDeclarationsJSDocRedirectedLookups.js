@@ -81,7 +81,7 @@
 /** @type {int} */ declare const n: int;
 /** @type {float} */ declare const o: float;
 /** @type {integer} */ declare const p: integer;
-/** @type {event} */ declare const q: Event | undefined;
+/** @type {event} */ declare const q: Event<EventTarget> | undefined;
 
 
 //// [DtsFileErrors]
@@ -123,5 +123,5 @@ out/index.d.ts(18,41): error TS2304: Cannot find name 'integer'.
     /** @type {integer} */ declare const p: integer;
                                             ~~~~~~~
 !!! error TS2304: Cannot find name 'integer'.
-    /** @type {event} */ declare const q: Event | undefined;
+    /** @type {event} */ declare const q: Event<EventTarget> | undefined;
     

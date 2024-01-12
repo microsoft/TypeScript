@@ -529,12 +529,12 @@ declare function createEventListener<K extends keyof DocumentEventMap>({ name, o
 declare const clickEvent: {
     readonly name: "click";
     readonly once?: boolean | undefined;
-    readonly callback: (ev: MouseEvent) => void;
+    readonly callback: (ev: MouseEvent<EventTarget>) => void;
 };
 declare const scrollEvent: {
     readonly name: "scroll";
     readonly once?: boolean | undefined;
-    readonly callback: (ev: Event) => void;
+    readonly callback: (ev: Event<EventTarget>) => void;
 };
 declare function ff1(): void;
 type ArgMap = {

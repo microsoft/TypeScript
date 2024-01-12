@@ -354,9 +354,9 @@ function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
 
         document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
 >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
->document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject<EventTarget>, options?: boolean | AddEventListenerOptions | undefined): void; }
 >document : Document
->addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
+>addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject<EventTarget>, options?: boolean | AddEventListenerOptions | undefined): void; }
 >event.name : K
 >event : Ev<K>
 >name : K
@@ -390,86 +390,86 @@ function createEventListener<K extends keyof DocumentEventMap>({ name, once = fa
 }
 
 const clickEvent = createEventListener({
->clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
->createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
+>clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent<EventTarget>) => void; }
+>createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent<EventTarget>) => void; }
 >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
->{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: MouseEvent) => void; }
+>{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: MouseEvent<EventTarget>) => void; }
 
     name: "click",
 >name : "click"
 >"click" : "click"
 
     callback: ev => console.log(ev),
->callback : (ev: MouseEvent) => void
->ev => console.log(ev) : (ev: MouseEvent) => void
->ev : MouseEvent
+>callback : (ev: MouseEvent<EventTarget>) => void
+>ev => console.log(ev) : (ev: MouseEvent<EventTarget>) => void
+>ev : MouseEvent<EventTarget>
 >console.log(ev) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->ev : MouseEvent
+>ev : MouseEvent<EventTarget>
 
 });
 
 const scrollEvent = createEventListener({
->scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
->createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
+>scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event<EventTarget>) => void; }
+>createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event<EventTarget>) => void; }
 >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
->{    name: "scroll",    callback: ev => console.log(ev),} : { name: "scroll"; callback: (ev: Event) => void; }
+>{    name: "scroll",    callback: ev => console.log(ev),} : { name: "scroll"; callback: (ev: Event<EventTarget>) => void; }
 
     name: "scroll",
 >name : "scroll"
 >"scroll" : "scroll"
 
     callback: ev => console.log(ev),
->callback : (ev: Event) => void
->ev => console.log(ev) : (ev: Event) => void
->ev : Event
+>callback : (ev: Event<EventTarget>) => void
+>ev => console.log(ev) : (ev: Event<EventTarget>) => void
+>ev : Event<EventTarget>
 >console.log(ev) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->ev : Event
+>ev : Event<EventTarget>
 
 });
 
 processEvents([clickEvent, scrollEvent]);
 >processEvents([clickEvent, scrollEvent]) : void
 >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
->[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; })[]
->clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
->scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
+>[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent<EventTarget>) => void; } | { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event<EventTarget>) => void; })[]
+>clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent<EventTarget>) => void; }
+>scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event<EventTarget>) => void; }
 
 processEvents([
 >processEvents([    { name: "click", callback: ev => console.log(ev) },    { name: "scroll", callback: ev => console.log(ev) },]) : void
 >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
->[    { name: "click", callback: ev => console.log(ev) },    { name: "scroll", callback: ev => console.log(ev) },] : ({ name: "click"; callback: (ev: MouseEvent) => void; } | { name: "scroll"; callback: (ev: Event) => void; })[]
+>[    { name: "click", callback: ev => console.log(ev) },    { name: "scroll", callback: ev => console.log(ev) },] : ({ name: "click"; callback: (ev: MouseEvent<EventTarget>) => void; } | { name: "scroll"; callback: (ev: Event<EventTarget>) => void; })[]
 
     { name: "click", callback: ev => console.log(ev) },
->{ name: "click", callback: ev => console.log(ev) } : { name: "click"; callback: (ev: MouseEvent) => void; }
+>{ name: "click", callback: ev => console.log(ev) } : { name: "click"; callback: (ev: MouseEvent<EventTarget>) => void; }
 >name : "click"
 >"click" : "click"
->callback : (ev: MouseEvent) => void
->ev => console.log(ev) : (ev: MouseEvent) => void
->ev : MouseEvent
+>callback : (ev: MouseEvent<EventTarget>) => void
+>ev => console.log(ev) : (ev: MouseEvent<EventTarget>) => void
+>ev : MouseEvent<EventTarget>
 >console.log(ev) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->ev : MouseEvent
+>ev : MouseEvent<EventTarget>
 
     { name: "scroll", callback: ev => console.log(ev) },
->{ name: "scroll", callback: ev => console.log(ev) } : { name: "scroll"; callback: (ev: Event) => void; }
+>{ name: "scroll", callback: ev => console.log(ev) } : { name: "scroll"; callback: (ev: Event<EventTarget>) => void; }
 >name : "scroll"
 >"scroll" : "scroll"
->callback : (ev: Event) => void
->ev => console.log(ev) : (ev: Event) => void
->ev : Event
+>callback : (ev: Event<EventTarget>) => void
+>ev => console.log(ev) : (ev: Event<EventTarget>) => void
+>ev : Event<EventTarget>
 >console.log(ev) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->ev : Event
+>ev : Event<EventTarget>
 
 ]);
 

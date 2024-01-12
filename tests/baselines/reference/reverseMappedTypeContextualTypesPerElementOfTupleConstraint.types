@@ -37,31 +37,31 @@ bindAll({} as HTMLButtonElement, [
 >bindAll : <TTarget extends EventTarget, TTypes extends Tuple<keyof TTarget & `on${any}`>>(target: TTarget, bindings: { [K in keyof TTypes]: { type: TTypes[K]; listener: (ev: Parameters<Extract<TTarget[TTypes[K]], (...args: any[]) => any>>[0]) => void; }; }) => void
 >{} as HTMLButtonElement : HTMLButtonElement
 >{} : {}
->[  {    type: "onclick",    listener: (event) => {},  },  {    type: "onkeydown",    listener: (event) => {},  },] : [{ type: "onclick"; listener: (event: MouseEvent) => void; }, { type: "onkeydown"; listener: (event: KeyboardEvent) => void; }]
+>[  {    type: "onclick",    listener: (event) => {},  },  {    type: "onkeydown",    listener: (event) => {},  },] : [{ type: "onclick"; listener: (event: MouseEvent<EventTarget>) => void; }, { type: "onkeydown"; listener: (event: KeyboardEvent<EventTarget>) => void; }]
   {
->{    type: "onclick",    listener: (event) => {},  } : { type: "onclick"; listener: (event: MouseEvent) => void; }
+>{    type: "onclick",    listener: (event) => {},  } : { type: "onclick"; listener: (event: MouseEvent<EventTarget>) => void; }
 
     type: "onclick",
 >type : "onclick"
 >"onclick" : "onclick"
 
     listener: (event) => {},
->listener : (event: MouseEvent) => void
->(event) => {} : (event: MouseEvent) => void
->event : MouseEvent
+>listener : (event: MouseEvent<EventTarget>) => void
+>(event) => {} : (event: MouseEvent<EventTarget>) => void
+>event : MouseEvent<EventTarget>
 
   },
   {
->{    type: "onkeydown",    listener: (event) => {},  } : { type: "onkeydown"; listener: (event: KeyboardEvent) => void; }
+>{    type: "onkeydown",    listener: (event) => {},  } : { type: "onkeydown"; listener: (event: KeyboardEvent<EventTarget>) => void; }
 
     type: "onkeydown",
 >type : "onkeydown"
 >"onkeydown" : "onkeydown"
 
     listener: (event) => {},
->listener : (event: KeyboardEvent) => void
->(event) => {} : (event: KeyboardEvent) => void
->event : KeyboardEvent
+>listener : (event: KeyboardEvent<EventTarget>) => void
+>(event) => {} : (event: KeyboardEvent<EventTarget>) => void
+>event : KeyboardEvent<EventTarget>
 
   },
 ]);
