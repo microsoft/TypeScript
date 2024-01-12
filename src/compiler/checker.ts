@@ -14905,9 +14905,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-        if(nodeIsSynthesized(node)) {
-            return false;
-        }
 
         if (node.initializer) {
             const signature = getSignatureFromDeclaration(node.parent);
