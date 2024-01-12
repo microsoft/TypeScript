@@ -19770,8 +19770,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We apply the mapped type's template type to each of the fixed part elements. For variadic elements, we
         // apply the mapped type itself to the variadic element type. For other elements in the variable part of the
         // tuple, we surround the element type with an array type and apply the mapped type to that. This ensures
-        // that we get sequential property key types ("0", "1", "2", etc.) for the fixed part of the tuple, and
-        // property key type number for the remaining elements.
+        // that we get sequential property key types for the fixed part of the tuple, and property key type number
+        // for the remaining elements. For example
+        //
+        //   type Keys<T> = { [K in keyof T]: K };
+        //   type Foo<T extends any[]> = Keys<[string, string, ...T, string]>; // ["0", "1", ...Keys<T>, number]
+        //
         const elementFlags = tupleType.target.elementFlags;
         const fixedLength = tupleType.target.fixedLength;
         const fixedMapper = fixedLength ? prependTypeMapping(typeVariable, tupleType, mapper) : mapper;
@@ -19779,7 +19783,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const flags = elementFlags[i];
             return i < fixedLength ? instantiateMappedTypeTemplate(mappedType, getStringLiteralType("" + i), !!(flags & ElementFlags.Optional), fixedMapper) :
                 flags & ElementFlags.Variadic ? instantiateType(mappedType, prependTypeMapping(typeVariable, type, mapper)) :
-                getElementTypeOfArrayType(instantiateType(mappedType, prependTypeMapping(typeVariable, createArrayType(type), mapper))) || unknownType;
+                getElementTypeOfArrayType(instantiateType(mappedType, prependTypeMapping(typeVariable, createArrayType(type), mapper))) ?? unknownType;
         });
         const modifiers = getMappedTypeModifiers(mappedType);
         const newElementFlags = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
