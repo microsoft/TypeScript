@@ -40412,11 +40412,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkTupleType(node: TupleTypeNode) {
-        const elementTypes = node.elements;
         let seenOptionalElement = false;
         let seenRestElement = false;
-        for (const e of elementTypes) {
-            const flags = getTupleElementFlags(e);
+        for (const e of node.elements) {
+            let flags = getTupleElementFlags(e);
             if (flags & ElementFlags.Variadic) {
                 const type = getTypeFromTypeNode((e as RestTypeNode | NamedTupleMember).type);
                 if (!isArrayLikeType(type)) {
@@ -40424,10 +40423,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 }
                 if (isArrayType(type) || isTupleType(type) && type.target.combinedFlags & ElementFlags.Rest) {
-                    seenRestElement = true;
+                    flags |= ElementFlags.Rest;
                 }
             }
-            else if (flags & ElementFlags.Rest) {
+            if (flags & ElementFlags.Rest) {
                 if (seenRestElement) {
                     grammarErrorOnNode(e, Diagnostics.A_rest_element_cannot_follow_another_rest_element);
                     break;
@@ -40441,7 +40440,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 seenOptionalElement = true;
             }
-            else if (seenOptionalElement) {
+            else if (flags & ElementFlags.Required && seenOptionalElement) {
                 grammarErrorOnNode(e, Diagnostics.A_required_element_cannot_follow_an_optional_element);
                 break;
             }
