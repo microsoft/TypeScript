@@ -598,3 +598,19 @@ dependentReturnType1.ts(463,13): error TS2322: Type 'R' is not assignable to typ
         }
         return 2;
     }
+    
+    // Return conditional expressions with parentheses
+    function returnStuff1<T extends boolean>(opts: { x: T }): T extends true ? 1 : T extends false ? 2 : 1 | 2 {
+        return (opts.x ? (1) : 2);
+    }
+    
+    function returnStuff2<T extends 1 | 2 | "a">(opts: { x: T }):
+        T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : "one" | "two" | 0 {
+        return (typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two"));
+    }
+    
+    // If the return type is written wrong, it still type checks
+    function returnStuff3<T extends 1 | 2 | "a">(opts: { x: T }):
+        T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : 1 | 2 | "zero" {
+        return (typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two"));
+    }

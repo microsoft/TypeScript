@@ -44137,9 +44137,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
         let actualReturnType = unwrappedReturnType;
         if (expr) {
-            expr = skipParentheses(expr);
-            if (isConditionalExpression(expr)) {
-                return checkReturnConditionalExpression(container, returnType, node, expr);
+            const unwrappedExpr = skipParentheses(expr);
+            if (isConditionalExpression(unwrappedExpr)) {
+                return checkReturnConditionalExpression(container, returnType, node, unwrappedExpr);
             }
         }
 
@@ -44162,9 +44162,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // `function foo(...) {
             //       |return;|
             // }`
-            const narrowPosition = expr && isConditionalExpression(walkUpParenthesizedExpressions(expr.parent)) ?
-                expr : node;
-            if (queryTypeParameters && narrowPosition.flowNode) {
+            let narrowPosition = node;
+            let narrowFlowNode = node.flowNode;
+            if (expr && isConditionalExpression(expr.parent)) {
+                narrowFlowNode = expr.parent.whenTrue === expr ? expr.parent.flowNodeWhenTrue : expr.parent.flowNodeWhenFalse;
+            }
+            if (queryTypeParameters && narrowFlowNode) {
                 const narrowed: [TypeParameter, Type][] = mapDefined(queryTypeParameters, ([tp, symbol, reference]) => {
                     const narrowReference = factory.cloneNode(reference); // Construct a reference that can be narrowed.
                     // Don't reuse the original reference's node id,
@@ -44175,7 +44178,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     getNodeLinks(narrowReference).resolvedSymbol = symbol;
                     setParent(narrowReference, narrowPosition.parent);
                     setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
-                    narrowReference.flowNode = narrowPosition.flowNode;
+                    narrowReference.flowNode = narrowFlowNode;
                     const exprType = getTypeOfExpression(narrowReference);
                     // Don't narrow the return type if narrowing didn't produce a narrower type for the expression.
                     if (isTypeAny(exprType) || isErrorType(exprType) || exprType === tp || exprType === mapType(tp, getBaseConstraintOrType)) {
@@ -44381,7 +44384,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function collectReturnStatementFlowNodes(container: SignatureDeclaration): FlowNode[] {
-        const flowNodes = [];
+        const flowNodes: FlowNode[] = [];
         visit(container);
         if (isFunctionLikeDeclaration(container) && container.endFlowNode) {
             flowNodes.push(container.endFlowNode);
@@ -44393,8 +44396,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const nodeContainer = getContainingFunctionOrClassStaticBlock((node as ReturnStatement));
                 if (nodeContainer === container) {
                     visitConditionalReturnExpression((node as ReturnStatement).expression);
-                    if ((node as ReturnStatement).flowNode) {
-                        flowNodes.push((node as ReturnStatement).flowNode);
+                    const flowNode = (node as ReturnStatement).flowNode;
+                    if (flowNode) {
+                        flowNodes.push(flowNode);
                     }
                 }
                 return;
@@ -44407,11 +44411,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!node) return;
             node = skipParentheses(node);
             if (isConditionalExpression(node)) {
+                node.flowNodeWhenTrue && flowNodes.push(node.flowNodeWhenTrue);
+                node.flowNodeWhenFalse && flowNodes.push(node.flowNodeWhenFalse);
                 visitConditionalReturnExpression(node.whenTrue);
                 visitConditionalReturnExpression(node.whenFalse);
-            }
-            else if (node.flowNode) {
-                flowNodes.push(node.flowNode);
             }
         }
     }

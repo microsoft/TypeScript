@@ -967,7 +967,6 @@ export interface FlowContainer extends Node {
 
 /** @internal */
 export type HasFlowNode =
-    | Expression
     | Identifier
     | ThisExpression
     | SuperExpression
@@ -2365,7 +2364,7 @@ export interface TemplateLiteralTypeSpan extends TypeNode {
 // checker actually thinks you have something of the right type.  Note: the brands are
 // never actually given values.  At runtime they have zero cost.
 
-export interface Expression extends FlowContainer, Node {
+export interface Expression extends Node {
     _expressionBrand: any;
 }
 
@@ -2711,6 +2710,10 @@ export interface ConditionalExpression extends Expression {
     readonly whenTrue: Expression;
     readonly colonToken: ColonToken;
     readonly whenFalse: Expression;
+    /** @internal*/
+    flowNodeWhenTrue?: FlowNode;
+    /** @internal */
+    flowNodeWhenFalse?: FlowNode;
 }
 
 export type FunctionBody = Block;

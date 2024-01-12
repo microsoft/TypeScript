@@ -261,7 +261,6 @@ import {
     isEnumMember,
     isExportAssignment,
     isExportDeclaration,
-    isExpression,
     isExpressionStatement,
     isExpressionWithTypeArguments,
     isExternalModule,
@@ -4164,24 +4163,13 @@ export function canHaveFlowNode(node: Node): node is HasFlowNode {
         return true;
     }
 
-    // >> TODO: how precise do we want to be here?
-    if (isExpression(node)) {
-        return true;
-    }
-    // let parent;
-    // if (isExpression(node)
-    //     && isConditionalExpression(parent = walkUpParenthesizedExpressions(node.parent))
-    //     && isConditionalExpressionInReturnStatement(parent)) {
-    //     return true;
-    // }
-
     switch (node.kind) {
-        // case SyntaxKind.Identifier:
-        // case SyntaxKind.ThisKeyword:
-        // case SyntaxKind.SuperKeyword:
-        // case SyntaxKind.ElementAccessExpression:
-        // case SyntaxKind.PropertyAccessExpression:
-        // case SyntaxKind.FunctionExpression:
+        case SyntaxKind.Identifier:
+        case SyntaxKind.ThisKeyword:
+        case SyntaxKind.SuperKeyword:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.FunctionExpression:
         case SyntaxKind.QualifiedName:
         case SyntaxKind.MetaProperty:
         case SyntaxKind.BindingElement:

@@ -1321,3 +1321,62 @@ function tupl<T extends true | false | undefined>(x: [string, some?: T]):
     }
     return 2;
 }
+
+// Return conditional expressions with parentheses
+function returnStuff1<T extends boolean>(opts: { x: T }): T extends true ? 1 : T extends false ? 2 : 1 | 2 {
+>returnStuff1 : Symbol(returnStuff1, Decl(dependentReturnType1.ts, 478, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 481, 22))
+>opts : Symbol(opts, Decl(dependentReturnType1.ts, 481, 41))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 481, 48))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 481, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 481, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 481, 22))
+
+    return (opts.x ? (1) : 2);
+>opts.x : Symbol(x, Decl(dependentReturnType1.ts, 481, 48))
+>opts : Symbol(opts, Decl(dependentReturnType1.ts, 481, 41))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 481, 48))
+}
+
+function returnStuff2<T extends 1 | 2 | "a">(opts: { x: T }):
+>returnStuff2 : Symbol(returnStuff2, Decl(dependentReturnType1.ts, 483, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 485, 22))
+>opts : Symbol(opts, Decl(dependentReturnType1.ts, 485, 45))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 485, 52))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 485, 22))
+
+    T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : "one" | "two" | 0 {
+>T : Symbol(T, Decl(dependentReturnType1.ts, 485, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 485, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 485, 22))
+
+    return (typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two"));
+>opts.x : Symbol(x, Decl(dependentReturnType1.ts, 485, 52))
+>opts : Symbol(opts, Decl(dependentReturnType1.ts, 485, 45))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 485, 52))
+>opts.x : Symbol(x, Decl(dependentReturnType1.ts, 485, 52))
+>opts : Symbol(opts, Decl(dependentReturnType1.ts, 485, 45))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 485, 52))
+}
+
+// If the return type is written wrong, it still type checks
+function returnStuff3<T extends 1 | 2 | "a">(opts: { x: T }):
+>returnStuff3 : Symbol(returnStuff3, Decl(dependentReturnType1.ts, 488, 1))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 491, 22))
+>opts : Symbol(opts, Decl(dependentReturnType1.ts, 491, 45))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 491, 52))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 491, 22))
+
+    T extends 1 ? "one" : T extends 2 ? "two" : T extends "a" ? 0 : 1 | 2 | "zero" {
+>T : Symbol(T, Decl(dependentReturnType1.ts, 491, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 491, 22))
+>T : Symbol(T, Decl(dependentReturnType1.ts, 491, 22))
+
+    return (typeof opts.x === "string" ? 0 : (opts.x === 1 ? ("one") : "two"));
+>opts.x : Symbol(x, Decl(dependentReturnType1.ts, 491, 52))
+>opts : Symbol(opts, Decl(dependentReturnType1.ts, 491, 45))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 491, 52))
+>opts.x : Symbol(x, Decl(dependentReturnType1.ts, 491, 52))
+>opts : Symbol(opts, Decl(dependentReturnType1.ts, 491, 45))
+>x : Symbol(x, Decl(dependentReturnType1.ts, 491, 52))
+}
