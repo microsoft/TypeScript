@@ -130,7 +130,7 @@ var r2b = i.foo['foo']();
 >'foo' : "foo"
 
 var a: {
->a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
 
     <U extends A, T extends A>(): U;
     <U extends A, T extends A>(x: U): U;
@@ -150,7 +150,7 @@ var r3 = a<A, A>().foo();
 >a<A, A>().foo() : string
 >a<A, A>().foo : () => string
 >a<A, A>() : A
->a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
 >foo : () => string
 
 var r3b = a()['foo']();
@@ -158,7 +158,7 @@ var r3b = a()['foo']();
 >a()['foo']() : string
 >a()['foo'] : () => string
 >a() : A
->a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
 >'foo' : "foo"
 
 // parameter supplied for type argument inference to succeed
@@ -172,7 +172,7 @@ var r3c = a(aB, aB).foo();
 >a(aB, aB).foo() : string
 >a(aB, aB).foo : () => string
 >a(aB, aB) : B
->a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
 >aB : B
 >aB : B
 >foo : () => string
@@ -182,7 +182,7 @@ var r3d = a(aB, aB)['foo']();
 >a(aB, aB)['foo']() : string
 >a(aB, aB)['foo'] : () => string
 >a(aB, aB) : B
->a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
 >aB : B
 >aB : B
 >'foo' : "foo"

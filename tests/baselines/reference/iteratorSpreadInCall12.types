@@ -75,7 +75,7 @@ new Foo(...[...new SymbolIterator, ...[...new _StringIterator]]);
 >new Foo(...[...new SymbolIterator, ...[...new _StringIterator]]) : Foo<string | symbol>
 >Foo : typeof Foo
 >...[...new SymbolIterator, ...[...new _StringIterator]] : string | symbol
->[...new SymbolIterator, ...[...new _StringIterator]] : readonly (string | symbol)[]
+>[...new SymbolIterator, ...[...new _StringIterator]] : (string | symbol)[]
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator
 >SymbolIterator : typeof SymbolIterator

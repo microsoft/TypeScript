@@ -48,19 +48,23 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Example = void 0;
-let Example = exports.Example = (() => {
+let Example = (() => {
     let _classDecorators = [deco];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var Example = class {
+        static { _classThis = this; }
         static {
-            __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
+            const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
             Example = _classThis = _classDescriptor.value;
+            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             __runInitializers(_classThis, _classExtraInitializers);
         }
         static foo() { }
     };
     return Example = _classThis;
 })();
+exports.Example = Example;
 Example.foo();

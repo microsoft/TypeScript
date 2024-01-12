@@ -242,7 +242,7 @@ var publicClassImplementingPublicInterfaceInGlobal = /** @class */ (function () 
 
 
 //// [privacyClassImplementsClauseDeclFile_externalModule.d.ts]
-export declare module publicModule {
+export declare namespace publicModule {
     export interface publicInterfaceInPublicModule {
     }
     interface privateInterfaceInPublicModule {
@@ -257,7 +257,7 @@ export declare module publicModule {
     }
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     export interface publicInterfaceInPrivateModule {
     }
     interface privateInterfaceInPrivateModule {
@@ -282,7 +282,7 @@ export declare class publicClassImplementingFromPrivateModuleInterface implement
 }
 export {};
 //// [privacyClassImplementsClauseDeclFile_GlobalFile.d.ts]
-declare module publicModuleInGlobal {
+declare namespace publicModuleInGlobal {
     export interface publicInterfaceInPublicModule {
     }
     interface privateInterfaceInPublicModule {

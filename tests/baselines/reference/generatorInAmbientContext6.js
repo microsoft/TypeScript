@@ -14,6 +14,6 @@ var M;
 
 
 //// [generatorInAmbientContext6.d.ts]
-declare module M {
+declare namespace M {
     function generator(): any;
 }

@@ -1,0 +1,37 @@
+/index.ts(6,50): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+/index.ts(7,14): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
+/index.ts(7,49): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+
+
+==== /index.ts (3 errors) ====
+    import type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+    import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+    
+    export interface LocalInterface extends RequireInterface, ImportInterface {}
+    
+    import {type RequireInterface as Req} from "pkg" with { "resolution-mode": "require" };
+                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+    import {type ImportInterface as Imp} from "pkg" with { "resolution-mode": "import" };
+                 ~~~~~~~~~~~~~~~
+!!! error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
+                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.
+    export interface Loc extends Req, Imp {}
+    
+    export type { RequireInterface } from "pkg" with { "resolution-mode": "require" };
+    export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
+    
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export interface ImportInterface {}
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export interface RequireInterface {}

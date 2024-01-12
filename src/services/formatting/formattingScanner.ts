@@ -113,7 +113,7 @@ export function getFormattingScanner<T>(text: string, languageVariant: LanguageV
             const item: TextRangeWithTriviaKind = {
                 pos,
                 end: scanner.getTokenFullStart(),
-                kind: t
+                kind: t,
             };
 
             pos = scanner.getTokenFullStart();

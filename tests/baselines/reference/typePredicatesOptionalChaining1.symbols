@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/typePredicatesOptionalChaining1.ts] ////
+
+=== typePredicatesOptionalChaining1.ts ===
+type X = {
+>X : Symbol(X, Decl(typePredicatesOptionalChaining1.ts, 0, 0))
+
+  y?: {
+>y : Symbol(y, Decl(typePredicatesOptionalChaining1.ts, 0, 10))
+
+    z?: string;
+>z : Symbol(z, Decl(typePredicatesOptionalChaining1.ts, 1, 7))
+
+  };
+};
+const x: X = {
+>x : Symbol(x, Decl(typePredicatesOptionalChaining1.ts, 5, 5))
+>X : Symbol(X, Decl(typePredicatesOptionalChaining1.ts, 0, 0))
+
+  y: {},
+>y : Symbol(y, Decl(typePredicatesOptionalChaining1.ts, 5, 14))
+
+};
+// type guard
+function isNotNull<A>(x: A): x is NonNullable<A> {
+>isNotNull : Symbol(isNotNull, Decl(typePredicatesOptionalChaining1.ts, 7, 2))
+>A : Symbol(A, Decl(typePredicatesOptionalChaining1.ts, 9, 19))
+>x : Symbol(x, Decl(typePredicatesOptionalChaining1.ts, 9, 22))
+>A : Symbol(A, Decl(typePredicatesOptionalChaining1.ts, 9, 19))
+>x : Symbol(x, Decl(typePredicatesOptionalChaining1.ts, 9, 22))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(typePredicatesOptionalChaining1.ts, 9, 19))
+
+  return x !== null && x !== undefined;
+>x : Symbol(x, Decl(typePredicatesOptionalChaining1.ts, 9, 22))
+>x : Symbol(x, Decl(typePredicatesOptionalChaining1.ts, 9, 22))
+>undefined : Symbol(undefined)
+}
+// function which I want to call in the result of the expression
+function title(str: string) {
+>title : Symbol(title, Decl(typePredicatesOptionalChaining1.ts, 11, 1))
+>str : Symbol(str, Decl(typePredicatesOptionalChaining1.ts, 13, 15))
+
+  return str.length > 0 ? "Dear " + str : "Dear nobody";
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(typePredicatesOptionalChaining1.ts, 13, 15))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(typePredicatesOptionalChaining1.ts, 13, 15))
+}
+
+isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
+>isNotNull : Symbol(isNotNull, Decl(typePredicatesOptionalChaining1.ts, 7, 2))
+>x?.y?.z : Symbol(z, Decl(typePredicatesOptionalChaining1.ts, 1, 7))
+>x?.y : Symbol(y, Decl(typePredicatesOptionalChaining1.ts, 0, 10))
+>x : Symbol(x, Decl(typePredicatesOptionalChaining1.ts, 5, 5))
+>y : Symbol(y, Decl(typePredicatesOptionalChaining1.ts, 0, 10))
+>z : Symbol(z, Decl(typePredicatesOptionalChaining1.ts, 1, 7))
+>title : Symbol(title, Decl(typePredicatesOptionalChaining1.ts, 11, 1))
+>x.y.z : Symbol(z, Decl(typePredicatesOptionalChaining1.ts, 1, 7))
+>x.y : Symbol(y, Decl(typePredicatesOptionalChaining1.ts, 0, 10))
+>x : Symbol(x, Decl(typePredicatesOptionalChaining1.ts, 5, 5))
+>y : Symbol(y, Decl(typePredicatesOptionalChaining1.ts, 0, 10))
+>z : Symbol(z, Decl(typePredicatesOptionalChaining1.ts, 1, 7))
+

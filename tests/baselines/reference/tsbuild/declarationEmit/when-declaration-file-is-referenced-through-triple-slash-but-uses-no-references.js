@@ -20,7 +20,15 @@ declare const console: { log(msg: any): void; };
 export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;
 
 //// [/src/solution/src/common/tsconfig.json]
-{"extends":"../../tsconfig.base.json","compilerOptions":{"composite":true},"include":["./nominal.ts"]}
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "./nominal.ts"
+  ]
+}
 
 //// [/src/solution/src/common/types.d.ts]
 declare type MyNominal<T, Name extends string> = T & {
@@ -32,7 +40,20 @@ import { Nominal } from '../common/nominal';
 export type MyNominal = Nominal<string, 'MyNominal'>;
 
 //// [/src/solution/src/subProject/tsconfig.json]
-{"extends":"../../tsconfig.base.json","compilerOptions":{"composite":true},"references":[{"path":"../common"}],"include":["./index.ts"]}
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ],
+  "include": [
+    "./index.ts"
+  ]
+}
 
 //// [/src/solution/src/subProject2/index.ts]
 import { MyNominal } from '../subProject/index';
@@ -44,16 +65,55 @@ export function getVar(): keyof typeof variable {
 }
 
 //// [/src/solution/src/subProject2/tsconfig.json]
-{"extends":"../../tsconfig.base.json","compilerOptions":{"composite":true},"references":[{"path":"../subProject"}],"include":["./index.ts"]}
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../subProject"
+    }
+  ],
+  "include": [
+    "./index.ts"
+  ]
+}
 
 //// [/src/solution/src/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"./subProject"},{"path":"./subProject2"}],"include":[]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "./subProject"
+    },
+    {
+      "path": "./subProject2"
+    }
+  ],
+  "include": []
+}
 
 //// [/src/solution/tsconfig.base.json]
-{"compilerOptions":{"rootDir":"./","outDir":"lib"}}
+{
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "lib"
+  }
+}
 
 //// [/src/solution/tsconfig.json]
-{"extends":"./tsconfig.base.json","compilerOptions":{"composite":true},"include":["./src/**/*.ts"]}
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
 
 
 

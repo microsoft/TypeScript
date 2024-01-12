@@ -1332,7 +1332,7 @@ export declare class publicClassWithPrivateModuleParameterTypes {
 }
 export declare function publicFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
 export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClass {
     }
     export class publicClass {
@@ -1385,7 +1385,7 @@ export declare module publicModule {
     export function publicAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClass {
     }
     export class publicClass {
@@ -1458,12 +1458,12 @@ declare class publicClassWithWithPublicParmeterTypesInGlobal {
 }
 declare function publicFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGlobal): void;
 declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGlobal): void;
-declare module publicModuleInGlobal {
+declare namespace publicModuleInGlobal {
     class privateClass {
     }
     export class publicClass {
     }
-    module privateModule {
+    namespace privateModule {
         class privateClass {
         }
         export class publicClass {

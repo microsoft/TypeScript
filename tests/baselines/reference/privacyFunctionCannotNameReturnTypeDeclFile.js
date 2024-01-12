@@ -361,7 +361,7 @@ declare module "GlobalWidgets" {
         name: string;
     }
     function createWidget3(): Widget3;
-    module SpecializedGlobalWidget {
+    namespace SpecializedGlobalWidget {
         class Widget4 {
             name: string;
         }
@@ -373,7 +373,7 @@ export declare class Widget1 {
     name: string;
 }
 export declare function createWidget1(): Widget1;
-export declare module SpecializedWidget {
+export declare namespace SpecializedWidget {
     class Widget2 {
         name: string;
     }

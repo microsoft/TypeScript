@@ -39,6 +39,7 @@ console.log(f());
 function f() {
     return "JS does hoists";
 }
+
 function firstfirst_part3Spread(...b: number[]) { }
 const firstfirst_part3_ar = [20, 30];
 firstfirst_part3Spread(10, ...firstfirst_part3_ar);
@@ -54,17 +55,15 @@ firstfirst_part3Spread(10, ...firstfirst_part3_ar);
     "sourceMap": true,
     "declarationMap": true,
     "outFile": "./bin/first-output.js",
-    "skipDefaultLibCheck": true,
+    "skipDefaultLibCheck": true
   },
   "files": [
     "first_PART1.ts",
     "first_part2.ts",
     "first_part3.ts"
   ],
-  "references": [
-  ]
+  "references": []
 }
-
 
 //// [/src/second/second_part1.ts]
 namespace N {
@@ -108,10 +107,8 @@ secondsecond_part2Spread(10, ...secondsecond_part2_ar);
     "outFile": "../2/second-output.js",
     "skipDefaultLibCheck": true
   },
-  "references": [
-  ]
+  "references": []
 }
-
 
 //// [/src/third/third_part1.ts]
 var c = new C();
@@ -136,38 +133,43 @@ thirdthird_part1Spread(10, ...thirdthird_part1_ar);
     "declarationMap": true,
     "declaration": true,
     "outFile": "./thirdjs/output/third-output.js",
-    "skipDefaultLibCheck": true,
+    "skipDefaultLibCheck": true
   },
   "files": [
     "third_part1.ts"
   ],
   "references": [
-    { "path": "../first", "prepend": true },
-    { "path": "../second", "prepend": true },
+    {
+      "path": "../first",
+      "prepend": true
+    },
+    {
+      "path": "../second",
+      "prepend": true
+    }
   ]
 }
 
 
 
-
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:15 AM[0m] Projects in this build: 
+[[90m12:00:27 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:16 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
+[[90m12:00:28 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/bin/first-output.tsbuildinfo' does not exist
 
-[[90m12:00:17 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:29 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:27 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
+[[90m12:00:39 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/2/second-output.tsbuildinfo' does not exist
 
-[[90m12:00:28 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:40 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:38 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
+[[90m12:00:50 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
-[[90m12:00:39 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:51 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -932,7 +934,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":2030,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-30083835302-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE\"}","hash":"15985439346-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":257,"kind":"text"}],"mapHash":"-6793954603-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC\"}","hash":"-12368550231-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-12564528434-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\nfunction forsecondsecond_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-17653520187-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n\nfunction secondsecond_part2Spread(...b: number[]) { }\nconst secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread(10, ...secondsecond_part2_ar);"],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":2030,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-30083835302-{\"version\":3,\"file\":\"second-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE\"}","hash":"15985439346-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\n//# sourceMappingURL=second-output.js.map"},"dts":{"sections":[{"pos":0,"end":257,"kind":"text"}],"mapHash":"-6793954603-{\"version\":3,\"file\":\"second-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../second/second_part1.ts\",\"../second/second_part2.ts\"],\"names\":[],\"mappings\":\"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC\"}","hash":"-12368550231-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n//# sourceMappingURL=second-output.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../second/second_part1.ts","../second/second_part2.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-13362958657-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\nfunction forsecondsecond_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","-27196066044-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n\nfunction secondsecond_part2Spread(...b: number[]) { }\nconst secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread(10, ...secondsecond_part2_ar);"],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./second-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","latestChangedDtsFile":"./second-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1090,8 +1092,8 @@ declare const secondsecond_part2_ar: number[];
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../second/second_part1.ts": "-12564528434-namespace N {\r\n    // Comment text\r\n}\r\n\r\nnamespace N {\r\n    function f() {\r\n        console.log('testing');\r\n    }\r\n\r\n    f();\r\n}\r\nfunction forsecondsecond_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
-      "../second/second_part2.ts": "-17653520187-class C {\r\n    doSomething() {\r\n        console.log(\"something got done\");\r\n    }\r\n}\r\n\nfunction secondsecond_part2Spread(...b: number[]) { }\nconst secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread(10, ...secondsecond_part2_ar);"
+      "../second/second_part1.ts": "-13362958657-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\nfunction forsecondsecond_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
+      "../second/second_part2.ts": "-27196066044-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n\nfunction secondsecond_part2Spread(...b: number[]) { }\nconst secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread(10, ...secondsecond_part2_ar);"
     },
     "root": [
       [
@@ -1119,7 +1121,7 @@ declare const secondsecond_part2_ar: number[];
     "latestChangedDtsFile": "./second-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 5933
+  "size": 5901
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -1137,7 +1139,7 @@ declare const firstfirst_part3_ar: number[];
 //# sourceMappingURL=first-output.d.ts.map
 
 //// [/src/first/bin/first-output.d.ts.map]
-{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC"}
+{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC"}
 
 //// [/src/first/bin/first-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -1298,6 +1300,7 @@ sourceFile:../first_part3.ts
 9 >                                                      ^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >                 firstfirst_part3Spread
 4 >                                       (
@@ -1306,15 +1309,15 @@ sourceFile:../first_part3.ts
 7 >                                              number
 8 >                                                    []
 9 >                                                      ) { }
-1->Emitted(10, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(10, 18) Source(4, 10) + SourceIndex(2)
-3 >Emitted(10, 40) Source(4, 32) + SourceIndex(2)
-4 >Emitted(10, 41) Source(4, 33) + SourceIndex(2)
-5 >Emitted(10, 44) Source(4, 36) + SourceIndex(2)
-6 >Emitted(10, 47) Source(4, 39) + SourceIndex(2)
-7 >Emitted(10, 53) Source(4, 45) + SourceIndex(2)
-8 >Emitted(10, 55) Source(4, 47) + SourceIndex(2)
-9 >Emitted(10, 63) Source(4, 52) + SourceIndex(2)
+1->Emitted(10, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(10, 18) Source(5, 10) + SourceIndex(2)
+3 >Emitted(10, 40) Source(5, 32) + SourceIndex(2)
+4 >Emitted(10, 41) Source(5, 33) + SourceIndex(2)
+5 >Emitted(10, 44) Source(5, 36) + SourceIndex(2)
+6 >Emitted(10, 47) Source(5, 39) + SourceIndex(2)
+7 >Emitted(10, 53) Source(5, 45) + SourceIndex(2)
+8 >Emitted(10, 55) Source(5, 47) + SourceIndex(2)
+9 >Emitted(10, 63) Source(5, 52) + SourceIndex(2)
 ---
 >>>declare const firstfirst_part3_ar: number[];
 1 >
@@ -1330,12 +1333,12 @@ sourceFile:../first_part3.ts
 4 >              firstfirst_part3_ar
 5 >                                  = [20, 30]
 6 >                                           ;
-1 >Emitted(11, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(11, 9) Source(5, 1) + SourceIndex(2)
-3 >Emitted(11, 15) Source(5, 7) + SourceIndex(2)
-4 >Emitted(11, 34) Source(5, 26) + SourceIndex(2)
-5 >Emitted(11, 44) Source(5, 37) + SourceIndex(2)
-6 >Emitted(11, 45) Source(5, 38) + SourceIndex(2)
+1 >Emitted(11, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(11, 9) Source(6, 1) + SourceIndex(2)
+3 >Emitted(11, 15) Source(6, 7) + SourceIndex(2)
+4 >Emitted(11, 34) Source(6, 26) + SourceIndex(2)
+5 >Emitted(11, 44) Source(6, 37) + SourceIndex(2)
+6 >Emitted(11, 45) Source(6, 38) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.d.ts.map
 
@@ -1396,7 +1399,7 @@ firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3
 //# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
 
 //// [/src/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
@@ -1683,11 +1686,12 @@ sourceFile:../first_part3.ts
 3 >         ^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >         firstfirst_part3Spread
-1->Emitted(46, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(46, 10) Source(4, 10) + SourceIndex(2)
-3 >Emitted(46, 32) Source(4, 32) + SourceIndex(2)
+1->Emitted(46, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(46, 10) Source(5, 10) + SourceIndex(2)
+3 >Emitted(46, 32) Source(5, 32) + SourceIndex(2)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -1695,8 +1699,8 @@ sourceFile:../first_part3.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(47, 5) Source(4, 33) + SourceIndex(2)
-2 >Emitted(47, 16) Source(4, 47) + SourceIndex(2)
+1 >Emitted(47, 5) Source(5, 33) + SourceIndex(2)
+2 >Emitted(47, 16) Source(5, 47) + SourceIndex(2)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -1711,20 +1715,20 @@ sourceFile:../first_part3.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(48, 10) Source(4, 33) + SourceIndex(2)
-2 >Emitted(48, 20) Source(4, 47) + SourceIndex(2)
-3 >Emitted(48, 22) Source(4, 33) + SourceIndex(2)
-4 >Emitted(48, 43) Source(4, 47) + SourceIndex(2)
-5 >Emitted(48, 45) Source(4, 33) + SourceIndex(2)
-6 >Emitted(48, 49) Source(4, 47) + SourceIndex(2)
+1->Emitted(48, 10) Source(5, 33) + SourceIndex(2)
+2 >Emitted(48, 20) Source(5, 47) + SourceIndex(2)
+3 >Emitted(48, 22) Source(5, 33) + SourceIndex(2)
+4 >Emitted(48, 43) Source(5, 47) + SourceIndex(2)
+5 >Emitted(48, 45) Source(5, 33) + SourceIndex(2)
+6 >Emitted(48, 49) Source(5, 47) + SourceIndex(2)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(49, 9) Source(4, 33) + SourceIndex(2)
-2 >Emitted(49, 31) Source(4, 47) + SourceIndex(2)
+1 >Emitted(49, 9) Source(5, 33) + SourceIndex(2)
+2 >Emitted(49, 31) Source(5, 47) + SourceIndex(2)
 ---
 >>>    }
 >>>}
@@ -1733,8 +1737,8 @@ sourceFile:../first_part3.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(51, 1) Source(4, 51) + SourceIndex(2)
-2 >Emitted(51, 2) Source(4, 52) + SourceIndex(2)
+1 >Emitted(51, 1) Source(5, 51) + SourceIndex(2)
+2 >Emitted(51, 2) Source(5, 52) + SourceIndex(2)
 ---
 >>>var firstfirst_part3_ar = [20, 30];
 1->
@@ -1759,16 +1763,16 @@ sourceFile:../first_part3.ts
 8 >                               30
 9 >                                 ]
 10>                                  ;
-1->Emitted(52, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(52, 5) Source(5, 7) + SourceIndex(2)
-3 >Emitted(52, 24) Source(5, 26) + SourceIndex(2)
-4 >Emitted(52, 27) Source(5, 29) + SourceIndex(2)
-5 >Emitted(52, 28) Source(5, 30) + SourceIndex(2)
-6 >Emitted(52, 30) Source(5, 32) + SourceIndex(2)
-7 >Emitted(52, 32) Source(5, 34) + SourceIndex(2)
-8 >Emitted(52, 34) Source(5, 36) + SourceIndex(2)
-9 >Emitted(52, 35) Source(5, 37) + SourceIndex(2)
-10>Emitted(52, 36) Source(5, 38) + SourceIndex(2)
+1->Emitted(52, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(52, 5) Source(6, 7) + SourceIndex(2)
+3 >Emitted(52, 24) Source(6, 26) + SourceIndex(2)
+4 >Emitted(52, 27) Source(6, 29) + SourceIndex(2)
+5 >Emitted(52, 28) Source(6, 30) + SourceIndex(2)
+6 >Emitted(52, 30) Source(6, 32) + SourceIndex(2)
+7 >Emitted(52, 32) Source(6, 34) + SourceIndex(2)
+8 >Emitted(52, 34) Source(6, 36) + SourceIndex(2)
+9 >Emitted(52, 35) Source(6, 37) + SourceIndex(2)
+10>Emitted(52, 36) Source(6, 38) + SourceIndex(2)
 ---
 >>>firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 1->
@@ -1786,18 +1790,18 @@ sourceFile:../first_part3.ts
 5 >                                                      , ...
 6 >                                                                firstfirst_part3_ar
 7 >                                                                                   );
-1->Emitted(53, 1) Source(6, 1) + SourceIndex(2)
-2 >Emitted(53, 23) Source(6, 23) + SourceIndex(2)
-3 >Emitted(53, 53) Source(6, 24) + SourceIndex(2)
-4 >Emitted(53, 55) Source(6, 26) + SourceIndex(2)
-5 >Emitted(53, 65) Source(6, 31) + SourceIndex(2)
-6 >Emitted(53, 84) Source(6, 50) + SourceIndex(2)
-7 >Emitted(53, 95) Source(6, 52) + SourceIndex(2)
+1->Emitted(53, 1) Source(7, 1) + SourceIndex(2)
+2 >Emitted(53, 23) Source(7, 23) + SourceIndex(2)
+3 >Emitted(53, 53) Source(7, 24) + SourceIndex(2)
+4 >Emitted(53, 55) Source(7, 26) + SourceIndex(2)
+5 >Emitted(53, 65) Source(7, 31) + SourceIndex(2)
+6 >Emitted(53, 84) Source(7, 50) + SourceIndex(2)
+7 >Emitted(53, 95) Source(7, 52) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1854,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-35433619521-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-7416090205-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"text"}],"mapHash":"32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-2071921725-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","4973778178-console.log(f());\r\n","998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1854,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-16946718015-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-7416090205-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"text"}],"mapHash":"11304487505-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-25468252236-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}","6007494133-console.log(f());\n","-1751035906-function f() {\n    return \"JS does hoists\";\n}\n\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1919,7 +1923,7 @@ declare const firstfirst_part3_ar: number[];
         }
       ],
       "hash": "-7416090205-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map",
-      "mapHash": "-35433619521-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
+      "mapHash": "-16946718015-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
           "typescript:rest",
@@ -1937,7 +1941,7 @@ declare const firstfirst_part3_ar: number[];
         }
       ],
       "hash": "-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map",
-      "mapHash": "32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
+      "mapHash": "11304487505-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
@@ -1949,9 +1953,9 @@ declare const firstfirst_part3_ar: number[];
     ],
     "fileInfos": {
       "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../first_part1.ts": "-2071921725-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
-      "../first_part2.ts": "4973778178-console.log(f());\r\n",
-      "../first_part3.ts": "998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"
+      "../first_part1.ts": "-25468252236-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}",
+      "../first_part2.ts": "6007494133-console.log(f());\n",
+      "../first_part3.ts": "-1751035906-function f() {\n    return \"JS does hoists\";\n}\n\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"
     },
     "root": [
       [
@@ -1981,7 +1985,7 @@ declare const firstfirst_part3_ar: number[];
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 5791
+  "size": 5768
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -2013,7 +2017,7 @@ declare const thirdthird_part1_ar: number[];
 //# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACLrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -2174,6 +2178,7 @@ sourceFile:../../../first/first_part3.ts
 9 >                                                      ^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >                 firstfirst_part3Spread
 4 >                                       (
@@ -2182,15 +2187,15 @@ sourceFile:../../../first/first_part3.ts
 7 >                                              number
 8 >                                                    []
 9 >                                                      ) { }
-1->Emitted(10, 1) Source(4, 1) + SourceIndex(1)
-2 >Emitted(10, 18) Source(4, 10) + SourceIndex(1)
-3 >Emitted(10, 40) Source(4, 32) + SourceIndex(1)
-4 >Emitted(10, 41) Source(4, 33) + SourceIndex(1)
-5 >Emitted(10, 44) Source(4, 36) + SourceIndex(1)
-6 >Emitted(10, 47) Source(4, 39) + SourceIndex(1)
-7 >Emitted(10, 53) Source(4, 45) + SourceIndex(1)
-8 >Emitted(10, 55) Source(4, 47) + SourceIndex(1)
-9 >Emitted(10, 63) Source(4, 52) + SourceIndex(1)
+1->Emitted(10, 1) Source(5, 1) + SourceIndex(1)
+2 >Emitted(10, 18) Source(5, 10) + SourceIndex(1)
+3 >Emitted(10, 40) Source(5, 32) + SourceIndex(1)
+4 >Emitted(10, 41) Source(5, 33) + SourceIndex(1)
+5 >Emitted(10, 44) Source(5, 36) + SourceIndex(1)
+6 >Emitted(10, 47) Source(5, 39) + SourceIndex(1)
+7 >Emitted(10, 53) Source(5, 45) + SourceIndex(1)
+8 >Emitted(10, 55) Source(5, 47) + SourceIndex(1)
+9 >Emitted(10, 63) Source(5, 52) + SourceIndex(1)
 ---
 >>>declare const firstfirst_part3_ar: number[];
 1 >
@@ -2206,12 +2211,12 @@ sourceFile:../../../first/first_part3.ts
 4 >              firstfirst_part3_ar
 5 >                                  = [20, 30]
 6 >                                           ;
-1 >Emitted(11, 1) Source(5, 1) + SourceIndex(1)
-2 >Emitted(11, 9) Source(5, 1) + SourceIndex(1)
-3 >Emitted(11, 15) Source(5, 7) + SourceIndex(1)
-4 >Emitted(11, 34) Source(5, 26) + SourceIndex(1)
-5 >Emitted(11, 44) Source(5, 37) + SourceIndex(1)
-6 >Emitted(11, 45) Source(5, 38) + SourceIndex(1)
+1 >Emitted(11, 1) Source(6, 1) + SourceIndex(1)
+2 >Emitted(11, 9) Source(6, 1) + SourceIndex(1)
+3 >Emitted(11, 15) Source(6, 7) + SourceIndex(1)
+4 >Emitted(11, 34) Source(6, 26) + SourceIndex(1)
+5 >Emitted(11, 44) Source(6, 37) + SourceIndex(1)
+6 >Emitted(11, 45) Source(6, 38) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -2563,7 +2568,7 @@ thirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACFnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -2850,11 +2855,12 @@ sourceFile:../../../first/first_part3.ts
 3 >         ^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >         firstfirst_part3Spread
-1->Emitted(46, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(46, 10) Source(4, 10) + SourceIndex(2)
-3 >Emitted(46, 32) Source(4, 32) + SourceIndex(2)
+1->Emitted(46, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(46, 10) Source(5, 10) + SourceIndex(2)
+3 >Emitted(46, 32) Source(5, 32) + SourceIndex(2)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -2862,8 +2868,8 @@ sourceFile:../../../first/first_part3.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(47, 5) Source(4, 33) + SourceIndex(2)
-2 >Emitted(47, 16) Source(4, 47) + SourceIndex(2)
+1 >Emitted(47, 5) Source(5, 33) + SourceIndex(2)
+2 >Emitted(47, 16) Source(5, 47) + SourceIndex(2)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -2878,20 +2884,20 @@ sourceFile:../../../first/first_part3.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(48, 10) Source(4, 33) + SourceIndex(2)
-2 >Emitted(48, 20) Source(4, 47) + SourceIndex(2)
-3 >Emitted(48, 22) Source(4, 33) + SourceIndex(2)
-4 >Emitted(48, 43) Source(4, 47) + SourceIndex(2)
-5 >Emitted(48, 45) Source(4, 33) + SourceIndex(2)
-6 >Emitted(48, 49) Source(4, 47) + SourceIndex(2)
+1->Emitted(48, 10) Source(5, 33) + SourceIndex(2)
+2 >Emitted(48, 20) Source(5, 47) + SourceIndex(2)
+3 >Emitted(48, 22) Source(5, 33) + SourceIndex(2)
+4 >Emitted(48, 43) Source(5, 47) + SourceIndex(2)
+5 >Emitted(48, 45) Source(5, 33) + SourceIndex(2)
+6 >Emitted(48, 49) Source(5, 47) + SourceIndex(2)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(49, 9) Source(4, 33) + SourceIndex(2)
-2 >Emitted(49, 31) Source(4, 47) + SourceIndex(2)
+1 >Emitted(49, 9) Source(5, 33) + SourceIndex(2)
+2 >Emitted(49, 31) Source(5, 47) + SourceIndex(2)
 ---
 >>>    }
 >>>}
@@ -2900,8 +2906,8 @@ sourceFile:../../../first/first_part3.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(51, 1) Source(4, 51) + SourceIndex(2)
-2 >Emitted(51, 2) Source(4, 52) + SourceIndex(2)
+1 >Emitted(51, 1) Source(5, 51) + SourceIndex(2)
+2 >Emitted(51, 2) Source(5, 52) + SourceIndex(2)
 ---
 >>>var firstfirst_part3_ar = [20, 30];
 1->
@@ -2926,16 +2932,16 @@ sourceFile:../../../first/first_part3.ts
 8 >                               30
 9 >                                 ]
 10>                                  ;
-1->Emitted(52, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(52, 5) Source(5, 7) + SourceIndex(2)
-3 >Emitted(52, 24) Source(5, 26) + SourceIndex(2)
-4 >Emitted(52, 27) Source(5, 29) + SourceIndex(2)
-5 >Emitted(52, 28) Source(5, 30) + SourceIndex(2)
-6 >Emitted(52, 30) Source(5, 32) + SourceIndex(2)
-7 >Emitted(52, 32) Source(5, 34) + SourceIndex(2)
-8 >Emitted(52, 34) Source(5, 36) + SourceIndex(2)
-9 >Emitted(52, 35) Source(5, 37) + SourceIndex(2)
-10>Emitted(52, 36) Source(5, 38) + SourceIndex(2)
+1->Emitted(52, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(52, 5) Source(6, 7) + SourceIndex(2)
+3 >Emitted(52, 24) Source(6, 26) + SourceIndex(2)
+4 >Emitted(52, 27) Source(6, 29) + SourceIndex(2)
+5 >Emitted(52, 28) Source(6, 30) + SourceIndex(2)
+6 >Emitted(52, 30) Source(6, 32) + SourceIndex(2)
+7 >Emitted(52, 32) Source(6, 34) + SourceIndex(2)
+8 >Emitted(52, 34) Source(6, 36) + SourceIndex(2)
+9 >Emitted(52, 35) Source(6, 37) + SourceIndex(2)
+10>Emitted(52, 36) Source(6, 38) + SourceIndex(2)
 ---
 >>>firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 1->
@@ -2953,13 +2959,13 @@ sourceFile:../../../first/first_part3.ts
 5 >                                                      , ...
 6 >                                                                firstfirst_part3_ar
 7 >                                                                                   );
-1->Emitted(53, 1) Source(6, 1) + SourceIndex(2)
-2 >Emitted(53, 23) Source(6, 23) + SourceIndex(2)
-3 >Emitted(53, 53) Source(6, 24) + SourceIndex(2)
-4 >Emitted(53, 55) Source(6, 26) + SourceIndex(2)
-5 >Emitted(53, 65) Source(6, 31) + SourceIndex(2)
-6 >Emitted(53, 84) Source(6, 50) + SourceIndex(2)
-7 >Emitted(53, 95) Source(6, 52) + SourceIndex(2)
+1->Emitted(53, 1) Source(7, 1) + SourceIndex(2)
+2 >Emitted(53, 23) Source(7, 23) + SourceIndex(2)
+3 >Emitted(53, 53) Source(7, 24) + SourceIndex(2)
+4 >Emitted(53, 55) Source(7, 26) + SourceIndex(2)
+5 >Emitted(53, 65) Source(7, 31) + SourceIndex(2)
+6 >Emitted(53, 84) Source(7, 50) + SourceIndex(2)
+7 >Emitted(53, 95) Source(7, 52) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -3698,7 +3704,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1854,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1362,"end":1854,"kind":"text"}]},{"pos":1854,"end":2522,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1854,"end":2522,"kind":"text"}]},{"pos":2522,"end":2944,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-62895833357-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-32745783681-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":307,"kind":"text"}]},{"pos":307,"end":564,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":307,"end":564,"kind":"text"}]},{"pos":564,"end":740,"kind":"text"}],"mapHash":"25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1854,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1362,"end":1854,"kind":"text"}]},{"pos":1854,"end":2522,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1854,"end":2522,"kind":"text"}]},{"pos":2522,"end":2944,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-72824444169-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACFnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-32745783681-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":307,"kind":"text"}]},{"pos":307,"end":564,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":307,"end":564,"kind":"text"}]},{"pos":564,"end":740,"kind":"text"}],"mapHash":"34622384169-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACLrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","-9658874822-var c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -3917,7 +3923,7 @@ declare const thirdthird_part1_ar: number[];
         }
       ],
       "hash": "-32745783681-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map",
-      "mapHash": "-62895833357-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
+      "mapHash": "-72824444169-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACFnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
           "typescript:rest",
@@ -3961,7 +3967,7 @@ declare const thirdthird_part1_ar: number[];
         }
       ],
       "hash": "-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map",
-      "mapHash": "25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
+      "mapHash": "34622384169-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACLrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
@@ -3975,7 +3981,7 @@ declare const thirdthird_part1_ar: number[];
       "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../../../first/bin/first-output.d.ts": "-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n",
       "../../../2/second-output.d.ts": "-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n",
-      "../../third_part1.ts": "-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"
+      "../../third_part1.ts": "-9658874822-var c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"
     },
     "root": [
       [
@@ -3999,7 +4005,7 @@ declare const thirdthird_part1_ar: number[];
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 10312
+  "size": 10308
 }
 
 
@@ -4026,20 +4032,20 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:57 AM[0m] Projects in this build: 
+[[90m12:01:09 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:58 AM[0m] Project 'src/first/tsconfig.json' is out of date because output 'src/first/bin/first-output.tsbuildinfo' is older than input 'src/first/first_PART1.ts'
+[[90m12:01:10 AM[0m] Project 'src/first/tsconfig.json' is out of date because output 'src/first/bin/first-output.tsbuildinfo' is older than input 'src/first/first_PART1.ts'
 
-[[90m12:00:59 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:01:11 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:07 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part2.ts' is older than output 'src/2/second-output.tsbuildinfo'
+[[90m12:01:19 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part2.ts' is older than output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:08 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:20 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:09 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:01:21 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -4104,7 +4110,7 @@ firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3
 //# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
 
 //// [/src/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
@@ -4418,11 +4424,12 @@ sourceFile:../first_part3.ts
 3 >         ^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >         firstfirst_part3Spread
-1->Emitted(47, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(47, 10) Source(4, 10) + SourceIndex(2)
-3 >Emitted(47, 32) Source(4, 32) + SourceIndex(2)
+1->Emitted(47, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(47, 10) Source(5, 10) + SourceIndex(2)
+3 >Emitted(47, 32) Source(5, 32) + SourceIndex(2)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -4430,8 +4437,8 @@ sourceFile:../first_part3.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(48, 5) Source(4, 33) + SourceIndex(2)
-2 >Emitted(48, 16) Source(4, 47) + SourceIndex(2)
+1 >Emitted(48, 5) Source(5, 33) + SourceIndex(2)
+2 >Emitted(48, 16) Source(5, 47) + SourceIndex(2)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -4446,20 +4453,20 @@ sourceFile:../first_part3.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(49, 10) Source(4, 33) + SourceIndex(2)
-2 >Emitted(49, 20) Source(4, 47) + SourceIndex(2)
-3 >Emitted(49, 22) Source(4, 33) + SourceIndex(2)
-4 >Emitted(49, 43) Source(4, 47) + SourceIndex(2)
-5 >Emitted(49, 45) Source(4, 33) + SourceIndex(2)
-6 >Emitted(49, 49) Source(4, 47) + SourceIndex(2)
+1->Emitted(49, 10) Source(5, 33) + SourceIndex(2)
+2 >Emitted(49, 20) Source(5, 47) + SourceIndex(2)
+3 >Emitted(49, 22) Source(5, 33) + SourceIndex(2)
+4 >Emitted(49, 43) Source(5, 47) + SourceIndex(2)
+5 >Emitted(49, 45) Source(5, 33) + SourceIndex(2)
+6 >Emitted(49, 49) Source(5, 47) + SourceIndex(2)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(50, 9) Source(4, 33) + SourceIndex(2)
-2 >Emitted(50, 31) Source(4, 47) + SourceIndex(2)
+1 >Emitted(50, 9) Source(5, 33) + SourceIndex(2)
+2 >Emitted(50, 31) Source(5, 47) + SourceIndex(2)
 ---
 >>>    }
 >>>}
@@ -4468,8 +4475,8 @@ sourceFile:../first_part3.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(52, 1) Source(4, 51) + SourceIndex(2)
-2 >Emitted(52, 2) Source(4, 52) + SourceIndex(2)
+1 >Emitted(52, 1) Source(5, 51) + SourceIndex(2)
+2 >Emitted(52, 2) Source(5, 52) + SourceIndex(2)
 ---
 >>>var firstfirst_part3_ar = [20, 30];
 1->
@@ -4494,16 +4501,16 @@ sourceFile:../first_part3.ts
 8 >                               30
 9 >                                 ]
 10>                                  ;
-1->Emitted(53, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(53, 5) Source(5, 7) + SourceIndex(2)
-3 >Emitted(53, 24) Source(5, 26) + SourceIndex(2)
-4 >Emitted(53, 27) Source(5, 29) + SourceIndex(2)
-5 >Emitted(53, 28) Source(5, 30) + SourceIndex(2)
-6 >Emitted(53, 30) Source(5, 32) + SourceIndex(2)
-7 >Emitted(53, 32) Source(5, 34) + SourceIndex(2)
-8 >Emitted(53, 34) Source(5, 36) + SourceIndex(2)
-9 >Emitted(53, 35) Source(5, 37) + SourceIndex(2)
-10>Emitted(53, 36) Source(5, 38) + SourceIndex(2)
+1->Emitted(53, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(53, 5) Source(6, 7) + SourceIndex(2)
+3 >Emitted(53, 24) Source(6, 26) + SourceIndex(2)
+4 >Emitted(53, 27) Source(6, 29) + SourceIndex(2)
+5 >Emitted(53, 28) Source(6, 30) + SourceIndex(2)
+6 >Emitted(53, 30) Source(6, 32) + SourceIndex(2)
+7 >Emitted(53, 32) Source(6, 34) + SourceIndex(2)
+8 >Emitted(53, 34) Source(6, 36) + SourceIndex(2)
+9 >Emitted(53, 35) Source(6, 37) + SourceIndex(2)
+10>Emitted(53, 36) Source(6, 38) + SourceIndex(2)
 ---
 >>>firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 1->
@@ -4521,18 +4528,18 @@ sourceFile:../first_part3.ts
 5 >                                                      , ...
 6 >                                                                firstfirst_part3_ar
 7 >                                                                                   );
-1->Emitted(54, 1) Source(6, 1) + SourceIndex(2)
-2 >Emitted(54, 23) Source(6, 23) + SourceIndex(2)
-3 >Emitted(54, 53) Source(6, 24) + SourceIndex(2)
-4 >Emitted(54, 55) Source(6, 26) + SourceIndex(2)
-5 >Emitted(54, 65) Source(6, 31) + SourceIndex(2)
-6 >Emitted(54, 84) Source(6, 50) + SourceIndex(2)
-7 >Emitted(54, 95) Source(6, 52) + SourceIndex(2)
+1->Emitted(54, 1) Source(7, 1) + SourceIndex(2)
+2 >Emitted(54, 23) Source(7, 23) + SourceIndex(2)
+3 >Emitted(54, 53) Source(7, 24) + SourceIndex(2)
+4 >Emitted(54, 55) Source(7, 26) + SourceIndex(2)
+5 >Emitted(54, 65) Source(7, 31) + SourceIndex(2)
+6 >Emitted(54, 84) Source(7, 50) + SourceIndex(2)
+7 >Emitted(54, 95) Source(7, 52) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1870,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-30182735568-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-26516546737-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"text"}],"mapHash":"32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5382108219-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}console.log(s);","4973778178-console.log(f());\r\n","998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1870,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]},"mapHash":"-20285768654-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-26516546737-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"text"}],"mapHash":"11304487505-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-25115744362-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}console.log(s);","6007494133-console.log(f());\n","-1751035906-function f() {\n    return \"JS does hoists\";\n}\n\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -4655,7 +4662,7 @@ declare const firstfirst_part3_ar: number[];
         }
       ],
       "hash": "-26516546737-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map",
-      "mapHash": "-30182735568-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
+      "mapHash": "-20285768654-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
           "typescript:rest",
@@ -4673,7 +4680,7 @@ declare const firstfirst_part3_ar: number[];
         }
       ],
       "hash": "-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map",
-      "mapHash": "32680275599-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
+      "mapHash": "11304487505-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
@@ -4685,9 +4692,9 @@ declare const firstfirst_part3_ar: number[];
     ],
     "fileInfos": {
       "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../first_part1.ts": "-5382108219-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}console.log(s);",
-      "../first_part2.ts": "4973778178-console.log(f());\r\n",
-      "../first_part3.ts": "998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"
+      "../first_part1.ts": "-25115744362-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}console.log(s);",
+      "../first_part2.ts": "6007494133-console.log(f());\n",
+      "../first_part3.ts": "-1751035906-function f() {\n    return \"JS does hoists\";\n}\n\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"
     },
     "root": [
       [
@@ -4717,7 +4724,7 @@ declare const firstfirst_part3_ar: number[];
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 5865
+  "size": 5842
 }
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -4817,7 +4824,7 @@ thirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACFnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -5131,11 +5138,12 @@ sourceFile:../../../first/first_part3.ts
 3 >         ^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >         firstfirst_part3Spread
-1->Emitted(47, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(47, 10) Source(4, 10) + SourceIndex(2)
-3 >Emitted(47, 32) Source(4, 32) + SourceIndex(2)
+1->Emitted(47, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(47, 10) Source(5, 10) + SourceIndex(2)
+3 >Emitted(47, 32) Source(5, 32) + SourceIndex(2)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -5143,8 +5151,8 @@ sourceFile:../../../first/first_part3.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(48, 5) Source(4, 33) + SourceIndex(2)
-2 >Emitted(48, 16) Source(4, 47) + SourceIndex(2)
+1 >Emitted(48, 5) Source(5, 33) + SourceIndex(2)
+2 >Emitted(48, 16) Source(5, 47) + SourceIndex(2)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -5159,20 +5167,20 @@ sourceFile:../../../first/first_part3.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(49, 10) Source(4, 33) + SourceIndex(2)
-2 >Emitted(49, 20) Source(4, 47) + SourceIndex(2)
-3 >Emitted(49, 22) Source(4, 33) + SourceIndex(2)
-4 >Emitted(49, 43) Source(4, 47) + SourceIndex(2)
-5 >Emitted(49, 45) Source(4, 33) + SourceIndex(2)
-6 >Emitted(49, 49) Source(4, 47) + SourceIndex(2)
+1->Emitted(49, 10) Source(5, 33) + SourceIndex(2)
+2 >Emitted(49, 20) Source(5, 47) + SourceIndex(2)
+3 >Emitted(49, 22) Source(5, 33) + SourceIndex(2)
+4 >Emitted(49, 43) Source(5, 47) + SourceIndex(2)
+5 >Emitted(49, 45) Source(5, 33) + SourceIndex(2)
+6 >Emitted(49, 49) Source(5, 47) + SourceIndex(2)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(50, 9) Source(4, 33) + SourceIndex(2)
-2 >Emitted(50, 31) Source(4, 47) + SourceIndex(2)
+1 >Emitted(50, 9) Source(5, 33) + SourceIndex(2)
+2 >Emitted(50, 31) Source(5, 47) + SourceIndex(2)
 ---
 >>>    }
 >>>}
@@ -5181,8 +5189,8 @@ sourceFile:../../../first/first_part3.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(52, 1) Source(4, 51) + SourceIndex(2)
-2 >Emitted(52, 2) Source(4, 52) + SourceIndex(2)
+1 >Emitted(52, 1) Source(5, 51) + SourceIndex(2)
+2 >Emitted(52, 2) Source(5, 52) + SourceIndex(2)
 ---
 >>>var firstfirst_part3_ar = [20, 30];
 1->
@@ -5207,16 +5215,16 @@ sourceFile:../../../first/first_part3.ts
 8 >                               30
 9 >                                 ]
 10>                                  ;
-1->Emitted(53, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(53, 5) Source(5, 7) + SourceIndex(2)
-3 >Emitted(53, 24) Source(5, 26) + SourceIndex(2)
-4 >Emitted(53, 27) Source(5, 29) + SourceIndex(2)
-5 >Emitted(53, 28) Source(5, 30) + SourceIndex(2)
-6 >Emitted(53, 30) Source(5, 32) + SourceIndex(2)
-7 >Emitted(53, 32) Source(5, 34) + SourceIndex(2)
-8 >Emitted(53, 34) Source(5, 36) + SourceIndex(2)
-9 >Emitted(53, 35) Source(5, 37) + SourceIndex(2)
-10>Emitted(53, 36) Source(5, 38) + SourceIndex(2)
+1->Emitted(53, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(53, 5) Source(6, 7) + SourceIndex(2)
+3 >Emitted(53, 24) Source(6, 26) + SourceIndex(2)
+4 >Emitted(53, 27) Source(6, 29) + SourceIndex(2)
+5 >Emitted(53, 28) Source(6, 30) + SourceIndex(2)
+6 >Emitted(53, 30) Source(6, 32) + SourceIndex(2)
+7 >Emitted(53, 32) Source(6, 34) + SourceIndex(2)
+8 >Emitted(53, 34) Source(6, 36) + SourceIndex(2)
+9 >Emitted(53, 35) Source(6, 37) + SourceIndex(2)
+10>Emitted(53, 36) Source(6, 38) + SourceIndex(2)
 ---
 >>>firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 1->
@@ -5234,13 +5242,13 @@ sourceFile:../../../first/first_part3.ts
 5 >                                                      , ...
 6 >                                                                firstfirst_part3_ar
 7 >                                                                                   );
-1->Emitted(54, 1) Source(6, 1) + SourceIndex(2)
-2 >Emitted(54, 23) Source(6, 23) + SourceIndex(2)
-3 >Emitted(54, 53) Source(6, 24) + SourceIndex(2)
-4 >Emitted(54, 55) Source(6, 26) + SourceIndex(2)
-5 >Emitted(54, 65) Source(6, 31) + SourceIndex(2)
-6 >Emitted(54, 84) Source(6, 50) + SourceIndex(2)
-7 >Emitted(54, 95) Source(6, 52) + SourceIndex(2)
+1->Emitted(54, 1) Source(7, 1) + SourceIndex(2)
+2 >Emitted(54, 23) Source(7, 23) + SourceIndex(2)
+3 >Emitted(54, 53) Source(7, 24) + SourceIndex(2)
+4 >Emitted(54, 55) Source(7, 26) + SourceIndex(2)
+5 >Emitted(54, 65) Source(7, 31) + SourceIndex(2)
+6 >Emitted(54, 84) Source(7, 50) + SourceIndex(2)
+7 >Emitted(54, 95) Source(7, 52) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -5979,7 +5987,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1870,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1362,"end":1870,"kind":"text"}]},{"pos":1870,"end":2538,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1870,"end":2538,"kind":"text"}]},{"pos":2538,"end":2960,"kind":"text"}],"mapHash":"5963265220-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-65318968533-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":307,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":307,"kind":"text"}]},{"pos":307,"end":564,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":307,"end":564,"kind":"text"}]},{"pos":564,"end":740,"kind":"text"}],"mapHash":"25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":490,"kind":"emitHelpers","data":"typescript:rest"},{"pos":491,"end":980,"kind":"emitHelpers","data":"typescript:read"},{"pos":981,"end":1361,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1362,"end":1870,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1362,"end":1870,"kind":"text"}]},{"pos":1870,"end":2538,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1870,"end":2538,"kind":"text"}]},{"pos":2538,"end":2960,"kind":"text"}],"mapHash":"17509490888-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACFnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-65318968533-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":307,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":307,"kind":"text"}]},{"pos":307,"end":564,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":307,"end":564,"kind":"text"}]},{"pos":564,"end":740,"kind":"text"}],"mapHash":"34622384169-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACLrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","-9658874822-var c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -6199,7 +6207,7 @@ declare const thirdthird_part1_ar: number[];
         }
       ],
       "hash": "-65318968533-var __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map",
-      "mapHash": "5963265220-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
+      "mapHash": "17509490888-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACbhB,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACFnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
           "typescript:rest",
@@ -6243,7 +6251,7 @@ declare const thirdthird_part1_ar: number[];
         }
       ],
       "hash": "-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map",
-      "mapHash": "25118173797-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
+      "mapHash": "34622384169-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACLrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
@@ -6257,7 +6265,7 @@ declare const thirdthird_part1_ar: number[];
       "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../../../first/bin/first-output.d.ts": "-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n",
       "../../../2/second-output.d.ts": "-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n",
-      "../../third_part1.ts": "-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"
+      "../../third_part1.ts": "-9658874822-var c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"
     },
     "root": [
       [
@@ -6281,7 +6289,7 @@ declare const thirdthird_part1_ar: number[];
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 10368
+  "size": 10365
 }
 
 
@@ -6306,26 +6314,26 @@ function forfirstfirst_PART1Rest() { }console.log(s);
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:01:20 AM[0m] Projects in this build: 
+[[90m12:01:32 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:01:21 AM[0m] Project 'src/first/tsconfig.json' is out of date because output 'src/first/bin/first-output.tsbuildinfo' is older than input 'src/first/first_PART1.ts'
+[[90m12:01:33 AM[0m] Project 'src/first/tsconfig.json' is out of date because output 'src/first/bin/first-output.tsbuildinfo' is older than input 'src/first/first_PART1.ts'
 
-[[90m12:01:22 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:01:34 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:30 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part2.ts' is older than output 'src/2/second-output.tsbuildinfo'
+[[90m12:01:42 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part2.ts' is older than output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:31 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:43 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:32 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:01:44 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
 
 //// [/src/first/bin/first-output.d.ts.map]
-{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC"}
+{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC"}
 
 //// [/src/first/bin/first-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -6484,6 +6492,7 @@ sourceFile:../first_part3.ts
 9 >                                                      ^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >                 firstfirst_part3Spread
 4 >                                       (
@@ -6492,15 +6501,15 @@ sourceFile:../first_part3.ts
 7 >                                              number
 8 >                                                    []
 9 >                                                      ) { }
-1->Emitted(10, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(10, 18) Source(4, 10) + SourceIndex(2)
-3 >Emitted(10, 40) Source(4, 32) + SourceIndex(2)
-4 >Emitted(10, 41) Source(4, 33) + SourceIndex(2)
-5 >Emitted(10, 44) Source(4, 36) + SourceIndex(2)
-6 >Emitted(10, 47) Source(4, 39) + SourceIndex(2)
-7 >Emitted(10, 53) Source(4, 45) + SourceIndex(2)
-8 >Emitted(10, 55) Source(4, 47) + SourceIndex(2)
-9 >Emitted(10, 63) Source(4, 52) + SourceIndex(2)
+1->Emitted(10, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(10, 18) Source(5, 10) + SourceIndex(2)
+3 >Emitted(10, 40) Source(5, 32) + SourceIndex(2)
+4 >Emitted(10, 41) Source(5, 33) + SourceIndex(2)
+5 >Emitted(10, 44) Source(5, 36) + SourceIndex(2)
+6 >Emitted(10, 47) Source(5, 39) + SourceIndex(2)
+7 >Emitted(10, 53) Source(5, 45) + SourceIndex(2)
+8 >Emitted(10, 55) Source(5, 47) + SourceIndex(2)
+9 >Emitted(10, 63) Source(5, 52) + SourceIndex(2)
 ---
 >>>declare const firstfirst_part3_ar: number[];
 1 >
@@ -6516,12 +6525,12 @@ sourceFile:../first_part3.ts
 4 >              firstfirst_part3_ar
 5 >                                  = [20, 30]
 6 >                                           ;
-1 >Emitted(11, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(11, 9) Source(5, 1) + SourceIndex(2)
-3 >Emitted(11, 15) Source(5, 7) + SourceIndex(2)
-4 >Emitted(11, 34) Source(5, 26) + SourceIndex(2)
-5 >Emitted(11, 44) Source(5, 37) + SourceIndex(2)
-6 >Emitted(11, 45) Source(5, 38) + SourceIndex(2)
+1 >Emitted(11, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(11, 9) Source(6, 1) + SourceIndex(2)
+3 >Emitted(11, 15) Source(6, 7) + SourceIndex(2)
+4 >Emitted(11, 34) Source(6, 26) + SourceIndex(2)
+5 >Emitted(11, 44) Source(6, 37) + SourceIndex(2)
+6 >Emitted(11, 45) Source(6, 38) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.d.ts.map
 
@@ -6570,7 +6579,7 @@ firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3
 //# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
 
 //// [/src/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
@@ -6790,11 +6799,12 @@ sourceFile:../first_part3.ts
 3 >         ^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >         firstfirst_part3Spread
-1->Emitted(34, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(34, 10) Source(4, 10) + SourceIndex(2)
-3 >Emitted(34, 32) Source(4, 32) + SourceIndex(2)
+1->Emitted(34, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(34, 10) Source(5, 10) + SourceIndex(2)
+3 >Emitted(34, 32) Source(5, 32) + SourceIndex(2)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -6802,8 +6812,8 @@ sourceFile:../first_part3.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(35, 5) Source(4, 33) + SourceIndex(2)
-2 >Emitted(35, 16) Source(4, 47) + SourceIndex(2)
+1 >Emitted(35, 5) Source(5, 33) + SourceIndex(2)
+2 >Emitted(35, 16) Source(5, 47) + SourceIndex(2)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -6818,20 +6828,20 @@ sourceFile:../first_part3.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(36, 10) Source(4, 33) + SourceIndex(2)
-2 >Emitted(36, 20) Source(4, 47) + SourceIndex(2)
-3 >Emitted(36, 22) Source(4, 33) + SourceIndex(2)
-4 >Emitted(36, 43) Source(4, 47) + SourceIndex(2)
-5 >Emitted(36, 45) Source(4, 33) + SourceIndex(2)
-6 >Emitted(36, 49) Source(4, 47) + SourceIndex(2)
+1->Emitted(36, 10) Source(5, 33) + SourceIndex(2)
+2 >Emitted(36, 20) Source(5, 47) + SourceIndex(2)
+3 >Emitted(36, 22) Source(5, 33) + SourceIndex(2)
+4 >Emitted(36, 43) Source(5, 47) + SourceIndex(2)
+5 >Emitted(36, 45) Source(5, 33) + SourceIndex(2)
+6 >Emitted(36, 49) Source(5, 47) + SourceIndex(2)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(37, 9) Source(4, 33) + SourceIndex(2)
-2 >Emitted(37, 31) Source(4, 47) + SourceIndex(2)
+1 >Emitted(37, 9) Source(5, 33) + SourceIndex(2)
+2 >Emitted(37, 31) Source(5, 47) + SourceIndex(2)
 ---
 >>>    }
 >>>}
@@ -6840,8 +6850,8 @@ sourceFile:../first_part3.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(39, 1) Source(4, 51) + SourceIndex(2)
-2 >Emitted(39, 2) Source(4, 52) + SourceIndex(2)
+1 >Emitted(39, 1) Source(5, 51) + SourceIndex(2)
+2 >Emitted(39, 2) Source(5, 52) + SourceIndex(2)
 ---
 >>>var firstfirst_part3_ar = [20, 30];
 1->
@@ -6866,16 +6876,16 @@ sourceFile:../first_part3.ts
 8 >                               30
 9 >                                 ]
 10>                                  ;
-1->Emitted(40, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(40, 5) Source(5, 7) + SourceIndex(2)
-3 >Emitted(40, 24) Source(5, 26) + SourceIndex(2)
-4 >Emitted(40, 27) Source(5, 29) + SourceIndex(2)
-5 >Emitted(40, 28) Source(5, 30) + SourceIndex(2)
-6 >Emitted(40, 30) Source(5, 32) + SourceIndex(2)
-7 >Emitted(40, 32) Source(5, 34) + SourceIndex(2)
-8 >Emitted(40, 34) Source(5, 36) + SourceIndex(2)
-9 >Emitted(40, 35) Source(5, 37) + SourceIndex(2)
-10>Emitted(40, 36) Source(5, 38) + SourceIndex(2)
+1->Emitted(40, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(40, 5) Source(6, 7) + SourceIndex(2)
+3 >Emitted(40, 24) Source(6, 26) + SourceIndex(2)
+4 >Emitted(40, 27) Source(6, 29) + SourceIndex(2)
+5 >Emitted(40, 28) Source(6, 30) + SourceIndex(2)
+6 >Emitted(40, 30) Source(6, 32) + SourceIndex(2)
+7 >Emitted(40, 32) Source(6, 34) + SourceIndex(2)
+8 >Emitted(40, 34) Source(6, 36) + SourceIndex(2)
+9 >Emitted(40, 35) Source(6, 37) + SourceIndex(2)
+10>Emitted(40, 36) Source(6, 38) + SourceIndex(2)
 ---
 >>>firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 1->
@@ -6893,18 +6903,18 @@ sourceFile:../first_part3.ts
 5 >                                                      , ...
 6 >                                                                firstfirst_part3_ar
 7 >                                                                                   );
-1->Emitted(41, 1) Source(6, 1) + SourceIndex(2)
-2 >Emitted(41, 23) Source(6, 23) + SourceIndex(2)
-3 >Emitted(41, 53) Source(6, 24) + SourceIndex(2)
-4 >Emitted(41, 55) Source(6, 26) + SourceIndex(2)
-5 >Emitted(41, 65) Source(6, 31) + SourceIndex(2)
-6 >Emitted(41, 84) Source(6, 50) + SourceIndex(2)
-7 >Emitted(41, 95) Source(6, 52) + SourceIndex(2)
+1->Emitted(41, 1) Source(7, 1) + SourceIndex(2)
+2 >Emitted(41, 23) Source(7, 23) + SourceIndex(2)
+3 >Emitted(41, 53) Source(7, 24) + SourceIndex(2)
+4 >Emitted(41, 55) Source(7, 26) + SourceIndex(2)
+5 >Emitted(41, 65) Source(7, 31) + SourceIndex(2)
+6 >Emitted(41, 84) Source(7, 50) + SourceIndex(2)
+7 >Emitted(41, 95) Source(7, 52) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1304,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]},"mapHash":"-26203276582-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"71257392207-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"text"}],"mapHash":"8802529616-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","1776071466-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() { }console.log(s);","4973778178-console.log(f());\r\n","998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1304,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]},"mapHash":"-7716375076-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"71257392207-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":307,"kind":"text"}],"mapHash":"21786479890-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../../../lib/lib.d.ts","../first_part1.ts","../first_part2.ts","../first_part3.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-20328557861-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }console.log(s);","6007494133-console.log(f());\n","-1751035906-function f() {\n    return \"JS does hoists\";\n}\n\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./first-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","latestChangedDtsFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -7006,7 +7016,7 @@ declare const firstfirst_part3_ar: number[];
         }
       ],
       "hash": "71257392207-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\n//# sourceMappingURL=first-output.js.map",
-      "mapHash": "-26203276582-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
+      "mapHash": "-7716375076-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
           "typescript:read",
@@ -7023,7 +7033,7 @@ declare const firstfirst_part3_ar: number[];
         }
       ],
       "hash": "-10647290581-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n//# sourceMappingURL=first-output.d.ts.map",
-      "mapHash": "8802529616-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
+      "mapHash": "21786479890-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\",\"../first_part2.ts\",\"../first_part3.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
@@ -7035,9 +7045,9 @@ declare const firstfirst_part3_ar: number[];
     ],
     "fileInfos": {
       "../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "../first_part1.ts": "1776071466-interface TheFirst {\r\n    none: any;\r\n}\r\n\r\nconst s = \"Hello, world\";\r\n\r\ninterface NoJsForHereEither {\r\n    none: any;\r\n}\r\n\r\nconsole.log(s);\r\nfunction forfirstfirst_PART1Rest() { }console.log(s);",
-      "../first_part2.ts": "4973778178-console.log(f());\r\n",
-      "../first_part3.ts": "998368782-function f() {\r\n    return \"JS does hoists\";\r\n}\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"
+      "../first_part1.ts": "-20328557861-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }console.log(s);",
+      "../first_part2.ts": "6007494133-console.log(f());\n",
+      "../first_part3.ts": "-1751035906-function f() {\n    return \"JS does hoists\";\n}\n\nfunction firstfirst_part3Spread(...b: number[]) { }\nconst firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread(10, ...firstfirst_part3_ar);"
     },
     "root": [
       [
@@ -7067,11 +7077,11 @@ declare const firstfirst_part3_ar: number[];
     "latestChangedDtsFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 4999
+  "size": 4977
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACLrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -7230,6 +7240,7 @@ sourceFile:../../../first/first_part3.ts
 9 >                                                      ^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >                 firstfirst_part3Spread
 4 >                                       (
@@ -7238,15 +7249,15 @@ sourceFile:../../../first/first_part3.ts
 7 >                                              number
 8 >                                                    []
 9 >                                                      ) { }
-1->Emitted(10, 1) Source(4, 1) + SourceIndex(1)
-2 >Emitted(10, 18) Source(4, 10) + SourceIndex(1)
-3 >Emitted(10, 40) Source(4, 32) + SourceIndex(1)
-4 >Emitted(10, 41) Source(4, 33) + SourceIndex(1)
-5 >Emitted(10, 44) Source(4, 36) + SourceIndex(1)
-6 >Emitted(10, 47) Source(4, 39) + SourceIndex(1)
-7 >Emitted(10, 53) Source(4, 45) + SourceIndex(1)
-8 >Emitted(10, 55) Source(4, 47) + SourceIndex(1)
-9 >Emitted(10, 63) Source(4, 52) + SourceIndex(1)
+1->Emitted(10, 1) Source(5, 1) + SourceIndex(1)
+2 >Emitted(10, 18) Source(5, 10) + SourceIndex(1)
+3 >Emitted(10, 40) Source(5, 32) + SourceIndex(1)
+4 >Emitted(10, 41) Source(5, 33) + SourceIndex(1)
+5 >Emitted(10, 44) Source(5, 36) + SourceIndex(1)
+6 >Emitted(10, 47) Source(5, 39) + SourceIndex(1)
+7 >Emitted(10, 53) Source(5, 45) + SourceIndex(1)
+8 >Emitted(10, 55) Source(5, 47) + SourceIndex(1)
+9 >Emitted(10, 63) Source(5, 52) + SourceIndex(1)
 ---
 >>>declare const firstfirst_part3_ar: number[];
 1 >
@@ -7262,12 +7273,12 @@ sourceFile:../../../first/first_part3.ts
 4 >              firstfirst_part3_ar
 5 >                                  = [20, 30]
 6 >                                           ;
-1 >Emitted(11, 1) Source(5, 1) + SourceIndex(1)
-2 >Emitted(11, 9) Source(5, 1) + SourceIndex(1)
-3 >Emitted(11, 15) Source(5, 7) + SourceIndex(1)
-4 >Emitted(11, 34) Source(5, 26) + SourceIndex(1)
-5 >Emitted(11, 44) Source(5, 37) + SourceIndex(1)
-6 >Emitted(11, 45) Source(5, 38) + SourceIndex(1)
+1 >Emitted(11, 1) Source(6, 1) + SourceIndex(1)
+2 >Emitted(11, 9) Source(6, 1) + SourceIndex(1)
+3 >Emitted(11, 15) Source(6, 7) + SourceIndex(1)
+4 >Emitted(11, 34) Source(6, 26) + SourceIndex(1)
+5 >Emitted(11, 44) Source(6, 37) + SourceIndex(1)
+6 >Emitted(11, 45) Source(6, 38) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -7618,7 +7629,7 @@ thirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACFnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -7849,11 +7860,12 @@ sourceFile:../../../first/first_part3.ts
 3 >         ^^^^^^^^^^^^^^^^^^^^^^
 1->
   >
+  >
 2 >function 
 3 >         firstfirst_part3Spread
-1->Emitted(45, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(45, 10) Source(4, 10) + SourceIndex(2)
-3 >Emitted(45, 32) Source(4, 32) + SourceIndex(2)
+1->Emitted(45, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(45, 10) Source(5, 10) + SourceIndex(2)
+3 >Emitted(45, 32) Source(5, 32) + SourceIndex(2)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -7861,8 +7873,8 @@ sourceFile:../../../first/first_part3.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(46, 5) Source(4, 33) + SourceIndex(2)
-2 >Emitted(46, 16) Source(4, 47) + SourceIndex(2)
+1 >Emitted(46, 5) Source(5, 33) + SourceIndex(2)
+2 >Emitted(46, 16) Source(5, 47) + SourceIndex(2)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -7877,20 +7889,20 @@ sourceFile:../../../first/first_part3.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(47, 10) Source(4, 33) + SourceIndex(2)
-2 >Emitted(47, 20) Source(4, 47) + SourceIndex(2)
-3 >Emitted(47, 22) Source(4, 33) + SourceIndex(2)
-4 >Emitted(47, 43) Source(4, 47) + SourceIndex(2)
-5 >Emitted(47, 45) Source(4, 33) + SourceIndex(2)
-6 >Emitted(47, 49) Source(4, 47) + SourceIndex(2)
+1->Emitted(47, 10) Source(5, 33) + SourceIndex(2)
+2 >Emitted(47, 20) Source(5, 47) + SourceIndex(2)
+3 >Emitted(47, 22) Source(5, 33) + SourceIndex(2)
+4 >Emitted(47, 43) Source(5, 47) + SourceIndex(2)
+5 >Emitted(47, 45) Source(5, 33) + SourceIndex(2)
+6 >Emitted(47, 49) Source(5, 47) + SourceIndex(2)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(48, 9) Source(4, 33) + SourceIndex(2)
-2 >Emitted(48, 31) Source(4, 47) + SourceIndex(2)
+1 >Emitted(48, 9) Source(5, 33) + SourceIndex(2)
+2 >Emitted(48, 31) Source(5, 47) + SourceIndex(2)
 ---
 >>>    }
 >>>}
@@ -7899,8 +7911,8 @@ sourceFile:../../../first/first_part3.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(50, 1) Source(4, 51) + SourceIndex(2)
-2 >Emitted(50, 2) Source(4, 52) + SourceIndex(2)
+1 >Emitted(50, 1) Source(5, 51) + SourceIndex(2)
+2 >Emitted(50, 2) Source(5, 52) + SourceIndex(2)
 ---
 >>>var firstfirst_part3_ar = [20, 30];
 1->
@@ -7925,16 +7937,16 @@ sourceFile:../../../first/first_part3.ts
 8 >                               30
 9 >                                 ]
 10>                                  ;
-1->Emitted(51, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(51, 5) Source(5, 7) + SourceIndex(2)
-3 >Emitted(51, 24) Source(5, 26) + SourceIndex(2)
-4 >Emitted(51, 27) Source(5, 29) + SourceIndex(2)
-5 >Emitted(51, 28) Source(5, 30) + SourceIndex(2)
-6 >Emitted(51, 30) Source(5, 32) + SourceIndex(2)
-7 >Emitted(51, 32) Source(5, 34) + SourceIndex(2)
-8 >Emitted(51, 34) Source(5, 36) + SourceIndex(2)
-9 >Emitted(51, 35) Source(5, 37) + SourceIndex(2)
-10>Emitted(51, 36) Source(5, 38) + SourceIndex(2)
+1->Emitted(51, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(51, 5) Source(6, 7) + SourceIndex(2)
+3 >Emitted(51, 24) Source(6, 26) + SourceIndex(2)
+4 >Emitted(51, 27) Source(6, 29) + SourceIndex(2)
+5 >Emitted(51, 28) Source(6, 30) + SourceIndex(2)
+6 >Emitted(51, 30) Source(6, 32) + SourceIndex(2)
+7 >Emitted(51, 32) Source(6, 34) + SourceIndex(2)
+8 >Emitted(51, 34) Source(6, 36) + SourceIndex(2)
+9 >Emitted(51, 35) Source(6, 37) + SourceIndex(2)
+10>Emitted(51, 36) Source(6, 38) + SourceIndex(2)
 ---
 >>>firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 1->
@@ -7952,13 +7964,13 @@ sourceFile:../../../first/first_part3.ts
 5 >                                                      , ...
 6 >                                                                firstfirst_part3_ar
 7 >                                                                                   );
-1->Emitted(52, 1) Source(6, 1) + SourceIndex(2)
-2 >Emitted(52, 23) Source(6, 23) + SourceIndex(2)
-3 >Emitted(52, 53) Source(6, 24) + SourceIndex(2)
-4 >Emitted(52, 55) Source(6, 26) + SourceIndex(2)
-5 >Emitted(52, 65) Source(6, 31) + SourceIndex(2)
-6 >Emitted(52, 84) Source(6, 50) + SourceIndex(2)
-7 >Emitted(52, 95) Source(6, 52) + SourceIndex(2)
+1->Emitted(52, 1) Source(7, 1) + SourceIndex(2)
+2 >Emitted(52, 23) Source(7, 23) + SourceIndex(2)
+3 >Emitted(52, 53) Source(7, 24) + SourceIndex(2)
+4 >Emitted(52, 55) Source(7, 26) + SourceIndex(2)
+5 >Emitted(52, 65) Source(7, 31) + SourceIndex(2)
+6 >Emitted(52, 84) Source(7, 50) + SourceIndex(2)
+7 >Emitted(52, 95) Source(7, 52) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -8697,7 +8709,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1361,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1362,"end":1795,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1362,"end":1795,"kind":"text"}]},{"pos":1795,"end":2463,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1795,"end":2463,"kind":"text"}]},{"pos":2463,"end":2885,"kind":"text"}],"mapHash":"26169118295-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-2171038301-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":307,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":307,"kind":"text"}]},{"pos":307,"end":564,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":307,"end":564,"kind":"text"}]},{"pos":564,"end":740,"kind":"text"}],"mapHash":"18621572486-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":489,"kind":"emitHelpers","data":"typescript:read"},{"pos":490,"end":870,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":871,"end":1361,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1362,"end":1795,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1362,"end":1795,"kind":"text"}]},{"pos":1795,"end":2463,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1795,"end":2463,"kind":"text"}]},{"pos":2463,"end":2885,"kind":"text"}],"mapHash":"-5234328997-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACFnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}","hash":"-2171038301-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map","sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":307,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":307,"kind":"text"}]},{"pos":307,"end":564,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":307,"end":564,"kind":"text"}]},{"pos":564,"end":740,"kind":"text"}],"mapHash":"-23413824694-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACLrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}","hash":"-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map"}},"program":{"fileNames":["../../../../lib/lib.d.ts","../../../first/bin/first-output.d.ts","../../../2/second-output.d.ts","../../third_part1.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n","-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n","-9658874822-var c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"],"root":[4],"options":{"composite":true,"declaration":true,"declarationMap":true,"downlevelIteration":true,"outFile":"./third-output.js","removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"outSignature":"-21519156314-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n","latestChangedDtsFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -8915,7 +8927,7 @@ declare const thirdthird_part1_ar: number[];
         }
       ],
       "hash": "-2171038301-var __read = (this && this.__read) || function (o, n) {\n    var m = typeof Symbol === \"function\" && o[Symbol.iterator];\n    if (!m) return o;\n    var i = m.call(o), r, ar = [], e;\n    try {\n        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);\n    }\n    catch (error) { e = { error: error }; }\n    finally {\n        try {\n            if (r && !r.done && (m = i[\"return\"])) m.call(i);\n        }\n        finally { if (e) throw e.error; }\n    }\n    return ar;\n};\nvar __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {\n    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {\n        if (ar || !(i in from)) {\n            if (!ar) ar = Array.prototype.slice.call(from, 0, i);\n            ar[i] = from[i];\n        }\n    }\n    return to.concat(ar || Array.prototype.slice.call(from));\n};\nvar __rest = (this && this.__rest) || function (s, e) {\n    var t = {};\n    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)\n        t[p] = s[p];\n    if (s != null && typeof Object.getOwnPropertySymbols === \"function\")\n        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {\n            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))\n                t[p[i]] = s[p[i]];\n        }\n    return t;\n};\nvar s = \"Hello, world\";\nconsole.log(s);\nfunction forfirstfirst_PART1Rest() { }\nconsole.log(s);\nconsole.log(f());\nfunction f() {\n    return \"JS does hoists\";\n}\nfunction firstfirst_part3Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar firstfirst_part3_ar = [20, 30];\nfirstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));\nvar N;\n(function (N) {\n    function f() {\n        console.log('testing');\n    }\n    f();\n})(N || (N = {}));\nfunction forsecondsecond_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nvar C = (function () {\n    function C() {\n    }\n    C.prototype.doSomething = function () {\n        console.log(\"something got done\");\n    };\n    return C;\n}());\nfunction secondsecond_part2Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar secondsecond_part2_ar = [20, 30];\nsecondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));\nvar c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\n    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, [\"b\"]);\n}\nfunction thirdthird_part1Spread() {\n    var b = [];\n    for (var _i = 0; _i < arguments.length; _i++) {\n        b[_i] = arguments[_i];\n    }\n}\nvar thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread.apply(void 0, __spreadArray([10], __read(thirdthird_part1_ar), false));\n//# sourceMappingURL=third-output.js.map",
-      "mapHash": "26169118295-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACDnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
+      "mapHash": "-5234328997-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part2.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXrD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;AAED,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE;ACFnD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACRvD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC;AACD,SAAS,sBAAsB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACnD,IAAM,mBAAmB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACrC,sBAAsB,8BAAC,EAAE,UAAK,mBAAmB,WAAE\"}",
       "sources": {
         "helpers": [
           "typescript:rest",
@@ -8959,7 +8971,7 @@ declare const thirdthird_part1_ar: number[];
         }
       ],
       "hash": "-25062717856-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\ndeclare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\ndeclare var c: C;\ndeclare function forthirdthird_part1Rest(): void;\ndeclare function thirdthird_part1Spread(...b: number[]): void;\ndeclare const thirdthird_part1_ar: number[];\n//# sourceMappingURL=third-output.d.ts.map",
-      "mapHash": "18621572486-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACJrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
+      "mapHash": "-23413824694-{\"version\":3,\"file\":\"third-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../../first/first_part3.ts\",\"../../../second/second_part1.ts\",\"../../../second/second_part2.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AAED,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC;ACLrC,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACrD,QAAA,MAAM,qBAAqB,UAAW,CAAC;ACPvC,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;AACnD,QAAA,MAAM,mBAAmB,UAAW,CAAC\"}"
     }
   },
   "program": {
@@ -8973,7 +8985,7 @@ declare const thirdthird_part1_ar: number[];
       "../../../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../../../first/bin/first-output.d.ts": "-5875110108-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\ndeclare function forfirstfirst_PART1Rest(): void;\ndeclare function f(): string;\ndeclare function firstfirst_part3Spread(...b: number[]): void;\ndeclare const firstfirst_part3_ar: number[];\n",
       "../../../2/second-output.d.ts": "-21549614962-declare namespace N {\n}\ndeclare namespace N {\n}\ndeclare function forsecondsecond_part1Rest(): void;\ndeclare class C {\n    doSomething(): void;\n}\ndeclare function secondsecond_part2Spread(...b: number[]): void;\ndeclare const secondsecond_part2_ar: number[];\n",
-      "../../third_part1.ts": "-1627128876-var c = new C();\r\nc.doSomething();\r\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"
+      "../../third_part1.ts": "-9658874822-var c = new C();\nc.doSomething();\nfunction forthirdthird_part1Rest() {\nconst { b, ...rest } = { a: 10, b: 30, yy: 30 };\n}\nfunction thirdthird_part1Spread(...b: number[]) { }\nconst thirdthird_part1_ar = [20, 30];\nthirdthird_part1Spread(10, ...thirdthird_part1_ar);"
     },
     "root": [
       [
@@ -8997,6 +9009,6 @@ declare const thirdthird_part1_ar: number[];
     "latestChangedDtsFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 10159
+  "size": 10156
 }
 

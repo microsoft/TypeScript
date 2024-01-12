@@ -39,7 +39,7 @@ second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to p
     class Sql extends Wagon {
         constructor() {
             super(); // error: not enough arguments
-            ~~~~~~~
+            ~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 first.js:5:16: An argument for 'numberOxen' was not provided.
             this.foonly = 12

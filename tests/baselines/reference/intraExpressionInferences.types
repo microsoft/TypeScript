@@ -1122,7 +1122,7 @@ type ErrorFn = (error: unknown) => void;
 >error : unknown
 
 declare const genericFn: <T>(args: {
->genericFn : <T>(args: { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: { body: T; }) => unknown; }) => T
+>genericFn : <T>(args: { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: {    body: T;}) => unknown; }) => T
 >args : { parser: (p: unknown, errorFn: ErrorFn) => T; handler: (data: {    body: T;}) => unknown; }
 
   parser: (p: unknown, errorFn: ErrorFn) => T;
@@ -1164,7 +1164,7 @@ genericFn({
 });
 
 declare const genericFnTuple: <T>(
->genericFnTuple : <T>(args: [parser: (p: unknown, errorFn: ErrorFn) => T, handler: (data: { body: T; }) => unknown]) => T
+>genericFnTuple : <T>(args: [parser: (p: unknown, errorFn: ErrorFn) => T, handler: (data: {    body: T;}) => unknown]) => T
 
   args: [
 >args : [parser: (p: unknown, errorFn: ErrorFn) => T, handler: (data: {    body: T;}) => unknown]
