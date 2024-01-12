@@ -1,13 +1,14 @@
 import {
     append,
     ArrowFunction,
+    CodeFixAction,
     declarationNameToString,
-    DiagnosticOrDiagnosticAndArguments,
     Diagnostics,
     factory,
     find,
     findAncestor,
     first,
+    firstDefined,
     forEach,
     FunctionDeclaration,
     FunctionExpression,
@@ -23,21 +24,24 @@ import {
     isSourceFileFromLibrary,
     isVariableDeclaration,
     last,
-    lastOrUndefined,
     length,
     map,
+    mapDefined,
     MethodDeclaration,
     Node,
     NodeBuilderFlags,
     ParameterDeclaration,
     Program,
+    QuestionToken,
+    Signature,
     SignatureKind,
-    sort,
+    some,
     SourceFile,
     SyntaxKind,
     textChanges,
     Type,
     TypeChecker,
+    TypeNode,
 } from "../_namespaces/ts";
 import {
     codeFixAll,
@@ -45,24 +49,59 @@ import {
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
 
-const fixId = "addMissingParam";
+const addMissingParamFixId = "addMissingParam";
+const addOptionalParamFixId = "addOptionalParam";
 const errorCodes = [Diagnostics.Expected_0_arguments_but_got_1.code];
 
 registerCodeFix({
     errorCodes,
-    fixIds: [fixId],
+    fixIds: [addMissingParamFixId, addOptionalParamFixId],
     getCodeActions(context) {
         const info = getInfo(context.sourceFile, context.program, context.span.start);
         if (info === undefined) return undefined;
 
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
-        return [createCodeFixAction(fixId, changes, info.description, fixId, Diagnostics.Add_all_missing_parameters)];
+        const { name, declarations, newParameters, newOptionalParameters } = info;
+        const actions: CodeFixAction[] = [];
+
+        if (length(newParameters)) {
+            append(
+                actions,
+                createCodeFixAction(
+                    addMissingParamFixId,
+                    textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newParameters)),
+                    [length(newParameters) > 1 ? Diagnostics.Add_missing_parameters_to_0 : Diagnostics.Add_missing_parameter_to_0, name],
+                    addMissingParamFixId,
+                    Diagnostics.Add_all_missing_parameters,
+                ),
+            );
+        }
+
+        if (length(newOptionalParameters)) {
+            append(
+                actions,
+                createCodeFixAction(
+                    addOptionalParamFixId,
+                    textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, declarations, newOptionalParameters)),
+                    [length(newOptionalParameters) > 1 ? Diagnostics.Add_optional_parameters_to_0 : Diagnostics.Add_optional_parameter_to_0, name],
+                    addOptionalParamFixId,
+                    Diagnostics.Add_all_optional_parameters,
+                ),
+            );
+        }
+
+        return actions;
     },
     getAllCodeActions: context =>
         codeFixAll(context, errorCodes, (changes, diag) => {
             const info = getInfo(context.sourceFile, context.program, diag.start);
             if (info) {
-                doChange(changes, context.sourceFile, info);
+                const { declarations, newParameters, newOptionalParameters } = info;
+                if (context.fixId === addMissingParamFixId) {
+                    doChange(changes, context.sourceFile, declarations, newParameters);
+                }
+                if (context.fixId === addOptionalParamFixId) {
+                    doChange(changes, context.sourceFile, declarations, newOptionalParameters);
+                }
             }
         }),
 });
@@ -74,10 +113,10 @@ type ConvertibleSignatureDeclaration =
     | MethodDeclaration;
 
 interface SignatureInfo {
-    readonly description: DiagnosticOrDiagnosticAndArguments;
     readonly newParameters: ParameterInfo[];
+    readonly newOptionalParameters: ParameterInfo[];
+    readonly name: string;
     readonly declarations: ConvertibleSignatureDeclaration[];
-    readonly overload: ConvertibleSignatureDeclaration | undefined;
 }
 
 interface ParameterInfo {
@@ -88,76 +127,80 @@ interface ParameterInfo {
 function getInfo(sourceFile: SourceFile, program: Program, pos: number): SignatureInfo | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     const callExpression = findAncestor(token, isCallExpression);
-    if (callExpression === undefined || length(callExpression.arguments) === 0) return undefined;
+    if (callExpression === undefined || length(callExpression.arguments) === 0) {
+        return undefined;
+    }
 
     const checker = program.getTypeChecker();
     const type = checker.getTypeAtLocation(callExpression.expression);
     const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-    const signature = lastOrUndefined(sort(signatures, (a, b) => length(a.parameters) - length(b.parameters)));
-    if (
-        signature &&
-        signature.declaration &&
-        isConvertibleSignatureDeclaration(signature.declaration)
-    ) {
-        // find a non-overload signature
-        const declaration = (signature.declaration.body === undefined ? find(signature.declaration.symbol.declarations, d => isConvertibleSignatureDeclaration(d) && !!d.body) : signature.declaration) as ConvertibleSignatureDeclaration;
-        if (declaration === undefined) {
-            return undefined;
+
+    // find a non-overload signature
+    const declaration = firstDefined(signatures, s => {
+        if (s.declaration && isConvertibleSignatureDeclaration(s.declaration)) {
+            return s.declaration.body ? s.declaration :
+                find(s.declaration.symbol.declarations, d => isConvertibleSignatureDeclaration(d) && !!d.body) as ConvertibleSignatureDeclaration;
         }
+        return undefined;
+    });
 
-        if (isSourceFileFromLibrary(program, declaration.getSourceFile())) {
-            return undefined;
-        }
-
-        const overload = signature.declaration.body === undefined ? signature.declaration : undefined;
-        if (overload && length(overload.parameters) !== length(declaration.parameters)) return undefined;
-
-        const name = tryGetName(declaration);
-        if (name === undefined) return undefined;
-
-        const declarations: ConvertibleSignatureDeclaration[] = append([declaration], overload);
-        const newParameters: ParameterInfo[] = [];
-        const parametersLength = length(declaration.parameters);
-        const argumentsLength = length(callExpression.arguments);
-        if (parametersLength > argumentsLength) return undefined;
-
-        for (let i = 0, pos = 0, paramIndex = 0; i < argumentsLength; i++) {
-            const arg = callExpression.arguments[i];
-            const expr = isAccessExpression(arg) ? getNameOfAccessExpression(arg) : arg;
-            const type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)));
-            const parameter = pos < parametersLength ? declaration.parameters[pos] : undefined;
-            if (
-                parameter &&
-                checker.isTypeAssignableTo(type, checker.getTypeAtLocation(parameter))
-            ) {
-                pos++;
-            }
-            else {
-                const newParameter = {
-                    pos: i,
-                    declaration: factory.createParameterDeclaration(
-                        /*modifiers*/ undefined,
-                        /*dotDotDotToken*/ undefined,
-                        expr && isIdentifier(expr) ? expr.text : `p${paramIndex++}`,
-                        /*questionToken*/ undefined,
-                        typeToTypeNode(checker, type, declaration),
-                        /*initializer*/ undefined,
-                    ),
-                };
-                append(newParameters, newParameter);
-            }
-        }
-        return {
-            declarations,
-            newParameters,
-            overload,
-            description: [
-                length(newParameters) > 1 ? Diagnostics.Add_missing_parameters_to_0 : Diagnostics.Add_missing_parameter_to_0,
-                declarationNameToString(name),
-            ],
-        };
+    if (declaration === undefined || isSourceFileFromLibrary(program, declaration.getSourceFile())) {
+        return undefined;
     }
-    return undefined;
+
+    const name = tryGetName(declaration);
+    if (name === undefined) {
+        return undefined;
+    }
+
+    const newParameters: ParameterInfo[] = [];
+    const newOptionalParameters: ParameterInfo[] = [];
+    const parametersLength = length(declaration.parameters);
+    const argumentsLength = length(callExpression.arguments);
+    if (parametersLength > argumentsLength) {
+        return undefined;
+    }
+
+    const overloads = getOverloads(declaration, signatures);
+    for (let i = 0, pos = 0, paramIndex = 0; i < argumentsLength; i++) {
+        const arg = callExpression.arguments[i];
+        const expr = isAccessExpression(arg) ? getNameOfAccessExpression(arg) : arg;
+        const type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)));
+        const parameter = pos < parametersLength ? declaration.parameters[pos] : undefined;
+        if (
+            parameter &&
+            checker.isTypeAssignableTo(type, checker.getTypeAtLocation(parameter))
+        ) {
+            pos++;
+        }
+        else {
+            const name = expr && isIdentifier(expr) ? expr.text : `p${paramIndex++}`;
+            const typeNode = typeToTypeNode(checker, type, declaration);
+            append(newParameters, {
+                pos: i,
+                declaration: createParameter(name, typeNode, /*questionToken*/ undefined),
+            });
+
+            if (
+                length(overloads) &&
+                some(overloads, d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined)
+            ) {
+                continue;
+            }
+
+            append(newOptionalParameters, {
+                pos: i,
+                declaration: createParameter(name, typeNode, factory.createToken(SyntaxKind.QuestionToken)),
+            });
+        }
+    }
+
+    return {
+        newParameters,
+        newOptionalParameters,
+        name: declarationNameToString(name),
+        declarations: [declaration, ...overloads],
+    };
 }
 
 function tryGetName(node: FunctionLikeDeclaration) {
@@ -176,10 +219,16 @@ function tryGetName(node: FunctionLikeDeclaration) {
 }
 
 function typeToTypeNode(checker: TypeChecker, type: Type, enclosingDeclaration: Node) {
-    return checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation) ?? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
+    return checker.typeToTypeNode(checker.getWidenedType(type), enclosingDeclaration, NodeBuilderFlags.NoTruncation)
+        ?? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { declarations, newParameters }: SignatureInfo) {
+function doChange(
+    changes: textChanges.ChangeTracker,
+    sourceFile: SourceFile,
+    declarations: ConvertibleSignatureDeclaration[],
+    newParameters: ParameterInfo[],
+) {
     forEach(declarations, declaration => {
         if (length(declaration.parameters)) {
             changes.replaceNodeRangeWithNodes(
@@ -247,4 +296,27 @@ function updateParameters(node: ConvertibleSignatureDeclaration, newParameters: 
         );
     }
     return parameters;
+}
+
+function getOverloads(implementation: ConvertibleSignatureDeclaration, signatures: readonly Signature[]): ConvertibleSignatureDeclaration[] {
+    const maxParams = Math.max(...mapDefined(signatures, s => isOverload(s) ? length(s.parameters) : undefined));
+    if (length(implementation.parameters) === maxParams) {
+        return mapDefined(signatures, s => isOverload(s) && length(s.parameters) === maxParams ? s.declaration : undefined) as ConvertibleSignatureDeclaration[];
+    }
+    return [];
+}
+
+function isOverload(signature: Signature) {
+    return !!signature.declaration && isConvertibleSignatureDeclaration(signature.declaration) && signature.declaration.body === undefined;
+}
+
+function createParameter(name: string, type: TypeNode, questionToken: QuestionToken | undefined) {
+    return factory.createParameterDeclaration(
+        /*modifiers*/ undefined,
+        /*dotDotDotToken*/ undefined,
+        name,
+        questionToken,
+        type,
+        /*initializer*/ undefined,
+    );
 }
