@@ -95,6 +95,7 @@ import {
     getLineStartPositionForPosition,
     getLocalSymbolForExportDefault,
     getModifiers,
+    getNameFromImportAttribute,
     getNameOfDeclaration,
     getNameTable,
     getNewLineCharacter,
@@ -169,6 +170,7 @@ import {
     isIdentifier,
     isIdentifierText,
     isImportableFile,
+    isImportAttributes,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isImportKeyword,
@@ -3768,6 +3770,7 @@ function getCompletionData(
             || tryGetObjectLikeCompletionSymbols()
             || tryGetImportCompletionSymbols()
             || tryGetImportOrExportClauseCompletionSymbols()
+            || tryGetImportAttributesCompletionSymbols()
             || tryGetLocalNamedExportCompletionSymbols()
             || tryGetConstructorCompletion()
             || tryGetClassLikeCompletionSymbols()
@@ -4452,6 +4455,21 @@ function getCompletionData(
             // If there's nothing else to import, don't offer `type` either
             keywordFilters = KeywordCompletionFilters.None;
         }
+        return GlobalsSearch.Success;
+    }
+
+    /**
+     * import { x } from "foo" with { | }
+     */
+    function tryGetImportAttributesCompletionSymbols(): GlobalsSearch {
+        if (contextToken === undefined) return GlobalsSearch.Continue;
+
+        const importAttributes = contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken ? tryCast(contextToken.parent, isImportAttributes) :
+            contextToken.kind === SyntaxKind.ColonToken ? tryCast(contextToken.parent.parent, isImportAttributes) : undefined;
+        if (importAttributes === undefined) return GlobalsSearch.Continue;
+
+        const existing = new Set(importAttributes.elements.map(getNameFromImportAttribute));
+        symbols = filter(typeChecker.getTypeAtLocation(importAttributes).getApparentProperties(), attr => !existing.has(attr.escapedName));
         return GlobalsSearch.Success;
     }
 

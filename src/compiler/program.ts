@@ -254,6 +254,7 @@ import {
     parseJsonSourceFileConfigFileContent,
     parseNodeFactory,
     Path,
+    pathContainsNodeModules,
     pathIsAbsolute,
     pathIsRelative,
     Program,
@@ -4039,7 +4040,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
                 const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
                 const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension);
-                const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
+                const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile && (!resolution.originalPath || pathContainsNodeModules(resolution.resolvedFileName));
                 const resolvedFileName = resolution.resolvedFileName;
 
                 if (isFromNodeModulesSearch) {

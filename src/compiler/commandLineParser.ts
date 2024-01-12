@@ -218,7 +218,7 @@ const libEntries: [string, string][] = [
     ["es2023.array", "lib.es2023.array.d.ts"],
     ["es2023.collection", "lib.es2023.collection.d.ts"],
     ["esnext.array", "lib.es2023.array.d.ts"],
-    ["esnext.collection", "lib.es2023.collection.d.ts"],
+    ["esnext.collection", "lib.esnext.collection.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
     ["esnext.intl", "lib.esnext.intl.d.ts"],
@@ -228,6 +228,7 @@ const libEntries: [string, string][] = [
     ["esnext.promise", "lib.esnext.promise.d.ts"],
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],
+    ["esnext.object", "lib.esnext.object.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];

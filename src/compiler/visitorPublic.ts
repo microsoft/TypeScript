@@ -91,6 +91,7 @@ import {
     NodeArray,
     NodesVisitor,
     NodeVisitor,
+    nullTransformationContext,
     ParameterDeclaration,
     ScriptTarget,
     setEmitFlags,
@@ -580,9 +581,9 @@ export function visitCommaListElements(elements: NodeArray<Expression>, visitor:
  * @param visitor The callback used to visit each child.
  * @param context A lexical environment context for the visitor.
  */
-export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: CoreTransformationContext): T;
+export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: CoreTransformationContext | undefined): T;
 /** @internal */
-export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: CoreTransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
+export function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: CoreTransformationContext | undefined, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T; // eslint-disable-line @typescript-eslint/unified-signatures
 /**
  * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
  *
@@ -590,10 +591,10 @@ export function visitEachChild<T extends Node>(node: T, visitor: Visitor, contex
  * @param visitor The callback used to visit each child.
  * @param context A lexical environment context for the visitor.
  */
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: CoreTransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: CoreTransformationContext | undefined, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 /** @internal */
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: CoreTransformationContext, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined;
-export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: CoreTransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: CoreTransformationContext | undefined, nodesVisitor?: NodesVisitor, tokenVisitor?: Visitor, nodeVisitor?: NodeVisitor): T | undefined;
+export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: CoreTransformationContext = nullTransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor, nodeVisitor: NodeVisitor = visitNode): T | undefined {
     if (node === undefined) {
         return undefined;
     }

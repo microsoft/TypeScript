@@ -69,7 +69,6 @@ import {
     NodeArray,
     NodeBuilderFlags,
     NodeFlags,
-    nullTransformationContext,
     ObjectFlags,
     ObjectLiteralExpression,
     ObjectType,
@@ -912,7 +911,7 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
             const typeArguments = visitNodes(node.typeArguments, visit, isTypeNode);
             return factory.createTypeReferenceNode(qualifier, typeArguments);
         }
-        return visitEachChild(node, visit, nullTransformationContext);
+        return visitEachChild(node, visit, /*context*/ undefined);
     }
 }
 

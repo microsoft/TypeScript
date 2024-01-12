@@ -15,7 +15,6 @@ import {
     canHaveModifiers,
     canProduceDiagnostics,
     ClassDeclaration,
-    CommentRange,
     compact,
     concatenate,
     ConditionalTypeNode,
@@ -67,8 +66,6 @@ import {
     getExternalModuleImportEqualsDeclarationExpression,
     getExternalModuleNameFromDeclaration,
     getFirstConstructorWithBody,
-    getLeadingCommentRanges,
-    getLeadingCommentRangesOfNode,
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
     getNormalizedAbsolutePath,
@@ -84,7 +81,6 @@ import {
     GetSymbolAccessibilityDiagnostic,
     getTextOfNode,
     getThisParameter,
-    getTrailingCommentRanges,
     hasDynamicName,
     hasEffectiveModifier,
     hasExtension,
@@ -133,6 +129,7 @@ import {
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
     isInterfaceDeclaration,
+    isInternalDeclaration,
     isJsonSourceFile,
     isLateVisibilityPaintedStatement,
     isLiteralExpression,
@@ -167,7 +164,6 @@ import {
     isVariableDeclaration,
     isVarUsing,
     JSDocFunctionType,
-    last,
     LateBoundDeclaration,
     LateVisibilityPaintedStatement,
     length,
@@ -211,7 +207,6 @@ import {
     setParent,
     setTextRange,
     SignatureDeclaration,
-    skipTrivia,
     some,
     SourceFile,
     startsWith,
@@ -251,35 +246,6 @@ export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver
     const compilerOptions = host.getCompilerOptions();
     const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
     return result.diagnostics;
-}
-
-function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
-    const comment = currentSourceFile.text.substring(range.pos, range.end);
-    return comment.includes("@internal");
-}
-
-/** @internal */
-export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
-    const parseTreeNode = getParseTreeNode(node);
-    if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
-        const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
-        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
-        const text = currentSourceFile.text;
-        const commentRanges = previousSibling
-            ? concatenate(
-                // to handle
-                // ... parameters, /** @internal */
-                // public param: string
-                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true)),
-                getLeadingCommentRanges(text, node.pos),
-            )
-            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));
-        return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
-    }
-    const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
-    return !!forEach(leadingCommentRanges, range => {
-        return hasInternalAnnotation(range, currentSourceFile);
-    });
 }
 
 const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals |

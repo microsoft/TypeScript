@@ -3643,6 +3643,13 @@ export interface UserPreferences {
      * Default: `false`
      */
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+    /**
+     * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is
+     * type-only.
+     *
+     * Default: `last`
+     */
+    readonly organizeImportsTypeOrder?: "last" | "first" | "inline";
 
     /**
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
