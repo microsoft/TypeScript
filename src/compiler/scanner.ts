@@ -1795,29 +1795,21 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
             const ch = codePointAt(text, pos);
             if (pos === 0) {
-                // If a file wasn't valid text at all, it will usually be apparent at
-                // position 0 because UTF-8 decode will fail and produce U+FFFD.
+                // If a file isn't valid text at all, it will usually be apparent
+                // in the first few characters because we'll see a NUL or UTF-8 decode will fail and produce U+FFFD.
                 // If that happens, just issue one error and refuse to try to scan further;
-                // this is likely a binary file that cannot be parsed
-                let isBinary = ch === CharacterCodes.replacementCharacter;
-                // See if this is an MPEG Transport Stream, where every 188th byte is "G" and the rest is garbage.
-                if (ch === CharacterCodes.G) {
-                    const end = Math.min(text.length, pos + 188);
-                    let i = pos + charSize(ch);
-                    while (i < end) {
-                        const ch = codePointAt(text, i);
-                        if (codePointAt(text, i) === CharacterCodes.replacementCharacter) {
-                            isBinary = true;
-                            break;
-                        }
-                        i += charSize(ch);
+                // this is likely a binary file that cannot be parsed.
+                let i = 0;
+                const stop = Math.min(text.length, 256);
+                while (i < stop) {
+                    const ch = codePointAt(text, i);
+                    if (!ch || ch === CharacterCodes.replacementCharacter) {
+                        // Jump to the end of the file and fail.
+                        error(Diagnostics.File_appears_to_be_binary);
+                        pos = end;
+                        return token = SyntaxKind.NonTextFileMarkerTrivia;
                     }
-                }
-                if (isBinary) {
-                    // Jump to the end of the file and fail.
-                    error(Diagnostics.File_appears_to_be_binary);
-                    pos = end;
-                    return token = SyntaxKind.NonTextFileMarkerTrivia;
+                    i += charSize(ch);
                 }
                 // Special handling for shebang
                 if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
