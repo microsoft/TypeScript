@@ -453,15 +453,13 @@ function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly So
         if (excludePatterns.some(p => p.test(fileName))) return true;
         if (realpathsWithSymlinks?.size && pathContainsNodeModules(fileName)) {
             let dir = getDirectoryPath(fileName);
-            let dirPath = getDirectoryPath(path);
-            while (dirPath !== "/") {
+            return forEachAncestorDirectory(getDirectoryPath(path), dirPath => {
                 const symlinks = realpathsWithSymlinks.get(ensureTrailingDirectorySeparator(dirPath));
                 if (symlinks) {
                     return symlinks.some(s => excludePatterns.some(p => p.test(fileName.replace(dir, s))));
                 }
                 dir = getDirectoryPath(dir);
-                dirPath = getDirectoryPath(dirPath);
-            }
+            }) ?? false;
         }
         return false;
     });
