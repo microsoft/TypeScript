@@ -18854,14 +18854,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result = instantiateNarrowType(trueType, narrowMapper, trueMapper);
                     break;
                 }
-                // >> TODO: document why/when we need this
-                // Same as above
-                else if (isTypeStrictSubtypeOf(checkType, inferredExtendsType)) {
-                    const trueType = getTypeFromTypeNode(root.node.trueType);
-                    const trueMapper = combinedMapper || mapper;
-                    result = instantiateNarrowType(trueType, narrowMapper, trueMapper);
-                    break;
-                }
             }
             // Return a deferred type for a check that is not definitely true
             result = createType(TypeFlags.Conditional) as ConditionalType;
