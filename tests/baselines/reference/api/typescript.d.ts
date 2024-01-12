@@ -8808,8 +8808,6 @@ declare namespace ts {
         readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
         readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
         readonly excludeLibrarySymbolsInNavTo?: boolean;
-        readonly includeInlineTypeFixes?: boolean;
-        readonly includeRelativeTypeFixes?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {

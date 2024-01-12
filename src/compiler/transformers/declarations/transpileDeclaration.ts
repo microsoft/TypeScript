@@ -16,7 +16,6 @@ import {
     IsolatedTransformationContext,
     normalizeSlashes,
     nullTransformationContext,
-    PrinterOptions,
     SourceFile,
     TransformationContextKind,
     transformDeclarations,
@@ -59,7 +58,7 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
         extendedDiagnostics: compilerOptions.extendedDiagnostics,
         onlyPrintJsDocStyle: true,
         omitBraceSourceMapPositions: true,
-    } as PrinterOptions);
+    });
 
     const writer = createTextWriter(getNewLineCharacter(compilerOptions));
     const declarationPath = getDeclarationEmitOutputFilePathWorker(

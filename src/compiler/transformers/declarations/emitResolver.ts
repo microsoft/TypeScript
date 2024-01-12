@@ -386,9 +386,7 @@ export function createEmitDeclarationResolver(file: SourceFile): CoreEmitResolve
     function isDeclarationVisible(node: Node): boolean {
         if (node) {
             const links = getNodeLinks(node);
-            if (links.isVisible === undefined) {
-                links.isVisible = !!determineIfDeclarationIsVisible(node, isDeclarationVisible);
-            }
+            links.isVisible ??= !!determineIfDeclarationIsVisible(node, isDeclarationVisible);
             return links.isVisible;
         }
 

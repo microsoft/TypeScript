@@ -10150,8 +10150,9 @@ export interface UserPreferences {
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
     readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
     readonly excludeLibrarySymbolsInNavTo?: boolean;
-
+    /** @internal */
     readonly includeInlineTypeFixes?: boolean;
+    /** @internal */
     readonly includeRelativeTypeFixes?: boolean;
 }
 

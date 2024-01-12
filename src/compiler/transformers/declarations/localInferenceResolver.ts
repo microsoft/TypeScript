@@ -107,7 +107,7 @@ import {
     VisitResult,
 } from "../../_namespaces/ts";
 
-enum NarrowBehavior {
+const enum NarrowBehavior {
     None = 0,
     AsConst = 1,
     KeepLiterals = 2,

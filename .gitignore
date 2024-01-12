@@ -57,7 +57,6 @@ yarn.lock
 yarn-error.log
 .parallelperf.*
 tests/baselines/reference/dt
-tests/auto-fixed/*
 .failed-tests
 TEST-results.xml
 package-lock.json

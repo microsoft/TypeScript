@@ -909,5 +909,5 @@ export function getMemberKeyFromElement(element: NamedDeclaration): MemberKey | 
     }
     const name = element.name;
     if (!name || isElementAccessExpression(name) || isObjectBindingPattern(name) || isArrayBindingPattern(name) || isJsxNamespacedName(name) || isPropertyAccessExpression(name)) return undefined;
-    return getMemberKey(name) as MemberKey;
+    return getMemberKey(name);
 }

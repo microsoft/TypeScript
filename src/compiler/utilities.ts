@@ -8698,12 +8698,6 @@ export const computedOptions = createComputedCompilerOptions({
             return !!(compilerOptions.isolatedModules || compilerOptions.verbatimModuleSyntax);
         },
     },
-    isolatedDeclarations: {
-        dependencies: ["verbatimModuleSyntax"],
-        computeValue: compilerOptions => {
-            return !!(compilerOptions.isolatedDeclarations);
-        },
-    },
     esModuleInterop: {
         dependencies: ["module", "target"],
         computeValue: (compilerOptions): boolean => {
