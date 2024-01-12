@@ -2,12 +2,12 @@
 
 //// [index.ts]
 export const a = async () => (await import("inner")).x();
-//// [node_modules/inner/index.d.ts]
+//// [index.d.ts]
 export { x } from "./other.js";
-//// [node_modules/inner/other.d.ts]
+//// [other.d.ts]
 import { Thing } from "./private.js"
 export const x: () => Thing;
-//// [node_modules/inner/private.d.ts]
+//// [private.d.ts]
 export interface Thing {} // not exported in export map, inaccessible under new module modes
 //// [package.json]
 {
@@ -16,7 +16,7 @@ export interface Thing {} // not exported in export map, inaccessible under new 
     "type": "module",
     "exports": "./index.js"
 }
-//// [node_modules/inner/package.json]
+//// [package.json]
 {
     "name": "inner",
     "private": true,

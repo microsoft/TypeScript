@@ -5,10 +5,10 @@
 import { Thing } from "inner/other";
 export const a = (await import("inner")).x();
 import {a as a2} from "package";
-//// [node_modules/inner/index.ts]
+//// [index.ts]
 // esm format file
 export { x } from "./other.js";
-//// [node_modules/inner/other.ts]
+//// [other.ts]
 // esm format file
 export interface Thing {}
 export const x: () => Thing = null as any;
@@ -19,7 +19,7 @@ export const x: () => Thing = null as any;
     "type": "module",
     "exports": "./index.ts"
 }
-//// [node_modules/inner/package.json]
+//// [package.json]
 {
     "name": "inner",
     "private": true,

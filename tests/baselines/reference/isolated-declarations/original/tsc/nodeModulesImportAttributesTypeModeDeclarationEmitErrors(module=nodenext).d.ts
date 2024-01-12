@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/node/nodeModulesImportAttributesTypeModeDeclarationEmitErrors.ts] ////
 
-//// [/node_modules/pkg/package.json]
+//// [package.json]
 {
     "name": "pkg",
     "version": "0.0.1",
@@ -9,13 +9,13 @@
         "require": "./require.js"
     }
 }
-//// [/node_modules/pkg/import.d.ts]
+//// [import.d.ts]
 export interface ImportInterface {}
 
-//// [/node_modules/pkg/require.d.ts]
+//// [require.d.ts]
 export interface RequireInterface {}
 
-//// [/index.ts]
+//// [index.ts]
 export type LocalInterface =
     & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
     & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
@@ -23,7 +23,7 @@ export type LocalInterface =
 export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
 export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
 
-//// [/other.ts]
+//// [other.ts]
 // missing with:
 export type LocalInterface =
     & import("pkg", {"resolution-mode": "require"}).RequireInterface
@@ -32,7 +32,7 @@ export type LocalInterface =
 export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
 export const b = (null as any as import("pkg", {"resolution-mode": "import"}).ImportInterface);
 
-//// [/other2.ts]
+//// [other2.ts]
 // wrong attribute key
 export type LocalInterface =
     & import("pkg", { with: {"bad": "require"} }).RequireInterface
@@ -41,7 +41,7 @@ export type LocalInterface =
 export const a = (null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface);
 export const b = (null as any as import("pkg", { with: {"bad": "import"} }).ImportInterface);
 
-//// [/other3.ts]
+//// [other3.ts]
 // Array instead of object-y thing
 export type LocalInterface =
     & import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface
@@ -50,7 +50,7 @@ export type LocalInterface =
 export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
 export const b = (null as any as import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface);
 
-//// [/other4.ts]
+//// [other4.ts]
 // Indirected attribute objecty-thing - not allowed
 type Attribute1 = { with: {"resolution-mode": "require"} };
 type Attribute2 = { with: {"resolution-mode": "import"} };
@@ -62,7 +62,7 @@ export type LocalInterface =
 export const a = (null as any as import("pkg", Attribute1).RequireInterface);
 export const b = (null as any as import("pkg", Attribute2).ImportInterface);
 
-//// [/other5.ts]
+//// [other5.ts]
 export type LocalInterface =
     & import("pkg", { with: {} }).RequireInterface
     & import("pkg", { with: {} }).ImportInterface;

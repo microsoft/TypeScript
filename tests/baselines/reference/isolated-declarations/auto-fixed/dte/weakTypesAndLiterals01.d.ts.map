@@ -1,5 +1,53 @@
 //// [tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts] ////
 
+//// [weakTypesAndLiterals01.ts]
+type WeakTypes =
+    | { optional?: true; }
+    | { toLowerCase?(): string }
+    | { toUpperCase?(): string, otherOptionalProp?: number };
+
+type LiteralsOrWeakTypes =
+    | "A"
+    | "B"
+    | WeakTypes;
+
+declare let aOrB: "A" | "B";
+
+const f = (arg: LiteralsOrWeakTypes): WeakTypes | "A" | "B" => {
+    if (arg === "A") {
+        return arg;
+    }
+    else {
+        return arg;
+    }
+}
+
+const g = (arg: WeakTypes): WeakTypes => {
+    if (arg === "A") {
+        return arg;
+    }
+    else {
+        return arg;
+    }
+}
+
+const h = (arg: LiteralsOrWeakTypes): LiteralsOrWeakTypes => {
+    if (arg === aOrB) {
+        return arg;
+    }
+    else {
+        return arg;
+    }
+}
+
+const i = (arg: WeakTypes): WeakTypes => {
+    if (arg === aOrB) {
+        return arg;
+    }
+    else {
+        return arg;
+    }
+}
 
 
 /// [Declarations] ////

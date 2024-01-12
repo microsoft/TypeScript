@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/declarationEmitReexportedSymlinkReference2.ts] ////
 
-//// [monorepo/pkg3/src/index.ts]
+//// [index.ts]
 export * from './keys';
-//// [monorepo/pkg3/src/keys.ts]
+//// [keys.ts]
 import {MetadataAccessor} from "@raymondfeng/pkg2";
 
 export const ADMIN = MetadataAccessor.create<boolean>('1');
-//// [monorepo/pkg1/dist/index.d.ts]
+//// [index.d.ts]
 export * from './types';
-//// [monorepo/pkg1/dist/types.d.ts]
+//// [types.d.ts]
 export declare type A = {
     id: string;
 };
@@ -22,7 +22,7 @@ export declare class MetadataAccessor<T, D extends IdType = IdType> {
     toString(): string;
     static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
 }
-//// [monorepo/pkg1/package.json]
+//// [package.json]
 {
     "name": "@raymondfeng/pkg1",
     "version": "1.0.0",
@@ -30,14 +30,14 @@ export declare class MetadataAccessor<T, D extends IdType = IdType> {
     "main": "dist/index.js",
     "typings": "dist/index.d.ts"
 }
-//// [monorepo/pkg2/dist/index.d.ts]
+//// [index.d.ts]
 import "./secondary";
 export * from './types';
-//// [monorepo/pkg2/dist/types.d.ts]
+//// [types.d.ts]
 export {MetadataAccessor} from '@raymondfeng/pkg1';
-//// [monorepo/pkg2/dist/secondary.d.ts]
+//// [secondary.d.ts]
 export {IdType} from '@raymondfeng/pkg1';
-//// [monorepo/pkg2/package.json]
+//// [package.json]
 {
     "name": "@raymondfeng/pkg2",
     "version": "1.0.0",

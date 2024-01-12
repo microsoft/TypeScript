@@ -7,7 +7,7 @@ import { fb } from "ext/other";
 export const va = fa();
 export const vb = fb();
 
-//// [node_modules/ext/package.json]
+//// [package.json]
 {
     "name": "ext",
     "version": "1.0.0",
@@ -17,19 +17,19 @@ export const vb = fb();
     }
 }
 
-//// [node_modules/ext/index.d.ts]
+//// [index.d.ts]
 export interface A {}
 export function fa(): A;
 
-//// [node_modules/ext/other.d.ts]
+//// [other.d.ts]
 export interface B {}
 export function fb(): B;
 
-//// [node_modules/ext/ts3.1/index.d.ts]
+//// [index.d.ts]
 export interface A {}
 export function fa(): A;
 
-//// [node_modules/ext/ts3.1/other.d.ts]
+//// [other.d.ts]
 export interface B {}
 export function fb(): B;
 

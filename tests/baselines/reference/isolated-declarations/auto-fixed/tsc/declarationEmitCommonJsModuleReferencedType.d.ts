@@ -1,23 +1,23 @@
 //// [tests/cases/compiler/declarationEmitCommonJsModuleReferencedType.ts] ////
 
-//// [r/node_modules/foo/node_modules/nested/index.d.ts]
+//// [index.d.ts]
 export interface NestedProps {}
-//// [r/node_modules/foo/other/index.d.ts]
+//// [index.d.ts]
 export interface OtherIndexProps {}
-//// [r/node_modules/foo/other.d.ts]
+//// [other.d.ts]
 export interface OtherProps {}
-//// [r/node_modules/foo/index.d.ts]
+//// [index.d.ts]
 import { OtherProps } from "./other";
 import { OtherIndexProps } from "./other/index";
 import { NestedProps } from "nested";
 export interface SomeProps {}
 
 export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
-//// [node_modules/root/index.d.ts]
+//// [index.d.ts]
 export interface RootProps {}
 
 export function bar(): RootProps;
-//// [r/entry.ts]
+//// [entry.ts]
 import { foo } from "foo";
 import { RootProps, bar } from "root";
 export const x = foo();

@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/nodeModuleReexportFromDottedPath.ts] ////
 
-//// [/node_modules/.prisma/client/index.d.ts]
+//// [index.d.ts]
 export interface PrismaClientOptions {
   rejectOnNotFound?: any;
 }
@@ -9,10 +9,10 @@ export class PrismaClient<T extends PrismaClientOptions = PrismaClientOptions> {
   private fetcher;
 }
 
-//// [/node_modules/@prisma/client/index.d.ts]
+//// [index.d.ts]
 export * from ".prisma/client";
 
-//// [/index.ts]
+//// [index.ts]
 import { PrismaClient } from "@prisma/client";
 declare const enhancePrisma: <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown };
 const EnhancedPrisma = enhancePrisma(PrismaClient);

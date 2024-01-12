@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/parseAssertEntriesError.ts] ////
 
-//// [/index.ts]
+//// [index.ts]
 export type LocalInterface =
     & import("pkg", { assert: {1234, "resolution-mode": "require"} }).RequireInterface
     & import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface;
@@ -8,7 +8,7 @@ export type LocalInterface =
 export const a = (null as any as import("pkg", { assert: {1234, "resolution-mode": "require"} }).RequireInterface);
 export const b = (null as any as import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface);
 
-//// [/node_modules/pkg/package.json]
+//// [package.json]
 {
     "name": "pkg",
     "version": "0.0.1",
@@ -17,9 +17,9 @@ export const b = (null as any as import("pkg", { assert: {1234, "resolution-mode
         "require": "./require.js"
     }
 }
-//// [/node_modules/pkg/import.d.ts]
+//// [import.d.ts]
 export interface ImportInterface {}
-//// [/node_modules/pkg/require.d.ts]
+//// [require.d.ts]
 export interface RequireInterface {}
 
 /// [Declarations] ////

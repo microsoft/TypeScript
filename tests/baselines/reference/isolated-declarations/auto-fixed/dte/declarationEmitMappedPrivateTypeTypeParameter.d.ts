@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/declarationEmitMappedPrivateTypeTypeParameter.ts] ////
 
-//// [/Helpers.ts]
+//// [Helpers.ts]
 export type StringKeyOf<TObj> = Extract<string, keyof TObj>;
 
-//// [/FromFactor.ts]
+//// [FromFactor.ts]
 export type RowToColumns<TColumns> = {
     [TName in StringKeyOf<TColumns>]: any;
 }

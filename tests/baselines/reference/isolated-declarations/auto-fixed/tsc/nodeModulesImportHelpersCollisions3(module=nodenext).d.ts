@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/node/nodeModulesImportHelpersCollisions3.ts] ////
 
-//// [subfolder/index.ts]
+//// [index.ts]
 // cjs format file
 export {default} from "fs";
 //// [index.ts]
@@ -12,7 +12,7 @@ export {default} from "fs";
     "private": true,
     "type": "module"
 }
-//// [subfolder/package.json]
+//// [package.json]
 {
     "type": "commonjs"
 }

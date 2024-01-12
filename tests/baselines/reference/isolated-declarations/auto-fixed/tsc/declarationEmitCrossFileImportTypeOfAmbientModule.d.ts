@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/declarationEmitCrossFileImportTypeOfAmbientModule.ts] ////
 
-//// [types/component.d.ts]
+//// [component.d.ts]
 declare module '@namespace/component' {
     export class Foo {}
 }
-//// [packages/somepackage/index.d.ts]
+//// [index.d.ts]
 import { Foo } from "@namespace/component";
 export declare const item: typeof Foo;
-//// [packages/secondpackage/index.ts]
+//// [index.ts]
 import { Foo } from "@namespace/component";
 import { item } from "../somepackage";
 export const reeexported: Foo = item;

@@ -1,6 +1,6 @@
 //// [tests/cases/conformance/node/nodeModulesImportAssignments.ts] ////
 
-//// [subfolder/index.ts]
+//// [index.ts]
 // cjs format file
 import fs = require("fs");
 fs.readFile;
@@ -23,7 +23,7 @@ export import fs2 = require("fs");
     "private": true,
     "type": "module"
 }
-//// [subfolder/package.json]
+//// [package.json]
 {
     "type": "commonjs"
 }

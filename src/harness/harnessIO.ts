@@ -1078,6 +1078,14 @@ export namespace Compiler {
             throw new Error("The test is not equivalent between TSC and DTE. Please provide an isolatedDeclarationDiffReason/isolatedDeclarationFixedDiffReason setting in the test if this is intentional");
         }
     }
+    function sourceContent(tsSources: readonly TestFile[]) {
+        let code = "";
+        for (let i = 0; i < tsSources.length; i++) {
+            code += "//// [" + ts.getBaseFileName(tsSources[i].unitName) + "]\r\n";
+            code += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
+        }
+        return code;
+    }
     function declarationContent(declarationFiles: readonly TestFile[], tsSources: readonly TestFile[], errors: readonly ts.Diagnostic[], prettyErrors?: boolean) {
         let dtsCode = "";
         if (declarationFiles.length > 0) {
@@ -1122,10 +1130,7 @@ export namespace Compiler {
         let code = "";
         code += "//// [" + header + "] ////\r\n\r\n";
 
-        for (let i = 0; i < tsSources.length; i++) {
-            code += "//// [" + tsSources[i].unitName + "]\r\n";
-            code += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
-        }
+        code += sourceContent(tsSources);
 
         code += "\r\n\r\n/// [Declarations] ////\r\n\r\n";
         code += declarationContent(declarationFiles, tsSources, errors, prettyErrors);
@@ -1133,6 +1138,7 @@ export namespace Compiler {
         // eslint-disable-next-line no-null/no-null
         Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts`), code.length > 0 ? code : null);
     }
+
 
     export function doDeclarationMapBaseline(
         baselinePath: string,
@@ -1144,6 +1150,9 @@ export namespace Compiler {
     ) {
         let code = "";
         code += "//// [" + header + "] ////\r\n\r\n";
+
+        code += sourceContent(tsSources);
+
         code += "\r\n\r\n/// [Declarations] ////\r\n\r\n";
         code += declarationContent(declarationFiles, tsSources, []);
         code += "\r\n\r\n/// [Declarations Maps] ////\r\n\r\n";
@@ -1162,11 +1171,7 @@ export namespace Compiler {
         let tsCode = "";
         const tsSources = otherFiles.concat(toBeCompiled);
         tsCode += "//// [" + header + "] ////\r\n\r\n";
-
-        for (let i = 0; i < tsSources.length; i++) {
-            tsCode += "//// [" + ts.getBaseFileName(tsSources[i].unitName) + "]\r\n";
-            tsCode += tsSources[i].content + (i < (tsSources.length - 1) ? "\r\n" : "");
-        }
+        tsCode += sourceContent(tsSources);
 
         let jsCode = "";
         result.js.forEach(file => {

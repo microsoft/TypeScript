@@ -1,23 +1,23 @@
 //// [tests/cases/compiler/symbolLinkDeclarationEmitModuleNamesImportRef.ts] ////
 
-//// [Folder/monorepo/core/index.ts]
+//// [index.ts]
 import { styles } from "package-a";
 
 export function getStyles() {
 	return styles;
 }
 
-//// [Folder/monorepo/package-a/index.d.ts]
+//// [index.d.ts]
 export declare const styles: import("styled-components").InterpolationValue[];
 
-//// [Folder/node_modules/styled-components/package.json]
+//// [package.json]
 {
   "name": "styled-components",
   "version": "3.3.3",
   "typings": "typings/styled-components.d.ts"
 }
 
-//// [Folder/node_modules/styled-components/typings/styled-components.d.ts]
+//// [styled-components.d.ts]
 export interface InterpolationValue {}
 
 /// [Declarations] ////

@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/declarationEmitWithInvalidPackageJsonTypings.ts] ////
 
-//// [/p1/node_modules/csv-parse/lib/index.d.ts]
+//// [index.d.ts]
 export function bar(): number;
-//// [/p1/node_modules/csv-parse/package.json]
+//// [package.json]
 {
   "main": "./lib",
   "name": "csv-parse",
@@ -12,7 +12,7 @@ export function bar(): number;
   ],
   "version": "4.8.2"
 }
-//// [/p1/index.ts]
+//// [index.ts]
 export interface MutableRefObject<T> {
     current: T;
 }

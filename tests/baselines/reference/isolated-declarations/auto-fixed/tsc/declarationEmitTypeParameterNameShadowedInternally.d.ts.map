@@ -1,5 +1,10 @@
 //// [tests/cases/compiler/declarationEmitTypeParameterNameShadowedInternally.ts] ////
 
+//// [declarationEmitTypeParameterNameShadowedInternally.ts]
+export const foo = <T,>(x: T): <T_1>(y: T_1) => readonly [T, T_1] => {
+	const inner = <T,>(y: T) => [x, y] as const;
+	return inner;
+}
 
 
 /// [Declarations] ////

@@ -1,5 +1,27 @@
 //// [tests/cases/conformance/declarationEmit/typeofImportTypeOnlyExport.ts] ////
 
+//// [button.ts]
+import {ClassMapDirective, classMap} from './lit.js';
+export const c: {
+    directive: ClassMapDirective;
+} = classMap();
+
+//// [lit.ts]
+class ClassMapDirective {}
+
+export type {ClassMapDirective};
+
+export const directive =
+  <C>(class_: C): () => {
+      directive: C;
+  } =>
+  () => ({
+    directive: class_,
+  });
+
+export const classMap: () => {
+    directive: typeof ClassMapDirective;
+} = directive(ClassMapDirective);
 
 
 /// [Declarations] ////

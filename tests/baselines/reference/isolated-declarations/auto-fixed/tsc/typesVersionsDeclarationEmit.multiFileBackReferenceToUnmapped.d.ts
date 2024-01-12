@@ -7,7 +7,7 @@ import { fa as fa2 } from "ext/other";
 export const va = fa();
 export const va2 = fa2();
 
-//// [node_modules/ext/package.json]
+//// [package.json]
 {
     "name": "ext",
     "version": "1.0.0",
@@ -19,15 +19,15 @@ export const va2 = fa2();
     }
 }
 
-//// [node_modules/ext/index.d.ts]
+//// [index.d.ts]
 export interface A {}
 export function fa(): A;
 
-//// [node_modules/ext/other.d.ts]
+//// [other.d.ts]
 export interface A2 {}
 export function fa(): A2;
 
-//// [node_modules/ext/ts3.1/index.d.ts]
+//// [index.d.ts]
 export * from "../other";
 
 

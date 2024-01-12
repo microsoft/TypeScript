@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/declarationFilesWithTypeReferences2.ts] ////
 
-//// [/node_modules/@types/node/index.d.ts]
+//// [index.d.ts]
 interface Error2 {
     stack2: string;
 }
 
-//// [/app.ts]
+//// [app.ts]
 function foo(): Error2 {
     return undefined;
 }

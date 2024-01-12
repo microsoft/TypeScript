@@ -1,6 +1,6 @@
 //// [tests/cases/compiler/declarationEmitObjectAssignedDefaultExport.ts] ////
 
-//// [node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts]
+//// [index.d.ts]
 interface Statics {
     "$$whatever": string;
 }
@@ -8,7 +8,7 @@ declare namespace hoistNonReactStatics {
     type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
 }
 export = hoistNonReactStatics;
-//// [node_modules/styled-components/index.d.ts]
+//// [index.d.ts]
 import * as hoistNonReactStatics from "hoist-non-react-statics";
 export interface DefaultTheme {}
 export type StyledComponent<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> =

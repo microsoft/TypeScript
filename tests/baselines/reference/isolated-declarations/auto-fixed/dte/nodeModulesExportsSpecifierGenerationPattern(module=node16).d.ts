@@ -4,10 +4,10 @@
 // esm format file
 import { Thing } from "inner/other";
 export const a = (await import("inner/index.js")).x();
-//// [node_modules/inner/index.d.ts]
+//// [index.d.ts]
 // esm format file
 export { x } from "./other.js";
-//// [node_modules/inner/other.d.ts]
+//// [other.d.ts]
 // esm format file
 export interface Thing {}
 export const x: () => Thing;
@@ -18,7 +18,7 @@ export const x: () => Thing;
     "type": "module",
     "exports": "./index.js"
 }
-//// [node_modules/inner/package.json]
+//// [package.json]
 {
     "name": "inner",
     "private": true,

@@ -1,5 +1,22 @@
 //// [tests/cases/compiler/declarationEmitPrefersPathKindBasedOnBundling.ts] ////
 
+//// [scalar.ts]
+export interface Scalar {
+	(): string;
+	value: number;
+}
+
+export function scalar(value: string): Scalar {
+	return null as any;
+}
+//// [spacing.ts]
+import { Scalar, scalar } from '../lib/operators/scalar';
+
+export default {
+	get xs(): Scalar {
+		return scalar("14px");
+	}
+};
 
 
 /// [Declarations] ////

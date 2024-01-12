@@ -1,5 +1,12 @@
 //// [tests/cases/compiler/declarationEmitAliasExportStar.ts] ////
 
+//// [thingB.ts]
+export interface ThingB { }
+//// [things.ts]
+export * from "./thingB";
+//// [index.ts]
+import * as things from "./things";
+export const thing2 = (param: things.ThingB): any => null;
 
 
 /// [Declarations] ////

@@ -1,5 +1,19 @@
 //// [tests/cases/compiler/declarationEmitTypeParameterNameInOuterScope.ts] ////
 
+//// [declarationEmitTypeParameterNameInOuterScope.ts]
+class A { }
+
+var a = <A,>(x: A): A => x;
+function a2<A,>(x: A): A { return x }
+
+var a3 = <A,>(x: A): globalThis.A => new A();
+function a4<A,>(x: A): globalThis.A { return new A() }
+
+
+interface B { }
+
+var b = <B,>(x: B): B => x;
+function b2<B,>(x: B): B { return x }
 
 
 /// [Declarations] ////

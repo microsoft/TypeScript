@@ -1,5 +1,64 @@
 //// [tests/cases/compiler/defaultParameterAddsUndefinedWithStrictNullChecks.ts] ////
 
+//// [defaultParameterAddsUndefinedWithStrictNullChecks.ts]
+function f(addUndefined1: string = "J", addUndefined2?: number): number {
+    return addUndefined1.length + (addUndefined2 || 0);
+}
+function g(addUndefined: string = "J", addDefined: number): number {
+    return addUndefined.length + addDefined;
+}
+let total: number = f() + f('a', 1) + f('b') + f(undefined, 2);
+total = g('c', 3) + g(undefined, 4);
+
+function foo1(x: string = "string", b: number): void {
+    x.length;
+}
+
+function foo2(x: string = "string", b: number): void {
+    x.length; // ok, should be string
+}
+
+function foo3(x: string | undefined = "string", b: number): void {
+    x.length; // ok, should be string
+    x = undefined;
+}
+
+function foo4(x: string | undefined = undefined, b: number): void {
+    x; // should be string | undefined
+    x = undefined;
+}
+
+type OptionalNullableString = string | null | undefined;
+function allowsNull(val: OptionalNullableString = ""): void {
+    val = null;
+    val = 'string and null are both ok';
+}
+allowsNull(null); // still allows passing null
+
+
+
+// .d.ts should have `string | undefined` for foo1, foo2, foo3 and foo4
+foo1(undefined, 1);
+foo2(undefined, 1);
+foo3(undefined, 1);
+foo4(undefined, 1);
+
+
+function removeUndefinedButNotFalse(x: boolean = true): false | undefined {
+    if (x === false) {
+        return x;
+    }
+}
+
+declare const cond: boolean;
+function removeNothing(y: boolean | undefined = cond ? true : undefined): boolean {
+    if (y !== undefined) {
+        if (y === false) {
+            return y;
+        }
+    }
+    return true;
+}
 
 
 /// [Declarations] ////

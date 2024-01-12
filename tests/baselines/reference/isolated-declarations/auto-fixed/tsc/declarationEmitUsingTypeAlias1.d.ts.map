@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/declarationEmitUsingTypeAlias1.ts] ////
+
+//// [inner.d.ts]
+export declare type Other = { other: string };
+export declare type SomeType = { arg: Other };
+
+//// [index.d.ts]
+export type OtherType = import('./inner').Other;
+export type SomeType = import('./inner').SomeType;
+
+//// [package.json]
+{
+  "name": "some-dep",
+  "exports": {
+    ".": "./dist/index.js"
+  }
+}
+
+//// [index.ts]
+import { SomeType } from "some-dep";
+
+export const foo = (thing: SomeType): SomeType => {
+  return thing;
+};
+
+export const bar = (thing: SomeType): Other => {
+  return thing.arg;
+};
+
+/// [Declarations] ////
+
+
+
+//// [src/index.d.ts]
+import { SomeType } from "some-dep";
+export declare const foo: (thing: SomeType) => SomeType;
+export declare const bar: (thing: SomeType) => Other;
+//# sourceMappingURL=index.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [src/index.d.ts.map]
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAE,MAAM,UAAU,CAAC;AAEpC,eAAO,MAAM,GAAG,UAAW,QAAQ,KAAG,QAErC,CAAC;AAEF,eAAO,MAAM,GAAG,UAAW,QAAQ,UAElC,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,aW1wb3J0IHsgU29tZVR5cGUgfSBmcm9tICJzb21lLWRlcCI7DQpleHBvcnQgZGVjbGFyZSBjb25zdCBmb286ICh0aGluZzogU29tZVR5cGUpID0+IFNvbWVUeXBlOw0KZXhwb3J0IGRlY2xhcmUgY29uc3QgYmFyOiAodGhpbmc6IFNvbWVUeXBlKSA9PiBPdGhlcjsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWluZGV4LmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguZC50cyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxRQUFRLEVBQUUsTUFBTSxVQUFVLENBQUM7QUFFcEMsZUFBTyxNQUFNLEdBQUcsVUFBVyxRQUFRLEtBQUcsUUFFckMsQ0FBQztBQUVGLGVBQU8sTUFBTSxHQUFHLFVBQVcsUUFBUSxVQUVsQyxDQUFDIn0=,aW1wb3J0IHsgU29tZVR5cGUgfSBmcm9tICJzb21lLWRlcCI7CgpleHBvcnQgY29uc3QgZm9vID0gKHRoaW5nOiBTb21lVHlwZSk6IFNvbWVUeXBlID0+IHsKICByZXR1cm4gdGhpbmc7Cn07CgpleHBvcnQgY29uc3QgYmFyID0gKHRoaW5nOiBTb21lVHlwZSk6IE90aGVyID0+IHsKICByZXR1cm4gdGhpbmcuYXJnOwp9Ow==
+

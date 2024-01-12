@@ -1,18 +1,18 @@
 //// [tests/cases/compiler/exportAssignmentMembersVisibleInAugmentation.ts] ////
 
-//// [/node_modules/foo/index.d.ts]
+//// [index.d.ts]
 export = foo;
 declare namespace foo {
     export type T = number;
 }
 
-//// [/a.ts]
+//// [a.ts]
 import * as foo from "foo";
 declare module "foo" {
     export function f(): T; // OK
 }
 
-//// [/b.ts]
+//// [b.ts]
 import * as foo from "foo";
 declare module "foo" {
     export function g(): foo.T; // OK

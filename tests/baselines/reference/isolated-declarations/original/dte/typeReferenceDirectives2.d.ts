@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/typeReferenceDirectives2.ts] ////
 
-//// [/app.ts]
+//// [app.ts]
 interface A {
     x: $
 }
-//// [/types/lib/index.d.ts]
+//// [index.d.ts]
 interface $ { x }
 
 

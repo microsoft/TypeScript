@@ -1,6 +1,18 @@
 //// [tests/cases/compiler/declarationEmitComputedNameCausesImportToBePainted.ts] ////
 
+//// [context.ts]
+export const Key: unique symbol = Symbol();
+export interface Context {
+  [Key]: string;
+}
+//// [index.ts]
+import { Key, Context } from "./context";
 
+export const context: Context = {
+  [Key]: 'bar',
+}
+
+export const withContext = ({ [Key]: value }: Context): string => value;
 
 /// [Declarations] ////
 
