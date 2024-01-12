@@ -1803,8 +1803,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 const stop = Math.min(text.length, 256);
                 while (i < stop) {
                     const ch = codePointAt(text, i);
-                    if (!ch || ch === CharacterCodes.replacementCharacter) {
-                        // Jump to the end of the file and fail.
+                    // Jump to the end of the file and fail.
+                    if (ch === CharacterCodes.nullCharacter || ch === CharacterCodes.replacementCharacter) {
                         error(Diagnostics.File_appears_to_be_binary);
                         pos = end;
                         return token = SyntaxKind.NonTextFileMarkerTrivia;
