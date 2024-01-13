@@ -4066,7 +4066,7 @@ export interface JSDocSatisfiesTag extends JSDocTag {
  * NOTE: this is different from {@link JSDocNonNullableType}
  * which is its own kind of type node. This is a tag that acts
  * like the `!` postfix operator in TypeScript.
- **/
+ */
 export interface JSDocNonNullTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocNonNullTag;
 }
