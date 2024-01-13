@@ -1,6 +1,7 @@
 // @strict: true
 // @declaration: true
 // @target: esnext
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // @filename: a.ts
 export const f = <T>(x: T, y: NoInfer<T>) => x;

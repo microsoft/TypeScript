@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferRedeclaration.ts] ////
+
+//// [a.ts]
+export const f = <T>(x: T, y: NoInfer<T>): T => x;
+
+//// [b.ts]
+import { f } from "./a";
+
+type NoInfer<T> = T & number;
+
+export const g: <T>(x: T, y: globalThis.NoInfer<T>) => T = f;
+
+
+/// [Declarations] ////
+
+
+
+//// [a.d.ts]
+export declare const f: <T>(x: T, y: NoInfer<T>) => T;
+//# sourceMappingURL=a.d.ts.map
+//// [b.d.ts]
+export declare const g: <T>(x: T, y: globalThis.NoInfer<T>) => T;
+//# sourceMappingURL=b.d.ts.map
+
+/// [Declarations Maps] ////
+
+
+//// [a.d.ts.map]
+{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,SAAU,CAAC,KAAK,QAAQ,CAAC,CAAC,KAAG,CAAM,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZjogPFQ+KHg6IFQsIHk6IE5vSW5mZXI8VD4pID0+IFQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1hLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxlQUFPLE1BQU0sQ0FBQyxTQUFVLENBQUMsS0FBSyxRQUFRLENBQUMsQ0FBQyxLQUFHLENBQU0sQ0FBQyJ9,ZXhwb3J0IGNvbnN0IGYgPSA8VD4oeDogVCwgeTogTm9JbmZlcjxUPik6IFQgPT4geDsK
+
+
+//// [b.d.ts.map]
+{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAIA,eAAO,MAAM,CAAC,EAAE,CAAC,CAAC,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,EAAE,UAAU,CAAC,OAAO,CAAC,CAAC,CAAC,KAAK,CAAK,CAAC"}
+
+//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZzogPFQ+KHg6IFQsIHk6IGdsb2JhbFRoaXMuTm9JbmZlcjxUPikgPT4gVDsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWIuZC50cy5tYXA=,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYi5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYi50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFJQSxlQUFPLE1BQU0sQ0FBQyxFQUFFLENBQUMsQ0FBQyxFQUFFLENBQUMsRUFBRSxDQUFDLEVBQUUsQ0FBQyxFQUFFLFVBQVUsQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLEtBQUssQ0FBSyxDQUFDIn0=,aW1wb3J0IHsgZiB9IGZyb20gIi4vYSI7Cgp0eXBlIE5vSW5mZXI8VD4gPSBUICYgbnVtYmVyOwoKZXhwb3J0IGNvbnN0IGc6IDxUPih4OiBULCB5OiBnbG9iYWxUaGlzLk5vSW5mZXI8VD4pID0+IFQgPSBmOwo=
+

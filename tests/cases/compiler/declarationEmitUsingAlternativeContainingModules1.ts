@@ -3,6 +3,7 @@
 // @module: nodenext
 // @moduleResolution: nodenext
 // @target: esnext
+// @isolatedDeclarationFixedDiffReason: Sourcemap is more detailed
 
 // @filename: node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh.d.ts
 type QueryKey = ReadonlyArray<unknown>;

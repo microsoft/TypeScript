@@ -1,0 +1,19 @@
+// [[Reason: Sourcemap is more detailed]] ////
+
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferRedeclaration.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,9 +1,9 @@
+ 
+ //// [a.d.ts.map]
+-{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,SAAU,CAAC,KAAK,QAAQ,CAAC,CAAC,KAAG,CAAM,CAAC"}
++{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,CAAC,GAAI,CAAC,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,EAAE,OAAO,CAAC,CAAC,CAAC,KAAG,CAAM,CAAC"}
+ 
+-//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZjogPFQ+KHg6IFQsIHk6IE5vSW5mZXI8VD4pID0+IFQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1hLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxlQUFPLE1BQU0sQ0FBQyxTQUFVLENBQUMsS0FBSyxRQUFRLENBQUMsQ0FBQyxLQUFHLENBQU0sQ0FBQyJ9,ZXhwb3J0IGNvbnN0IGYgPSA8VD4oeDogVCwgeTogTm9JbmZlcjxUPik6IFQgPT4geDsK
++//// https://sokra.github.io/source-map-visualization#base64,ZXhwb3J0IGRlY2xhcmUgY29uc3QgZjogPFQ+KHg6IFQsIHk6IE5vSW5mZXI8VD4pID0+IFQ7DQovLyMgc291cmNlTWFwcGluZ1VSTD1hLmQudHMubWFw,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5kLnRzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiYS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxlQUFPLE1BQU0sQ0FBQyxHQUFJLENBQUMsRUFBRSxDQUFDLEVBQUUsQ0FBQyxFQUFFLENBQUMsRUFBRSxPQUFPLENBQUMsQ0FBQyxDQUFDLEtBQUcsQ0FBTSxDQUFDIn0=,ZXhwb3J0IGNvbnN0IGYgPSA8VD4oeDogVCwgeTogTm9JbmZlcjxUPik6IFQgPT4geDsK
+ 
+ 
+ //// [b.d.ts.map]
+ {"version":3,"file":"b.d.ts","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":"AAIA,eAAO,MAAM,CAAC,EAAE,CAAC,CAAC,EAAE,CAAC,EAAE,CAAC,EAAE,CAAC,EAAE,UAAU,CAAC,OAAO,CAAC,CAAC,CAAC,KAAK,CAAK,CAAC"}
