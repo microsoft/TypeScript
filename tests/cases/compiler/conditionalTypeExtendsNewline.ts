@@ -27,3 +27,17 @@ type Example8 = {
      [Key in string as Key 
           extends string ? 'true' : 'false']: string;
 };
+
+class Example9 {
+  a?: number
+  extends = null;
+}
+
+type Example10Interface = {
+  extends: number | undefined;
+}
+
+class Example10 implements Example10Interface {
+  a?: number
+  extends;
+}

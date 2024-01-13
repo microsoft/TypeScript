@@ -56,3 +56,31 @@ type Example8 = {
           extends string ? 'true' : 'false']: string;
 };
 
+class Example9 {
+>Example9 : Symbol(Example9, Decl(conditionalTypeExtendsNewline.ts, 28, 2))
+
+  a?: number
+>a : Symbol(Example9.a, Decl(conditionalTypeExtendsNewline.ts, 30, 16))
+
+  extends = null;
+>extends : Symbol(Example9.extends, Decl(conditionalTypeExtendsNewline.ts, 31, 12))
+}
+
+type Example10Interface = {
+>Example10Interface : Symbol(Example10Interface, Decl(conditionalTypeExtendsNewline.ts, 33, 1))
+
+  extends: number | undefined;     
+>extends : Symbol(extends, Decl(conditionalTypeExtendsNewline.ts, 35, 27))
+}
+
+class Example10 implements Example10Interface {
+>Example10 : Symbol(Example10, Decl(conditionalTypeExtendsNewline.ts, 37, 1))
+>Example10Interface : Symbol(Example10Interface, Decl(conditionalTypeExtendsNewline.ts, 33, 1))
+
+  a?: number
+>a : Symbol(Example10.a, Decl(conditionalTypeExtendsNewline.ts, 39, 47))
+
+  extends;
+>extends : Symbol(Example10.extends, Decl(conditionalTypeExtendsNewline.ts, 40, 12))
+}
+

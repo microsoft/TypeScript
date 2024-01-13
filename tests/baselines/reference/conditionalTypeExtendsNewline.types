@@ -65,3 +65,30 @@ type Example8 = {
           extends string ? 'true' : 'false']: string;
 };
 
+class Example9 {
+>Example9 : Example9
+
+  a?: number
+>a : number
+
+  extends = null;
+>extends : any
+}
+
+type Example10Interface = {
+>Example10Interface : { extends: number | undefined; }
+
+  extends: number | undefined;     
+>extends : number
+}
+
+class Example10 implements Example10Interface {
+>Example10 : Example10
+
+  a?: number
+>a : number
+
+  extends;
+>extends : any
+}
+

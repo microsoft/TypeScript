@@ -31,8 +31,33 @@ type Example8 = {
           extends string ? 'true' : 'false']: string;
 };
 
+class Example9 {
+  a?: number
+  extends = null;
+}
+
+type Example10Interface = {
+  extends: number | undefined;     
+}
+
+class Example10 implements Example10Interface {
+  a?: number
+  extends;
+}
+
 
 //// [conditionalTypeExtendsNewline.js]
 // Repro from #53589
 function example6(a) { }
 ;
+var Example9 = /** @class */ (function () {
+    function Example9() {
+        this.extends = null;
+    }
+    return Example9;
+}());
+var Example10 = /** @class */ (function () {
+    function Example10() {
+    }
+    return Example10;
+}());

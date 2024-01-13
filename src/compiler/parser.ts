@@ -4866,9 +4866,16 @@ namespace Parser {
     }
 
     function parseConditionalTypeExtends() {
-        // If the `extends` keyword is followed by a : or a ?: then the `extends` is
-        // a key in an object type rather than the keyword (see #21637)
-        return parseOptional(SyntaxKind.ExtendsKeyword) && !(parseOptional(SyntaxKind.QuestionToken) || parseOptional(SyntaxKind.ColonToken));
+        // In certain cases when extends is preceeded by a newline this can
+        // indicate that it is a key in an object type or instance variable
+        // in a class.  We infer those case by looking at the next token to
+        // see if it is likely part of such a definition. (see #21637)
+        return parseOptional(SyntaxKind.ExtendsKeyword) && !(
+            parseOptional(SyntaxKind.QuestionToken) ||
+            parseOptional(SyntaxKind.ColonToken) ||
+            parseOptional(SyntaxKind.EqualsToken) ||
+            parseOptional(SyntaxKind.SemicolonToken)
+        );
     }
 
     function parseTypeAnnotation(): TypeNode | undefined {
