@@ -1,9 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -15,7 +14,7 @@ describe("unittests:: tsserver:: syntax operations", () => {
     it("works when file is removed and added with different content", () => {
         const app: File = {
             path: `/user/username/projects/myproject/app.ts`,
-            content: "console.log('Hello world');"
+            content: "console.log('Hello world');",
         };
         const unitTest1: File = {
             path: `/user/username/projects/myproject/unitTest1.ts`,
@@ -30,15 +29,15 @@ describe("Test Suite 1", () => {
         assert.ok(1 === 1, "This shouldn't fail");
         assert.ok(false, "This should fail");
     });
-});`
+});`,
         };
         const tsconfig: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: "{}"
+            content: "{}",
         };
         const files = [app, libFile, tsconfig];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([{ file: app.path, content: app.content }], session);
 
         host.writeFile(unitTest1.path, unitTest1.content);
@@ -48,14 +47,14 @@ describe("Test Suite 1", () => {
 
         session.executeCommandSeq<ts.server.protocol.FileRequest>({
             command: ts.server.protocol.CommandTypes.NavBarFull,
-            arguments: { file: unitTest1.path }
+            arguments: { file: unitTest1.path },
         });
         host.deleteFile(unitTest1.path);
         host.runQueuedTimeoutCallbacks();
 
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
             command: ts.server.protocol.CommandTypes.Close,
-            arguments: { file: unitTest1.path }
+            arguments: { file: unitTest1.path },
         });
         host.runQueuedTimeoutCallbacks();
 
@@ -70,7 +69,7 @@ export function Test1() {
 export function Test2() {
     assert.ok(1 === 1, "This shouldn't fail");
     assert.ok(false, "This should fail");
-};`
+};`,
         };
         host.writeFile(unitTest1.path, unitTest1WithChangedContent.content);
         host.runQueuedTimeoutCallbacks();
@@ -79,7 +78,7 @@ export function Test2() {
 
         session.executeCommandSeq<ts.server.protocol.FileRequest>({
             command: ts.server.protocol.CommandTypes.NavBarFull,
-            arguments: { file: unitTest1WithChangedContent.path }
+            arguments: { file: unitTest1WithChangedContent.path },
         });
         baselineTsserverLogs("syntaxOperations", "file is removed and added with different content", session);
     });

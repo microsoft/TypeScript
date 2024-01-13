@@ -41,7 +41,7 @@ var auxiliry_1 = require("./auxiliry");
 function annotation() {
     return function (target) { };
 }
-var ClassA = exports.ClassA = /** @class */ (function () {
+var ClassA = /** @class */ (function () {
     function ClassA() {
     }
     __decorate([
@@ -50,3 +50,4 @@ var ClassA = exports.ClassA = /** @class */ (function () {
     ], ClassA.prototype, "array", void 0);
     return ClassA;
 }());
+exports.ClassA = ClassA;

@@ -1,0 +1,8 @@
+a.js(1,10): error TS8017: Signature declarations can only be used in TypeScript files.
+
+
+==== a.js (1 errors) ====
+    function foo();
+             ~~~
+!!! error TS8017: Signature declarations can only be used in TypeScript files.
+    

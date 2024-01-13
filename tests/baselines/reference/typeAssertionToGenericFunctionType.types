@@ -2,8 +2,8 @@
 
 === typeAssertionToGenericFunctionType.ts ===
 var x = {
->x : { a: <T>(x: T) => T; b: <T>(x: T) => void; }
->{    a: < <T>(x: T) => T > ((x: any) => 1),    b: <T>(x: T) => { x }} : { a: <T>(x: T) => T; b: <T>(x: T) => void; }
+>x : { a: <T>(x: T) => T; b: <T_1>(x: T_1) => void; }
+>{    a: < <T>(x: T) => T > ((x: any) => 1),    b: <T>(x: T) => { x }} : { a: <T>(x: T) => T; b: <T_1>(x: T_1) => void; }
 
     a: < <T>(x: T) => T > ((x: any) => 1),
 >a : <T>(x: T) => T
@@ -23,13 +23,13 @@ var x = {
 x.a<string>(1); // bug was that this caused 'Could not find symbol T' on return type T in the type assertion on x.a's definition
 >x.a<string>(1) : string
 >x.a : <T>(x: T) => T
->x : { a: <T>(x: T) => T; b: <T>(x: T) => void; }
+>x : { a: <T>(x: T) => T; b: <T_1>(x: T_1) => void; }
 >a : <T>(x: T) => T
 >1 : 1
 
 x.b<string>(); // error
 >x.b<string>() : void
 >x.b : <T>(x: T) => void
->x : { a: <T>(x: T) => T; b: <T>(x: T) => void; }
+>x : { a: <T>(x: T) => T; b: <T_1>(x: T_1) => void; }
 >b : <T>(x: T) => void
 

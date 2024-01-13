@@ -1,9 +1,7 @@
-/a.js(21,44): error TS1360: Type '{ a: number; b: number; }' does not satisfy the expected type 'T1'.
-  Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
+/a.js(21,44): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
 /a.js(22,17): error TS1360: Type '{}' does not satisfy the expected type 'T1'.
   Property 'a' is missing in type '{}' but required in type 'T1'.
-/a.js(31,49): error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'T4'.
-  Object literal may only specify known properties, and 'b' does not exist in type 'T4'.
+/a.js(31,49): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T4'.
 
 
 ==== /a.js (3 errors) ====
@@ -29,8 +27,7 @@
     const t1 = /** @satisfies {T1} */ ({ a: 1 });
     const t2 = /** @satisfies {T1} */ ({ a: 1, b: 1 });
                                                ~
-!!! error TS1360: Type '{ a: number; b: number; }' does not satisfy the expected type 'T1'.
-!!! error TS1360:   Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
     const t3 = /** @satisfies {T1} */ ({});
                     ~~~~~~~~~
 !!! error TS1360: Type '{}' does not satisfy the expected type 'T1'.
@@ -46,6 +43,5 @@
     const t7 = /** @satisfies {T4} */ ({ a: 'test' });
     const t8 = /** @satisfies {T4} */ ({ a: 'test', b: 'test' });
                                                     ~
-!!! error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'T4'.
-!!! error TS1360:   Object literal may only specify known properties, and 'b' does not exist in type 'T4'.
+!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T4'.
     

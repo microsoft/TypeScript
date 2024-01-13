@@ -44,10 +44,10 @@ function f(b) {
                 function Foo() {
                 }
                 Foo.x = function () {
-                    new Foo();
+                    new _a();
                 };
                 Foo.prototype.m = function () {
-                    new Foo();
+                    new _a();
                 };
                 return Foo;
             }()),

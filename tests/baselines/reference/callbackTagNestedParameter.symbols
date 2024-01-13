@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/jsdoc/callbackTagNestedParameter.ts] ////
+
+=== cb_nested.js ===
+/**
+ * @callback WorksWithPeopleCallback
+ * @param {Object} person
+ * @param {string} person.name
+ * @param {number} [person.age]
+ * @returns {void}
+ */
+
+/**
+ * For each person, calls your callback.
+ * @param {WorksWithPeopleCallback} callback
+ * @returns {void}
+ */
+function eachPerson(callback) {
+>eachPerson : Symbol(eachPerson, Decl(cb_nested.js, 0, 0))
+>callback : Symbol(callback, Decl(cb_nested.js, 13, 20))
+
+    callback({ name: "Empty" });
+>callback : Symbol(callback, Decl(cb_nested.js, 13, 20))
+>name : Symbol(name, Decl(cb_nested.js, 14, 14))
+}
+

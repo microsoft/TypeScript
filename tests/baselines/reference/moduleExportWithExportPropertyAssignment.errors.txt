@@ -6,7 +6,7 @@ a.js(4,6): error TS2554: Expected 1 arguments, but got 0.
     var mod1 = require('./mod1')
     mod1()
     mod1.f() // error, not enough arguments
-         ~~~
+         ~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 mod1.js:4:30: An argument for 'a' was not provided.
     

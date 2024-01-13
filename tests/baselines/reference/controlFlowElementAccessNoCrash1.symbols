@@ -1,0 +1,81 @@
+//// [tests/cases/conformance/controlFlow/controlFlowElementAccessNoCrash1.ts] ////
+
+=== controlFlowElementAccessNoCrash1.ts ===
+interface TestTscEdit {
+>TestTscEdit : Symbol(TestTscEdit, Decl(controlFlowElementAccessNoCrash1.ts, 0, 0))
+
+  caption: string;
+>caption : Symbol(TestTscEdit.caption, Decl(controlFlowElementAccessNoCrash1.ts, 0, 23))
+
+  commandLineArgs?: readonly string[];
+>commandLineArgs : Symbol(TestTscEdit.commandLineArgs, Decl(controlFlowElementAccessNoCrash1.ts, 1, 18))
+}
+
+interface TestTscCompile {
+>TestTscCompile : Symbol(TestTscCompile, Decl(controlFlowElementAccessNoCrash1.ts, 3, 1))
+
+  subScenario: string;
+>subScenario : Symbol(TestTscCompile.subScenario, Decl(controlFlowElementAccessNoCrash1.ts, 5, 26))
+
+  commandLineArgs: readonly string[];
+>commandLineArgs : Symbol(TestTscCompile.commandLineArgs, Decl(controlFlowElementAccessNoCrash1.ts, 6, 22))
+}
+
+interface VerifyTscEditDiscrepanciesInput {
+>VerifyTscEditDiscrepanciesInput : Symbol(VerifyTscEditDiscrepanciesInput, Decl(controlFlowElementAccessNoCrash1.ts, 8, 1))
+
+  index: number;
+>index : Symbol(VerifyTscEditDiscrepanciesInput.index, Decl(controlFlowElementAccessNoCrash1.ts, 10, 43))
+
+  edits: readonly TestTscEdit[];
+>edits : Symbol(VerifyTscEditDiscrepanciesInput.edits, Decl(controlFlowElementAccessNoCrash1.ts, 11, 16))
+>TestTscEdit : Symbol(TestTscEdit, Decl(controlFlowElementAccessNoCrash1.ts, 0, 0))
+
+  commandLineArgs: TestTscCompile["commandLineArgs"];
+>commandLineArgs : Symbol(VerifyTscEditDiscrepanciesInput.commandLineArgs, Decl(controlFlowElementAccessNoCrash1.ts, 12, 32))
+>TestTscCompile : Symbol(TestTscCompile, Decl(controlFlowElementAccessNoCrash1.ts, 3, 1))
+}
+
+function testTscCompile(input: TestTscCompile) {}
+>testTscCompile : Symbol(testTscCompile, Decl(controlFlowElementAccessNoCrash1.ts, 14, 1))
+>input : Symbol(input, Decl(controlFlowElementAccessNoCrash1.ts, 16, 24))
+>TestTscCompile : Symbol(TestTscCompile, Decl(controlFlowElementAccessNoCrash1.ts, 3, 1))
+
+function verifyTscEditDiscrepancies({
+>verifyTscEditDiscrepancies : Symbol(verifyTscEditDiscrepancies, Decl(controlFlowElementAccessNoCrash1.ts, 16, 49))
+
+  index,
+>index : Symbol(index, Decl(controlFlowElementAccessNoCrash1.ts, 18, 37))
+
+  edits,
+>edits : Symbol(edits, Decl(controlFlowElementAccessNoCrash1.ts, 19, 8))
+
+  commandLineArgs,
+>commandLineArgs : Symbol(commandLineArgs, Decl(controlFlowElementAccessNoCrash1.ts, 20, 8))
+
+}: VerifyTscEditDiscrepanciesInput) {
+>VerifyTscEditDiscrepanciesInput : Symbol(VerifyTscEditDiscrepanciesInput, Decl(controlFlowElementAccessNoCrash1.ts, 8, 1))
+
+  const { caption } = edits[index];
+>caption : Symbol(caption, Decl(controlFlowElementAccessNoCrash1.ts, 23, 9))
+>edits : Symbol(edits, Decl(controlFlowElementAccessNoCrash1.ts, 19, 8))
+>index : Symbol(index, Decl(controlFlowElementAccessNoCrash1.ts, 18, 37))
+
+  testTscCompile({
+>testTscCompile : Symbol(testTscCompile, Decl(controlFlowElementAccessNoCrash1.ts, 14, 1))
+
+    subScenario: caption,
+>subScenario : Symbol(subScenario, Decl(controlFlowElementAccessNoCrash1.ts, 24, 18))
+>caption : Symbol(caption, Decl(controlFlowElementAccessNoCrash1.ts, 23, 9))
+
+    commandLineArgs: edits[index].commandLineArgs || commandLineArgs,
+>commandLineArgs : Symbol(commandLineArgs, Decl(controlFlowElementAccessNoCrash1.ts, 25, 25))
+>edits[index].commandLineArgs : Symbol(TestTscEdit.commandLineArgs, Decl(controlFlowElementAccessNoCrash1.ts, 1, 18))
+>edits : Symbol(edits, Decl(controlFlowElementAccessNoCrash1.ts, 19, 8))
+>index : Symbol(index, Decl(controlFlowElementAccessNoCrash1.ts, 18, 37))
+>commandLineArgs : Symbol(TestTscEdit.commandLineArgs, Decl(controlFlowElementAccessNoCrash1.ts, 1, 18))
+>commandLineArgs : Symbol(commandLineArgs, Decl(controlFlowElementAccessNoCrash1.ts, 20, 8))
+
+  });
+}
+

@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/app.js]
 let x =   1;
@@ -26,13 +26,13 @@ Info seq  [hh:mm:ss:mss] Creating configuration project /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/jsconfig.json 2000 undefined Project: /a/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingStart",
-     "body": {
-      "projectName": "/a/jsconfig.json",
-      "reason": "Creating possible configured project for /a/app.js to open"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/a/jsconfig.json",
+        "reason": "Creating possible configured project for /a/app.js to open"
+      }
     }
 Info seq  [hh:mm:ss:mss] Config: /a/jsconfig.json : {
  "rootNames": [
@@ -51,13 +51,13 @@ Info seq  [hh:mm:ss:mss] Config: /a/jsconfig.json : {
 Info seq  [hh:mm:ss:mss] Non TS file size exceeded limit (20971533). Largest files: /a/largefile.js:20971521, /a/app.js:12
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLanguageServiceState",
-     "body": {
-      "projectName": "/a/jsconfig.json",
-      "languageServiceEnabled": false
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLanguageServiceState",
+      "body": {
+        "projectName": "/a/jsconfig.json",
+        "languageServiceEnabled": false
+      }
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/jsconfig.json
@@ -74,128 +74,128 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingFinish",
-     "body": {
-      "projectName": "/a/jsconfig.json"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/a/jsconfig.json"
+      }
     }
 Info seq  [hh:mm:ss:mss] Skipped loading contents of large file /a/largefile.js for info /a/largefile.js: fileSize: 20971521
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "largeFileReferenced",
-     "body": {
-      "file": "/a/largefile.js",
-      "fileSize": 20971521,
-      "maxFileSize": 4194304
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "telemetry",
-     "body": {
-      "telemetryEventName": "projectInfo",
-      "payload": {
-       "projectId": "d0d8dad6731288ecaafd815d288fca9793f4a55553e712b664ec18e525950982",
-       "fileStats": {
-        "js": 2,
-        "jsSize": 12,
-        "jsx": 0,
-        "jsxSize": 0,
-        "ts": 0,
-        "tsSize": 0,
-        "tsx": 0,
-        "tsxSize": 0,
-        "dts": 0,
-        "dtsSize": 0,
-        "deferred": 0,
-        "deferredSize": 0
-       },
-       "compilerOptions": {
-        "allowJs": true,
-        "maxNodeModuleJsDepth": 2,
-        "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true,
-        "noEmit": true
-       },
-       "typeAcquisition": {
-        "enable": true,
-        "include": false,
-        "exclude": false
-       },
-       "extends": false,
-       "files": false,
-       "include": false,
-       "exclude": false,
-       "compileOnSave": false,
-       "configFileName": "jsconfig.json",
-       "projectType": "configured",
-       "languageServiceEnabled": false,
-       "version": "FakeVersion"
+      "seq": 0,
+      "type": "event",
+      "event": "largeFileReferenced",
+      "body": {
+        "file": "/a/largefile.js",
+        "fileSize": 20971521,
+        "maxFileSize": 4194304
       }
-     }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "configFileDiag",
-     "body": {
-      "triggerFile": "/a/app.js",
-      "configFile": "/a/jsconfig.json",
-      "diagnostics": [
-       {
-        "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
-        "code": 6053,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Array'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Boolean'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Function'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'IArguments'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Number'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'Object'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'RegExp'.",
-        "code": 2318,
-        "category": "error"
-       },
-       {
-        "text": "Cannot find global type 'String'.",
-        "code": 2318,
-        "category": "error"
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "d0d8dad6731288ecaafd815d288fca9793f4a55553e712b664ec18e525950982",
+          "fileStats": {
+            "js": 2,
+            "jsSize": 12,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 0,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "allowJs": true,
+            "maxNodeModuleJsDepth": 2,
+            "allowSyntheticDefaultImports": true,
+            "skipLibCheck": true,
+            "noEmit": true
+          },
+          "typeAcquisition": {
+            "enable": true,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "jsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": false,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/a/app.js",
+        "configFile": "/a/jsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] Project '/a/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)

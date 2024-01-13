@@ -1,5 +1,11 @@
 import * as ts from "../../_namespaces/ts";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     verifyTsc,
 } from "../helpers/tsc";
@@ -11,15 +17,53 @@ import {
     addTripleSlashRef,
     appendText,
     enableStrict,
-    loadProjectFromDisk,
+    loadProjectFromFiles,
     removeRest,
-    replaceText
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     let outFileFs: vfs.FileSystem;
     before(() => {
-        outFileFs = loadProjectFromDisk("tests/projects/amdModulesWithOut");
+        outFileFs = loadProjectFromFiles({
+            "/src/app/file3.ts": dedent`
+                export const z = 30;
+                import { x } from "file1";
+            `,
+            "/src/app/file4.ts": `const myVar = 30;`,
+            "/src/app/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    ignoreDeprecations: "5.0",
+                    target: "es5",
+                    module: "amd",
+                    composite: true,
+                    strict: false,
+                    sourceMap: true,
+                    declarationMap: true,
+                    outFile: "module.js",
+                },
+                exclude: ["module.d.ts"],
+                references: [
+                    { path: "../lib", prepend: true },
+                ],
+            }),
+            "/src/lib/file0.ts": `const myGlob = 20;`,
+            "/src/lib/file1.ts": `export const x = 10;`,
+            "/src/lib/file2.ts": `export const y = 20;`,
+            "/src/lib/global.ts": `const globalConst = 10;`,
+            "/src/lib/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    target: "es5",
+                    module: "amd",
+                    composite: true,
+                    sourceMap: true,
+                    declarationMap: true,
+                    strict: false,
+                    outFile: "module.js",
+                },
+                exclude: ["module.d.ts"],
+            }),
+        });
     });
     after(() => {
         outFileFs = undefined!;
@@ -34,7 +78,7 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     function verifyOutFileScenario({
         subScenario,
         modifyFs,
-        modifyAgainFs
+        modifyAgainFs,
     }: VerifyOutFileScenarioInput) {
         verifyTsc({
             scenario: "amdModulesWithOut",
@@ -46,13 +90,13 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
             edits: [
                 {
                     caption: "incremental-declaration-doesnt-change",
-                    edit: fs => appendText(fs, "/src/lib/file1.ts", "console.log(x);")
+                    edit: fs => appendText(fs, "/src/lib/file1.ts", "console.log(x);"),
                 },
                 ...(modifyAgainFs ? [{
                     caption: "incremental-headers-change-without-dts-changes",
-                    edit: modifyAgainFs
+                    edit: modifyAgainFs,
                 }] : ts.emptyArray),
-            ]
+            ],
         });
     }
 
@@ -79,7 +123,7 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
                     addTestPrologue(fs, "/src/app/file3.ts", `"myPrologue"`);
                     addTestPrologue(fs, "/src/app/file4.ts", `"myPrologue2";`);
                 },
-                modifyAgainFs: fs => addTestPrologue(fs, "/src/lib/file1.ts", `"myPrologue5"`)
+                modifyAgainFs: fs => addTestPrologue(fs, "/src/lib/file1.ts", `"myPrologue5"`),
             });
         });
 
@@ -106,7 +150,7 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
                     addRest(fs, "app", "file3");
                     addSpread(fs, "app", "file4");
                 },
-                modifyAgainFs: fs => removeRest(fs, "lib", "file1")
+                modifyAgainFs: fs => removeRest(fs, "lib", "file1"),
             });
         });
 
@@ -118,17 +162,25 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
                 modifyFs: fs => {
                     addTripleSlashRef(fs, "lib", "file0");
                     addTripleSlashRef(fs, "app", "file4");
-                }
+                },
             });
         });
 
         describe("stripInternal", () => {
             function stripInternalScenario(fs: vfs.FileSystem) {
                 const internal = "/*@internal*/";
-                replaceText(fs, "/src/app/tsconfig.json", `"composite": true,`, `"composite": true,
-"stripInternal": true,`);
+                replaceText(
+                    fs,
+                    "/src/app/tsconfig.json",
+                    `"composite": true,`,
+                    `"composite": true,
+"stripInternal": true,`,
+                );
                 replaceText(fs, "/src/lib/file0.ts", "const", `${internal} const`);
-                appendText(fs, "/src/lib/file1.ts", `
+                appendText(
+                    fs,
+                    "/src/lib/file1.ts",
+                    `
 export class normalC {
     ${internal} constructor() { }
     ${internal} prop: string;
@@ -153,7 +205,8 @@ ${internal} export namespace internalOther.something { export class someClass {}
 ${internal} export import internalImport = internalNamespace.someClass;
 ${internal} export type internalType = internalC;
 ${internal} export const internalConst = 10;
-${internal} export enum internalEnum { a, b, c }`);
+${internal} export enum internalEnum { a, b, c }`,
+                );
             }
 
             // Verify initial + incremental edits

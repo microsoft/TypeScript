@@ -29,7 +29,7 @@ export class Foo {}
 
 //// [index.mjs]
 import { __decorate } from "tslib";
-export var Foo = /** @class */ (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo = __decorate([
@@ -37,3 +37,4 @@ export var Foo = /** @class */ (function () {
     ], Foo);
     return Foo;
 }());
+export { Foo };

@@ -1,3 +1,4 @@
+// === Call Hierarchy ===
 ╭ name: default
 ├ kind: class
 ├ file: /tests/cases/fourslash/other.ts

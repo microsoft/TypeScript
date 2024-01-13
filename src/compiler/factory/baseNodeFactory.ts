@@ -35,7 +35,7 @@ export function createBaseNodeFactory(): BaseNodeFactory {
         createBaseIdentifierNode,
         createBasePrivateIdentifierNode,
         createBaseTokenNode,
-        createBaseNode
+        createBaseNode,
     };
 
     function createBaseSourceFileNode(kind: SyntaxKind.SourceFile): Node {

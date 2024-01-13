@@ -15,13 +15,20 @@ declare global {
     }
 }
 const Compa = (x: {x: number}) => <div>{"" + x}</div>;
+const x = { video: () => null }
 
-let a = <\u0061></a>; // works
-let ab = <\u0061-b></a-b>; // works
-let ac = <a-\u0063></a-c>; // works
-let compa = <Comp\u0061 x={12} />; // works
+// unicode escape sequence is not allowed in tag name or JSX attribute name.
+// tag name:
+; <\u0061></a>
+; <\u0061-b></a-b>
+; <a-\u0063></a-c>
+; <Comp\u0061 x={12} />
+; <x.\u0076ideo />
+; <\u{0061}></a>
+; <\u{0061}-b></a-b>
+; <a-\u{0063}></a-c>
+; <Comp\u{0061} x={12} />
 
-let a2 = <\u{0061}></a>; // works
-let ab2 = <\u{0061}-b></a-b>; // works
-let ac2 = <a-\u{0063}></a-c>; // works
-let compa2 = <Comp\u{0061} x={12} />; // works
+// attribute name
+;<video data-\u0076ideo />
+;<video \u0073rc="" />
