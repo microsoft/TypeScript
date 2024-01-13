@@ -37,7 +37,7 @@ class Example9 {
 }
 
 type Example10Interface = {
-  extends: number | undefined;     
+  extends: number | undefined;
 }
 
 class Example10 implements Example10Interface {

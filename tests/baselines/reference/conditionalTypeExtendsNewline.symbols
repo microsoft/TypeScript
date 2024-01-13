@@ -69,7 +69,7 @@ class Example9 {
 type Example10Interface = {
 >Example10Interface : Symbol(Example10Interface, Decl(conditionalTypeExtendsNewline.ts, 33, 1))
 
-  extends: number | undefined;     
+  extends: number | undefined;
 >extends : Symbol(extends, Decl(conditionalTypeExtendsNewline.ts, 35, 27))
 }
 
