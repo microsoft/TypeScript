@@ -1,0 +1,22 @@
+// === Inlay Hints ===
+helperB("hello, world!");
+        ^
+{
+  "text": "",
+  "position": 45,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "bParam",
+      "span": {
+        "start": 61,
+        "length": 6
+      },
+      "file": "/tests/cases/fourslash/bbb.mts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}

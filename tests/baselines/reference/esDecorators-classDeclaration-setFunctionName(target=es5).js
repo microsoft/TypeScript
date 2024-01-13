@@ -25,7 +25,6 @@ declare let dec: any;
 
 //// [a.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var C = function () {
     var _classDecorators = [dec];
@@ -39,18 +38,19 @@ var C = function () {
     }());
     __setFunctionName(_classThis, "C");
     (function () {
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
         C = _classThis = _classDescriptor.value;
+        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
     return C = _classThis;
 }();
 //// [b.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = exports.C = function () {
+var C = function () {
     var _classDecorators = [dec];
     var _classDescriptor;
     var _classExtraInitializers = [];
@@ -62,15 +62,17 @@ var C = exports.C = function () {
     }());
     __setFunctionName(_classThis, "C");
     (function () {
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
         C = _classThis = _classDescriptor.value;
+        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
     return C = _classThis;
 }();
+exports.C = C;
 //// [c.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var default_1 = function () {
     var _classDecorators = [dec];
@@ -82,10 +84,12 @@ var default_1 = function () {
         }
         return default_1;
     }());
+    __setFunctionName(_classThis, "default");
     (function () {
-        __setFunctionName(_classThis, "default_1");
-        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name }, null, _classExtraInitializers);
+        var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+        __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
         default_1 = _classThis = _classDescriptor.value;
+        if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
     return default_1 = _classThis;

@@ -444,7 +444,7 @@ type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
 >args : T
 
 type T06 = T05<[number, ...boolean[]]>;
->T06 : [string, number, ...boolean[]]
+>T06 : [x: string, number, ...boolean[]]
 
 type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? { head: A, tail: B } : any[];
 >P1 : P1<T>

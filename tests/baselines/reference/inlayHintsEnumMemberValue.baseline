@@ -1,0 +1,27 @@
+// === Inlay Hints ===
+    A,
+     ^
+{
+  "text": "= 0",
+  "position": 14,
+  "kind": "Enum",
+  "whitespaceBefore": true
+}
+
+    AA,
+      ^
+{
+  "text": "= 1",
+  "position": 22,
+  "kind": "Enum",
+  "whitespaceBefore": true
+}
+
+    BB,
+      ^
+{
+  "text": "= 11",
+  "position": 42,
+  "kind": "Enum",
+  "whitespaceBefore": true
+}

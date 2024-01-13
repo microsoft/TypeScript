@@ -7,28 +7,28 @@ Fs::
 
 //// [/apath/jsconfig.json]
 {
- "typeAcquisition": {
-  "enable": false,
-  "include": [
-   "0.d.ts"
-  ],
-  "exclude": [
-   "0.js"
-  ]
- }
+  "typeAcquisition": {
+    "enable": false,
+    "include": [
+      "0.d.ts"
+    ],
+    "exclude": [
+      "0.js"
+    ]
+  }
 }
 
 
 configFileName:: jsconfig.json
 TypeAcquisition::
 {
- "enable": false,
- "include": [
-  "0.d.ts"
- ],
- "exclude": [
-  "0.js"
- ]
+  "enable": false,
+  "include": [
+    "0.d.ts"
+  ],
+  "exclude": [
+    "0.js"
+  ]
 }
 Errors::
 

@@ -51,9 +51,10 @@ export class CompilerBaselineRunner extends RunnerBase {
         return this.testSuiteName;
     }
 
+    private testFiles: string[] | undefined;
     public enumerateTestFiles() {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
-        return this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true }).map(CompilerTest.getConfigurations);
+        return this.testFiles ??= this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
     }
 
     public initializeTests() {
@@ -64,9 +65,8 @@ export class CompilerBaselineRunner extends RunnerBase {
 
             // this will set up a series of describe/it blocks to run between the setup and cleanup phases
             const files = this.tests.length > 0 ? this.tests : IO.enumerateTestFiles(this);
-            files.forEach(test => {
-                const file = typeof test === "string" ? test : test.file;
-                this.checkTestCodeOutput(vpath.normalizeSeparators(file), typeof test === "string" ? CompilerTest.getConfigurations(test) : test);
+            files.forEach(file => {
+                this.checkTestCodeOutput(vpath.normalizeSeparators(file), CompilerTest.getConfigurations(file));
             });
         });
     }
@@ -140,6 +140,7 @@ class CompilerTest {
         "importHelpers",
         "downlevelIteration",
         "isolatedModules",
+        "verbatimModuleSyntax",
         "strict",
         "noImplicitAny",
         "strictNullChecks",
@@ -263,7 +264,7 @@ class CompilerTest {
             this.harnessSettings,
             /*options*/ tsConfigOptions,
             /*currentDirectory*/ this.harnessSettings.currentDirectory,
-            testCaseContent.symlinks
+            testCaseContent.symlinks,
         );
 
         this.options = this.result.options;
@@ -283,13 +284,13 @@ class CompilerTest {
             this.configuredName,
             this.tsConfigFiles.concat(this.toBeCompiled, this.otherFiles),
             this.result.diagnostics,
-            !!this.options.pretty);
+            !!this.options.pretty,
+        );
     }
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
-            Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"),
-                JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4));
+            Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".trace.json"), JSON.stringify(this.result.traces.map(Utils.sanitizeTraceResolutionLogEntry), undefined, 4));
         }
     }
 
@@ -314,7 +315,8 @@ class CompilerTest {
                 this.tsConfigFiles,
                 this.toBeCompiled,
                 this.otherFiles,
-                this.harnessSettings);
+                this.harnessSettings,
+            );
         }
     }
 
@@ -323,16 +325,16 @@ class CompilerTest {
             this.configuredName,
             this.options,
             this.result,
-            this.harnessSettings);
+            this.harnessSettings,
+        );
     }
 
     public verifyTypesAndSymbols() {
-        if (this.fileName.indexOf("APISample") >= 0) {
+        if (this.fileName.includes("APISample")) {
             return;
         }
 
-        const noTypesAndSymbols =
-            this.harnessSettings.noTypesAndSymbols &&
+        const noTypesAndSymbols = this.harnessSettings.noTypesAndSymbols &&
             this.harnessSettings.noTypesAndSymbols.toLowerCase() === "true";
         if (noTypesAndSymbols) {
             return;
@@ -347,7 +349,7 @@ class CompilerTest {
             /*multifile*/ undefined,
             /*skipTypeBaselines*/ undefined,
             /*skipSymbolBaselines*/ undefined,
-            !!ts.length(this.result.diagnostics)
+            !!ts.length(this.result.diagnostics),
         );
     }
 
@@ -355,7 +357,7 @@ class CompilerTest {
         return {
             unitName: unit.name,
             content: unit.content,
-            fileOptions: unit.fileOptions
+            fileOptions: unit.fileOptions,
         };
     }
 }

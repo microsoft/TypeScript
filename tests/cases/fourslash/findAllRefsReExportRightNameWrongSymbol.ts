@@ -16,11 +16,9 @@
 
 verify.noErrors();
 const [aDef, a, bDef, b, cFromBDef, cFromB, cFromADef, cFromA, cUse, dDef, d] = test.ranges();
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['a', 'b', 'cFromB', 'cFromA', 'cUse', 'd'] },
-    { type: "findRenameLocations", markerOrRange: a },
-    { type: "findRenameLocations", markerOrRange: [cFromA, cUse] },
-    { type: "findRenameLocations", markerOrRange: b },
-    { type: "findRenameLocations", markerOrRange: cFromB },
-    { type: "findRenameLocations", markerOrRange: d },
-);
+verify.baselineFindAllReferences('a', 'b', 'cFromB', 'cFromA', 'cUse', 'd');
+verify.baselineRename(a);
+verify.baselineRename([cFromA, cUse]);
+verify.baselineRename(b);
+verify.baselineRename(cFromB);
+verify.baselineRename(d);

@@ -8,7 +8,6 @@ import {
     isArray,
     map,
     some,
-    trimString,
 } from "./_namespaces/ts";
 
 // https://semver.org/#spec-item-2
@@ -18,7 +17,7 @@ import {
 //
 // NOTE: We differ here in that we allow X and X.Y, with missing parts having the default
 // value of `0`.
-const versionRegExp = /^(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:\-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
+const versionRegExp = /^(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
 
 // https://semver.org/#spec-item-9
 // > A pre-release version MAY be denoted by appending a hyphen and a series of dot separated
@@ -109,20 +108,24 @@ export class Version {
 
     increment(field: "major" | "minor" | "patch") {
         switch (field) {
-            case "major": return new Version(this.major + 1, 0, 0);
-            case "minor": return new Version(this.major, this.minor + 1, 0);
-            case "patch": return new Version(this.major, this.minor, this.patch + 1);
-            default: return Debug.assertNever(field);
+            case "major":
+                return new Version(this.major + 1, 0, 0);
+            case "minor":
+                return new Version(this.major, this.minor + 1, 0);
+            case "patch":
+                return new Version(this.major, this.minor, this.patch + 1);
+            default:
+                return Debug.assertNever(field);
         }
     }
 
-    with(fields: { major?: number, minor?: number, patch?: number, prerelease?: string | readonly string[], build?: string | readonly string[] }) {
+    with(fields: { major?: number; minor?: number; patch?: number; prerelease?: string | readonly string[]; build?: string | readonly string[]; }) {
         const {
             major = this.major,
             minor = this.minor,
             patch = this.patch,
             prerelease = this.prerelease,
-            build = this.build
+            build = this.build,
         } = fields;
         return new Version(major, minor, patch, prerelease, build);
     }
@@ -147,7 +150,7 @@ function tryParseComponents(text: string) {
         minor: parseInt(minor, 10),
         patch: parseInt(patch, 10),
         prerelease,
-        build
+        build,
     };
 }
 
@@ -271,17 +274,17 @@ const rangeRegExp = /^(~|\^|<|<=|>|>=|=)?\s*([a-z0-9-+.*]+)$/i;
 
 function parseRange(text: string) {
     const alternatives: Comparator[][] = [];
-    for (let range of trimString(text).split(logicalOrRegExp)) {
+    for (let range of text.trim().split(logicalOrRegExp)) {
         if (!range) continue;
         const comparators: Comparator[] = [];
-        range = trimString(range);
+        range = range.trim();
         const match = hyphenRegExp.exec(range);
         if (match) {
             if (!parseHyphen(match[1], match[2], comparators)) return undefined;
         }
         else {
             for (const simple of range.split(whitespaceRegExp)) {
-                const match = rangeRegExp.exec(trimString(simple));
+                const match = rangeRegExp.exec(simple.trim());
                 if (!match || !parseComparator(match[1], match[2], comparators)) return undefined;
             }
         }
@@ -300,7 +303,8 @@ function parsePartial(text: string) {
         isWildcard(major) || isWildcard(minor) ? 0 : parseInt(minor, 10),
         isWildcard(major) || isWildcard(minor) || isWildcard(patch) ? 0 : parseInt(patch, 10),
         prerelease,
-        build);
+        build,
+    );
 
     return { version, major, minor, patch };
 }
@@ -319,8 +323,9 @@ function parseHyphen(left: string, right: string, comparators: Comparator[]) {
     if (!isWildcard(rightResult.major)) {
         comparators.push(
             isWildcard(rightResult.minor) ? createComparator("<", rightResult.version.increment("major")) :
-            isWildcard(rightResult.patch) ? createComparator("<", rightResult.version.increment("minor")) :
-            createComparator("<=", rightResult.version));
+                isWildcard(rightResult.patch) ? createComparator("<", rightResult.version.increment("minor")) :
+                createComparator("<=", rightResult.version),
+        );
     }
 
     return true;
@@ -335,29 +340,39 @@ function parseComparator(operator: string, text: string, comparators: Comparator
         switch (operator) {
             case "~":
                 comparators.push(createComparator(">=", version));
-                comparators.push(createComparator("<", version.increment(
-                    isWildcard(minor) ? "major" :
-                    "minor")));
+                comparators.push(createComparator(
+                    "<",
+                    version.increment(
+                        isWildcard(minor) ? "major" :
+                            "minor",
+                    ),
+                ));
                 break;
             case "^":
                 comparators.push(createComparator(">=", version));
-                comparators.push(createComparator("<", version.increment(
-                    version.major > 0 || isWildcard(minor) ? "major" :
-                    version.minor > 0 || isWildcard(patch) ? "minor" :
-                    "patch")));
+                comparators.push(createComparator(
+                    "<",
+                    version.increment(
+                        version.major > 0 || isWildcard(minor) ? "major" :
+                            version.minor > 0 || isWildcard(patch) ? "minor" :
+                            "patch",
+                    ),
+                ));
                 break;
             case "<":
             case ">=":
                 comparators.push(
                     isWildcard(minor) || isWildcard(patch) ? createComparator(operator, version.with({ prerelease: "0" })) :
-                    createComparator(operator, version));
+                        createComparator(operator, version),
+                );
                 break;
             case "<=":
             case ">":
                 comparators.push(
                     isWildcard(minor) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("major").with({ prerelease: "0" })) :
-                    isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor").with({ prerelease: "0" })) :
-                    createComparator(operator, version));
+                        isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor").with({ prerelease: "0" })) :
+                        createComparator(operator, version),
+                );
                 break;
             case "=":
             case undefined:
@@ -408,12 +423,18 @@ function testAlternative(version: Version, comparators: readonly Comparator[]) {
 function testComparator(version: Version, operator: Comparator["operator"], operand: Version) {
     const cmp = version.compareTo(operand);
     switch (operator) {
-        case "<": return cmp < 0;
-        case "<=": return cmp <= 0;
-        case ">": return cmp > 0;
-        case ">=": return cmp >= 0;
-        case "=": return cmp === 0;
-        default: return Debug.assertNever(operator);
+        case "<":
+            return cmp < 0;
+        case "<=":
+            return cmp <= 0;
+        case ">":
+            return cmp > 0;
+        case ">=":
+            return cmp >= 0;
+        case "=":
+            return cmp === 0;
+        default:
+            return Debug.assertNever(operator);
     }
 }
 
