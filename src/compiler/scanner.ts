@@ -1796,7 +1796,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             const ch = codePointAt(text, pos);
             if (pos === 0) {
                 // If a file isn't valid text at all, it will usually be apparent
-                // in the first few characters because we'll see a NUL or UTF-8 decode will fail and produce U+FFFD.
+                // in the first few characters because UTF-8 decode will fail and produce U+FFFD.
                 // If that happens, just issue one error and refuse to try to scan further;
                 // this is likely a binary file that cannot be parsed.
                 let i = 0;
@@ -1804,7 +1804,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 while (i < stop) {
                     const ch = codePointAt(text, i);
                     // Jump to the end of the file and fail.
-                    if (ch === CharacterCodes.nullCharacter || ch === CharacterCodes.replacementCharacter) {
+                    if (ch === CharacterCodes.replacementCharacter) {
                         error(Diagnostics.File_appears_to_be_binary);
                         pos = end;
                         return token = SyntaxKind.NonTextFileMarkerTrivia;
