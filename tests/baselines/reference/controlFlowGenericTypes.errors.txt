@@ -263,3 +263,7 @@ controlFlowGenericTypes.ts(168,9): error TS18048: 'iSpec' is possibly 'undefined
       });
     }
     
+    declare function bar<F extends (...args: readonly any[]) => any>(f: F): F;
+    
+    const fx = bar(<T extends string | number>(x: T) => x);
+    

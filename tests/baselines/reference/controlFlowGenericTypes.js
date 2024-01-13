@@ -235,6 +235,10 @@ function foo<T extends Root>(root: T, key: keyof T) {
   });
 }
 
+declare function bar<F extends (...args: readonly any[]) => any>(f: F): F;
+
+const fx = bar(<T extends string | number>(x: T) => x);
+
 
 //// [controlFlowGenericTypes.js]
 "use strict";
@@ -403,3 +407,4 @@ function foo(root, key) {
         return union;
     });
 }
+var fx = bar(function (x) { return x; });

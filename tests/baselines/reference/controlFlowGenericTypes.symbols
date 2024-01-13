@@ -692,3 +692,19 @@ function foo<T extends Root>(root: T, key: keyof T) {
   });
 }
 
+declare function bar<F extends (...args: readonly any[]) => any>(f: F): F;
+>bar : Symbol(bar, Decl(controlFlowGenericTypes.ts, 232, 1))
+>F : Symbol(F, Decl(controlFlowGenericTypes.ts, 234, 21))
+>args : Symbol(args, Decl(controlFlowGenericTypes.ts, 234, 32))
+>f : Symbol(f, Decl(controlFlowGenericTypes.ts, 234, 65))
+>F : Symbol(F, Decl(controlFlowGenericTypes.ts, 234, 21))
+>F : Symbol(F, Decl(controlFlowGenericTypes.ts, 234, 21))
+
+const fx = bar(<T extends string | number>(x: T) => x);
+>fx : Symbol(fx, Decl(controlFlowGenericTypes.ts, 236, 5))
+>bar : Symbol(bar, Decl(controlFlowGenericTypes.ts, 232, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 236, 16))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 236, 43))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 236, 16))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 236, 43))
+

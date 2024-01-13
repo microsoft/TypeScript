@@ -618,7 +618,7 @@ function foo<T extends Root>(root: T, key: keyof T) {
 
   bug(() => {
 >bug(() => {    if (typeof union === "string") throw new Error();    return union;  }) : void
->bug : <T>(cb: () => number) => void
+>bug : <T_1>(cb: () => number) => void
 >() => {    if (typeof union === "string") throw new Error();    return union;  } : () => number
 
     if (typeof union === "string") throw new Error();
@@ -634,4 +634,17 @@ function foo<T extends Root>(root: T, key: keyof T) {
 
   });
 }
+
+declare function bar<F extends (...args: readonly any[]) => any>(f: F): F;
+>bar : <F extends (...args: readonly any[]) => any>(f: F) => F
+>args : readonly any[]
+>f : F
+
+const fx = bar(<T extends string | number>(x: T) => x);
+>fx : <T extends string | number>(x: T) => string | number
+>bar(<T extends string | number>(x: T) => x) : <T extends string | number>(x: T) => string | number
+>bar : <F extends (...args: readonly any[]) => any>(f: F) => F
+><T extends string | number>(x: T) => x : <T extends string | number>(x: T) => string | number
+>x : T
+>x : string | number
 
