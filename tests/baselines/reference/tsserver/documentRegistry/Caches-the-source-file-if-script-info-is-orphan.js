@@ -202,6 +202,8 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -220,6 +222,24 @@ DocumentRegistry::
     /user/username/projects/myproject/index.ts: TS 1
     /a/lib/lib.d.ts: TS 1
 Before request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/module1.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/myproject:
+  {}
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -242,6 +262,8 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)

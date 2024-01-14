@@ -83,6 +83,7 @@ import {
     noop,
     normalizePath,
     normalizeSlashes,
+    notImplemented,
     optionDeclarations,
     optionsForWatch,
     PackageJsonAutoImportPreference,
@@ -104,6 +105,7 @@ import {
     removeMinAndVersionNumbers,
     ResolvedProjectReference,
     resolveProjectReferencePath,
+    returnFalse,
     returnNoopFileWatcher,
     returnTrue,
     ScriptKind,
@@ -168,7 +170,6 @@ import {
     Msg,
     NormalizedPath,
     normalizedPathToPath,
-    nullTypingsInstaller,
     PackageInstalledResponse,
     PackageJsonCache,
     Project,
@@ -181,7 +182,6 @@ import {
     SetTypings,
     ThrottledOperations,
     toNormalizedPath,
-    TypingsCache,
     WatchTypingLocations,
 } from "./_namespaces/ts.server";
 import * as protocol from "./protocol";
@@ -202,6 +202,16 @@ export const CreateFileWatcherEvent: protocol.CreateFileWatcherEventName = "crea
 export const CreateDirectoryWatcherEvent: protocol.CreateDirectoryWatcherEventName = "createDirectoryWatcher";
 export const CloseFileWatcherEvent: protocol.CloseFileWatcherEventName = "closeFileWatcher";
 const ensureProjectForOpenFileSchedule = "*ensureProjectForOpenFiles*";
+
+export const nullTypingsInstaller: ITypingsInstaller = {
+    isKnownTypesPackageName: returnFalse,
+    // Should never be called because we never provide a types registry.
+    installPackage: notImplemented,
+    enqueueInstallTypingsRequest: noop,
+    attach: noop,
+    onProjectClosed: noop,
+    globalTypingsCacheLocation: undefined!, // TODO: GH#18217
+};
 
 export interface ProjectsUpdatedInBackgroundEvent {
     eventName: typeof ProjectsUpdatedInBackgroundEvent;
@@ -999,9 +1009,6 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
 
 export class ProjectService {
     /** @internal */
-    readonly typingsCache: TypingsCache;
-
-    /** @internal */
     readonly documentRegistry: DocumentRegistry;
 
     /**
@@ -1141,6 +1148,7 @@ export class ProjectService {
 
     /** @internal */ verifyDocumentRegistry = noop;
     /** @internal */ verifyProgram: (project: Project) => void = noop;
+    /** @internal */ verifyUnresovedImports: (project: Project) => void = noop;
     /** @internal */ onProjectCreation: (project: Project) => void = noop;
 
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
@@ -1187,8 +1195,6 @@ export class ProjectService {
         }
 
         this.typingsInstaller.attach(this);
-
-        this.typingsCache = new TypingsCache(this.typingsInstaller);
 
         this.hostConfiguration = {
             formatCodeOptions: getDefaultFormatCodeSettings(this.host.newLine),
@@ -1302,11 +1308,11 @@ export class ProjectService {
         switch (response.kind) {
             case ActionSet:
                 // Update the typing files and update the project
-                project.updateTypingFiles(this.typingsCache.updateTypingsForProject(response.projectName, response.compilerOptions, response.typeAcquisition, response.unresolvedImports, response.typings));
+                project.updateTypingsForProject(response);
                 return;
             case ActionInvalidate:
                 // Do not clear resolution cache, there was changes detected in typings, so enque typing request and let it get us correct results
-                this.typingsCache.enqueueInstallTypingsForProject(project, project.lastCachedUnresolvedImportsList, /*forceRefresh*/ true);
+                project.enqueueInstallTypingsForProject(/*forceRefresh*/ true);
                 return;
         }
     }

@@ -1081,7 +1081,7 @@ Reusing resolution of module './b' from '/user/username/projects/transitiveRefer
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'Node10'.
+Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
@@ -1200,15 +1200,7 @@ Output::
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
-'paths' option is specified, looking for a pattern to match module name '@ref/a'.
-Module name '@ref/a', matched pattern '@ref/*'.
-Trying substitution './refs/*', candidate module location: './refs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, Declaration.
-File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
-File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
-File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
+Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 [96mtsconfig.c.json[0m:[93m14[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
 

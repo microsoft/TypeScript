@@ -4687,7 +4687,7 @@ export interface Program extends ScriptReferenceHost {
      */
     getMissingFilePaths(): Map<Path, string>;
     /** @internal */
-    getModuleResolutionCache(): ModuleResolutionCache | undefined;
+    getPackageJsonInfoCache(): PackageJsonInfoCache | undefined;
     /** @internal */
     getFilesByNameMap(): Map<Path, SourceFile | false | undefined>;
 
@@ -5188,7 +5188,6 @@ export interface TypeChecker {
     /** @internal */ createIndexInfo(keyType: Type, type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
     /** @internal */ isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
     /** @internal */ tryFindAmbientModule(moduleName: string): Symbol | undefined;
-    /** @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
 
     /** @internal */ getSymbolWalker(accept?: (symbol: Symbol) => boolean): SymbolWalker;
 
@@ -7756,6 +7755,8 @@ export interface ResolvedModuleWithFailedLookupLocations {
      * while respecting package.json `exports`, but were found when disabling `exports`.
      */
     node10Result?: string;
+    /** @internal */
+    globalCacheResolution?: boolean;
 }
 
 export interface ResolvedTypeReferenceDirective {
@@ -7827,6 +7828,7 @@ export interface CompilerHost extends ModuleResolutionHost {
         options: CompilerOptions,
         containingSourceFile: SourceFile,
         reusedNames: readonly StringLiteralLike[] | undefined,
+        ambientModuleNames: readonly StringLiteralLike[] | undefined,
     ): readonly ResolvedModuleWithFailedLookupLocations[];
     resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
         typeDirectiveReferences: readonly T[],
@@ -7867,6 +7869,22 @@ export interface CompilerHost extends ModuleResolutionHost {
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 
     jsDocParsingMode?: JSDocParsingMode;
+}
+
+/** @internal */
+export interface CompilerHostSupportingResolutionCache {
+    onReusedModuleResolutions?(
+        reusedNames: readonly StringLiteralLike[] | undefined,
+        containingSourceFile: SourceFile,
+        ambientModuleNames: readonly StringLiteralLike[] | undefined,
+    ): void;
+    onReusedTypeReferenceDirectiveResolutions?<T extends FileReference | string>(
+        reusedNames: readonly T[] | undefined,
+        containingSourceFile: SourceFile | undefined,
+    ): void;
+}
+/** @internal */
+export interface CompilerHost extends CompilerHostSupportingResolutionCache {
 }
 
 /** true if --out otherwise source file name *

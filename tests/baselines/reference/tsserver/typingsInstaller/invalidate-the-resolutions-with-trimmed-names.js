@@ -349,14 +349,12 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/b",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /a/b/node_modules; all files: []
 TI:: [hh:mm:ss:mss]     Found package names: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -388,7 +386,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "maxNodeModuleJsDepth": 2
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
@@ -414,7 +411,6 @@ Info seq  [hh:mm:ss:mss] event:
           "maxNodeModuleJsDepth": 2
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -468,14 +464,12 @@ TI:: [hh:mm:ss:mss] Got install request
         "include": [],
         "exclude": []
       },
-      "unresolvedImports": [],
       "projectRootPath": "/a/b",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /a/b/node_modules; all files: []
 TI:: [hh:mm:ss:mss]     Found package names: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -507,7 +501,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "maxNodeModuleJsDepth": 2
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -531,7 +524,6 @@ Info seq  [hh:mm:ss:mss] event:
           "maxNodeModuleJsDepth": 2
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }

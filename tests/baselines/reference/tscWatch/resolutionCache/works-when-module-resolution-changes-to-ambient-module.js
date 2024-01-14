@@ -142,11 +142,9 @@ Output::
 //// [/users/username/projects/project/foo.js] file written with same contents
 
 PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-PolledWatches *deleted*::
 /users/username/projects/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -160,11 +158,9 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/users/username/projects/project/node_modules/@types:
-  {}
-
-FsWatchesRecursive *deleted*::
 /users/username/projects/project/node_modules:
+  {}
+/users/username/projects/project/node_modules/@types:
   {}
 
 Timeout callback:: count: 0

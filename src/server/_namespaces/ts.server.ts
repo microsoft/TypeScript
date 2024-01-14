@@ -8,7 +8,6 @@ export * from "../utilities";
 import * as protocol from "./ts.server.protocol";
 export { protocol };
 export * from "../scriptInfo";
-export * from "../typingsCache";
 export * from "../project";
 export * from "../editorServices";
 export * from "../moduleSpecifierCache";

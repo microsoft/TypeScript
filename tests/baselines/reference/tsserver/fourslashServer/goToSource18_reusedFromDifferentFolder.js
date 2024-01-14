@@ -131,8 +131,8 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Search path: /some
 Info seq  [hh:mm:ss:mss] For info: /some/index.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /folder/random.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/yargs/package.json 2000 undefined Project: /dev/null/inferredProject2* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /folder/random.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (7)

@@ -1601,7 +1601,7 @@ export class Session<TMessage = string> implements EventSender {
             if (nodeModulesPathParts && fileName.lastIndexOf(nodeModulesPathPart) === nodeModulesPathParts.topLevelNodeModulesIndex) {
                 // Second check ensures the fileName only contains one `/node_modules/`. If there's more than one I give up.
                 const packageDirectory = fileName.substring(0, nodeModulesPathParts.packageRootIndex);
-                const packageJsonCache = project.getModuleResolutionCache()?.getPackageJsonInfoCache();
+                const packageJsonCache = project.getPackageJsonInfoCache();
                 const compilerOptions = project.getCompilationSettings();
                 const packageJson = getPackageScopeForPath(getNormalizedAbsolutePath(packageDirectory + "/package.json", project.getCurrentDirectory()), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
                 if (!packageJson) return undefined;
@@ -1612,7 +1612,7 @@ export class Session<TMessage = string> implements EventSender {
                     packageJson,
                     { moduleResolution: ModuleResolutionKind.Node10 },
                     project,
-                    project.getModuleResolutionCache(),
+                    packageJsonCache,
                 );
                 // This substring is correct only because we checked for a single `/node_modules/` at the top.
                 const packageNamePathPart = fileName.substring(
