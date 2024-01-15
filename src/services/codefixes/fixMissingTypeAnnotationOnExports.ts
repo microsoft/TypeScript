@@ -698,10 +698,7 @@ function withChanges<T>(
 
         const expressionToVar = new Map<Expression, Identifier>();
 
-        let i = 0;
-        while (i < bindingElements.length) {
-            const bindingElement = bindingElements[i];
-
+        for (const bindingElement of bindingElements) {
             if (bindingElement.element!.propertyName && isComputedPropertyName(bindingElement.element!.propertyName)) {
                 const computedExpression = bindingElement.element!.propertyName.expression;
                 const identifierForComputedProperty = factory.getGeneratedNameForNode(computedExpression);
@@ -775,7 +772,6 @@ function withChanges<T>(
                     ),
                 ));
             }
-            ++i;
         }
 
         if (enclosingVarStmt.declarationList.declarations.length > 1) {
