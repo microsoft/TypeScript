@@ -7825,7 +7825,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (context.tracker.canTrackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
                         trackComputedName(node.expression, context.enclosingDeclaration, context);
                     }
-                    let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, /*context*/ undefined, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
+                    let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, /*context*/ undefined, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags);
                     if (isBindingElement(visited)) {
                         visited = factory.updateBindingElement(
                             visited,
@@ -32629,7 +32629,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Find the first enclosing class that has the declaring classes of the protected constituents
         // of the property as base classes
         let enclosingClass = forEachEnclosingClass(location, enclosingDeclaration => {
-            const enclosingClass = getDeclaredTypeOfSymbol(getSymbolOfDeclaration(enclosingDeclaration)!) as InterfaceType;
+            const enclosingClass = getDeclaredTypeOfSymbol(getSymbolOfDeclaration(enclosingDeclaration)) as InterfaceType;
             return isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing);
         });
         // A protected property is accessible if the property is within the declaring class or classes derived from it
@@ -36278,7 +36278,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTypeOfSymbol(symbol);
         }
         else {
-            const symbol = getSymbolOfDeclaration(container)!;
+            const symbol = getSymbolOfDeclaration(container);
             return getTypeOfSymbol(symbol);
         }
     }
@@ -40068,7 +40068,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // TypeScript 1.0 spec (April 2014)
         // 3.7.4: An object type can contain at most one string index signature and one numeric index signature.
         // 8.5: A class declaration can have at most one string index member declaration and one numeric index member declaration
-        const indexSymbol = getIndexSymbol(getSymbolOfDeclaration(node)!);
+        const indexSymbol = getIndexSymbol(getSymbolOfDeclaration(node));
         if (indexSymbol?.declarations) {
             const indexSignatureMap = new Map<TypeId, { type: Type; declarations: IndexSignatureDeclaration[]; }>();
             for (const declaration of (indexSymbol.declarations as IndexSignatureDeclaration[])) {
@@ -41025,7 +41025,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.NamespaceImport:
                 case SyntaxKind.ImportClause:
                     let result = DeclarationSpaces.None;
-                    const target = resolveAlias(getSymbolOfDeclaration(d as ImportEqualsDeclaration | NamespaceImport | ImportClause | ExportAssignment | BinaryExpression)!);
+                    const target = resolveAlias(getSymbolOfDeclaration(d as ImportEqualsDeclaration | NamespaceImport | ImportClause | ExportAssignment | BinaryExpression));
                     forEach(target.declarations, d => {
                         result |= getDeclarationSpaces(d);
                     });
@@ -47539,7 +47539,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (isDeclarationNameOrImportPropertyName(node)) {
             // This is a declaration, call getSymbolOfNode
-            const parentSymbol = getSymbolOfDeclaration(parent as Declaration)!;
+            const parentSymbol = getSymbolOfDeclaration(parent as Declaration);
             return isImportOrExportSpecifier(node.parent) && node.parent.propertyName === node
                 ? getImmediateAliasedSymbol(parentSymbol)
                 : parentSymbol;
