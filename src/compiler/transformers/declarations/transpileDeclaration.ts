@@ -84,7 +84,6 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
         diagnostics,
     };
 
-    // logic replicated from emitter.ts
     function getSourceMapGenerator(declarationFilePath: string, declarationMapPath: string) {
         if (!getAreDeclarationMapsEnabled(compilerOptions)) return;
 
