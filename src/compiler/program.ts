@@ -1197,7 +1197,7 @@ export function getReferencedFileLocation(program: Program, ref: ReferencedFile)
     switch (kind) {
         case FileIncludeKind.Import:
             const importLiteral = getModuleNameStringLiteralAt(file, index);
-            packageId = program.getResolvedModule(file, importLiteral.text, getModeForResolutionAtIndex(file, index, program.getCompilerOptions()))?.resolvedModule?.packageId;
+            packageId = program.getResolvedModule(file, importLiteral.text, program.getModeForUsageLocation(file, importLiteral))?.resolvedModule?.packageId;
             if (importLiteral.pos === -1) return { file, packageId, text: importLiteral.text };
             pos = skipTrivia(file.text, importLiteral.pos);
             end = importLiteral.end;
