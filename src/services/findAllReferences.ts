@@ -234,6 +234,7 @@ import {
     StringLiteralLike,
     stripQuotes,
     SuperContainer,
+    SwitchStatement,
     Symbol,
     SymbolDisplay,
     SymbolDisplayPart,
@@ -406,7 +407,7 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
 }
 
 /** @internal */
-export function getContextNode(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | undefined): ContextNode | undefined {
+export function getContextNode(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | SwitchStatement | undefined): ContextNode | undefined {
     if (!node) return undefined;
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
@@ -451,14 +452,18 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
                     findAncestor(node.parent, node => isBinaryExpression(node) || isForInOrOfStatement(node)) as BinaryExpression | ForInOrOfStatement,
                 ) :
                 node;
-
+        case SyntaxKind.SwitchStatement:
+            return {
+                start: find(node.getChildren(node.getSourceFile()), node => node.kind === SyntaxKind.SwitchKeyword)!,
+                end: (node as SwitchStatement).caseBlock,
+            };
         default:
             return node;
     }
 }
 
 /** @internal */
-export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context?: ContextNode): { contextSpan: TextSpan; } | undefined {
+export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context: ContextNode | undefined): { contextSpan: TextSpan; } | undefined {
     if (!context) return undefined;
     const contextSpan = isContextWithStartAndEndNode(context) ?
         getTextSpan(context.start, sourceFile, context.end) :
@@ -873,6 +878,9 @@ function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSp
         Debug.assert(endNode === undefined);
         start += 1;
         end -= 1;
+    }
+    if (endNode?.kind === SyntaxKind.CaseBlock) {
+        end = endNode.getFullStart();
     }
     return createTextSpanFromBounds(start, end);
 }

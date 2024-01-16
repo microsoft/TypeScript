@@ -916,6 +916,7 @@ export const enum JsxFlags {
 // dprint-ignore
 /** @internal */
 export const enum RelationComparisonResult {
+    None                = 0,
     Succeeded           = 1 << 0, // Should be truthy
     Failed              = 1 << 1,
     Reported            = 1 << 2,
@@ -5591,7 +5592,6 @@ export type LateVisibilityPaintedStatement =
 /** @internal */
 export interface SymbolVisibilityResult {
     accessibility: SymbolAccessibility;
-    bindingElementToMakeVisible?: BindingElement;
     aliasesToMakeVisible?: LateVisibilityPaintedStatement[]; // aliases that need to have this symbol visible
     errorSymbolName?: string; // Optional symbol name that results in error
     errorNode?: Node; // optional node that results in error
@@ -5824,8 +5824,8 @@ export interface Symbol {
     /** @internal */ exportSymbol?: Symbol; // Exported symbol associated with this symbol
     /** @internal */ constEnumOnlyModule: boolean | undefined; // True if module contains only const enums or other modules with only const enums
     /** @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
+    /** @internal */ lastAssignmentPos?: number; // Source position of last node that assigns value to symbol
     /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
-    /** @internal */ isAssigned?: boolean; // True if the symbol is a parameter with assignments
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
 
@@ -5970,6 +5970,7 @@ export const enum InternalSymbolName {
     Default = "default", // Default export symbol (technically not wholly internal, but included here for usability)
     This = "this",
     InstantiationExpression = "__instantiationExpression", // Instantiation expressions
+    ImportAttributes = "__importAttributes",
 }
 
 /**
@@ -6706,8 +6707,9 @@ export interface StringMappingType extends InstantiableType {
 // Substitution types are created for type parameters or indexed access types that occur in the
 // true branch of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the
 // reference to T in Foo<T> is resolved as a substitution type that substitutes 'string & T' for T.
-// Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it. Substitution
-// types disappear upon instantiation (just like type parameters).
+// Thus, if Foo has a 'string' constraint on its type parameter, T will satisfy it.
+// Substitution type are also created for NoInfer<T> types. Those are represented as substitution
+// types where the constraint is type 'unknown' (which is never generated for the case above).
 export interface SubstitutionType extends InstantiableType {
     objectFlags: ObjectFlags;
     baseType: Type; // Target type
@@ -7753,10 +7755,10 @@ export interface ResolvedModuleWithFailedLookupLocations {
     resolutionDiagnostics?: Diagnostic[];
     /**
      * @internal
-     * Used to issue a diagnostic if typings for a non-relative import couldn't be found
-     * while respecting package.json `exports`, but were found when disabling `exports`.
+     * Used to issue a better diagnostic when an unresolvable module may
+     * have been resolvable under different module resolution settings.
      */
-    node10Result?: string;
+    alternateResult?: string;
 }
 
 export interface ResolvedTypeReferenceDirective {
@@ -9692,6 +9694,7 @@ export interface ModuleSpecifierResolutionHost {
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+    getCommonSourceDirectory(): string;
 }
 
 /** @internal */
@@ -10075,6 +10078,7 @@ export interface UserPreferences {
     readonly organizeImportsNumericCollation?: boolean;
     readonly organizeImportsAccentCollation?: boolean;
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+    readonly organizeImportsTypeOrder?: "first" | "last" | "inline";
     readonly excludeLibrarySymbolsInNavTo?: boolean;
 }
 

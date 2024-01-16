@@ -89,6 +89,7 @@ verify.completions({
       sortText: completion.SortText.AutoImportSuggestions
     }
   ],
+  excludes: ["NOT_REACHABLE"],
   preferences: {
     includeCompletionsForModuleExports: true,
     allowIncompleteCompletions: true

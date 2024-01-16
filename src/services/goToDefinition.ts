@@ -53,6 +53,7 @@ import {
     isClassStaticBlockDeclaration,
     isConstructorDeclaration,
     isDeclarationFileName,
+    isDefaultClause,
     isExternalModuleNameRelative,
     isFunctionLike,
     isFunctionLikeDeclaration,
@@ -69,6 +70,7 @@ import {
     isPropertyName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
+    isSwitchStatement,
     isTypeAliasDeclaration,
     isTypeReferenceNode,
     isVariableDeclaration,
@@ -91,6 +93,7 @@ import {
     skipTrivia,
     some,
     SourceFile,
+    SwitchStatement,
     Symbol,
     SymbolDisplay,
     SymbolFlags,
@@ -105,6 +108,9 @@ import {
     TypeReference,
     unescapeLeadingUnderscores,
 } from "./_namespaces/ts";
+import {
+    isContextWithStartAndEndNode,
+} from "./_namespaces/ts.FindAllReferences";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
@@ -133,9 +139,26 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
     }
 
-    if (node.kind === SyntaxKind.ReturnKeyword) {
-        const functionDeclaration = findAncestor(node.parent, n => isClassStaticBlockDeclaration(n) ? "quit" : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
-        return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+    switch (node.kind) {
+        case SyntaxKind.ReturnKeyword:
+            const functionDeclaration = findAncestor(node.parent, n =>
+                isClassStaticBlockDeclaration(n)
+                    ? "quit"
+                    : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+            return functionDeclaration
+                ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)]
+                : undefined;
+        case SyntaxKind.DefaultKeyword:
+            if (!isDefaultClause(node.parent)) {
+                break;
+            }
+        // falls through
+        case SyntaxKind.CaseKeyword:
+            const switchStatement = findAncestor(node.parent, isSwitchStatement);
+            if (switchStatement) {
+                return [createDefinitionInfoFromSwitch(switchStatement, sourceFile)];
+            }
+            break;
     }
 
     if (node.kind === SyntaxKind.AwaitKeyword) {
@@ -631,6 +654,24 @@ function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declara
         isAmbient: !!(declaration.flags & NodeFlags.Ambient),
         unverified,
         failedAliasResolution,
+    };
+}
+
+function createDefinitionInfoFromSwitch(statement: SwitchStatement, sourceFile: SourceFile): DefinitionInfo {
+    const keyword = FindAllReferences.getContextNode(statement)!;
+    const textSpan = createTextSpanFromNode(isContextWithStartAndEndNode(keyword) ? keyword.start : keyword, sourceFile);
+    return {
+        fileName: sourceFile.fileName,
+        textSpan,
+        kind: ScriptElementKind.keyword,
+        name: "switch",
+        containerKind: undefined!,
+        containerName: "",
+        ...FindAllReferences.toContextSpan(textSpan, sourceFile, keyword),
+        isLocal: true,
+        isAmbient: false,
+        unverified: false,
+        failedAliasResolution: undefined,
     };
 }
 

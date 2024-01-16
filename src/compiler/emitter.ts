@@ -583,33 +583,48 @@ export function getOutputExtension(fileName: string, options: CompilerOptions): 
         Extension.Js;
 }
 
-function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined, getCommonSourceDirectory?: () => string) {
+function getOutputPathWithoutChangingExt(
+    inputFileName: string,
+    ignoreCase: boolean,
+    outputDir: string | undefined,
+    getCommonSourceDirectory: () => string,
+): string {
     return outputDir ?
         resolvePath(
             outputDir,
-            getRelativePathFromDirectory(getCommonSourceDirectory ? getCommonSourceDirectory() : getCommonSourceDirectoryOfConfig(configFile, ignoreCase), inputFileName, ignoreCase),
+            getRelativePathFromDirectory(getCommonSourceDirectory(), inputFileName, ignoreCase),
         ) :
         inputFileName;
 }
 
 /** @internal */
-export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
+export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)) {
+    return getOutputDeclarationFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
+}
+
+/** @internal */
+export function getOutputDeclarationFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string) {
     return changeExtension(
-        getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir, getCommonSourceDirectory),
+        getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.declarationDir || options.outDir, getCommonSourceDirectory),
         getDeclarationEmitExtensionForPath(inputFileName),
     );
 }
 
-function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
+function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory = () => getCommonSourceDirectoryOfConfig(configFile, ignoreCase)) {
     if (configFile.options.emitDeclarationOnly) return undefined;
     const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
-    const outputFileName = changeExtension(
-        getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir, getCommonSourceDirectory),
-        getOutputExtension(inputFileName, configFile.options),
-    );
+    const outputFileName = getOutputJSFileNameWorker(inputFileName, configFile.options, ignoreCase, getCommonSourceDirectory);
     return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
         outputFileName :
         undefined;
+}
+
+/** @internal */
+export function getOutputJSFileNameWorker(inputFileName: string, options: CompilerOptions, ignoreCase: boolean, getCommonSourceDirectory: () => string): string {
+    return changeExtension(
+        getOutputPathWithoutChangingExt(inputFileName, ignoreCase, options.outDir, getCommonSourceDirectory),
+        getOutputExtension(inputFileName, options),
+    );
 }
 
 function createAddOutput() {
@@ -3592,7 +3607,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function willEmitLeadingNewLine(node: Expression): boolean {
         if (!currentSourceFile) return false;
-        if (some(getLeadingCommentRanges(currentSourceFile.text, node.pos), commentWillEmitNewLine)) return true;
+        const leadingCommentRanges = getLeadingCommentRanges(currentSourceFile.text, node.pos);
+        if (leadingCommentRanges) {
+            const parseNode = getParseTreeNode(node);
+            if (parseNode && isParenthesizedExpression(parseNode.parent)) {
+                return true;
+            }
+        }
+        if (some(leadingCommentRanges, commentWillEmitNewLine)) return true;
         if (some(getSyntheticLeadingComments(node), commentWillEmitNewLine)) return true;
         if (isPartiallyEmittedExpression(node)) {
             if (node.pos !== node.expression.pos) {

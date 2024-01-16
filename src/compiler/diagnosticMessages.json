@@ -3735,6 +3735,14 @@
         "category": "Error",
         "code": 2866
     },
+    "Cannot find name '{0}'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun`.": {
+        "category": "Error",
+        "code": 2867
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun` and then add 'bun' to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2868
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4167,6 +4175,14 @@
     "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 4124
+    },
+    "Each declaration of '{0}.{1}' differs in its value, where '{2}' was expected but '{3}' was given.": {
+        "category": "Error",
+        "code": 4125
+    },
+    "One value of '{0}.{1}' is the string '{2}', and the other is assumed to be an unknown numeric value.": {
+        "category": "Error",
+        "code": 4126
     },
 
     "The current host does not support the '{0}' option.": {
@@ -5430,6 +5446,14 @@
     "There are types at '{0}', but this result could not be resolved when respecting package.json \"exports\". The '{1}' library may need to update its package.json or typings.": {
         "category": "Message",
         "code": 6278
+    },
+    "Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.": {
+        "category": "Message",
+        "code": 6279
+    },
+    "There are types at '{0}', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.": {
+        "category": "Message",
+        "code": 6280
     },
 
     "Enable project compilation": {

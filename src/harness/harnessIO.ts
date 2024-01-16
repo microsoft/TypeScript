@@ -25,7 +25,7 @@ export interface IO {
     fileExists(fileName: string): boolean;
     directoryExists(path: string): boolean;
     deleteFile(fileName: string): void;
-    enumerateTestFiles(runner: RunnerBase): (string | FileBasedTest)[];
+    enumerateTestFiles(runner: RunnerBase): string[];
     listFiles(path: string, filter?: RegExp, options?: { recursive?: boolean; }): string[];
     log(text: string): void;
     args(): string[];
@@ -84,53 +84,26 @@ function createNodeIO(): IO {
         return runner.getTestFiles();
     }
 
-    function listFiles(path: string, spec: RegExp, options: { recursive?: boolean; } = {}) {
+    function listFiles(path: string, spec: RegExp | undefined, options: { recursive?: boolean; } = {}) {
         function filesInFolder(folder: string): string[] {
+            const { files, directories } = ts.sys.getAccessibleFileSystemEntries!(folder);
             let paths: string[] = [];
-
-            for (const file of fs.readdirSync(folder)) {
+            for (const file of files) {
                 const pathToFile = pathModule.join(folder, file);
-                if (!fs.existsSync(pathToFile)) continue; // ignore invalid symlinks
-                const stat = fs.statSync(pathToFile);
-                if (options.recursive && stat.isDirectory()) {
-                    paths = paths.concat(filesInFolder(pathToFile));
-                }
-                else if (stat.isFile() && (!spec || file.match(spec))) {
+                if (!spec || file.match(spec)) {
                     paths.push(pathToFile);
                 }
             }
-
+            if (options.recursive) {
+                for (const dir of directories) {
+                    const pathToDir = pathModule.join(folder, dir);
+                    paths = paths.concat(filesInFolder(pathToDir));
+                }
+            }
             return paths;
         }
 
         return filesInFolder(path);
-    }
-
-    function getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries {
-        try {
-            const entries: string[] = fs.readdirSync(dirname || ".").sort(ts.sys.useCaseSensitiveFileNames ? ts.compareStringsCaseSensitive : ts.compareStringsCaseInsensitive);
-            const files: string[] = [];
-            const directories: string[] = [];
-            for (const entry of entries) {
-                if (entry === "." || entry === "..") continue;
-                const name = vpath.combine(dirname, entry);
-                try {
-                    const stat = fs.statSync(name);
-                    if (!stat) continue;
-                    if (stat.isFile()) {
-                        files.push(entry);
-                    }
-                    else if (stat.isDirectory()) {
-                        directories.push(entry);
-                    }
-                }
-                catch { /*ignore*/ }
-            }
-            return { files, directories };
-        }
-        catch (e) {
-            return { files: [], directories: [] };
-        }
     }
 
     function createDirectory(path: string) {
@@ -170,7 +143,7 @@ function createNodeIO(): IO {
         getWorkspaceRoot: () => workspaceRoot,
         exit: exitCode => ts.sys.exit(exitCode),
         readDirectory: (path, extension, exclude, include, depth) => ts.sys.readDirectory(path, extension, exclude, include, depth),
-        getAccessibleFileSystemEntries,
+        getAccessibleFileSystemEntries: ts.sys.getAccessibleFileSystemEntries!,
         tryEnableSourceMapsForHost: () => ts.sys.tryEnableSourceMapsForHost && ts.sys.tryEnableSourceMapsForHost(),
         getMemoryUsage: () => ts.sys.getMemoryUsage && ts.sys.getMemoryUsage(),
         getEnvironmentVariable: name => ts.sys.getEnvironmentVariable(name),
