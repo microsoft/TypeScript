@@ -323,8 +323,11 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json *default*
 
-Info seq  [hh:mm:ss:mss] getDefaultProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: undefined
+Info seq  [hh:mm:ss:mss] File: /user/username/projects/myproject/src/main.ts:
+	getDefaultProjectForFile:
+		/user/username/projects/myproject/tsconfig.json
+	findDefaultConfiguredProject:
+		undefined
 Before request
 
 Info seq  [hh:mm:ss:mss] request:

@@ -325,8 +325,11 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-Info seq  [hh:mm:ss:mss] getDefaultProject for /user/username/projects/myproject/src/main.ts: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: undefined
+Info seq  [hh:mm:ss:mss] File: /user/username/projects/myproject/src/main.ts:
+	getDefaultProjectForFile:
+		/dev/null/inferredProject1*
+	findDefaultConfiguredProject:
+		undefined
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
