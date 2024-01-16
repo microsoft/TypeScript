@@ -18,7 +18,7 @@ class C3 {
 }
 
 //// [file3-2.ts]
-class C3 {
+class C32 {
     accessor x = 0;
 }
 
@@ -55,7 +55,7 @@ class C3 {
     accessor #y = 0;
 }
 //// [file3-2.js]
-class C3 {
+class C32 {
     accessor x = 0;
 }
 //// [file4.js]

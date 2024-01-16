@@ -33,8 +33,8 @@ class C3 {
 }
 
 === file3-2.ts ===
-class C3 {
->C3 : C3
+class C32 {
+>C32 : C32
 
     accessor x = 0;
 >x : number

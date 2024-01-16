@@ -19,7 +19,7 @@ class C3 {
 }
 
 // @filename: file3-2.ts
-class C3 {
+class C32 {
     accessor x = 0;
 }
 

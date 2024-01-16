@@ -710,7 +710,6 @@ export function createLocalInferenceResolver({
         );
     }
 
-    // Copied similar function in checker. Maybe a reusable one should be created.
     function deepClone<T extends Node>(node: T): T {
         const clonedNode = visitEachChild(node, deepClone, nullTransformationContext, deepCloneNodes);
         // If node has children visitEachChild will already return a new node
