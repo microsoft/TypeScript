@@ -1022,6 +1022,39 @@ export * from "lib";
                 ts.OrganizeImports.detectSorting(ts.getSourceFileOfNode(originalImports[0]), {})
             );
         });
+
+        it("Detection-5", () => {
+            const sourceFile = ts.createSourceFile(
+                "/a.ts",
+                `import {
+    Type1,
+    Type2,
+    func4,
+    Type3,
+    Type4,
+    Type5,
+    Type7,
+    Type8,
+    Type9,
+    func1,
+    func2,
+    Type6,
+    func3,
+    func5,
+    func6,
+    func7,
+    func8,
+    func9,
+} from "foo";`,
+                ts.ScriptTarget.ES2015,
+                /*setParentNodes*/ true,
+                ts.ScriptKind.TS
+            );
+            assert.equal(
+                ts.SortKind.CaseSensitive,
+                ts.OrganizeImports.detectSorting(sourceFile, {})
+            );
+        });
     });
 
     function parseImports(...importStrings: string[]): readonly ts.ImportDeclaration[] {
