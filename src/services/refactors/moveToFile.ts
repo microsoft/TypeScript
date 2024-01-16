@@ -51,7 +51,6 @@ import {
     getDecorators,
     getDirectoryPath,
     getLocaleSpecificMessage,
-    getModeForUsageLocation,
     getModifiers,
     getPropertySymbolFromBindingElement,
     getQuotePreference,
@@ -314,7 +313,7 @@ function getTargetFileImportsAndAddExportInOldFile(
                 // Recomputing module specifier
                 const moduleSpecifier = moduleSpecifierFromImport(i);
                 const compilerOptions = program.getCompilerOptions();
-                const resolved = program.getResolvedModule(oldFile, moduleSpecifier.text, getModeForUsageLocation(oldFile, moduleSpecifier, compilerOptions));
+                const resolved = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier);
                 const fileName = resolved?.resolvedModule?.resolvedFileName;
                 if (fileName && targetSourceFile) {
                     const newModuleSpecifier = getModuleSpecifier(compilerOptions, targetSourceFile, targetSourceFile.fileName, fileName, createModuleSpecifierResolutionHost(program, host));

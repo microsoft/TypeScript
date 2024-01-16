@@ -140,6 +140,7 @@ import {
     getResolveJsonModule,
     getRootLength,
     getSetExternalModuleIndicator,
+    getSourceFileOfNode,
     getSpellingSuggestion,
     getStrictOptionValue,
     getSupportedExtensions,
@@ -864,7 +865,7 @@ export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: 
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions: CompilerOptions): ResolutionMode {
     // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
     // so it's safe to use them even pre-bind
-    return getModeForUsageLocation(file, getModuleNameStringLiteralAt(file, index), compilerOptions);
+    return getModeForUsageLocationWorker(file, getModuleNameStringLiteralAt(file, index), compilerOptions);
 }
 
 /** @internal */
@@ -879,15 +880,23 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
 }
 
 /**
- * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
- * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
- * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
- * `moduleResolution` is `node16`+.
+ * Use `program.getModeForUsageLocation`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
+ * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
+ * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
+ * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
+ * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
+ * impact on module resolution, emit, or type checking.
  * @param file The file the import or import-like reference is contained within
  * @param usage The module reference string
+ * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
+ * should be the options of the referenced project, not the referencing project.
  * @returns The final resolution mode of the import
  */
 export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions: CompilerOptions) {
+    return getModeForUsageLocationWorker(file, usage, compilerOptions);
+}
+
+function getModeForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions: CompilerOptions) {
     if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
@@ -903,7 +912,7 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
             return override;
         }
     }
-    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler) {
+    if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
         return (usage.parent.parent && isImportEqualsDeclaration(usage.parent.parent) || isRequireCall(usage.parent, /*requireStringLiteralLikeArgument*/ false))
             ? ModuleKind.CommonJS
             : ModuleKind.ESNext;
@@ -1889,6 +1898,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getAutomaticTypeDirectiveResolutions: () => automaticTypeDirectiveResolutions,
         isSourceFileFromExternalLibrary,
         isSourceFileDefaultLibrary,
+        getModeForUsageLocation,
         getSourceFileFromReference,
         getLibFileFromReference,
         sourceFileToPackageName,
@@ -1898,6 +1908,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         resolvedTypeReferenceDirectiveNames,
         resolvedLibReferences,
         getResolvedModule,
+        getResolvedModuleFromModuleSpecifier,
         getResolvedTypeReferenceDirective,
         forEachResolvedModule,
         forEachResolvedTypeReferenceDirective,
@@ -1952,6 +1963,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function getResolvedModule(file: SourceFile, moduleName: string, mode: ResolutionMode) {
         return resolvedModules?.get(file.path)?.get(moduleName, mode);
+    }
+
+    function getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLike): ResolvedModuleWithFailedLookupLocations | undefined {
+        const sourceFile = getSourceFileOfNode(moduleSpecifier);
+        Debug.assertIsDefined(sourceFile, "`moduleSpecifier` must have a `SourceFile` ancestor. Use `program.getResolvedModule` instead to provide the containing file and resolution mode.");
+        return getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
     }
 
     function getResolvedTypeReferenceDirective(file: SourceFile, typeDirectiveName: string, mode: ResolutionMode) {
@@ -2162,8 +2179,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const moduleName = moduleNames[i];
             // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
             if (file === oldSourceFile && !hasInvalidatedResolutions(file.path)) {
-                const mode = getModeForUsageLocation(file, moduleName, options);
-                const oldResolution = oldProgram?.getResolvedModule(file, moduleName.text, mode);
+                const oldResolution = oldProgram?.getResolvedModule(file, moduleName.text, oldProgram.getModeForUsageLocation(file, moduleName));
                 if (oldResolution?.resolvedModule) {
                     if (isTraceEnabled(options, host)) {
                         trace(
@@ -2231,7 +2247,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // If we change our policy of rechecking failed lookups on each program create,
         // we should adjust the value returned here.
         function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: StringLiteralLike): boolean {
-            const resolutionToFile = oldProgram?.getResolvedModule(file, moduleName.text, getModeForUsageLocation(file, moduleName, oldProgram.getCompilerOptions()))?.resolvedModule;
+            const resolutionToFile = oldProgram?.getResolvedModule(file, moduleName.text, oldProgram.getModeForUsageLocation(file, moduleName))?.resolvedModule;
             const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
             if (resolutionToFile && resolvedFile) {
                 // In the old program, we resolved to an ambient module that was in the same
@@ -4035,7 +4051,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             for (let index = 0; index < moduleNames.length; index++) {
                 const resolution = resolutions[index].resolvedModule;
                 const moduleName = moduleNames[index].text;
-                const mode = getModeForUsageLocation(file, moduleNames[index], optionsForFile);
+                const mode = getModeForUsageLocationWorker(file, moduleNames[index], optionsForFile);
                 resolutionsInFile.set(moduleName, mode, resolutions[index]);
                 addResolutionDiagnosticsFromResolutionOrCache(file, moduleName, resolutions[index], mode);
 
@@ -4984,6 +5000,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             symlinks.setSymlinksFromResolutions(forEachResolvedModule, forEachResolvedTypeReferenceDirective, automaticTypeDirectiveResolutions);
         }
         return symlinks;
+    }
+
+    function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode {
+        const optionsForFile = getRedirectReferenceForResolution(file)?.commandLine.options || options;
+        return getModeForUsageLocationWorker(file, usage, optionsForFile);
     }
 }
 

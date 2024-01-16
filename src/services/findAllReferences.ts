@@ -65,7 +65,6 @@ import {
     getLocalSymbolForExportDefault,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
-    getModeForUsageLocation,
     getNameOfDeclaration,
     getNameTable,
     getNextJSDocCommentLocation,
@@ -1023,7 +1022,7 @@ export namespace Core {
             if (!options.implementations && isStringLiteralLike(node)) {
                 if (isModuleSpecifierLike(node)) {
                     const fileIncludeReasons = program.getFileIncludeReasons();
-                    const referencedFileName = program.getResolvedModule(node.getSourceFile(), node.text, getModeForUsageLocation(node.getSourceFile(), node, program.getCompilerOptions()))?.resolvedModule?.resolvedFileName;
+                    const referencedFileName = program.getResolvedModuleFromModuleSpecifier(node)?.resolvedModule?.resolvedFileName;
                     const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
                     if (referencedFile) {
                         return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];
