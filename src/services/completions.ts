@@ -5369,7 +5369,7 @@ function getContextualKeywords(
             && tokenLine === currentLine
         ) {
             entries.push({
-                name: tokenToString(SyntaxKind.AssertKeyword)!,
+                name: tokenToString(SyntaxKind.AssertKeyword),
                 kind: ScriptElementKind.keyword,
                 kindModifiers: ScriptElementKindModifier.none,
                 sortText: SortText.GlobalsOrKeywords,
