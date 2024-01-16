@@ -1799,17 +1799,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 // in the first few characters because UTF-8 decode will fail and produce U+FFFD.
                 // If that happens, just issue one error and refuse to try to scan further;
                 // this is likely a binary file that cannot be parsed.
-                let i = 0;
-                const stop = Math.min(text.length, 256);
-                while (i < stop) {
-                    const ch = codePointAt(text, i);
-                    // Jump to the end of the file and fail.
-                    if (ch === CharacterCodes.replacementCharacter) {
-                        error(Diagnostics.File_appears_to_be_binary);
-                        pos = end;
-                        return token = SyntaxKind.NonTextFileMarkerTrivia;
-                    }
-                    i += charSize(ch);
+                //
+                // It's safe to slice the text; U+FFFD can only be produced by an invalid decode,
+                // so even if we cut a surrogate pair in half, they wouldn't be U+FFFD.
+                if (text.slice(0, 256).includes("\uFFFD")) {
+                    error(Diagnostics.File_appears_to_be_binary);
+                    pos = end;
+                    return token = SyntaxKind.NonTextFileMarkerTrivia;
                 }
                 // Special handling for shebang
                 if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
