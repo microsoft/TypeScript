@@ -469,7 +469,6 @@ import {
     RequireOrImportCall,
     RequireVariableStatement,
     ResolutionMode,
-    ResolutionNameAndModeGetter,
     ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
@@ -837,21 +836,16 @@ export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirec
 /** @internal */
 export function hasChangesInResolutions<K, V>(
     names: readonly K[],
-    newSourceFile: SourceFile,
     newResolutions: readonly V[],
-    getOldResolution: (name: string, mode: ResolutionMode) => V | undefined,
+    getOldResolution: (name: K) => V | undefined,
     comparer: (oldResolution: V, newResolution: V) => boolean,
-    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
-    compilerOptions: CompilerOptions,
 ): boolean {
     Debug.assert(names.length === newResolutions.length);
 
     for (let i = 0; i < names.length; i++) {
         const newResolution = newResolutions[i];
         const entry = names[i];
-        const name = nameAndModeGetter.getName(entry);
-        const mode = nameAndModeGetter.getMode(entry, newSourceFile, compilerOptions);
-        const oldResolution = getOldResolution(name, mode);
+        const oldResolution = getOldResolution(entry);
         const changed = oldResolution
             ? !newResolution || !comparer(oldResolution, newResolution)
             : newResolution;

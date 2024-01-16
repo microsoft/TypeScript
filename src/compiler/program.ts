@@ -1014,8 +1014,7 @@ function getTypeReferenceResolutionName<T extends FileReference | string>(entry:
     return !isString(entry) ? toFileNameLowerCase(entry.fileName) : entry;
 }
 
-/** @internal */
-export const typeReferenceResolutionNameAndModeGetter: ResolutionNameAndModeGetter<FileReference | string, SourceFile | undefined> = {
+const typeReferenceResolutionNameAndModeGetter: ResolutionNameAndModeGetter<FileReference | string, SourceFile | undefined> = {
     getName: getTypeReferenceResolutionName,
     getMode: (entry, file) => getModeForFileReference(entry, file?.impliedNodeFormat),
 };
@@ -2541,12 +2540,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             // ensure that module resolution results are still correct
             const resolutionsChanged = hasChangesInResolutions(
                 moduleNames,
-                newSourceFile,
                 resolutions,
-                (name, mode) => oldProgram!.getResolvedModule(newSourceFile, name, mode),
+                oldProgram.getResolvedModuleFromModuleSpecifier,
                 moduleResolutionIsEqualTo,
-                moduleResolutionNameAndModeGetter,
-                oldProgram.getCompilerOptions(),
             );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
             const typesReferenceDirectives = newSourceFile.typeReferenceDirectives;
@@ -2555,12 +2551,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             // ensure that types resolutions are still correct
             const typeReferenceResolutionsChanged = hasChangesInResolutions(
                 typesReferenceDirectives,
-                newSourceFile,
                 typeReferenceResolutions,
-                (name, mode) => oldProgram?.getResolvedTypeReferenceDirective(newSourceFile, name, mode),
+                name => oldProgram!.getResolvedTypeReferenceDirective(newSourceFile, getTypeReferenceResolutionName(name), getModeForFileReference(name, newSourceFile.impliedNodeFormat)),
                 typeDirectiveIsEqualTo,
-                typeReferenceResolutionNameAndModeGetter,
-                oldProgram.getCompilerOptions(),
             );
             if (typeReferenceResolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
         }
