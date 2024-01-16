@@ -3,7 +3,6 @@
 // @emitdecoratormetadata: true
 // @target: es5
 // @module: commonjs
-// @isolatedDeclarationDiffReason: TSC removes import that is not used in a semantically valid way. DTE can't know about this.
 // @filename: db.ts
 export default class db {
     public doSomething() {

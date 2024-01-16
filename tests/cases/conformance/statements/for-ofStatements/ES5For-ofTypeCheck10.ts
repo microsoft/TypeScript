@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 //@target: ES5
 
 // In ES3/5, you cannot for...of over an arbitrary iterable.

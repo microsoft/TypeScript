@@ -1,4 +1,3 @@
-//@isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 interface I {
         [p]; // Used to be indexer, now it is a computed property
         [p1: string];

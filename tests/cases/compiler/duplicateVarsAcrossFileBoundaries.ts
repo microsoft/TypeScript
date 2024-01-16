@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: TSC Resolves variable types across files.
 // @Filename: duplicateVarsAcrossFileBoundaries_0.ts
 var x = 3;
 var y = "";

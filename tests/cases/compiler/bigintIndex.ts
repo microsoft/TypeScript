@@ -1,5 +1,4 @@
 // @target: es2020
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 
 // @filename: a.ts
 interface BigIntIndex<E> {

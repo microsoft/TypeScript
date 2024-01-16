@@ -1,5 +1,4 @@
 // @target: es6
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 var s: string;
 var n: number;
 var a: any;

@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: TS normalizes types
 const obj = {
     a: "foo" as "foo",
     b: <"foo">"foo",

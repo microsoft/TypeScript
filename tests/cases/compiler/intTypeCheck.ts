@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 interface i1 {
     //Property Signatures
     p;

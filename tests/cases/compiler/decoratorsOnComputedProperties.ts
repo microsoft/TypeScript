@@ -1,6 +1,5 @@
 // @target: es6
 // @experimentalDecorators: true
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 function x(o: object, k: PropertyKey) { }
 let i = 0;
 function foo(): string { return ++i + ""; }

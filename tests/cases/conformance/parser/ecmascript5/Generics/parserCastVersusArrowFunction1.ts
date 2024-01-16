@@ -1,5 +1,4 @@
 // @isolatedDeclarations: false
-// @isolatedDeclarationDiffReason: Syntactically invalid.
 var v = <T>() => 1;
 var v = <T>a;
 

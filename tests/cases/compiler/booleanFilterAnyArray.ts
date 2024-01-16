@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: TS normalizes types
 interface Bullean { }
 interface BulleanConstructor {
     new(v1?: any): Bullean;

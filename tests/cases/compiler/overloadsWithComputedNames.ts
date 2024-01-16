@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 // https://github.com/microsoft/TypeScript/issues/52329
 class Person {
     ["B"](a: number): string;

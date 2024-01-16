@@ -1,5 +1,4 @@
 // @target: es6
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 class C {
 class C1 {
     static staticProp = 10;

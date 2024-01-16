@@ -128,6 +128,7 @@ export class CompilerBaselineRunner extends RunnerBase {
             it(`Correct dte emit for ${fileName}`, () => isolatedTest?.verifyDteOutput());
             it(`Correct tsc emit for ${fileName}`, () => isolatedTest?.verifyTscOutput());
             it(`Correct dte/tsc diff ${fileName}`, () => isolatedTest?.verifyDiff());
+            it(`Correct diff reason ${fileName}`, () => isolatedTest?.verifyDiffReason());
 
             after(() => {
                 isolatedTest = undefined!;
@@ -141,7 +142,8 @@ export class CompilerBaselineRunner extends RunnerBase {
                 if (fixedIsolatedTestEnv) {
                     fixedIsolatedTest = new FixedIsolatedDeclarationTest(fixedIsolatedTestEnv);
                 }
-                else {
+                else if(!environment.compilerOptions.isolatedDeclarationDiffReason) {
+                    // Don't skip if they have a reason we need to fail if unused reasons exist
                     this.skip();
                 }
             });
@@ -151,6 +153,7 @@ export class CompilerBaselineRunner extends RunnerBase {
             it(`Correct dte map emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteMapOutput());
             it(`Correct tsc map emit for ${fileName}`, () => fixedIsolatedTest?.verifyTscMapOutput());
             it(`Correct dte/tsc map diff ${fileName}`, () => fixedIsolatedTest?.verifyMapDiff());
+            it(`Correct diff reason ${fileName}`, () => fixedIsolatedTest?.verifyDiffReason());
 
             after(() => {
                 fixedIsolatedTest = undefined!;
@@ -480,13 +483,15 @@ class IsolatedDeclarationTest extends CompilerTestBase {
     protected isDiagnosticEquivalent: boolean;
     protected isOutputMapEquivalent: boolean;
 
-    static transformEnvironment(compilerEnvironment: CompilerTestEnvironment): CompilerTestEnvironment | undefined {
+    static transformEnvironment(compilerEnvironment: CompilerTestEnvironment, shouldNotExclude = !!compilerEnvironment.testCaseContent.settings.isolatedDeclarationDiffReason): CompilerTestEnvironment | undefined {
         const options = compilerEnvironment.compilerOptions;
-        // Exclude tests some tests
-        // - those explicitly not opting into isolatedDeclarations
-        // - those that do not usually emit output anyway
-        if (options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols || !options.declaration) {
-            return undefined;
+        if (!shouldNotExclude) {
+            // Exclude tests some tests
+            // - those explicitly not opting into isolatedDeclarations
+            // - those that do not usually emit output anyway
+            if((options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols || !options.declaration)) {
+                return undefined;
+            }
         }
         const clonedOptions: ts.CompilerOptions & Compiler.HarnessOptions = ts.cloneCompilerOptions(compilerEnvironment.compilerOptions);
         if (clonedOptions.isolatedDeclarations === undefined) {
@@ -658,11 +663,15 @@ class IsolatedDeclarationTest extends CompilerTestBase {
         );
     }
 
+    verifyDiffReason() {
+        if (this.isOutputMapEquivalent && this.isOutputEquivalent && this.isDiagnosticEquivalent) {
+            ts.Debug.assert(this.diffReason === undefined, "Should not have a diff reason if everything is equivalent");
+        }else {
+            ts.Debug.assert(this.diffReason !== undefined, "Should have a reason if everything is not equivalent");
+        }
+    }
     verifyDiff() {
         if (this.isOutputEquivalent && this.isDiagnosticEquivalent) {
-            if (this.isOutputMapEquivalent) {
-                ts.Debug.assert(this.diffReason === undefined, "Should not have a diff reason if everything is equivalent");
-            }
             return;
         }
         Compiler.doDeclarationDiffBaseline(
@@ -697,16 +706,18 @@ class IsolatedDeclarationTest extends CompilerTestBase {
 }
 
 class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
-    static fixTestProject(compilerEnvironment: CompilerTestEnvironment): CompilerTestEnvironment | undefined {
-        // Exclude test that disable types and symbols (good proxy for very complex test)
-        if (compilerEnvironment.compilerOptions.noTypesAndSymbols) {
-            return undefined;
-        }
-        if (!compilerEnvironment.compilerOptions.declaration) {
-            return undefined;
+    static fixTestProject(compilerEnvironment: CompilerTestEnvironment, shouldNotExclude = !!compilerEnvironment.testCaseContent.settings.isolatedDeclarationFixedDiffReason): CompilerTestEnvironment | undefined {
+        if(!shouldNotExclude) {
+            // Exclude test that disable types and symbols (good proxy for very complex test)
+            if (compilerEnvironment.compilerOptions.noTypesAndSymbols) {
+                return undefined;
+            }
+            if (!compilerEnvironment.compilerOptions.declaration) {
+                return undefined;
+            }
         }
 
-        const env = IsolatedDeclarationTest.transformEnvironment(compilerEnvironment);
+        const env = IsolatedDeclarationTest.transformEnvironment(compilerEnvironment, shouldNotExclude);
         if (!env) {
             return undefined;
         }

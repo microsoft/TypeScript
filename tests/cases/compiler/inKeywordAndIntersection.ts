@@ -1,5 +1,4 @@
 // @strict: true
-// @isolatedDeclarationDiffReason: TS normalizes types
 
 class A { a = 0 }
 class B { b = 0 }
