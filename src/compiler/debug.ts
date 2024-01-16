@@ -357,7 +357,7 @@ export namespace Debug {
     }
 
     /**
-     * Asserts the symbol is defined and is of the right kind (originating in TSC or sample DTE depending o context)
+     * Asserts the symbol is defined and is of the right kind (originating in TSC or sample DTE depending o the test that is currently being run)
      * The default implementation just asserts the symbol is not null
      * In tests it is overridden to ensure we don't accidentally use TSC symbols in DTE
      */
