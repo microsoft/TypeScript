@@ -13850,14 +13850,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(type: Type, include: TypeFlags, stringsOnly: boolean, cb: (keyType: Type) => void) {
-        if (isTupleType(type)) {
-            forEachType(getUnionType(getElementTypes(type).map((_, i) => getStringLiteralType("" + i))), cb);
-            return;
-        }
-        if (isArrayType(type)) {
-            cb(numberType);
-            return;
-        }
         for (const prop of getPropertiesOfType(type)) {
             cb(getLiteralTypeFromProperty(prop, include));
         }
@@ -16250,8 +16242,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             // Given a homomorphic mapped type { [K in keyof T]: XXX }, where T is constrained to an array or tuple type, in the
-            // template type XXX, K has an added constraint of number | `${number}`. The same is added in the optional name type.
-            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && (node === (parent as MappedTypeNode).type || node === (parent as MappedTypeNode).nameType)) {
+            // template type XXX, K has an added constraint of number | `${number}`.
+            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && node === (parent as MappedTypeNode).type) {
                 const mappedType = getTypeFromTypeNode(parent as TypeNode) as MappedType;
                 if (getTypeParameterFromMappedType(mappedType) === getActualTypeVariable(type)) {
                     const typeParameter = getHomomorphicTypeVariable(mappedType);
