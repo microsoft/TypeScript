@@ -701,6 +701,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         }
         // Default export declarations set isVisible on true on associated symbols in the type checker.
         function bindExportAssignment(node: ExportAssignment) {
+            bindNode(node.expression);
             if (node.expression && isIdentifier(node.expression)) {
                 const name = node.expression.escapedText;
                 postBindingAction.push(() => {

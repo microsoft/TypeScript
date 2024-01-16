@@ -28,12 +28,15 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
         ...transpileOptions.compilerOptions,
         isolatedDeclarations: true,
     };
+    const getCanonicalFileName = createGetCanonicalFileName(!!compilerOptions.useCaseSensitiveFileNames);
+    const currentDirectory = normalizeSlashes(transpileOptions.currentDirectory ?? ".");
+    const commonSourceDirectory = normalizeSlashes(ensureTrailingDirectorySeparator(transpileOptions.commonSourceDirectory ?? "."));
     const emitHost = {
-        getCurrentDirectory: () => transpileOptions.currentDirectory ?? ".",
-        getCanonicalFileName: createGetCanonicalFileName(!!compilerOptions.useCaseSensitiveFileNames),
+        getCurrentDirectory: () => currentDirectory,
+        getCanonicalFileName,
         useCaseSensitiveFileNames: () => !!compilerOptions.useCaseSensitiveFileNames,
         getCompilerOptions: () => compilerOptions.compilerOptions,
-        getCommonSourceDirectory: () => ensureTrailingDirectorySeparator(transpileOptions.commonSourceDirectory ?? "."),
+        getCommonSourceDirectory: () => commonSourceDirectory,
     };
     const emitResolver = createEmitDeclarationResolver(sourceFile);
     const diagnostics: Diagnostic[] = [];
