@@ -10,19 +10,21 @@ lib.decorators.d.ts-Text
 lib.decorators.legacy.d.ts-Text
 
 //// [/project/index.ts]
-S3
+ServerRuntimeMetaFunction
 
-//// [/project/node_modules/aws-sdk/clients/s3.d.ts]
-export declare class S3 {}
+//// [/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/index.d.ts]
+export declare function ServerRuntimeMetaFunction(): void;
 
-//// [/project/node_modules/aws-sdk/index.d.ts]
-export * from "./clients/s3";
+//// [/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/package.json]
+{
+  "name": "@remix-run/server-runtime",
+  "version": "0.0.0",
+  "main": "index.js"
+}
 
-//// [/project/node_modules/aws-sdk/package.json]
-{ "name": "aws-sdk", "version": "2.0.0", "main": "index.js" }
-
+//// [/project/node_modules/@remix-run/server-runtime] symlink(/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package)
 //// [/project/package.json]
-{ "dependencies": { "aws-sdk": "*" } }
+{ "dependencies": { "@remix-run/server-runtime": "*" } }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -30,33 +32,41 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/project/node_modules/aws-sdk/package.json"
+        "file": "/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/package.json"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /project/node_modules/aws-sdk
-Info seq  [hh:mm:ss:mss] For info: /project/node_modules/aws-sdk/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] Search path: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package
+Info seq  [hh:mm:ss:mss] For info: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/aws-sdk/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/aws-sdk/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/.store/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/node_modules/.store/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/project/node_modules/aws-sdk/package.json SVC-1-0 "{ \"name\": \"aws-sdk\", \"version\": \"2.0.0\", \"main\": \"index.js\" }"
+	/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/package.json SVC-1-0 "{\n  \"name\": \"@remix-run/server-runtime\",\n  \"version\": \"0.0.0\",\n  \"main\": \"index.js\"\n}"
 
 
-	../../../lib.d.ts
+	../../../../../lib.d.ts
 	  Default library for target 'es5'
-	../../../lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../lib.d.ts'
-	../../../lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../lib.d.ts'
+	../../../../../lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../../../lib.d.ts'
+	../../../../../lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../../../lib.d.ts'
 	package.json
 	  Root file specified for compilation
 
@@ -66,7 +76,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /project/node_modules/aws-sdk/package.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 After Request
 watchedFiles::
@@ -76,9 +86,21 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/jsconfig.json: *new*
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.json: *new*
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.json: *new*
+  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
-/project/node_modules/aws-sdk/node_modules/@types: *new*
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/node_modules/@types: *new*
+  {}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/node_modules/@types: *new*
+  {}
+/project/node_modules/.store/node_modules/@types: *new*
   {}
 
 Info seq  [hh:mm:ss:mss] request:
@@ -99,7 +121,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/project/index.ts SVC-1-0 "S3"
+	/project/index.ts SVC-1-0 "ServerRuntimeMetaFunction"
 
 
 	../lib.d.ts
@@ -114,20 +136,15 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/aws-sdk/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/aws-sdk/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/aws-sdk/clients/s3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (2)
-	/project/node_modules/aws-sdk/clients/s3.d.ts Text-1 "export declare class S3 {}"
-	/project/node_modules/aws-sdk/index.d.ts Text-1 "export * from \"./clients/s3\";"
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/index.d.ts Text-1 "export declare function ServerRuntimeMetaFunction(): void;"
 
 
-	node_modules/aws-sdk/clients/s3.d.ts
-	  Imported via "./clients/s3" from file 'node_modules/aws-sdk/index.d.ts' with packageId 'aws-sdk/clients/s3.d.ts@2.0.0'
-	node_modules/aws-sdk/index.d.ts
+	node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/index.d.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -140,11 +157,11 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (2)
+Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /project/node_modules/aws-sdk/package.json ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/package.json ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /project/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
@@ -156,17 +173,25 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
-/project/node_modules/aws-sdk/clients/s3.d.ts: *new*
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/jsconfig.json:
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/index.d.ts: *new*
   {"pollingInterval":500}
-/project/node_modules/aws-sdk/index.d.ts: *new*
-  {"pollingInterval":500}
-/project/node_modules/aws-sdk/package.json: *new*
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/jsconfig.json:
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/tsconfig.json:
+  {"pollingInterval":2000}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/tsconfig.json:
   {"pollingInterval":2000}
 /project/package.json: *new*
   {"pollingInterval":250}
 
 watchedDirectoriesRecursive::
-/project/node_modules/aws-sdk/node_modules/@types:
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/node_modules/@types:
+  {}
+/project/node_modules/.store/@remix-run-server-runtime-virtual-c72daf0d/package/node_modules/@types:
+  {}
+/project/node_modules/.store/node_modules/@types:
   {}
 
 Info seq  [hh:mm:ss:mss] request:
@@ -177,7 +202,7 @@ Info seq  [hh:mm:ss:mss] request:
         "preferences": {
           "includeCompletionsForModuleExports": true,
           "autoImportFileExcludePatterns": [
-            "/**/node_modules/aws-sdk"
+            "/**/@remix-run/server-runtime"
           ]
         }
       },
@@ -198,7 +223,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/project/index.ts",
         "line": 1,
-        "offset": 3
+        "offset": 26
       },
       "command": "completionInfo"
     }
@@ -226,7 +251,7 @@ Info seq  [hh:mm:ss:mss] response:
           },
           "end": {
             "line": 1,
-            "offset": 3
+            "offset": 26
           }
         },
         "entries": [
@@ -888,7 +913,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "preferences": {
           "autoImportFileExcludePatterns": [
-            "/**/node_modules/aws-sdk"
+            "/**/@remix-run/server-runtime"
           ]
         }
       },
@@ -909,7 +934,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "preferences": {
           "autoImportFileExcludePatterns": [
-            "/**/node_modules/aws-sdk"
+            "/**/@remix-run/server-runtime"
           ]
         }
       },
@@ -961,9 +986,9 @@ Info seq  [hh:mm:ss:mss] response:
       "success": true,
       "body": [
         {
-          "message": "Cannot find name 'S3'.",
+          "message": "Cannot find name 'ServerRuntimeMetaFunction'.",
           "start": 0,
-          "length": 2,
+          "length": 25,
           "category": "error",
           "code": 2304,
           "startLocation": {
@@ -972,7 +997,7 @@ Info seq  [hh:mm:ss:mss] response:
           },
           "endLocation": {
             "line": 1,
-            "offset": 3
+            "offset": 26
           }
         }
       ]
@@ -1005,7 +1030,7 @@ Info seq  [hh:mm:ss:mss] request:
         "startLine": 1,
         "startOffset": 1,
         "endLine": 1,
-        "endOffset": 3,
+        "endOffset": 26,
         "errorCodes": [
           2304
         ]
