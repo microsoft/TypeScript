@@ -19,7 +19,7 @@ console.log(a, b, A, B);`,
 
 edit.replaceLine(0, 'import { type a, type A, b, B } from "foo2";');
 verify.organizeImports(
-`import { B, b, type A, type a } from "foo2";
+`import { b, B, type a, type A } from "foo2";
 console.log(a, b, A, B);`,
     /*mode*/ undefined,
     { organizeImportsIgnoreCase: "auto", organizeImportsTypeOrder: "last" }
@@ -27,7 +27,7 @@ console.log(a, b, A, B);`,
 
 edit.replaceLine(0, 'import { type a, type A, b, B } from "foo3";');
 verify.organizeImports(
-`import { B, b, type A, type a } from "foo3";
+`import { b, B, type a, type A } from "foo3";
 console.log(a, b, A, B);`,
     /*mode*/ undefined,
     { organizeImportsIgnoreCase: "auto" }
