@@ -1,45 +1,20 @@
 //// [tests/cases/compiler/dependentReturnType2.ts] ////
 
 === dependentReturnType2.ts ===
-declare function q(x: object): x is { b: number };
->q : (x: object) => x is { b: number; }
->x : object
->b : number
-
-function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: string } ? number : (string | number) {
->foo : <T extends { a: string; } | { b: number; }>(x: T) => T extends {    a: string;} ? number : (string | number)
->a : string
->b : number
+// If during narrowing, one of the conditional types in the distribution doesn't narrow, then the whole type will not be narrowed
+function whoKnows<T extends string | number | undefined>(x: T): T extends true ? 1 : T extends false ? 2 : 3 {
+>whoKnows : <T extends string | number | undefined>(x: T) => T extends true ? 1 : T extends false ? 2 : 3
 >x : T
->a : string
+>true : true
+>false : false
 
-    if (q(x)) {
->q(x) : boolean
->q : (x: object) => x is { b: number; }
->x : { a: string; } | { b: number; }
+    if (typeof x !== "string") {
+>typeof x !== "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : T
+>"string" : "string"
 
-        x.b;
->x.b : number
->x : { b: number; }
->b : number
-
-        return "";
->"" : ""
+        return 3;
+>3 : 3
     }
 }
-
-let y = { a: "", b: 1 }
->y : { a: string; b: number; }
->{ a: "", b: 1 } : { a: string; b: number; }
->a : string
->"" : ""
->b : number
->1 : 1
-
-const r = foo<{ a: string }>(y); // number
->r : number
->foo<{ a: string }>(y) : number
->foo : <T extends { a: string; } | { b: number; }>(x: T) => T extends { a: string; } ? number : string | number
->a : string
->y : { a: string; b: number; }
-

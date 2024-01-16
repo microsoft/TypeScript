@@ -1,14 +1,9 @@
 // @strict: true
 // @noEmit: true
 
-declare function q(x: object): x is { b: number };
-
-function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: string } ? number : (string | number) {
-    if (q(x)) {
-        x.b;
-        return "";
+// If during narrowing, one of the conditional types in the distribution doesn't narrow, then the whole type will not be narrowed
+function whoKnows<T extends string | number | undefined>(x: T): T extends true ? 1 : T extends false ? 2 : 3 {
+    if (typeof x !== "string") {
+        return 3;
     }
 }
-
-let y = { a: "", b: 1 }
-const r = foo<{ a: string }>(y); // number

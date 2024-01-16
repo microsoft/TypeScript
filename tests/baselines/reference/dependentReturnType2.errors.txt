@@ -1,20 +1,15 @@
-dependentReturnType2.ts(3,62): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-dependentReturnType2.ts(6,9): error TS2322: Type 'string' is not assignable to type 'T extends { a: string; } ? number : string | number'.
+dependentReturnType2.ts(2,65): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+dependentReturnType2.ts(4,9): error TS2322: Type '3' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 3'.
 
 
 ==== dependentReturnType2.ts (2 errors) ====
-    declare function q(x: object): x is { b: number };
-    
-    function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: string } ? number : (string | number) {
-                                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // If during narrowing, one of the conditional types in the distribution doesn't narrow, then the whole type will not be narrowed
+    function whoKnows<T extends string | number | undefined>(x: T): T extends true ? 1 : T extends false ? 2 : 3 {
+                                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
-        if (q(x)) {
-            x.b;
-            return "";
+        if (typeof x !== "string") {
+            return 3;
             ~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'T extends { a: string; } ? number : string | number'.
+!!! error TS2322: Type '3' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 3'.
         }
     }
-    
-    let y = { a: "", b: 1 }
-    const r = foo<{ a: string }>(y); // number

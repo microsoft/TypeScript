@@ -1,43 +1,18 @@
 //// [tests/cases/compiler/dependentReturnType2.ts] ////
 
 === dependentReturnType2.ts ===
-declare function q(x: object): x is { b: number };
->q : Symbol(q, Decl(dependentReturnType2.ts, 0, 0))
->x : Symbol(x, Decl(dependentReturnType2.ts, 0, 19))
->x : Symbol(x, Decl(dependentReturnType2.ts, 0, 19))
->b : Symbol(b, Decl(dependentReturnType2.ts, 0, 37))
+// If during narrowing, one of the conditional types in the distribution doesn't narrow, then the whole type will not be narrowed
+function whoKnows<T extends string | number | undefined>(x: T): T extends true ? 1 : T extends false ? 2 : 3 {
+>whoKnows : Symbol(whoKnows, Decl(dependentReturnType2.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 1, 18))
+>x : Symbol(x, Decl(dependentReturnType2.ts, 1, 57))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 1, 18))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 1, 18))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 1, 18))
 
-function foo<T extends { a: string } | { b: number }>(x: T): T extends { a: string } ? number : (string | number) {
->foo : Symbol(foo, Decl(dependentReturnType2.ts, 0, 50))
->T : Symbol(T, Decl(dependentReturnType2.ts, 2, 13))
->a : Symbol(a, Decl(dependentReturnType2.ts, 2, 24))
->b : Symbol(b, Decl(dependentReturnType2.ts, 2, 40))
->x : Symbol(x, Decl(dependentReturnType2.ts, 2, 54))
->T : Symbol(T, Decl(dependentReturnType2.ts, 2, 13))
->T : Symbol(T, Decl(dependentReturnType2.ts, 2, 13))
->a : Symbol(a, Decl(dependentReturnType2.ts, 2, 72))
+    if (typeof x !== "string") {
+>x : Symbol(x, Decl(dependentReturnType2.ts, 1, 57))
 
-    if (q(x)) {
->q : Symbol(q, Decl(dependentReturnType2.ts, 0, 0))
->x : Symbol(x, Decl(dependentReturnType2.ts, 2, 54))
-
-        x.b;
->x.b : Symbol(b, Decl(dependentReturnType2.ts, 2, 40))
->x : Symbol(x, Decl(dependentReturnType2.ts, 2, 54))
->b : Symbol(b, Decl(dependentReturnType2.ts, 2, 40))
-
-        return "";
+        return 3;
     }
 }
-
-let y = { a: "", b: 1 }
->y : Symbol(y, Decl(dependentReturnType2.ts, 9, 3))
->a : Symbol(a, Decl(dependentReturnType2.ts, 9, 9))
->b : Symbol(b, Decl(dependentReturnType2.ts, 9, 16))
-
-const r = foo<{ a: string }>(y); // number
->r : Symbol(r, Decl(dependentReturnType2.ts, 10, 5))
->foo : Symbol(foo, Decl(dependentReturnType2.ts, 0, 50))
->a : Symbol(a, Decl(dependentReturnType2.ts, 10, 15))
->y : Symbol(y, Decl(dependentReturnType2.ts, 9, 3))
-

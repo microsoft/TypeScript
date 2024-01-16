@@ -18749,9 +18749,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedType;
     }
 
-    function getNarrowConditionalType(root: ConditionalRoot, narrowMapper: TypeMapper, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+    function getNarrowConditionalType(type: ConditionalType, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type {
+        let root: ConditionalRoot = type.root;
         let result;
-        const originalRoot = root;
 
         // We loop here for an immediately nested conditional type in the false position, effectively treating
         // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
@@ -18855,15 +18855,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 }
             }
-            // Return a deferred type for a check that is not definitely true
-            result = createType(TypeFlags.Conditional) as ConditionalType;
-            result.root = originalRoot;
-            result.checkType = instantiateType(originalRoot.checkType, mapper);
-            result.extendsType = instantiateType(originalRoot.extendsType, mapper);
-            result.mapper = mapper;
-            result.combinedMapper = undefined;
-            result.aliasSymbol = aliasSymbol || originalRoot.aliasSymbol;
-            result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(originalRoot.aliasTypeArguments, mapper!); // TODO: GH#18217
+            // Return the original type for a check that is not definitely true and could not be narrowed
+            result = type;
             break;
         }
         return result;
@@ -20086,8 +20079,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         type: ConditionalType,
         narrowMapper: TypeMapper,
         mapper: TypeMapper | undefined,
-        aliasSymbol?: Symbol,
-        aliasTypeArguments?: readonly Type[]): Type {
+        _aliasSymbol?: Symbol,
+        _aliasTypeArguments?: readonly Type[]): Type {
         const root = type.root;
         if (root.outerTypeParameters) {
             // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
@@ -20095,36 +20088,49 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // instantiation cache key from the type IDs of the type arguments.
             const typeArguments = mapper ? map(root.outerTypeParameters, t => getMappedType(t, mapper)) : root.outerTypeParameters;
             // >> No caching yet
-            let result;
             const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
-            const checkType = root.checkType;
             const checkTypeVariable = getNarrowableCheckTypeVariable(root, newMapper);
             const distributionType = checkTypeVariable ? getMappedType(checkTypeVariable, narrowMapper) : undefined;
             // Distributive conditional types are distributed over union types. For example, when the
             // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
             // result is (A extends U ? X : Y) | (B extends U ? X : Y).
-            if (distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never)) {
-                result = mapTypeWithAlias(
-                    getReducedType(distributionType),
-                    t => getNarrowConditionalType(
-                        root,
-                        prependTypeMapping(checkType, t, narrowMapper),
-                        newMapper),
-                    aliasSymbol,
-                    aliasTypeArguments,
-                    /*useIntersection*/ true); // We use the intersection instead of unioning over the conditional types,
-                    // because we want the write type so that it is safe
+            if (distributionType && checkTypeVariable !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never)) {
+                return getNarrowDistributedConditionalType(type, distributionType, checkTypeVariable!, narrowMapper, newMapper);
             }
             else {
-                result = getNarrowConditionalType(root, narrowMapper, newMapper, aliasSymbol, aliasTypeArguments);
+                return getNarrowConditionalType(type, narrowMapper, newMapper);
             }
-            return result;
         }
         return type;
     }
 
+    // `distributionType` should be a union type (or never).
+    function getNarrowDistributedConditionalType(
+        type: ConditionalType,
+        distributionType: Type,
+        checkTypeVariable: TypeParameter,
+        narrowMapper: TypeMapper,
+        mapper: TypeMapper): Type {
+        distributionType = getReducedType(distributionType);
+        if (distributionType.flags & TypeFlags.Never) {
+            return distributionType;
+        }
+        if (distributionType.flags & TypeFlags.Union) {
+            const mappedTypes: Type[] = [];
+            for (const t of (distributionType as UnionType).types) {
+                const result = getNarrowConditionalType(type, prependTypeMapping(checkTypeVariable, t, narrowMapper), mapper);
+                // If one of the component types could not be narrowed, then don't narrow the whole type
+                if (result === type) {
+                    return type;
+                }
+                mappedTypes.push(result);
+            }
+            return getIntersectionType(mappedTypes);
+        }
+        return getNarrowConditionalType(type, narrowMapper, mapper);
+    }
+
     function isNarrowableReturnType(type: Type) {
-        // >> TODO: also check if generic?
         return type.flags & (TypeFlags.IndexedAccess | TypeFlags.Conditional) && couldContainTypeVariables(type);
     }
 
@@ -27308,8 +27314,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Apply a mapping function to a type and return the resulting type. If the source type
     // is a union type, the mapping function is applied to each constituent type and a union
     // of the resulting types is returned.
-    function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean, useIntersection?: boolean): Type;
-    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean, useIntersection?: boolean): Type | undefined;
+    function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean, useIntersection?: boolean, skipIfAnyUnchanged?: boolean): Type;
+    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean, useIntersection?: boolean, skipIfAnyUnchanged?: boolean): Type | undefined;
     function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean, useIntersection = false): Type | undefined {
         if (type.flags & TypeFlags.Never) {
             return type;

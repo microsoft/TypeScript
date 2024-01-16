@@ -2,8 +2,7 @@ dependentReturnType1.ts(11,9): error TS2322: Type 'number' is not assignable to 
 dependentReturnType1.ts(26,9): error TS2322: Type 'string' is not assignable to type 'never'.
 dependentReturnType1.ts(35,9): error TS2322: Type 'string' is not assignable to type 'never'.
 dependentReturnType1.ts(70,9): error TS2322: Type '{ a: "a"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
-dependentReturnType1.ts(74,5): error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'Three & (T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four)'.
-  Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
+dependentReturnType1.ts(74,5): error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
 dependentReturnType1.ts(80,9): error TS2322: Type '{ a: "a"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : One | Two | Three | Four'.
 dependentReturnType1.ts(84,22): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'Three & Four'.
 dependentReturnType1.ts(99,9): error TS2322: Type 'RightOut' is not assignable to type 'Arg extends LeftIn ? LeftOut : RightOut'.
@@ -125,8 +124,7 @@ dependentReturnType1.ts(463,13): error TS2322: Type 'R' is not assignable to typ
         // because we now check assignability to a narrower type...
         return { a: "a", b: "b", c: "c", d: "d", e: "e", f: "f", g: "g" }; // Error
         ~~~~~~
-!!! error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'Three & (T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four)'.
-!!! error TS2322:   Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
+!!! error TS2322: Type '{ a: "a"; b: "b"; c: "c"; d: "d"; e: "e"; f: "f"; g: "g"; }' is not assignable to type 'T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : Four'.
     }
     
     function f101<T extends 1 | 2 | 3 | 4>(x: T): T extends 1 ? One : T extends 2 ? Two : T extends 3 ? Three : T extends 4 ? Four : One | Two | Three | Four { // Well written conditional
