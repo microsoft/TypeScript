@@ -530,6 +530,7 @@ export function createLocalInferenceResolver({
                 });
 
                 if (nameKey) {
+                    Debug.assertSymbolValid(prop.symbol);
                     const exitingIndex = members.get(prop.symbol);
                     if (exitingIndex !== undefined && !isMethodOrAccessor(prop)) {
                         properties[exitingIndex] = newProp;
@@ -663,6 +664,7 @@ export function createLocalInferenceResolver({
 
     function normalizePropertyName(symbol: Symbol, isMethod: boolean) {
         let nameText;
+        Debug.assertSymbolValid(symbol);
         Debug.assert(symbol.declarations !== undefined, "Symbol has no declarations");
         let stringNamed = !!length(symbol.declarations);
         let singleQuote = stringNamed;
@@ -789,6 +791,7 @@ export function createLocalInferenceResolver({
             return localInference(node.expression, NarrowBehavior.KeepLiterals);
         }
         else if (isVariableDeclaration(node)) {
+            Debug.assertSymbolValid(node.symbol);
             const firstDeclaration = node.symbol.valueDeclaration;
             // Use first declaration of variable for the type
             if (node !== firstDeclaration && firstDeclaration && isVariableDeclaration(firstDeclaration)) {

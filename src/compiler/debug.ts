@@ -357,6 +357,15 @@ export namespace Debug {
     }
 
     /**
+     * Asserts the symbol is defined and is of the right kind (originating in TSC or sample DTE depending o context)
+     * The default implementation just asserts the symbol is not null
+     * In tests it is overridden to ensure we don't accidentally use TSC symbols in DTE
+     */
+    // eslint-disable-next-line prefer-const
+    export let assertSymbolValid = (symbol: Symbol) => {
+        assert(symbol, "Symbol not defined");
+    };
+    /**
      * Asserts a value has the specified type in typespace only (does not perform a runtime assertion).
      * This is useful in cases where we switch on `node.kind` and can be reasonably sure the type is accurate, and
      * as a result can reduce the number of unnecessary casts.
