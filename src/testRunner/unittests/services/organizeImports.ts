@@ -990,6 +990,40 @@ export * from "lib";
         }
     });
 
+    describe("Detection", () => {
+        it("Detection-1", () => {
+            const originalImports = parseImports(`import { abc, Abc } from 'b';`, `import { I, M, R } from 'a';`);
+            assert.equal(
+                ts.SortKind.CaseInsensitive,
+                ts.OrganizeImports.detectSorting(ts.getSourceFileOfNode(originalImports[0]), {})
+            );
+        });
+
+        it("Detection-2", () => {
+            const originalImports = parseImports(`import { abc, Abc } from 'a';`, `import { I, M, R } from 'b';`);
+            assert.equal(
+                ts.SortKind.CaseInsensitive,
+                ts.OrganizeImports.detectSorting(ts.getSourceFileOfNode(originalImports[0]), {})
+            );
+        });
+
+        it("Detection-3", () => {
+            const originalImports = parseImports(`import { I, M, R } from 'a';`,`import { Abc, abc } from 'b';`);
+            assert.equal(
+                ts.SortKind.None,
+                ts.OrganizeImports.detectSorting(ts.getSourceFileOfNode(originalImports[0]), {})
+            );
+        });
+
+        it("Detection-4", () => {
+            const originalImports = parseImports(`import { I, M, R } from 'a';`,`import { abc, Abc } from 'b';`);
+            assert.equal(
+                ts.SortKind.CaseInsensitive,
+                ts.OrganizeImports.detectSorting(ts.getSourceFileOfNode(originalImports[0]), {})
+            );
+        });
+    });
+
     function parseImports(...importStrings: string[]): readonly ts.ImportDeclaration[] {
         const sourceFile = ts.createSourceFile("a.ts", importStrings.join("\n"), ts.ScriptTarget.ES2015, /*setParentNodes*/ true, ts.ScriptKind.TS);
         const imports = ts.filter(sourceFile.statements, ts.isImportDeclaration);
