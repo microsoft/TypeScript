@@ -5185,7 +5185,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else {
-                    error(errorNode, moduleNotFoundError, moduleReference);
+                    if (host.getResolvedModule(currentSourceFile, moduleReference, mode)?.alternateResult) {
+                        const errorInfo = createModuleNotFoundChain(currentSourceFile, host, moduleReference, mode, moduleReference);
+                        errorOrSuggestion(/*isError*/ true, errorNode, chainDiagnosticMessages(errorInfo, moduleNotFoundError, moduleReference));
+                    }
+                    else {
+                        error(errorNode, moduleNotFoundError, moduleReference);
+                    }
                 }
             }
         }
