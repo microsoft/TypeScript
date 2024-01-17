@@ -2541,7 +2541,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolutionsChanged = hasChangesInResolutions(
                 moduleNames,
                 resolutions,
-                oldProgram.getResolvedModuleFromModuleSpecifier,
+                name => oldProgram.getResolvedModule(newSourceFile, name.text, oldProgram.getModeForUsageLocation(newSourceFile, name)),
                 moduleResolutionIsEqualTo,
             );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
