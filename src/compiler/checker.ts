@@ -19981,20 +19981,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * This is similar to `instantiateType`, but with behavior specific to narrowing a return type based on control flow for type parameters.
+     * This is similar to `instantiateType`, but with behavior specific to narrowing a return type based on control flow narrowing of expressions that have type parameter types.
      */
-    function instantiateNarrowType(type: Type, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type;
-    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type | undefined;
-    function instantiateNarrowType(type: Type | undefined, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type | undefined {
-        return type ? instantiateNarrowTypeWithAlias(type, narrowMapper, mapper, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined) : type;
-    }
-
-    function instantiateNarrowTypeWithAlias(
-        type: Type,
-        narrowMapper: TypeMapper,
-        mapper: TypeMapper | undefined,
-        aliasSymbol: Symbol | undefined,
-        aliasTypeArguments: readonly Type[] | undefined): Type {
+    function instantiateNarrowType(type: Type, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type {
         if (!couldContainTypeVariables(type)) {
             return type;
         }
@@ -20009,7 +19998,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
-        const result = instantiateNarrowTypeWorker(type, narrowMapper, mapper, aliasSymbol, aliasTypeArguments);
+        const result = instantiateNarrowTypeWorker(type, narrowMapper, mapper);
         instantiationDepth--;
         return result;
     }
@@ -20022,15 +20011,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function instantiateNarrowTypeWorker(
         type: Type,
         narrowMapper: TypeMapper,
-        mapper: TypeMapper | undefined,
-        aliasSymbol: Symbol | undefined,
-        aliasTypeArguments: readonly Type[] | undefined): Type {
+        mapper: TypeMapper | undefined): Type {
         type = instantiateType(type, mapper);
         const flags = type.flags;
         if (flags & TypeFlags.IndexedAccess) {
-            // >> TODO: what's that extra alias stuff here doing?
-            const newAliasSymbol = aliasSymbol || type.aliasSymbol;
-            const newAliasTypeArguments = aliasSymbol || !mapper ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
             const objectType = instantiateNarrowType((type as IndexedAccessType).objectType, narrowMapper, mapper);
             let indexType = instantiateNarrowType((type as IndexedAccessType).indexType, narrowMapper, mapper);
             let accessFlags = (type as IndexedAccessType).accessFlags;
@@ -20045,10 +20029,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const result = getIndexedAccessType(
                 objectType,
                 indexType,
-                accessFlags,
-                /*accessNode*/ undefined,
-                newAliasSymbol,
-                newAliasTypeArguments);
+                accessFlags);
             // >> NOTE: We need to detect if result is different from just putting the already resolved types together
             return instantiateNarrowType(result, narrowMapper, mapper);
         }
@@ -20056,9 +20037,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getNarrowConditionalTypeInstantiation(
                 type as ConditionalType,
                 narrowMapper,
-                mapper ? combineTypeMappers((type as ConditionalType).mapper, mapper) : (type as ConditionalType).mapper,
-                aliasSymbol,
-                aliasTypeArguments);
+                mapper ? combineTypeMappers((type as ConditionalType).mapper, mapper) : (type as ConditionalType).mapper);
         }
 
         return type;
@@ -20078,9 +20057,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNarrowConditionalTypeInstantiation(
         type: ConditionalType,
         narrowMapper: TypeMapper,
-        mapper: TypeMapper | undefined,
-        _aliasSymbol?: Symbol,
-        _aliasTypeArguments?: readonly Type[]): Type {
+        mapper: TypeMapper | undefined): Type {
         const root = type.root;
         if (root.outerTypeParameters) {
             // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
