@@ -127,8 +127,8 @@ export class CompilerBaselineRunner extends RunnerBase {
             });
             it(`Correct dte emit for ${fileName}`, () => isolatedTest?.verifyDteOutput());
             it(`Correct tsc emit for ${fileName}`, () => isolatedTest?.verifyTscOutput());
-            it(`Correct dte/tsc diff ${fileName}`, () => isolatedTest?.verifyDiff());
-            it(`Correct diff reason ${fileName}`, () => isolatedTest?.verifyDiffReason());
+            it(`Correct dte/tsc diff for ${fileName}`, () => isolatedTest?.verifyDiff());
+            it(`Correct diff reason for ${fileName}`, () => isolatedTest?.verifyDiffReason());
 
             after(() => {
                 isolatedTest = undefined!;
@@ -142,18 +142,17 @@ export class CompilerBaselineRunner extends RunnerBase {
                 if (fixedIsolatedTestEnv) {
                     fixedIsolatedTest = new FixedIsolatedDeclarationTest(fixedIsolatedTestEnv);
                 }
-                else if(!environment.compilerOptions.isolatedDeclarationDiffReason) {
-                    // Don't skip if they have a reason we need to fail if unused reasons exist
+                else {
                     this.skip();
                 }
             });
-            it(`Correct dte emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
-            it(`Correct tsc emit for ${fileName}`, () => fixedIsolatedTest?.verifyTscOutput());
-            it(`Correct dte/tsc diff ${fileName}`, () => fixedIsolatedTest?.verifyDiff());
-            it(`Correct dte map emit for ${fileName}`, () => fixedIsolatedTest?.verifyDteMapOutput());
-            it(`Correct tsc map emit for ${fileName}`, () => fixedIsolatedTest?.verifyTscMapOutput());
-            it(`Correct dte/tsc map diff ${fileName}`, () => fixedIsolatedTest?.verifyMapDiff());
-            it(`Correct diff reason ${fileName}`, () => fixedIsolatedTest?.verifyDiffReason());
+            it(`Correct dte emit for fixed ${fileName}`, () => fixedIsolatedTest?.verifyDteOutput());
+            it(`Correct tsc emit for fixed ${fileName}`, () => fixedIsolatedTest?.verifyTscOutput());
+            it(`Correct dte/tsc diff for fixed ${fileName}`, () => fixedIsolatedTest?.verifyDiff());
+            it(`Correct dte map emit for fixed ${fileName}`, () => fixedIsolatedTest?.verifyDteMapOutput());
+            it(`Correct tsc map emit for fixed ${fileName}`, () => fixedIsolatedTest?.verifyTscMapOutput());
+            it(`Correct dte/tsc map diff for fixed ${fileName}`, () => fixedIsolatedTest?.verifyMapDiff());
+            it(`Correct diff reason for fixed ${fileName}`, () => fixedIsolatedTest?.verifyDiffReason());
 
             after(() => {
                 fixedIsolatedTest = undefined!;
