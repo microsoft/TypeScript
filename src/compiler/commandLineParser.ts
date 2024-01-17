@@ -821,8 +821,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "boolean",
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Ensure_that_each_file_can_have_declaration_emit_generated_without_type_information,
-        transpileOptionValue: true,
         defaultValueDescription: false,
+        affectsBuildInfo: true,
+        affectsEmit: true,
     },
 
     // Strict Type Checks
