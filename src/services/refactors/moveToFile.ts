@@ -152,7 +152,9 @@ import {
 import {
     registerRefactor,
 } from "../refactorProvider";
-import { isBlockLike } from "./extractSymbol";
+import {
+    isBlockLike
+} from "./extractSymbol";
 
 const refactorNameForMoveToFile = "Move to file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);
@@ -174,8 +176,10 @@ registerRefactor(refactorNameForMoveToFile, {
             const file = context.file;
             const startNode = getTokenAtPosition(file, context.startPosition);
             const endNode = getTokenAtPosition(file, endPosition);
-            if (startNode.kind !== SyntaxKind.SourceFile && isBlockLike(startNode)
-                && endNode.kind !== SyntaxKind.SourceFile && isBlockLike(endNode)) {
+            if (
+                startNode.kind !== SyntaxKind.SourceFile && isBlockLike(startNode)
+                && endNode.kind !== SyntaxKind.SourceFile && isBlockLike(endNode)
+            ) {
                 return emptyArray;
             }
         }
