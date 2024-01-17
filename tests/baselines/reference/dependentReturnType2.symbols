@@ -16,3 +16,25 @@ function whoKnows<T extends string | number | undefined>(x: T): T extends true ?
         return 3;
     }
 }
+
+// If the conditional type's input is `never`, then it resolves to `never`:
+function neverOk<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 2 : 1 | 2 {
+>neverOk : Symbol(neverOk, Decl(dependentReturnType2.ts, 5, 1))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 8, 17))
+>x : Symbol(x, Decl(dependentReturnType2.ts, 8, 36))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 8, 17))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 8, 17))
+>T : Symbol(T, Decl(dependentReturnType2.ts, 8, 17))
+
+    if (x === true) {
+>x : Symbol(x, Decl(dependentReturnType2.ts, 8, 36))
+
+        return 1;
+    }
+    if (x === false) {
+>x : Symbol(x, Decl(dependentReturnType2.ts, 8, 36))
+
+        return 2;
+    }
+    return 1;
+}

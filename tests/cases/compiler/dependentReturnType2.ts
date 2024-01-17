@@ -7,3 +7,14 @@ function whoKnows<T extends string | number | undefined>(x: T): T extends true ?
         return 3;
     }
 }
+
+// If the conditional type's input is `never`, then it resolves to `never`:
+function neverOk<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 2 : 1 | 2 {
+    if (x === true) {
+        return 1;
+    }
+    if (x === false) {
+        return 2;
+    }
+    return 1;
+}
