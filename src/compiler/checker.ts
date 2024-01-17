@@ -16886,7 +16886,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const type = elementTypes[i];
             const flags = target.elementFlags[i];
             if (flags & ElementFlags.Variadic) {
-                if (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type)) {
+                if (type.flags & TypeFlags.InstantiableNonPrimitive || everyContainedType(type, isGenericMappedType)) {
                     // Generic variadic elements stay as they are.
                     addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                 }
@@ -30575,13 +30575,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
         return mapType(type, t => {
-            if (isGenericMappedType(t) && !t.declaration.nameType) {
-                const constraint = getConstraintTypeFromMappedType(t);
-                const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
-                const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
-                if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
-                    return substituteIndexedMappedType(t, propertyNameType);
-                }
+            if (everyContainedType(t, t => isGenericMappedType(t) && !t.declaration.nameType)) {
+                const newTypes = mapDefined(t.flags & TypeFlags.Intersection ? (t as IntersectionType).types : [t], t => {
+                    const mappedType = t as MappedType;
+                    const constraint = getConstraintTypeFromMappedType(mappedType);
+                    const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
+                    const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
+                    if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
+                        return substituteIndexedMappedType(mappedType, propertyNameType);
+                    }
+                });
+                return newTypes.length ? getIntersectionType(newTypes) : undefined;
             }
             else if (t.flags & TypeFlags.StructuredType) {
                 const prop = getPropertyOfType(t, name);
@@ -30815,6 +30819,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    function getApparentTypeOfInstantiatedContextualType(type: Type) {
+        return getObjectFlags(type) & ObjectFlags.Mapped ? type : getApparentType(type);
+    }
+
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
     // be "pushed" onto a node using the contextualType property.
     function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -30829,7 +30837,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // That would evaluate mapped types with array or tuple type constraints too eagerly
                 // and thus it would prevent `getTypeOfPropertyOfContextualType` from obtaining per-position contextual type for elements of array literal expressions.
                 // Apparent type of other mapped types is already the mapped type itself so we can just avoid calling `getApparentType` here for all mapped types.
-                t => getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
+                t => {
+                    if (t.flags & TypeFlags.Intersection) {
+                        return getIntersectionType(map((t as IntersectionType).types, getApparentTypeOfInstantiatedContextualType));
+                    }
+                    return getApparentTypeOfInstantiatedContextualType(t);
+                },
                 /*noReductions*/ true,
             );
             return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
