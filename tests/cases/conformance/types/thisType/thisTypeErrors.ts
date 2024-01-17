@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: TS resolves invalid types to any
 var x1: this;
 var x2: { a: this };
 var x3: this[];

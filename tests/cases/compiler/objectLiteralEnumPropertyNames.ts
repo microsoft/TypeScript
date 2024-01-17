@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: Computed property are not resolved
 // Fixes #16887
 enum Strs {
     A = 'a',

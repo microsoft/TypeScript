@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: DTE preserves different duplicate identifier 
 const t1 = {
     1: 1,
     [1]: 0 // duplicate

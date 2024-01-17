@@ -1,6 +1,5 @@
 // @target: es5
 // @useDefineForClassFields: true,false
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 
 const FunctionPropertyNames = {
     name: 'name',

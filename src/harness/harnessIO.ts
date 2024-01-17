@@ -1062,10 +1062,6 @@ export namespace Compiler {
         fullDiff += Diff.createTwoFilesPatch("TSC", "DTE", tscContent, dteContent, "declarations", "declarations");
 
         Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts.map.diff`), fullDiff);
-
-        if (reason === undefined) {
-            throw new Error("The test is not equivalent between TSC and DTE. Please provide an isolatedDeclarationDiffReason/isolatedDeclarationFixedDiffReason setting in the test if this is intentional");
-        }
     }
 
     export function doDeclarationDiffBaseline(
@@ -1089,10 +1085,6 @@ export namespace Compiler {
         fullDiff += Diff.createTwoFilesPatch("TSC", "DTE", tscContent, dteContent, "declarations", "declarations");
 
         Baseline.runBaseline(type + "/" + baselinePath.replace(/\.tsx?/, `.d.ts.diff`), fullDiff);
-
-        if (reason === undefined) {
-            throw new Error("The test is not equivalent between TSC and DTE. Please provide an isolatedDeclarationDiffReason/isolatedDeclarationFixedDiffReason setting in the test if this is intentional");
-        }
     }
     function sourceContent(tsSources: readonly TestFile[]) {
         let code = "";

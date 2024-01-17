@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 // @target: es6
 var p1: number | string;
 var p2: number | number[];

@@ -1,5 +1,4 @@
 // @target: esnext
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 
 type K = number | string;
 type T = {

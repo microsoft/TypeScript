@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: TS normalizes types
 // The following are errors because of circular references
 var c: typeof c;
 var c: any;

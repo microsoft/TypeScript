@@ -1,5 +1,4 @@
 // @target: es5
-// @isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 
 module m1 {
     export module m2 {

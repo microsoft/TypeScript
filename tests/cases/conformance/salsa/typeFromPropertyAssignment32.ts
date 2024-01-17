@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: Property is defined in another file. DTE can't detect this but TSC has another error for this already
 // @Filename: expando.ts
 function ExpandoMerge(n: number) {
     return n;

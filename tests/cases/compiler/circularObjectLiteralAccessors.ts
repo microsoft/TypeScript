@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: TS merges accessors with the same type. DTE can only merge if one type is specified.
 // @target: es5
 
 // Repro from #6000

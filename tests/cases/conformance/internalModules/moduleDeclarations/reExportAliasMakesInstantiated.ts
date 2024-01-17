@@ -1,4 +1,3 @@
-// @isolatedDeclarationDiffReason: GH#55571
 declare module pack1 {
   const test1: string;
   export { test1 };

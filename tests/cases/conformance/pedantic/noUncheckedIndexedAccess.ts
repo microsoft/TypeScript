@@ -1,6 +1,5 @@
 // @strict: true
 // @noUncheckedIndexedAccess: true
-// @isolatedDeclarationDiffReason: TS normalizes types
 
 type CheckBooleanOnly<T extends boolean> = any;
 // Validate CheckBooleanOnly works - should error

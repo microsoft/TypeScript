@@ -1,5 +1,4 @@
 // @allowUnreachableCode: true
-// @isolatedDeclarationDiffReason: TS normalizes types
 
 class Base { private p; }
 class Derived1 extends Base { private m; }

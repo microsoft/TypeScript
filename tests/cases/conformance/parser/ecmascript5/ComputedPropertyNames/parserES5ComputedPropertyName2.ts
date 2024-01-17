@@ -1,3 +1,2 @@
 //@target: ES5
-//@isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
 var v = { [e]: 1 };

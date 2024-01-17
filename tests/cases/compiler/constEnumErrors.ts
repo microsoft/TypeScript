@@ -1,5 +1,4 @@
 // @lib: es5
-// @isolatedDeclarationDiffReason: TSC detects forward ref which is not allowed and so enum value is undefined, which is also the way we detect isolated declaration errors.
 const enum E {
     A
 }
