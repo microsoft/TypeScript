@@ -44339,11 +44339,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (((symbol.valueDeclaration && isOptionalDeclaration(symbol.valueDeclaration))
                     || isOptionalTupleElementSymbol(symbol))
                 && type.flags & TypeFlags.Union
-                && (type as UnionType).types[0] === undefinedOrMissingType
+                && ((type as UnionType).types[0] === undefinedType
+                    || exactOptionalPropertyTypes && (type as UnionType).types[0] === missingType)
                 && (type as UnionType).types[1].flags & TypeFlags.TypeParameter) {
                 const typeParam = (type as UnionType).types[1] as TypeParameter;
                 const constraint = getConstraintOfTypeParameter(typeParam);
-                if (!constraint || containsUndefinedType(constraint)) {
+                if (!constraint || constraint.flags & TypeFlags.Unknown || containsUndefinedType(constraint)) {
                     add(typeParam, symbol, reference);
                 }
             }

@@ -6,8 +6,8 @@ declare const rand: { a?: never };
 >rand : { a?: never; }
 >a : undefined
 
-type MissingType = typeof rand.a;
->MissingType : undefined
+type Missing = typeof rand.a;
+>Missing : undefined
 >rand.a : undefined
 >rand : { a?: never; }
 >a : undefined
@@ -16,7 +16,7 @@ declare function takesString(x: string): void;
 >takesString : (x: string) => void
 >x : string
 
-function hasOwnP<T extends string | MissingType>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
+function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
 >hasOwnP : <T extends string | undefined>(obj: {    a?: T;}) => T extends string ? 1 : T extends undefined ? 2 : 1 | 2
 >obj : { a?: T; }
 >a : T | undefined
@@ -40,4 +40,41 @@ function hasOwnP<T extends string | MissingType>(obj: { a?: T }): T extends stri
     }
     return 2;
 >2 : 2
+}
+
+function foo<T extends string | undefined>(opts: { x?: T }):
+>foo : <T extends string | undefined>(opts: {    x?: T;}) => T extends undefined ? 0 : T extends string ? 1 : 0 | 1
+>opts : { x?: T; }
+>x : T | undefined
+
+    T extends undefined ? 0 : T extends string ? 1 : 0 | 1 {
+    if (opts.x === undefined) {
+>opts.x === undefined : boolean
+>opts.x : T | undefined
+>opts : { x?: T; }
+>x : T | undefined
+>undefined : undefined
+
+        return 0;
+>0 : 0
+    }
+    return 1;
+>1 : 1
+}
+
+function bar<T extends string | Missing>(x?: T ):
+>bar : <T extends string | undefined>(x?: T) => T extends Missing ? 0 : T extends string ? 1 : 0 | 1
+>x : T | undefined
+
+    T extends Missing ? 0 : T extends string ? 1 : 0 | 1 {
+    if (x === undefined) {
+>x === undefined : boolean
+>x : T | undefined
+>undefined : undefined
+
+        return 0;
+>0 : 0
+    }
+    return 1;
+>1 : 1
 }

@@ -6,38 +6,81 @@ declare const rand: { a?: never };
 >rand : Symbol(rand, Decl(dependentReturnType4.ts, 1, 13))
 >a : Symbol(a, Decl(dependentReturnType4.ts, 1, 21))
 
-type MissingType = typeof rand.a;
->MissingType : Symbol(MissingType, Decl(dependentReturnType4.ts, 1, 34))
+type Missing = typeof rand.a;
+>Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 1, 34))
 >rand.a : Symbol(a, Decl(dependentReturnType4.ts, 1, 21))
 >rand : Symbol(rand, Decl(dependentReturnType4.ts, 1, 13))
 >a : Symbol(a, Decl(dependentReturnType4.ts, 1, 21))
 
 declare function takesString(x: string): void;
->takesString : Symbol(takesString, Decl(dependentReturnType4.ts, 2, 33))
+>takesString : Symbol(takesString, Decl(dependentReturnType4.ts, 2, 29))
 >x : Symbol(x, Decl(dependentReturnType4.ts, 3, 29))
 
-function hasOwnP<T extends string | MissingType>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
+function hasOwnP<T extends string | Missing>(obj: { a?: T }): T extends string ? 1 : T extends undefined ? 2 : 1 | 2 {
 >hasOwnP : Symbol(hasOwnP, Decl(dependentReturnType4.ts, 3, 46))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 4, 17))
->MissingType : Symbol(MissingType, Decl(dependentReturnType4.ts, 1, 34))
->obj : Symbol(obj, Decl(dependentReturnType4.ts, 4, 49))
->a : Symbol(a, Decl(dependentReturnType4.ts, 4, 55))
+>Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 1, 34))
+>obj : Symbol(obj, Decl(dependentReturnType4.ts, 4, 45))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 4, 51))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 4, 17))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 4, 17))
 >T : Symbol(T, Decl(dependentReturnType4.ts, 4, 17))
 
     if (obj.hasOwnProperty("a")) {
 >obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
->obj : Symbol(obj, Decl(dependentReturnType4.ts, 4, 49))
+>obj : Symbol(obj, Decl(dependentReturnType4.ts, 4, 45))
 >hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 
         takesString(obj.a);
->takesString : Symbol(takesString, Decl(dependentReturnType4.ts, 2, 33))
->obj.a : Symbol(a, Decl(dependentReturnType4.ts, 4, 55))
->obj : Symbol(obj, Decl(dependentReturnType4.ts, 4, 49))
->a : Symbol(a, Decl(dependentReturnType4.ts, 4, 55))
+>takesString : Symbol(takesString, Decl(dependentReturnType4.ts, 2, 29))
+>obj.a : Symbol(a, Decl(dependentReturnType4.ts, 4, 51))
+>obj : Symbol(obj, Decl(dependentReturnType4.ts, 4, 45))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 4, 51))
 
         return 1;
     }
     return 2;
+}
+
+function foo<T extends string | undefined>(opts: { x?: T }):
+>foo : Symbol(foo, Decl(dependentReturnType4.ts, 10, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 12, 13))
+>opts : Symbol(opts, Decl(dependentReturnType4.ts, 12, 43))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 12, 50))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 12, 13))
+
+    T extends undefined ? 0 : T extends string ? 1 : 0 | 1 {
+>T : Symbol(T, Decl(dependentReturnType4.ts, 12, 13))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 12, 13))
+
+    if (opts.x === undefined) {
+>opts.x : Symbol(x, Decl(dependentReturnType4.ts, 12, 50))
+>opts : Symbol(opts, Decl(dependentReturnType4.ts, 12, 43))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 12, 50))
+>undefined : Symbol(undefined)
+
+        return 0;
+    }
+    return 1;
+}
+
+function bar<T extends string | Missing>(x?: T ):
+>bar : Symbol(bar, Decl(dependentReturnType4.ts, 18, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 20, 13))
+>Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 1, 34))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 20, 41))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 20, 13))
+
+    T extends Missing ? 0 : T extends string ? 1 : 0 | 1 {
+>T : Symbol(T, Decl(dependentReturnType4.ts, 20, 13))
+>Missing : Symbol(Missing, Decl(dependentReturnType4.ts, 1, 34))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 20, 13))
+
+    if (x === undefined) {
+>x : Symbol(x, Decl(dependentReturnType4.ts, 20, 41))
+>undefined : Symbol(undefined)
+
+        return 0;
+    }
+    return 1;
 }
