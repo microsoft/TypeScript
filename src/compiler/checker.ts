@@ -20020,7 +20020,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let accessFlags = (type as IndexedAccessType).accessFlags;
             if (indexType.flags & TypeFlags.TypeParameter) {
                 indexType = getMappedType(indexType, narrowMapper);
-                accessFlags |= AccessFlags.Writing; // Get the writing type
+                // If we're narrowing the index type, we need to get the write type,
+                // i.e. intersecting the results of distributing the indexed access over a union index.
+                accessFlags |= AccessFlags.Writing;
             }
             // >> NOTE: this possibly recurs forever; how do we break this recursion? is the below enough?
             if (indexType === (type as IndexedAccessType).indexType && objectType === (type as IndexedAccessType).objectType) {
