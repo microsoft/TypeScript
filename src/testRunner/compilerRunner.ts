@@ -488,7 +488,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
             // Exclude tests some tests
             // - those explicitly not opting into isolatedDeclarations
             // - those that do not usually emit output anyway
-            if((options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols || !options.declaration)) {
+            if (options.isolatedDeclarations === false || options.noEmit || options.noTypesAndSymbols || !options.declaration) {
                 return undefined;
             }
         }
@@ -665,7 +665,8 @@ class IsolatedDeclarationTest extends CompilerTestBase {
     verifyDiffReason() {
         if (this.isOutputMapEquivalent && this.isOutputEquivalent && this.isDiagnosticEquivalent) {
             ts.Debug.assert(this.diffReason === undefined, "Should not have a diff reason if everything is equivalent");
-        }else {
+        }
+        else {
             ts.Debug.assert(this.diffReason !== undefined, "Should have a reason if everything is not equivalent");
         }
     }
@@ -706,7 +707,7 @@ class IsolatedDeclarationTest extends CompilerTestBase {
 
 class FixedIsolatedDeclarationTest extends IsolatedDeclarationTest {
     static fixTestProject(compilerEnvironment: CompilerTestEnvironment, shouldNotExclude = !!compilerEnvironment.testCaseContent.settings.isolatedDeclarationFixedDiffReason): CompilerTestEnvironment | undefined {
-        if(!shouldNotExclude) {
+        if (!shouldNotExclude) {
             // Exclude test that disable types and symbols (good proxy for very complex test)
             if (compilerEnvironment.compilerOptions.noTypesAndSymbols) {
                 return undefined;
