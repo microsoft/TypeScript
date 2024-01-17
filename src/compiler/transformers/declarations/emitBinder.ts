@@ -180,7 +180,7 @@ const knownFunctionMembers = new Set([
 export function bindSourceFileForDeclarationEmit(file: SourceFile) {
     const nodeLinks: EmitDeclarationNodeLinks[] = [];
     function tryGetNodeLinks(node: Node): EmitDeclarationNodeLinks | undefined {
-        const id = (node as any).id;
+        const id = node.id;
         if (!id) return undefined;
         return nodeLinks[id];
     }
@@ -274,7 +274,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         /* eslint-disable no-var */
         var currentScope: Node = undefined!;
         var currentFunctionLocalSymbolTable: EmitDeclarationSymbolTable = undefined!;
-        var currentSymbol: EmitDeclarationSymbol = undefined!;
+        var currentParent: EmitDeclarationSymbol = undefined!;
         var currentLocalSymbolTable: EmitDeclarationSymbolTable = undefined!;
         var currentExportsSymbolTable: EmitDeclarationSymbolTable | undefined;
         var postBindingAction: (() => void)[] = [];
@@ -296,7 +296,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         }
         function createEmitSymbol(): EmitDeclarationSymbol {
             return {
-                parent: currentSymbol,
+                parent: currentParent,
                 declarations: [],
                 flags: 0,
             };
@@ -353,24 +353,24 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
             return symbol;
         }
         function withScope(scope: Node, exports: EmitDeclarationSymbolTable | undefined, fn: () => void) {
-            const old = [currentScope, currentSymbol, currentFunctionLocalSymbolTable, currentLocalSymbolTable, currentExportsSymbolTable] as const;
+            const old = [currentScope, currentParent, currentFunctionLocalSymbolTable, currentLocalSymbolTable, currentExportsSymbolTable] as const;
             currentScope = scope;
             const links = getNodeLinks(scope);
             currentLocalSymbolTable = links.locals ??= new Map();
-            currentSymbol = links.symbol ?? currentSymbol;
+            currentParent = links.symbol ?? currentParent;
             currentExportsSymbolTable = exports;
             if (isBlockScopedContainerTopLevel(scope)) {
                 currentFunctionLocalSymbolTable = currentLocalSymbolTable;
             }
             fn();
-            [currentScope, currentSymbol, currentFunctionLocalSymbolTable, currentLocalSymbolTable, currentExportsSymbolTable] = old;
+            [currentScope, currentParent, currentFunctionLocalSymbolTable, currentLocalSymbolTable, currentExportsSymbolTable] = old;
         }
-        function withMembers(symbol: EmitDeclarationSymbol, table: "members" | "exports" = "members", fn: () => void) {
-            const old = [currentLocalSymbolTable, currentSymbol] as const;
-            currentSymbol = symbol;
-            currentLocalSymbolTable = symbol[table] ??= new Map();
+        function withMembers(symbol: EmitDeclarationSymbol, addToExports = false, fn: () => void) {
+            const old = [currentLocalSymbolTable, currentParent] as const;
+            currentParent = symbol;
+            currentLocalSymbolTable = addToExports ? symbol.exports ??= new Map() : symbol.members ??= new Map();
             fn();
-            [currentLocalSymbolTable, currentSymbol] = old;
+            [currentLocalSymbolTable, currentParent] = old;
         }
 
         interface LocalAndExportName {
@@ -492,7 +492,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         function bindObjectLiteral(object: ObjectLiteralExpression) {
             const objectSymbol = createAnonymousEmitSymbol(object);
 
-            withMembers(objectSymbol, "members", () => {
+            withMembers(objectSymbol, /*addToExports*/ false, () => {
                 object.properties.forEach(m => {
                     bindNode(m);
                 });
@@ -687,7 +687,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
         }
         function bindTypeLiteralNode(node: TypeLiteralNode) {
             const objectSymbol = createAnonymousEmitSymbol(node);
-            withMembers(objectSymbol, "members", () => {
+            withMembers(objectSymbol, /*addToExports*/ false, () => {
                 node.members.forEach(bindNode);
             });
         }
@@ -727,14 +727,14 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                         });
                     });
                 }
-                elements.forEach(e => {
+                for (const e of elements) {
                     postBindingAction.push(() => {
                         const resolvedSymbol = resolveName(e, (e.propertyName ?? e.name).escapedText, ~0);
                         if (resolvedSymbol) {
                             resolvedSymbol.declarations.forEach(d => getNodeLinks(d).isVisible = true);
                         }
                     });
-                });
+                }
             }
         }
         function bindEnumDeclaration(node: EnumDeclaration) {
@@ -777,7 +777,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
             withScope(interfaceDeclaration, /*exports*/ undefined, () => {
                 bindTypeParameters(interfaceDeclaration.typeParameters);
             });
-            withMembers(interfaceSymbol, "members", () => {
+            withMembers(interfaceSymbol, /*addToExports*/ false, () => {
                 interfaceDeclaration.members.forEach(m => {
                     bindNode(m);
                 });
@@ -790,7 +790,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
             withScope(classDeclaration, /*exports*/ undefined, () => {
                 bindTypeParameters(classDeclaration.typeParameters);
             });
-            withMembers(classSymbol, "members", () => {
+            withMembers(classSymbol, /*addToExports*/ false, () => {
                 classDeclaration.members.forEach(m => {
                     if (hasSyntacticModifier(m, ModifierFlags.Static)) return;
                     if (m.kind === SyntaxKind.SemicolonClassElement || m.kind === SyntaxKind.ClassStaticBlockDeclaration) return;
@@ -798,7 +798,7 @@ export function bindSourceFileForDeclarationEmit(file: SourceFile) {
                     bindNode(m);
                 });
             });
-            withMembers(classSymbol, "exports", () => {
+            withMembers(classSymbol, /*addToExports*/ true, () => {
                 classDeclaration.members.forEach(m => {
                     if (!hasSyntacticModifier(m, ModifierFlags.Static)) return;
                     if (
