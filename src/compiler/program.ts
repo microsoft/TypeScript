@@ -852,17 +852,22 @@ export function getModeForFileReference(ref: FileReference | string, containingF
 }
 
 /**
- * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
- * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
- * If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
+ * Use `program.getModeForResolutionAtIndex`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
+ * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
+ * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
+ * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
+ * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
+ * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
  * @param file File to fetch the resolution mode within
  * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
+ * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
+ * should be the options of the referenced project, not the referencing project.
  */
 export function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
 /** @internal */
 // eslint-disable-next-line @typescript-eslint/unified-signatures
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions: CompilerOptions): ResolutionMode;
-export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions: CompilerOptions): ResolutionMode {
+export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions?: CompilerOptions): ResolutionMode {
     // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
     // so it's safe to use them even pre-bind
     return getModeForUsageLocationWorker(file, getModuleNameStringLiteralAt(file, index), compilerOptions);
@@ -896,7 +901,7 @@ export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMo
     return getModeForUsageLocationWorker(file, usage, compilerOptions);
 }
 
-function getModeForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions: CompilerOptions) {
+function getModeForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMode; }, usage: StringLiteralLike, compilerOptions?: CompilerOptions) {
     if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
         if (isTypeOnly) {
@@ -912,7 +917,7 @@ function getModeForUsageLocationWorker(file: { impliedNodeFormat?: ResolutionMod
             return override;
         }
     }
-    if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
+    if (compilerOptions && getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
         return (usage.parent.parent && isImportEqualsDeclaration(usage.parent.parent) || isRequireCall(usage.parent, /*requireStringLiteralLikeArgument*/ false))
             ? ModuleKind.CommonJS
             : ModuleKind.ESNext;
@@ -1898,6 +1903,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         isSourceFileFromExternalLibrary,
         isSourceFileDefaultLibrary,
         getModeForUsageLocation,
+        getModeForResolutionAtIndex,
         getSourceFileFromReference,
         getLibFileFromReference,
         sourceFileToPackageName,
@@ -4998,6 +5004,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode {
         const optionsForFile = getRedirectReferenceForResolution(file)?.commandLine.options || options;
         return getModeForUsageLocationWorker(file, usage, optionsForFile);
+    }
+
+    function getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode {
+        return getModeForUsageLocation(file, getModuleNameStringLiteralAt(file, index));
     }
 }
 
