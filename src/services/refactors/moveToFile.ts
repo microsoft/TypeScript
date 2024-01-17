@@ -153,7 +153,7 @@ import {
     registerRefactor,
 } from "../refactorProvider";
 import {
-    isBlockLike
+    isBlockLike,
 } from "./extractSymbol";
 
 const refactorNameForMoveToFile = "Move to file";
