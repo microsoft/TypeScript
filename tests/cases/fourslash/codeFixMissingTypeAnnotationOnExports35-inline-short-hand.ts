@@ -17,3 +17,13 @@ export default {
   x: x as number
 };`
 });
+
+verify.codeFix({
+  description: "Add inline type assertion to 'typeof x'",
+  index: 2,
+  newFileContent:
+`const x = 1;
+export default {
+  x: x as typeof x
+};`
+});

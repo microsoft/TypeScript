@@ -1007,6 +1007,12 @@ function withChanges<T>(
         if (isParameter(node)) {
             return emptyInferenceResult;
         }
+        if (isShorthandPropertyAssignment(node)) {
+            return {
+                typeNode: createTypeOfFromEntityNameExpression(node.name),
+                mutatedTarget: false,
+            };
+        }
         if (isEntityNameExpression(node)) {
             return {
                 typeNode: createTypeOfFromEntityNameExpression(node),
