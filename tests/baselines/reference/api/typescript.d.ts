@@ -10358,6 +10358,11 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
+    namespace refactor {
+        namespace extractSymbol {
+            function isBlockLike(node: Node): node is BlockLike;
+        }
+    }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the

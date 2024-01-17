@@ -226,17 +226,6 @@ Info seq  [hh:mm:ss:mss] response:
           ]
         },
         {
-          "name": "Move to file",
-          "description": "Move to file",
-          "actions": [
-            {
-              "name": "Move to file",
-              "description": "Move to file",
-              "kind": "refactor.move.file"
-            }
-          ]
-        },
-        {
           "name": "Extract Symbol",
           "description": "Extract function",
           "actions": [
@@ -255,6 +244,17 @@ Info seq  [hh:mm:ss:mss] response:
               "description": "Extract to constant in enclosing scope",
               "name": "constant_scope_0",
               "kind": "refactor.extract.constant"
+            }
+          ]
+        },
+        {
+          "name": "Move to file",
+          "description": "Move to file",
+          "actions": [
+            {
+              "name": "Move to file",
+              "description": "Move to file",
+              "kind": "refactor.move.file"
             }
           ]
         }
