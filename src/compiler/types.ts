@@ -7532,9 +7532,6 @@ export const enum CharacterCodes {
     mathematicalSpace = 0x205F,
     ogham = 0x1680,
 
-    // Unicode replacement character produced when a byte sequence is invalid
-    replacementCharacter = 0xFFFD,
-
     _ = 0x5F,
     $ = 0x24,
 
