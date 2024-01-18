@@ -76,6 +76,7 @@ import {
     isArrayLiteralExpression,
     isBinaryExpression,
     isBindingElement,
+    isBlockLike,
     isDeclarationName,
     isExportDeclaration,
     isExportSpecifier,
@@ -152,9 +153,6 @@ import {
 import {
     registerRefactor,
 } from "../refactorProvider";
-import {
-    isBlockLike,
-} from "./extractSymbol";
 
 const refactorNameForMoveToFile = "Move to file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);
@@ -172,7 +170,7 @@ registerRefactor(refactorNameForMoveToFile, {
             return emptyArray;
         }
         const endPosition = context.endPosition;
-        if (endPosition) {
+        if (endPosition !== undefined) {
             const file = context.file;
             const startNode = getTokenAtPosition(file, context.startPosition);
             const endNode = getTokenAtPosition(file, endPosition);

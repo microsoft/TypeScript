@@ -6,7 +6,6 @@ import {
     assertType,
     BindingElement,
     Block,
-    BlockLike,
     BreakStatement,
     CancellationToken,
     canHaveModifiers,
@@ -67,6 +66,7 @@ import {
     isAssignmentExpression,
     isBinaryExpression,
     isBlock,
+    isBlockLike,
     isBlockScope,
     isCaseClause,
     isClassLike,
@@ -2221,17 +2221,6 @@ function isExtractableExpression(node: Node): boolean {
     return true;
 }
 
-export function isBlockLike(node: Node): node is BlockLike {
-    switch (node.kind) {
-        case SyntaxKind.Block:
-        case SyntaxKind.SourceFile:
-        case SyntaxKind.ModuleBlock:
-        case SyntaxKind.CaseClause:
-            return true;
-        default:
-            return false;
-    }
-}
 
 function isInJSXContent(node: Node) {
     return isStringLiteralJsxAttribute(node) ||
