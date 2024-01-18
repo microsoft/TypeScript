@@ -14558,9 +14558,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 constraint = getConstraintOfTypeParameter(typeVariable);
             }
             else {
-                const modifiersConstraint = getConstraintOfType(getModifiersTypeFromMappedType(type));
-                if (modifiersConstraint) {
-                    constraint = getApparentType(modifiersConstraint);
+                const modifiersType = getModifiersTypeFromMappedType(type);
+                if (modifiersType) {
+                    constraint = getApparentType(getConstraintOfType(modifiersType) || modifiersType);
                 }
             }
             if (constraint && everyType(constraint, isArrayOrTupleType)) {
