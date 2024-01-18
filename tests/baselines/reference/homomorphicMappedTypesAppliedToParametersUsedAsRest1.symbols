@@ -1,0 +1,54 @@
+//// [tests/cases/compiler/homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts] ////
+
+=== homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts ===
+// https://github.com/microsoft/TypeScript/issues/29919
+
+type FuncParams<T> = T extends (...args: infer P) => any ? P : never;
+>FuncParams : Symbol(FuncParams, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 0, 0))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 2, 16))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 2, 16))
+>args : Symbol(args, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 2, 32))
+>P : Symbol(P, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 2, 46))
+>P : Symbol(P, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 2, 46))
+
+type Stringify<T> = {
+>Stringify : Symbol(Stringify, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 2, 69))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 3, 15))
+
+  [K in keyof T]: string;
+>K : Symbol(K, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 4, 3))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 3, 15))
+
+};
+type Optional<T> = {
+>Optional : Symbol(Optional, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 5, 2))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 6, 14))
+
+  [K in keyof T]?: T[K];
+>K : Symbol(K, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 7, 3))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 6, 14))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 6, 14))
+>K : Symbol(K, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 7, 3))
+
+};
+
+function doOptionalStuff<T>(func: T, ...params: Optional<FuncParams<T>>) {}
+>doOptionalStuff : Symbol(doOptionalStuff, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 8, 2))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 10, 25))
+>func : Symbol(func, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 10, 28))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 10, 25))
+>params : Symbol(params, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 10, 36))
+>Optional : Symbol(Optional, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 5, 2))
+>FuncParams : Symbol(FuncParams, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 0, 0))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 10, 25))
+
+function doStringStuff<T>(func: T, ...params: Stringify<FuncParams<T>>) {}
+>doStringStuff : Symbol(doStringStuff, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 10, 75))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 12, 23))
+>func : Symbol(func, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 12, 26))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 12, 23))
+>params : Symbol(params, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 12, 34))
+>Stringify : Symbol(Stringify, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 2, 69))
+>FuncParams : Symbol(FuncParams, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 0, 0))
+>T : Symbol(T, Decl(homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts, 12, 23))
+

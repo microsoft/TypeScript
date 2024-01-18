@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts] ////
+
+=== homomorphicMappedTypesAppliedToParametersUsedAsRest1.ts ===
+// https://github.com/microsoft/TypeScript/issues/29919
+
+type FuncParams<T> = T extends (...args: infer P) => any ? P : never;
+>FuncParams : FuncParams<T>
+>args : P
+
+type Stringify<T> = {
+>Stringify : Stringify<T>
+
+  [K in keyof T]: string;
+};
+type Optional<T> = {
+>Optional : Optional<T>
+
+  [K in keyof T]?: T[K];
+};
+
+function doOptionalStuff<T>(func: T, ...params: Optional<FuncParams<T>>) {}
+>doOptionalStuff : <T>(func: T, ...params: Optional<FuncParams<T>>) => void
+>func : T
+>params : Optional<FuncParams<T>>
+
+function doStringStuff<T>(func: T, ...params: Stringify<FuncParams<T>>) {}
+>doStringStuff : <T>(func: T, ...params: Stringify<FuncParams<T>>) => void
+>func : T
+>params : Stringify<FuncParams<T>>
+
