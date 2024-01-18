@@ -189,8 +189,9 @@ function isDeclarationExported(declaration: InitializedVariableDeclaration): boo
 function getReferenceNodes(declaration: InitializedVariableDeclaration, checker: TypeChecker, file: SourceFile): Identifier[] | undefined {
     const references: Identifier[] = [];
     const cannotInline = FindAllReferences.Core.eachSymbolReferenceInFile(declaration.name as Identifier, checker, file, ref => {
-        // Only inline if all references are reads. Else we might end up with an invalid scenario like:
-        // const y = x++ + 1 -> const y = 2++ + 1
+        // Only inline if all references are reads, or if it includes a shorthand property assignment.
+        // Else we might end up with an invalid scenario like:
+        // const y = x++ + 1 -> const y = 2++ + 1,
         if (FindAllReferences.isWriteAccessForReference(ref) && !isShorthandPropertyAssignment(ref.parent)) {
             return true;
         }
