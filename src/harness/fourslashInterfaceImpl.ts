@@ -1043,6 +1043,12 @@ export namespace Completion {
         kindModifiers: "declare",
         sortText: SortText.GlobalsOrKeywords,
     });
+    const deprecatedInterfaceEntry = (name: string): ExpectedCompletionEntryObject => ({
+        name,
+        kind: "interface",
+        kindModifiers: "deprecated,declare",
+        sortText: "z15" as SortText,
+    });
     const typeEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "type",
@@ -1128,7 +1134,7 @@ export namespace Completion {
         interfaceEntry("TemplateStringsArray"),
         interfaceEntry("ImportMeta"),
         interfaceEntry("ImportCallOptions"),
-        interfaceEntry("ImportAssertions"),
+        deprecatedInterfaceEntry("ImportAssertions"),
         interfaceEntry("ImportAttributes"),
         varEntry("Math"),
         varEntry("Date"),

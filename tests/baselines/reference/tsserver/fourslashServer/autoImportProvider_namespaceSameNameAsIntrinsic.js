@@ -585,12 +585,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "ImportAssertions",
-            "kind": "interface",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "ImportAttributes",
             "kind": "interface",
             "kindModifiers": "declare",
@@ -1161,6 +1155,12 @@ Info seq  [hh:mm:ss:mss] response:
               "fileName": "/node_modules/fp-ts/index.d.ts",
               "isPackageJsonImport": true
             }
+          },
+          {
+            "name": "ImportAssertions",
+            "kind": "interface",
+            "kindModifiers": "deprecated,declare",
+            "sortText": "z15"
           }
         ]
       }
