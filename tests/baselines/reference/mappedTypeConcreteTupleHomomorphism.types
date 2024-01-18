@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/mappedTypeConcreteTupleHomomorphism.ts] ////
+
+=== mappedTypeConcreteTupleHomomorphism.ts ===
+type TupleOfNumbers = [1, 2]
+>TupleOfNumbers : [1, 2]
+
+type HomomorphicType = {
+>HomomorphicType : ["1", "2"]
+
+    [K in keyof TupleOfNumbers]: `${TupleOfNumbers[K]}`
+}
+const homomorphic: HomomorphicType = ['1', '2']
+>homomorphic : ["1", "2"]
+>['1', '2'] : ["1", "2"]
+>'1' : "1"
+>'2' : "2"
+
+type TupleOfNumbersKeys = keyof TupleOfNumbers
+>TupleOfNumbersKeys : keyof TupleOfNumbers
+
+type HomomorphicType2 = {
+>HomomorphicType2 : ["1", "2"]
+
+    [K in TupleOfNumbersKeys]: `${TupleOfNumbers[K]}`
+}
+const homomorphic2: HomomorphicType2 = ['1', '2']
+>homomorphic2 : ["1", "2"]
+>['1', '2'] : ["1", "2"]
+>'1' : "1"
+>'2' : "2"
+
+type GenericType<T> = {
+>GenericType : GenericType<T>
+
+    [K in keyof T]: [K, T[K]]
+}
+
+type HomomorphicInstantiation = {
+>HomomorphicInstantiation : [1, 1, 1]
+
+    [K in keyof GenericType<['c', 'd', 'e']>]: 1
+}
+
+const d: HomomorphicInstantiation = [1, 1, 1]
+>d : [1, 1, 1]
+>[1, 1, 1] : [1, 1, 1]
+>1 : 1
+>1 : 1
+>1 : 1
+
+type TupleOfNumbersAndObjects = [1, 2, {}]
+>TupleOfNumbersAndObjects : [1, 2, {}]
+
+type ShouldErrorOnInterpolation = {
+>ShouldErrorOnInterpolation : ["1", "2", string]
+
+    [K in keyof TupleOfNumbersAndObjects]: `${TupleOfNumbersAndObjects[K]}`
+}
+
+// repro from #27995
+type Foo = ['a', 'b'];
+>Foo : ["a", "b"]
+
+interface Bar {
+    a: string;
+>a : string
+
+    b: number;
+>b : number
+}
+
+type Baz = { [K in keyof Foo]: Bar[Foo[K]]; };
+>Baz : [string, number]
+

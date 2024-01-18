@@ -14021,10 +14021,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type.modifiersType;
     }
 
+    function getMappedTypeNodeModifiers(node: MappedTypeNode) {
+        return (node.readonlyToken ? node.readonlyToken.kind === SyntaxKind.MinusToken ? MappedTypeModifiers.ExcludeReadonly : MappedTypeModifiers.IncludeReadonly : 0) |
+            (node.questionToken ? node.questionToken.kind === SyntaxKind.MinusToken ? MappedTypeModifiers.ExcludeOptional : MappedTypeModifiers.IncludeOptional : 0);
+    }
+
     function getMappedTypeModifiers(type: MappedType): MappedTypeModifiers {
-        const declaration = type.declaration;
-        return (declaration.readonlyToken ? declaration.readonlyToken.kind === SyntaxKind.MinusToken ? MappedTypeModifiers.ExcludeReadonly : MappedTypeModifiers.IncludeReadonly : 0) |
-            (declaration.questionToken ? declaration.questionToken.kind === SyntaxKind.MinusToken ? MappedTypeModifiers.ExcludeOptional : MappedTypeModifiers.IncludeOptional : 0);
+        return getMappedTypeNodeModifiers(type.declaration);
     }
 
     function getMappedTypeOptionality(type: MappedType): number {
@@ -16243,14 +16246,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // Given a homomorphic mapped type { [K in keyof T]: XXX }, where T is constrained to an array or tuple type, in the
             // template type XXX, K has an added constraint of number | `${number}`.
-            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && node === (parent as MappedTypeNode).type) {
-                const mappedType = getTypeFromTypeNode(parent as TypeNode) as MappedType;
-                if (getTypeParameterFromMappedType(mappedType) === getActualTypeVariable(type)) {
-                    const typeParameter = getHomomorphicTypeVariable(mappedType);
-                    if (typeParameter) {
-                        const constraint = getConstraintOfTypeParameter(typeParameter);
-                        if (constraint && everyType(constraint, isArrayOrTupleType)) {
-                            constraints = append(constraints, getUnionType([numberType, numericStringType]));
+            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && node === (parent as MappedTypeNode).type && !(parent as MappedTypeNode).nameType) {
+                const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration((parent as MappedTypeNode).typeParameter));
+                const constraintType = getConstraintOfTypeParameter(typeParameter) || errorType;
+                const arrayOrTuple = getArrayOrTupleOriginIndexType(constraintType);
+                if (arrayOrTuple) {
+                    if (isTupleType(arrayOrTuple)) {
+                        constraints = append(constraints, getUnionType(map(getTypeArguments(arrayOrTuple), (_, i) => getStringLiteralType("" + i))));
+                    }
+                    else {
+                        constraints = append(constraints, getUnionType([numberType, numericStringType]));
+                    }
+                }
+                else {
+                    if (typeParameter === getActualTypeVariable(type)) {
+                        const typeVariable = constraintType.flags & TypeFlags.Index && getActualTypeVariable((constraintType as IndexType).type);
+                        const homomorphicTypeVariable = typeVariable && typeVariable.flags & TypeFlags.TypeParameter ? typeVariable as TypeParameter : undefined;
+                        if (homomorphicTypeVariable) {
+                            const constraint = getConstraintOfTypeParameter(homomorphicTypeVariable);
+                            if (constraint && everyType(constraint, isArrayOrTupleType)) {
+                                constraints = append(constraints, getUnionType([numberType, numericStringType]));
+                            }
                         }
                     }
                 }
@@ -18605,17 +18621,58 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedType;
     }
 
+    function getArrayOrTupleOriginIndexType(type: Type) {
+        if (!(type.flags & TypeFlags.Union)) {
+            return;
+        }
+        const origin = (type as UnionType).origin;
+        if (!origin || !(origin.flags & TypeFlags.Index)) {
+            return;
+        }
+        const originType = (origin as IndexType).type;
+        return isArrayOrTupleType(originType) ? originType : undefined;
+    }
+
     function getTypeFromMappedTypeNode(node: MappedTypeNode): Type {
         const links = getNodeLinks(node);
         if (!links.resolvedType) {
+            // Eagerly resolve the constraint type which forces an error if the constraint type circularly
+            // references itself through one or more type aliases.
+            const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration(node.typeParameter));
+            const constraintType = getConstraintOfTypeParameter(typeParameter) || errorType;
+            const arrayOrTuple = !node.nameType && getArrayOrTupleOriginIndexType(constraintType);
+            if (arrayOrTuple) {
+                if (!node.type) {
+                    return errorType;
+                }
+                const modifiers = getMappedTypeNodeModifiers(node);
+                const templateType = addOptionality(getTypeFromTypeNode(node.type), /*isProperty*/ true, !!(modifiers & MappedTypeModifiers.IncludeOptional));
+
+                if (isTupleType(arrayOrTuple)) {
+                    return links.resolvedType = instantiateMappedTupleType(
+                        arrayOrTuple,
+                        modifiers,
+                        typeParameter,
+                        templateType,
+                        /*mapper*/ undefined,
+                    );
+                }
+
+                return links.resolvedType = instantiateMappedArrayType(
+                    arrayOrTuple,
+                    modifiers,
+                    typeParameter,
+                    templateType,
+                    /*mapper*/ undefined,
+                );
+            }
             const type = createObjectType(ObjectFlags.Mapped, node.symbol) as MappedType;
             type.declaration = node;
             type.aliasSymbol = getAliasSymbolForTypeNode(node);
             type.aliasTypeArguments = getTypeArgumentsForAliasSymbol(type.aliasSymbol);
+            type.typeParameter = typeParameter;
+            type.constraintType = constraintType;
             links.resolvedType = type;
-            // Eagerly resolve the constraint type which forces an error if the constraint type circularly
-            // references itself through one or more type aliases.
-            getConstraintTypeFromMappedType(type);
         }
         return links.resolvedType;
     }
@@ -19775,13 +19832,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     isArrayType(t) || t.flags & TypeFlags.Any && findResolutionCycleStartIndex(typeVariable, TypeSystemPropertyName.ImmediateBaseConstraint) < 0 &&
                                         (constraint = getConstraintOfTypeParameter(typeVariable)) && everyType(constraint, isArrayOrTupleType)
                                 ) {
-                                    return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable, t, mapper));
+                                    return instantiateMappedArrayType(t, getMappedTypeModifiers(type), getTypeParameterFromMappedType(type), getTemplateTypeFromMappedType(type.target as MappedType || type), prependTypeMapping(typeVariable, t, mapper));
                                 }
                                 if (isGenericTupleType(t)) {
                                     return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
                                 }
                                 if (isTupleType(t)) {
-                                    return instantiateMappedTupleType(t, type, prependTypeMapping(typeVariable, t, mapper));
+                                    return instantiateMappedTupleType(t, getMappedTypeModifiers(type), getTypeParameterFromMappedType(type), getTemplateTypeFromMappedType(type.target as MappedType || type), prependTypeMapping(typeVariable, t, mapper));
                                 }
                             }
                             return instantiateAnonymousType(type, prependTypeMapping(typeVariable, t, mapper));
@@ -19823,16 +19880,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly);
     }
 
-    function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
-        const elementType = instantiateMappedTypeTemplate(mappedType, numberType, /*isOptional*/ true, mapper);
+    function instantiateMappedArrayType(arrayType: Type, modifiers: MappedTypeModifiers, typeParameter: TypeParameter, templateType: Type, mapper: TypeMapper | undefined) {
+        const elementType = instantiateMappedTypeTemplate(modifiers, typeParameter, templateType, numberType, /*isOptional*/ true, mapper);
         return isErrorType(elementType) ? errorType :
-            createArrayType(elementType, getModifiedReadonlyState(isReadonlyArrayType(arrayType), getMappedTypeModifiers(mappedType)));
+            createArrayType(elementType, getModifiedReadonlyState(isReadonlyArrayType(arrayType), modifiers));
     }
 
-    function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
+    function instantiateMappedTupleType(tupleType: TupleTypeReference, modifiers: MappedTypeModifiers, typeParameter: TypeParameter, templateType: Type, mapper: TypeMapper | undefined) {
         const elementFlags = tupleType.target.elementFlags;
-        const elementTypes = map(getElementTypes(tupleType), (_, i) => instantiateMappedTypeTemplate(mappedType, getStringLiteralType("" + i), !!(elementFlags[i] & ElementFlags.Optional), mapper));
-        const modifiers = getMappedTypeModifiers(mappedType);
+        const elementTypes = map(getElementTypes(tupleType), (_, i) => instantiateMappedTypeTemplate(modifiers, typeParameter, templateType, getStringLiteralType("" + i), !!(elementFlags[i] & ElementFlags.Optional), mapper));
         const newTupleModifiers = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
             modifiers & MappedTypeModifiers.ExcludeOptional ? map(elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
             elementFlags;
@@ -19841,10 +19897,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             createTupleType(elementTypes, newTupleModifiers, newReadonly, tupleType.target.labeledElementDeclarations);
     }
 
-    function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
-        const templateMapper = appendTypeMapping(mapper, getTypeParameterFromMappedType(type), key);
-        const propType = instantiateType(getTemplateTypeFromMappedType(type.target as MappedType || type), templateMapper);
-        const modifiers = getMappedTypeModifiers(type);
+    function instantiateMappedTypeTemplate(modifiers: MappedTypeModifiers, typeParameter: TypeParameter, templateType: Type, key: Type, isOptional: boolean, mapper: TypeMapper | undefined) {
+        const templateMapper = appendTypeMapping(mapper, typeParameter, key);
+        const propType = instantiateType(templateType, templateMapper);
         return strictNullChecks && modifiers & MappedTypeModifiers.IncludeOptional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType, /*isProperty*/ true) :
             strictNullChecks && modifiers & MappedTypeModifiers.ExcludeOptional && isOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
             propType;
@@ -40559,6 +40614,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const type = getTypeFromMappedTypeNode(node) as MappedType;
+        if (!(getObjectFlags(type) & ObjectFlags.Mapped)) {
+            return;
+        }
         const nameType = getNameTypeFromMappedType(type);
         if (nameType) {
             checkTypeAssignableTo(nameType, keyofConstraintType, node.nameType);
