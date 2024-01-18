@@ -18,7 +18,7 @@ o1?.(...[1, 2]);
 >o1?.(...[1, 2]) : number | undefined
 >o1 : ((...args: any[]) => number) | undefined
 >...[1, 2] : number
->[1, 2] : readonly [number, number]
+>[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 
@@ -27,7 +27,7 @@ o1?.(1, ...[2, 3], 4);
 >o1 : ((...args: any[]) => number) | undefined
 >1 : 1
 >...[2, 3] : number
->[2, 3] : readonly [number, number]
+>[2, 3] : [number, number]
 >2 : 2
 >3 : 3
 >4 : 4
@@ -56,7 +56,7 @@ o2?.b(...[1, 2]);
 >o2 : { b: (...args: any[]) => number; } | undefined
 >b : ((...args: any[]) => number) | undefined
 >...[1, 2] : number
->[1, 2] : readonly [number, number]
+>[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 
@@ -67,7 +67,7 @@ o2?.b(1, ...[2, 3], 4);
 >b : ((...args: any[]) => number) | undefined
 >1 : 1
 >...[2, 3] : number
->[2, 3] : readonly [number, number]
+>[2, 3] : [number, number]
 >2 : 2
 >3 : 3
 >4 : 4
@@ -91,7 +91,7 @@ o2?.["b"](...[1, 2]);
 >o2 : { b: (...args: any[]) => number; } | undefined
 >"b" : "b"
 >...[1, 2] : number
->[1, 2] : readonly [number, number]
+>[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 
@@ -102,7 +102,7 @@ o2?.["b"](1, ...[2, 3], 4);
 >"b" : "b"
 >1 : 1
 >...[2, 3] : number
->[2, 3] : readonly [number, number]
+>[2, 3] : [number, number]
 >2 : 2
 >3 : 3
 >4 : 4
@@ -137,7 +137,7 @@ o3.b?.(...[1, 2]).c;
 >o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
 >b : ((...args: any[]) => { c: string; }) | undefined
 >...[1, 2] : number
->[1, 2] : readonly [number, number]
+>[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 >c : string | undefined
@@ -150,7 +150,7 @@ o3.b?.(1, ...[2, 3], 4).c;
 >b : ((...args: any[]) => { c: string; }) | undefined
 >1 : 1
 >...[2, 3] : number
->[2, 3] : readonly [number, number]
+>[2, 3] : [number, number]
 >2 : 2
 >3 : 3
 >4 : 4
@@ -180,7 +180,7 @@ o3.b?.(...[1, 2])["c"];
 >o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
 >b : ((...args: any[]) => { c: string; }) | undefined
 >...[1, 2] : number
->[1, 2] : readonly [number, number]
+>[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 >"c" : "c"
@@ -193,7 +193,7 @@ o3.b?.(1, ...[2, 3], 4)["c"];
 >b : ((...args: any[]) => { c: string; }) | undefined
 >1 : 1
 >...[2, 3] : number
->[2, 3] : readonly [number, number]
+>[2, 3] : [number, number]
 >2 : 2
 >3 : 3
 >4 : 4
@@ -223,7 +223,7 @@ o3["b"]?.(...[1, 2]).c;
 >o3 : { b: ((...args: any[]) => { c: string; }) | undefined; }
 >"b" : "b"
 >...[1, 2] : number
->[1, 2] : readonly [number, number]
+>[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 >c : string | undefined
@@ -236,7 +236,7 @@ o3["b"]?.(1, ...[2, 3], 4).c;
 >"b" : "b"
 >1 : 1
 >...[2, 3] : number
->[2, 3] : readonly [number, number]
+>[2, 3] : [number, number]
 >2 : 2
 >3 : 3
 >4 : 4

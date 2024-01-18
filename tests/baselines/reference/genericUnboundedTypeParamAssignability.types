@@ -40,17 +40,17 @@ function user<T>(t: T) {
 
   f1(t);
 >f1(t) : void
->f1 : <T>(o: T) => void
+>f1 : <T_1>(o: T_1) => void
 >t : T
 
   f2(t); // error in strict, unbounded T doesn't satisfy the constraint
 >f2(t) : void
->f2 : <T extends {}>(o: T) => void
+>f2 : <T_1 extends {}>(o: T_1) => void
 >t : T
 
   f3(t); // error in strict, unbounded T doesn't satisfy the constraint
 >f3(t) : void
->f3 : <T extends Record<string, any>>(o: T) => void
+>f3 : <T_1 extends Record<string, any>>(o: T_1) => void
 >t : T
 
   t.toString();  // error, for the same reason as f1()

@@ -16,13 +16,33 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 //// [/src/packages/pkg1.tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"]},"files":["./pkg1_index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ]
+  },
+  "files": [
+    "./pkg1_index.ts"
+  ]
+}
 
 //// [/src/packages/pkg1_index.ts]
 export const theNum: TheNum = "type1";
 
 //// [/src/packages/pkg2.tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot2"]},"files":["./pkg2_index.ts"]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot2"
+    ]
+  },
+  "files": [
+    "./pkg2_index.ts"
+  ]
+}
 
 //// [/src/packages/pkg2_index.ts]
 export const theNum: TheNum2 = "type2";

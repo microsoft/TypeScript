@@ -36,10 +36,11 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, [Diagnostics.Add_0_to_unresolved_variable, info.className || "this"], fixId, Diagnostics.Add_qualifier_to_all_unresolved_variables_matching_a_member_name)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, diag.start, diag.code);
-        if (info) doChange(changes, context.sourceFile, info);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, diag.start, diag.code);
+            if (info) doChange(changes, context.sourceFile, info);
+        }),
 });
 
 interface Info {

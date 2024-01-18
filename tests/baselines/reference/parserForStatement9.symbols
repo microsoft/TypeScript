@@ -1,0 +1,25 @@
+//// [tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement9.ts] ////
+
+=== parserForStatement9.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54769
+
+for (let [x = 'a' in {}] = []; !x; x = !x) console.log(x)
+>x : Symbol(x, Decl(parserForStatement9.ts, 2, 10))
+>x : Symbol(x, Decl(parserForStatement9.ts, 2, 10))
+>x : Symbol(x, Decl(parserForStatement9.ts, 2, 10))
+>x : Symbol(x, Decl(parserForStatement9.ts, 2, 10))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(parserForStatement9.ts, 2, 10))
+
+for (let {x = 'a' in {}} = {}; !x; x = !x) console.log(x)
+>x : Symbol(x, Decl(parserForStatement9.ts, 3, 10))
+>x : Symbol(x, Decl(parserForStatement9.ts, 3, 10))
+>x : Symbol(x, Decl(parserForStatement9.ts, 3, 10))
+>x : Symbol(x, Decl(parserForStatement9.ts, 3, 10))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(parserForStatement9.ts, 3, 10))
+

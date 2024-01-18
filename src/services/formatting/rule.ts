@@ -2,7 +2,9 @@ import {
     emptyArray,
     SyntaxKind,
 } from "../_namespaces/ts";
-import { FormattingContext } from "../_namespaces/ts.formatting";
+import {
+    FormattingContext,
+} from "../_namespaces/ts.formatting";
 
 /** @internal */
 export interface Rule {
@@ -18,6 +20,7 @@ export type ContextPredicate = (context: FormattingContext) => boolean;
 /** @internal */
 export const anyContext: readonly ContextPredicate[] = emptyArray;
 
+// dprint-ignore
 /** @internal */
 export const enum RuleAction {
     None                       = 0,

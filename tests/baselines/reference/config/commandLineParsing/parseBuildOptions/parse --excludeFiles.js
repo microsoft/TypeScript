@@ -3,9 +3,9 @@ buildOptions::
 {}
 WatchOptions::
 {
- "excludeFiles": [
-  "**/temp/*.ts"
- ]
+  "excludeFiles": [
+    "**/temp/*.ts"
+  ]
 }
 Projects::
 .
