@@ -152,7 +152,7 @@ function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferen
     }
 
     // Try finding the declaration and nodes to replace via the reference token.
-    if (tryWithReferenceToken || isShorthandPropertyAssignment(parent)) {
+    if (tryWithReferenceToken) {
         let definition = checker.resolveName(token.text, token, SymbolFlags.Value, /*excludeGlobals*/ false);
         definition = definition && checker.getMergedSymbol(definition);
 
