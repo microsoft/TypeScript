@@ -229,6 +229,7 @@ import {
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportMetaProperty,
+    ImportOrExportSpecifier,
     ImportSpecifier,
     ImportTypeNode,
     IndexInfo,
@@ -465,6 +466,7 @@ import {
     PseudoBigInt,
     PunctuationOrKeywordSyntaxKind,
     PunctuationSyntaxKind,
+    pushIfUnique,
     QualifiedName,
     QuestionQuestionEqualsToken,
     ReadonlyCollection,
@@ -537,6 +539,7 @@ import {
     TransformFlags,
     TransientSymbol,
     TriviaSyntaxKind,
+    tryAddToSet,
     tryCast,
     tryRemovePrefix,
     TryStatement,
@@ -10925,11 +10928,30 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
 }
 
 /** @internal */
-export function createEntityVisibilityChecker<T extends { flags: SymbolFlags; declarations?: Declaration[]; }>({ isDeclarationVisible, isThisAccessible, markDeclarationAsVisible: markNodeAsVisible, resolveName, defaultSymbolAccessibility }: {
+export function getModuleSpecifierForImportOrExport(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportOrExportSpecifier): Expression | undefined {
+    switch (node.kind) {
+        case SyntaxKind.ImportClause:
+            return node.parent.moduleSpecifier;
+        case SyntaxKind.ImportEqualsDeclaration:
+            return isExternalModuleReference(node.moduleReference) ? node.moduleReference.expression : undefined;
+        case SyntaxKind.NamespaceImport:
+            return node.parent.parent.moduleSpecifier;
+        case SyntaxKind.ImportSpecifier:
+            return node.parent.parent.parent.moduleSpecifier;
+        case SyntaxKind.ExportSpecifier:
+            return node.parent.parent.moduleSpecifier;
+        default:
+            return Debug.assertNever(node);
+    }
+}
+
+/** @internal */
+export function createEntityVisibilityChecker({ isDeclarationVisible, isThisAccessible, markDeclarationAsVisible, resolveName, defaultSymbolAccessibility, getTargetOfExportSpecifier }: {
     defaultSymbolAccessibility: SymbolAccessibility;
     isDeclarationVisible(node: Node): boolean;
     isThisAccessible(identifier: Identifier, meaning: SymbolFlags): SymbolVisibilityResult;
     markDeclarationAsVisible(node: Node): void;
+    getTargetOfExportSpecifier(exportSpecifier: ExportSpecifier, flags: SymbolFlags): Symbol | undefined;
     resolveName(
         location: Node | undefined,
         name: __String,
@@ -10939,9 +10961,54 @@ export function createEntityVisibilityChecker<T extends { flags: SymbolFlags; de
         isUse: boolean,
         excludeGlobals?: boolean,
         getSpellingSuggestions?: boolean,
-    ): T | undefined;
+    ): Symbol | undefined;
 }) {
-    function hasVisibleDeclarations(symbol: T, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
+
+    
+    function collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined {
+        let exportSymbol: Symbol | undefined;
+        if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
+            exportSymbol = resolveName(node, node.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, node, /*isUse*/ false);
+        }
+        else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
+            exportSymbol = getTargetOfExportSpecifier(node.parent as ExportSpecifier, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+        }
+        let result: Node[] | undefined;
+        let visited: Set<number> | undefined;
+        if (exportSymbol) {
+            visited = new Set();
+            visited.add(getSymbolId(exportSymbol));
+            buildVisibleNodeList(exportSymbol.declarations);
+        }
+        return result;
+
+        function buildVisibleNodeList(declarations: Declaration[] | undefined) {
+            forEach(declarations, declaration => {
+                const resultNode = getAnyImportSyntax(declaration) || declaration;
+                if (setVisibility) {
+                    markDeclarationAsVisible(declaration);
+                }
+                else {
+                    result = result || [];
+                    pushIfUnique(result, resultNode);
+                }
+
+                if (isInternalModuleImportEqualsDeclaration(declaration)) {
+                    // Add the referenced top container visible
+                    const internalModuleReference = declaration.moduleReference as Identifier | QualifiedName;
+                    const firstIdentifier = getFirstIdentifier(internalModuleReference);
+                    const importSymbol = resolveName(declaration, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
+                    if (importSymbol && visited) {
+                        if (tryAddToSet(visited, getSymbolId(importSymbol))) {
+                            buildVisibleNodeList(importSymbol.declarations);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function hasVisibleDeclarations(symbol: Symbol, shouldComputeAliasToMakeVisible: boolean): SymbolVisibilityResult | undefined {
         let aliasesToMakeVisible: LateVisibilityPaintedStatement[] | undefined;
         if (!every(filter(symbol.declarations, d => d.kind !== SyntaxKind.Identifier), getIsDeclarationVisible)) {
             return undefined;
@@ -11010,7 +11077,7 @@ export function createEntityVisibilityChecker<T extends { flags: SymbolFlags; de
             // we want to just check if type- alias is accessible or not but we don't care about emitting those alias at that time
             // since we will do the emitting later in trackSymbol.
             if (shouldComputeAliasToMakeVisible) {
-                markNodeAsVisible(declaration);
+                markDeclarationAsVisible(declaration);
                 aliasesToMakeVisible = appendIfUnique(aliasesToMakeVisible, aliasingStatement);
             }
             return true;
@@ -11059,7 +11126,7 @@ export function createEntityVisibilityChecker<T extends { flags: SymbolFlags; de
         };
     }
 
-    return { hasVisibleDeclarations, isEntityNameVisible };
+    return { hasVisibleDeclarations, isEntityNameVisible, collectLinkedAliases };
 }
 
 /** @internal */

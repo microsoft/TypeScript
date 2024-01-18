@@ -38,7 +38,7 @@ export function transpileDeclaration(sourceFile: SourceFile, transpileOptions: T
         getCompilerOptions: () => compilerOptions.compilerOptions,
         getCommonSourceDirectory: () => commonSourceDirectory,
     };
-    const emitResolver = createEmitDeclarationResolver(sourceFile);
+    const emitResolver = createEmitDeclarationResolver(sourceFile, compilerOptions);
     const diagnostics: Diagnostic[] = [];
     const transformationContext: IsolatedTransformationContext = {
         ...nullTransformationContext,

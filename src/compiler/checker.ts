@@ -241,7 +241,6 @@ import {
     getAllJSDocTags,
     getAllowSyntheticDefaultImports,
     getAncestor,
-    getAnyImportSyntax,
     getAssignedExpandoInitializer,
     getAssignmentDeclarationKind,
     getAssignmentDeclarationPropertyAccessKind,
@@ -329,6 +328,7 @@ import {
     getModeForUsageLocation,
     getModifiers,
     getModuleInstanceState,
+    getModuleSpecifierForImportOrExport,
     getNameFromImportAttribute,
     getNameFromIndexInfo,
     getNameOfDeclaration,
@@ -1477,7 +1477,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
 
-    var { hasVisibleDeclarations, isEntityNameVisible } = createEntityVisibilityChecker({
+    var { hasVisibleDeclarations, isEntityNameVisible, collectLinkedAliases } = createEntityVisibilityChecker({
         defaultSymbolAccessibility: SymbolAccessibility.NotAccessible,
         isThisAccessible,
         isDeclarationVisible,
@@ -1485,6 +1485,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getNodeLinks(declaration).isVisible = true;
         },
         resolveName,
+        getTargetOfExportSpecifier,
     });
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -4166,23 +4167,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         markSymbolOfAliasDeclarationIfTypeOnly(node, exportDefaultSymbol, /*finalTarget*/ undefined, /*overwriteEmpty*/ false);
         return exportDefaultSymbol;
-    }
-
-    function getModuleSpecifierForImportOrExport(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportOrExportSpecifier): Expression | undefined {
-        switch (node.kind) {
-            case SyntaxKind.ImportClause:
-                return node.parent.moduleSpecifier;
-            case SyntaxKind.ImportEqualsDeclaration:
-                return isExternalModuleReference(node.moduleReference) ? node.moduleReference.expression : undefined;
-            case SyntaxKind.NamespaceImport:
-                return node.parent.parent.moduleSpecifier;
-            case SyntaxKind.ImportSpecifier:
-                return node.parent.parent.parent.moduleSpecifier;
-            case SyntaxKind.ExportSpecifier:
-                return node.parent.parent.moduleSpecifier;
-            default:
-                return Debug.assertNever(node);
-        }
     }
 
     function reportNonDefaultExport(moduleSymbol: Symbol, node: ImportClause) {
@@ -10367,48 +10351,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined {
-        let exportSymbol: Symbol | undefined;
-        if (node.parent && node.parent.kind === SyntaxKind.ExportAssignment) {
-            exportSymbol = resolveName(node, node.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, node, /*isUse*/ false);
-        }
-        else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
-            exportSymbol = getTargetOfExportSpecifier(node.parent as ExportSpecifier, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
-        }
-        let result: Node[] | undefined;
-        let visited: Set<number> | undefined;
-        if (exportSymbol) {
-            visited = new Set();
-            visited.add(getSymbolId(exportSymbol));
-            buildVisibleNodeList(exportSymbol.declarations);
-        }
-        return result;
-
-        function buildVisibleNodeList(declarations: Declaration[] | undefined) {
-            forEach(declarations, declaration => {
-                const resultNode = getAnyImportSyntax(declaration) || declaration;
-                if (setVisibility) {
-                    getNodeLinks(declaration).isVisible = true;
-                }
-                else {
-                    result = result || [];
-                    pushIfUnique(result, resultNode);
-                }
-
-                if (isInternalModuleImportEqualsDeclaration(declaration)) {
-                    // Add the referenced top container visible
-                    const internalModuleReference = declaration.moduleReference as Identifier | QualifiedName;
-                    const firstIdentifier = getFirstIdentifier(internalModuleReference);
-                    const importSymbol = resolveName(declaration, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
-                    if (importSymbol && visited) {
-                        if (tryAddToSet(visited, getSymbolId(importSymbol))) {
-                            buildVisibleNodeList(importSymbol.declarations);
-                        }
-                    }
-                }
-            });
-        }
-    }
 
     /**
      * Push an entry on the type resolution stack. If an entry with the given target and the given property name
