@@ -245,6 +245,10 @@ function getReplacementExpression(reference: Node, replacement: Expression) {
         return factory.createParenthesizedExpression(replacement);
     }
 
+    // Inline shorthand property assignment
+    // E.g.:
+    // const x = 1;
+    // const y = { x }; -> const y = { x: 1 };
     if (isIdentifier(reference) && isShorthandPropertyAssignment(parent)) {
         return factory.createPropertyAssignment(reference, replacement);
     }
