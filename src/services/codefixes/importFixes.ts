@@ -626,7 +626,7 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
     }
 }
 
-function getImportFixes(
+export function getImportFixes(
     exportInfos: readonly SymbolExportInfo[],
     usagePosition: number | undefined,
     isValidTypeOnlyUseSite: boolean,
@@ -833,7 +833,7 @@ function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile
     };
 }
 
-function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
+export function shouldUseRequire(sourceFile: SourceFile, program: Program): boolean {
     // 1. TypeScript files don't use require variable declarations
     if (!isSourceFileJS(sourceFile)) {
         return false;
@@ -1198,7 +1198,7 @@ function getTypeOnlyPromotionFix(sourceFile: SourceFile, symbolToken: Identifier
     return { kind: ImportFixKind.PromoteTypeOnly, typeOnlyAliasDeclaration };
 }
 
-function getSymbolNamesToImport(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string[] {
+export function getSymbolNamesToImport(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string[] {
     const parent = symbolToken.parent;
     if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && jsxModeNeedsExplicitImport(compilerOptions.jsx)) {
         const jsxNamespace = checker.getJsxNamespace(sourceFile);
@@ -1217,7 +1217,7 @@ function needsJsxNamespaceFix(jsxNamespace: string, symbolToken: Identifier, che
 }
 
 // Returns a map from an exported symbol's ID to a list of every way it's (re-)exported.
-function getExportInfos(
+export function getExportInfos(
     symbolName: string,
     isJsxTagName: boolean,
     currentTokenMeaning: SemanticMeaning,

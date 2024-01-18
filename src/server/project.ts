@@ -1,3 +1,4 @@
+import { getExportInfos, getImportFixes, getSymbolNamesToImport, shouldUseRequire } from "../services/codefixes/importFixes";
 import * as ts from "./_namespaces/ts";
 import {
     addRange,
@@ -2210,6 +2211,128 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.noDtsResolutionProject.rootFile = rootFile;
         }
         return this.noDtsResolutionProject;
+    }
+
+    // export anotherGetFixes(updatedFile: ts.SourceFile, originalProgram: ts.Program, node: ts.Identifier, languageServiceHost: this, cancellationToken: ts.CancellationToken, preferences: ts.UserPreferences) {
+    //     const imports = flatMap(getSymbolNamesToImport(updatedFile, originalProgram.getTypeChecker(), node, originalProgram.getCompilerOptions()), symbolName => {
+    //         // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
+    //         if (symbolName === ts.InternalSymbolName.Default) {
+    //             return undefined;
+    //         }
+    //         const isValidTypeOnlyUseSite = ts.isValidTypeOnlyAliasUseSite(node);
+    //         const useRequire = shouldUseRequire(updatedFile, originalProgram);
+    //         const exportInfo = getExportInfos(symbolName, ts.isJSXTagName(node), ts.getMeaningFromLocation(node), cancellationToken, updatedFile, originalProgram, true, languageServiceHost, preferences);
+    //         return arrayFrom(
+    //             ts.flatMapIterator(exportInfo.values(), exportInfos => getImportFixes(exportInfos, node.getStart(updatedFile), isValidTypeOnlyUseSite, useRequire, originalProgram, updatedFile, languageServiceHost, preferences).fixes),
+    //             fix => ({ fix, symbolName, errorIdentifierText: node.text, isJsxNamespaceFix: symbolName !== node.text }),
+    //         );
+    //     }
+    // }
+
+    /** @internal */
+    updatedTargetFile(rootFile: string, targetFileText: string, pastedText: string): {updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: ts.Program | undefined} {
+        const originalProgram = this.program;
+        this.getScriptInfo(rootFile)?.editContent(0, targetFileText.length-1, pastedText);
+        this.updateGraph();
+        const updatedFile = this.program?.getSourceFile(rootFile);
+        const updatedProgram = this.program;
+        return { updatedFile, updatedProgram, originalProgram };
+    }
+    /** @internal */
+    getFakeSourceFile(rootFile: string, pastedText: string, _targetFileName: string, targetFileText: string): [] | undefined {
+
+        /**
+         * cscriptInfo.editContent()
+         * project.updateGraph gives the new SF
+         * after scriptInfo.editContent("") the new SF is not updated
+         */
+        //const t = this.getScriptInfo(rootFile);
+        // const scriptInfo = this.projectService.getScriptInfoForPath(this.toPath(rootFile));
+        this.getScriptInfo(rootFile)?.editContent(0, targetFileText.length, pastedText);
+        this.updateGraph();
+        const updatedFile = this.program?.getSourceFile(rootFile);
+        const updatedProgram = this.program;
+
+        const originalProgram = this.program;
+        const cancellationToken = this.cancellationToken;
+        const languageServiceHost = this;
+        const preferences = this.projectService.getPreferences(toNormalizedPath(rootFile));
+        let allImports:[] | undefined;
+        
+        if (updatedFile && updatedProgram && originalProgram) {
+            ts.forEachChild(updatedFile, function cb(node) {
+                if (ts.isIdentifier(node)) {
+                    if (!updatedProgram.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ true) &&
+                        !originalProgram?.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ false)) {
+                        //generate imports
+                        const imports = flatMap(getSymbolNamesToImport(updatedFile, originalProgram.getTypeChecker(), node, originalProgram.getCompilerOptions()), symbolName => {
+                            // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
+                            if (symbolName === ts.InternalSymbolName.Default) {
+                                return undefined;
+                            }
+                            const isValidTypeOnlyUseSite = ts.isValidTypeOnlyAliasUseSite(node);
+                            const useRequire = shouldUseRequire(updatedFile, originalProgram);
+                            const exportInfo = getExportInfos(symbolName, ts.isJSXTagName(node), ts.getMeaningFromLocation(node), cancellationToken, updatedFile, originalProgram, true, languageServiceHost, preferences);
+                            const t = arrayFrom(
+                                ts.flatMapIterator(exportInfo.values(), exportInfos => getImportFixes(exportInfos, node.getStart(updatedFile), isValidTypeOnlyUseSite, useRequire, originalProgram, updatedFile, languageServiceHost, preferences).fixes),
+                                fix => ({ fix, symbolName, errorIdentifierText: node.text, isJsxNamespaceFix: symbolName !== node.text }),
+                            );
+                        });
+                    }
+                }
+                else {
+                    node.forEachChild(cb);
+                }
+            });
+        }
+
+        // const program: Program = ts.createProgram([rootFile], this.getCompilerOptions(), {
+        //     getSourceFile:() => ts.createSourceFile("fake source file", pastedText, { languageVersion: ts.ScriptTarget.ES2015, jsDocParsingMode: JSDocParsingMode.ParseNone }, /*setParentNodes*/ false),
+        //     getDefaultLibFileName: () => ts.getDefaultLibFilePath(this.getCompilerOptions()),
+        //     writeFile: noop,
+        //     getCurrentDirectory: () => this.getCurrentDirectory(),
+        //     getCanonicalFileName: () => "fake source file",
+        //     useCaseSensitiveFileNames: () => true,
+        //     getNewLine: () => "\n",
+        //     fileExists(){return true},
+        //     readFile() {
+        //         return pastedText;
+        //     }
+        // });
+        // const fakeSourceFile = program.getSourceFile("fake source file");
+        // const originalProgram = this.program;
+        // const cancellationToken = this.cancellationToken;
+        // const languageServiceHost = this;
+        // const preferences = this.projectService.getPreferences(toNormalizedPath(rootFile));
+        // let imports;
+        
+        // if (fakeSourceFile && originalProgram) {
+        //     ts.forEachChild(fakeSourceFile, function cb(node) {
+        //         if (ts.isIdentifier(node)) {
+        //             if (!program.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ true) &&
+        //                 !originalProgram?.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ false)) {
+        //                 //generate imports
+        //                 imports = flatMap(getSymbolNamesToImport(fakeSourceFile, originalProgram.getTypeChecker(), node, originalProgram.getCompilerOptions()), symbolName => {
+        //                     // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
+        //                     if (symbolName === ts.InternalSymbolName.Default) {
+        //                         return undefined;
+        //                     }
+        //                     const isValidTypeOnlyUseSite = ts.isValidTypeOnlyAliasUseSite(node);
+        //                     const useRequire = shouldUseRequire(fakeSourceFile, originalProgram);
+        //                     const exportInfo = getExportInfos(symbolName, ts.isJSXTagName(node), ts.getMeaningFromLocation(node), cancellationToken, fakeSourceFile, originalProgram, true, languageServiceHost, preferences);
+        //                     return arrayFrom(
+        //                         ts.flatMapIterator(exportInfo.values(), exportInfos => getImportFixes(exportInfos, node.getStart(fakeSourceFile), isValidTypeOnlyUseSite, useRequire, program, fakeSourceFile, languageServiceHost, preferences).fixes),
+        //                         fix => ({ fix, symbolName, errorIdentifierText: node.text, isJsxNamespaceFix: symbolName !== node.text }),
+        //                     );
+        //                 });
+        //             }
+        //         }
+        //         else {
+        //             node.forEachChild(cb);
+        //         }
+        //     });
+        // }
+        return allImports;
     }
 
     /** @internal */

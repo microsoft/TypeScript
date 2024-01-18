@@ -620,6 +620,10 @@ export class Verify extends VerifyNegatable {
     public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences): void {
         this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
+
+    public postPasteImportFix(options: verifyPostPasteImportFix): void {
+        this.state.getPostPasteImportFixes(options.targetFile, options.pastes, options.preferences, options.originalFile, options.copyRange);
+    }
 }
 
 export class Edit {
@@ -1870,6 +1874,14 @@ export interface VerifyCodeFixAllOptions {
     newFileContent: NewFileContent;
     commands: readonly {}[];
     preferences?: ts.UserPreferences;
+}
+
+export interface verifyPostPasteImportFix {
+    targetFile: string;
+    pastes: Array<{text: string; range: ts.TextRange}>;
+    preferences: ts.UserPreferences;
+    originalFile?: string;
+    copyRange?: ts.CopyRange
 }
 
 export interface VerifyRefactorOptions {

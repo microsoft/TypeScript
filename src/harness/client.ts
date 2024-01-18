@@ -13,6 +13,7 @@ import {
     computeLineAndCharacterOfPosition,
     computeLineStarts,
     computePositionOfLineAndCharacter,
+    CopyRange,
     createQueue,
     createTextSpanFromBounds,
     Debug,
@@ -1007,6 +1008,19 @@ export class SessionClient implements LanguageService {
 
     getSupportedCodeFixes(): readonly string[] {
         return getSupportedCodeFixes();
+    }
+
+    getPostPasteImportFixes(targetFile: string, pastes: Array<{text: string; range: TextRange}>, _preferences: UserPreferences, _formatOptions: FormatCodeSettings, originalFile?: string, copyRange?: CopyRange): FileTextChanges[]{    
+        const t = this.createFileRangeRequestArgs(targetFile, pastes[0].range.pos, pastes[0].range.end);
+        const args = this.createFileLocationOrRangeRequestArgs(pastes[0].range, targetFile) as protocol.GetPostPasteImportFixesRequestArgs; //needs to be fixed
+        args.targetFile = targetFile;
+        args.pastes = [{text: pastes[0].text, range: t}];
+        args.originalFile = originalFile;
+        args.copyRange = copyRange;
+
+        const request = this.processRequest<protocol.GetPostPasteImportFixesRequest>(protocol.CommandTypes.GetPostPasteImportFixes, args);
+        const response = this.processResponse<protocol.GetPostPasteImportFixesResponse>(request);
+        return [];
     }
 
     getProgram(): Program {

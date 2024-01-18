@@ -431,7 +431,9 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
-
+    /** @internal */ getFakeSourceFile(rootFile: string, pastedText: string, targetFileName: string, targetFileText: string) : [] | undefined;
+    /** @internal */ updatedTargetFile(rootFile: string, targetFileText: string, pastedText: string): {updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: Program | undefined};
+//needs to be changed to optional
     jsDocParsingMode?: JSDocParsingMode | undefined;
 }
 
@@ -684,6 +686,12 @@ export interface LanguageService {
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
     dispose(): void;
+    getPostPasteImportFixes (targetFile: string, pastes: Array<{text: string; range: TextRange}>, preferences: UserPreferences, formatOptions: FormatCodeSettings, originalFile: string | undefined, copyLocation: CopyRange | undefined): FileTextChanges[];
+}
+
+export interface CopyRange {
+    start: { line: number, offset: number };
+    end: { line: number, offset: number }
 }
 
 export interface JsxClosingTagInfo {
@@ -705,6 +713,12 @@ export const enum OrganizeImportsMode {
     SortAndCombine = "SortAndCombine",
     RemoveUnused = "RemoveUnused",
 }
+
+export interface postPasteImportFix {
+    targetFile: string, 
+    targetFileText: string,
+    pastes: Array<{text: string; range: TextSpan}>
+} 
 
 export interface OrganizeImportsArgs extends CombinedCodeFixScope {
     /** @deprecated Use `mode` instead */

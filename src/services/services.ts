@@ -319,6 +319,8 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
+    postPasteImportFixes,
+    CopyRange,
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
@@ -2089,6 +2091,20 @@ export function createLanguageService(
         };
     }
 
+    function getPostPasteImportFixes (
+        targetFile: string, 
+        pastes: Array<{text: string; range: TextRange}>,
+        preferences: UserPreferences,
+        formatOptions: FormatCodeSettings,
+        originalFile?: string,
+        copyLocation?: CopyRange
+        ): FileTextChanges[]{
+        synchronizeHostData();
+        const originalSourceFile = originalFile ? getValidSourceFile(originalFile) : undefined;
+        const edits = postPasteImportFixes.postPastImportFixProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host), originalSourceFile, copyLocation);
+        return edits;
+    }
+
     function getNodeForQuickInfo(node: Node): Node {
         if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
             return node.parent.expression;
@@ -3155,6 +3171,7 @@ export function createLanguageService(
         uncommentSelection,
         provideInlayHints,
         getSupportedCodeFixes,
+        getPostPasteImportFixes
     };
 
     switch (languageServiceMode) {

@@ -144,6 +144,7 @@ export const enum CommandTypes {
     GetApplicableRefactors = "getApplicableRefactors",
     GetEditsForRefactor = "getEditsForRefactor",
     GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+    GetPostPasteImportFixes = "getPostPasteImportFixes",
     /** @internal */
     GetEditsForRefactorFull = "getEditsForRefactor-full",
 
@@ -628,6 +629,29 @@ export interface GetMoveToRefactoringFileSuggestions extends Response {
         newFileName: string;
         files: string[];
     };
+}
+
+/**
+ * Request refactorings at a given position post pasting text from some other location.
+ */
+
+export interface GetPostPasteImportFixesRequest extends Request {
+    command: CommandTypes.GetPostPasteImportFixes;
+    arguments: GetPostPasteImportFixesRequestArgs;
+}
+export type DocumentRange = FileRangeRequestArgs;
+export type CopyRange  = {
+    start: Location;
+    end: Location;
+}
+export type GetPostPasteImportFixesRequestArgs = FileLocationOrRangeRequestArgs & {
+    targetFile: string, 
+    pastes: Array<{text: string; range: DocumentRange}>,
+    originalFile?: string,
+    copyRange?: CopyRange
+}
+export interface GetPostPasteImportFixesResponse extends Response {
+    filename: string;
 }
 
 /**

@@ -2796,6 +2796,12 @@ export class Session<TMessage = string> implements EventSender {
         return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
+    private getPostPasteImportFixes(args: protocol.GetPostPasteImportFixesRequestArgs) {
+        const { file, project } = this.getFileAndProject(args);
+        const textRange = this.getRange(args.pastes[0].range, project.getScriptInfoForNormalizedPath(file)!);
+        return project.getLanguageService().getPostPasteImportFixes(args.targetFile, [{text: args.pastes[0].text, range: textRange}], this.getPreferences(file), this.getFormatOptions(file), args.originalFile, args.copyRange);
+    }
+
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
         Debug.assert(args.scope.type === "file");
         const { file, project } = this.getFileAndProject(args.scope.args);
@@ -3520,6 +3526,9 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
             return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
+        },
+        [protocol.CommandTypes.GetPostPasteImportFixes]: (request: protocol.GetPostPasteImportFixesRequest) => {
+            return this.requiredResponse(this.getPostPasteImportFixes(request.arguments));
         },
         [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
