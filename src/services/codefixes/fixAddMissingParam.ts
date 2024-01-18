@@ -5,10 +5,9 @@ import {
     declarationNameToString,
     Diagnostics,
     factory,
-    find,
+    filter,
     findAncestor,
     first,
-    firstDefined,
     forEach,
     FunctionDeclaration,
     FunctionExpression,
@@ -24,17 +23,15 @@ import {
     isSourceFileFromLibrary,
     isVariableDeclaration,
     last,
+    lastOrUndefined,
     length,
     map,
-    mapDefined,
     MethodDeclaration,
     Node,
     NodeBuilderFlags,
     ParameterDeclaration,
     Program,
     QuestionToken,
-    Signature,
-    SignatureKind,
     some,
     SourceFile,
     SyntaxKind,
@@ -133,73 +130,69 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Signatu
 
     const checker = program.getTypeChecker();
     const type = checker.getTypeAtLocation(callExpression.expression);
-    const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-
-    // find a non-overload signature
-    const declaration = firstDefined(signatures, s => {
-        if (s.declaration && isConvertibleSignatureDeclaration(s.declaration)) {
-            return s.declaration.body ? s.declaration :
-                find(s.declaration.symbol.declarations, d => isConvertibleSignatureDeclaration(d) && !!d.body) as ConvertibleSignatureDeclaration;
-        }
-        return undefined;
-    });
-
-    if (declaration === undefined || isSourceFileFromLibrary(program, declaration.getSourceFile())) {
+    const convertibleSignatureDeclarations = filter(type.symbol.declarations, isConvertibleSignatureDeclaration);
+    if (convertibleSignatureDeclarations === undefined) {
         return undefined;
     }
 
-    const name = tryGetName(declaration);
+    const nonOverloadDeclaration = lastOrUndefined(convertibleSignatureDeclarations);
+    if (
+        nonOverloadDeclaration === undefined ||
+        nonOverloadDeclaration.body === undefined ||
+        isSourceFileFromLibrary(program, nonOverloadDeclaration.getSourceFile())
+    ) {
+        return undefined;
+    }
+
+    const name = tryGetName(nonOverloadDeclaration);
     if (name === undefined) {
         return undefined;
     }
 
     const newParameters: ParameterInfo[] = [];
     const newOptionalParameters: ParameterInfo[] = [];
-    const parametersLength = length(declaration.parameters);
+    const parametersLength = length(nonOverloadDeclaration.parameters);
     const argumentsLength = length(callExpression.arguments);
     if (parametersLength > argumentsLength) {
         return undefined;
     }
 
-    const overloads = getOverloads(declaration, signatures);
+    const declarations = [nonOverloadDeclaration, ...getOverloads(nonOverloadDeclaration, convertibleSignatureDeclarations)];
     for (let i = 0, pos = 0, paramIndex = 0; i < argumentsLength; i++) {
         const arg = callExpression.arguments[i];
         const expr = isAccessExpression(arg) ? getNameOfAccessExpression(arg) : arg;
         const type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)));
-        const parameter = pos < parametersLength ? declaration.parameters[pos] : undefined;
+        const parameter = pos < parametersLength ? nonOverloadDeclaration.parameters[pos] : undefined;
         if (
             parameter &&
             checker.isTypeAssignableTo(type, checker.getTypeAtLocation(parameter))
         ) {
             pos++;
+            continue;
         }
-        else {
-            const name = expr && isIdentifier(expr) ? expr.text : `p${paramIndex++}`;
-            const typeNode = typeToTypeNode(checker, type, declaration);
-            append(newParameters, {
-                pos: i,
-                declaration: createParameter(name, typeNode, /*questionToken*/ undefined),
-            });
 
-            if (
-                length(overloads) &&
-                some(overloads, d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined)
-            ) {
-                continue;
-            }
+        const name = expr && isIdentifier(expr) ? expr.text : `p${paramIndex++}`;
+        const typeNode = typeToTypeNode(checker, type, nonOverloadDeclaration);
+        append(newParameters, {
+            pos: i,
+            declaration: createParameter(name, typeNode, /*questionToken*/ undefined),
+        });
 
-            append(newOptionalParameters, {
-                pos: i,
-                declaration: createParameter(name, typeNode, factory.createToken(SyntaxKind.QuestionToken)),
-            });
+        if (isOptionalPos(declarations, pos)) {
+            continue;
         }
+
+        append(newOptionalParameters, {
+            pos: i,
+            declaration: createParameter(name, typeNode, factory.createToken(SyntaxKind.QuestionToken)),
+        });
     }
 
     return {
         newParameters,
         newOptionalParameters,
         name: declarationNameToString(name),
-        declarations: [declaration, ...overloads],
+        declarations,
     };
 }
 
@@ -298,16 +291,24 @@ function updateParameters(node: ConvertibleSignatureDeclaration, newParameters: 
     return parameters;
 }
 
-function getOverloads(implementation: ConvertibleSignatureDeclaration, signatures: readonly Signature[]): ConvertibleSignatureDeclaration[] {
-    const maxParams = Math.max(...mapDefined(signatures, s => isOverload(s) ? length(s.parameters) : undefined));
-    if (length(implementation.parameters) === maxParams) {
-        return mapDefined(signatures, s => isOverload(s) && length(s.parameters) === maxParams ? s.declaration : undefined) as ConvertibleSignatureDeclaration[];
+function getOverloads(implementation: ConvertibleSignatureDeclaration, declarations: readonly ConvertibleSignatureDeclaration[]): ConvertibleSignatureDeclaration[] {
+    const overloads: ConvertibleSignatureDeclaration[] = [];
+    for (const declaration of declarations) {
+        if (isOverload(declaration)) {
+            if (length(declaration.parameters) === length(implementation.parameters)) {
+                overloads.push(declaration);
+                continue;
+            }
+            if (length(declaration.parameters) > length(implementation.parameters)) {
+                return [];
+            }
+        }
     }
-    return [];
+    return overloads;
 }
 
-function isOverload(signature: Signature) {
-    return !!signature.declaration && isConvertibleSignatureDeclaration(signature.declaration) && signature.declaration.body === undefined;
+function isOverload(declaration: ConvertibleSignatureDeclaration) {
+    return isConvertibleSignatureDeclaration(declaration) && declaration.body === undefined;
 }
 
 function createParameter(name: string, type: TypeNode, questionToken: QuestionToken | undefined) {
@@ -319,4 +320,8 @@ function createParameter(name: string, type: TypeNode, questionToken: QuestionTo
         type,
         /*initializer*/ undefined,
     );
+}
+
+function isOptionalPos(declarations: ConvertibleSignatureDeclaration[], pos: number) {
+    return length(declarations) && some(declarations, d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined);
 }
