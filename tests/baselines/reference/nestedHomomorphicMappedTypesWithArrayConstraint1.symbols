@@ -1,0 +1,48 @@
+//// [tests/cases/compiler/nestedHomomorphicMappedTypesWithArrayConstraint1.ts] ////
+
+=== nestedHomomorphicMappedTypesWithArrayConstraint1.ts ===
+interface SinonMatcher {
+>SinonMatcher : Symbol(SinonMatcher, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 0))
+
+  and(expr: SinonMatcher): SinonMatcher;
+>and : Symbol(SinonMatcher.and, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 24))
+>expr : Symbol(expr, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 1, 6))
+>SinonMatcher : Symbol(SinonMatcher, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 0))
+>SinonMatcher : Symbol(SinonMatcher, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 0))
+
+  or(expr: SinonMatcher): SinonMatcher;
+>or : Symbol(SinonMatcher.or, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 1, 40))
+>expr : Symbol(expr, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 2, 5))
+>SinonMatcher : Symbol(SinonMatcher, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 0))
+>SinonMatcher : Symbol(SinonMatcher, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 0))
+
+  test(val: any): boolean;
+>test : Symbol(SinonMatcher.test, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 2, 39))
+>val : Symbol(val, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 3, 7))
+}
+
+type MatchArguments<T> = {
+>MatchArguments : Symbol(MatchArguments, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 4, 1))
+>T : Symbol(T, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 6, 20))
+
+  [K in keyof T]: SinonMatcher | T[K];
+>K : Symbol(K, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 7, 3))
+>T : Symbol(T, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 6, 20))
+>SinonMatcher : Symbol(SinonMatcher, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 0, 0))
+>T : Symbol(T, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 6, 20))
+>K : Symbol(K, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 7, 3))
+
+};
+
+interface SinonSpyCallApi<TArgs extends any[] = any[]> {
+>SinonSpyCallApi : Symbol(SinonSpyCallApi, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 8, 2))
+>TArgs : Symbol(TArgs, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 10, 26))
+
+  calledWith(...args: Partial<MatchArguments<TArgs>>): boolean;
+>calledWith : Symbol(SinonSpyCallApi.calledWith, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 10, 56))
+>args : Symbol(args, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 11, 13))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>MatchArguments : Symbol(MatchArguments, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 4, 1))
+>TArgs : Symbol(TArgs, Decl(nestedHomomorphicMappedTypesWithArrayConstraint1.ts, 10, 26))
+}
+

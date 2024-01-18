@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/nestedHomomorphicMappedTypesWithArrayConstraint1.ts] ////
+
+=== nestedHomomorphicMappedTypesWithArrayConstraint1.ts ===
+interface SinonMatcher {
+  and(expr: SinonMatcher): SinonMatcher;
+>and : (expr: SinonMatcher) => SinonMatcher
+>expr : SinonMatcher
+
+  or(expr: SinonMatcher): SinonMatcher;
+>or : (expr: SinonMatcher) => SinonMatcher
+>expr : SinonMatcher
+
+  test(val: any): boolean;
+>test : (val: any) => boolean
+>val : any
+}
+
+type MatchArguments<T> = {
+>MatchArguments : MatchArguments<T>
+
+  [K in keyof T]: SinonMatcher | T[K];
+};
+
+interface SinonSpyCallApi<TArgs extends any[] = any[]> {
+  calledWith(...args: Partial<MatchArguments<TArgs>>): boolean;
+>calledWith : (...args: Partial<MatchArguments<TArgs>>) => boolean
+>args : Partial<MatchArguments<TArgs>>
+}
+
