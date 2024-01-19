@@ -60,7 +60,7 @@ function createCancellationToken(args: string[]): ServerCancellationToken {
     }
     else {
         return {
-            isCancellationRequested: () => pipeExists(cancellationPipeName!), // TODO: GH#18217
+            isCancellationRequested: () => pipeExists(cancellationPipeName), // TODO: GH#18217
             setRequest: (_requestId: number): void => void 0,
             resetRequest: (_requestId: number): void => void 0,
         };

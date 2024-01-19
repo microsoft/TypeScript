@@ -2523,7 +2523,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 moduleNames,
                 newSourceFile,
                 resolutions,
-                (name, mode) => oldProgram!.getResolvedModule(newSourceFile, name, mode),
+                (name, mode) => oldProgram.getResolvedModule(newSourceFile, name, mode),
                 moduleResolutionIsEqualTo,
                 moduleResolutionNameAndModeGetter,
             );
@@ -2580,7 +2580,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
             if (oldFile.path === path) {
                 // Set the file as found during node modules search if it was found that way in old progra,
-                if (oldProgram!.isSourceFileFromExternalLibrary(oldFile)) {
+                if (oldProgram.isSourceFileFromExternalLibrary(oldFile)) {
                     sourceFilesFoundSearchingNodeModules.set(oldFile.path, true);
                 }
                 return;
