@@ -776,9 +776,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts: *new*
   {}
-/a/file2.ts: *new*
+/a/file1.ts:
   {}
 
 Before request
@@ -833,9 +833,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -890,9 +890,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -1092,9 +1092,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -1657,9 +1657,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts: *new*
   {}
-/a/file2.ts: *new*
+/a/file1.ts:
   {}
 
 Before request
@@ -1714,9 +1714,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -1771,9 +1771,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -2003,9 +2003,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -2568,9 +2568,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts: *new*
   {}
-/a/file2.ts: *new*
+/a/file1.ts:
   {}
 
 Before request
@@ -2625,9 +2625,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -2682,9 +2682,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -2884,9 +2884,9 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
@@ -3449,9 +3449,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts: *new*
   {}
-/a/file2.ts: *new*
+/a/file1.ts:
   {}
 
 Before request
@@ -3506,9 +3506,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
@@ -3563,9 +3563,9 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}

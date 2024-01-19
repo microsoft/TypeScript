@@ -88,7 +88,7 @@ link_1.b;
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/yx: *new*
+/user/username/projects/myproject/yX: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -98,13 +98,13 @@ FsWatches::
   {}
 /user/username/projects/myproject: *new*
   {}
+/user/username/projects/myproject/XY.ts: *new*
+  {}
 /user/username/projects/myproject/b.ts: *new*
   {}
 /user/username/projects/myproject/link.ts: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/xy.ts: *new*
   {}
 
 FsWatchesRecursive::

@@ -65,17 +65,17 @@ Output::
 
 
 FsWatches::
-/user/username/projects/noemitonerror/shared/types/db.ts: *new*
+/user/username/projects/noEmitOnError/shared/types/db.ts: *new*
   {}
-/user/username/projects/noemitonerror/src/main.ts: *new*
+/user/username/projects/noEmitOnError/src/main.ts: *new*
   {}
-/user/username/projects/noemitonerror/src/other.ts: *new*
+/user/username/projects/noEmitOnError/src/other.ts: *new*
   {}
-/user/username/projects/noemitonerror/tsconfig.json: *new*
+/user/username/projects/noEmitOnError/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/noemitonerror: *new*
+/user/username/projects/noEmitOnError: *new*
   {}
 
 Program root files: [

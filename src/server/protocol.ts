@@ -1336,6 +1336,7 @@ export interface RenameInfoSuccess {
 
     /**
      * Full display name of item to be renamed.
+     * If item to be renamed is a file, then this is the original text of the module specifer
      */
     fullDisplayName: string;
 
@@ -3642,6 +3643,13 @@ export interface UserPreferences {
      * Default: `false`
      */
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+    /**
+     * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is
+     * type-only.
+     *
+     * Default: `last`
+     */
+    readonly organizeImportsTypeOrder?: "last" | "first" | "inline";
 
     /**
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.

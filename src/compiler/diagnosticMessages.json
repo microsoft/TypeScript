@@ -951,6 +951,22 @@
         "category": "Error",
         "code": 1288
     },
+    "'{0}' resolves to a type-only declaration and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'import type' where '{0}' is imported.": {
+        "category": "Error",
+        "code": 1289
+    },
+    "'{0}' resolves to a type-only declaration and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'export type { {0} as default }'.": {
+        "category": "Error",
+        "code": 1290
+    },
+    "'{0}' resolves to a type and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'import type' where '{0}' is imported.": {
+        "category": "Error",
+        "code": 1291
+    },
+    "'{0}' resolves to a type and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'export type { {0} as default }'.": {
+        "category": "Error",
+        "code": 1292
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -3715,6 +3731,18 @@
         "category": "Error",
         "code": 2865
     },
+    "Import '{0}' conflicts with global value used in this file, so must be declared with a type-only import when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 2866
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun`.": {
+        "category": "Error",
+        "code": 2867
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun` and then add 'bun' to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2868
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4147,6 +4175,14 @@
     "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 4124
+    },
+    "Each declaration of '{0}.{1}' differs in its value, where '{2}' was expected but '{3}' was given.": {
+        "category": "Error",
+        "code": 4125
+    },
+    "One value of '{0}.{1}' is the string '{2}', and the other is assumed to be an unknown numeric value.": {
+        "category": "Error",
+        "code": 4126
     },
 
     "The current host does not support the '{0}' option.": {
@@ -5410,6 +5446,14 @@
     "There are types at '{0}', but this result could not be resolved when respecting package.json \"exports\". The '{1}' library may need to update its package.json or typings.": {
         "category": "Message",
         "code": 6278
+    },
+    "Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.": {
+        "category": "Message",
+        "code": 6279
+    },
+    "There are types at '{0}', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.": {
+        "category": "Message",
+        "code": 6280
     },
 
     "Enable project compilation": {
@@ -7747,6 +7791,30 @@
     "Add missing comma for object member completion '{0}'.": {
         "category": "Message",
         "code": 95187
+    },
+    "Add missing parameter to '{0}'": {
+        "category": "Message",
+        "code": 95188
+    },
+    "Add missing parameters to '{0}'": {
+        "category": "Message",
+        "code": 95189
+    },
+    "Add all missing parameters": {
+        "category": "Message",
+        "code": 95190
+    },
+    "Add optional parameter to '{0}'": {
+        "category": "Message",
+        "code": 95191
+    },
+    "Add optional parameters to '{0}'": {
+        "category": "Message",
+        "code": 95192
+    },
+    "Add all optional parameters": {
+        "category": "Message",
+        "code": 95193
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
