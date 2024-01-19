@@ -2184,7 +2184,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const moduleName = moduleNames[i];
             // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
             if (file === oldSourceFile && !hasInvalidatedResolutions(file.path)) {
-                const oldResolution = oldProgram?.getResolvedModule(file, moduleName.text, oldProgram.getModeForUsageLocation(file, moduleName));
+                const oldResolution = oldProgram?.getResolvedModule(file, moduleName.text, getModeForUsageLocation(file, moduleName));
                 if (oldResolution?.resolvedModule) {
                     if (isTraceEnabled(options, host)) {
                         trace(
@@ -2252,7 +2252,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // If we change our policy of rechecking failed lookups on each program create,
         // we should adjust the value returned here.
         function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: StringLiteralLike): boolean {
-            const resolutionToFile = oldProgram?.getResolvedModule(file, moduleName.text, oldProgram.getModeForUsageLocation(file, moduleName))?.resolvedModule;
+            const resolutionToFile = oldProgram?.getResolvedModule(file, moduleName.text, getModeForUsageLocation(file, moduleName))?.resolvedModule;
             const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
             if (resolutionToFile && resolvedFile) {
                 // In the old program, we resolved to an ambient module that was in the same
@@ -2547,7 +2547,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolutionsChanged = hasChangesInResolutions(
                 moduleNames,
                 resolutions,
-                name => oldProgram!.getResolvedModule(newSourceFile, name.text, oldProgram!.getModeForUsageLocation(newSourceFile, name)),
+                name => oldProgram!.getResolvedModule(newSourceFile, name.text, getModeForUsageLocation(newSourceFile, name)),
                 moduleResolutionIsEqualTo,
             );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
@@ -4044,7 +4044,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolutions = resolvedModulesProcessing?.get(file.path) ||
                 resolveModuleNamesReusingOldState(moduleNames, file);
             Debug.assert(resolutions.length === moduleNames.length);
-            const optionsForFile = (useSourceOfProjectReferenceRedirect ? getRedirectReferenceForResolution(file)?.commandLine.options : undefined) || options;
+            const optionsForFile = getRedirectReferenceForResolution(file)?.commandLine.options || options;
             const resolutionsInFile = createModeAwareCache<ResolutionWithFailedLookupLocations>();
             (resolvedModules ??= new Map()).set(file.path, resolutionsInFile);
             for (let index = 0; index < moduleNames.length; index++) {
