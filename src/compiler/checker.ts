@@ -2053,7 +2053,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noConstraintType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var circularConstraintType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var resolvingDefaultType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
-    var resolvingApparentMappedType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
 
     var markerSuperType = createTypeParameter();
     var markerSubType = createTypeParameter();
@@ -14539,32 +14538,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getApparentTypeOfMappedType(type: MappedType) {
-        if (type.resolvedApparentType) {
-            if (type.resolvedApparentType === resolvingApparentMappedType) {
-                return type.resolvedApparentType = type;
-            }
-            return type.resolvedApparentType;
-        }
-        type.resolvedApparentType = resolvingApparentMappedType;
-        return type.resolvedApparentType = getResolvedApparentTypeOfMappedType(type);
+        return type.resolvedApparentType || (type.resolvedApparentType = getResolvedApparentTypeOfMappedType(type));
     }
 
     function getResolvedApparentTypeOfMappedType(type: MappedType) {
-        const mappedType = type.target as MappedType || type;
-        const typeVariable = getHomomorphicTypeVariable(mappedType);
-        if (typeVariable && !mappedType.declaration.nameType) {
-            let constraint: Type | undefined;
-            if (!type.target) {
-                constraint = getConstraintOfTypeParameter(typeVariable);
-            }
-            else {
-                const modifiersConstraint = getConstraintOfType(getModifiersTypeFromMappedType(type));
-                if (modifiersConstraint) {
-                    constraint = getApparentType(modifiersConstraint);
-                }
-            }
+        const typeVariable = getHomomorphicTypeVariable(type);
+        if (typeVariable && !type.declaration.nameType) {
+            const constraint = getConstraintOfTypeParameter(typeVariable);
             if (constraint && everyType(constraint, isArrayOrTupleType)) {
-                return instantiateType(mappedType, prependTypeMapping(typeVariable, constraint, mappedType.mapper));
+                return instantiateType(type, prependTypeMapping(typeVariable, constraint, type.mapper));
             }
         }
         return type;
