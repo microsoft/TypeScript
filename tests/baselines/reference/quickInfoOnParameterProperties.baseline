@@ -1,3 +1,4 @@
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoOnParameterProperties.ts ===
 // interface IFoo {
 //   /** this is the name of blabla 

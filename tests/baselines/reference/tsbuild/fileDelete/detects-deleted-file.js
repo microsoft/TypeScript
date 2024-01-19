@@ -28,7 +28,11 @@ export function child2() {
 
 
 //// [/src/child/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/src/main/main.ts]
 import { child } from "../child/child";
@@ -38,7 +42,16 @@ export function main() {
 
 
 //// [/src/main/tsconfig.json]
-{"compilerOptions":{"composite":true},"references":[{"path":"../child"}]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../child"
+    }
+  ]
+}
 
 
 

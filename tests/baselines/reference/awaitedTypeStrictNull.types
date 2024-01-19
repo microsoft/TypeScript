@@ -120,9 +120,9 @@ async function main() {
     ] = await Promise.all([
 >await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
 >Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, true | Promise<true> | PromiseLike<true>]
 
         MaybePromise(1),
@@ -151,9 +151,9 @@ class Api<D = {}> {
 	async post<T = D>() { return this.request<T>(); }
 >post : <T = D>() => Promise<T>
 >this.request<T>() : Promise<T>
->this.request : <D>() => Promise<D>
+>this.request : <D_1>() => Promise<D_1>
 >this : this
->request : <D>() => Promise<D>
+>request : <D_1>() => Promise<D_1>
 
 	async request<D>(): Promise<D> { throw new Error(); }
 >request : <D>() => Promise<D>
@@ -174,9 +174,9 @@ async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj
 	// Should not error.
 	return api.post();
 >api.post() : Promise<T extends object ? { [K in keyof T]: Obj; } : Obj>
->api.post : <T = {}>() => Promise<T>
+>api.post : <T_1 = {}>() => Promise<T_1>
 >api : Api<{}>
->post : <T = {}>() => Promise<T>
+>post : <T_1 = {}>() => Promise<T_1>
 }
 
 // helps with tests where '.types' just prints out the type alias name
