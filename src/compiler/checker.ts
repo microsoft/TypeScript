@@ -16225,7 +16225,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // Given a homomorphic mapped type { [K in keyof T]: XXX }, where T is constrained to an array or tuple type, in the
             // template type XXX, K has an added constraint of number | `${number}`.
-            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && node === (parent as MappedTypeNode).type) {
+            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && !(parent as MappedTypeNode).nameType && node === (parent as MappedTypeNode).type) {
                 const mappedType = getTypeFromTypeNode(parent as TypeNode) as MappedType;
                 if (getTypeParameterFromMappedType(mappedType) === getActualTypeVariable(type)) {
                     const typeParameter = getHomomorphicTypeVariable(mappedType);
