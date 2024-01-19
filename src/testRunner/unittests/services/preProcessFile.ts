@@ -1,4 +1,7 @@
 import * as ts from "../../_namespaces/ts";
+import {
+    jsonToReadableText,
+} from "../helpers";
 
 describe("unittests:: services:: PreProcessFile:", () => {
     function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
@@ -18,7 +21,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
         if (expected === actual) {
             return;
         }
-        assert.deepEqual(actual, expected, `Expected [${kind}] ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
+        assert.deepEqual(actual, expected, `Expected [${kind}] ${jsonToReadableText(expected)}, got ${jsonToReadableText(actual)}`);
     }
 
     describe("Test preProcessFiles,", () => {

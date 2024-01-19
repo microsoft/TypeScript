@@ -110,7 +110,7 @@ function g1<T extends Box<T> | undefined>(x: T) {
 
         unbox(x);
 >unbox(x) : T
->unbox : <T>(x: Box<T>) => T
+>unbox : <T_1>(x: Box<T_1>) => T_1
 >x : Box<T>
     }
 }
@@ -127,7 +127,7 @@ function g2<T extends Box<T> | undefined>(x: T) {
 
         unbox(x);
 >unbox(x) : T
->unbox : <T>(x: Box<T>) => T
+>unbox : <T_1>(x: Box<T_1>) => T_1
 >x : Box<T>
     }
 }
@@ -144,7 +144,7 @@ function g3<T extends Box<T> | undefined>(x: T) {
 
         unbox(x);  // Error
 >unbox(x) : T
->unbox : <T>(x: Box<T>) => T
+>unbox : <T_1>(x: Box<T_1>) => T_1
 >x : undefined
     }
 }
@@ -160,7 +160,7 @@ function g4<T extends Box<T> | undefined>(x: T) {
 
         unbox(x);  // Error
 >unbox(x) : unknown
->unbox : <T>(x: Box<T>) => T
+>unbox : <T_1>(x: Box<T_1>) => T_1
 >x : undefined
     }
 }

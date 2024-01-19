@@ -32,8 +32,8 @@ class Foo<Elements extends readonly unknown[]> {
 >this.elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
 >this : this
 >elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
->{ bar: "abc" } : { bar: "abc"; }
->bar : "abc"
+>{ bar: "abc" } : { bar: string; }
+>bar : string
 >"abc" : "abc"
   }
 }

@@ -48,7 +48,7 @@ verify.completions(
     { marker: "7", exact: completion.globalsInsideFunction(x), isGlobalCompletion: true },
     { marker: "9", exact: ["x", "y"], isGlobalCompletion: false },
     { marker: "10", exact: completion.classElementKeywords, isGlobalCompletion: false, isNewIdentifierLocation: true },
-    { marker: "13", exact: globals, isGlobalCompletion: false },
+    { marker: "13", exact: completion.globalTypesPlus(["A", "B", "C"]), isGlobalCompletion: false },
     { marker: "15", exact: globals.filter(name => name !== 'x'), isGlobalCompletion: true, isNewIdentifierLocation: true },
     { marker: "16", unsorted: [...x, completion.globalThisEntry, ...completion.globalsVars, completion.undefinedVarEntry].filter(name => name !== 'user'), isGlobalCompletion: false },
     { marker: "17", exact: completion.globalKeywords, isGlobalCompletion: false },

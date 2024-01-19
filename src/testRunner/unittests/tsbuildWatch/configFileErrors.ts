@@ -2,6 +2,9 @@ import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTscWatch,
 } from "../helpers/tscWatch";
 import {
@@ -63,7 +66,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
                 edit: sys =>
                     sys.writeFile(
                         `/user/username/projects/myproject/tsconfig.json`,
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { composite: true, declaration: true },
                             files: ["a.ts", "b.ts"],
                         }),

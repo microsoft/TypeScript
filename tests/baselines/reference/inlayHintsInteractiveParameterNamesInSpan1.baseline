@@ -1,3 +1,4 @@
+// === Inlay Hints ===
 function c2 () { foo2(1, 2); }
                       ^
 {

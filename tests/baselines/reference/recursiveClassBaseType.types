@@ -8,7 +8,7 @@ declare const p: <T>(fn: () => T) => T;
 >fn : () => T
 
 declare const Base: <T>(val: T) => { new(): T };
->Base : <T>(val: T) => new () => T
+>Base : <T>(val: T) => {    new (): T;}
 >val : T
 
 class C extends Base({ x: p<C[]>(() => []) }) { }

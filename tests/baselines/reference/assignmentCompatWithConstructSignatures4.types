@@ -105,10 +105,10 @@ module Errors {
                 }): boolean[];
             };
         var a17: {
->a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
+>a17 : { new (x: { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }): any[]; new (x: { new <T_2 extends Derived2>(a: T_2): T_2; new <T_3 extends Base>(a: T_3): T_3; }): any[]; }
 
                 new (x: {
->x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
+>x : { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }
 
                     new <T extends Derived>(a: T): T;
 >a : T
@@ -118,7 +118,7 @@ module Errors {
 
                 }): any[];
                 new (x: {
->x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
+>x : { new <T extends Derived2>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }
 
                     new <T extends Derived2>(a: T): T;
 >a : T
@@ -224,7 +224,7 @@ module Errors {
 >a12 : new (x: Base[], y: Derived2[]) => Derived[]
 
         var b15: new <T>(x: { a: T; b: T }) => T; 
->b15 : new <T>(x: { a: T; b: T; }) => T
+>b15 : new <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -240,7 +240,7 @@ module Errors {
 >a15 : new (x: { a: string; b: number; }) => number
 
         var b15a: new <T extends Base>(x: { a: T; b: T }) => number; 
->b15a : new <T extends Base>(x: { a: T; b: T; }) => number
+>b15a : new <T extends Base>(x: {    a: T;    b: T;}) => number
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -277,13 +277,13 @@ module Errors {
 
         a17 = b17; // error
 >a17 = b17 : new <T>(x: (a: T) => T) => any[]
->a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
+>a17 : { new (x: { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }): any[]; new (x: { new <T_2 extends Derived2>(a: T_2): T_2; new <T_3 extends Base>(a: T_3): T_3; }): any[]; }
 >b17 : new <T>(x: (a: T) => T) => any[]
 
         b17 = a17; // error
->b17 = a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
+>b17 = a17 : { new (x: { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }): any[]; new (x: { new <T_2 extends Derived2>(a: T_2): T_2; new <T_3 extends Base>(a: T_3): T_3; }): any[]; }
 >b17 : new <T>(x: (a: T) => T) => any[]
->a17 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
+>a17 : { new (x: { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }): any[]; new (x: { new <T_2 extends Derived2>(a: T_2): T_2; new <T_3 extends Base>(a: T_3): T_3; }): any[]; }
     }
 
     module WithGenericSignaturesInBaseType {

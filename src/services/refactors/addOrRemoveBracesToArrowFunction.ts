@@ -12,11 +12,13 @@ import {
     factory,
     first,
     getContainingFunction,
+    getLeftmostExpression,
     getLocaleSpecificMessage,
     getTokenAtPosition,
     isArrowFunction,
     isBlock,
     isExpression,
+    isObjectLiteralExpression,
     isReturnStatement,
     needsParentheses,
     rangeContainsRange,
@@ -147,7 +149,8 @@ function getConvertibleArrowFunctionAtPosition(file: SourceFile, startPosition: 
     else if (refactorKindBeginsWith(removeBracesAction.kind, kind) && isBlock(func.body) && func.body.statements.length === 1) {
         const firstStatement = first(func.body.statements);
         if (isReturnStatement(firstStatement)) {
-            return { func, addBraces: false, expression: firstStatement.expression, returnStatement: firstStatement };
+            const expression = firstStatement.expression && isObjectLiteralExpression(getLeftmostExpression(firstStatement.expression, /*stopAtCallExpressions*/ false)) ? factory.createParenthesizedExpression(firstStatement.expression) : firstStatement.expression;
+            return { func, addBraces: false, expression, returnStatement: firstStatement };
         }
     }
     return undefined;
