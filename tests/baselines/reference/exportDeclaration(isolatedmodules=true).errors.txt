@@ -1,0 +1,25 @@
+/b.ts(3,5): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+/d.ts(2,10): error TS1291: 'A' resolves to a type and must be marked type-only in this file before re-exporting when 'isolatedModules' is enabled. Consider using 'import type' where 'A' is imported.
+
+
+==== /a.ts (0 errors) ====
+    class A {}
+    export type { A };
+    
+==== /b.ts (1 errors) ====
+    import { A } from './a';
+    declare const a: A;
+    new A();
+        ~
+!!! error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
+!!! related TS1377 /a.ts:2:15: 'A' was exported here.
+    
+==== /c.ts (0 errors) ====
+    import type { A } from './a';
+    export = A;
+    
+==== /d.ts (1 errors) ====
+    import { A } from './a';
+    export = A;
+             ~
+!!! error TS1291: 'A' resolves to a type and must be marked type-only in this file before re-exporting when 'isolatedModules' is enabled. Consider using 'import type' where 'A' is imported.

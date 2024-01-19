@@ -22,7 +22,14 @@ export const x = "hello";
 export const y = "world";
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"composite":true},"include":["*.ts"]}
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "include": [
+    "*.ts"
+  ]
+}
 
 
 

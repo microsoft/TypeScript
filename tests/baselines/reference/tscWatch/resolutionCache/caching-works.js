@@ -39,8 +39,36 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/d/f0.ts"]
-Program options: {"module":2}
+//// [/users/username/projects/project/f1.js]
+foo();
+
+
+//// [/users/username/projects/project/d/f0.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+
+
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/d/f0.ts: *new*
+  {}
+/users/username/projects/project/f1.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/d/f0.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -57,31 +85,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/f1.ts (used version)
 /users/username/projects/project/d/f0.ts (used version)
 
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/d/f0.ts: *new*
-  {}
-/users/username/projects/project/f1.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/f1.js]
-foo();
-
-
-//// [/users/username/projects/project/d/f0.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-
-
 
 Change:: Adding text doesnt re-resole the imports
 
@@ -91,8 +95,12 @@ import {x} from "f1"
                             var x: string = 1;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -117,8 +125,22 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/d/f0.ts"]
-Program options: {"module":2}
+//// [/users/username/projects/project/d/f0.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var x = 1;
+});
+
+
+
+
+Program root files: [
+  "/users/username/projects/project/d/f0.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -133,15 +155,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/users/username/projects/project/d/f0.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var x = 1;
-});
-
-
-
 Change:: Resolves f2
 
 Input::
@@ -149,8 +162,12 @@ Input::
 import {x} from "f2"
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -165,18 +182,13 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/d/f0.ts"]
-Program options: {"module":2}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/d/f0.ts
+//// [/users/username/projects/project/d/f0.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/d/f0.ts
 
-Shape signatures in builder refreshed for::
-/users/username/projects/project/d/f0.ts (computed .d.ts)
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -192,15 +204,25 @@ FsWatchesRecursive::
 /users/username/projects:
   {}
 
+
+Program root files: [
+  "/users/username/projects/project/d/f0.ts"
+]
+Program options: {
+  "module": 2
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/d/f0.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/d/f0.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/d/f0.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/d/f0.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-
-
 
 Change:: Resolve f1
 
@@ -209,8 +231,12 @@ Input::
 import {x} from "f1"
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -230,8 +256,28 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/d/f0.ts"]
-Program options: {"module":2}
+//// [/users/username/projects/project/f1.js] file written with same contents
+//// [/users/username/projects/project/d/f0.js] file written with same contents
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/d/f0.ts:
+  {}
+/users/username/projects/project/f1.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects:
+  {}
+
+
+Program root files: [
+  "/users/username/projects/project/d/f0.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -247,19 +293,4 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/f1.ts (computed .d.ts)
 /users/username/projects/project/d/f0.ts (computed .d.ts)
 
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/project/d/f0.ts:
-  {}
-/users/username/projects/project/f1.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/f1.js] file written with same contents
-//// [/users/username/projects/project/d/f0.js] file written with same contents

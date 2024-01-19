@@ -5,11 +5,11 @@ import * as b from '../../beta/b'
 
 //// [/alpha/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": []
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": []
 }
 
 //// [/beta/b.ts]

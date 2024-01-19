@@ -101,7 +101,7 @@ variadicTuples1.ts(411,7): error TS2322: Type '[boolean, false]' is not assignab
         foo1(...t1, ...t2, 42, 43, 44);
         foo1(...t1, ...t2, ...a1);
         foo1(...t1);  // Error
-        ~~~~~~~~~~~
+        ~~~~
 !!! error TS2555: Expected at least 3 arguments, but got 2.
 !!! related TS6210 variadicTuples1.ts:45:45: An argument for 'c' was not provided.
         foo1(...t1, 45);  // Error

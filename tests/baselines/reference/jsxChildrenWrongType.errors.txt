@@ -1,4 +1,4 @@
-other.tsx(10,5): error TS2769: No overload matches this call.
+other.tsx(10,6): error TS2769: No overload matches this call.
   Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
     Type 'unknown' is not assignable to type 'string | boolean'.
   Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
@@ -16,7 +16,7 @@ other.tsx(10,5): error TS2769: No overload matches this call.
     declare class Foo extends React.Component<PropsType, {}> {}
     const b = (
         <Foo>
-        ~~~~~
+         ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 2 of 2, '(props: PropsType, context: any): Foo', gave the following error.
 !!! error TS2769:     Type 'unknown' is not assignable to type 'string | boolean'.

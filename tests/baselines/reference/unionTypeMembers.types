@@ -144,27 +144,27 @@ num = x.commonMethodWithOwnTypeParameter(num);
 >num = x.commonMethodWithOwnTypeParameter(num) : number
 >num : number
 >x.commonMethodWithOwnTypeParameter(num) : number
->x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
 >x : I1<number> | I2<number>
->commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
 >num : number
 
 str = x.commonMethodWithOwnTypeParameter(str);
 >str = x.commonMethodWithOwnTypeParameter(str) : string
 >str : string
 >x.commonMethodWithOwnTypeParameter(str) : string
->x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
 >x : I1<number> | I2<number>
->commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
 >str : string
 
 strOrNum = x.commonMethodWithOwnTypeParameter(strOrNum);
 >strOrNum = x.commonMethodWithOwnTypeParameter(strOrNum) : string | number
 >strOrNum : string | number
 >x.commonMethodWithOwnTypeParameter(strOrNum) : string | number
->x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
 >x : I1<number> | I2<number>
->commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
 >strOrNum : string | number
 
 x.propertyOnlyInI1; // error

@@ -541,7 +541,7 @@ export class F<T, U> {
      * @param {A} a
      * @param {B} b
      */
-    static create<A_1, B_1>(a: A_1, b: B_1): F<A_1, B_1>;
+    static create<A, B>(a: A, b: B): F<A, B>;
     /**
      * @param {T} a
      * @param {U} b

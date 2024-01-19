@@ -49,10 +49,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo2 = exports.foo = void 0;
 function foo(_a) {
-    var _b = _a.foo, foo = _b === void 0 ? yield Promise.resolve().then(function () { return require("./bar"); }) : _b;
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_c) {
-            return [2 /*return*/];
+    return __awaiter(this, arguments, void 0, function (_b) {
+        var _c, foo, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
+                case 0:
+                    _c = _b.foo;
+                    if (!(_c === void 0)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, Promise.resolve().then(function () { return require("./bar"); })];
+                case 1:
+                    _d = _e.sent();
+                    return [3 /*break*/, 3];
+                case 2:
+                    _d = _c;
+                    _e.label = 3;
+                case 3:
+                    foo = _d;
+                    return [2 /*return*/];
+            }
         });
     });
 }

@@ -97,22 +97,22 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function main() {
-    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
-        var _d, _e, _f, d1_1, env_1, d1, e_1_1;
-        var _g;
+        var _a, _b, _c, d1_1, env_1, d1, e_1_1;
+        var _d;
+        var _e, e_1, _f, _g;
         return __generator(this, function (_h) {
             switch (_h.label) {
                 case 0:
                     _h.trys.push([0, 5, 6, 11]);
-                    _d = true, _e = __asyncValues([(_g = {}, _g[Symbol.dispose] = function () { }, _g), null, undefined]);
+                    _a = true, _b = __asyncValues([(_d = {}, _d[Symbol.dispose] = function () { }, _d), null, undefined]);
                     _h.label = 1;
-                case 1: return [4 /*yield*/, _e.next()];
+                case 1: return [4 /*yield*/, _b.next()];
                 case 2:
-                    if (!(_f = _h.sent(), _a = _f.done, !_a)) return [3 /*break*/, 4];
-                    _c = _f.value;
-                    _d = false;
-                    d1_1 = _c;
+                    if (!(_c = _h.sent(), _e = _c.done, !_e)) return [3 /*break*/, 4];
+                    _g = _c.value;
+                    _a = false;
+                    d1_1 = _g;
                     env_1 = { stack: [], error: void 0, hasError: false };
                     try {
                         d1 = __addDisposableResource(env_1, d1_1, false);
@@ -126,7 +126,7 @@ function main() {
                     }
                     _h.label = 3;
                 case 3:
-                    _d = true;
+                    _a = true;
                     return [3 /*break*/, 1];
                 case 4: return [3 /*break*/, 11];
                 case 5:
@@ -135,8 +135,8 @@ function main() {
                     return [3 /*break*/, 11];
                 case 6:
                     _h.trys.push([6, , 9, 10]);
-                    if (!(!_d && !_a && (_b = _e.return))) return [3 /*break*/, 8];
-                    return [4 /*yield*/, _b.call(_e)];
+                    if (!(!_a && !_e && (_f = _b.return))) return [3 /*break*/, 8];
+                    return [4 /*yield*/, _f.call(_b)];
                 case 7:
                     _h.sent();
                     _h.label = 8;

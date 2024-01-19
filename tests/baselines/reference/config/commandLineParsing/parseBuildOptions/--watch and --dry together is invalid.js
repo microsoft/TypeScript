@@ -1,8 +1,8 @@
 --watch --dry
 buildOptions::
 {
- "watch": true,
- "dry": true
+  "watch": true,
+  "dry": true
 }
 WatchOptions::
 

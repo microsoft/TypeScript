@@ -152,7 +152,7 @@ interface InvalidInterface {
 
 // type literals
 type InvalidTypeLiteral = {
->InvalidTypeLiteral : { invalidPropertyType: unique symbol; invalidArgType(arg: unique symbol): void; invalidRestArgType(...args: (unique symbol)[]): void; invalidReturnType(): unique symbol; invalidThisType(this: unique symbol): any; invalidTypePredicate(n: any): n is symbol; invalidTypeParameterConstraint<T extends symbol>(): void; invalidTypeParameterDefault<T = symbol>(): void; }
+>InvalidTypeLiteral : { invalidPropertyType: unique symbol; invalidArgType(arg: unique symbol): void; invalidRestArgType(...args: (unique symbol)[]): void; invalidReturnType(): unique symbol; invalidThisType(this: unique symbol): any; invalidTypePredicate(n: any): n is symbol; invalidTypeParameterConstraint<T extends symbol>(): void; invalidTypeParameterDefault<T_1 = symbol>(): void; }
 
     invalidPropertyType: unique symbol;
 >invalidPropertyType : symbol

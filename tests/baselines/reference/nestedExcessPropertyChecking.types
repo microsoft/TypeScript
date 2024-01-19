@@ -160,3 +160,58 @@ const response: Query = {
     },
 };
 
+// Repro from #53412
+
+type BaseItem = {
+>BaseItem : { id: number; }
+
+    id: number;
+>id : number
+}
+type ExtendedItem = BaseItem & {
+>ExtendedItem : BaseItem & { description: string | null; }
+
+    description: string | null
+>description : string | null
+
+};
+  
+type BaseValue = {
+>BaseValue : { items: BaseItem[]; }
+
+    // there are other fields
+    items: BaseItem[];
+>items : BaseItem[]
+}
+type ExtendedValue = BaseValue & {
+>ExtendedValue : BaseValue & { items: ExtendedItem[]; }
+
+    // there are other fields
+    items: ExtendedItem[];
+>items : ExtendedItem[]
+}
+
+const TEST_VALUE: ExtendedValue = {
+>TEST_VALUE : ExtendedValue
+>{    items: [        {id: 1, description: null},        {id: 2, description: 'wigglytubble'},    ]} : { items: ({ id: number; description: null; } | { id: number; description: string; })[]; }
+
+    items: [
+>items : ({ id: number; description: null; } | { id: number; description: string; })[]
+>[        {id: 1, description: null},        {id: 2, description: 'wigglytubble'},    ] : ({ id: number; description: null; } | { id: number; description: string; })[]
+
+        {id: 1, description: null},
+>{id: 1, description: null} : { id: number; description: null; }
+>id : number
+>1 : 1
+>description : null
+
+        {id: 2, description: 'wigglytubble'},
+>{id: 2, description: 'wigglytubble'} : { id: number; description: string; }
+>id : number
+>2 : 2
+>description : string
+>'wigglytubble' : "wigglytubble"
+
+    ]
+};
+

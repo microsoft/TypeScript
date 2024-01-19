@@ -2,7 +2,7 @@
 
 === /node_modules/tslib/index.d.ts ===
 export declare function __classPrivateFieldGet<T extends object, V>(
->__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V | undefined; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }
+>__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V | undefined; }, kind?: "f"): V; <T_1 extends new (...args: any[]) => unknown, V_1>(receiver: T_1, state: T_1, kind: "f", f: { value: V_1; }): V_1; }
 
   receiver: T,
 >receiver : T
@@ -19,7 +19,7 @@ export declare function __classPrivateFieldGet<T extends object, V>(
 
 ): V;
 export declare function __classPrivateFieldGet<T extends new (...args: any[]) => unknown, V>(
->__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: {    value: V;}): V; }
+>__classPrivateFieldGet : { <T_1 extends object, V_1>(receiver: T_1, state: { has(o: T_1): boolean; get(o: T_1): V_1; }, kind?: "f"): V_1; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: {    value: V;}): V; }
 >args : any[]
 
   receiver: T,
@@ -39,7 +39,7 @@ export declare function __classPrivateFieldGet<T extends new (...args: any[]) =>
 
 === /node_modules/tslib/index.d.mts ===
 export { __classPrivateFieldGet } from "./index.js";
->__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V; }, kind?: "f"): V; <T extends new (...args: any[]) => unknown, V>(receiver: T, state: T, kind: "f", f: { value: V; }): V; }
+>__classPrivateFieldGet : { <T extends object, V>(receiver: T, state: { has(o: T): boolean; get(o: T): V; }, kind?: "f"): V; <T_1 extends new (...args: any[]) => unknown, V_1>(receiver: T_1, state: T_1, kind: "f", f: { value: V_1; }): V_1; }
 
 === /index.mts ===
 export class Foo {

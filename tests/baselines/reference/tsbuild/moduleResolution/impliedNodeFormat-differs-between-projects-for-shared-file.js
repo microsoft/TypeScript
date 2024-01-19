@@ -32,10 +32,17 @@ interface Array<T> { length: number; [n: number]: T; }
 
 
 //// [/src/projects/a/tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/src/projects/b/package.json]
-{"name":"b","type":"module"}
+{
+  "name": "b",
+  "type": "module"
+}
 
 //// [/src/projects/b/src/index.ts]
 import pg from "pg";
@@ -43,13 +50,21 @@ pg.foo();
 
 
 //// [/src/projects/b/tsconfig.json]
-{"compilerOptions":{"strict":true,"module":"node16"}}
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "node16"
+  }
+}
 
 //// [/src/projects/node_modules/@types/pg/index.d.ts]
 export function foo(): void;
 
 //// [/src/projects/node_modules/@types/pg/package.json]
-{"name":"@types/pg","types":"index.d.ts"}
+{
+  "name": "@types/pg",
+  "types": "index.d.ts"
+}
 
 
 

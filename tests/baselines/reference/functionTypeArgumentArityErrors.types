@@ -3,33 +3,33 @@
 === functionTypeArgumentArityErrors.ts ===
 // Overloaded functions with default type arguments
 declare function f1<A = any>(): void;
->f1 : { <A = any>(): void; <A, B, C, D = any>(): void; }
+>f1 : { <A = any>(): void; <A_1, B, C, D = any>(): void; }
 
 declare function f1<A, B, C, D = any>(): void;
->f1 : { <A = any>(): void; <A, B, C, D = any>(): void; }
+>f1 : { <A_1 = any>(): void; <A, B, C, D = any>(): void; }
 
 f1<number, number>();
 >f1<number, number>() : void
->f1 : { <A = any>(): void; <A, B, C, D = any>(): void; }
+>f1 : { <A = any>(): void; <A_1, B, C, D = any>(): void; }
 
 f1<number, number, number, number, number>();
 >f1<number, number, number, number, number>() : void
->f1 : { <A = any>(): void; <A, B, C, D = any>(): void; }
+>f1 : { <A = any>(): void; <A_1, B, C, D = any>(): void; }
 
 // Overloaded functions with no default type arguments
 declare function f2<A>(): void;
->f2 : { <A>(): void; <A, B, C>(): void; }
+>f2 : { <A>(): void; <A_1, B, C>(): void; }
 
 declare function f2<A, B, C>(): void;
->f2 : { <A>(): void; <A, B, C>(): void; }
+>f2 : { <A_1>(): void; <A, B, C>(): void; }
 
 f2<number, number>();
 >f2<number, number>() : void
->f2 : { <A>(): void; <A, B, C>(): void; }
+>f2 : { <A>(): void; <A_1, B, C>(): void; }
 
 f2<number, number, number, number>();
 >f2<number, number, number, number>() : void
->f2 : { <A>(): void; <A, B, C>(): void; }
+>f2 : { <A>(): void; <A_1, B, C>(): void; }
 
 // Overloaded non-generic functions
 declare function f3(): void;

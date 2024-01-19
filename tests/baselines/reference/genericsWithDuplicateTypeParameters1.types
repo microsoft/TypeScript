@@ -32,8 +32,8 @@ interface I<X, X> {
 }
 
 var m = {
->m : { a: <X>() => void; b: <X>(a: X, b: X) => X; }
->{    a: function f<X, X>() {},    b: function f2<X, X>(a: X, b: X): X { return null; }} : { a: <X>() => void; b: <X>(a: X, b: X) => X; }
+>m : { a: <X>() => void; b: <X_1>(a: X_1, b: X_1) => X_1; }
+>{    a: function f<X, X>() {},    b: function f2<X, X>(a: X, b: X): X { return null; }} : { a: <X>() => void; b: <X_1>(a: X_1, b: X_1) => X_1; }
 
     a: function f<X, X>() {},
 >a : <X>() => void

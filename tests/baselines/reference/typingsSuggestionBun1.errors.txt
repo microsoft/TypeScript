@@ -1,0 +1,11 @@
+a.ts(1,14): error TS2868: Cannot find name 'Bun'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun` and then add 'bun' to the types field in your tsconfig.
+
+
+==== tsconfig.json (0 errors) ====
+    { "compilerOptions": {"types": []} }
+    
+==== a.ts (1 errors) ====
+    const file = Bun.file("/a.ts");
+                 ~~~
+!!! error TS2868: Cannot find name 'Bun'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun` and then add 'bun' to the types field in your tsconfig.
+    

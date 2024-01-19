@@ -13,7 +13,9 @@ declare var v: {
 v === 'foo';
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -43,20 +45,10 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
+//// [/user/username/projects/myproject/a.js]
+v === 'foo';
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -76,22 +68,45 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-v === 'foo';
-
-
 
 Change:: Enable noErrorTruncation
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"noErrorTruncation":true}}
+{
+  "compilerOptions": {
+    "noErrorTruncation": true
+  }
+}
 
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -106,8 +121,16 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"noErrorTruncation":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "noErrorTruncation": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -120,4 +143,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

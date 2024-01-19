@@ -51,7 +51,7 @@ interface A {
 >arg : T
 
     a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>a11 : <T>(x: {    foo: T;}, y: {    foo: T;    bar: T;}) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: T; bar: T; }
@@ -59,13 +59,13 @@ interface A {
 >bar : T
 
     a15: <T>(x: { a: T; b: T }) => T[];
->a15 : <T>(x: { a: T; b: T; }) => T[]
+>a15 : <T>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
->a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>a16 : <T extends Base>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -167,7 +167,7 @@ b5 = x.a5;
 >a5 : <T, U>(x: (arg: T) => U) => T
 
 var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
->b11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>b11 : <T, U>(x: {    foo: T;}, y: {    foo: U;    bar: U;}) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: U; bar: U; }
@@ -189,7 +189,7 @@ b11 = x.a11;
 >a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 
 var b16: <T>(x: { a: T; b: T }) => T[]; 
->b16 : <T>(x: { a: T; b: T; }) => T[]
+>b16 : <T>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T

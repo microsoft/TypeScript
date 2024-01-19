@@ -43,7 +43,12 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 }
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"declaration":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true
+  }
+}
 
 
 

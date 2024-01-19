@@ -25,11 +25,11 @@ console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
 >Intl.PluralRules.supportedLocalesOf(locales, options).join(', ') : string
 >Intl.PluralRules.supportedLocalesOf(locales, options).join : (separator?: string) => string
 >Intl.PluralRules.supportedLocalesOf(locales, options) : string[]
->Intl.PluralRules.supportedLocalesOf : (locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
->Intl.PluralRules : { (locales?: string | string[], options?: Intl.PluralRulesOptions): Intl.PluralRules; new (locales?: string | string[], options?: Intl.PluralRulesOptions): Intl.PluralRules; supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
+>Intl.PluralRules.supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
+>Intl.PluralRules : Intl.PluralRulesConstructor
 >Intl : typeof Intl
->PluralRules : { (locales?: string | string[], options?: Intl.PluralRulesOptions): Intl.PluralRules; new (locales?: string | string[], options?: Intl.PluralRulesOptions): Intl.PluralRules; supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[]; }
->supportedLocalesOf : (locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
+>PluralRules : Intl.PluralRulesConstructor
+>supportedLocalesOf : (locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }) => string[]
 >locales : string[]
 >options : { readonly localeMatcher: "lookup"; }
 >join : (separator?: string) => string

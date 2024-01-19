@@ -1,6 +1,12 @@
 //// [tests/cases/compiler/defaultValueInFunctionTypes.ts] ////
 
 === defaultValueInFunctionTypes.ts ===
+type Foo = ({ first = 0 }: { first?: number }) => unknown;
+>Foo : ({ first }: { first?: number; }) => unknown
+>first : number
+>0 : 0
+>first : number
+
 var x: (a: number = 1) => number;
 >x : (a?: number) => number
 >a : number

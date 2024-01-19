@@ -1,9 +1,17 @@
-Resolving "b" from /a/b.ts with typings: ["a","b"]
+Resolving "b" from /a/b.ts with typings: [
+  "a",
+  "b"
+]
 //// [/a/b.ts]
 
 
 //// [/node_modules/b/package.json]
-{"typings":["a","b"]}
+{
+  "typings": [
+    "a",
+    "b"
+  ]
+}
 
 //// [/a/b.d.ts]
 
@@ -40,12 +48,20 @@ Resolution:: {
   ]
 }
 
-Resolving "b" from /a/b.ts with typings: ["a","b"] with host that doesnt have directoryExists
+Resolving "b" from /a/b.ts with typings: [
+  "a",
+  "b"
+] with host that doesnt have directoryExists
 //// [/a/b.ts]
 
 
 //// [/node_modules/b/package.json]
-{"typings":["a","b"]}
+{
+  "typings": [
+    "a",
+    "b"
+  ]
+}
 
 //// [/a/b.d.ts]
 
@@ -82,12 +98,18 @@ Resolution:: {
   ]
 }
 
-Resolving "b" from /a/b.ts with typings: {"a":"b"}
+Resolving "b" from /a/b.ts with typings: {
+  "a": "b"
+}
 //// [/a/b.ts]
 
 
 //// [/node_modules/b/package.json]
-{"typings":{"a":"b"}}
+{
+  "typings": {
+    "a": "b"
+  }
+}
 
 //// [/a/b.d.ts]
 
@@ -124,12 +146,18 @@ Resolution:: {
   ]
 }
 
-Resolving "b" from /a/b.ts with typings: {"a":"b"} with host that doesnt have directoryExists
+Resolving "b" from /a/b.ts with typings: {
+  "a": "b"
+} with host that doesnt have directoryExists
 //// [/a/b.ts]
 
 
 //// [/node_modules/b/package.json]
-{"typings":{"a":"b"}}
+{
+  "typings": {
+    "a": "b"
+  }
+}
 
 //// [/a/b.d.ts]
 
@@ -171,7 +199,9 @@ Resolving "b" from /a/b.ts with typings: true
 
 
 //// [/node_modules/b/package.json]
-{"typings":true}
+{
+  "typings": true
+}
 
 //// [/a/b.d.ts]
 
@@ -213,7 +243,9 @@ Resolving "b" from /a/b.ts with typings: true with host that doesnt have directo
 
 
 //// [/node_modules/b/package.json]
-{"typings":true}
+{
+  "typings": true
+}
 
 //// [/a/b.d.ts]
 
@@ -255,7 +287,9 @@ Resolving "b" from /a/b.ts with typings: null
 
 
 //// [/node_modules/b/package.json]
-{"typings":null}
+{
+  "typings": null
+}
 
 //// [/a/b.d.ts]
 
@@ -297,7 +331,9 @@ Resolving "b" from /a/b.ts with typings: null with host that doesnt have directo
 
 
 //// [/node_modules/b/package.json]
-{"typings":null}
+{
+  "typings": null
+}
 
 //// [/a/b.d.ts]
 

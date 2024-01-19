@@ -15,7 +15,7 @@ class C {
      * @readonly
      */
     static readonlyType;
->readonlyType : symbol
+>readonlyType : unique symbol
 
     /**
      * @type {unique symbol}

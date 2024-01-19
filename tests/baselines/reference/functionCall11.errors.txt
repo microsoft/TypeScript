@@ -8,7 +8,7 @@ functionCall11.ts(6,15): error TS2554: Expected 1-2 arguments, but got 3.
     foo('foo', 1); 
     foo('foo'); 
     foo();
-    ~~~~~
+    ~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
 !!! related TS6210 functionCall11.ts:1:14: An argument for 'a' was not provided.
     foo(1, 'bar');

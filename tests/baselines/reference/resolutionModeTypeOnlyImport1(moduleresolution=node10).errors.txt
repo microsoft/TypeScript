@@ -2,6 +2,7 @@ error TS2688: Cannot find type definition file for 'foo'.
   The file is in the program because:
     Entry point for implicit type library 'foo'
 /app.ts(1,35): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+  There are types at '/node_modules/@types/foo/index.d.mts', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.
 
 
 !!! error TS2688: Cannot find type definition file for 'foo'.
@@ -29,6 +30,7 @@ error TS2688: Cannot find type definition file for 'foo'.
     import type { x as Default } from "foo";
                                       ~~~~~
 !!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+!!! error TS2307:   There are types at '/node_modules/@types/foo/index.d.mts', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.
     import type { x as Import } from "foo" assert { "resolution-mode": "import" };
     import type { x as Require } from "foo" assert { "resolution-mode": "require" };
     type _Default = typeof Default;

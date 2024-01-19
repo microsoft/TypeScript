@@ -1621,6 +1621,15 @@ export function createLanguageService(
     }
 
     function synchronizeHostData(): void {
+        if (host.updateFromProject && !host.updateFromProjectInProgress) {
+            host.updateFromProject();
+        }
+        else {
+            synchronizeHostDataWorker();
+        }
+    }
+
+    function synchronizeHostDataWorker(): void {
         Debug.assert(languageServiceMode !== LanguageServiceMode.Syntactic);
         // perform fast check if host supports it
         if (host.getProjectVersion) {
@@ -3274,16 +3283,21 @@ export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementW
         return symbol ? [symbol] : emptyArray;
     }
 
-    const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectLiteralExpression(node.parent) || isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
+    const filteredTypes = isObjectLiteralExpression(node.parent) || isJsxAttributes(node.parent)
+        ? filter(contextualType.types, t => !checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent))
+        : contextualType.types;
+    const discriminatedPropertySymbols = mapDefined(filteredTypes, t => t.getProperty(name));
     if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
         const symbol = contextualType.getProperty(name);
         if (symbol) return [symbol];
     }
-    if (discriminatedPropertySymbols.length === 0) {
+    if (!filteredTypes.length && !discriminatedPropertySymbols.length) {
         // Bad discriminant -- do again without discriminating
         return mapDefined(contextualType.types, t => t.getProperty(name));
     }
-    return discriminatedPropertySymbols;
+    // by eliminating duplicates we might even end up with a single symbol
+    // that helps with displaying better quick infos on properties of union types
+    return deduplicate(discriminatedPropertySymbols, equateValues);
 }
 
 function isArgumentOfElementAccessExpression(node: Node) {

@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/promiseWithResolvers.ts] ////
+
+=== promiseWithResolvers.ts ===
+type T = {};
+>T : {}
+
+const { promise, resolve, reject } = Promise.withResolvers<T>();
+>promise : Promise<T>
+>resolve : (value: T | PromiseLike<T>) => void
+>reject : (reason?: any) => void
+>Promise.withResolvers<T>() : PromiseWithResolvers<T>
+>Promise.withResolvers : <T>() => PromiseWithResolvers<T>
+>Promise : PromiseConstructor
+>withResolvers : <T>() => PromiseWithResolvers<T>
+

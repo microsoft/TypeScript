@@ -5,15 +5,15 @@ class A<T> {
 >A : A<T>
 
     static B<S>(v: A<S>): A<S>;
->B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
+>B : { <S>(v: A<S>): A<S>; <S_1>(v: S_1): A<S_1>; }
 >v : A<S>
 
     static B<S>(v: S): A<S>;
->B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
+>B : { <S_1>(v: A<S_1>): A<S_1>; <S>(v: S): A<S>; }
 >v : S
 
     static B<S>(v: any): A<S> {
->B : { <S>(v: A<S>): A<S>; <S>(v: S): A<S>; }
+>B : { <S_1>(v: A<S_1>): A<S_1>; <S_2>(v: S_2): A<S_2>; }
 >v : any
 
         return null;

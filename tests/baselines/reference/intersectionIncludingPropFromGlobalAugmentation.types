@@ -1,0 +1,34 @@
+//// [tests/cases/conformance/types/typeRelationships/assignmentCompatibility/intersectionIncludingPropFromGlobalAugmentation.ts] ////
+
+=== intersectionIncludingPropFromGlobalAugmentation.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54345
+
+interface Test1 { toString: null | 'string'; }
+>toString : "string" | null
+
+type Test2 = Test1 & { optional?: unknown };
+>Test2 : Test1 & { optional?: unknown; }
+>optional : unknown
+
+declare const source: Test1;
+>source : Test1
+
+const target: Test2 = { ...source };
+>target : Test2
+>{ ...source } : { toString: "string" | null; }
+>source : Test1
+
+const toString = target.toString;
+>toString : "string" | null
+>target.toString : "string" | null
+>target : Test2
+>toString : "string" | null
+
+const hasOwn = target.hasOwnProperty; // not an own member but it should still be accessible
+>hasOwn : (v: PropertyKey) => boolean
+>target.hasOwnProperty : (v: PropertyKey) => boolean
+>target : Test2
+>hasOwnProperty : (v: PropertyKey) => boolean
+
+export {}
+

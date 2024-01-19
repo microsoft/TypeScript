@@ -1,11 +1,11 @@
 config:
 {
- "compilerOptions": {
-  "allowJs": false
- },
- "include": [
-  "js/*"
- ]
+  "compilerOptions": {
+    "allowJs": false
+  },
+  "include": [
+    "js/*"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -81,28 +81,28 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "allowJs": false,
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "compilerOptions": {
-   "allowJs": false
+  "options": {
+    "allowJs": false,
+    "configFilePath": "c:/dev/tsconfig.json"
   },
-  "include": [
-   "js/*"
-  ]
- },
- "wildcardDirectories": {
-  "c:/dev/js": "WatchDirectoryFlags.None"
- },
- "compileOnSave": false
+  "fileNames": [],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "compilerOptions": {
+      "allowJs": false
+    },
+    "include": [
+      "js/*"
+    ]
+  },
+  "wildcardDirectories": {
+    "c:/dev/js": "WatchDirectoryFlags.None"
+  },
+  "compileOnSave": false
 }
 Errors::
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file 'c:/dev/tsconfig.json'. Specified 'include' paths were '["js/*"]' and 'exclude' paths were '[]'.

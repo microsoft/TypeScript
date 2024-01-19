@@ -8,7 +8,9 @@
 
 
 //// [/root/m3/package.json]
-{"typings":"dist/typings.d.ts"}
+{
+  "typings": "dist/typings.d.ts"
+}
 
 //// [/root/m3/dist/typings.d.ts]
 
@@ -112,7 +114,9 @@ Resolution:: {
 
 
 //// [/root/m3/package.json]
-{"typings":"dist/typings.d.ts"}
+{
+  "typings": "dist/typings.d.ts"
+}
 
 //// [/root/m3/dist/typings.d.ts]
 

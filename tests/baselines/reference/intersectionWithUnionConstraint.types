@@ -45,7 +45,7 @@ type T1 = (string | number | undefined) & (string | null | undefined);  // strin
 
 function f3<T extends string | number | undefined>(x: T & (number | object | undefined)) {
 >f3 : <T extends string | number | undefined>(x: T & (number | object | undefined)) => void
->x : T & (number | object | undefined)
+>x : (T & undefined) | (T & number)
 
     const y: number | undefined = x;
 >y : number | undefined
@@ -54,7 +54,7 @@ function f3<T extends string | number | undefined>(x: T & (number | object | und
 
 function f4<T extends string | number>(x: T & (number | object)) {
 >f4 : <T extends string | number>(x: T & (number | object)) => void
->x : T & (number | object)
+>x : T & number
 
     const y: number = x;
 >y : number

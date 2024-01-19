@@ -23,14 +23,14 @@ export {}
 
 //// [/primary/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": [],
- "files": [
-  "a.ts"
- ]
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [],
+  "files": [
+    "a.ts"
+  ]
 }
 
 

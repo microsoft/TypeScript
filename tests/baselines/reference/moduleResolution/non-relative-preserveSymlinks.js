@@ -4,7 +4,10 @@
 //// [/app/node_modules/linked/index.d.ts] symlink(/linked/index.d.ts)
 
 //// [/app/node_modules/linked/package.json]
-{"version": "0.0.0", "main": "./index"}
+{
+  "version": "0.0.0",
+  "main": "./index"
+}
 
 Resolving "linked" from /app/app.ts when preserveSymlinks is false
 Resolution:: {
@@ -34,7 +37,10 @@ Resolution:: {
 //// [/app/node_modules/linked/index.d.ts] symlink(/linked/index.d.ts)
 
 //// [/app/node_modules/linked/package.json]
-{"version": "0.0.0", "main": "./index"}
+{
+  "version": "0.0.0",
+  "main": "./index"
+}
 
 Resolving "linked" from /app/app.ts when preserveSymlinks is true
 Resolution:: {

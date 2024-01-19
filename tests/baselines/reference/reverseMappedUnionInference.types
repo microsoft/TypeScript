@@ -1,0 +1,148 @@
+//// [tests/cases/compiler/reverseMappedUnionInference.ts] ////
+
+=== reverseMappedUnionInference.ts ===
+interface AnyExtractor<Result> {
+  matches: (node: any) => boolean;
+>matches : (node: any) => boolean
+>node : any
+
+  extract: (node: any) => Result | undefined;
+>extract : (node: any) => Result | undefined
+>node : any
+}
+
+interface Extractor<T, Result> {
+  matches: (node: unknown) => node is T;
+>matches : (node: unknown) => node is T
+>node : unknown
+
+  extract: (node: T) => Result | undefined;
+>extract : (node: T) => Result | undefined
+>node : T
+}
+
+declare function createExtractor<T, Result>(params: {
+>createExtractor : <T, Result>(params: { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }) => Extractor<T, Result>
+>params : { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }
+
+  matcher: (node: unknown) => node is T;
+>matcher : (node: unknown) => node is T
+>node : unknown
+
+  extract: (node: T) => Result;
+>extract : (node: T) => Result
+>node : T
+
+}): Extractor<T, Result>;
+
+interface Identifier {
+  kind: "identifier";
+>kind : "identifier"
+
+  name: string;
+>name : string
+}
+
+declare function isIdentifier(node: unknown): node is Identifier;
+>isIdentifier : (node: unknown) => node is Identifier
+>node : unknown
+
+const identifierExtractor = createExtractor({
+>identifierExtractor : Extractor<Identifier, { node: Identifier; kind: "identifier"; value: string; }>
+>createExtractor({  matcher: isIdentifier,  extract: (node) => {    return {      node,      kind: "identifier" as const,      value: node.name,    };  },}) : Extractor<Identifier, { node: Identifier; kind: "identifier"; value: string; }>
+>createExtractor : <T, Result>(params: { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }) => Extractor<T, Result>
+>{  matcher: isIdentifier,  extract: (node) => {    return {      node,      kind: "identifier" as const,      value: node.name,    };  },} : { matcher: (node: unknown) => node is Identifier; extract: (node: Identifier) => { node: Identifier; kind: "identifier"; value: string; }; }
+
+  matcher: isIdentifier,
+>matcher : (node: unknown) => node is Identifier
+>isIdentifier : (node: unknown) => node is Identifier
+
+  extract: (node) => {
+>extract : (node: Identifier) => { node: Identifier; kind: "identifier"; value: string; }
+>(node) => {    return {      node,      kind: "identifier" as const,      value: node.name,    };  } : (node: Identifier) => { node: Identifier; kind: "identifier"; value: string; }
+>node : Identifier
+
+    return {
+>{      node,      kind: "identifier" as const,      value: node.name,    } : { node: Identifier; kind: "identifier"; value: string; }
+
+      node,
+>node : Identifier
+
+      kind: "identifier" as const,
+>kind : "identifier"
+>"identifier" as const : "identifier"
+>"identifier" : "identifier"
+
+      value: node.name,
+>value : string
+>node.name : string
+>node : Identifier
+>name : string
+
+    };
+  },
+});
+
+interface StringLiteral {
+  kind: "stringLiteral";
+>kind : "stringLiteral"
+
+  value: string;
+>value : string
+}
+
+declare function isStringLiteral(node: unknown): node is StringLiteral;
+>isStringLiteral : (node: unknown) => node is StringLiteral
+>node : unknown
+
+const stringExtractor = createExtractor({
+>stringExtractor : Extractor<StringLiteral, { node: StringLiteral; kind: "string"; value: string; }>
+>createExtractor({  matcher: isStringLiteral,  extract: (node) => {    return {      node,      kind: "string" as const,      value: node.value,    };  },}) : Extractor<StringLiteral, { node: StringLiteral; kind: "string"; value: string; }>
+>createExtractor : <T, Result>(params: { matcher: (node: unknown) => node is T; extract: (node: T) => Result; }) => Extractor<T, Result>
+>{  matcher: isStringLiteral,  extract: (node) => {    return {      node,      kind: "string" as const,      value: node.value,    };  },} : { matcher: (node: unknown) => node is StringLiteral; extract: (node: StringLiteral) => { node: StringLiteral; kind: "string"; value: string; }; }
+
+  matcher: isStringLiteral,
+>matcher : (node: unknown) => node is StringLiteral
+>isStringLiteral : (node: unknown) => node is StringLiteral
+
+  extract: (node) => {
+>extract : (node: StringLiteral) => { node: StringLiteral; kind: "string"; value: string; }
+>(node) => {    return {      node,      kind: "string" as const,      value: node.value,    };  } : (node: StringLiteral) => { node: StringLiteral; kind: "string"; value: string; }
+>node : StringLiteral
+
+    return {
+>{      node,      kind: "string" as const,      value: node.value,    } : { node: StringLiteral; kind: "string"; value: string; }
+
+      node,
+>node : StringLiteral
+
+      kind: "string" as const,
+>kind : "string"
+>"string" as const : "string"
+>"string" : "string"
+
+      value: node.value,
+>value : string
+>node.value : string
+>node : StringLiteral
+>value : string
+
+    };
+  },
+});
+
+declare function unionType<Result extends readonly unknown[]>(parsers: {
+>unionType : <Result extends readonly unknown[]>(parsers: { [K in keyof Result]: AnyExtractor<Result[K]>; }) => AnyExtractor<Result[number]>
+>parsers : { [K in keyof Result]: AnyExtractor<Result[K]>; }
+
+  [K in keyof Result]: AnyExtractor<Result[K]>;
+}): AnyExtractor<Result[number]>;
+
+const myUnion = unionType([identifierExtractor, stringExtractor]);
+>myUnion : AnyExtractor<{ node: Identifier; kind: "identifier"; value: string; } | { node: StringLiteral; kind: "string"; value: string; }>
+>unionType([identifierExtractor, stringExtractor]) : AnyExtractor<{ node: Identifier; kind: "identifier"; value: string; } | { node: StringLiteral; kind: "string"; value: string; }>
+>unionType : <Result extends readonly unknown[]>(parsers: { [K in keyof Result]: AnyExtractor<Result[K]>; }) => AnyExtractor<Result[number]>
+>[identifierExtractor, stringExtractor] : [Extractor<Identifier, { node: Identifier; kind: "identifier"; value: string; }>, Extractor<StringLiteral, { node: StringLiteral; kind: "string"; value: string; }>]
+>identifierExtractor : Extractor<Identifier, { node: Identifier; kind: "identifier"; value: string; }>
+>stringExtractor : Extractor<StringLiteral, { node: StringLiteral; kind: "string"; value: string; }>
+

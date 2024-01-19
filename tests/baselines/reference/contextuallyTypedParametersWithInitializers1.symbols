@@ -1,0 +1,321 @@
+//// [tests/cases/compiler/contextuallyTypedParametersWithInitializers1.ts] ////
+
+=== contextuallyTypedParametersWithInitializers1.ts ===
+declare function id1<T>(input: T): T;
+>id1 : Symbol(id1, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 0))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 21))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 24))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 21))
+
+declare function id2<T extends (x: any) => any>(input: T): T;
+>id2 : Symbol(id2, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 37))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 1, 21))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 1, 32))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers1.ts, 1, 48))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 1, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 1, 21))
+
+declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
+>id3 : Symbol(id3, Decl(contextuallyTypedParametersWithInitializers1.ts, 1, 61))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 2, 21))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 2, 32))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 2, 36))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers1.ts, 2, 57))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 2, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 2, 21))
+
+declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
+>id4 : Symbol(id4, Decl(contextuallyTypedParametersWithInitializers1.ts, 2, 70))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 3, 21))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 3, 32))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 3, 36))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers1.ts, 3, 61))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 3, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 3, 21))
+
+declare function id5<T extends (x?: number) => any>(input: T): T;
+>id5 : Symbol(id5, Decl(contextuallyTypedParametersWithInitializers1.ts, 3, 74))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 4, 21))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 4, 32))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers1.ts, 4, 52))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 4, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 4, 21))
+
+const f10 = function ({ foo = 42 }) { return foo };
+>f10 : Symbol(f10, Decl(contextuallyTypedParametersWithInitializers1.ts, 6, 5))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 6, 23))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 6, 23))
+
+const f11 = id1(function ({ foo = 42 }) { return foo });
+>f11 : Symbol(f11, Decl(contextuallyTypedParametersWithInitializers1.ts, 7, 5))
+>id1 : Symbol(id1, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 0))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 7, 27))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 7, 27))
+
+const f12 = id2(function ({ foo = 42 }) { return foo });
+>f12 : Symbol(f12, Decl(contextuallyTypedParametersWithInitializers1.ts, 8, 5))
+>id2 : Symbol(id2, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 37))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 8, 27))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 8, 27))
+
+const f13 = id3(function ({ foo = 42 }) { return foo });
+>f13 : Symbol(f13, Decl(contextuallyTypedParametersWithInitializers1.ts, 9, 5))
+>id3 : Symbol(id3, Decl(contextuallyTypedParametersWithInitializers1.ts, 1, 61))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 9, 27))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 9, 27))
+
+const f14 = id4(function ({ foo = 42 }) { return foo });
+>f14 : Symbol(f14, Decl(contextuallyTypedParametersWithInitializers1.ts, 10, 5))
+>id4 : Symbol(id4, Decl(contextuallyTypedParametersWithInitializers1.ts, 2, 70))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 10, 27))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 10, 27))
+
+const f20 = function (foo = 42) { return foo };
+>f20 : Symbol(f20, Decl(contextuallyTypedParametersWithInitializers1.ts, 12, 5))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 12, 22))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 12, 22))
+
+const f21 = id1(function (foo = 42) { return foo });
+>f21 : Symbol(f21, Decl(contextuallyTypedParametersWithInitializers1.ts, 13, 5))
+>id1 : Symbol(id1, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 0))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 13, 26))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 13, 26))
+
+const f22 = id2(function (foo = 42) { return foo });
+>f22 : Symbol(f22, Decl(contextuallyTypedParametersWithInitializers1.ts, 14, 5))
+>id2 : Symbol(id2, Decl(contextuallyTypedParametersWithInitializers1.ts, 0, 37))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 14, 26))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 14, 26))
+
+const f25 = id5(function (foo = 42) { return foo });
+>f25 : Symbol(f25, Decl(contextuallyTypedParametersWithInitializers1.ts, 15, 5))
+>id5 : Symbol(id5, Decl(contextuallyTypedParametersWithInitializers1.ts, 3, 74))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 15, 26))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 15, 26))
+
+const f1 = (x = 1) => 0;  // number
+>f1 : Symbol(f1, Decl(contextuallyTypedParametersWithInitializers1.ts, 17, 5))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 17, 12))
+
+const f2: any = (x = 1) => 0;  // number
+>f2 : Symbol(f2, Decl(contextuallyTypedParametersWithInitializers1.ts, 18, 5))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 18, 17))
+
+const f3: unknown = (x = 1) => 0;  // number
+>f3 : Symbol(f3, Decl(contextuallyTypedParametersWithInitializers1.ts, 19, 5))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 19, 21))
+
+const f4: Function = (x = 1) => 0;  // number
+>f4 : Symbol(f4, Decl(contextuallyTypedParametersWithInitializers1.ts, 20, 5))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 20, 22))
+
+const f5: (...args: any[]) => any = (x = 1) => 0;  // any
+>f5 : Symbol(f5, Decl(contextuallyTypedParametersWithInitializers1.ts, 21, 5))
+>args : Symbol(args, Decl(contextuallyTypedParametersWithInitializers1.ts, 21, 11))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 21, 37))
+
+const f6: () => any = (x = 1) => 0;  // number
+>f6 : Symbol(f6, Decl(contextuallyTypedParametersWithInitializers1.ts, 22, 5))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 22, 23))
+
+const f7: () => any = (x?) => 0;  // Implicit any error
+>f7 : Symbol(f7, Decl(contextuallyTypedParametersWithInitializers1.ts, 23, 5))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 23, 23))
+
+const f8: () => any = (...x) => 0;  // []
+>f8 : Symbol(f8, Decl(contextuallyTypedParametersWithInitializers1.ts, 24, 5))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 24, 23))
+
+declare function g1<T>(x: T): T;
+>g1 : Symbol(g1, Decl(contextuallyTypedParametersWithInitializers1.ts, 24, 34))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 26, 20))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 26, 23))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 26, 20))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 26, 20))
+
+declare function g2<T extends any>(x: T): T;
+>g2 : Symbol(g2, Decl(contextuallyTypedParametersWithInitializers1.ts, 26, 32))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 27, 20))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 27, 35))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 27, 20))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 27, 20))
+
+declare function g3<T extends unknown>(x: T): T;
+>g3 : Symbol(g3, Decl(contextuallyTypedParametersWithInitializers1.ts, 27, 44))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 28, 20))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 28, 39))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 28, 20))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 28, 20))
+
+declare function g4<T extends Function>(x: T): T;
+>g4 : Symbol(g4, Decl(contextuallyTypedParametersWithInitializers1.ts, 28, 48))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 29, 20))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 29, 40))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 29, 20))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 29, 20))
+
+declare function g5<T extends (...args: any[]) => any>(x: T): T;
+>g5 : Symbol(g5, Decl(contextuallyTypedParametersWithInitializers1.ts, 29, 49))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 30, 20))
+>args : Symbol(args, Decl(contextuallyTypedParametersWithInitializers1.ts, 30, 31))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 30, 55))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 30, 20))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 30, 20))
+
+declare function g6<T extends () => any>(x: T): T;
+>g6 : Symbol(g6, Decl(contextuallyTypedParametersWithInitializers1.ts, 30, 64))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 31, 20))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 31, 41))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 31, 20))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 31, 20))
+
+g1((x = 1) => 0);  // number
+>g1 : Symbol(g1, Decl(contextuallyTypedParametersWithInitializers1.ts, 24, 34))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 33, 4))
+
+g2((x = 1) => 0);  // number
+>g2 : Symbol(g2, Decl(contextuallyTypedParametersWithInitializers1.ts, 26, 32))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 34, 4))
+
+g3((x = 1) => 0);  // number
+>g3 : Symbol(g3, Decl(contextuallyTypedParametersWithInitializers1.ts, 27, 44))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 35, 4))
+
+g4((x = 1) => 0);  // number
+>g4 : Symbol(g4, Decl(contextuallyTypedParametersWithInitializers1.ts, 28, 48))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 36, 4))
+
+g5((x = 1) => 0);  // any
+>g5 : Symbol(g5, Decl(contextuallyTypedParametersWithInitializers1.ts, 29, 49))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 37, 4))
+
+g6((x = 1) => 0);  // number
+>g6 : Symbol(g6, Decl(contextuallyTypedParametersWithInitializers1.ts, 30, 64))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 38, 4))
+
+g6((x?) => 0);     // Implicit any error
+>g6 : Symbol(g6, Decl(contextuallyTypedParametersWithInitializers1.ts, 30, 64))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 39, 4))
+
+g6((...x) => 0);   // []
+>g6 : Symbol(g6, Decl(contextuallyTypedParametersWithInitializers1.ts, 30, 64))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 40, 4))
+
+// Repro from #28816
+
+function id<T>(input: T): T { return input }
+>id : Symbol(id, Decl(contextuallyTypedParametersWithInitializers1.ts, 40, 16))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 44, 12))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers1.ts, 44, 15))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 44, 12))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers1.ts, 44, 12))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers1.ts, 44, 15))
+
+function getFoo ({ foo = 42 }) {
+>getFoo : Symbol(getFoo, Decl(contextuallyTypedParametersWithInitializers1.ts, 44, 44))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 46, 18))
+
+  return foo;
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 46, 18))
+}
+
+const newGetFoo = id(getFoo);
+>newGetFoo : Symbol(newGetFoo, Decl(contextuallyTypedParametersWithInitializers1.ts, 50, 5))
+>id : Symbol(id, Decl(contextuallyTypedParametersWithInitializers1.ts, 40, 16))
+>getFoo : Symbol(getFoo, Decl(contextuallyTypedParametersWithInitializers1.ts, 44, 44))
+
+const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
+>newGetFoo2 : Symbol(newGetFoo2, Decl(contextuallyTypedParametersWithInitializers1.ts, 51, 5))
+>id : Symbol(id, Decl(contextuallyTypedParametersWithInitializers1.ts, 40, 16))
+>getFoo : Symbol(getFoo, Decl(contextuallyTypedParametersWithInitializers1.ts, 51, 22))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 51, 40))
+
+  return foo;
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers1.ts, 51, 40))
+
+});
+
+// Repro from comment in #30840
+
+declare function memoize<F extends Function>(func: F): F;
+>memoize : Symbol(memoize, Decl(contextuallyTypedParametersWithInitializers1.ts, 53, 3))
+>F : Symbol(F, Decl(contextuallyTypedParametersWithInitializers1.ts, 57, 25))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>func : Symbol(func, Decl(contextuallyTypedParametersWithInitializers1.ts, 57, 45))
+>F : Symbol(F, Decl(contextuallyTypedParametersWithInitializers1.ts, 57, 25))
+>F : Symbol(F, Decl(contextuallyTypedParametersWithInitializers1.ts, 57, 25))
+
+function add(x: number, y = 0): number {
+>add : Symbol(add, Decl(contextuallyTypedParametersWithInitializers1.ts, 57, 57))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 59, 13))
+>y : Symbol(y, Decl(contextuallyTypedParametersWithInitializers1.ts, 59, 23))
+
+    return x + y;
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 59, 13))
+>y : Symbol(y, Decl(contextuallyTypedParametersWithInitializers1.ts, 59, 23))
+}
+const memoizedAdd = memoize(add);
+>memoizedAdd : Symbol(memoizedAdd, Decl(contextuallyTypedParametersWithInitializers1.ts, 62, 5))
+>memoize : Symbol(memoize, Decl(contextuallyTypedParametersWithInitializers1.ts, 53, 3))
+>add : Symbol(add, Decl(contextuallyTypedParametersWithInitializers1.ts, 57, 57))
+
+const add2 = (x: number, y = 0): number => x + y;
+>add2 : Symbol(add2, Decl(contextuallyTypedParametersWithInitializers1.ts, 64, 5))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 64, 14))
+>y : Symbol(y, Decl(contextuallyTypedParametersWithInitializers1.ts, 64, 24))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 64, 14))
+>y : Symbol(y, Decl(contextuallyTypedParametersWithInitializers1.ts, 64, 24))
+
+const memoizedAdd2 = memoize(add2);
+>memoizedAdd2 : Symbol(memoizedAdd2, Decl(contextuallyTypedParametersWithInitializers1.ts, 65, 5))
+>memoize : Symbol(memoize, Decl(contextuallyTypedParametersWithInitializers1.ts, 53, 3))
+>add2 : Symbol(add2, Decl(contextuallyTypedParametersWithInitializers1.ts, 64, 5))
+
+const memoizedAdd3 = memoize((x: number, y = 0): number => x + y);
+>memoizedAdd3 : Symbol(memoizedAdd3, Decl(contextuallyTypedParametersWithInitializers1.ts, 67, 5))
+>memoize : Symbol(memoize, Decl(contextuallyTypedParametersWithInitializers1.ts, 53, 3))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 67, 30))
+>y : Symbol(y, Decl(contextuallyTypedParametersWithInitializers1.ts, 67, 40))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers1.ts, 67, 30))
+>y : Symbol(y, Decl(contextuallyTypedParametersWithInitializers1.ts, 67, 40))
+
+// Repro from #36052
+
+declare function execute(script: string | Function): Promise<string>;
+>execute : Symbol(execute, Decl(contextuallyTypedParametersWithInitializers1.ts, 67, 66))
+>script : Symbol(script, Decl(contextuallyTypedParametersWithInitializers1.ts, 71, 25))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+  
+export function executeSomething() {
+>executeSomething : Symbol(executeSomething, Decl(contextuallyTypedParametersWithInitializers1.ts, 71, 69))
+
+    return execute((root: HTMLElement, debug = true) => {
+>execute : Symbol(execute, Decl(contextuallyTypedParametersWithInitializers1.ts, 67, 66))
+>root : Symbol(root, Decl(contextuallyTypedParametersWithInitializers1.ts, 74, 20))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>debug : Symbol(debug, Decl(contextuallyTypedParametersWithInitializers1.ts, 74, 38))
+
+        if (debug) {
+>debug : Symbol(debug, Decl(contextuallyTypedParametersWithInitializers1.ts, 74, 38))
+
+            root.innerHTML = '';
+>root.innerHTML : Symbol(InnerHTML.innerHTML, Decl(lib.dom.d.ts, --, --))
+>root : Symbol(root, Decl(contextuallyTypedParametersWithInitializers1.ts, 74, 20))
+>innerHTML : Symbol(InnerHTML.innerHTML, Decl(lib.dom.d.ts, --, --))
+        }
+    });
+}
+
+const fz1 = (debug = true) => false;
+>fz1 : Symbol(fz1, Decl(contextuallyTypedParametersWithInitializers1.ts, 81, 5))
+>debug : Symbol(debug, Decl(contextuallyTypedParametersWithInitializers1.ts, 81, 13))
+
+const fz2: Function = (debug = true) => false;
+>fz2 : Symbol(fz2, Decl(contextuallyTypedParametersWithInitializers1.ts, 82, 5))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>debug : Symbol(debug, Decl(contextuallyTypedParametersWithInitializers1.ts, 82, 23))
+

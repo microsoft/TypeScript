@@ -18,8 +18,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-function test(isError = false) {
-    return __awaiter(this, void 0, void 0, function* () {
+function test() {
+    return __awaiter(this, arguments, void 0, function* (isError = false) {
         if (isError === true) {
             return;
         }

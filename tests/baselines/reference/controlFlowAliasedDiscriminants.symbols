@@ -1,0 +1,362 @@
+//// [tests/cases/compiler/controlFlowAliasedDiscriminants.ts] ////
+
+=== controlFlowAliasedDiscriminants.ts ===
+type UseQueryResult<T> = {
+>UseQueryResult : Symbol(UseQueryResult, Decl(controlFlowAliasedDiscriminants.ts, 0, 0))
+>T : Symbol(T, Decl(controlFlowAliasedDiscriminants.ts, 0, 20))
+
+    isSuccess: false;
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26))
+
+    data: undefined;
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21))
+
+} | {
+    isSuccess: true;
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+
+    data: T
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>T : Symbol(T, Decl(controlFlowAliasedDiscriminants.ts, 0, 20))
+
+};
+
+function useQuery(): UseQueryResult<number> {
+>useQuery : Symbol(useQuery, Decl(controlFlowAliasedDiscriminants.ts, 6, 2))
+>UseQueryResult : Symbol(UseQueryResult, Decl(controlFlowAliasedDiscriminants.ts, 0, 0))
+
+    return {
+        isSuccess: false,
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 9, 12))
+
+        data: undefined,
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 10, 25))
+>undefined : Symbol(undefined)
+
+    };
+}
+
+const { data: data1, isSuccess: isSuccess1 } = useQuery();
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 15, 7))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess1 : Symbol(isSuccess1, Decl(controlFlowAliasedDiscriminants.ts, 15, 20))
+>useQuery : Symbol(useQuery, Decl(controlFlowAliasedDiscriminants.ts, 6, 2))
+
+const { data: data2, isSuccess: isSuccess2 } = useQuery();
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 16, 7))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess2 : Symbol(isSuccess2, Decl(controlFlowAliasedDiscriminants.ts, 16, 20))
+>useQuery : Symbol(useQuery, Decl(controlFlowAliasedDiscriminants.ts, 6, 2))
+
+const { data: data3, isSuccess: isSuccess3 } = useQuery();
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data3 : Symbol(data3, Decl(controlFlowAliasedDiscriminants.ts, 17, 7))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess3 : Symbol(isSuccess3, Decl(controlFlowAliasedDiscriminants.ts, 17, 20))
+>useQuery : Symbol(useQuery, Decl(controlFlowAliasedDiscriminants.ts, 6, 2))
+
+if (isSuccess1 && isSuccess2 && isSuccess3) {
+>isSuccess1 : Symbol(isSuccess1, Decl(controlFlowAliasedDiscriminants.ts, 15, 20))
+>isSuccess2 : Symbol(isSuccess2, Decl(controlFlowAliasedDiscriminants.ts, 16, 20))
+>isSuccess3 : Symbol(isSuccess3, Decl(controlFlowAliasedDiscriminants.ts, 17, 20))
+
+    data1.toExponential();  // should ok
+>data1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 15, 7))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+    data2.toExponential();  // should ok
+>data2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 16, 7))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+    data3.toExponential();  // should ok
+>data3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data3 : Symbol(data3, Decl(controlFlowAliasedDiscriminants.ts, 17, 7))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+}
+
+const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
+>areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 25, 5))
+>isSuccess1 : Symbol(isSuccess1, Decl(controlFlowAliasedDiscriminants.ts, 15, 20))
+>isSuccess2 : Symbol(isSuccess2, Decl(controlFlowAliasedDiscriminants.ts, 16, 20))
+>isSuccess3 : Symbol(isSuccess3, Decl(controlFlowAliasedDiscriminants.ts, 17, 20))
+
+if (areSuccess) {
+>areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 25, 5))
+
+    data1.toExponential();  // should ok
+>data1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 15, 7))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+    data2.toExponential();  // should ok
+>data2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 16, 7))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+    data3.toExponential();  // should ok
+>data3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data3 : Symbol(data3, Decl(controlFlowAliasedDiscriminants.ts, 17, 7))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+}
+
+{
+    let { data: data1, isSuccess: isSuccess1 } = useQuery();
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 33, 9))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess1 : Symbol(isSuccess1, Decl(controlFlowAliasedDiscriminants.ts, 33, 22))
+>useQuery : Symbol(useQuery, Decl(controlFlowAliasedDiscriminants.ts, 6, 2))
+
+    let { data: data2, isSuccess: isSuccess2 } = useQuery();
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 34, 9))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess2 : Symbol(isSuccess2, Decl(controlFlowAliasedDiscriminants.ts, 34, 22))
+>useQuery : Symbol(useQuery, Decl(controlFlowAliasedDiscriminants.ts, 6, 2))
+
+    const { data: data3, isSuccess: isSuccess3 } = useQuery();
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data3 : Symbol(data3, Decl(controlFlowAliasedDiscriminants.ts, 35, 11))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess3 : Symbol(isSuccess3, Decl(controlFlowAliasedDiscriminants.ts, 35, 24))
+>useQuery : Symbol(useQuery, Decl(controlFlowAliasedDiscriminants.ts, 6, 2))
+
+    const areSuccess = isSuccess1 && isSuccess2 && isSuccess3;
+>areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 36, 9))
+>isSuccess1 : Symbol(isSuccess1, Decl(controlFlowAliasedDiscriminants.ts, 33, 22))
+>isSuccess2 : Symbol(isSuccess2, Decl(controlFlowAliasedDiscriminants.ts, 34, 22))
+>isSuccess3 : Symbol(isSuccess3, Decl(controlFlowAliasedDiscriminants.ts, 35, 24))
+
+    if (areSuccess) {
+>areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 36, 9))
+
+        data1.toExponential();  // should error
+>data1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 33, 9))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+        data2.toExponential();  // should error
+>data2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 34, 9))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+        data3.toExponential();  // should ok
+>data3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data3 : Symbol(data3, Decl(controlFlowAliasedDiscriminants.ts, 35, 11))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+declare function getArrayResult(): [true, number] | [false, undefined];
+>getArrayResult : Symbol(getArrayResult, Decl(controlFlowAliasedDiscriminants.ts, 42, 1))
+{
+    const [foo1, bar1] = getArrayResult();
+>foo1 : Symbol(foo1, Decl(controlFlowAliasedDiscriminants.ts, 46, 11))
+>bar1 : Symbol(bar1, Decl(controlFlowAliasedDiscriminants.ts, 46, 16))
+>getArrayResult : Symbol(getArrayResult, Decl(controlFlowAliasedDiscriminants.ts, 42, 1))
+
+    const [foo2, bar2] = getArrayResult();
+>foo2 : Symbol(foo2, Decl(controlFlowAliasedDiscriminants.ts, 47, 11))
+>bar2 : Symbol(bar2, Decl(controlFlowAliasedDiscriminants.ts, 47, 16))
+>getArrayResult : Symbol(getArrayResult, Decl(controlFlowAliasedDiscriminants.ts, 42, 1))
+
+    const [foo3, bar3] = getArrayResult();
+>foo3 : Symbol(foo3, Decl(controlFlowAliasedDiscriminants.ts, 48, 11))
+>bar3 : Symbol(bar3, Decl(controlFlowAliasedDiscriminants.ts, 48, 16))
+>getArrayResult : Symbol(getArrayResult, Decl(controlFlowAliasedDiscriminants.ts, 42, 1))
+
+    const arrayAllSuccess = foo1 && foo2 && foo3;
+>arrayAllSuccess : Symbol(arrayAllSuccess, Decl(controlFlowAliasedDiscriminants.ts, 49, 9))
+>foo1 : Symbol(foo1, Decl(controlFlowAliasedDiscriminants.ts, 46, 11))
+>foo2 : Symbol(foo2, Decl(controlFlowAliasedDiscriminants.ts, 47, 11))
+>foo3 : Symbol(foo3, Decl(controlFlowAliasedDiscriminants.ts, 48, 11))
+
+    if (arrayAllSuccess) {
+>arrayAllSuccess : Symbol(arrayAllSuccess, Decl(controlFlowAliasedDiscriminants.ts, 49, 9))
+
+        bar1.toExponential();  // should ok
+>bar1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>bar1 : Symbol(bar1, Decl(controlFlowAliasedDiscriminants.ts, 46, 16))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+        bar2.toExponential();  // should ok
+>bar2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>bar2 : Symbol(bar2, Decl(controlFlowAliasedDiscriminants.ts, 47, 16))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+        bar3.toExponential();  // should ok
+>bar3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>bar3 : Symbol(bar3, Decl(controlFlowAliasedDiscriminants.ts, 48, 16))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+{
+    const [foo1, bar1] = getArrayResult();
+>foo1 : Symbol(foo1, Decl(controlFlowAliasedDiscriminants.ts, 58, 11))
+>bar1 : Symbol(bar1, Decl(controlFlowAliasedDiscriminants.ts, 58, 16))
+>getArrayResult : Symbol(getArrayResult, Decl(controlFlowAliasedDiscriminants.ts, 42, 1))
+
+    let [foo2, bar2] = getArrayResult();
+>foo2 : Symbol(foo2, Decl(controlFlowAliasedDiscriminants.ts, 59, 9))
+>bar2 : Symbol(bar2, Decl(controlFlowAliasedDiscriminants.ts, 59, 14))
+>getArrayResult : Symbol(getArrayResult, Decl(controlFlowAliasedDiscriminants.ts, 42, 1))
+
+    let [foo3, bar3] = getArrayResult();
+>foo3 : Symbol(foo3, Decl(controlFlowAliasedDiscriminants.ts, 60, 9))
+>bar3 : Symbol(bar3, Decl(controlFlowAliasedDiscriminants.ts, 60, 14))
+>getArrayResult : Symbol(getArrayResult, Decl(controlFlowAliasedDiscriminants.ts, 42, 1))
+
+    const arrayAllSuccess = foo1 && foo2 && foo3;
+>arrayAllSuccess : Symbol(arrayAllSuccess, Decl(controlFlowAliasedDiscriminants.ts, 61, 9))
+>foo1 : Symbol(foo1, Decl(controlFlowAliasedDiscriminants.ts, 58, 11))
+>foo2 : Symbol(foo2, Decl(controlFlowAliasedDiscriminants.ts, 59, 9))
+>foo3 : Symbol(foo3, Decl(controlFlowAliasedDiscriminants.ts, 60, 9))
+
+    if (arrayAllSuccess) {
+>arrayAllSuccess : Symbol(arrayAllSuccess, Decl(controlFlowAliasedDiscriminants.ts, 61, 9))
+
+        bar1.toExponential();   // should ok
+>bar1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>bar1 : Symbol(bar1, Decl(controlFlowAliasedDiscriminants.ts, 58, 16))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+        bar2.toExponential();   // should error
+>bar2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>bar2 : Symbol(bar2, Decl(controlFlowAliasedDiscriminants.ts, 59, 14))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+        bar3.toExponential();   // should error
+>bar3.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>bar3 : Symbol(bar3, Decl(controlFlowAliasedDiscriminants.ts, 60, 14))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+type Nested = {
+>Nested : Symbol(Nested, Decl(controlFlowAliasedDiscriminants.ts, 67, 1))
+
+    type: 'string';
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15))
+
+    resp: {
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+
+        data: string
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+    }
+} | {
+    type: 'number';
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+
+    resp: {
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 75, 19))
+
+        data: number;
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 76, 11))
+    }
+}
+
+{
+    let resp!: Nested;
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 82, 7))
+>Nested : Symbol(Nested, Decl(controlFlowAliasedDiscriminants.ts, 67, 1))
+
+    const { resp: { data }, type } = resp;
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19), Decl(controlFlowAliasedDiscriminants.ts, 75, 19))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 83, 19))
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 83, 27))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 82, 7))
+
+    if (type === 'string') {
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 83, 27))
+
+        data satisfies string;
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 83, 19))
+    }
+    if (resp.type === 'string') {
+>resp.type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15), Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 82, 7))
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15), Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+
+        resp.resp.data satisfies string;
+>resp.resp.data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+>resp.resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 82, 7))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+    }    
+}
+
+{
+   
+    let resp!: Nested;
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 94, 7))
+>Nested : Symbol(Nested, Decl(controlFlowAliasedDiscriminants.ts, 67, 1))
+
+    const { resp: { data: dataAlias }, type } = resp;
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19), Decl(controlFlowAliasedDiscriminants.ts, 75, 19))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11), Decl(controlFlowAliasedDiscriminants.ts, 76, 11))
+>dataAlias : Symbol(dataAlias, Decl(controlFlowAliasedDiscriminants.ts, 95, 19))
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 95, 38))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 94, 7))
+
+    if (type === 'string') {
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 95, 38))
+
+        dataAlias satisfies string;
+>dataAlias : Symbol(dataAlias, Decl(controlFlowAliasedDiscriminants.ts, 95, 19))
+    }
+    if (resp.type === 'string') {
+>resp.type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15), Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 94, 7))
+>type : Symbol(type, Decl(controlFlowAliasedDiscriminants.ts, 69, 15), Decl(controlFlowAliasedDiscriminants.ts, 74, 5))
+
+        resp.resp.data satisfies string;
+>resp.resp.data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+>resp.resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 94, 7))
+>resp : Symbol(resp, Decl(controlFlowAliasedDiscriminants.ts, 70, 19))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 71, 11))
+    }    
+}
+
+function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {
+>bindingPatternInParameter : Symbol(bindingPatternInParameter, Decl(controlFlowAliasedDiscriminants.ts, 102, 1))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 104, 36))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess1 : Symbol(isSuccess1, Decl(controlFlowAliasedDiscriminants.ts, 104, 49))
+>UseQueryResult : Symbol(UseQueryResult, Decl(controlFlowAliasedDiscriminants.ts, 0, 0))
+
+  const { data: data2, isSuccess: isSuccess2 } = useQuery();
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 105, 9))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess2 : Symbol(isSuccess2, Decl(controlFlowAliasedDiscriminants.ts, 105, 22))
+>useQuery : Symbol(useQuery, Decl(controlFlowAliasedDiscriminants.ts, 6, 2))
+
+  const areSuccess = isSuccess1 && isSuccess2;
+>areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 107, 7))
+>isSuccess1 : Symbol(isSuccess1, Decl(controlFlowAliasedDiscriminants.ts, 104, 49))
+>isSuccess2 : Symbol(isSuccess2, Decl(controlFlowAliasedDiscriminants.ts, 105, 22))
+
+  if (areSuccess) {
+>areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 107, 7))
+
+    data1.toExponential();
+>data1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 104, 36))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+    data2.toExponential();
+>data2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 105, 9))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+  }
+}
+

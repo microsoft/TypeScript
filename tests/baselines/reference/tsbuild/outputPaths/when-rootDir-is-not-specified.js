@@ -19,7 +19,11 @@ declare const console: { log(msg: any): void; };
 export const x = 10;
 
 //// [/src/tsconfig.json]
-{"compilerOptions":{"outDir":"dist"}}
+{
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}
 
 
 

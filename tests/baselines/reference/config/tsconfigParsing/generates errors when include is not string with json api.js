@@ -3,7 +3,13 @@ Fs::
 
 
 //// [/apath/tsconfig.json]
-{"include":[["./**/*.ts"]]}
+{
+  "include": [
+    [
+      "./**/*.ts"
+    ]
+  ]
+}
 
 
 configFileName:: /apath/tsconfig.json

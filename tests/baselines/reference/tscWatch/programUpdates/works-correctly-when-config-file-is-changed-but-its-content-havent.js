@@ -35,8 +35,34 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+
+
+FsWatches::
+/a/b/commonFile1.ts: *new*
+  {}
+/a/b/commonFile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -53,40 +79,27 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-FsWatches::
-/a/b/commonfile1.ts: *new*
-  {}
-/a/b/commonfile2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-
 
 Change:: Modify config without changing content
 
 Input::
 //// [/a/b/tsconfig.json] file changed its modified time
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 [[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 
 
@@ -97,4 +110,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

@@ -29,7 +29,16 @@ export function fooBar(): string;
 export function temp(): string;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"exclude":["node_modules"],"watchOptions":{"excludeDirectories":["**/temp"]}}
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "watchOptions": {
+    "excludeDirectories": [
+      "**/temp"
+    ]
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -41,26 +50,13 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/src/main.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/node_modules/bar/foo.d.ts
-/user/username/projects/myproject/node_modules/bar/index.d.ts
-/user/username/projects/myproject/src/main.ts
+//// [/user/username/projects/myproject/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var bar_1 = require("bar");
+(0, bar_1.foo)();
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/node_modules/bar/foo.d.ts
-/user/username/projects/myproject/node_modules/bar/index.d.ts
-/user/username/projects/myproject/src/main.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/node_modules/bar/foo.d.ts (used version)
-/user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
-/user/username/projects/myproject/src/main.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -88,15 +84,36 @@ FsWatches::
 /user/username/projects/myproject/tsconfig.json: *new*
   {}
 
+Timeout callback:: count: 1
+1: timerToUpdateChildWatches *new*
+
+Program root files: [
+  "/user/username/projects/myproject/src/main.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/node_modules/bar/foo.d.ts
+/user/username/projects/myproject/node_modules/bar/index.d.ts
+/user/username/projects/myproject/src/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/node_modules/bar/foo.d.ts
+/user/username/projects/myproject/node_modules/bar/index.d.ts
+/user/username/projects/myproject/src/main.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/node_modules/bar/foo.d.ts (used version)
+/user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
+/user/username/projects/myproject/src/main.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var bar_1 = require("bar");
-(0, bar_1.foo)();
-
-
 
 Change:: Directory watch updates because of main.js creation
 
@@ -104,11 +121,11 @@ Input::
 
 Before running Timeout callback:: count: 1
 1: timerToUpdateChildWatches
+
 After running Timeout callback:: count: 0
-Output::
+
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: add new folder to temp
 
@@ -117,9 +134,5 @@ Input::
 export function temp(): string;
 
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-

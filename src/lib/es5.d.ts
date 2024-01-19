@@ -626,6 +626,7 @@ interface ImportCallOptions {
 
 /**
  * The type for the `assert` property of the optional second argument to `import()`.
+ * @deprecated
  */
 interface ImportAssertions {
     [key: string]: string;
@@ -1647,6 +1648,11 @@ type Capitalize<S extends string> = intrinsic;
  * Convert first character of string literal type to lowercase
  */
 type Uncapitalize<S extends string> = intrinsic;
+
+/**
+ * Marker for non-inference type position
+ */
+type NoInfer<T> = intrinsic;
 
 /**
  * Marker for contextual 'this' type
@@ -4400,11 +4406,14 @@ declare namespace Intl {
         compare(x: string, y: string): number;
         resolvedOptions(): ResolvedCollatorOptions;
     }
-    var Collator: {
+
+    interface CollatorConstructor {
         new (locales?: string | string[], options?: CollatorOptions): Collator;
         (locales?: string | string[], options?: CollatorOptions): Collator;
         supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
-    };
+    }
+
+    var Collator: CollatorConstructor;
 
     interface NumberFormatOptions {
         localeMatcher?: string | undefined;
@@ -4436,12 +4445,15 @@ declare namespace Intl {
         format(value: number): string;
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
-    var NumberFormat: {
+
+    interface NumberFormatConstructor {
         new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
         readonly prototype: NumberFormat;
-    };
+    }
+
+    var NumberFormat: NumberFormatConstructor;
 
     interface DateTimeFormatOptions {
         localeMatcher?: "best fit" | "lookup" | undefined;
@@ -4480,12 +4492,15 @@ declare namespace Intl {
         format(date?: Date | number): string;
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
-    var DateTimeFormat: {
+
+    interface DateTimeFormatConstructor {
         new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
         readonly prototype: DateTimeFormat;
-    };
+    }
+
+    var DateTimeFormat: DateTimeFormatConstructor;
 }
 
 interface String {

@@ -46,3 +46,23 @@ class C extends Array {
     }
 }
 
+class D {
+>D : Symbol(D, Decl(classFieldSuperAccessible.ts, 14, 1))
+
+    accessor b = () => {}
+>b : Symbol(D.b, Decl(classFieldSuperAccessible.ts, 16, 9))
+}
+class E extends D {
+>E : Symbol(E, Decl(classFieldSuperAccessible.ts, 18, 1))
+>D : Symbol(D, Decl(classFieldSuperAccessible.ts, 14, 1))
+
+    foo() {
+>foo : Symbol(E.foo, Decl(classFieldSuperAccessible.ts, 19, 19))
+
+        super.b()
+>super.b : Symbol(D.b, Decl(classFieldSuperAccessible.ts, 16, 9))
+>super : Symbol(D, Decl(classFieldSuperAccessible.ts, 14, 1))
+>b : Symbol(D.b, Decl(classFieldSuperAccessible.ts, 16, 9))
+    }
+}
+

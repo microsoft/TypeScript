@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/expandoFunctionBlockShadowing.ts] ////
+
+=== expandoFunctionBlockShadowing.ts ===
+// https://github.com/microsoft/TypeScript/issues/56538
+
+export function X() {}
+>X : Symbol(X, Decl(expandoFunctionBlockShadowing.ts, 0, 0))
+
+if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  const X: { test?: any } = {};
+>X : Symbol(X, Decl(expandoFunctionBlockShadowing.ts, 4, 7))
+>test : Symbol(test, Decl(expandoFunctionBlockShadowing.ts, 4, 12))
+
+  X.test = 1;
+>X.test : Symbol(test, Decl(expandoFunctionBlockShadowing.ts, 4, 12))
+>X : Symbol(X, Decl(expandoFunctionBlockShadowing.ts, 4, 7))
+>test : Symbol(test, Decl(expandoFunctionBlockShadowing.ts, 4, 12))
+}
+
+export function Y() {}
+>Y : Symbol(Y, Decl(expandoFunctionBlockShadowing.ts, 6, 1), Decl(expandoFunctionBlockShadowing.ts, 8, 22))
+
+Y.test = "foo";
+>Y.test : Symbol(Y.test, Decl(expandoFunctionBlockShadowing.ts, 8, 22))
+>Y : Symbol(Y, Decl(expandoFunctionBlockShadowing.ts, 6, 1), Decl(expandoFunctionBlockShadowing.ts, 8, 22))
+>test : Symbol(Y.test, Decl(expandoFunctionBlockShadowing.ts, 8, 22))
+
+const aliasTopY = Y;
+>aliasTopY : Symbol(aliasTopY, Decl(expandoFunctionBlockShadowing.ts, 10, 5))
+>Y : Symbol(Y, Decl(expandoFunctionBlockShadowing.ts, 6, 1), Decl(expandoFunctionBlockShadowing.ts, 8, 22))
+
+if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  const Y = function Y() {}
+>Y : Symbol(Y, Decl(expandoFunctionBlockShadowing.ts, 12, 7))
+>Y : Symbol(Y, Decl(expandoFunctionBlockShadowing.ts, 12, 11))
+
+  Y.test = 42;
+>Y.test : Symbol(Y.test, Decl(expandoFunctionBlockShadowing.ts, 12, 27))
+>Y : Symbol(Y, Decl(expandoFunctionBlockShadowing.ts, 12, 7))
+>test : Symbol(Y.test, Decl(expandoFunctionBlockShadowing.ts, 12, 27))
+
+  const topYcheck: { (): void; test: string } = aliasTopY;
+>topYcheck : Symbol(topYcheck, Decl(expandoFunctionBlockShadowing.ts, 15, 7))
+>test : Symbol(test, Decl(expandoFunctionBlockShadowing.ts, 15, 30))
+>aliasTopY : Symbol(aliasTopY, Decl(expandoFunctionBlockShadowing.ts, 10, 5))
+
+  const blockYcheck: { (): void; test: number } = Y;
+>blockYcheck : Symbol(blockYcheck, Decl(expandoFunctionBlockShadowing.ts, 16, 7))
+>test : Symbol(test, Decl(expandoFunctionBlockShadowing.ts, 16, 32))
+>Y : Symbol(Y, Decl(expandoFunctionBlockShadowing.ts, 12, 7))
+}

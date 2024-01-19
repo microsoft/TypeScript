@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/app.ts]
 let xyz = 1;
@@ -14,7 +14,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-ServerCancellationToken:: Cancellation Request id:: 1
+TestServerCancellationToken:: Cancellation Request id:: 1
 Info seq  [hh:mm:ss:mss] Search path: /a/b
 Info seq  [hh:mm:ss:mss] For info: /a/b/app.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -36,6 +36,7 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+TestServerCancellationToken:: resetRequest:: 1 is as expected
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -60,12 +61,16 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-ServerCancellationToken:: Cancellation Request id:: 2
+TestServerCancellationToken:: Cancellation Request id:: 2
+TestServerCancellationToken:: resetRequest:: 2 is as expected
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 1
+1: checkOne *new*
 
 Before request
 
@@ -83,7 +88,8 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-ServerCancellationToken:: Cancellation Request id:: 3
+TestServerCancellationToken:: Cancellation Request id:: 3
+TestServerCancellationToken:: resetRequest:: 3 is as expected
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
@@ -119,22 +125,65 @@ After request
 Before running Timeout callback:: count: 1
 1: checkOne
 
-ServerCancellationToken:: Cancellation Request id:: 2
-Info seq  [hh:mm:ss:mss] Session does not support events: ignored event: {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a/b/app.ts","diagnostics":[]}}
+TestServerCancellationToken:: Cancellation Request id:: 2
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/a/b/app.ts",
+        "diagnostics": []
+      }
+    }
+TestServerCancellationToken:: resetRequest:: 2 is as expected
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
-ServerCancellationToken:: Cancellation Request id:: 2
-Info seq  [hh:mm:ss:mss] Session does not support events: ignored event: {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a/b/app.ts","diagnostics":[]}}
+TestServerCancellationToken:: Cancellation Request id:: 2
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/a/b/app.ts",
+        "diagnostics": []
+      }
+    }
+TestServerCancellationToken:: resetRequest:: 2 is as expected
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
-ServerCancellationToken:: Cancellation Request id:: 2
-Info seq  [hh:mm:ss:mss] Session does not support events: ignored event: {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a/b/app.ts","diagnostics":[]}}
-Info seq  [hh:mm:ss:mss] Session does not support events: ignored event: {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+TestServerCancellationToken:: Cancellation Request id:: 2
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/a/b/app.ts",
+        "diagnostics": []
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 2
+      }
+    }
+TestServerCancellationToken:: resetRequest:: 2 is as expected
 After running Immedidate callback:: count: 0

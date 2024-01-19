@@ -3,7 +3,16 @@
         "esModuleInterop": true,
         "target": "es5",
         "module": "commonjs",
-        "strict": true
+        "strict": true,
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
+        "strictPropertyInitialization": true,
+        "alwaysStrict": true,
+        "useUnknownInCatchVariables": true
     },
     "references": [
         {

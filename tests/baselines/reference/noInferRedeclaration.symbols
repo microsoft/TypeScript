@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/types/typeRelationships/typeInference/noInferRedeclaration.ts] ////
+
+=== a.ts ===
+export const f = <T>(x: T, y: NoInfer<T>) => x;
+>f : Symbol(f, Decl(a.ts, 0, 12))
+>T : Symbol(T, Decl(a.ts, 0, 18))
+>x : Symbol(x, Decl(a.ts, 0, 21))
+>T : Symbol(T, Decl(a.ts, 0, 18))
+>y : Symbol(y, Decl(a.ts, 0, 26))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(a.ts, 0, 18))
+>x : Symbol(x, Decl(a.ts, 0, 21))
+
+=== b.ts ===
+import { f } from "./a";
+>f : Symbol(f, Decl(b.ts, 0, 8))
+
+type NoInfer<T> = T & number;
+>NoInfer : Symbol(NoInfer, Decl(b.ts, 0, 24))
+>T : Symbol(T, Decl(b.ts, 2, 13))
+>T : Symbol(T, Decl(b.ts, 2, 13))
+
+export const g = f;
+>g : Symbol(g, Decl(b.ts, 4, 12))
+>f : Symbol(f, Decl(b.ts, 0, 8))
+

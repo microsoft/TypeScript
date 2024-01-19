@@ -83,6 +83,7 @@ import {
     isStatic,
     isStringLiteralLike,
     isStringOrNumericLiteralLike,
+    isTemplateLiteral,
     isToken,
     isVariableDeclaration,
     lastOrUndefined,
@@ -1058,7 +1059,7 @@ function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration |
                 return `${name} callback`;
             }
 
-            const args = cleanText(mapDefined(parent.arguments, a => isStringLiteralLike(a) ? a.getText(curSourceFile) : undefined).join(", "));
+            const args = cleanText(mapDefined(parent.arguments, a => isStringLiteralLike(a) || isTemplateLiteral(a) ? a.getText(curSourceFile) : undefined).join(", "));
             return `${name}(${args}) callback`;
         }
     }

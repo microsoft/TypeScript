@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/es2021/es2021LocalesObjectArgument.ts] ////
+
+=== es2021LocalesObjectArgument.ts ===
+const enUS = new Intl.Locale("en-US");
+>enUS : Symbol(enUS, Decl(es2021LocalesObjectArgument.ts, 0, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+const deDE = new Intl.Locale("de-DE");
+>deDE : Symbol(deDE, Decl(es2021LocalesObjectArgument.ts, 1, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+const jaJP = new Intl.Locale("ja-JP");
+>jaJP : Symbol(jaJP, Decl(es2021LocalesObjectArgument.ts, 2, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+new Intl.ListFormat(enUS);
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>enUS : Symbol(enUS, Decl(es2021LocalesObjectArgument.ts, 0, 5))
+
+new Intl.ListFormat([deDE, jaJP]);
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>deDE : Symbol(deDE, Decl(es2021LocalesObjectArgument.ts, 1, 5))
+>jaJP : Symbol(jaJP, Decl(es2021LocalesObjectArgument.ts, 2, 5))
+
+Intl.ListFormat.supportedLocalesOf(enUS);
+>Intl.ListFormat.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>enUS : Symbol(enUS, Decl(es2021LocalesObjectArgument.ts, 0, 5))
+
+Intl.ListFormat.supportedLocalesOf([deDE, jaJP]);
+>Intl.ListFormat.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>Intl.ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 3 more)
+>ListFormat : Symbol(Intl.ListFormat, Decl(lib.es2021.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2021.intl.d.ts, --, --))
+>deDE : Symbol(deDE, Decl(es2021LocalesObjectArgument.ts, 1, 5))
+>jaJP : Symbol(jaJP, Decl(es2021LocalesObjectArgument.ts, 2, 5))
+

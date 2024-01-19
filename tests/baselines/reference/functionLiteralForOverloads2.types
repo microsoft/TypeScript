@@ -42,7 +42,7 @@ var f: {
 >C : typeof C
 
 var f2: {
->f2 : { new <T>(x: string): C; new <T>(x: number): C; }
+>f2 : { new <T>(x: string): C; new <T_1>(x: number): C; }
 
     new<T>(x: string): C;
 >x : string
@@ -54,7 +54,7 @@ var f2: {
 >C : typeof C
 
 var f3: {
->f3 : { new <T>(x: string): D<T>; new <T>(x: number): D<T>; }
+>f3 : { new <T>(x: string): D<T>; new <T_1>(x: number): D<T_1>; }
 
     new<T>(x: string): D<T>;
 >x : string

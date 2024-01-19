@@ -11,7 +11,7 @@ functionCall16.ts(6,5): error TS2345: Argument of type 'number' is not assignabl
     foo('foo'); 
     foo('foo', 'bar'); 
     foo();
-    ~~~~~
+    ~~~
 !!! error TS2555: Expected at least 1 arguments, but got 0.
 !!! related TS6210 functionCall16.ts:1:14: An argument for 'a' was not provided.
     foo(1, 'bar');

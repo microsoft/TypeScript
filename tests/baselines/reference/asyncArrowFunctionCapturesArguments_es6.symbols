@@ -10,7 +10,7 @@ class C {
       function other() {}
 >other : Symbol(other, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 1, 13))
 
-      var fn = async () => await other.apply(this, arguments);      
+      var fn = async () => await other.apply(this, arguments);
 >fn : Symbol(fn, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 3, 9))
 >other.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >other : Symbol(other, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 1, 13))
@@ -20,3 +20,11 @@ class C {
    }
 }
 
+function f() {
+>f : Symbol(f, Decl(asyncArrowFunctionCapturesArguments_es6.ts, 5, 1))
+
+   return async () => async () => arguments.length;
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+}

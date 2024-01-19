@@ -17,7 +17,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
-{"include":["app.ts"]}
+{
+  "include": [
+    "app.ts"
+  ]
+}
 
 
 /a/lib/tsc.js -w -p /A/B/tsconfig.json
@@ -29,8 +33,27 @@ Output::
 
 
 
-Program root files: ["/A/B/app.ts"]
-Program options: {"watch":true,"project":"/A/B/tsconfig.json","configFilePath":"/A/B/tsconfig.json"}
+//// [/A/B/app.js]
+var x = 1;
+
+
+
+FsWatches::
+/A/B/app.ts: *new*
+  {}
+/A/B/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/A/B/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/A/B/tsconfig.json",
+  "configFilePath": "/A/B/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -44,17 +67,4 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/app.ts (used version)
 
-FsWatches::
-/a/b/app.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/A/B/app.js]
-var x = 1;
-
-

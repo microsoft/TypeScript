@@ -10,24 +10,24 @@ interface A {
 }
 
 function f<T>(a: T);
->f : { <T>(a: T): any; <T>(a: T): any; }
+>f : { <T>(a: T): any; <T_1>(a: T_1): any; }
 >a : T
 
 function f<T>(a: T);
->f : { <T>(a: T): any; <T>(a: T): any; }
+>f : { <T_1>(a: T_1): any; <T>(a: T): any; }
 >a : T
 
 function f(a) { }
->f : { <T>(a: T): any; <T>(a: T): any; }
+>f : { <T>(a: T): any; <T_1>(a: T_1): any; }
 >a : any
 
 interface I2 {
     f<T>(x: T): number;
->f : { <T>(x: T): number; <T>(x: T): string; }
+>f : { <T>(x: T): number; <T_1>(x: T_1): string; }
 >x : T
 
     f<T>(x: T): string;
->f : { <T>(x: T): number; <T>(x: T): string; }
+>f : { <T_1>(x: T_1): number; <T>(x: T): string; }
 >x : T
 }
 
@@ -45,7 +45,7 @@ class C2<T> {
 >C2 : C2<T>
 }
 var b: {
->b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+>b : { new <T>(x: T, y: string): C2<T>; new <T_1>(x: T_1, y: string): C2<T_1>; }
 
     new <T>(x: T, y: string): C2<T>;
 >x : T

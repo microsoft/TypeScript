@@ -10,7 +10,5 @@
 ////declare [|const|] enum E {
 ////}
 
-verify.baselineCommands(
-    { type: "documentHighlights" }, // They are in different scopes, so not counted together.
-    { type: "documentHighlights", markerOrRange: test.markers() },
-);
+verify.baselineDocumentHighlights(); // They are in different scopes, so not counted together.
+verify.baselineDocumentHighlights(test.markers());

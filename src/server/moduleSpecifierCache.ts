@@ -1,4 +1,5 @@
 import {
+    closeFileWatcher,
     FileWatcher,
     ModulePath,
     ModuleSpecifierCache,
@@ -14,11 +15,12 @@ import * as Debug from "../compiler/debug";
 /** @internal */
 export interface ModuleSpecifierResolutionCacheHost {
     watchNodeModulesForPackageJsonChanges(directoryPath: string): FileWatcher;
+    toPath(fileName: string): Path;
 }
 
 /** @internal */
 export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ModuleSpecifierCache {
-    let containedNodeModulesWatchers: Map<string, FileWatcher> | undefined;
+    let containedNodeModulesWatchers: Map<Path, FileWatcher> | undefined;
     let cache: Map<Path, ResolvedModuleSpecifierInfo> | undefined;
     let currentKey: string | undefined;
     const result: ModuleSpecifierCache = {
@@ -39,9 +41,10 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
                     if (p.isInNodeModules) {
                         // No trailing slash
                         const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length - 1);
-                        if (!containedNodeModulesWatchers?.has(nodeModulesPath)) {
+                        const key = host.toPath(nodeModulesPath);
+                        if (!containedNodeModulesWatchers?.has(key)) {
                             (containedNodeModulesWatchers ||= new Map()).set(
-                                nodeModulesPath,
+                                key,
                                 host.watchNodeModulesForPackageJsonChanges(nodeModulesPath),
                             );
                         }
@@ -70,7 +73,7 @@ export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheH
             }
         },
         clear() {
-            containedNodeModulesWatchers?.forEach(watcher => watcher.close());
+            containedNodeModulesWatchers?.forEach(closeFileWatcher);
             cache?.clear();
             containedNodeModulesWatchers?.clear();
             currentKey = undefined;

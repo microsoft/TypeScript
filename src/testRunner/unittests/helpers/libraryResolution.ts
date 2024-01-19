@@ -3,6 +3,9 @@ import {
 } from "../../_namespaces/Utils";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     FsContents,
     libContent,
 } from "./contents";
@@ -25,23 +28,23 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
             /// <reference lib="scripthost"/>
             /// <reference lib="es5"/>
         `,
-        "/home/src/projects/project1/tsconfig.json": JSON.stringify({
+        "/home/src/projects/project1/tsconfig.json": jsonToReadableText({
             compilerOptions: { composite: true, typeRoots: ["./typeroot1"], lib: ["es5", "dom"], traceResolution: true },
         }),
         "/home/src/projects/project1/typeroot1/sometype/index.d.ts": `export type TheNum = "type1";`,
         "/home/src/projects/project2/utils.d.ts": `export const y = 10;`,
         "/home/src/projects/project2/index.ts": `export const y = 10`,
-        "/home/src/projects/project2/tsconfig.json": JSON.stringify({
+        "/home/src/projects/project2/tsconfig.json": jsonToReadableText({
             compilerOptions: { composite: true, lib: ["es5", "dom"], traceResolution: true },
         }),
         "/home/src/projects/project3/utils.d.ts": `export const y = 10;`,
         "/home/src/projects/project3/index.ts": `export const z = 10`,
-        "/home/src/projects/project3/tsconfig.json": JSON.stringify({
+        "/home/src/projects/project3/tsconfig.json": jsonToReadableText({
             compilerOptions: { composite: true, lib: ["es5", "dom"], traceResolution: true },
         }),
         "/home/src/projects/project4/utils.d.ts": `export const y = 10;`,
         "/home/src/projects/project4/index.ts": `export const z = 10`,
-        "/home/src/projects/project4/tsconfig.json": JSON.stringify({
+        "/home/src/projects/project4/tsconfig.json": jsonToReadableText({
             compilerOptions: { composite: true, lib: ["esnext", "dom", "webworker"], traceResolution: true },
         }),
         "/home/src/lib/lib.es5.d.ts": libContent,
@@ -80,7 +83,7 @@ export function getSysForLibResolution(libRedirection?: true) {
     );
 }
 
-export function getServerHosForLibResolution(libRedirection?: true) {
+export function getServerHostForLibResolution(libRedirection?: true) {
     return createServerHost(
         getFsContentsForLibResolution(libRedirection),
         {

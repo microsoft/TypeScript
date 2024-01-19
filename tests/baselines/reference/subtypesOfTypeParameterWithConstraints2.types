@@ -349,20 +349,20 @@ function f12<T extends <U>(x: U) => U>(x: T) {
 >x : T
 
     var r8 = true ? <T>(x: T) => { return x } : x; // ok
->r8 : <T>(x: T) => T
->true ? <T>(x: T) => { return x } : x : <T>(x: T) => T
+>r8 : <T_1>(x: T_1) => T_1
+>true ? <T>(x: T) => { return x } : x : <T_1>(x: T_1) => T_1
 >true : true
-><T>(x: T) => { return x } : <T>(x: T) => T
+><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 >x : T
 >x : T
 >x : T
 
     var r8b = true ? x : <T>(x: T) => { return x }; // ok, type parameters not identical across declarations
->r8b : <T>(x: T) => T
->true ? x : <T>(x: T) => { return x } : <T>(x: T) => T
+>r8b : <T_1>(x: T_1) => T_1
+>true ? x : <T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 >true : true
 >x : T
-><T>(x: T) => { return x } : <T>(x: T) => T
+><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 >x : T
 >x : T
 }

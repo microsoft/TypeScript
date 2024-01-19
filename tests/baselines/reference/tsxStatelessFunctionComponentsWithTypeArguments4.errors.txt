@@ -1,4 +1,4 @@
-file.tsx(9,14): error TS2769: No overload matches this call.
+file.tsx(9,15): error TS2769: No overload matches this call.
   Overload 1 of 3, '(): Element', gave the following error.
     Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'a' does not exist on type 'IntrinsicAttributes'.
@@ -27,7 +27,7 @@ file.tsx(10,15): error TS2769: No overload matches this call.
     // Error
     function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
         let a0 = <OverloadComponent a={arg1.b}/>
-                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  ~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(): Element', gave the following error.
 !!! error TS2769:     Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes'.

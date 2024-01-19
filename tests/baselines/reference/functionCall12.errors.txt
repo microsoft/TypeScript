@@ -8,7 +8,7 @@ functionCall12.ts(7,15): error TS2345: Argument of type 'number' is not assignab
     foo('foo', 1); 
     foo('foo'); 
     foo();
-    ~~~~~
+    ~~~
 !!! error TS2554: Expected 1-3 arguments, but got 0.
 !!! related TS6210 functionCall12.ts:1:14: An argument for 'a' was not provided.
     foo(1, 'bar');

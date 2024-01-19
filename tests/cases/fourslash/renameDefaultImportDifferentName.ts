@@ -14,9 +14,7 @@
 const [CDef, C, B0Def, B0, B1] = test.ranges();
 const bRanges = [B0, B1];
 
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['1', '2'] },
-    { type: "findRenameLocations", markerOrRange: C },
-    { type: "findRenameLocations", markerOrRange: bRanges },
-    { type: "documentHighlights", markerOrRange: "1" },
-);
+verify.baselineFindAllReferences('1', '2');
+verify.baselineRename(C);
+verify.baselineRename(bRanges);
+verify.baselineDocumentHighlights("1");

@@ -29,8 +29,32 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"module":2}
+//// [/users/username/projects/project/foo.js]
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
+
+
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/bar.d.ts: *new*
+  {}
+/users/username/projects/project/foo.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -47,36 +71,21 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/bar.d.ts (used version)
 /users/username/projects/project/foo.ts (used version)
 
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/bar.d.ts: *new*
-  {}
-/users/username/projects/project/foo.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/foo.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-
-
 
 Change:: Delete imported file
 
 Input::
 //// [/users/username/projects/project/bar.d.ts] deleted
 
+Timeout callback:: count: 2
+1: timerToUpdateProgram *new*
+2: timerToInvalidateFailedLookupResolutions *new*
+
 Before running Timeout callback:: count: 2
 1: timerToUpdateProgram
 2: timerToInvalidateFailedLookupResolutions
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -91,18 +100,7 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"module":2}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/foo.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/foo.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/foo.ts (computed .d.ts)
+//// [/users/username/projects/project/foo.js] file written with same contents
 
 FsWatches::
 /a/lib/lib.d.ts:
@@ -118,9 +116,28 @@ FsWatchesRecursive::
 /users/username/projects:
   {}
 
-exitCode:: ExitStatus.undefined
+Timeout callback:: count: 0
+2: timerToInvalidateFailedLookupResolutions *deleted*
 
-//// [/users/username/projects/project/foo.js] file written with same contents
+
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "module": 2
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/foo.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/foo.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/foo.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
 
 Change:: Create imported file
 
@@ -129,12 +146,20 @@ Input::
 export const y = 1;export const x = 10;
 
 
+Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions *new*
+
 Before running Timeout callback:: count: 1
 3: timerToInvalidateFailedLookupResolutions
+
 After running Timeout callback:: count: 1
-4: timerToUpdateProgram
+
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -144,8 +169,27 @@ Output::
 
 
 
-Program root files: ["/users/username/projects/project/foo.ts"]
-Program options: {"module":2}
+//// [/users/username/projects/project/foo.js] file written with same contents
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/bar.d.ts: *new*
+  {}
+/users/username/projects/project/foo.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects:
+  {}
+
+
+Program root files: [
+  "/users/username/projects/project/foo.ts"
+]
+Program options: {
+  "module": 2
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -160,18 +204,4 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/bar.d.ts (used version)
 /users/username/projects/project/foo.ts (computed .d.ts)
 
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/project/bar.d.ts: *new*
-  {}
-/users/username/projects/project/foo.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/users/username/projects/project/foo.js] file written with same contents

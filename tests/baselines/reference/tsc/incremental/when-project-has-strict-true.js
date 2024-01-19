@@ -19,15 +19,28 @@ declare const console: { log(msg: any): void; };
 export class class1 {}
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"strict":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "strict": true
+  }
+}
 
 
 
 Output::
 /lib/tsc -noEmit -p src/project
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/class1.ts"]
-Program options: {"incremental":true,"strict":true,"noEmit":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/class1.ts"
+]
+Program options: {
+  "incremental": true,
+  "strict": true,
+  "noEmit": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -102,8 +115,16 @@ Input::
 Output::
 /lib/tsc -noEmit -p src/project
 exitCode:: ExitStatus.Success
-Program root files: ["/src/project/class1.ts"]
-Program options: {"incremental":true,"strict":true,"noEmit":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
+Program root files: [
+  "/src/project/class1.ts"
+]
+Program options: {
+  "incremental": true,
+  "strict": true,
+  "noEmit": true,
+  "project": "/src/project",
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

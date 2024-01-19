@@ -28,7 +28,9 @@ export function child2() {
 
 
 //// [/src/child/tsconfig.json]
-{"compilerOptions":{}}
+{
+  "compilerOptions": {}
+}
 
 
 

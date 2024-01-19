@@ -222,3 +222,11 @@ templateLiteralTypes3.ts(141,9): error TS2367: This comparison appears to be uni
     
     type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
     
+    // Repro from #56582
+    
+    function a<T extends {id: string}>() {
+        let x: keyof T & string | `-${keyof T & string}`;
+        x = "id";
+        x = "-id";
+    }
+    

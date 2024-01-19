@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/circularReferenceInReturnType.ts] ////
+
+=== circularReferenceInReturnType.ts ===
+declare function fn1<T>(cb: () => T): string;
+>fn1 : <T>(cb: () => T) => string
+>cb : () => T
+
+const res1 = fn1(() => res1);
+>res1 : string
+>fn1(() => res1) : string
+>fn1 : <T>(cb: () => T) => string
+>() => res1 : () => string
+>res1 : string
+
+declare function fn2<T>(): (cb: () => any) => (a: T) => void;
+>fn2 : <T>() => (cb: () => any) => (a: T) => void
+>cb : () => any
+>a : T
+
+const res2 = fn2()(() => res2);
+>res2 : (a: unknown) => void
+>fn2()(() => res2) : (a: unknown) => void
+>fn2() : (cb: () => any) => (a: unknown) => void
+>fn2 : <T>() => (cb: () => any) => (a: T) => void
+>() => res2 : () => (a: unknown) => void
+>res2 : (a: unknown) => void
+
+declare function fn3<T>(): <T2>(cb: (arg: T2) => any) => (a: T) => void;
+>fn3 : <T>() => <T2>(cb: (arg: T2) => any) => (a: T) => void
+>cb : (arg: T2) => any
+>arg : T2
+>a : T
+
+const res3 = fn3()(() => res3);
+>res3 : (a: unknown) => void
+>fn3()(() => res3) : (a: unknown) => void
+>fn3() : <T2>(cb: (arg: T2) => any) => (a: unknown) => void
+>fn3 : <T>() => <T2>(cb: (arg: T2) => any) => (a: T) => void
+>() => res3 : () => (a: unknown) => void
+>res3 : (a: unknown) => void
+

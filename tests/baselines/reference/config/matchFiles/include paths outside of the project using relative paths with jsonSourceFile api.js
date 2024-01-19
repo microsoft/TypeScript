@@ -1,12 +1,12 @@
 config:
 {
- "include": [
-  "*",
-  "../ext/*"
- ],
- "exclude": [
-  "**"
- ]
+  "include": [
+    "*",
+    "../ext/*"
+  ],
+  "exclude": [
+    "**"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -82,30 +82,30 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/ext/ext.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "*",
-   "../ext/*"
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/ext/ext.ts"
   ],
-  "exclude": [
-   "**"
-  ]
- },
- "wildcardDirectories": {
-  "c:/ext": "WatchDirectoryFlags.None"
- },
- "compileOnSave": false
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "*",
+      "../ext/*"
+    ],
+    "exclude": [
+      "**"
+    ]
+  },
+  "wildcardDirectories": {
+    "c:/ext": "WatchDirectoryFlags.None"
+  },
+  "compileOnSave": false
 }
 Errors::
 

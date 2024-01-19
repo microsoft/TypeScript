@@ -17,7 +17,5 @@
 const [r0Def, r0, r1Def, r1, r2] = test.ranges();
 const ranges = [r0, r1, r2];
 // Testing that it works with documentHighlights too
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['0', '1', '2'] },
-    { type: "documentHighlights", markerOrRange: ranges, options: { filesToSearch: ["/b.ts", "/c/sub.js", "/d.ts"] } },
-);
+verify.baselineFindAllReferences('0', '1', '2');
+verify.baselineDocumentHighlights(ranges, { filesToSearch: ["/b.ts", "/c/sub.js", "/d.ts"] });

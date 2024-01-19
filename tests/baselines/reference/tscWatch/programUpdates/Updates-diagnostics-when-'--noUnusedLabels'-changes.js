@@ -17,7 +17,11 @@ interface Array<T> { length: number; [n: number]: T; }
 label: while (1) {}
 
 //// [/tsconfig.json]
-{"compilerOptions":{"allowUnusedLabels":true}}
+{
+  "compilerOptions": {
+    "allowUnusedLabels": true
+  }
+}
 
 
 /a/lib/tsc.js -w -p /tsconfig.json
@@ -29,20 +33,10 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a.ts
-/a/lib/lib.d.ts
+//// [/a.js]
+label: while (1) { }
 
-Semantic diagnostics in builder refreshed for::
-/a.ts
-/a/lib/lib.d.ts
 
-Shape signatures in builder refreshed for::
-/a.ts (used version)
-/a/lib/lib.d.ts (used version)
 
 FsWatches::
 /a.ts: *new*
@@ -56,22 +50,48 @@ FsWatchesRecursive::
 /: *new*
   {}
 
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "allowUnusedLabels": true,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a.ts
+/a/lib/lib.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a.ts
+/a/lib/lib.d.ts
+
+Shape signatures in builder refreshed for::
+/a.ts (used version)
+/a/lib/lib.d.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/a.js]
-label: while (1) { }
-
-
 
 Change:: Disable  allowUnsusedLabels
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"allowUnusedLabels":false}}
+{
+  "compilerOptions": {
+    "allowUnusedLabels": false
+  }
+}
 
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -86,8 +106,18 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":false,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+
+
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "allowUnusedLabels": false,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a.ts
@@ -101,16 +131,23 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: Enable  allowUnsusedLabels
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"allowUnusedLabels":true}}
+{
+  "compilerOptions": {
+    "allowUnusedLabels": true
+  }
+}
 
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -120,8 +157,18 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"allowUnusedLabels":true,"watch":true,"project":"/tsconfig.json","configFilePath":"/tsconfig.json"}
+
+
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "allowUnusedLabels": true,
+  "watch": true,
+  "project": "/tsconfig.json",
+  "configFilePath": "/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a.ts
@@ -134,4 +181,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

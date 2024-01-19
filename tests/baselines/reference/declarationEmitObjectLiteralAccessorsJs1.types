@@ -1,0 +1,86 @@
+//// [tests/cases/compiler/declarationEmitObjectLiteralAccessorsJs1.ts] ////
+
+=== index.js ===
+// same type accessors
+export const obj1 = {
+>obj1 : { x: string; }
+>{  /**   * my awesome getter (first in source order)   * @returns {string}   */  get x() {    return "";  },  /**    * my awesome setter (second in source order)   * @param {string} a   */  set x(a) {},} : { x: string; }
+
+  /**
+   * my awesome getter (first in source order)
+   * @returns {string}
+   */
+  get x() {
+>x : string
+
+    return "";
+>"" : ""
+
+  },
+  /** 
+   * my awesome setter (second in source order)
+   * @param {string} a
+   */
+  set x(a) {},
+>x : string
+>a : string
+
+};
+
+// divergent accessors
+export const obj2 = {
+>obj2 : { get x(): string; set x(a: number); }
+>{  /**    * my awesome getter   * @returns {string}   */  get x() {    return "";  },  /**    * my awesome setter   * @param {number} a   */  set x(a) {},} : { get x(): string; set x(a: number); }
+
+  /** 
+   * my awesome getter
+   * @returns {string}
+   */
+  get x() {
+>x : string
+
+    return "";
+>"" : ""
+
+  },
+  /** 
+   * my awesome setter
+   * @param {number} a
+   */
+  set x(a) {},
+>x : string
+>a : number
+
+};
+
+export const obj3 = {
+>obj3 : { readonly x: string; }
+>{  /**   * my awesome getter   * @returns {string}   */  get x() {    return "";  },} : { readonly x: string; }
+
+  /**
+   * my awesome getter
+   * @returns {string}
+   */
+  get x() {
+>x : string
+
+    return "";
+>"" : ""
+
+  },
+};
+
+export const obj4 = {
+>obj4 : { x: number; }
+>{  /**   * my awesome setter   * @param {number} a   */  set x(a) {},} : { x: number; }
+
+  /**
+   * my awesome setter
+   * @param {number} a
+   */
+  set x(a) {},
+>x : number
+>a : number
+
+};
+

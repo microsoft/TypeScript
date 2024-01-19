@@ -1,0 +1,32 @@
+error TS6504: File '/node_modules/pkg/untyped.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Root file specified for compilation
+/index.ts(1,21): error TS7016: Could not find a declaration file for module 'pkg'. '/node_modules/pkg/untyped.js' implicitly has an 'any' type.
+  There are types at '/node_modules/pkg/definitely-not-index.d.ts', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.
+
+
+!!! error TS6504: File '/node_modules/pkg/untyped.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Root file specified for compilation
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+      "name": "pkg",
+      "version": "1.0.0",
+      "main": "./untyped.js",
+      "exports": {
+          ".": "./definitely-not-index.js"
+      }
+    }
+    
+==== /node_modules/pkg/untyped.js (0 errors) ====
+    export {};
+    
+==== /node_modules/pkg/definitely-not-index.d.ts (0 errors) ====
+    export {};
+    
+==== /index.ts (1 errors) ====
+    import { pkg } from "pkg";
+                        ~~~~~
+!!! error TS7016: Could not find a declaration file for module 'pkg'. '/node_modules/pkg/untyped.js' implicitly has an 'any' type.
+!!! error TS7016:   There are types at '/node_modules/pkg/definitely-not-index.d.ts', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.
+    

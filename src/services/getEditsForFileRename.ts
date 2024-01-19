@@ -15,7 +15,6 @@ import {
     GetCanonicalFileName,
     getDirectoryPath,
     getFileMatcherPatterns,
-    getModeForUsageLocation,
     getOptionFromName,
     getRegexFromPattern,
     getRelativePathFromDirectory,
@@ -34,7 +33,6 @@ import {
     ModuleResolutionHost,
     moduleSpecifiers,
     normalizePath,
-    Path,
     pathIsRelative,
     Program,
     PropertyAssignment,
@@ -215,7 +213,7 @@ function updateImports(
 
             // Need an update if the imported file moved, or the importing file moved and was using a relative path.
             return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
+                ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
                 : undefined;
         });
     }
@@ -248,9 +246,9 @@ function getSourceFileToImport(
         return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
     }
     else {
-        const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
+        const mode = program.getModeForUsageLocation(importingSourceFile, importLiteral);
         const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
-            program.getResolvedModule(importingSourceFile, importLiteral.text, mode) :
+            program.getResolvedModuleFromModuleSpecifier(importLiteral) :
             host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
         return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
     }

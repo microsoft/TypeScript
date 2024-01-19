@@ -19,25 +19,31 @@ declare const console: { log(msg: any): void; };
 export const z = 30;
 import { x } from "lib/file1";
 
+
 //// [/src/app/file4.ts]
 const myVar = 30;
 
 //// [/src/app/tsconfig.json]
 {
-    "compilerOptions": {
-        "ignoreDeprecations": "5.0",
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "strict": false,
-        "sourceMap": true,
-        "declarationMap": true,
-        "outFile": "module.js"
-    },
-    "exclude": ["module.d.ts"],
-    "references": [
-        { "path": "../lib", "prepend": true }
-    ]
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "target": "es5",
+    "module": "amd",
+    "composite": true,
+    "strict": false,
+    "sourceMap": true,
+    "declarationMap": true,
+    "outFile": "module.js"
+  },
+  "exclude": [
+    "module.d.ts"
+  ],
+  "references": [
+    {
+      "path": "../lib",
+      "prepend": true
+    }
+  ]
 }
 
 //// [/src/lib/file0.ts]
@@ -54,34 +60,35 @@ const globalConst = 10;
 
 //// [/src/lib/tsconfig.json]
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "amd",
-        "composite": true,
-        "sourceMap": true,
-        "declarationMap": true,
-        "strict": false,
-        "outFile": "../module.js", "rootDir": "../"
-    },
-    "exclude": ["module.d.ts"]
-
+  "compilerOptions": {
+    "target": "es5",
+    "module": "amd",
+    "composite": true,
+    "sourceMap": true,
+    "declarationMap": true,
+    "strict": false,
+    "outFile": "../module.js", "rootDir": "../"
+  },
+  "exclude": [
+    "module.d.ts"
+  ]
 }
 
 
 
 Output::
 /lib/tsc -b /src/app --verbose
-[[90m12:00:08 AM[0m] Projects in this build: 
+[[90m12:00:18 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:00:09 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/module.tsbuildinfo' does not exist
+[[90m12:00:19 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output file 'src/module.tsbuildinfo' does not exist
 
-[[90m12:00:10 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:00:20 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:19 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
+[[90m12:00:29 AM[0m] Project 'src/app/tsconfig.json' is out of date because output file 'src/app/module.tsbuildinfo' does not exist
 
-[[90m12:00:20 AM[0m] Building project '/src/app/tsconfig.json'...
+[[90m12:00:30 AM[0m] Building project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -473,7 +480,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":453,"kind":"prepend","data":"../module.js","texts":[{"pos":0,"end":453,"kind":"text"}]},{"pos":453,"end":672,"kind":"text"}],"mapHash":"5108062215-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC\"}","hash":"6195305346-var myGlob = 20;\ndefine(\"lib/file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n});\ndefine(\"lib/file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n});\nvar myVar = 30;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":171,"kind":"prepend","data":"../module.d.ts","texts":[{"pos":0,"end":171,"kind":"text"}]},{"pos":171,"end":249,"kind":"text"}],"mapHash":"-41254439122-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"-17877883596-declare const myGlob = 20;\ndeclare module \"lib/file1\" {\n    export const x = 10;\n}\ndeclare module \"lib/file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-21806566655-declare const myGlob = 20;\ndeclare module \"lib/file1\" {\n    export const x = 10;\n}\ndeclare module \"lib/file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","3263932623-export const z = 30;\r\nimport { x } from \"lib/file1\";","1463681686-const myVar = 30;"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"-24691359027-declare const myGlob = 20;\ndeclare module \"lib/file1\" {\n    export const x = 10;\n}\ndeclare module \"lib/file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":453,"kind":"prepend","data":"../module.js","texts":[{"pos":0,"end":453,"kind":"text"}]},{"pos":453,"end":672,"kind":"text"}],"mapHash":"5108062215-{\"version\":3,\"file\":\"module.js\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC\"}","hash":"6195305346-var myGlob = 20;\ndefine(\"lib/file1\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n});\ndefine(\"lib/file2\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 20;\n});\nvar globalConst = 10;\ndefine(\"file3\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.z = void 0;\n    exports.z = 30;\n});\nvar myVar = 30;\n//# sourceMappingURL=module.js.map"},"dts":{"sections":[{"pos":0,"end":171,"kind":"prepend","data":"../module.d.ts","texts":[{"pos":0,"end":171,"kind":"text"}]},{"pos":171,"end":249,"kind":"text"}],"mapHash":"-41254439122-{\"version\":3,\"file\":\"module.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../lib/file0.ts\",\"../lib/file1.ts\",\"../lib/file2.ts\",\"../lib/global.ts\",\"file3.ts\",\"file4.ts\"],\"names\":[],\"mappings\":\"AAAA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC\"}","hash":"-17877883596-declare const myGlob = 20;\ndeclare module \"lib/file1\" {\n    export const x = 10;\n}\ndeclare module \"lib/file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n//# sourceMappingURL=module.d.ts.map"}},"program":{"fileNames":["../../lib/lib.d.ts","../module.d.ts","./file3.ts","./file4.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-21806566655-declare const myGlob = 20;\ndeclare module \"lib/file1\" {\n    export const x = 10;\n}\ndeclare module \"lib/file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n","-16038404532-export const z = 30;\nimport { x } from \"lib/file1\";\n","1463681686-const myVar = 30;"],"root":[3,4],"options":{"composite":true,"declarationMap":true,"module":2,"outFile":"./module.js","sourceMap":true,"strict":false,"target":1},"outSignature":"-24691359027-declare const myGlob = 20;\ndeclare module \"lib/file1\" {\n    export const x = 10;\n}\ndeclare module \"lib/file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\ndeclare module \"file3\" {\n    export const z = 30;\n}\ndeclare const myVar = 30;\n","latestChangedDtsFile":"./module.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -599,7 +606,7 @@ declare const myVar = 30;
     "fileInfos": {
       "../../lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "../module.d.ts": "-21806566655-declare const myGlob = 20;\ndeclare module \"lib/file1\" {\n    export const x = 10;\n}\ndeclare module \"lib/file2\" {\n    export const y = 20;\n}\ndeclare const globalConst = 10;\n",
-      "./file3.ts": "3263932623-export const z = 30;\r\nimport { x } from \"lib/file1\";",
+      "./file3.ts": "-16038404532-export const z = 30;\nimport { x } from \"lib/file1\";\n",
       "./file4.ts": "1463681686-const myVar = 30;"
     },
     "root": [
@@ -625,7 +632,7 @@ declare const myVar = 30;
     "latestChangedDtsFile": "./module.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 3731
+  "size": 3733
 }
 
 //// [/src/module.d.ts]

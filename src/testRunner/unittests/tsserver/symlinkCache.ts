@@ -2,9 +2,8 @@ import * as ts from "../../_namespaces/ts";
 
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -97,7 +96,7 @@ function setup() {
         depSrcSubFolderIndexTs,
         link,
     ]);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const session = new TestSession(host);
     const projectService = session.getProjectService();
     return {
         host,

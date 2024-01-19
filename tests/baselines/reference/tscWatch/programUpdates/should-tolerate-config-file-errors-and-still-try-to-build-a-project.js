@@ -43,8 +43,39 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"module":0,"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+
+
+FsWatches::
+/a/b/commonFile1.ts: *new*
+  {}
+/a/b/commonFile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "module": 0,
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -61,27 +92,4 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-FsWatches::
-/a/b/commonfile1.ts: *new*
-  {}
-/a/b/commonfile2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-

@@ -1,6 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
     runWatchBaseline,
@@ -47,7 +50,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
         };
         const configFile: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({ compilerOptions }),
+            content: jsonToReadableText({ compilerOptions }),
         };
         const files = [file, configFile, libFile];
         it("using createWatchOfConfigFile ", () => {

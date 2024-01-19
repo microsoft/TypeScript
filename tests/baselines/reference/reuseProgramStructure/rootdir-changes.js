@@ -32,7 +32,10 @@ typerefs: {
 }
 
 
-MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
+MissingPaths:: [
+  "non-existing-file.ts",
+  "lib.d.ts"
+]
 
 a.ts(2,22): error TS6059: File 'b.ts' is not under 'rootDir' '/a/b'. 'rootDir' is expected to contain all source files.
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
@@ -75,7 +78,10 @@ typerefs: {
 }
 
 
-MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
+MissingPaths:: [
+  "non-existing-file.ts",
+  "lib.d.ts"
+]
 
 a.ts(2,22): error TS6059: File 'b.ts' is not under 'rootDir' '/a/c'. 'rootDir' is expected to contain all source files.
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.

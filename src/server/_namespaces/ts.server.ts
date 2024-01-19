@@ -15,3 +15,4 @@ export * from "../moduleSpecifierCache";
 export * from "../packageJsonCache";
 export * from "../session";
 export * from "../scriptVersionCache";
+export * from "../typingInstallerAdapter";

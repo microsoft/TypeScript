@@ -1,4 +1,4 @@
-/tsconfig.json(5,9): error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
+/tsconfig.json(5,9): error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
 /tsconfig.json(5,9): error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
   Use 'verbatimModuleSyntax' instead.
 /tsconfig.json(5,9): error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
@@ -14,7 +14,7 @@
             "isolatedModules": true,
             "preserveValueImports": true,
             ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
+!!! error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
             ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS5101: Option 'preserveValueImports' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 !!! error TS5101:   Use 'verbatimModuleSyntax' instead.

@@ -22,7 +22,7 @@ interface Instance<Data> {
 }
 
 declare var Moon: {
->Moon : <Data>(options?: ConstructorOptions<Data> | undefined) => Instance<Data>
+>Moon : <Data>(options?: ConstructorOptions<Data>) => Instance<Data>
 
     <Data>(options?: ConstructorOptions<Data>): Instance<Data>;
 >options : ConstructorOptions<Data> | undefined

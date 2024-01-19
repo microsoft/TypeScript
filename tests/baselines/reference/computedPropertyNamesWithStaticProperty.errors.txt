@@ -1,25 +1,49 @@
-computedPropertyNamesWithStaticProperty.ts(3,10): error TS2449: Class 'C' used before its declaration.
-computedPropertyNamesWithStaticProperty.ts(6,10): error TS2449: Class 'C' used before its declaration.
-computedPropertyNamesWithStaticProperty.ts(9,6): error TS2449: Class 'C' used before its declaration.
+computedPropertyNamesWithStaticProperty.ts(3,10): error TS2449: Class 'C1' used before its declaration.
+computedPropertyNamesWithStaticProperty.ts(6,10): error TS2449: Class 'C1' used before its declaration.
+computedPropertyNamesWithStaticProperty.ts(9,6): error TS2449: Class 'C1' used before its declaration.
+computedPropertyNamesWithStaticProperty.ts(14,10): error TS2449: Class 'C2' used before its declaration.
+computedPropertyNamesWithStaticProperty.ts(17,10): error TS2449: Class 'C2' used before its declaration.
+computedPropertyNamesWithStaticProperty.ts(20,6): error TS2449: Class 'C2' used before its declaration.
 
 
-==== computedPropertyNamesWithStaticProperty.ts (3 errors) ====
-    class C {
+==== computedPropertyNamesWithStaticProperty.ts (6 errors) ====
+    class C1 {
         static staticProp = 10;
-        get [C.staticProp]() {
-             ~
-!!! error TS2449: Class 'C' used before its declaration.
-!!! related TS2728 computedPropertyNamesWithStaticProperty.ts:1:7: 'C' is declared here.
+        get [C1.staticProp]() {
+             ~~
+!!! error TS2449: Class 'C1' used before its declaration.
+!!! related TS2728 computedPropertyNamesWithStaticProperty.ts:1:7: 'C1' is declared here.
             return "hello";
         }
-        set [C.staticProp](x: string) {
-             ~
-!!! error TS2449: Class 'C' used before its declaration.
-!!! related TS2728 computedPropertyNamesWithStaticProperty.ts:1:7: 'C' is declared here.
+        set [C1.staticProp](x: string) {
+             ~~
+!!! error TS2449: Class 'C1' used before its declaration.
+!!! related TS2728 computedPropertyNamesWithStaticProperty.ts:1:7: 'C1' is declared here.
             var y = x;
         }
-        [C.staticProp]() { }
-         ~
-!!! error TS2449: Class 'C' used before its declaration.
-!!! related TS2728 computedPropertyNamesWithStaticProperty.ts:1:7: 'C' is declared here.
+        [C1.staticProp]() { }
+         ~~
+!!! error TS2449: Class 'C1' used before its declaration.
+!!! related TS2728 computedPropertyNamesWithStaticProperty.ts:1:7: 'C1' is declared here.
     }
+    
+    (class C2 {
+        static staticProp = 10;
+        get [C2.staticProp]() {
+             ~~
+!!! error TS2449: Class 'C2' used before its declaration.
+!!! related TS2728 computedPropertyNamesWithStaticProperty.ts:12:8: 'C2' is declared here.
+            return "hello";
+        }
+        set [C2.staticProp](x: string) {
+             ~~
+!!! error TS2449: Class 'C2' used before its declaration.
+!!! related TS2728 computedPropertyNamesWithStaticProperty.ts:12:8: 'C2' is declared here.
+            var y = x;
+        }
+        [C2.staticProp]() { }
+         ~~
+!!! error TS2449: Class 'C2' used before its declaration.
+!!! related TS2728 computedPropertyNamesWithStaticProperty.ts:12:8: 'C2' is declared here.
+    })
+    

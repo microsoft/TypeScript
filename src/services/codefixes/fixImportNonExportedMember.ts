@@ -116,10 +116,10 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         const importDeclaration = findAncestor(token, isImportDeclaration);
         if (importDeclaration === undefined) return undefined;
 
-        const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier.text : undefined;
+        const moduleSpecifier = isStringLiteral(importDeclaration.moduleSpecifier) ? importDeclaration.moduleSpecifier : undefined;
         if (moduleSpecifier === undefined) return undefined;
 
-        const resolvedModule = program.getResolvedModule(sourceFile, moduleSpecifier, /*mode*/ undefined)?.resolvedModule;
+        const resolvedModule = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
         if (resolvedModule === undefined) return undefined;
 
         const moduleSourceFile = program.getSourceFile(resolvedModule.resolvedFileName);
@@ -136,7 +136,7 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         if (node === undefined) return undefined;
 
         const exportName = { node: token, isTypeOnly: isTypeDeclaration(node) };
-        return { exportName, node, moduleSourceFile, moduleSpecifier };
+        return { exportName, node, moduleSourceFile, moduleSpecifier: moduleSpecifier.text };
     }
     return undefined;
 }

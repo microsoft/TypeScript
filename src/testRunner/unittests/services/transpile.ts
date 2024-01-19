@@ -662,4 +662,15 @@ export * as alias from './file';`,
             testVerbatimModuleSyntax: true,
         },
     );
+
+    transpilesCorrectly(
+        "Elides re-export of type-only import",
+        `
+        import type { Foo } from "./types";
+        export { Foo };
+        `,
+        {
+            options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
+        },
+    );
 });

@@ -161,7 +161,7 @@ module Errors {
 
         interface I6 extends A {
             a15: new <T>(x: { a: T; b: T }) => T; // error, T is {} which isn't an acceptable return type
->a15 : new <T>(x: { a: T; b: T; }) => T
+>a15 : new <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -169,7 +169,7 @@ module Errors {
 
         interface I7 extends A {
             a15: new <T extends Base>(x: { a: T; b: T }) => number; // error, T defaults to Base, which is not compatible with number or string
->a15 : new <T extends Base>(x: { a: T; b: T; }) => number
+>a15 : new <T extends Base>(x: {    a: T;    b: T;}) => number
 >x : { a: T; b: T; }
 >a : T
 >b : T

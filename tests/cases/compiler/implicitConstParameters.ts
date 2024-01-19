@@ -35,7 +35,7 @@ function f3(x: string | undefined) {
 }
 
 function f4(x: string | undefined) {
-    x = "abc";  // causes x to be considered non-const
+    x = "abc";
     if (x) {
         doSomething(() => x.length);
     }

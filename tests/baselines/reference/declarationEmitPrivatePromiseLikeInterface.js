@@ -72,6 +72,6 @@ export interface HttpResponse<D extends unknown, E extends unknown = unknown> ex
     error: E;
 }
 export declare class HttpClient<SecurityDataType = unknown> {
-    request: <T = any, E = any>() => TPromise<HttpResponse<T, E>, any>;
+    request: <T = any, E = any>() => TPromise<HttpResponse<T, E>>;
 }
 export {};

@@ -29,12 +29,12 @@ blockScopedSameNameFunctionDeclarationStrictES5.ts(17,1): error TS2554: Expected
         }
         foo(10);
         foo(); // not ok - needs number
-        ~~~~~
+        ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 blockScopedSameNameFunctionDeclarationStrictES5.ts:2:14: An argument for 'a' was not provided.
     }
     foo(10);
     foo(); // not ok - needs number
-    ~~~~~
+    ~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 blockScopedSameNameFunctionDeclarationStrictES5.ts:2:14: An argument for 'a' was not provided.

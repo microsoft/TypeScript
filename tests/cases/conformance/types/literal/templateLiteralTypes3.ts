@@ -195,3 +195,11 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 // Repro from #52685
 
 type Boom = 'abc' | 'def' | `a${string}` | Lowercase<string>;
+
+// Repro from #56582
+
+function a<T extends {id: string}>() {
+    let x: keyof T & string | `-${keyof T & string}`;
+    x = "id";
+    x = "-id";
+}

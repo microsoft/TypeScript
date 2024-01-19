@@ -99,7 +99,7 @@ var b2: { new <T>(x: T): T };
 >x : T
 
 var c2: { <T>(x: T): T; <T>(x: T, y: T): T };
->c2 : { <T>(x: T): T; <T>(x: T, y: T): T; }
+>c2 : { <T>(x: T): T; <T_1>(x: T_1, y: T_1): T_1; }
 >x : T
 >x : T
 >y : T
@@ -127,8 +127,8 @@ var r12 = foo(i2);
 >i2 : I2<string>
 
 var r15 = foo(c2);
->r15 : { <T>(x: T): T; <T>(x: T, y: T): T; }
->foo(c2) : { <T>(x: T): T; <T>(x: T, y: T): T; }
+>r15 : { <T>(x: T): T; <T_1>(x: T_1, y: T_1): T_1; }
+>foo(c2) : { <T>(x: T): T; <T_1>(x: T_1, y: T_1): T_1; }
 >foo : <T extends (x: string) => string>(x: T) => T
->c2 : { <T>(x: T): T; <T>(x: T, y: T): T; }
+>c2 : { <T>(x: T): T; <T_1>(x: T_1, y: T_1): T_1; }
 

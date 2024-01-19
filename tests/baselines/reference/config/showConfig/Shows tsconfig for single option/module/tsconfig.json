@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
-        "module": "none"
+        "module": "none",
+        "moduleResolution": "classic"
     }
 }

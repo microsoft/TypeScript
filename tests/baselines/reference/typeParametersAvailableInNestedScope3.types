@@ -2,7 +2,7 @@
 
 === typeParametersAvailableInNestedScope3.ts ===
 function foo<T>(v: T) {
->foo : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; c: <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }; }
+>foo : <T>(v: T) => { a: <T_1>(a: T_1) => T_1; b: () => T; c: <T_2>(v: T_2) => { a: <T_3>(a: T_3) => T_3; b: () => T_2; }; }
 >v : T
 
     function a<T>(a: T) { return a; }
@@ -15,7 +15,7 @@ function foo<T>(v: T) {
 >v : T
 
     function c<T>(v: T) {
->c : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }
+>c : <T>(v: T) => { a: <T_1>(a: T_1) => T_1; b: () => T; }
 >v : T
 
         function a<T>(a: T) { return a; }
@@ -28,15 +28,15 @@ function foo<T>(v: T) {
 >v : T
 
         return { a, b };
->{ a, b } : { a: <T>(a: T) => T; b: () => T; }
->a : <T>(a: T) => T
+>{ a, b } : { a: <T_1>(a: T_1) => T_1; b: () => T; }
+>a : <T_1>(a: T_1) => T_1
 >b : () => T
     }
 
     return { a, b, c };
->{ a, b, c } : { a: <T>(a: T) => T; b: () => T; c: <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }; }
->a : <T>(a: T) => T
+>{ a, b, c } : { a: <T_1>(a: T_1) => T_1; b: () => T; c: <T_2>(v: T_2) => { a: <T_3>(a: T_3) => T_3; b: () => T_2; }; }
+>a : <T_1>(a: T_1) => T_1
 >b : () => T
->c : <T>(v: T) => { a: <T>(a: T) => T; b: () => T; }
+>c : <T_1>(v: T_1) => { a: <T_2>(a: T_2) => T_2; b: () => T_1; }
 }
 

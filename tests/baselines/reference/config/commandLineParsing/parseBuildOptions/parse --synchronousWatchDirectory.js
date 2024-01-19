@@ -1,11 +1,11 @@
 --synchronousWatchDirectory --verbose
 buildOptions::
 {
- "verbose": true
+  "verbose": true
 }
 WatchOptions::
 {
- "synchronousWatchDirectory": true
+  "synchronousWatchDirectory": true
 }
 Projects::
 .

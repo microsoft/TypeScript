@@ -1,0 +1,108 @@
+//// [tests/cases/compiler/contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts] ////
+
+=== contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts ===
+// repro #47682
+
+declare class StateMachine<T> {
+>StateMachine : StateMachine<T>
+
+  onDone: (a: T) => void;
+>onDone : (a: T) => void
+>a : T
+}
+
+declare function createMachine<T>(implementations: {
+>createMachine : <T>(implementations: {    services: Record<string, () => Promise<T> | StateMachine<T>>;}) => void
+>implementations : { services: Record<string, () => Promise<T> | StateMachine<T>>; }
+
+  services: Record<string, () => Promise<T> | StateMachine<T>>;
+>services : Record<string, () => Promise<T> | StateMachine<T>>
+
+}): void;
+
+createMachine<{ count: number }>({
+>createMachine<{ count: number }>({  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },}) : void
+>createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
+>count : number
+>{  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },} : { services: { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }; }
+
+  services: {
+>services : { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }
+>{    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  } : { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }
+
+    test: async () => Promise.reject("some err"),
+>test : () => Promise<{ count: number; }>
+>async () => Promise.reject("some err") : () => Promise<{ count: number; }>
+>Promise.reject("some err") : Promise<{ count: number; }>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise : PromiseConstructor
+>reject : <T = never>(reason?: any) => Promise<T>
+>"some err" : "some err"
+
+    async test2() {
+>test2 : () => Promise<{ count: number; }>
+
+      return Promise.reject("some err");
+>Promise.reject("some err") : Promise<{ count: number; }>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise : PromiseConstructor
+>reject : <T = never>(reason?: any) => Promise<T>
+>"some err" : "some err"
+
+    },
+  },
+});
+
+function fn1(): () => Promise<{ count: number }> | StateMachine<{ count: number }> {
+>fn1 : () => () => Promise<{    count: number;}> | StateMachine<{    count: number;}>
+>count : number
+>count : number
+
+  return async () => Promise.reject('some err')
+>async () => Promise.reject('some err') : () => Promise<{ count: number; }>
+>Promise.reject('some err') : Promise<{ count: number; }>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
+>Promise : PromiseConstructor
+>reject : <T = never>(reason?: any) => Promise<T>
+>'some err' : "some err"
+}
+
+// repro #47682 issuecomment-1174099713
+
+declare function load(): Promise<boolean>;
+>load : () => Promise<boolean>
+
+type LoadCallback = () => Promise<boolean> | string;
+>LoadCallback : () => Promise<boolean> | string
+
+// all of those are essentially the same and should be allowed
+const cb1: LoadCallback = async () => load().then(m => m);
+>cb1 : LoadCallback
+>async () => load().then(m => m) : () => Promise<boolean>
+>load().then(m => m) : Promise<boolean>
+>load().then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>load() : Promise<boolean>
+>load : () => Promise<boolean>
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>m => m : (m: boolean) => boolean
+>m : boolean
+>m : boolean
+
+const cb2: LoadCallback = async () => load();
+>cb2 : LoadCallback
+>async () => load() : () => Promise<boolean>
+>load() : Promise<boolean>
+>load : () => Promise<boolean>
+
+const cb3: LoadCallback = () => load().then(m => m);
+>cb3 : LoadCallback
+>() => load().then(m => m) : () => Promise<boolean>
+>load().then(m => m) : Promise<boolean>
+>load().then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>load() : Promise<boolean>
+>load : () => Promise<boolean>
+>then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>m => m : (m: boolean) => boolean
+>m : boolean
+>m : boolean
+

@@ -1,3 +1,4 @@
+// === Inlay Hints ===
     foo(...x, 3);
         ^
 {

@@ -1,5 +1,5 @@
 // @moduleResolution: bundler
-// @module: esnext
+// @module: esnext, preserve
 // @checkJs: true
 // @allowJs: true
 // @outDir: out
@@ -22,12 +22,12 @@ declare module "path" {
 // @Filename: /mainJs.js
 import {} from "./a";
 import("./a");
-const _ = require("./a"); // No resolution
+const _ = require("./a");
 _.a; // any
 
 // @Filename: /main.ts
 import {} from "./a";
-import _ = require("./a"); // Error
+import _ = require("./a"); // Error in esnext
 export = {}; // Error
 export {};
 

@@ -10,7 +10,7 @@ class C {
       function other() {}
 >other : () => void
 
-      var fn = async () => await other.apply(this, arguments);      
+      var fn = async () => await other.apply(this, arguments);
 >fn : () => Promise<any>
 >async () => await other.apply(this, arguments) : () => Promise<any>
 >await other.apply(this, arguments) : any
@@ -23,3 +23,13 @@ class C {
    }
 }
 
+function f() {
+>f : () => () => Promise<() => Promise<number>>
+
+   return async () => async () => arguments.length;
+>async () => async () => arguments.length : () => Promise<() => Promise<number>>
+>async () => arguments.length : () => Promise<number>
+>arguments.length : number
+>arguments : IArguments
+>length : number
+}

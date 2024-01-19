@@ -1,8 +1,16 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "exclude": [
+    "temp"
+  ]
+}
 
 //// [/user/username/projects/myproject/projects/project1/class1.ts]
 class class1 {}
@@ -11,7 +19,17 @@ class class1 {}
 declare class class1 {}
 
 //// [/user/username/projects/myproject/projects/project2/tsconfig.json]
-{"compilerOptions":{"module":"none","composite":true},"references":[{"path":"../project1"}]}
+{
+  "compilerOptions": {
+    "module": "none",
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../project1"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/projects/project2/class2.ts]
 class class2 {}
@@ -43,6 +61,16 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/projects
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/projects/project2/class2.ts :: Config file name: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/projects/project2/class2.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/projects/project2/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/projects/project2/class2.ts"
@@ -101,6 +129,70 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/myproject/projects/project2/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "f882baf9605e0eb10c6faf44fb3bdc1cf0428db7f81867e6462774c6b989f621",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 30,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "module": "none",
+            "composite": true
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/projects/project2/class2.ts",
+        "configFile": "/user/username/projects/myproject/projects/project2/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/projects/project2
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/projects/project2/tsconfig.json :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Configured)
@@ -153,6 +245,10 @@ Before running Timeout callback:: count: 2
 class class3 {}
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/projects/project2/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.ts 500 undefined WatchType: Closed Script info
@@ -192,6 +288,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/projects/project2/class2.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/user/username/projects/myproject/projects/project2/class2.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
 
 PolledWatches::

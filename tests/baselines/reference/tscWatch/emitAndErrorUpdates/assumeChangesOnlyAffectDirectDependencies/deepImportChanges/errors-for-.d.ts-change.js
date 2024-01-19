@@ -45,26 +45,14 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.d.ts
-/user/username/projects/myproject/b.d.ts
-/user/username/projects/myproject/a.ts
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var b_1 = require("./b");
+var b = new b_1.B();
+console.log(b.c.d);
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/c.d.ts
-/user/username/projects/myproject/b.d.ts
-/user/username/projects/myproject/a.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/c.d.ts (used version)
-/user/username/projects/myproject/b.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -90,16 +78,36 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "assumeChangesOnlyAffectDirectDependencies": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.d.ts
+/user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/c.d.ts
+/user/username/projects/myproject/b.d.ts
+/user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/c.d.ts (used version)
+/user/username/projects/myproject/b.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var b = new b_1.B();
-console.log(b.c.d);
-
-
 
 Change:: Rename property d to d2 of class C to initialize signatures
 
@@ -111,8 +119,12 @@ export class C
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -122,8 +134,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "assumeChangesOnlyAffectDirectDependencies": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -140,7 +162,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Rename property d2 to d of class C to revert back to original text
 
@@ -152,8 +173,12 @@ export class C
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -163,8 +188,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "assumeChangesOnlyAffectDirectDependencies": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -181,7 +216,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Rename property d to d2 of class C
 
@@ -193,8 +227,12 @@ export class C
 }
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -204,8 +242,18 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.d.ts","/user/username/projects/myproject/c.d.ts"]
-Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.d.ts",
+  "/user/username/projects/myproject/c.d.ts"
+]
+Program options: {
+  "watch": true,
+  "assumeChangesOnlyAffectDirectDependencies": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -222,4 +270,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
-

@@ -19,11 +19,11 @@ interface Buzz {
 
 ([] as Fizz[] | Buzz[]).filter(item => item.id < 5);
 >([] as Fizz[] | Buzz[]).filter(item => item.id < 5) : (Fizz | Buzz)[]
->([] as Fizz[] | Buzz[]).filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): Buzz[]; }
+>([] as Fizz[] | Buzz[]).filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): Buzz[]; }
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
 >[] : undefined[]
->filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): Buzz[]; }
+>filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): Buzz[]; }
 >item => item.id < 5 : (item: Fizz | Buzz) => boolean
 >item : Fizz | Buzz
 >item.id < 5 : boolean
@@ -34,11 +34,11 @@ interface Buzz {
 
 ([] as Fizz[] | readonly Buzz[]).filter(item => item.id < 5); 
 >([] as Fizz[] | readonly Buzz[]).filter(item => item.id < 5) : (Fizz | Buzz)[]
->([] as Fizz[] | readonly Buzz[]).filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
+>([] as Fizz[] | readonly Buzz[]).filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
 >([] as Fizz[] | readonly Buzz[]) : Fizz[] | readonly Buzz[]
 >[] as Fizz[] | readonly Buzz[] : Fizz[] | readonly Buzz[]
 >[] : undefined[]
->filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
+>filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
 >item => item.id < 5 : (item: Fizz | Buzz) => boolean
 >item : Fizz | Buzz
 >item.id < 5 : boolean
@@ -49,11 +49,11 @@ interface Buzz {
 
 ([] as Fizz[] | Buzz[]).find(item => item);
 >([] as Fizz[] | Buzz[]).find(item => item) : Fizz | Buzz
->([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
+>([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S_1, thisArg?: any): S_1; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
 >[] : undefined[]
->find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
+>find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S_1, thisArg?: any): S_1; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
 >item => item : (item: Fizz | Buzz) => Fizz | Buzz
 >item : Fizz | Buzz
 >item : Fizz | Buzz
@@ -64,11 +64,11 @@ declare function isFizz(x: unknown): x is Fizz;
 
 ([] as Fizz[] | Buzz[]).find(isFizz);
 >([] as Fizz[] | Buzz[]).find(isFizz) : Fizz
->([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
+>([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S_1, thisArg?: any): S_1; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
 >[] : undefined[]
->find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
+>find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S_1, thisArg?: any): S_1; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
 >isFizz : (x: unknown) => x is Fizz
 
 declare function isBuzz(x: unknown): x is Buzz;
@@ -77,20 +77,20 @@ declare function isBuzz(x: unknown): x is Buzz;
 
 ([] as Fizz[] | Buzz[]).find(isBuzz);
 >([] as Fizz[] | Buzz[]).find(isBuzz) : Buzz
->([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
+>([] as Fizz[] | Buzz[]).find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S_1, thisArg?: any): S_1; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
 >[] : undefined[]
->find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S, thisArg?: any): S; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
+>find : { <S extends Fizz>(predicate: (value: Fizz, index: number, obj: Fizz[]) => value is S, thisArg?: any): S; (predicate: (value: Fizz, index: number, obj: Fizz[]) => unknown, thisArg?: any): Fizz; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, obj: Buzz[]) => value is S_1, thisArg?: any): S_1; (predicate: (value: Buzz, index: number, obj: Buzz[]) => unknown, thisArg?: any): Buzz; }
 >isBuzz : (x: unknown) => x is Buzz
 
 ([] as Fizz[] | Buzz[]).every(item => item.id < 5);
 >([] as Fizz[] | Buzz[]).every(item => item.id < 5) : boolean
->([] as Fizz[] | Buzz[]).every : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): boolean; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): boolean; }
+>([] as Fizz[] | Buzz[]).every : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): boolean; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S_1, thisArg?: any): this is S_1[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): boolean; }
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
 >[] : undefined[]
->every : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): boolean; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): boolean; }
+>every : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): boolean; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, array: Buzz[]) => value is S_1, thisArg?: any): this is S_1[]; (predicate: (value: Buzz, index: number, array: Buzz[]) => unknown, thisArg?: any): boolean; }
 >item => item.id < 5 : (item: Fizz | Buzz) => boolean
 >item : Fizz | Buzz
 >item.id < 5 : boolean
@@ -101,11 +101,11 @@ declare function isBuzz(x: unknown): x is Buzz;
 
 ([] as Fizz[] | Buzz[]).reduce(item => item);
 >([] as Fizz[] | Buzz[]).reduce(item => item) : Fizz | Buzz
->([] as Fizz[] | Buzz[]).reduce : { (callbackfn: (previousValue: Fizz, currentValue: Fizz, currentIndex: number, array: Fizz[]) => Fizz): Fizz; (callbackfn: (previousValue: Fizz, currentValue: Fizz, currentIndex: number, array: Fizz[]) => Fizz, initialValue: Fizz): Fizz; <U>(callbackfn: (previousValue: U, currentValue: Fizz, currentIndex: number, array: Fizz[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: Buzz, currentValue: Buzz, currentIndex: number, array: Buzz[]) => Buzz): Buzz; (callbackfn: (previousValue: Buzz, currentValue: Buzz, currentIndex: number, array: Buzz[]) => Buzz, initialValue: Buzz): Buzz; <U>(callbackfn: (previousValue: U, currentValue: Buzz, currentIndex: number, array: Buzz[]) => U, initialValue: U): U; }
+>([] as Fizz[] | Buzz[]).reduce : { (callbackfn: (previousValue: Fizz, currentValue: Fizz, currentIndex: number, array: Fizz[]) => Fizz): Fizz; (callbackfn: (previousValue: Fizz, currentValue: Fizz, currentIndex: number, array: Fizz[]) => Fizz, initialValue: Fizz): Fizz; <U>(callbackfn: (previousValue: U, currentValue: Fizz, currentIndex: number, array: Fizz[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: Buzz, currentValue: Buzz, currentIndex: number, array: Buzz[]) => Buzz): Buzz; (callbackfn: (previousValue: Buzz, currentValue: Buzz, currentIndex: number, array: Buzz[]) => Buzz, initialValue: Buzz): Buzz; <U_1>(callbackfn: (previousValue: U_1, currentValue: Buzz, currentIndex: number, array: Buzz[]) => U_1, initialValue: U_1): U_1; }
 >([] as Fizz[] | Buzz[]) : Fizz[] | Buzz[]
 >[] as Fizz[] | Buzz[] : Fizz[] | Buzz[]
 >[] : undefined[]
->reduce : { (callbackfn: (previousValue: Fizz, currentValue: Fizz, currentIndex: number, array: Fizz[]) => Fizz): Fizz; (callbackfn: (previousValue: Fizz, currentValue: Fizz, currentIndex: number, array: Fizz[]) => Fizz, initialValue: Fizz): Fizz; <U>(callbackfn: (previousValue: U, currentValue: Fizz, currentIndex: number, array: Fizz[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: Buzz, currentValue: Buzz, currentIndex: number, array: Buzz[]) => Buzz): Buzz; (callbackfn: (previousValue: Buzz, currentValue: Buzz, currentIndex: number, array: Buzz[]) => Buzz, initialValue: Buzz): Buzz; <U>(callbackfn: (previousValue: U, currentValue: Buzz, currentIndex: number, array: Buzz[]) => U, initialValue: U): U; }
+>reduce : { (callbackfn: (previousValue: Fizz, currentValue: Fizz, currentIndex: number, array: Fizz[]) => Fizz): Fizz; (callbackfn: (previousValue: Fizz, currentValue: Fizz, currentIndex: number, array: Fizz[]) => Fizz, initialValue: Fizz): Fizz; <U>(callbackfn: (previousValue: U, currentValue: Fizz, currentIndex: number, array: Fizz[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: Buzz, currentValue: Buzz, currentIndex: number, array: Buzz[]) => Buzz): Buzz; (callbackfn: (previousValue: Buzz, currentValue: Buzz, currentIndex: number, array: Buzz[]) => Buzz, initialValue: Buzz): Buzz; <U_1>(callbackfn: (previousValue: U_1, currentValue: Buzz, currentIndex: number, array: Buzz[]) => U_1, initialValue: U_1): U_1; }
 >item => item : (item: Fizz | Buzz) => Fizz | Buzz
 >item : Fizz | Buzz
 >item : Fizz | Buzz
@@ -113,11 +113,11 @@ declare function isBuzz(x: unknown): x is Buzz;
 
 ([] as [Fizz] | readonly [Buzz?]).filter(item => item?.id < 5);
 >([] as [Fizz] | readonly [Buzz?]).filter(item => item?.id < 5) : (Fizz | Buzz)[]
->([] as [Fizz] | readonly [Buzz?]).filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
+>([] as [Fizz] | readonly [Buzz?]).filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
 >([] as [Fizz] | readonly [Buzz?]) : [Fizz] | readonly [Buzz?]
 >[] as [Fizz] | readonly [Buzz?] : [Fizz] | readonly [Buzz?]
 >[] : []
->filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
+>filter : { <S extends Fizz>(predicate: (value: Fizz, index: number, array: Fizz[]) => value is S, thisArg?: any): S[]; (predicate: (value: Fizz, index: number, array: Fizz[]) => unknown, thisArg?: any): Fizz[]; } | { <S_1 extends Buzz>(predicate: (value: Buzz, index: number, array: readonly Buzz[]) => value is S_1, thisArg?: any): S_1[]; (predicate: (value: Buzz, index: number, array: readonly Buzz[]) => unknown, thisArg?: any): Buzz[]; }
 >item => item?.id < 5 : (item: Fizz | Buzz) => boolean
 >item : Fizz | Buzz
 >item?.id < 5 : boolean

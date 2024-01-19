@@ -24,7 +24,10 @@ declare const _default: {
 export default _default;
 
 //// [/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json]
-{"name":"typescript-fsa","version":"3.0.0-beta-2"}
+{
+  "name": "typescript-fsa",
+  "version": "3.0.0-beta-2"
+}
 
 //// [/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts]
 export interface Action<Payload> {
@@ -42,7 +45,13 @@ export declare function actionCreatorFactory(prefix?: string | null): ActionCrea
 export default actionCreatorFactory;
 
 //// [/user/username/projects/myproject/plugin-one/tsconfig.json]
-{"compilerOptions":{"target":"es5","declaration":true,"traceResolution":true}}
+{
+  "compilerOptions": {
+    "target": "es5",
+    "declaration": true,
+    "traceResolution": true
+  }
+}
 
 //// [/user/username/projects/myproject/plugin-one/index.ts]
 import pluginTwo from "plugin-two"; // include this to add reference to symlink
@@ -54,7 +63,10 @@ const featureOne = action<{ route: string }>("feature-one");
 export const actions = { featureOne };
 
 //// [/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json]
-{"name":"typescript-fsa","version":"3.0.0-beta-2"}
+{
+  "name": "typescript-fsa",
+  "version": "3.0.0-beta-2"
+}
 
 //// [/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts]
 export interface Action<Payload> {
@@ -150,19 +162,6 @@ plugin-one/index.ts
   Matched by default include pattern '**/*'
 
 
-Program root files: ["/user/username/projects/myproject/plugin-one/action.ts","/user/username/projects/myproject/plugin-one/index.ts"]
-Program options: {"target":1,"declaration":true,"traceResolution":true,"project":"/user/username/projects/myproject/plugin-one","explainFiles":true,"configFilePath":"/user/username/projects/myproject/plugin-one/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
-/user/username/projects/myproject/plugin-one/action.ts
-/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts
-/user/username/projects/myproject/plugin-two/index.d.ts
-/user/username/projects/myproject/plugin-one/index.ts
-
-exitCode:: ExitStatus.Success
-
 //// [/user/username/projects/myproject/plugin-one/action.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -190,3 +189,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 export {};
 
 
+
+Program root files: [
+  "/user/username/projects/myproject/plugin-one/action.ts",
+  "/user/username/projects/myproject/plugin-one/index.ts"
+]
+Program options: {
+  "target": 1,
+  "declaration": true,
+  "traceResolution": true,
+  "project": "/user/username/projects/myproject/plugin-one",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/plugin-one/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts
+/user/username/projects/myproject/plugin-one/action.ts
+/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts
+/user/username/projects/myproject/plugin-two/index.d.ts
+/user/username/projects/myproject/plugin-one/index.ts
+
+exitCode:: ExitStatus.Success

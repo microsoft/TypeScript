@@ -41,55 +41,6 @@ Output::
 
 
 
-Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/modulefile1.ts (used version)
-/a/b/file1consumer1.ts (used version)
-/a/b/file1consumer2.ts (used version)
-/a/b/globalfile3.ts (used version)
-/a/b/modulefile2.ts (used version)
-
-FsWatches::
-/a/b/file1consumer1.ts: *new*
-  {}
-/a/b/file1consumer2.ts: *new*
-  {}
-/a/b/globalfile3.ts: *new*
-  {}
-/a/b/modulefile1.ts: *new*
-  {}
-/a/b/modulefile2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -123,6 +74,65 @@ exports.Foo4 = 10;
 
 
 
+FsWatches::
+/a/b/file1Consumer1.ts: *new*
+  {}
+/a/b/file1Consumer2.ts: *new*
+  {}
+/a/b/globalFile3.ts: *new*
+  {}
+/a/b/moduleFile1.ts: *new*
+  {}
+/a/b/moduleFile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Program root files: [
+  "/a/b/file1Consumer1.ts",
+  "/a/b/file1Consumer2.ts",
+  "/a/b/globalFile3.ts",
+  "/a/b/moduleFile1.ts",
+  "/a/b/moduleFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
+/a/b/globalFile3.ts
+/a/b/moduleFile2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
+/a/b/globalFile3.ts
+/a/b/moduleFile2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/modulefile1.ts (used version)
+/a/b/file1consumer1.ts (used version)
+/a/b/file1consumer2.ts (used version)
+/a/b/globalfile3.ts (used version)
+/a/b/modulefile2.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: change moduleFile1 shape and delete file1Consumer2
 
 Input::
@@ -131,8 +141,12 @@ export var T: number;export function Foo() { };
 
 //// [/a/b/file1Consumer2.ts] deleted
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -142,8 +156,51 @@ Output::
 
 
 
-Program root files: ["/a/b/file1Consumer1.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/moduleFile1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = exports.T = void 0;
+function Foo() { }
+exports.Foo = Foo;
+;
+
+
+//// [/a/b/file1Consumer1.js] file written with same contents
+
+FsWatches::
+/a/b/file1Consumer1.ts:
+  {}
+/a/b/globalFile3.ts:
+  {}
+/a/b/moduleFile1.ts:
+  {}
+/a/b/moduleFile2.ts:
+  {}
+/a/b/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/a/b/file1Consumer2.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
+
+Program root files: [
+  "/a/b/file1Consumer1.ts",
+  "/a/b/globalFile3.ts",
+  "/a/b/moduleFile1.ts",
+  "/a/b/moduleFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -160,37 +217,4 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (computed .d.ts)
 /a/b/file1consumer1.ts (computed .d.ts)
 
-FsWatches::
-/a/b/file1consumer1.ts:
-  {}
-/a/b/globalfile3.ts:
-  {}
-/a/b/modulefile1.ts:
-  {}
-/a/b/modulefile2.ts:
-  {}
-/a/b/tsconfig.json:
-  {}
-/a/lib/lib.d.ts:
-  {}
-
-FsWatches *deleted*::
-/a/b/file1consumer2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = exports.T = void 0;
-function Foo() { }
-exports.Foo = Foo;
-;
-
-
-//// [/a/b/file1Consumer1.js] file written with same contents

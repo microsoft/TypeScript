@@ -1,0 +1,47 @@
+index.js(20,22): error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
+index.js(23,22): error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
+index.js(26,22): error TS2855: Class field 'justProp' defined by the parent class is not accessible in the child class via super.
+index.js(29,22): error TS2855: Class field ''literalElementAccess'' defined by the parent class is not accessible in the child class via super.
+
+
+==== index.js (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55884
+    
+    class YaddaBase {
+        constructor() {
+            this.roots = "hi";
+            /** @type number */
+            this.justProp;
+            /** @type string */
+            this['literalElementAccess'];
+    
+            this.b()
+        }
+        accessor b = () => {
+            this.foo = 10
+        }
+    }
+    
+    class DerivedYadda extends YaddaBase {
+        get rootTests() {
+            return super.roots;
+                         ~~~~~
+!!! error TS2855: Class field 'roots' defined by the parent class is not accessible in the child class via super.
+        }
+        get fooTests() {
+            return super.foo;
+                         ~~~
+!!! error TS2855: Class field 'foo' defined by the parent class is not accessible in the child class via super.
+        }
+        get justPropTests() {
+            return super.justProp;
+                         ~~~~~~~~
+!!! error TS2855: Class field 'justProp' defined by the parent class is not accessible in the child class via super.
+        }
+        get literalElementAccessTests() {
+            return super.literalElementAccess;
+                         ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2855: Class field ''literalElementAccess'' defined by the parent class is not accessible in the child class via super.
+        }
+    }
+    

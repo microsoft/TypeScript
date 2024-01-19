@@ -270,36 +270,27 @@ sourceFile:derivedClassConstructorWithExplicitReturns01.ts
 >>>        var _this = _super.call(this, a) || this;
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^
-3 >                    ^^^^^^^^^^^^^^^^^^
-4 >                                      ^
-5 >                                       ^
-6 >                                        ^^^^^^^^^
-7 >                                                 ^^^^->
-1->
-2 >        constructor(a = 100) {
-  >                
-3 >                    super(
-4 >                                      a
-5 >                                       )
-6 >                                        ;
-  >                                        
-  >                                                if (Math.random() < 0.5) {
-  >                                                    "You win!"
-  >                                                    return {
-  >                                                        cProp: 1,
-  >                                                        dProp: () => this,
-  >                                                        foo() { return "You win!!!!!" }
-  >                                                    };
-  >                                                }
-  >                                                else
-  >                                                    return null;
-  >                                            }
-1->Emitted(33, 9) Source(19, 5) + SourceIndex(0)
+3 >                    ^^^^^^
+4 >                          ^^^^^^^^^^^^
+5 >                                      ^
+6 >                                       ^
+7 >                                        ^^^^^^^^^
+8 >                                                 ^^^^->
+1->) {
+  >        
+2 >        
+3 >                    super
+4 >                          (
+5 >                                      a
+6 >                                       )
+7 >                                        ;
+1->Emitted(33, 9) Source(20, 9) + SourceIndex(0)
 2 >Emitted(33, 21) Source(20, 9) + SourceIndex(0)
-3 >Emitted(33, 39) Source(20, 15) + SourceIndex(0)
-4 >Emitted(33, 40) Source(20, 16) + SourceIndex(0)
-5 >Emitted(33, 41) Source(20, 17) + SourceIndex(0)
-6 >Emitted(33, 50) Source(32, 6) + SourceIndex(0)
+3 >Emitted(33, 27) Source(20, 14) + SourceIndex(0)
+4 >Emitted(33, 39) Source(20, 15) + SourceIndex(0)
+5 >Emitted(33, 40) Source(20, 16) + SourceIndex(0)
+6 >Emitted(33, 41) Source(20, 17) + SourceIndex(0)
+7 >Emitted(33, 50) Source(20, 18) + SourceIndex(0)
 ---
 >>>        _this.dProp = function () { return _this; };
 1->^^^^^^^^

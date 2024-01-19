@@ -1,8 +1,8 @@
 config:
 {
- "exclude": [
-  "**/x"
- ]
+  "exclude": [
+    "**/x"
+  ]
 }
 Fs::
 //// [/dev/A.ts]
@@ -72,24 +72,24 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "exclude": [
-   "**/x"
-  ]
- },
- "wildcardDirectories": {
-  "c:/dev": "WatchDirectoryFlags.Recursive"
- },
- "compileOnSave": false
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "exclude": [
+      "**/x"
+    ]
+  },
+  "wildcardDirectories": {
+    "c:/dev": "WatchDirectoryFlags.Recursive"
+  },
+  "compileOnSave": false
 }
 Errors::
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file 'c:/dev/tsconfig.json'. Specified 'include' paths were '["**/*"]' and 'exclude' paths were '["**/x"]'.

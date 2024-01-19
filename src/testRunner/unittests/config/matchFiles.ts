@@ -3,6 +3,9 @@ import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineParseConfig,
 } from "./helpers";
 
@@ -163,7 +166,7 @@ const caseInsensitiveHostWithSameFileNamesWithDifferentExtensions = new fakes.Pa
 );
 
 function baselineMatches(subScenario: string, json: any, host: fakes.ParseConfigHost, basePath: string) {
-    const jsonText = JSON.stringify(json, undefined, " ");
+    const jsonText = jsonToReadableText(json);
     baselineParseConfig({
         scenario: "matchFiles",
         subScenario,
@@ -177,15 +180,11 @@ function baselineMatches(subScenario: string, json: any, host: fakes.ParseConfig
                 if (parsed.wildcardDirectories) ts.getOwnKeys(parsed.wildcardDirectories).forEach(dir => wildcardDirectories![dir] = `WatchDirectoryFlags.${(ts as any).WatchDirectoryFlags[parsed.wildcardDirectories![dir]]}`);
                 baseline.push(
                     "Result",
-                    JSON.stringify(
-                        {
-                            ...parsed,
-                            errors: undefined,
-                            wildcardDirectories,
-                        },
-                        undefined,
-                        " ",
-                    ),
+                    jsonToReadableText({
+                        ...parsed,
+                        errors: undefined,
+                        wildcardDirectories,
+                    }),
                 );
             },
         }],

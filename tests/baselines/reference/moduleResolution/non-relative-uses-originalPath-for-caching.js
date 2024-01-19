@@ -4,7 +4,10 @@
 //// [/sub/node_modules/a/index.ts] symlink(/modules/a.ts)
 
 //// [/sub/node_modules/a/package.json]
-{"version": "0.0.0", "main": "./index"}
+{
+  "version": "0.0.0",
+  "main": "./index"
+}
 
 Resolving "a" from /sub/dir/foo.ts
 Resolution:: {

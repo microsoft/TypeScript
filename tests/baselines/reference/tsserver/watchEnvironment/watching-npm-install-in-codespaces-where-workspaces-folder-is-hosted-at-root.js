@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/workspaces/somerepo/src/tsconfig.json] Inode:: 4
 {}
@@ -40,13 +40,13 @@ Info seq  [hh:mm:ss:mss] Creating configuration project /workspaces/somerepo/src
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/tsconfig.json 2000 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingStart",
-     "body": {
-      "projectName": "/workspaces/somerepo/src/tsconfig.json",
-      "reason": "Creating possible configured project for /workspaces/somerepo/src/main.ts to open"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/workspaces/somerepo/src/tsconfig.json",
+        "reason": "Creating possible configured project for /workspaces/somerepo/src/main.ts to open"
+      }
     }
 Info seq  [hh:mm:ss:mss] Config: /workspaces/somerepo/src/tsconfig.json : {
  "rootNames": [
@@ -89,64 +89,64 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingFinish",
-     "body": {
-      "projectName": "/workspaces/somerepo/src/tsconfig.json"
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "telemetry",
-     "body": {
-      "telemetryEventName": "projectInfo",
-      "payload": {
-       "projectId": "9e8115631fa65f5cabbf69613510b85e9196bbd1dbd96acfd77b994bec889817",
-       "fileStats": {
-        "js": 0,
-        "jsSize": 0,
-        "jsx": 0,
-        "jsxSize": 0,
-        "ts": 1,
-        "tsSize": 55,
-        "tsx": 0,
-        "tsxSize": 0,
-        "dts": 2,
-        "dtsSize": 371,
-        "deferred": 0,
-        "deferredSize": 0
-       },
-       "compilerOptions": {},
-       "typeAcquisition": {
-        "enable": false,
-        "include": false,
-        "exclude": false
-       },
-       "extends": false,
-       "files": false,
-       "include": false,
-       "exclude": false,
-       "compileOnSave": false,
-       "configFileName": "tsconfig.json",
-       "projectType": "configured",
-       "languageServiceEnabled": true,
-       "version": "FakeVersion"
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/workspaces/somerepo/src/tsconfig.json"
       }
-     }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "configFileDiag",
-     "body": {
-      "triggerFile": "/workspaces/somerepo/src/main.ts",
-      "configFile": "/workspaces/somerepo/src/tsconfig.json",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "9e8115631fa65f5cabbf69613510b85e9196bbd1dbd96acfd77b994bec889817",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 55,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 2,
+            "dtsSize": 371,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/workspaces/somerepo/src/main.ts",
+        "configFile": "/workspaces/somerepo/src/tsconfig.json",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] Project '/workspaces/somerepo/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -201,58 +201,66 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/workspaces/somerepo/src/main.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/workspaces/somerepo/src/main.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/workspaces/somerepo/src/main.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/workspaces/somerepo/src/main.ts",
+        "diagnostics": []
+      }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/workspaces/somerepo/src/main.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/workspaces/somerepo/src/main.ts",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 2
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 2
+      }
     }
 After running Immedidate callback:: count: 0
 
@@ -309,6 +317,12 @@ FsWatches *deleted*::
 /workspaces/somerepo/node_modules/@types/random-seed:
   {"inode":8}
 
+Timeout callback:: count: 4
+12: /workspaces/somerepo/src/tsconfig.json *new*
+13: *ensureProjectForOpenFiles* *new*
+15: timerToUpdateChildWatches *new*
+16: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
@@ -326,6 +340,13 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 5
+12: /workspaces/somerepo/src/tsconfig.json
+13: *ensureProjectForOpenFiles*
+15: timerToUpdateChildWatches
+16: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
+17: checkOne *new*
 
 Before running Timeout callback:: count: 5
 12: /workspaces/somerepo/src/tsconfig.json
@@ -351,70 +372,78 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/workspaces/somerepo/src/main.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/workspaces/somerepo/src/main.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 3
+
+Timeout callback:: count: 3
+16: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *deleted*
 12: /workspaces/somerepo/src/tsconfig.json
 13: *ensureProjectForOpenFiles*
 15: timerToUpdateChildWatches
+
+Immedidate callback:: count: 1
+3: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/workspaces/somerepo/src/main.ts",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 1,
-         "offset": 28
-        },
-        "end": {
-         "line": 1,
-         "offset": 41
-        },
-        "text": "Cannot find module 'random-seed' or its corresponding type declarations.",
-        "code": 2307,
-        "category": "error"
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/workspaces/somerepo/src/main.ts",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 1,
+              "offset": 28
+            },
+            "end": {
+              "line": 1,
+              "offset": 41
+            },
+            "text": "Cannot find module 'random-seed' or its corresponding type declarations.",
+            "code": 2307,
+            "category": "error"
+          }
+        ]
+      }
     }
 After running Immedidate callback:: count: 1
-4: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 4: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/workspaces/somerepo/src/main.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/workspaces/somerepo/src/main.ts",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 3
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 3
+      }
     }
 After running Immedidate callback:: count: 0
 
@@ -441,17 +470,17 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /workspaces/somerepo/src/main.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /workspaces/somerepo/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /workspaces/somerepo/src/main.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /workspaces/somerepo/src/main.ts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/workspaces/somerepo/src/main.ts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/workspaces/somerepo/src/main.ts"
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] sysLog:: onTimerToUpdateChildWatches:: 3
 Info seq  [hh:mm:ss:mss] sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
@@ -476,9 +505,11 @@ Info seq  [hh:mm:ss:mss] Scheduled: /workspaces/somerepo/src/tsconfig.jsonFailed
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /workspaces/somerepo/node_modules/@types/random-seed 1:: WatchInfo: /workspaces/somerepo/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 After running Timeout callback:: count: 3
-24: /workspaces/somerepo/src/tsconfig.json
-25: *ensureProjectForOpenFiles*
-26: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
+
+Timeout callback:: count: 3
+24: /workspaces/somerepo/src/tsconfig.json *new*
+25: *ensureProjectForOpenFiles* *new*
+26: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
 
 Before request
 //// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 16
@@ -509,6 +540,12 @@ FsWatches::
 /workspaces/somerepo/src/tsconfig.json:
   {"inode":4}
 
+Timeout callback:: count: 4
+24: /workspaces/somerepo/src/tsconfig.json
+25: *ensureProjectForOpenFiles*
+26: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
+32: timerToUpdateChildWatches *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
@@ -526,6 +563,13 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Timeout callback:: count: 5
+24: /workspaces/somerepo/src/tsconfig.json
+25: *ensureProjectForOpenFiles*
+26: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
+32: timerToUpdateChildWatches
+33: checkOne *new*
 
 Before running Timeout callback:: count: 5
 24: /workspaces/somerepo/src/tsconfig.json
@@ -558,56 +602,65 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/workspaces/somerepo/src/main.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/workspaces/somerepo/src/main.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 3
+
+Timeout callback:: count: 3
+25: *ensureProjectForOpenFiles* *deleted*
+26: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *deleted*
 24: /workspaces/somerepo/src/tsconfig.json
 32: timerToUpdateChildWatches
-34: *ensureProjectForOpenFiles*
+34: *ensureProjectForOpenFiles* *new*
+
+Immedidate callback:: count: 1
+5: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "/workspaces/somerepo/src/main.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "/workspaces/somerepo/src/main.ts",
+        "diagnostics": []
+      }
     }
 After running Immedidate callback:: count: 1
-6: suggestionCheck
+
+Immedidate callback:: count: 1
+6: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 6: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "/workspaces/somerepo/src/main.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "/workspaces/somerepo/src/main.ts",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 4
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 4
+      }
     }
 After running Immedidate callback:: count: 0
 
@@ -631,9 +684,6 @@ Info seq  [hh:mm:ss:mss] Scheduled: /workspaces/somerepo/src/tsconfig.jsonFailed
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /workspaces/somerepo/node_modules/@types :: WatchInfo: /workspaces/somerepo/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 After running Timeout callback:: count: 3
-36: /workspaces/somerepo/src/tsconfig.json
-37: *ensureProjectForOpenFiles*
-38: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation
 
 PolledWatches::
 /workspaces/somerepo/src/node_modules:
@@ -654,3 +704,9 @@ FsWatches::
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
   {"inode":4}
+
+Timeout callback:: count: 3
+34: *ensureProjectForOpenFiles* *deleted*
+36: /workspaces/somerepo/src/tsconfig.json *new*
+37: *ensureProjectForOpenFiles* *new*
+38: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*

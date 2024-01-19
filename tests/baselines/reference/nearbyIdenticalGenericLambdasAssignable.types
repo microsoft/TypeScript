@@ -2,7 +2,7 @@
 
 === nearbyIdenticalGenericLambdasAssignable.ts ===
 declare const fA: <T>() => { v: T };
->fA : <T>() => { v: T; }
+>fA : <T>() => {    v: T;}
 >v : T
 
 const fB = <T>() => {
@@ -43,7 +43,7 @@ type TC = typeof fC;
 >fC : <T>() => { v: T; }
 
 type TL = <T>() => { v: T }; 
->TL : <T>() => { v: T; }
+>TL : <T>() => {    v: T;}
 >v : T
 
 declare function accA(x: TA): void;

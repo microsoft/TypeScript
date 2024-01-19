@@ -32,7 +32,5 @@
 
 goTo.file("/src/a.ts");
 verify.numberOfErrorsInCurrentFile(0);
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['useAX', 'defAX', 'useBX'] },
-    { type: "goToDefinition", markerOrRange: ["useAX", "useBX"] },
-);
+verify.baselineFindAllReferences('useAX', 'defAX', 'useBX');
+verify.baselineGoToDefinition("useAX", "useBX");

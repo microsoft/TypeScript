@@ -9,7 +9,7 @@
 
 verify.completions({
     marker: "",
-    exact: completion.globalsPlus(["foo"]),
+    includes: { name: "exportedConstant", source: "/a", hasAction: true, sortText: completion.SortText.AutoImportSuggestions }, 
     isNewIdentifierLocation: true,
     preferences: { includeCompletionsForModuleExports: true },
 });

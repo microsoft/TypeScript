@@ -20,9 +20,9 @@ for (const zoneName of timezoneNames) {
   var formatter = new Intl.DateTimeFormat('en-US', {
 >formatter : Intl.DateTimeFormat
 >new Intl.DateTimeFormat('en-US', {    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  }) : Intl.DateTimeFormat
->Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >Intl : typeof Intl
->DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
+>DateTimeFormat : Intl.DateTimeFormatConstructor
 >'en-US' : "en-US"
 >{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "short" | "long" | "shortOffset" | "longOffset" | "shortGeneric" | "longGeneric"; }
 

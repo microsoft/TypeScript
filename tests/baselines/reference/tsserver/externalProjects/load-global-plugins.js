@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/file1.ts]
 let x = [1, 2];
@@ -41,6 +41,43 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "6de66c42d673e2588b28b51b7d7183410c48b2853c20dcd6fba10cd859223e64",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 15,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "compileOnSave": true,
+          "configFileName": "other",
+          "projectType": "external",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,

@@ -1,7 +1,7 @@
 --verbose --invalidOption
 buildOptions::
 {
- "verbose": true
+  "verbose": true
 }
 WatchOptions::
 

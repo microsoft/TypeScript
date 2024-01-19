@@ -7,10 +7,10 @@ type FuncOrGeneratorFunc = () => (number | Generator<(arg: number) => void, any,
 
 const f: FuncOrGeneratorFunc = function*() {
 >f : FuncOrGeneratorFunc
->function*() {  yield (num) => console.log(num); // `num` should be inferred to have type `number`.} : () => Generator<(num: number) => void, void, unknown>
+>function*() {  yield (num) => console.log(num); // `num` should be inferred to have type `number`.} : () => Generator<(num: number) => void, void, void>
 
   yield (num) => console.log(num); // `num` should be inferred to have type `number`.
->yield (num) => console.log(num) : any
+>yield (num) => console.log(num) : void
 >(num) => console.log(num) : (num: number) => void
 >num : number
 >console.log(num) : void

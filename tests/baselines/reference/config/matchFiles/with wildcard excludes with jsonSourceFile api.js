@@ -1,18 +1,18 @@
 config:
 {
- "include": [
-  "a.ts",
-  "b.ts",
-  "z/a.ts",
-  "z/abz.ts",
-  "z/aba.ts",
-  "x/b.ts"
- ],
- "exclude": [
-  "*.ts",
-  "z/??z.ts",
-  "*/b.ts"
- ]
+  "include": [
+    "a.ts",
+    "b.ts",
+    "z/a.ts",
+    "z/abz.ts",
+    "z/aba.ts",
+    "x/b.ts"
+  ],
+  "exclude": [
+    "*.ts",
+    "z/??z.ts",
+    "*/b.ts"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -88,35 +88,35 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/z/a.ts",
-  "c:/dev/z/aba.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "a.ts",
-   "b.ts",
-   "z/a.ts",
-   "z/abz.ts",
-   "z/aba.ts",
-   "x/b.ts"
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/z/a.ts",
+    "c:/dev/z/aba.ts"
   ],
-  "exclude": [
-   "*.ts",
-   "z/??z.ts",
-   "*/b.ts"
-  ]
- },
- "wildcardDirectories": {},
- "compileOnSave": false
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "a.ts",
+      "b.ts",
+      "z/a.ts",
+      "z/abz.ts",
+      "z/aba.ts",
+      "x/b.ts"
+    ],
+    "exclude": [
+      "*.ts",
+      "z/??z.ts",
+      "*/b.ts"
+    ]
+  },
+  "wildcardDirectories": {},
+  "compileOnSave": false
 }
 Errors::
 

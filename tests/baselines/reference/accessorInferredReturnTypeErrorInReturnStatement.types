@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/accessorInferredReturnTypeErrorInReturnStatement.ts] ////
+
+=== accessorInferredReturnTypeErrorInReturnStatement.ts ===
+export var basePrototype = {
+>basePrototype : { readonly primaryPath: any; }
+>{  get primaryPath() {    var _this = this;    return _this.collection.schema.primaryPath;  },  } : { readonly primaryPath: any; }
+
+  get primaryPath() {
+>primaryPath : any
+
+    var _this = this;
+>_this : { readonly primaryPath: any; }
+>this : { readonly primaryPath: any; }
+
+    return _this.collection.schema.primaryPath;
+>_this.collection.schema.primaryPath : any
+>_this.collection.schema : any
+>_this.collection : any
+>_this : { readonly primaryPath: any; }
+>collection : any
+>schema : any
+>primaryPath : any
+
+  },  
+};
+

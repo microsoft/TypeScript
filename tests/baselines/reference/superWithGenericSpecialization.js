@@ -40,7 +40,7 @@ var C = /** @class */ (function () {
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
-        return _super.call(this) || this;
+        return _super.call(this) || this; // uses the type parameter type of the base class, ie string
     }
     return D;
 }(C));

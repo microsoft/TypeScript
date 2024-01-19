@@ -3,6 +3,9 @@ import {
 } from "../../_namespaces/Utils";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTscWatch,
 } from "../helpers/tscWatch";
 import {
@@ -21,7 +24,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     { path: `/user/username/projects/myproject/project1/node_modules/file/index.d.ts`, content: "export const foo = 10;" },
                     {
                         path: `/user/username/projects/myproject/project1/tsconfig.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { composite: true, types: ["foo", "bar"] },
                             files: ["index.ts"],
                         }),
@@ -30,7 +33,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     { path: `/user/username/projects/myproject/project2/file.d.ts`, content: "export const foo = 10;" },
                     {
                         path: `/user/username/projects/myproject/project2/tsconfig.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions: { composite: true, types: ["foo"], moduleResolution: "classic" },
                             files: ["index.ts"],
                         }),
@@ -39,7 +42,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     { path: `/user/username/projects/myproject/node_modules/@types/bar/index.d.ts`, content: "export const bar = 10;" },
                     {
                         path: `/user/username/projects/myproject/tsconfig.json`,
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             files: [],
                             references: [
                                 { path: "./project1" },
@@ -68,7 +71,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg1",
                         version: "1.0.0",
                         main: "build/index.js",
@@ -83,7 +86,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             outDir: "build",
                             module: "node16",
@@ -101,7 +104,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg2/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             composite: true,
                             outDir: "build",
@@ -111,7 +114,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg2/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg2",
                         version: "1.0.0",
                         main: "build/index.js",
@@ -162,7 +165,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg1",
                         version: "1.0.0",
                         main: "build/index.js",
@@ -176,7 +179,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             outDir: "build",
                         },
@@ -185,7 +188,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg2/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             composite: true,
                             outDir: "build",
@@ -207,7 +210,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                 },
                 {
                     path: `/user/username/projects/myproject/packages/pkg2/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "pkg2",
                         version: "1.0.0",
                         main: "build/index.js",

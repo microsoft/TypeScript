@@ -21,6 +21,18 @@ type V11 = [number, ...string[], boolean?];  // Error
 type V12 = [number, string?, boolean];  // Error
 >V12 : [number, (string | undefined)?, boolean]
 
+type V15 = [...string[], ...number[]];  // Error
+>V15 : [...string[], ...number[]]
+
+type V16 = [...string[], ...Array<number>];  // Error
+>V16 : (string | number)[]
+
+type V17 = [...Array<string>, ...number[]];  // Error
+>V17 : (string | number)[]
+
+type V18 = [...Array<string>, ...Array<number>];  // Error
+>V18 : (string | number)[]
+
 // Normalization
 
 type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];

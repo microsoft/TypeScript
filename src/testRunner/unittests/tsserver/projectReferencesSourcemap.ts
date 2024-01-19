@@ -1,11 +1,12 @@
 import * as ts from "../../_namespaces/ts";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     closeFilesForSession,
     createHostWithSolutionBuild,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     TestSession,
     TestSessionRequest,
@@ -32,7 +33,7 @@ export function fn5() { }
     };
     const dependencyConfig: File = {
         path: `${dependecyLocation}/tsconfig.json`,
-        content: JSON.stringify({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } }),
+        content: jsonToReadableText({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } }),
     };
 
     const mainTs: File = {
@@ -54,7 +55,7 @@ fn5();
     };
     const mainConfig: File = {
         path: `${mainLocation}/tsconfig.json`,
-        content: JSON.stringify({
+        content: jsonToReadableText({
             compilerOptions: { composite: true, declarationMap: true },
             references: [{ path: "../dependency" }],
         }),
@@ -89,7 +90,14 @@ fn5();
     function changeDtsMapFile(host: TestServerHost) {
         host.writeFile(
             dtsMapLocation,
-            `{"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC"}`,
+            jsonToReadableText({
+                version: 3,
+                file: "FnS.d.ts",
+                sourceRoot: "",
+                sources: ["../dependency/FnS.ts"],
+                names: [],
+                mappings: "AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,eAAO,MAAM,CAAC,KAAK,CAAC",
+            }),
         );
     }
 
@@ -157,7 +165,7 @@ fn5();
         for (let fn = 1; fn <= 5; fn++) {
             const fnAction = action(fn);
             session.executeCommandSeq(fnAction);
-            const debugInfo = `${JSON.stringify(fnAction)}:: ${fn}`;
+            const debugInfo = `${jsonToReadableText(fnAction)}:: ${fn}`;
             const dtsInfo = session.getProjectService().getScriptInfoForPath(dtsPath);
             const dtsMapInfo = session.getProjectService().getScriptInfoForPath(dtsMapPath);
 
@@ -232,19 +240,19 @@ fn5();
         // Erase project reference
         host.writeFile(
             mainConfig.path,
-            JSON.stringify({
+            jsonToReadableText({
                 compilerOptions: { composite: true, declarationMap: true },
             }),
         );
         onHostCreate?.(host);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         return { host, session };
     }
 
     function createSessionWithProjectReferences(onHostCreate?: OnHostCreate) {
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         onHostCreate?.(host);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         return { host, session };
     }
 
@@ -253,7 +261,7 @@ fn5();
         // Erase project reference
         host.writeFile(
             mainConfig.path,
-            JSON.stringify({
+            jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     declarationMap: true,
@@ -263,7 +271,7 @@ fn5();
             }),
         );
         onHostCreate?.(host);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         return { host, session };
     }
 
@@ -844,7 +852,7 @@ ${dependencyTs.content}`,
 
             it("when projects are not built", () => {
                 const host = createServerHost(files);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const session = new TestSession(host);
                 openFilesForSession([mainTs, randomFile], session);
                 verifyAllFnAction(
                     session,
@@ -1660,7 +1668,7 @@ ${dependencyTs.content}`,
 
             it("when projects are not built", () => {
                 const host = createServerHost(files);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const session = new TestSession(host);
                 openFilesForSession([dependencyTs, randomFile], session);
                 verifyAllFnAction(
                     session,
@@ -2712,7 +2720,7 @@ ${dependencyTs.content}`,
 
             it("when projects are not built", () => {
                 const host = createServerHost(files);
-                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                const session = new TestSession(host);
                 openFilesForSession([mainTs, dependencyTs, randomFile], session);
                 verifyAllFnAction(
                     session,

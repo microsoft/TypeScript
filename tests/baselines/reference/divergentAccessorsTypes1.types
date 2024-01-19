@@ -50,7 +50,7 @@ interface Test2 {
 }
 
 type Test3 = {
->Test3 : { foo: string; bar: string | number; }
+>Test3 : { get foo(): string; set foo(s: string | number); get bar(): string | number; set bar(s: string | number | boolean); }
 
     get foo(): string;
 >foo : string

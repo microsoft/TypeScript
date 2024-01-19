@@ -1,7 +1,7 @@
 --verbose --fallbackPolling
 buildOptions::
 {
- "verbose": true
+  "verbose": true
 }
 WatchOptions::
 {}

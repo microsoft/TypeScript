@@ -3,7 +3,9 @@ Resolving "./bar" from /a/b/c/d.ts with typings: c/d/e.d.ts
 
 
 //// [/a/b/c/bar/package.json]
-{"typings":"c/d/e.d.ts"}
+{
+  "typings": "c/d/e.d.ts"
+}
 
 //// [/a/b/c/bar/c/d/e.d.ts]
 
@@ -30,7 +32,9 @@ Resolving "./bar" from /a/b/c/d.ts with typings: c/d/e.d.ts with host that doesn
 
 
 //// [/a/b/c/bar/package.json]
-{"typings":"c/d/e.d.ts"}
+{
+  "typings": "c/d/e.d.ts"
+}
 
 //// [/a/b/c/bar/c/d/e.d.ts]
 
@@ -57,7 +61,9 @@ Resolving "../../bar" from /a/b/c/d.ts with typings: e.d.ts
 
 
 //// [/a/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [/a/bar/e.d.ts]
 
@@ -84,7 +90,9 @@ Resolving "../../bar" from /a/b/c/d.ts with typings: e.d.ts with host that doesn
 
 
 //// [/a/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [/a/bar/e.d.ts]
 
@@ -111,7 +119,9 @@ Resolving "/bar" from /a/b/c/d.ts with typings: e.d.ts
 
 
 //// [/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [/bar/e.d.ts]
 
@@ -138,7 +148,9 @@ Resolving "/bar" from /a/b/c/d.ts with typings: e.d.ts with host that doesnt hav
 
 
 //// [/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [/bar/e.d.ts]
 
@@ -165,7 +177,9 @@ Resolving "c:/bar" from c:/a/b/c/d.ts with typings: e.d.ts
 
 
 //// [c:/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [c:/bar/e.d.ts]
 
@@ -192,7 +206,9 @@ Resolving "c:/bar" from c:/a/b/c/d.ts with typings: e.d.ts with host that doesnt
 
 
 //// [c:/bar/package.json]
-{"typings":"e.d.ts"}
+{
+  "typings": "e.d.ts"
+}
 
 //// [c:/bar/e.d.ts]
 

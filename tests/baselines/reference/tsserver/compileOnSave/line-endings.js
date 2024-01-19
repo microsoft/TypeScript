@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false newLine: 
 
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/app.ts]
 var x = 1;
@@ -72,7 +72,7 @@ var y = 2;
 
 currentDirectory:: / useCaseSensitiveFileNames: false newLine: 
 
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/app.ts]
 var x = 1;

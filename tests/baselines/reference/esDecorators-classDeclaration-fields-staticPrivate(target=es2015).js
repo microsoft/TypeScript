@@ -20,19 +20,21 @@ class D {
 //// [esDecorators-classDeclaration-fields-staticPrivate.js]
 let C = (() => {
     var _a, _C_field1;
-    let _staticExtraInitializers = [];
     let _static_private_field1_decorators;
     let _static_private_field1_initializers = [];
+    let _static_private_field1_extraInitializers = [];
     return _a = class C {
         },
         (() => {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _static_private_field1_decorators = [dec];
-            __esDecorate(null, null, _static_private_field1_decorators, { kind: "field", name: "#field1", static: true, private: true, access: { has: obj => __classPrivateFieldIn(_a, obj), get: obj => __classPrivateFieldGet(obj, _a, "f", _C_field1), set: (obj, value) => { __classPrivateFieldSet(obj, _a, value, "f", _C_field1); } }, metadata: _metadata }, _static_private_field1_initializers, _staticExtraInitializers);
+            __esDecorate(null, null, _static_private_field1_decorators, { kind: "field", name: "#field1", static: true, private: true, access: { has: obj => __classPrivateFieldIn(_a, obj), get: obj => __classPrivateFieldGet(obj, _a, "f", _C_field1), set: (obj, value) => { __classPrivateFieldSet(obj, _a, value, "f", _C_field1); } }, metadata: _metadata }, _static_private_field1_initializers, _static_private_field1_extraInitializers);
             if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-            __runInitializers(_a, _staticExtraInitializers);
         })(),
         _C_field1 = { value: __runInitializers(_a, _static_private_field1_initializers, 0) },
+        (() => {
+            __runInitializers(_a, _static_private_field1_extraInitializers);
+        })(),
         _a;
 })();
 let D = (() => {

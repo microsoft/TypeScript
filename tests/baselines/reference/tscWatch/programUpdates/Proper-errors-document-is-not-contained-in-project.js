@@ -39,20 +39,9 @@ Output::
 
 
 
-Program root files: ["/a/b/app.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/app.ts
+//// [/a/b/app.js]
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/app.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/app.ts (used version)
 
 FsWatches::
 /a/b/app.ts: *new*
@@ -66,8 +55,25 @@ FsWatchesRecursive::
 /a/b: *new*
   {}
 
+Program root files: [
+  "/a/b/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/b/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/b/app.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/app.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/app.js]
-
-

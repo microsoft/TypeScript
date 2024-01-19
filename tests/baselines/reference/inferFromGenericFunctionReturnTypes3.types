@@ -9,9 +9,9 @@ function truePromise(): Promise<true> {
 
     return Promise.resolve(true);
 >Promise.resolve(true) : Promise<true>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >true : true
 }
 
@@ -415,9 +415,9 @@ const f1: F = () => {
 
     return Promise.all([
 >Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]) : Promise<({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]>
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >Promise : PromiseConstructor
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
 >[        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ] : ({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]
         {
 >{            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        } : { name: string; age: number; position: "GOALKEEPER"; }

@@ -7,7 +7,11 @@ import * as data from './data.json'
 { "foo": 1 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node"}}
+{
+  "compilerOptions": {
+    "moduleResolution": "node"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -37,20 +41,11 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"moduleResolution":2,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/data.json: *new*
@@ -74,23 +69,47 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "moduleResolution": 2,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: Enable resolveJsonModule
 
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"moduleResolution":"node","resolveJsonModule":true}}
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "resolveJsonModule": true
+  }
+}
 
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -100,21 +119,7 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts"]
-Program options: {"moduleResolution":2,"resolveJsonModule":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/data.json
-/user/username/projects/myproject/a.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/data.json
-/user/username/projects/myproject/a.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/data.json (computed .d.ts)
-/user/username/projects/myproject/a.ts (computed .d.ts)
+//// [/user/username/projects/myproject/a.js] file written with same contents
 
 PolledWatches::
 /user/username/projects/myproject/data.json:
@@ -140,6 +145,28 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
-exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
+Program root files: [
+  "/user/username/projects/myproject/a.ts"
+]
+Program options: {
+  "moduleResolution": 2,
+  "resolveJsonModule": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/data.json
+/user/username/projects/myproject/a.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/data.json
+/user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/data.json (computed .d.ts)
+/user/username/projects/myproject/a.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

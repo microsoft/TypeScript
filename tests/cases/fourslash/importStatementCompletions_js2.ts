@@ -12,7 +12,9 @@
 // @noEmit: true
 
 // @Filename: /node_modules/react/index.d.ts
-//// declare namespace React {}
+//// declare namespace React {
+////    export class Component {}
+//// }
 //// export = React;
 
 // @Filename: /test.js

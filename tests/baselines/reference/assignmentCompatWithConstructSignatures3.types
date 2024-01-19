@@ -355,7 +355,7 @@ b13 = a13; // ok
 >a13 : new (x: Base[], y: Derived[]) => Derived[]
 
 var b14: new <T>(x: { a: T; b: T }) => T; 
->b14 : new <T>(x: { a: T; b: T; }) => T
+>b14 : new <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T

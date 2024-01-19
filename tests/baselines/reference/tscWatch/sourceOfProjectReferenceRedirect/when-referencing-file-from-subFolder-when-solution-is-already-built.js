@@ -17,10 +17,33 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.json]
-{"compilerOptions":{"outDir":"lib","rootDir":"src","composite":true},"include":["src"],"references":[{"path":"../B"}]}
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "composite": true
+  },
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../B"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/B/tsconfig.json]
-{"compilerOptions":{"outDir":"lib","rootDir":"src","composite":true},"include":["src"]}
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "rootDir": "src",
+    "composite": true
+  },
+  "include": [
+    "src"
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/A/src/test.ts]
 import { foo } from 'b/lib/foo';
@@ -224,65 +247,6 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/A/src/test.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/A/lib","rootDir":"/user/username/projects/myproject/packages/A/src","composite":true,"configFilePath":"/user/username/projects/myproject/packages/A/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/packages/B/src/foo.ts
-/user/username/projects/myproject/packages/B/src/bar/foo.ts
-/user/username/projects/myproject/packages/A/src/test.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/packages/B/src/foo.ts
-/user/username/projects/myproject/packages/B/src/bar/foo.ts
-/user/username/projects/myproject/packages/A/src/test.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/packages/b/src/foo.ts (used version)
-/user/username/projects/myproject/packages/a/src/test.ts (computed .d.ts)
-/user/username/projects/myproject/packages/b/src/bar/foo.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/packages/a/src/test.ts: *new*
-  {}
-/user/username/projects/myproject/packages/a/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/b/package.json: *new*
-  {}
-/user/username/projects/myproject/packages/b/src/bar/foo.ts: *new*
-  {}
-/user/username/projects/myproject/packages/b/src/foo.ts: *new*
-  {}
-/user/username/projects/myproject/packages/b/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules: *new*
-  {}
-/user/username/projects/myproject/packages/a/src: *new*
-  {}
-/user/username/projects/myproject/packages/b/src: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/packages/A/lib/test.js] file written with same contents
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"latestChangedDtsFile":"./lib/test.d.ts"},"version":"FakeTSVersion"}
@@ -359,3 +323,69 @@ exitCode:: ExitStatus.undefined
   "size": 1014
 }
 
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/A/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/A/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/packages/A/src/test.ts: *new*
+  {}
+/user/username/projects/myproject/packages/A/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/packages/B/package.json: *new*
+  {}
+/user/username/projects/myproject/packages/B/src/bar/foo.ts: *new*
+  {}
+/user/username/projects/myproject/packages/B/src/foo.ts: *new*
+  {}
+/user/username/projects/myproject/packages/B/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/packages/A/src: *new*
+  {}
+/user/username/projects/myproject/packages/B/src: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/packages/A/src/test.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/A/lib",
+  "rootDir": "/user/username/projects/myproject/packages/A/src",
+  "composite": true,
+  "configFilePath": "/user/username/projects/myproject/packages/A/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/packages/B/src/foo.ts
+/user/username/projects/myproject/packages/B/src/bar/foo.ts
+/user/username/projects/myproject/packages/A/src/test.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/packages/B/src/foo.ts
+/user/username/projects/myproject/packages/B/src/bar/foo.ts
+/user/username/projects/myproject/packages/A/src/test.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/packages/b/src/foo.ts (used version)
+/user/username/projects/myproject/packages/a/src/test.ts (computed .d.ts)
+/user/username/projects/myproject/packages/b/src/bar/foo.ts (used version)
+
+exitCode:: ExitStatus.undefined

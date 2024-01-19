@@ -1,7 +1,0 @@
-// === findRenameLocations ===
-// === /tests/cases/fourslash/shims/getRenameInfo-shims.ts ===
-// ///<reference path="./Bar.ts" />
-// <|function /*RENAME*/[|BarRENAME|]() {
-//     // This is a reference to Bar in a comment.
-//     "this is a reference to Bar in a string"
-// }|>

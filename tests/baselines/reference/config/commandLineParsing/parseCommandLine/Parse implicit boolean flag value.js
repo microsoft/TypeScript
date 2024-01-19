@@ -1,7 +1,7 @@
 --strictNullChecks
 CompilerOptions::
 {
- "strictNullChecks": true
+  "strictNullChecks": true
 }
 WatchOptions::
 

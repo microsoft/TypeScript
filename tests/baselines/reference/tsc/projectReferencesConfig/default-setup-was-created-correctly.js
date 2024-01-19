@@ -20,11 +20,11 @@ export { };
 
 //// [/primary/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": []
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": []
 }
 
 //// [/secondary/b.ts]
@@ -32,15 +32,15 @@ import * as mod_0 from "../primary/a"
 
 //// [/secondary/tsconfig.json]
 {
- "compilerOptions": {
-  "composite": true,
-  "outDir": "bin"
- },
- "references": [
-  {
-   "path": "../primary"
-  }
- ]
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "bin"
+  },
+  "references": [
+    {
+      "path": "../primary"
+    }
+  ]
 }
 
 

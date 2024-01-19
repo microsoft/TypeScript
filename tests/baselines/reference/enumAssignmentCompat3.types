@@ -196,7 +196,7 @@ abc = nope; // nope!
 >abc : First.E
 >nope : Abc.Nope
 
-abc = decl; // ok
+abc = decl; // bad - value of 'c' differs between these enums
 >abc = decl : Decl.E
 >abc : First.E
 >decl : Decl.E
@@ -226,7 +226,7 @@ nope = abc; // nope!
 >nope : Abc.Nope
 >abc : First.E
 
-decl = abc; // ok
+decl = abc; // bad - value of 'c' differs between these enums
 >decl = abc : First.E
 >decl : Decl.E
 >abc : First.E
@@ -253,7 +253,7 @@ abc = merged; // missing 'd'
 >abc : First.E
 >merged : Merged.E
 
-merged = abc; // ok
+merged = abc; // bad - value of 'c' differs between these enums
 >merged = abc : First.E
 >merged : Merged.E
 >abc : First.E

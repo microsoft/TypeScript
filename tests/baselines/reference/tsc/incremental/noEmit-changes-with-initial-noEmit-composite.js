@@ -43,7 +43,11 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 }
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 
 

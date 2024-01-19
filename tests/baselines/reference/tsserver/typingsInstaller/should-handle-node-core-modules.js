@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/b/app.js]
 // @ts-check
 
@@ -21,6 +21,15 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/app.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /a/b
 Info seq  [hh:mm:ss:mss] For info: /a/b/app.js :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -52,40 +61,79 @@ TI:: [hh:mm:ss:mss] Npm config file: /tmp/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/tmp/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/tmp/package.json]
 { "private": true }
 
 //// [/tmp/node_modules/types-registry/index.json]
 {
- "entries": {
-  "node": {
-   "latest": "1.3.0",
-   "ts2.0": "1.0.0",
-   "ts2.1": "1.0.0",
-   "ts2.2": "1.2.0",
-   "ts2.3": "1.3.0",
-   "ts2.4": "1.3.0",
-   "ts2.5": "1.3.0",
-   "ts2.6": "1.3.0",
-   "ts2.7": "1.3.0"
+  "entries": {
+    "node": {
+      "latest": "1.3.0",
+      "ts2.0": "1.0.0",
+      "ts2.1": "1.0.0",
+      "ts2.2": "1.2.0",
+      "ts2.3": "1.3.0",
+      "ts2.4": "1.3.0",
+      "ts2.5": "1.3.0",
+      "ts2.6": "1.3.0",
+      "ts2.7": "1.3.0"
+    }
   }
- }
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["net","stream"],"projectRootPath":"/a/b","cachePath":"/tmp","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/lib/lib.d.ts",
+        "/a/b/app.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [
+        "net",
+        "stream"
+      ],
+      "projectRootPath": "/a/b",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node"]
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["node"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["node"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "node"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["/a/b/bower_components","/a/b/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
@@ -93,8 +141,24 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 TI:: [hh:mm:ss:mss] Installing typings ["node"]
 TI:: [hh:mm:ss:mss] Npm config file: /tmp/package.json
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::beginInstallTypes","eventId":1,"typingsInstallerVersion":"FakeVersion","projectName":"/dev/null/inferredProject1*"}
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/node@tsFakeMajor.Minor"]'.
+    {
+      "kind": "event::beginInstallTypes",
+      "eventId": 1,
+      "typingsInstallerVersion": "FakeVersion",
+      "projectName": "/dev/null/inferredProject1*"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "beginInstallTypes",
+      "body": {
+        "eventId": 1
+      }
+    }
+TI:: [hh:mm:ss:mss] #1 with cwd: /tmp arguments: [
+  "@types/node@tsFakeMajor.Minor"
+]
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -102,8 +166,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-TI:: [hh:mm:ss:mss] #1 with arguments'["@types/node@tsFakeMajor.Minor"]':: true
-TI:: Before installWorker
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
 
 PolledWatches::
 /a/b/bower_components: *new*
@@ -115,7 +182,19 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 
-TI:: After installWorker
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/node@ts5.4"
+] *new*
+
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/node@tsFakeMajor.Minor"
+]
+
+TI:: Installation #1 with arguments:: [
+  "@types/node@tsFakeMajor.Minor"
+] complete with success::true
 //// [/tmp/node_modules/node/index.d.ts]
 
 declare module "net" {
@@ -129,11 +208,92 @@ declare module "stream" {
 TI:: [hh:mm:ss:mss] Installed typings ["@types/node@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/tmp/node_modules/node/index.d.ts"]
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":["/tmp/node_modules/node/index.d.ts"],"unresolvedImports":["net","stream"],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [
+        "/tmp/node_modules/node/index.d.ts"
+      ],
+      "unresolvedImports": [
+        "net",
+        "stream"
+      ],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [
+          "/tmp/node_modules/node/index.d.ts"
+        ],
+        "unresolvedImports": [
+          "net",
+          "stream"
+        ],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"event::endInstallTypes","eventId":1,"projectName":"/dev/null/inferredProject1*","packagesToInstall":["@types/node@tsFakeMajor.Minor"],"installSuccess":true,"typingsInstallerVersion":"FakeVersion"}
+    {
+      "kind": "event::endInstallTypes",
+      "eventId": 1,
+      "projectName": "/dev/null/inferredProject1*",
+      "packagesToInstall": [
+        "@types/node@tsFakeMajor.Minor"
+      ],
+      "installSuccess": true,
+      "typingsInstallerVersion": "FakeVersion"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "endInstallTypes",
+      "body": {
+        "eventId": 1,
+        "packages": [
+          "@types/node@tsFakeMajor.Minor"
+        ],
+        "success": true
+      }
+    }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
@@ -158,24 +318,132 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/tmp/node_modules/node/index.d.ts","/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":[],"projectRootPath":"/a/b","cachePath":"/tmp","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/lib/lib.d.ts",
+        "/tmp/node_modules/node/index.d.ts",
+        "/a/b/app.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/a/b",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":[],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":[],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 2
-3: /dev/null/inferredProject1*
-4: *ensureProjectForOpenFiles*
+
+Timeout callback:: count: 2
+2: *ensureProjectForOpenFiles* *deleted*
+3: /dev/null/inferredProject1* *new*
+4: *ensureProjectForOpenFiles* *new*
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "applyChangedToOpenFiles",
+      "arguments": {
+        "changedFiles": [
+          {
+            "fileName": "/a/b/app.js",
+            "changes": [
+              {
+                "span": {
+                  "start": 67,
+                  "length": 0
+                },
+                "newText": " "
+              }
+            ]
+          }
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
 
 Before running Timeout callback:: count: 2
 3: /dev/null/inferredProject1*
@@ -199,21 +467,102 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["s tream"],"projectRootPath":"/a/b","cachePath":"/tmp","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/lib/lib.d.ts",
+        "/a/b/app.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [
+        "s tream"
+      ],
+      "projectRootPath": "/a/b",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["s tream"]
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["s tream"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["s tream"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "s tream"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
 TI:: [hh:mm:ss:mss] Installing typings ["s tream"]
 TI:: [hh:mm:ss:mss] 's tream':: Package name 's tream' contains non URI safe characters
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["s tream"],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [
+        "s tream"
+      ],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [
+          "s tream"
+        ],
+        "kind": "action::set"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -231,10 +580,50 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/app.js
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/a/b/app.js"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "applyChangedToOpenFiles",
+      "arguments": {
+        "changedFiles": [
+          {
+            "fileName": "/a/b/app.js",
+            "changes": [
+              {
+                "span": {
+                  "start": 14,
+                  "length": 0
+                },
+                "newText": "const bar = require(\"bar\");"
+              }
+            ]
+          }
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": true,
+      "responseRequired": true
+    }
+After request
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -245,21 +634,105 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/b/app.js SVC-1-2 "// @ts-check\n\nconst bar = require(\"bar\");const net = require(\"net\");\nconst stream = require(\"s tream\");"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/a/b/app.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["bar","s tream"],"projectRootPath":"/a/b","cachePath":"/tmp","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/tmp', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/lib/lib.d.ts",
+        "/a/b/app.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [
+        "bar",
+        "s tream"
+      ],
+      "projectRootPath": "/a/b",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["bar","s tream"]
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["bar","s tream"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["bar","s tream"],"filesToWatch":["/a/b/bower_components","/a/b/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "bar",
+        "s tream"
+      ],
+      "filesToWatch": [
+        "/a/b/bower_components",
+        "/a/b/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*"}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*"
+    }
 TI:: [hh:mm:ss:mss] Installing typings ["bar","s tream"]
 TI:: [hh:mm:ss:mss] 'bar':: Entry for package 'bar' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] 's tream':: 's tream' is in missingTypingsSet - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["bar","s tream"],"kind":"action::set"}
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [
+        "bar",
+        "s tream"
+      ],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [
+          "bar",
+          "s tream"
+        ],
+        "kind": "action::set"
+      }
+    }
+After program update

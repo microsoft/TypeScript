@@ -16,7 +16,12 @@ interface GlobalFoo { age: number }
 export var Foo4 = 10;
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"module":"system","outFile":"/a/b/out.js"}}
+{
+  "compilerOptions": {
+    "module": "system",
+    "outFile": "/a/b/out.js"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -40,43 +45,6 @@ Output::
 [[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
-Program options: {"module":4,"outFile":"/a/b/out.js","watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/b/moduleFile1.ts
-/a/b/file1Consumer1.ts
-/a/b/file1Consumer2.ts
-/a/b/globalFile3.ts
-/a/b/moduleFile2.ts
-
-No cached semantic diagnostics in the builder::
-
-No shapes updated in the builder::
-
-FsWatches::
-/a/b/file1consumer1.ts: *new*
-  {}
-/a/b/file1consumer2.ts: *new*
-  {}
-/a/b/globalfile3.ts: *new*
-  {}
-/a/b/modulefile1.ts: *new*
-  {}
-/a/b/modulefile2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/a/b/out.js]
 System.register("moduleFile1", [], function (exports_1, context_1) {
@@ -127,27 +95,41 @@ System.register("moduleFile2", [], function (exports_4, context_4) {
 
 
 
-Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+FsWatches::
+/a/b/file1Consumer1.ts: *new*
+  {}
+/a/b/file1Consumer2.ts: *new*
+  {}
+/a/b/globalFile3.ts: *new*
+  {}
+/a/b/moduleFile1.ts: *new*
+  {}
+/a/b/moduleFile2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
-Input::
-//// [/a/b/moduleFile1.ts]
-export var T: number;export function Foo() { };
+FsWatchesRecursive::
+/a/b: *new*
+  {}
 
-
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/a/b/file1Consumer1.ts","/a/b/file1Consumer2.ts","/a/b/globalFile3.ts","/a/b/moduleFile1.ts","/a/b/moduleFile2.ts"]
-Program options: {"module":4,"outFile":"/a/b/out.js","watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
-Program structureReused: Completely
+Program root files: [
+  "/a/b/file1Consumer1.ts",
+  "/a/b/file1Consumer2.ts",
+  "/a/b/globalFile3.ts",
+  "/a/b/moduleFile1.ts",
+  "/a/b/moduleFile2.ts"
+]
+Program options: {
+  "module": 4,
+  "outFile": "/a/b/out.js",
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/moduleFile1.ts
@@ -161,6 +143,28 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
+
+Change:: Change the content of moduleFile1 to `export var T: number;export function Foo() { };`
+
+Input::
+//// [/a/b/moduleFile1.ts]
+export var T: number;export function Foo() { };
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+
+
 
 //// [/a/b/out.js]
 System.register("moduleFile1", [], function (exports_1, context_1) {
@@ -211,3 +215,33 @@ System.register("moduleFile2", [], function (exports_4, context_4) {
 });
 
 
+
+
+Program root files: [
+  "/a/b/file1Consumer1.ts",
+  "/a/b/file1Consumer2.ts",
+  "/a/b/globalFile3.ts",
+  "/a/b/moduleFile1.ts",
+  "/a/b/moduleFile2.ts"
+]
+Program options: {
+  "module": 4,
+  "outFile": "/a/b/out.js",
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/a/b/moduleFile1.ts
+/a/b/file1Consumer1.ts
+/a/b/file1Consumer2.ts
+/a/b/globalFile3.ts
+/a/b/moduleFile2.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

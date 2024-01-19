@@ -1,6 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
@@ -24,24 +27,20 @@ function getConfig({ references, options, config }: {
     options?: ts.CompilerOptions;
     config?: object;
 } = {}) {
-    return JSON.stringify(
-        {
-            compilerOptions: {
-                composite: true,
-                outDir: "bin",
-                ...options,
-            },
-            references: references?.map(r => {
-                if (typeof r === "string") {
-                    return { path: r };
-                }
-                return r;
-            }) || [],
-            ...config,
+    return jsonToReadableText({
+        compilerOptions: {
+            composite: true,
+            outDir: "bin",
+            ...options,
         },
-        undefined,
-        " ",
-    );
+        references: references?.map(r => {
+            if (typeof r === "string") {
+                return { path: r };
+            }
+            return r;
+        }) || [],
+        ...config,
+    });
 }
 
 describe("unittests:: config:: project-references meta check", () => {

@@ -1,0 +1,15 @@
+a.js(5,18): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+a.js(5,28): error TS1005: ';' expected.
+
+
+==== ./a.js (2 errors) ====
+    /** @type {unique symbol} */
+    const foo = Symbol();
+    
+    /** @typedef {{ [foo]: boolean }} A */
+    /** @typedef {{ [key: foo] boolean }} B */
+                     ~~~
+!!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+                               ~~~~~~~
+!!! error TS1005: ';' expected.
+    

@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/reverseMappedTypePrimitiveConstraintProperty.ts] ////
+
+=== reverseMappedTypePrimitiveConstraintProperty.ts ===
+declare function test<
+>test : Symbol(test, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 0, 0))
+
+  T extends { prop: string; nested: { nestedProp: string } },
+>T : Symbol(T, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 0, 22))
+>prop : Symbol(prop, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 1, 13))
+>nested : Symbol(nested, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 1, 27))
+>nestedProp : Symbol(nestedProp, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 1, 37))
+
+>(obj: { [K in keyof T]: T[K] }): T;
+>obj : Symbol(obj, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 2, 2))
+>K : Symbol(K, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 2, 10))
+>T : Symbol(T, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 0, 22))
+>T : Symbol(T, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 0, 22))
+>K : Symbol(K, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 2, 10))
+>T : Symbol(T, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 0, 22))
+
+const result = test({
+>result : Symbol(result, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 4, 5))
+>test : Symbol(test, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 0, 0))
+
+  prop: "foo", // this one should not widen to string
+>prop : Symbol(prop, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 4, 21))
+
+  nested: {
+>nested : Symbol(nested, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 5, 14))
+
+    nestedProp: "bar",
+>nestedProp : Symbol(nestedProp, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 6, 11))
+
+  },
+  extra: "baz",
+>extra : Symbol(extra, Decl(reverseMappedTypePrimitiveConstraintProperty.ts, 8, 4))
+
+});
+

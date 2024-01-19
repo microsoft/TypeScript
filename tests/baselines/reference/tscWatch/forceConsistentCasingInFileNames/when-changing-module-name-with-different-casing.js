@@ -7,7 +7,11 @@ export class logger { }
 import { logger } from "./logger"; new logger();
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,23 +36,25 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/another.ts","/user/username/projects/myproject/logger.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/logger.ts
-/user/username/projects/myproject/another.ts
+//// [/user/username/projects/myproject/logger.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.logger = void 0;
+var logger = /** @class */ (function () {
+    function logger() {
+    }
+    return logger;
+}());
+exports.logger = logger;
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/logger.ts
-/user/username/projects/myproject/another.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/logger.ts (used version)
-/user/username/projects/myproject/another.ts (used version)
+//// [/user/username/projects/myproject/another.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var logger_1 = require("./logger");
+new logger_1.logger();
+
+
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -70,27 +76,33 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/another.ts",
+  "/user/username/projects/myproject/logger.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/logger.ts
+/user/username/projects/myproject/another.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/logger.ts
+/user/username/projects/myproject/another.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/logger.ts (used version)
+/user/username/projects/myproject/another.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/logger.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.logger = void 0;
-var logger = /** @class */ (function () {
-    function logger() {
-    }
-    return logger;
-}());
-exports.logger = logger;
-
-
-//// [/user/username/projects/myproject/another.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var logger_1 = require("./logger");
-new logger_1.logger();
-
-
 
 Change:: Change module name from logger to Logger
 
@@ -99,8 +111,12 @@ Input::
 import { logger } from "./Logger"; new logger();
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -118,8 +134,25 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/another.ts","/user/username/projects/myproject/logger.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/another.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Logger_1 = require("./Logger");
+new Logger_1.logger();
+
+
+
+
+Program root files: [
+  "/user/username/projects/myproject/another.ts",
+  "/user/username/projects/myproject/logger.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject/tsconfig.json",
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -133,11 +166,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/another.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/another.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var Logger_1 = require("./Logger");
-new Logger_1.logger();
-
-

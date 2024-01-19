@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue3.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue3.ts ===
+type Shape =
+>Shape : Symbol(Shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 0, 0))
+
+    | { kind: "circle", radius: number }
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 7))
+>radius : Symbol(radius, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 23))
+
+    | { kind: "square", sideLength: number }
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
+>sideLength : Symbol(sideLength, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 23))
+
+function wat(shape: Shape) {
+>wat : Symbol(wat, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 44))
+>shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
+>Shape : Symbol(Shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 0, 0))
+
+    switch (true) {
+        case shape.kind === "circle":
+>shape.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 7), Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
+>shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 7), Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
+
+            return Math.PI * shape.radius ** 2;
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>shape.radius : Symbol(radius, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 23))
+>shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
+>radius : Symbol(radius, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 23))
+
+        case shape.kind === "circle": // should error
+>shape.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 7), Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
+>shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 7), Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
+    }
+
+    if (shape.kind === "circle") {
+>shape.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
+>shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
+
+        return Math.PI * shape.radius ** 2;
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
+    }
+    else if (shape.kind === "circle") {
+>shape.kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
+>shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
+>kind : Symbol(kind, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 2, 7))
+
+        //         ~~~~
+        // Property 'kind' does not exist on type 'never'.
+    }
+}
+

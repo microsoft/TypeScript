@@ -8,7 +8,11 @@ import { a } from "./a";
 const b: string = a;
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"isolatedModules":true}}
+{
+  "compilerOptions": {
+    "isolatedModules": true
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -33,23 +37,20 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"isolatedModules":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+exports.a = "";
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/b.ts (used version)
+//// [/user/username/projects/myproject/b.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var a_1 = require("./a");
+var b = a_1.a;
+
+
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -71,22 +72,32 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "isolatedModules": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/b.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = "";
-
-
-//// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = require("./a");
-var b = a_1.a;
-
-
 
 Change:: Change shape of a
 
@@ -95,8 +106,12 @@ Input::
 export const a: number = 1
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -111,8 +126,24 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
-Program options: {"isolatedModules":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+exports.a = 1;
+
+
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts"
+]
+Program options: {
+  "isolatedModules": true,
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -128,11 +159,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (used version)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = 1;
-
-

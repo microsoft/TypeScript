@@ -1,0 +1,415 @@
+//// [tests/cases/compiler/declarationEmitBindingPatternsUnused.ts] ////
+
+=== declarationEmitBindingPatternsUnused.ts ===
+type Named = { name: string }
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+
+// Resons we can't remove aliases that are not used in the function signature: 
+
+// 1.Causes duplicate identifier if we remove alias
+function duplicateIndetifiers({ name: alias, name: alias2 }: Named) { }
+>duplicateIndetifiers : Symbol(duplicateIndetifiers, Decl(declarationEmitBindingPatternsUnused.ts, 0, 29))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 5, 31))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias2 : Symbol(alias2, Decl(declarationEmitBindingPatternsUnused.ts, 5, 44))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+function duplicateIndetifiers2(name: string, { name: alias }: Named) { }
+>duplicateIndetifiers2 : Symbol(duplicateIndetifiers2, Decl(declarationEmitBindingPatternsUnused.ts, 5, 71))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 6, 31))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 6, 46))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+function duplicateIndetifiers3({ name: alias }: Named, { name: alias2 }: Named) { }
+>duplicateIndetifiers3 : Symbol(duplicateIndetifiers3, Decl(declarationEmitBindingPatternsUnused.ts, 6, 72))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 7, 32))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias2 : Symbol(alias2, Decl(declarationEmitBindingPatternsUnused.ts, 7, 56))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+let value = "";
+>value : Symbol(value, Decl(declarationEmitBindingPatternsUnused.ts, 9, 3))
+
+// 2.Can change in meaning for typeof value if we remove alias
+function shadowedVariable({ value: alias }: { value: string }): typeof value { return value }
+>shadowedVariable : Symbol(shadowedVariable, Decl(declarationEmitBindingPatternsUnused.ts, 9, 15))
+>value : Symbol(value, Decl(declarationEmitBindingPatternsUnused.ts, 11, 45))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 11, 27))
+>value : Symbol(value, Decl(declarationEmitBindingPatternsUnused.ts, 11, 45))
+>value : Symbol(value, Decl(declarationEmitBindingPatternsUnused.ts, 9, 3))
+>value : Symbol(value, Decl(declarationEmitBindingPatternsUnused.ts, 9, 3))
+
+function notReferenced({ name: alias }: Named) {
+>notReferenced : Symbol(notReferenced, Decl(declarationEmitBindingPatternsUnused.ts, 11, 93))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 13, 24))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+}
+function notReferencedNestedAlias({ p: { name: alias } }: { p: Named }) {
+>notReferencedNestedAlias : Symbol(notReferencedNestedAlias, Decl(declarationEmitBindingPatternsUnused.ts, 15, 1))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 16, 59))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 16, 40))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 16, 59))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+}
+function notReferencedArrayAlias([a, b, { name: alias }]: Named[]) {
+>notReferencedArrayAlias : Symbol(notReferencedArrayAlias, Decl(declarationEmitBindingPatternsUnused.ts, 17, 1))
+>a : Symbol(a, Decl(declarationEmitBindingPatternsUnused.ts, 18, 34))
+>b : Symbol(b, Decl(declarationEmitBindingPatternsUnused.ts, 18, 36))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 18, 41))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+}
+
+function referencedInCode({ name: alias }: Named) {
+>referencedInCode : Symbol(referencedInCode, Decl(declarationEmitBindingPatternsUnused.ts, 19, 1))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 21, 27))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+    return alias;
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 21, 27))
+}
+
+function referencedInSignarture({ name: alias }: Named): typeof alias {
+>referencedInSignarture : Symbol(referencedInSignarture, Decl(declarationEmitBindingPatternsUnused.ts, 23, 1))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 25, 33))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 25, 33))
+
+    return alias;
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 25, 33))
+}
+
+function referencedInSignartureKeyword({ function: alias }: { function: string }): typeof alias {
+>referencedInSignartureKeyword : Symbol(referencedInSignartureKeyword, Decl(declarationEmitBindingPatternsUnused.ts, 27, 1))
+>function : Symbol(function, Decl(declarationEmitBindingPatternsUnused.ts, 29, 61))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 29, 40))
+>function : Symbol(function, Decl(declarationEmitBindingPatternsUnused.ts, 29, 61))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 29, 40))
+
+    return null!;
+}
+
+function referencedInInferredType({ name: alias }: Named) {
+>referencedInInferredType : Symbol(referencedInInferredType, Decl(declarationEmitBindingPatternsUnused.ts, 31, 1))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 33, 35))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+    type Named2 = { name: typeof alias }
+>Named2 : Symbol(Named2, Decl(declarationEmitBindingPatternsUnused.ts, 33, 59))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 34, 19))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 33, 35))
+
+    return null! as Named2
+>Named2 : Symbol(Named2, Decl(declarationEmitBindingPatternsUnused.ts, 33, 59))
+}
+
+function referencedInNestedFunction({ name: alias }: Named) {
+>referencedInNestedFunction : Symbol(referencedInNestedFunction, Decl(declarationEmitBindingPatternsUnused.ts, 36, 1))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 38, 37))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+    return function(p: typeof alias) {
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 39, 20))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 38, 37))
+
+    }
+}
+
+function referencedNestedAlias({ p: { name: alias } }: { p: Named }): typeof alias {
+>referencedNestedAlias : Symbol(referencedNestedAlias, Decl(declarationEmitBindingPatternsUnused.ts, 42, 1))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 44, 56))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 44, 37))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 44, 56))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 44, 37))
+
+	return alias;
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 44, 37))
+}
+
+function referencedArrayAlias([a, b, { name: alias }]: Named[]): typeof alias {
+>referencedArrayAlias : Symbol(referencedArrayAlias, Decl(declarationEmitBindingPatternsUnused.ts, 46, 1))
+>a : Symbol(a, Decl(declarationEmitBindingPatternsUnused.ts, 48, 31))
+>b : Symbol(b, Decl(declarationEmitBindingPatternsUnused.ts, 48, 33))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 48, 38))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 48, 38))
+
+	return alias;
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 48, 38))
+}
+
+
+class NotReferencedClass {
+>NotReferencedClass : Symbol(NotReferencedClass, Decl(declarationEmitBindingPatternsUnused.ts, 50, 1))
+
+	constructor({ name: alias }: Named) {
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 54, 14))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+	}
+	set x({ name: alias }: Named) {
+>x : Symbol(NotReferencedClass.x, Decl(declarationEmitBindingPatternsUnused.ts, 55, 2))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 56, 8))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+        console.log(alias);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 56, 8))
+    }
+	m({ name: alias }: Named) {
+>m : Symbol(NotReferencedClass.m, Decl(declarationEmitBindingPatternsUnused.ts, 58, 5))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 59, 4))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+        console.log(alias);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 59, 4))
+    }
+}
+
+class ReferencedInCodeClas {
+>ReferencedInCodeClas : Symbol(ReferencedInCodeClas, Decl(declarationEmitBindingPatternsUnused.ts, 62, 1))
+
+	constructor({ name: alias }: Named) {
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 65, 14))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+		console.log(alias);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 65, 14))
+	}
+	set x({ name: alias }: Named) {
+>x : Symbol(ReferencedInCodeClas.x, Decl(declarationEmitBindingPatternsUnused.ts, 67, 2))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 68, 8))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+        console.log(alias);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 68, 8))
+    }
+	m({ name: alias }: Named) {
+>m : Symbol(ReferencedInCodeClas.m, Decl(declarationEmitBindingPatternsUnused.ts, 70, 5))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 71, 4))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+        console.log(alias);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 71, 4))
+    }
+}
+
+class ReferencedInSignartureClass {
+>ReferencedInSignartureClass : Symbol(ReferencedInSignartureClass, Decl(declarationEmitBindingPatternsUnused.ts, 74, 1))
+
+	constructor({ name: alias }: Named, p: typeof alias) {
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 77, 14))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 77, 36))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 77, 14))
+
+		console.log(alias);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 77, 14))
+	}
+	set x({ name: alias }: Named & { o: typeof alias }) {
+>x : Symbol(ReferencedInSignartureClass.x, Decl(declarationEmitBindingPatternsUnused.ts, 79, 2))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 80, 8))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>o : Symbol(o, Decl(declarationEmitBindingPatternsUnused.ts, 80, 33))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 80, 8))
+        
+    }
+	mReturnType({ name: alias }: Named): typeof alias {
+>mReturnType : Symbol(ReferencedInSignartureClass.mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 82, 5))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 83, 14))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 83, 14))
+
+        return null!
+    }
+	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias> {
+>mRerturnTypeNested : Symbol(ReferencedInSignartureClass.mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 85, 5))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 86, 21))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 86, 21))
+
+        return null!
+    }
+    mParameter({ name: alias }: Named, p: typeof alias) {
+>mParameter : Symbol(ReferencedInSignartureClass.mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 88, 5))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 89, 16))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 89, 38))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 89, 16))
+
+        return null!
+    }
+}
+
+let notReferencedFnType: ({ name: alias }: Named) => void;
+>notReferencedFnType : Symbol(notReferencedFnType, Decl(declarationEmitBindingPatternsUnused.ts, 94, 3))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 94, 27))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+let referencedInSignartureReturnTypeFnType: ({ name: alias }: Named) => typeof alias;
+>referencedInSignartureReturnTypeFnType : Symbol(referencedInSignartureReturnTypeFnType, Decl(declarationEmitBindingPatternsUnused.ts, 95, 3))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 95, 46))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 95, 46))
+
+let referencedInSignartureParamTypeFnType: ({ name: alias }: Named, p: typeof alias) => void;
+>referencedInSignartureParamTypeFnType : Symbol(referencedInSignartureParamTypeFnType, Decl(declarationEmitBindingPatternsUnused.ts, 96, 3))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 96, 45))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 96, 67))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 96, 45))
+
+let notReferencedCtorType: new ({ name: alias }: Named) => void;
+>notReferencedCtorType : Symbol(notReferencedCtorType, Decl(declarationEmitBindingPatternsUnused.ts, 98, 3))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 98, 33))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+let referencedInSignartureReturnTypeCtorType: new ({ name: alias }: Named) => typeof alias;
+>referencedInSignartureReturnTypeCtorType : Symbol(referencedInSignartureReturnTypeCtorType, Decl(declarationEmitBindingPatternsUnused.ts, 99, 3))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 99, 52))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 99, 52))
+
+let referencedInSignartureParamTypeCtorType: new  ({ name: alias }: Named, p: typeof alias) => void;
+>referencedInSignartureParamTypeCtorType : Symbol(referencedInSignartureParamTypeCtorType, Decl(declarationEmitBindingPatternsUnused.ts, 100, 3))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 100, 52))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 100, 74))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 100, 52))
+
+
+interface NotReferencedInterface {
+>NotReferencedInterface : Symbol(NotReferencedInterface, Decl(declarationEmitBindingPatternsUnused.ts, 100, 100))
+
+	({ name: alias }: Named): void
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 104, 3))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+	new ({ name: alias }: Named): void
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 105, 7))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+	set x({ name: alias }: Named);
+>x : Symbol(NotReferencedInterface.x, Decl(declarationEmitBindingPatternsUnused.ts, 105, 35))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 106, 8))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+
+	m({ name: alias }: Named);
+>m : Symbol(NotReferencedInterface.m, Decl(declarationEmitBindingPatternsUnused.ts, 106, 31))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 107, 4))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+}
+
+interface ReferencedInSignartureInterface {
+>ReferencedInSignartureInterface : Symbol(ReferencedInSignartureInterface, Decl(declarationEmitBindingPatternsUnused.ts, 108, 1))
+
+	({ name: alias }: Named, p: typeof alias): void
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 111, 3))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 111, 25))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 111, 3))
+
+	({ name: alias }: Named): typeof alias
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 112, 3))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 112, 3))
+	
+	new ({ name: alias }: Named, p: typeof alias): void
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 114, 7))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 114, 29))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 114, 7))
+
+	new ({ name: alias }: Named): typeof alias
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 115, 7))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 115, 7))
+
+	set x({ name: alias }: Named & { o: typeof alias })
+>x : Symbol(ReferencedInSignartureInterface.x, Decl(declarationEmitBindingPatternsUnused.ts, 115, 43))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 116, 8))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>o : Symbol(o, Decl(declarationEmitBindingPatternsUnused.ts, 116, 33))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 116, 8))
+
+	mReturnType({ name: alias }: Named): typeof alias;
+>mReturnType : Symbol(ReferencedInSignartureInterface.mReturnType, Decl(declarationEmitBindingPatternsUnused.ts, 116, 52))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 117, 14))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 117, 14))
+
+	mRerturnTypeNested({ name: alias }: Named): NonNullable<typeof alias>;
+>mRerturnTypeNested : Symbol(ReferencedInSignartureInterface.mRerturnTypeNested, Decl(declarationEmitBindingPatternsUnused.ts, 117, 51))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 118, 21))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 118, 21))
+
+    mParameter({ name: alias }: Named, p: typeof alias);
+>mParameter : Symbol(ReferencedInSignartureInterface.mParameter, Decl(declarationEmitBindingPatternsUnused.ts, 118, 71))
+>name : Symbol(name, Decl(declarationEmitBindingPatternsUnused.ts, 0, 14))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 119, 16))
+>Named : Symbol(Named, Decl(declarationEmitBindingPatternsUnused.ts, 0, 0))
+>p : Symbol(p, Decl(declarationEmitBindingPatternsUnused.ts, 119, 38))
+>alias : Symbol(alias, Decl(declarationEmitBindingPatternsUnused.ts, 119, 16))
+}

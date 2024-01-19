@@ -19,8 +19,8 @@ declare const b: (string | number)[] | null[] | undefined[] | {}[];
 let x = a.equalsShallow(b);
 >x : boolean
 >a.equalsShallow(b) : boolean
->a.equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean)
+>a.equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T_1>(this: readonly T_1[], other: readonly T_1[]) => boolean) | (<T_2>(this: readonly T_2[], other: readonly T_2[]) => boolean) | (<T_3>(this: readonly T_3[], other: readonly T_3[]) => boolean)
 >a : (string | number)[] | null[] | undefined[] | {}[]
->equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T>(this: readonly T[], other: readonly T[]) => boolean)
+>equalsShallow : (<T>(this: readonly T[], other: readonly T[]) => boolean) | (<T_1>(this: readonly T_1[], other: readonly T_1[]) => boolean) | (<T_2>(this: readonly T_2[], other: readonly T_2[]) => boolean) | (<T_3>(this: readonly T_3[], other: readonly T_3[]) => boolean)
 >b : (string | number)[] | null[] | undefined[] | {}[]
 

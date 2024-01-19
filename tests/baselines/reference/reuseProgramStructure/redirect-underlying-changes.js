@@ -106,7 +106,9 @@ b: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
@@ -219,7 +221,9 @@ b: {
 }
 
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 /a.ts(3,3): error TS2345: Argument of type 'import("/node_modules/b/node_modules/x/index").default' is not assignable to parameter of type 'import("/node_modules/a/node_modules/x/index").default'.
   Types have separate declarations of a private property 'x'.

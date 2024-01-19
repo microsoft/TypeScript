@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/b/commonFile1.ts]
 let x = 1
@@ -24,7 +24,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "allowJs": true,
-          "target": 2
+          "target": "ES2015"
         }
       },
       "seq": 1,
@@ -36,6 +36,3 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
-
-Timeout callback:: count: 0
-Immedidate callback:: count: 0

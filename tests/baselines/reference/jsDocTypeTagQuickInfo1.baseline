@@ -1,3 +1,4 @@
+// === QuickInfo ===
 === /tests/cases/fourslash/jsDocTypeTag1.js ===
 // /** @type {String} */
 // var S;

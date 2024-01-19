@@ -59,8 +59,8 @@ type ExcludeWithDefault<T, U, D = never> = T extends U ? D : T;
 >ExcludeWithDefault : ExcludeWithDefault<T, U, D>
 
 const fn5 = <Params>(
->fn5 : <Params>(params: Pick<Params, ExcludeWithDefault<keyof Params, never, never>>) => Params
-><Params>(    params: Pick<Params, ExcludeWithDefault<keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, ExcludeWithDefault<keyof Params, never, never>>) => Params
+>fn5 : <Params>(params: Pick<Params, ExcludeWithDefault<keyof Params, never>>) => Params
+><Params>(    params: Pick<Params, ExcludeWithDefault<keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, ExcludeWithDefault<keyof Params, never>>) => Params
 
     params: Pick<Params, ExcludeWithDefault<keyof Params, never>>,
 >params : Pick<Params, ExcludeWithDefault<keyof Params, never, never>>
@@ -83,8 +83,8 @@ function fn6<T>(x: ExcludeWithDefault<T, never>) {
 }
 
 const fn7 = <Params>(
->fn7 : <Params>(params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params, never>>) => Params
-><Params>(    params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>,): Params => params : <Params>(params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params, never>>) => Params
+>fn7 : <Params>(params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>) => Params
+><Params>(    params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>,): Params => params : <Params>(params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>) => Params
 
     params: Pick<Params, ExtractWithDefault<keyof Params, keyof Params>>,
 >params : Pick<Params, ExtractWithDefault<keyof Params, keyof Params, never>>

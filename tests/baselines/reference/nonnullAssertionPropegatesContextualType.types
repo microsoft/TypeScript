@@ -5,8 +5,8 @@ let rect2: SVGRectElement = document.querySelector('.svg-rectangle')!; // Error:
 >rect2 : SVGRectElement
 >document.querySelector('.svg-rectangle')! : SVGRectElement
 >document.querySelector('.svg-rectangle') : SVGRectElement | null
->document.querySelector : { <K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null; <K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null; <K extends keyof MathMLElementTagNameMap>(selectors: K): MathMLElementTagNameMap[K] | null; <K extends keyof HTMLElementDeprecatedTagNameMap>(selectors: K): HTMLElementDeprecatedTagNameMap[K] | null; <E extends Element = Element>(selectors: string): E | null; }
+>document.querySelector : { <K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null; <K_1 extends keyof SVGElementTagNameMap>(selectors: K_1): SVGElementTagNameMap[K_1] | null; <K_2 extends keyof MathMLElementTagNameMap>(selectors: K_2): MathMLElementTagNameMap[K_2] | null; <K_3 extends keyof HTMLElementDeprecatedTagNameMap>(selectors: K_3): HTMLElementDeprecatedTagNameMap[K_3] | null; <E extends Element = Element>(selectors: string): E | null; }
 >document : Document
->querySelector : { <K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null; <K extends keyof SVGElementTagNameMap>(selectors: K): SVGElementTagNameMap[K] | null; <K extends keyof MathMLElementTagNameMap>(selectors: K): MathMLElementTagNameMap[K] | null; <K extends keyof HTMLElementDeprecatedTagNameMap>(selectors: K): HTMLElementDeprecatedTagNameMap[K] | null; <E extends Element = Element>(selectors: string): E | null; }
+>querySelector : { <K extends keyof HTMLElementTagNameMap>(selectors: K): HTMLElementTagNameMap[K] | null; <K_1 extends keyof SVGElementTagNameMap>(selectors: K_1): SVGElementTagNameMap[K_1] | null; <K_2 extends keyof MathMLElementTagNameMap>(selectors: K_2): MathMLElementTagNameMap[K_2] | null; <K_3 extends keyof HTMLElementDeprecatedTagNameMap>(selectors: K_3): HTMLElementDeprecatedTagNameMap[K_3] | null; <E extends Element = Element>(selectors: string): E | null; }
 >'.svg-rectangle' : ".svg-rectangle"
 

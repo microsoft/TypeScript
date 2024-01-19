@@ -207,14 +207,12 @@ var simpleAction = function (payload) { return ({
     type: "SIMPLE_ACTION",
     payload: payload
 }); };
-var thunkAction = function (param1, param2) { return function (dispatch, _a) {
-    var foo = _a.foo;
-    return __awaiter(void 0, void 0, void 0, function () {
-        return __generator(this, function (_b) {
-            return [2 /*return*/, foo];
-        });
+var thunkAction = function (param1, param2) { return function (dispatch_1, _a) { return __awaiter(void 0, [dispatch_1, _a], void 0, function (dispatch, _b) {
+    var foo = _b.foo;
+    return __generator(this, function (_c) {
+        return [2 /*return*/, foo];
     });
-}; };
+}); }; };
 var TestComponent = /** @class */ (function (_super) {
     __extends(TestComponent, _super);
     function TestComponent() {

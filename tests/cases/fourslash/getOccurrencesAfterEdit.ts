@@ -8,15 +8,7 @@
 ////    x.f/*1*/oo
 ////}
 
-verify.baselineCommands(
-    { type: "documentHighlights", markerOrRange: "1" },
-    {
-        type: "customWork",
-        work: () => {
-            goTo.marker("0");
-            edit.insert("\n");
-            return "Added new line";
-        },
-    },
-    { type: "documentHighlights", markerOrRange: "1" },
-);
+verify.baselineDocumentHighlights("1");
+goTo.marker("0");
+edit.insert("\n");
+verify.baselineDocumentHighlights("1");

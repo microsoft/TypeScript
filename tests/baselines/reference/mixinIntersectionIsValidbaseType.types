@@ -62,7 +62,7 @@ const AMixin = <K extends Constructor<Initable> & Initable>(SuperClass: K) => {
 >class A extends Serializable(SuperClass) {    } : { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; } & K
 >A : { new (...args: any[]): A; prototype: AMixin<any>.A; init(...args: any[]): void; } & K
 >Serializable(SuperClass) : Serializable<K>.SerializableLocal & Initable
->Serializable : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K
+>Serializable : <K_1 extends Constructor<Initable> & Initable>(SuperClass: K_1) => { new (...args: any[]): SerializableLocal; prototype: Serializable<any>.SerializableLocal; init(...args: any[]): void; } & K_1
 >SuperClass : K
 
     };

@@ -15,8 +15,7 @@ body:
 
         The "Common Feature Requests" section of the FAQ lists many popular requests: https://github.com/Microsoft/TypeScript/wiki/FAQ#common-feature-requests
       placeholder: |
-        List of keywords you searched for before creating this issue.
-        Write them down here so that others can find this suggestion more easily and help provide feedback.
+        List of keywords you searched for before creating this issue. Write them down here so that others can find this suggestion more easily and help provide feedback.
 
         e.g. "isArray readonly", "regex string types", "json const assertion import"
     validations:
@@ -26,9 +25,7 @@ body:
     attributes:
       label: '✅ Viability Checklist'
       description: |
-        Suggestions that don't meet all these criteria are very, very unlikely to be accepted.
-        We always recommend reviewing the TypeScript design goals before investing time writing
-        a proposal for ideas outside the scope of the project.
+        Suggestions that don't meet all these criteria are very, very unlikely to be accepted. We always recommend reviewing the TypeScript design goals before investing time writing a proposal for ideas outside the scope of the project.
 
         My suggestion meets the following guidelines.
       options:
@@ -39,6 +36,8 @@ body:
         - label: This could be implemented without emitting different JS based on the types of the expressions
           required: true
         - label: This isn't a runtime feature (e.g. library functionality, non-ECMAScript syntax with JavaScript output, new syntax sugar for JS, etc.)
+          required: true
+        - label: "This isn't a request to add a new utility type: https://github.com/microsoft/TypeScript/wiki/No-New-Utility-Types"
           required: true
         - label: 'This feature would agree with the rest of our Design Goals: https://github.com/Microsoft/TypeScript/wiki/TypeScript-Design-Goals'
           required: true
@@ -54,8 +53,7 @@ body:
     attributes:
       label: '📃 Motivating Example'
       description: |
-        If you were announcing this feature in a blog post, what's a short
-        explanation that shows a developer why this feature improves the language?
+        If you were announcing this feature in a blog post, what's a short explanation that shows a developer why this feature improves the language?
     validations:
       required: true
   - type: textarea

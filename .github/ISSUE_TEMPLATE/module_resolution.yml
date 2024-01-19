@@ -27,8 +27,7 @@ body:
         4. The configuration of the target module
         5. A difference in runtime behavior
 
-        You will also be required to post a cloneable repository.
-        This repo must involve running `tsc`, not a third-party tool (e.g. vue-tsc, ngc, expo, ...)
+        You will also be required to post a cloneable repository. This repo must involve running `tsc`, not a third-party tool (e.g. vue-tsc, ngc, expo, ...)
 
   - type: input
     id: repo-url

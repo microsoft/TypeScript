@@ -22,3 +22,31 @@ verify.importFixAtPosition([
     type SomeInterface,
 } from "./exports.js";
 new SomePig`]);
+
+verify.importFixAtPosition([
+`import {
+    SomePig,
+    type SomeInterface,
+} from "./exports.js";
+new SomePig`],
+/*errorCode*/ undefined,
+{ organizeImportsTypeOrder: "last" });
+
+verify.importFixAtPosition([
+`import {
+    type SomeInterface,
+    SomePig,
+} from "./exports.js";
+new SomePig`],
+    /*errorCode*/ undefined,
+    { organizeImportsTypeOrder: "inline" }
+);
+
+verify.importFixAtPosition([
+`import {
+    type SomeInterface,
+    SomePig,
+} from "./exports.js";
+new SomePig`],
+/*errorCode*/ undefined,
+{ organizeImportsTypeOrder: "first" });

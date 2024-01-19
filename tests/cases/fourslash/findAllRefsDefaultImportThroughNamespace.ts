@@ -19,9 +19,7 @@ const [r0Def, r0, r1, r2, r3Def, r3, r4] = test.ranges();
 goTo.rangeStart(r2);
 verify.renameInfoFailed();
 
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['0', '1', '2', '3', '4'] },
-    { type: "findRenameLocations", markerOrRange: r1 },
-    // Can rename a default property.
-    { type: "findRenameLocations", markerOrRange: [r3, r4] },
-);
+verify.baselineFindAllReferences('0', '1', '2', '3', '4');
+verify.baselineRename(r1);
+// Can rename a default property.
+verify.baselineRename([r3, r4])

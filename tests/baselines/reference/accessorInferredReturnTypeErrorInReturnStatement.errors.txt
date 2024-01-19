@@ -1,0 +1,16 @@
+accessorInferredReturnTypeErrorInReturnStatement.ts(2,7): error TS7023: 'primaryPath' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+accessorInferredReturnTypeErrorInReturnStatement.ts(4,18): error TS2339: Property 'collection' does not exist on type '{ readonly primaryPath: any; }'.
+
+
+==== accessorInferredReturnTypeErrorInReturnStatement.ts (2 errors) ====
+    export var basePrototype = {
+      get primaryPath() {
+          ~~~~~~~~~~~
+!!! error TS7023: 'primaryPath' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        var _this = this;
+        return _this.collection.schema.primaryPath;
+                     ~~~~~~~~~~
+!!! error TS2339: Property 'collection' does not exist on type '{ readonly primaryPath: any; }'.
+      },  
+    };
+    

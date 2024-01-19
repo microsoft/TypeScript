@@ -29,12 +29,13 @@ declare namespace Intl {
         select(n: number): LDMLPluralRule;
     }
 
-    const PluralRules: {
-        new (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
-        (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
+    interface PluralRulesConstructor {
+        new (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
+        (locales?: string | readonly string[], options?: PluralRulesOptions): PluralRules;
+        supportedLocalesOf(locales: string | readonly string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
+    }
 
-        supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit"; }): string[];
-    };
+    const PluralRules: PluralRulesConstructor;
 
     // We can only have one definition for 'type' in TypeScript, and so you can learn where the keys come from here:
     type ES2018NumberFormatPartType = "literal" | "nan" | "infinity" | "percent" | "integer" | "group" | "decimal" | "fraction" | "plusSign" | "minusSign" | "percentSign" | "currency" | "code" | "symbol" | "name";

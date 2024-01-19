@@ -86,7 +86,7 @@ function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
 }
 
 function fa1<T>(x: T, y: { [P in keyof T]: T[P] }, z: { [P in keyof T & string as `p_${P}`]: T[P] }) {
->fa1 : <T>(x: T, y: { [P in keyof T]: T[P]; }, z: { [P in keyof T & string as `p_${P}`]: T[P]; }) => void
+>fa1 : <T>(x: T, y: { [P in keyof T]: T[P]; }, z: { [P_1 in keyof T & string as `p_${P_1}`]: T[P_1]; }) => void
 >x : T
 >y : { [P in keyof T]: T[P]; }
 >z : { [P in keyof T & string as `p_${P}`]: T[P]; }
@@ -263,29 +263,29 @@ type T43 = Split<any, '.'>;  // string[]
 // Inference and property name paths
 
 declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2];
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_2, P0_2 extends keyof T_2 & string>(obj: T_2, path: P0_2): T_2[P0_2]; (obj: object, path: string): unknown; }
 >obj : T
 >path : `${P0}.${P1}.${P2}`
 
 declare function getProp<T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1];
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}.${P2}`): T_1[P0_1][P1_1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T_2, P0_2 extends keyof T_2 & string>(obj: T_2, path: P0_2): T_2[P0_2]; (obj: object, path: string): unknown; }
 >obj : T
 >path : `${P0}.${P1}`
 
 declare function getProp<T, P0 extends keyof T & string>(obj: T, path: P0): T[P0];
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T_1, P0_1 extends keyof T_1 & string, P1 extends keyof T_1[P0_1] & string, P2 extends keyof T_1[P0_1][P1] & string>(obj: T_1, path: `${P0_1}.${P1}.${P2}`): T_1[P0_1][P1][P2]; <T_2, P0_2 extends keyof T_2 & string, P1_1 extends keyof T_2[P0_2] & string>(obj: T_2, path: `${P0_2}.${P1_1}`): T_2[P0_2][P1_1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
 >obj : T
 >path : P0
 
 declare function getProp(obj: object, path: string): unknown;
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_2, P0_2 extends keyof T_2 & string>(obj: T_2, path: P0_2): T_2[P0_2]; (obj: object, path: string): unknown; }
 >obj : object
 >path : string
 
 let p1 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a');
 >p1 : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a') : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_2, P0_2 extends keyof T_2 & string>(obj: T_2, path: P0_2): T_2[P0_2]; (obj: object, path: string): unknown; }
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
 >{ a: { b: {c: 42, d: 'hello' }}} : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
 >a : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
@@ -301,7 +301,7 @@ let p1 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a');
 let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >p2 : { readonly c: 42; readonly d: "hello"; }
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b') : { readonly c: 42; readonly d: "hello"; }
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_2, P0_2 extends keyof T_2 & string>(obj: T_2, path: P0_2): T_2[P0_2]; (obj: object, path: string): unknown; }
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
 >{ a: { b: {c: 42, d: 'hello' }}} : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
 >a : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
@@ -317,7 +317,7 @@ let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 let p3 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d');
 >p3 : "hello"
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d') : "hello"
->getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string>(obj: T, path: `${P0}.${P1}`): T[P0][P1]; <T, P0 extends keyof T & string>(obj: T, path: P0): T[P0]; (obj: object, path: string): unknown; }
+>getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_2, P0_2 extends keyof T_2 & string>(obj: T_2, path: P0_2): T_2[P0_2]; (obj: object, path: string): unknown; }
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
 >{ a: { b: {c: 42, d: 'hello' }}} : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
 >a : { readonly b: { readonly c: 42; readonly d: "hello"; }; }

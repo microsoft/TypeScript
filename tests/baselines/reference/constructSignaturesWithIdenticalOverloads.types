@@ -115,7 +115,7 @@ var r5 = new a(1, '');
 >'' : ""
 
 var b: {
->b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+>b : { new <T>(x: T, y: string): C2<T>; new <T_1>(x: T_1, y: string): C2<T_1>; }
 
     new <T>(x: T, y: string): C2<T>;
 >x : T
@@ -129,7 +129,7 @@ var b: {
 var r6 = new b(1, '');
 >r6 : C2<number>
 >new b(1, '') : C2<number>
->b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+>b : { new <T>(x: T, y: string): C2<T>; new <T_1>(x: T_1, y: string): C2<T_1>; }
 >1 : 1
 >'' : ""
 

@@ -54,7 +54,7 @@ interface A { // T
 >arg : T
 
     a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
+>a11 : <T>(x: {    foo: T;}, y: {    foo: T;    bar: T;}) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: T; bar: T; }
@@ -62,13 +62,13 @@ interface A { // T
 >bar : T
 
     a15: <T>(x: { a: T; b: T }) => T[];
->a15 : <T>(x: { a: T; b: T; }) => T[]
+>a15 : <T>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
->a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
+>a16 : <T extends Base>(x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T
@@ -109,7 +109,7 @@ interface I5<T> extends A {
 
 interface I7<T> extends A {
     a11: <U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
->a11 : <U>(x: {    foo: T;}, y: { foo: U; bar: U; }) => Base
+>a11 : <U>(x: {    foo: T;}, y: {    foo: U;    bar: U;}) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: U; bar: U; }

@@ -11,6 +11,11 @@ type V10 = [number, ...string[], ...boolean[]];  // Error
 type V11 = [number, ...string[], boolean?];  // Error
 type V12 = [number, string?, boolean];  // Error
 
+type V15 = [...string[], ...number[]];  // Error
+type V16 = [...string[], ...Array<number>];  // Error
+type V17 = [...Array<string>, ...number[]];  // Error
+type V18 = [...Array<string>, ...Array<number>];  // Error
+
 // Normalization
 
 type Tup3<T extends unknown[], U extends unknown[], V extends unknown[]> = [...T, ...U, ...V];

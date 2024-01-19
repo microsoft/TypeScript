@@ -32,8 +32,38 @@ Output::
 
 
 
-Program root files: ["/a/b/f1.ts","/a/b/f2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/f1.js]
+var x = 1;
+
+
+//// [/a/b/f2.js]
+var y = 2;
+
+
+
+FsWatches::
+/a/b/f1.ts: *new*
+  {}
+/a/b/f2.ts: *new*
+  {}
+/a/b/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Program root files: [
+  "/a/b/f1.ts",
+  "/a/b/f2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -50,44 +80,25 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (used version)
 /a/b/f2.ts (used version)
 
-FsWatches::
-/a/b/f1.ts: *new*
-  {}
-/a/b/f2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/f1.js]
-var x = 1;
-
-
-//// [/a/b/f2.js]
-var y = 2;
-
-
 
 Change:: Delete config file
 
 Input::
 //// [/a/b/tsconfig.json] deleted
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
-After running Timeout callback:: count: 1
-1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
 Output::
 [91merror[0m[90m TS5083: [0mCannot read file '/a/b/tsconfig.json'.
 
 
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

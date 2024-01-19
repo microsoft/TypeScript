@@ -402,9 +402,9 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNest
 const promiseForConstCall = Promise.resolve(constCall);
 >promiseForConstCall : Promise<unique symbol>
 >Promise.resolve(constCall) : Promise<unique symbol>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >constCall : unique symbol
 
 const arrayOfConstCall = [constCall];

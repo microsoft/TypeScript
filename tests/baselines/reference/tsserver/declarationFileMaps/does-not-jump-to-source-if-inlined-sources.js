@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/a.ts]
 export function fnA() {}
@@ -7,7 +7,19 @@ export interface IfaceA {}
 export const instanceA: IfaceA = {};
 
 //// [/a/bin/a.d.ts.map]
-{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["../a.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC","sourcesContent":["export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"]}
+{
+  "version": 3,
+  "file": "a.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../a.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC",
+  "sourcesContent": [
+    "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
+  ]
+}
 
 //// [/a/bin/a.d.ts]
 export declare function fnA(): void;
@@ -20,7 +32,16 @@ export declare const instanceA: IfaceA;
 export function fnB() {}
 
 //// [/b/bin/b.d.ts.map]
-{"version":3,"file":"b.d.ts","sourceRoot":"","sources":["../b.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAK"}
+{
+  "version": 3,
+  "file": "b.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../b.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,wBAAgB,GAAG,SAAK"
+}
 
 //// [/b/bin/b.d.ts]
 export declare function fnB(): void;

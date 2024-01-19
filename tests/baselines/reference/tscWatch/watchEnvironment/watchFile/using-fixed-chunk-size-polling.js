@@ -20,7 +20,11 @@ let x = 1
 let y = 1
 
 //// [/a/b/tsconfig.json]
-{"watchOptions":{"watchFile":"FixedChunkSizePolling"}}
+{
+  "watchOptions": {
+    "watchFile": "FixedChunkSizePolling"
+  }
+}
 
 
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
@@ -32,8 +36,31 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
+
+
+FsWatchesRecursive::
+/a/b: *new*
+  {}
+
+Timeout callback:: count: 1
+1: pollQueue *new*
+
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -50,20 +77,7 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-FsWatchesRecursive::
-/a/b: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-
 
 Change:: The timeout is to check the status of all files
 
@@ -71,24 +85,38 @@ Input::
 
 Before running Timeout callback:: count: 1
 1: pollQueue
+
 After running Timeout callback:: count: 1
-2: pollQueue
+
+Timeout callback:: count: 1
+2: pollQueue *new*
+
 Before running Timeout callback:: count: 1
 2: pollQueue
+
 After running Timeout callback:: count: 1
-3: pollQueue
+
+Timeout callback:: count: 1
+3: pollQueue *new*
+
 Before running Timeout callback:: count: 1
 3: pollQueue
+
 After running Timeout callback:: count: 1
-4: pollQueue
+
+Timeout callback:: count: 1
+4: pollQueue *new*
+
 Before running Timeout callback:: count: 1
 4: pollQueue
+
 After running Timeout callback:: count: 1
-5: pollQueue
-Output::
+
+Timeout callback:: count: 1
+5: pollQueue *new*
+
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Make change to file but should detect as changed and schedule program update
 
@@ -99,13 +127,15 @@ var zz30 = 100;
 
 Before running Timeout callback:: count: 1
 5: pollQueue
+
 After running Timeout callback:: count: 2
-6: timerToUpdateProgram
-7: pollQueue
-Output::
+
+Timeout callback:: count: 2
+6: timerToUpdateProgram *new*
+7: pollQueue *new*
+
 
 exitCode:: ExitStatus.undefined
-
 
 Change:: Callbacks: queue and scheduled program update
 
@@ -114,8 +144,8 @@ Input::
 Before running Timeout callback:: count: 2
 6: timerToUpdateProgram
 7: pollQueue
+
 After running Timeout callback:: count: 1
-8: pollQueue
 Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
@@ -124,8 +154,25 @@ Output::
 
 
 
-Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+//// [/a/b/commonFile1.js]
+var zz30 = 100;
+
+
+//// [/a/b/commonFile2.js] file written with same contents
+
+Timeout callback:: count: 1
+8: pollQueue *new*
+
+
+Program root files: [
+  "/a/b/commonFile1.ts",
+  "/a/b/commonFile2.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/b/tsconfig.json",
+  "configFilePath": "/a/b/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -143,21 +190,17 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/commonFile1.js]
-var zz30 = 100;
-
-
-//// [/a/b/commonFile2.js] file written with same contents
-
 Change:: The timeout is to check the status of all files
 
 Input::
 
 Before running Timeout callback:: count: 1
 8: pollQueue
+
 After running Timeout callback:: count: 1
-9: pollQueue
-Output::
+
+Timeout callback:: count: 1
+9: pollQueue *new*
+
 
 exitCode:: ExitStatus.undefined
-

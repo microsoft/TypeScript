@@ -41,7 +41,15 @@ export { C } from "./c";
 
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"target":"es5","module":"commonjs","declaration":true,"emitDeclarationOnly":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
+    "emitDeclarationOnly": true
+  }
+}
 
 
 /a/lib/tsc.js -w
@@ -52,56 +60,6 @@ Output::
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/c.ts (used version)
-/users/username/projects/project/b.ts (used version)
-/users/username/projects/project/a.ts (used version)
-/users/username/projects/project/index.ts (used version)
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/a.ts: *new*
-  {}
-/users/username/projects/project/b.ts: *new*
-  {}
-/users/username/projects/project/c.ts: *new*
-  {}
-/users/username/projects/project/index.ts: *new*
-  {}
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/c.d.ts]
 import { A } from "./a";
@@ -251,6 +209,69 @@ export { C } from "./c";
 }
 
 
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/a.ts: *new*
+  {}
+/users/username/projects/project/b.ts: *new*
+  {}
+/users/username/projects/project/c.ts: *new*
+  {}
+/users/username/projects/project/index.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/a.ts",
+  "/users/username/projects/project/b.ts",
+  "/users/username/projects/project/c.ts",
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "target": 1,
+  "module": 1,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/c.ts (used version)
+/users/username/projects/project/b.ts (used version)
+/users/username/projects/project/a.ts (used version)
+/users/username/projects/project/index.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change::
 
 Input::
@@ -294,54 +315,6 @@ Output::
 [[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/users/username/projects/project/a.ts","/users/username/projects/project/b.ts","/users/username/projects/project/c.ts","/users/username/projects/project/index.ts"]
-Program options: {"incremental":true,"target":1,"module":1,"declaration":true,"emitDeclarationOnly":true,"watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/c.ts
-/users/username/projects/project/b.ts
-/users/username/projects/project/a.ts
-/users/username/projects/project/index.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/a.ts (used version)
-/users/username/projects/project/index.ts (used version)
-/users/username/projects/project/c.ts (used version)
-/users/username/projects/project/b.ts (used version)
-
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/a.ts: *new*
-  {}
-/users/username/projects/project/b.ts: *new*
-  {}
-/users/username/projects/project/c.ts: *new*
-  {}
-/users/username/projects/project/index.ts: *new*
-  {}
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/c.d.ts] file written with same contents
 //// [/users/username/projects/project/b.d.ts] file written with same contents
@@ -474,3 +447,64 @@ export interface A {
   "size": 1145
 }
 
+
+PolledWatches::
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/a.ts: *new*
+  {}
+/users/username/projects/project/b.ts: *new*
+  {}
+/users/username/projects/project/c.ts: *new*
+  {}
+/users/username/projects/project/index.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/a.ts",
+  "/users/username/projects/project/b.ts",
+  "/users/username/projects/project/c.ts",
+  "/users/username/projects/project/index.ts"
+]
+Program options: {
+  "incremental": true,
+  "target": 1,
+  "module": 1,
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "watch": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/c.ts
+/users/username/projects/project/b.ts
+/users/username/projects/project/a.ts
+/users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/a.ts (used version)
+/users/username/projects/project/index.ts (used version)
+/users/username/projects/project/c.ts (used version)
+/users/username/projects/project/b.ts (used version)
+
+exitCode:: ExitStatus.undefined

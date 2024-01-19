@@ -89,7 +89,7 @@ function foo1<a>(value: void|a): void {
 
     if (isVoid(value)) {
 >isVoid(value) : boolean
->isVoid : <a>(value: void | a) => value is void
+>isVoid : <a_1>(value: void | a_1) => value is void
 >value : void | a
 
         value; // value is void
@@ -107,7 +107,7 @@ function baz1<a>(value: void|a): void {
 
       if (isNonVoid(value)) {
 >isNonVoid(value) : boolean
->isNonVoid : <a>(value: void | a) => value is a
+>isNonVoid : <a_1>(value: void | a_1) => value is a_1
 >value : void | a
 
           value; // value is a
@@ -193,9 +193,9 @@ const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ na
 >Promise.resolve().then(() => ({ name: 'test' })) : Promise<ITest | { name: "test"; }>
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >Promise.resolve() : Promise<void>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => ({ name: 'test' }) : () => { name: "test"; }
 >({ name: 'test' }) : { name: "test"; }
@@ -247,9 +247,9 @@ const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
 >a : T
 >b : U
 >Object.assign(a, b) : T & U
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_2 extends {}, U_2, V>(target: T_2, source1: U_2, source2: V): T_2 & U_2 & V; <T_3 extends {}, U_3, V_1, W>(target: T_3, source1: U_3, source2: V_1, source3: W): T_3 & U_3 & V_1 & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_2 extends {}, U_2, V>(target: T_2, source1: U_2, source2: V): T_2 & U_2 & V; <T_3 extends {}, U_3, V_1, W>(target: T_3, source1: U_3, source2: V_1, source3: W): T_3 & U_3 & V_1 & W; (target: object, ...sources: any[]): any; }
 >a : T
 >b : U
 

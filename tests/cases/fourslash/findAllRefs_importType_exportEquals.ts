@@ -13,12 +13,10 @@
 
 verify.noErrors();
 const [r0Def, r0, r1Def, r1, r2Def, rExport, r2, r3Def, r3, r3b, r4Def, r4, r4b] = test.ranges();
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['0', '1', '2', '3', '4', 'export'] },
-    { type: "findRenameLocations", markerOrRange: [r0, r1, r2] },
-);
+verify.baselineFindAllReferences('0', '1', '2', '3', '4', 'export');
+verify.baselineRename([r0, r1, r2]);
 for (const range of [r3b, r4b]) {
     goTo.rangeStart(range);
-    verify.renameInfoSucceeded(/*displayName*/ "/a.ts", /*fullDisplayName*/ "/a.ts", /*kind*/ "module", /*kindModifiers*/ "", /*fileToRename*/ "/a.ts", range);
+    verify.renameInfoSucceeded(/*displayName*/ "/a.ts", /*fullDisplayName*/ "./a", /*kind*/ "module", /*kindModifiers*/ "", /*fileToRename*/ "/a.ts", range);
     verify.renameInfoFailed("You cannot rename this element.", { allowRenameOfImportPath: false });
 }

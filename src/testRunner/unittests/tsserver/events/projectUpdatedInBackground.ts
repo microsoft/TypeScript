@@ -1,9 +1,10 @@
 import * as ts from "../../../_namespaces/ts";
 
 import {
+    jsonToReadableText,
+} from "../../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     createSessionWithCustomEventHandler,
     openFilesForSession,
     TestSession,
@@ -51,7 +52,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 it(subScenario, () => {
                     const config: File = {
                         path: "/users/username/projects/project/tsconfig.json",
-                        content: JSON.stringify({
+                        content: jsonToReadableText({
                             compilerOptions,
                         }),
                     };
@@ -124,7 +125,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 const additionalFiles = getAdditionalFileOrFolder ? getAdditionalFileOrFolder() : [];
                 const configFile = {
                     path: configFilePath,
-                    content: JSON.stringify(configObj || { compilerOptions: {} }),
+                    content: jsonToReadableText(configObj || { compilerOptions: {} }),
                 };
 
                 const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];
@@ -377,7 +378,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                     };
                     const configFile: File = {
                         path: rootFolder + "a/b/project/tsconfig.json",
-                        content: JSON.stringify({ compilerOptions: { typeRoots: [] } }),
+                        content: jsonToReadableText({ compilerOptions: { typeRoots: [] } }),
                     };
 
                     const host = createServerHost([file1, file3, libFile, configFile]);
@@ -407,19 +408,14 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
     describe("when event handler is not set but session is created with canUseEvents = true", () => {
         describe("without noGetErrOnBackgroundUpdate, diagnostics for open files are queued", () => {
             verifyProjectsUpdatedInBackgroundEvent("without noGetErrOnBackgroundUpdate", host =>
-                createSession(host, {
-                    canUseEvents: true,
-                    logger: createLoggerWithInMemoryLogs(host),
+                new TestSession({
+                    host,
+                    noGetErrOnBackgroundUpdate: false,
                 }));
         });
 
         describe("with noGetErrOnBackgroundUpdate, diagnostics for open file are not queued", () => {
-            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", host =>
-                createSession(host, {
-                    canUseEvents: true,
-                    logger: createLoggerWithInMemoryLogs(host),
-                    noGetErrOnBackgroundUpdate: true,
-                }));
+            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", host => new TestSession(host));
         });
     });
 });

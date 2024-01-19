@@ -14,7 +14,7 @@ requiredInitializedParameter1.ts(16,1): error TS2554: Expected 3 arguments, but 
     f4(0, 1, 2);
     
     f1(0, 1);
-    ~~~~~~~~
+    ~~
 !!! error TS2554: Expected 3 arguments, but got 2.
 !!! related TS6210 requiredInitializedParameter1.ts:1:23: An argument for 'c' was not provided.
     f2(0, 1);
@@ -22,7 +22,7 @@ requiredInitializedParameter1.ts(16,1): error TS2554: Expected 3 arguments, but 
     f4(0, 1);
     
     f1(0);
-    ~~~~~
+    ~~
 !!! error TS2554: Expected 3 arguments, but got 1.
 !!! related TS6210 requiredInitializedParameter1.ts:1:16: An argument for 'b' was not provided.
     f2(0);

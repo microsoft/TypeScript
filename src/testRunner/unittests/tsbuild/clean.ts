@@ -3,6 +3,9 @@ import {
 } from "../../_namespaces/ts";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc";
@@ -19,7 +22,7 @@ describe("unittests:: tsbuild - clean::", () => {
             loadProjectFromFiles({
                 "/src/index.js": "",
                 "/src/bar.ts": "",
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { allowJs: true },
                 }),
             }),
@@ -31,7 +34,7 @@ describe("unittests:: tsbuild - clean::", () => {
         fs: () =>
             loadProjectFromFiles({
                 "/src/project/src/main.tsx": "export const x = 10;",
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: { declaration: true },
                     include: ["src/**/*.tsx", "src/**/*.ts"],
                 }),

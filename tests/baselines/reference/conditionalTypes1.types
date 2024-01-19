@@ -436,37 +436,37 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 
     zeroOf(5);  // 0
 >zeroOf(5) : 0
->zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
 >5 : 5
 
     zeroOf("hello");  // ""
 >zeroOf("hello") : ""
->zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
 >"hello" : "hello"
 
     zeroOf(true);  // false
 >zeroOf(true) : false
->zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
 >true : true
 
     zeroOf(n);  // 0
 >zeroOf(n) : 0
->zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
 >n : number
 
     zeroOf(b);  // False
 >zeroOf(b) : false
->zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
 >b : boolean
 
     zeroOf(x);  // 0 | false
 >zeroOf(x) : false | 0
->zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
 >x : number | boolean
 
     zeroOf(y);  // ZeroOf<T>
 >zeroOf(y) : ZeroOf<T>
->zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
+>zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
 >y : T
 }
 
@@ -789,8 +789,8 @@ type Baz<T> = Foo<T>;
 >Baz : Baz<T>
 
 const convert2 = <T>(value: Foo<T>): Baz<T> => value;
->convert2 : <T>(value: Foo<T>) => Foo<T>
-><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Foo<T>
+>convert2 : <T>(value: Foo<T>) => Baz<T>
+><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Baz<T>
 >value : Foo<T>
 >value : Foo<T>
 
@@ -915,10 +915,10 @@ function f50() {
 >false : false
 
     type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
->Omit : { [P in keyof T]: (T[P] extends never ? never : false) extends false ? P : never; }[keyof T]
+>Omit : { [P in keyof T]: (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends never ? never : false : never : never) extends infer T_2 ? T_2 extends (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends never ? never : false : never : never) ? T_2 extends false ? P : never : never : never; }[keyof T]
 
     type Omit2<T extends object, U = never> = { [P in keyof T]: If<Eq<T[P], U>, never, P>; }[keyof T];
->Omit2 : { [P in keyof T]: (T[P] extends U ? U extends T[P] ? true : false : false) extends false ? P : never; }[keyof T]
+>Omit2 : { [P in keyof T]: (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends U ? U extends T_1 ? true : false : false : never : never) extends infer T_2 ? T_2 extends (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends U ? U extends T_1 ? true : false : false : never : never) ? T_2 extends false ? P : never : never : never; }[keyof T]
 
     type A = Omit<{ a: void; b: never; }>;  // 'a'
 >A : "a"

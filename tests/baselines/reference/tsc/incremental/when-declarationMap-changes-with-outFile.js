@@ -22,7 +22,14 @@ const x = 10;
 const y = 10;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"noEmitOnError":true,"declaration":true,"composite":true,"outFile":"../outFile.js"}}
+{
+  "compilerOptions": {
+    "noEmitOnError": true,
+    "declaration": true,
+    "composite": true,
+    "outFile": "../outFile.js"
+  }
+}
 
 
 

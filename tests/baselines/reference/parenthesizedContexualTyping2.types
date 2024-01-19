@@ -14,18 +14,18 @@ type FuncType = (x: <T>(p: T) => T) => typeof x;
 >x : <T>(p: T) => T
 
 function fun<T>(f: FuncType, x: T): T;
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >f : FuncType
 >x : T
 
 function fun<T>(f: FuncType, g: FuncType, x: T): T;
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T_1>(f: FuncType, x: T_1): T_1; <T>(f: FuncType, g: FuncType, x: T): T; }
 >f : FuncType
 >g : FuncType
 >x : T
 
 function fun<T>(...rest: any[]): T {
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T_1>(f: FuncType, x: T_1): T_1; <T_2>(f: FuncType, g: FuncType, x: T_2): T_2; }
 >rest : any[]
 
     return undefined;
@@ -35,7 +35,7 @@ function fun<T>(...rest: any[]): T {
 var a = fun(x => { x<number>(undefined); return x; }, 10);
 >a : number
 >fun(x => { x<number>(undefined); return x; }, 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
 >x<number>(undefined) : number
@@ -47,7 +47,7 @@ var a = fun(x => { x<number>(undefined); return x; }, 10);
 var b = fun((x => { x<number>(undefined); return x; }), 10);
 >b : number
 >fun((x => { x<number>(undefined); return x; }), 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
@@ -60,7 +60,7 @@ var b = fun((x => { x<number>(undefined); return x; }), 10);
 var c = fun(((x => { x<number>(undefined); return x; })), 10);
 >c : number
 >fun(((x => { x<number>(undefined); return x; })), 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -74,7 +74,7 @@ var c = fun(((x => { x<number>(undefined); return x; })), 10);
 var d = fun((((x => { x<number>(undefined); return x; }))), 10);
 >d : number
 >fun((((x => { x<number>(undefined); return x; }))), 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >(((x => { x<number>(undefined); return x; }))) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -89,7 +89,7 @@ var d = fun((((x => { x<number>(undefined); return x; }))), 10);
 var e = fun(x => { x<number>(undefined); return x; }, x => { x<number>(undefined); return x; }, 10);
 >e : number
 >fun(x => { x<number>(undefined); return x; }, x => { x<number>(undefined); return x; }, 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
 >x<number>(undefined) : number
@@ -107,7 +107,7 @@ var e = fun(x => { x<number>(undefined); return x; }, x => { x<number>(undefined
 var f = fun((x => { x<number>(undefined); return x; }),(x => { x<number>(undefined); return x; }), 10);
 >f : number
 >fun((x => { x<number>(undefined); return x; }),(x => { x<number>(undefined); return x; }), 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
@@ -127,7 +127,7 @@ var f = fun((x => { x<number>(undefined); return x; }),(x => { x<number>(undefin
 var g = fun(((x => { x<number>(undefined); return x; })),((x => { x<number>(undefined); return x; })), 10);
 >g : number
 >fun(((x => { x<number>(undefined); return x; })),((x => { x<number>(undefined); return x; })), 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -149,7 +149,7 @@ var g = fun(((x => { x<number>(undefined); return x; })),((x => { x<number>(unde
 var h = fun((((x => { x<number>(undefined); return x; }))),((x => { x<number>(undefined); return x; })), 10);
 >h : number
 >fun((((x => { x<number>(undefined); return x; }))),((x => { x<number>(undefined); return x; })), 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >(((x => { x<number>(undefined); return x; }))) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
@@ -173,7 +173,7 @@ var h = fun((((x => { x<number>(undefined); return x; }))),((x => { x<number>(un
 var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined), 10);
 >i : number
 >fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined), 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >(Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined) : (x: <T>(p: T) => T) => any
 >Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined : (x: <T>(p: T) => T) => any
 >Math.random() < 0.5 : boolean
@@ -196,7 +196,7 @@ var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x 
 var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), 10);
 >j : number
 >fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : (x: <T>(p: T) => T) => any
 >Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : (x: <T>(p: T) => T) => any
 >Math.random() < 0.5 : boolean
@@ -221,7 +221,7 @@ var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), x => { x<number>(undefined); return x; }, 10);
 >k : number
 >fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)), x => { x<number>(undefined); return x; }, 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : (x: <T>(p: T) => T) => any
 >Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : (x: <T>(p: T) => T) => any
 >Math.random() < 0.5 : boolean
@@ -252,7 +252,7 @@ var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))),((x => { x<number>(undefined); return x; })), 10);
 >l : number
 >fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))),((x => { x<number>(undefined); return x; })), 10) : 10
->fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
+>fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 >((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))) : (x: <T>(p: T) => T) => any
 >(Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined))) : (x: <T>(p: T) => T) => any
 >Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)) : (x: <T>(p: T) => T) => any

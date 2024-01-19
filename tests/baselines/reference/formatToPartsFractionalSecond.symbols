@@ -5,7 +5,7 @@ new Intl.DateTimeFormat().formatToParts().find((val) => val.type === 'fractional
 >new Intl.DateTimeFormat().formatToParts().find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >new Intl.DateTimeFormat().formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
 >Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --) ... and 4 more)
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
 >DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2021.intl.d.ts, --, --))
 >formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
 >find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))

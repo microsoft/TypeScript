@@ -8,7 +8,7 @@
 ////
 //// declare function addListener<K extends keyof Events>(type: K, listener: (ev: Events[K]) => any): void;
 ////
-//// /*1*/addListener("/*2*/")/*3*/
+//// /*1*/addListener/*2*/("/*3*/")
 
-verify.completions({ marker: ["2"], exact: ["click", "drag"] });
-verify.errorExistsBetweenMarkers("1", "3");
+verify.completions({ marker: ["3"], exact: ["click", "drag"] });
+verify.errorExistsBetweenMarkers("1", "2");

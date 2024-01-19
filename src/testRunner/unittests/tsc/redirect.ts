@@ -1,4 +1,7 @@
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
@@ -11,7 +14,7 @@ describe("unittests:: tsc:: redirect::", () => {
         subScenario: "when redirecting ts file",
         fs: () =>
             loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({
+                "/src/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
                         outDir: "out",
                     },
@@ -22,14 +25,14 @@ describe("unittests:: tsc:: redirect::", () => {
                 }),
                 "/src/project/copy1/node_modules/target/index.ts": "export const a = 1;",
                 "/src/project/copy1/node_modules/target/import.ts": `import {} from "./";`,
-                "/src/project/copy1/node_modules/target/package.json": JSON.stringify({
+                "/src/project/copy1/node_modules/target/package.json": jsonToReadableText({
                     name: "target",
                     version: "1.0.0",
                     main: "index.js",
                 }),
                 "/src/project/copy2/node_modules/target/index.ts": "export const a = 1;",
                 "/src/project/copy2/node_modules/target/import.ts": `import {} from "./";`,
-                "/src/project/copy2/node_modules/target/package.json": JSON.stringify({
+                "/src/project/copy2/node_modules/target/package.json": jsonToReadableText({
                     name: "target",
                     version: "1.0.0",
                     main: "index.js",

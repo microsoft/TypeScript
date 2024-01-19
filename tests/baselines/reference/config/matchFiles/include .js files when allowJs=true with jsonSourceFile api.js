@@ -1,11 +1,11 @@
 config:
 {
- "compilerOptions": {
-  "allowJs": true
- },
- "include": [
-  "js/*"
- ]
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "include": [
+    "js/*"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -81,31 +81,31 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "allowJs": true,
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/js/a.js",
-  "c:/dev/js/b.js"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "compilerOptions": {
-   "allowJs": true
+  "options": {
+    "allowJs": true,
+    "configFilePath": "c:/dev/tsconfig.json"
   },
-  "include": [
-   "js/*"
-  ]
- },
- "wildcardDirectories": {
-  "c:/dev/js": "WatchDirectoryFlags.None"
- },
- "compileOnSave": false
+  "fileNames": [
+    "c:/dev/js/a.js",
+    "c:/dev/js/b.js"
+  ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "compilerOptions": {
+      "allowJs": true
+    },
+    "include": [
+      "js/*"
+    ]
+  },
+  "wildcardDirectories": {
+    "c:/dev/js": "WatchDirectoryFlags.None"
+  },
+  "compileOnSave": false
 }
 Errors::
 

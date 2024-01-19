@@ -157,7 +157,8 @@ export class TypingsCache {
     }
 
     onProjectClosed(project: Project) {
-        this.perProjectCache.delete(project.getProjectName());
-        this.installer.onProjectClosed(project);
+        if (this.perProjectCache.delete(project.getProjectName())) {
+            this.installer.onProjectClosed(project);
+        }
     }
 }

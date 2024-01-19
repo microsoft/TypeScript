@@ -1,9 +1,9 @@
 config:
 {
- "files": [
-  "z.ts",
-  "x.ts"
- ]
+  "files": [
+    "z.ts",
+    "x.ts"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -79,27 +79,27 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/z.ts",
-  "c:/dev/x.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "files": [
-   "z.ts",
-   "x.ts"
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/z.ts",
+    "c:/dev/x.ts"
   ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "files": [
+      "z.ts",
+      "x.ts"
+    ],
+    "compileOnSave": false
+  },
+  "wildcardDirectories": {},
   "compileOnSave": false
- },
- "wildcardDirectories": {},
- "compileOnSave": false
 }
 Errors::
 

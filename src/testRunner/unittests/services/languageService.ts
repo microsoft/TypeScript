@@ -5,6 +5,9 @@ import {
 import * as ts from "../../_namespaces/ts";
 
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     createServerHost,
     File,
     libFile,
@@ -153,7 +156,7 @@ export function Component(x: Config): any;`,
         function setup(useSourceOfProjectReferenceRedirect: (() => boolean) | undefined) {
             const config1: File = {
                 path: `/user/username/projects/myproject/projects/project1/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,
@@ -171,7 +174,7 @@ export function Component(x: Config): any;`,
             };
             const config2: File = {
                 path: `/user/username/projects/myproject/projects/project2/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         composite: true,

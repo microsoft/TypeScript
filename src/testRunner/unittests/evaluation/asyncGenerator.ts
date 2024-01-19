@@ -62,4 +62,25 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
             { done: true, value: undefined },
         ]);
     });
+    it("pass promise to gen.return()", async () => {
+        const result = evaluator.evaluateTypeScript(
+            `
+        export const output = [];
+        async function* fn() {
+            yield* [1]
+            return 3
+        }
+        export async function main() {
+            const it = fn();
+            output.push(await it.next());
+            output.push(await it.return(Promise.resolve(2)));
+        }`,
+            { target: ts.ScriptTarget.ES2017 },
+        );
+        await result.main();
+        assert.deepEqual(result.output, [
+            { done: false, value: 1 },
+            { done: true, value: 2 },
+        ]);
+    });
 });

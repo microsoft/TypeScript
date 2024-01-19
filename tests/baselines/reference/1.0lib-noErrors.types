@@ -1886,7 +1886,7 @@ interface Array<T> {
 >n : number
 }
 declare var Array: {
->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: Array<any>; }
+>Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T_1>(...items: T_1[]): T_1[]; new (arrayLength?: number): any[]; new <T_2>(arrayLength: number): T_2[]; new <T_3>(...items: T_3[]): T_3[]; isArray(arg: any): boolean; prototype: Array<any>; }
 
     new (arrayLength?: number): any[];
 >arrayLength : number

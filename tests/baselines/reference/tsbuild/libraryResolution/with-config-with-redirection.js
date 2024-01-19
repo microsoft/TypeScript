@@ -112,7 +112,19 @@ export const file = 10;
 export const x = "type1";
 
 //// [/home/src/projects/project1/tsconfig.json]
-{"compilerOptions":{"composite":true,"typeRoots":["./typeroot1"],"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "typeRoots": [
+      "./typeroot1"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project1/typeroot1/sometype/index.d.ts]
 export type TheNum = "type1";
@@ -124,7 +136,16 @@ export const y = 10;
 export const y = 10
 
 //// [/home/src/projects/project2/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project2/utils.d.ts]
 export const y = 10;
@@ -133,7 +154,16 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project3/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["es5","dom"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "es5",
+      "dom"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project3/utils.d.ts]
 export const y = 10;
@@ -142,7 +172,17 @@ export const y = 10;
 export const z = 10
 
 //// [/home/src/projects/project4/tsconfig.json]
-{"compilerOptions":{"composite":true,"lib":["esnext","dom","webworker"],"traceResolution":true}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "lib": [
+      "esnext",
+      "dom",
+      "webworker"
+    ],
+    "traceResolution": true
+  }
+}
 
 //// [/home/src/projects/project4/utils.d.ts]
 export const y = 10;
@@ -352,8 +392,27 @@ project4/index.ts
 project4/utils.d.ts
   Matched by default include pattern '**/*'
 exitCode:: ExitStatus.Success
-Program root files: ["/home/src/projects/project1/core.d.ts","/home/src/projects/project1/file.ts","/home/src/projects/project1/file2.ts","/home/src/projects/project1/index.ts","/home/src/projects/project1/utils.d.ts","/home/src/projects/project1/typeroot1/sometype/index.d.ts"]
-Program options: {"composite":true,"typeRoots":["/home/src/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"configFilePath":"/home/src/projects/project1/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project1/core.d.ts",
+  "/home/src/projects/project1/file.ts",
+  "/home/src/projects/project1/file2.ts",
+  "/home/src/projects/project1/index.ts",
+  "/home/src/projects/project1/utils.d.ts",
+  "/home/src/projects/project1/typeroot1/sometype/index.d.ts"
+]
+Program options: {
+  "composite": true,
+  "typeRoots": [
+    "/home/src/projects/project1/typeroot1"
+  ],
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/home/src/projects/project1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
@@ -391,8 +450,20 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project1/typeroot1/sometype/index.d.ts (used version)
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts (used version)
 
-Program root files: ["/home/src/projects/project2/index.ts","/home/src/projects/project2/utils.d.ts"]
-Program options: {"composite":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"configFilePath":"/home/src/projects/project2/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project2/index.ts",
+  "/home/src/projects/project2/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/home/src/projects/project2/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -412,8 +483,20 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project2/index.ts (computed .d.ts during emit)
 /home/src/projects/project2/utils.d.ts (used version)
 
-Program root files: ["/home/src/projects/project3/index.ts","/home/src/projects/project3/utils.d.ts"]
-Program options: {"composite":true,"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"explainFiles":true,"configFilePath":"/home/src/projects/project3/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project3/index.ts",
+  "/home/src/projects/project3/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "lib": [
+    "lib.es5.d.ts",
+    "lib.dom.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/home/src/projects/project3/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
@@ -433,8 +516,21 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project3/index.ts (computed .d.ts during emit)
 /home/src/projects/project3/utils.d.ts (used version)
 
-Program root files: ["/home/src/projects/project4/index.ts","/home/src/projects/project4/utils.d.ts"]
-Program options: {"composite":true,"lib":["lib.esnext.d.ts","lib.dom.d.ts","lib.webworker.d.ts"],"traceResolution":true,"explainFiles":true,"configFilePath":"/home/src/projects/project4/tsconfig.json"}
+Program root files: [
+  "/home/src/projects/project4/index.ts",
+  "/home/src/projects/project4/utils.d.ts"
+]
+Program options: {
+  "composite": true,
+  "lib": [
+    "lib.esnext.d.ts",
+    "lib.dom.d.ts",
+    "lib.webworker.d.ts"
+  ],
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/home/src/projects/project4/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts

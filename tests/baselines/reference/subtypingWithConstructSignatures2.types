@@ -643,7 +643,7 @@ var r13b = [r13arg2, r13arg1];
 >r13arg1 : new <T extends Derived[]>(x: Base[], y: T) => T
 
 var r14arg1: new <T>(x: { a: T; b: T }) => T;
->r14arg1 : new <T>(x: { a: T; b: T; }) => T
+>r14arg1 : new <T>(x: {    a: T;    b: T;}) => T
 >x : { a: T; b: T; }
 >a : T
 >b : T

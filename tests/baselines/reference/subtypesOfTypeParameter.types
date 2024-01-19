@@ -216,20 +216,20 @@ function f2<T, U>(x: T, y: U) {
 >() => { } : () => void
 
     var r8 = true ? <T>(x: T) => { return x } : x;
->r8 : T | (<T>(x: T) => T)
->true ? <T>(x: T) => { return x } : x : T | (<T>(x: T) => T)
+>r8 : T | (<T_1>(x: T_1) => T_1)
+>true ? <T>(x: T) => { return x } : x : T | (<T_1>(x: T_1) => T_1)
 >true : true
-><T>(x: T) => { return x } : <T>(x: T) => T
+><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 >x : T
 >x : T
 >x : T
 
     var r8b = true ? x : <T>(x: T) => { return x }; // type parameters not identical across declarations
->r8b : T | (<T>(x: T) => T)
->true ? x : <T>(x: T) => { return x } : T | (<T>(x: T) => T)
+>r8b : T | (<T_1>(x: T_1) => T_1)
+>true ? x : <T>(x: T) => { return x } : T | (<T_1>(x: T_1) => T_1)
 >true : true
 >x : T
-><T>(x: T) => { return x } : <T>(x: T) => T
+><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
 >x : T
 >x : T
 
@@ -359,18 +359,18 @@ function f2<T, U>(x: T, y: U) {
 >a : T
 
         var r17 = true ? x : a;
->r17 : T | T
->true ? x : a : T | T
+>r17 : T_1 | T
+>true ? x : a : T_1 | T
 >true : true
->x : T
+>x : T_1
 >a : T
 
         var r17 = true ? a : x;
->r17 : T | T
->true ? a : x : T | T
+>r17 : T_1 | T
+>true ? a : x : T_1 | T
 >true : true
 >a : T
->x : T
+>x : T_1
     }
 
     function f18<T, U extends T>(a: U) {
@@ -378,18 +378,18 @@ function f2<T, U>(x: T, y: U) {
 >a : U
 
         var r18 = true ? x : a;
->r18 : T | U
->true ? x : a : T | U
+>r18 : T_1 | U
+>true ? x : a : T_1 | U
 >true : true
->x : T
+>x : T_1
 >a : U
 
         var r18 = true ? a : x;
->r18 : T | U
->true ? a : x : T | U
+>r18 : T_1 | U
+>true ? a : x : T_1 | U
 >true : true
 >a : U
->x : T
+>x : T_1
     }
 
     var r19 = true ? new Object() : x; // BCT is Object

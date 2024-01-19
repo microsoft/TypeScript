@@ -133,13 +133,13 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         const fileFromCache = sourceFileLike.get(path);
         if (fileFromCache !== undefined) return fileFromCache ? fileFromCache : undefined;
 
-        if (!host.readFile || host.fileExists && !host.fileExists(path)) {
+        if (!host.readFile || host.fileExists && !host.fileExists(fileName)) {
             sourceFileLike.set(path, false);
             return undefined;
         }
 
         // And failing that, check the disk
-        const text = host.readFile(path);
+        const text = host.readFile(fileName);
         const file = text ? createSourceFileLike(text) : false;
         sourceFileLike.set(path, file);
         return file ? file : undefined;

@@ -19,22 +19,61 @@ declare const console: { log(msg: any): void; };
 export const a: Unrestricted = 1;
 
 //// [/src/shared/tsconfig-base.json]
-{"include":["./typings-base/"]}
+{
+  "include": [
+    "./typings-base/"
+  ]
+}
 
 //// [/src/shared/tsconfig.json]
-{"extends":"./tsconfig-base.json","compilerOptions":{"composite":true,"outDir":"../target-tsc-build/","rootDir":".."},"files":["./index.ts"]}
+{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../target-tsc-build/",
+    "rootDir": ".."
+  },
+  "files": [
+    "./index.ts"
+  ]
+}
 
 //// [/src/shared/typings-base/globals.d.ts]
 type Unrestricted = any;
 
 //// [/src/tsconfig.json]
-{"references":[{"path":"./shared/tsconfig.json"},{"path":"./webpack/tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./shared/tsconfig.json"
+    },
+    {
+      "path": "./webpack/tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 //// [/src/webpack/index.ts]
 export const b: Unrestricted = 1;
 
 //// [/src/webpack/tsconfig.json]
-{"extends":"../shared/tsconfig-base.json","compilerOptions":{"composite":true,"outDir":"../target-tsc-build/","rootDir":".."},"files":["./index.ts"],"references":[{"path":"../shared/tsconfig.json"}]}
+{
+  "extends": "../shared/tsconfig-base.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../target-tsc-build/",
+    "rootDir": ".."
+  },
+  "files": [
+    "./index.ts"
+  ],
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
+}
 
 
 

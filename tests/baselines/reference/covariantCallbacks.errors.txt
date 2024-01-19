@@ -23,9 +23,18 @@ covariantCallbacks.ts(69,5): error TS2322: Type 'AList4' is not assignable to ty
       Types of parameters 'cb' and 'cb' are incompatible.
         Types of parameters 'item' and 'item' are incompatible.
           Type 'A' is not assignable to type 'B'.
+covariantCallbacks.ts(98,1): error TS2322: Type 'SetLike1<(x: string) => void>' is not assignable to type 'SetLike1<(x: unknown) => void>'.
+  Type '(x: string) => void' is not assignable to type '(x: unknown) => void'.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'unknown' is not assignable to type 'string'.
+covariantCallbacks.ts(106,1): error TS2322: Type 'SetLike2<(x: string) => void>' is not assignable to type 'SetLike1<(x: unknown) => void>'.
+  The types returned by 'get()' are incompatible between these types.
+    Type '(x: string) => void' is not assignable to type '(x: unknown) => void'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'unknown' is not assignable to type 'string'.
 
 
-==== covariantCallbacks.ts (6 errors) ====
+==== covariantCallbacks.ts (8 errors) ====
     // Test that callback parameters are related covariantly
     
     interface P<T> {
@@ -128,4 +137,52 @@ covariantCallbacks.ts(69,5): error TS2322: Type 'AList4' is not assignable to ty
 !!! error TS2322:         Types of parameters 'item' and 'item' are incompatible.
 !!! error TS2322:           Type 'A' is not assignable to type 'B'.
     }
+    
+    // Repro from #51620
+    
+    type Bivar<T> = { set(value: T): void }
+    
+    declare let bu: Bivar<unknown>;
+    declare let bs: Bivar<string>;
+    bu = bs;
+    bs = bu;
+    
+    declare let bfu: Bivar<(x: unknown) => void>;
+    declare let bfs: Bivar<(x: string) => void>;
+    bfu = bfs;
+    bfs = bfu;
+    
+    type Bivar1<T> = { set(value: T): void }
+    type Bivar2<T> = { set(value: T): void }
+    
+    declare let b1fu: Bivar1<(x: unknown) => void>;
+    declare let b2fs: Bivar2<(x: string) => void>;
+    b1fu = b2fs;
+    b2fs = b1fu;
+    
+    type SetLike<T> = { set(value: T): void, get(): T }
+    
+    declare let sx: SetLike1<(x: unknown) => void>;
+    declare let sy: SetLike1<(x: string) => void>;
+    sx = sy;  // Error
+    ~~
+!!! error TS2322: Type 'SetLike1<(x: string) => void>' is not assignable to type 'SetLike1<(x: unknown) => void>'.
+!!! error TS2322:   Type '(x: string) => void' is not assignable to type '(x: unknown) => void'.
+!!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:       Type 'unknown' is not assignable to type 'string'.
+    sy = sx;
+    
+    type SetLike1<T> = { set(value: T): void, get(): T }
+    type SetLike2<T> = { set(value: T): void, get(): T }
+    
+    declare let s1: SetLike1<(x: unknown) => void>;
+    declare let s2: SetLike2<(x: string) => void>;
+    s1 = s2;  // Error
+    ~~
+!!! error TS2322: Type 'SetLike2<(x: string) => void>' is not assignable to type 'SetLike1<(x: unknown) => void>'.
+!!! error TS2322:   The types returned by 'get()' are incompatible between these types.
+!!! error TS2322:     Type '(x: string) => void' is not assignable to type '(x: unknown) => void'.
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:         Type 'unknown' is not assignable to type 'string'.
+    s2 = s1;
     

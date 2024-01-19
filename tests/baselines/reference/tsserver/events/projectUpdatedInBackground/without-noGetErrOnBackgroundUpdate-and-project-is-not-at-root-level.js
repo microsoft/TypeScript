@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/rootfolder/otherfolder/a/b/project/file1.ts]
 import a from "file2"
@@ -21,7 +21,11 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json]
-{"compilerOptions":{"typeRoots":[]}}
+{
+  "compilerOptions": {
+    "typeRoots": []
+  }
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -39,13 +43,13 @@ Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/rootfolde
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingStart",
-     "body": {
-      "projectName": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json",
-      "reason": "Creating possible configured project for /user/username/rootfolder/otherfolder/a/b/project/file1.ts to open"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/rootfolder/otherfolder/a/b/project/file1.ts to open"
+      }
     }
 Info seq  [hh:mm:ss:mss] Config: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json : {
  "rootNames": [
@@ -90,66 +94,66 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingFinish",
-     "body": {
-      "projectName": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json"
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "telemetry",
-     "body": {
-      "telemetryEventName": "projectInfo",
-      "payload": {
-       "projectId": "79b1a0103ed8006f174a1f979cf698219d4ec4ae3a48594da1085f7a1749553c",
-       "fileStats": {
-        "js": 0,
-        "jsSize": 0,
-        "jsx": 0,
-        "jsxSize": 0,
-        "ts": 2,
-        "tsSize": 39,
-        "tsx": 0,
-        "tsxSize": 0,
-        "dts": 1,
-        "dtsSize": 334,
-        "deferred": 0,
-        "deferredSize": 0
-       },
-       "compilerOptions": {
-        "typeRoots": []
-       },
-       "typeAcquisition": {
-        "enable": false,
-        "include": false,
-        "exclude": false
-       },
-       "extends": false,
-       "files": false,
-       "include": false,
-       "exclude": false,
-       "compileOnSave": false,
-       "configFileName": "tsconfig.json",
-       "projectType": "configured",
-       "languageServiceEnabled": true,
-       "version": "FakeVersion"
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json"
       }
-     }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "configFileDiag",
-     "body": {
-      "triggerFile": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts",
-      "configFile": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "79b1a0103ed8006f174a1f979cf698219d4ec4ae3a48594da1085f7a1749553c",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 39,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "typeRoots": []
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts",
+        "configFile": "/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -199,6 +203,10 @@ Before running Timeout callback:: count: 2
 export class c { }export class d {}
 
 
+Timeout callback:: count: 2
+1: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -226,20 +234,23 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
+        ]
+      }
     }
 After running Timeout callback:: count: 1
-3: checkOne
+
+Timeout callback:: count: 1
+3: checkOne *new*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation
@@ -285,6 +296,10 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/project:
   {}
 
+Timeout callback:: count: 2
+3: checkOne
+6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation *new*
+
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
@@ -316,16 +331,15 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "/user/username/rootfolder/otherfolder/a/b/project/file1.ts",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 1
-7: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /user/username/rootfolder/otherfolder/a/b/project/node_modules:
@@ -353,6 +367,13 @@ FsWatchesRecursive::
 /user/username/rootfolder/otherfolder/a/b/project:
   {}
 
+Timeout callback:: count: 1
+6: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.jsonFailedLookupInvalidation *deleted*
+7: *ensureProjectForOpenFiles* *new*
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Timeout callback:: count: 1
 7: *ensureProjectForOpenFiles*
 
@@ -373,17 +394,23 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/rootfolder/otherfolder/a/b/project/file1.ts
+Info seq  [hh:mm:ss:mss] Queueing diagnostics update for /user/username/rootfolder/otherfolder/a/b/project/file1.ts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/user/username/rootfolder/otherfolder/a/b/project/file1.ts"
+        ]
+      }
     }
 After running Timeout callback:: count: 1
-8: checkOne
+
+Timeout callback:: count: 1
+8: checkOne *new*
+
+Immedidate callback:: count: 0
+1: semanticCheck *deleted*

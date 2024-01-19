@@ -1,0 +1,293 @@
+//// [tests/cases/compiler/controlFlowInstanceofWithSymbolHasInstance.ts] ////
+
+=== controlFlowInstanceofWithSymbolHasInstance.ts ===
+interface PromiseConstructor {
+>PromiseConstructor : Symbol(PromiseConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 0, 0))
+
+    [Symbol.hasInstance](value: any): value is Promise<any>;
+>[Symbol.hasInstance] : Symbol(PromiseConstructor[Symbol.hasInstance], Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 0, 30))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 1, 25))
+>value : Symbol(value, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 1, 25))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}
+
+interface SetConstructor {
+>SetConstructor : Symbol(SetConstructor, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 2, 1))
+
+    [Symbol.hasInstance](value: any): value is Set<any>;
+>[Symbol.hasInstance] : Symbol(SetConstructor[Symbol.hasInstance], Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 4, 26))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 5, 25))
+>value : Symbol(value, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 5, 25))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}
+
+function f1(s: Set<string> | Set<number>) {
+>f1 : Symbol(f1, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 6, 1))
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 8, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    s = new Set<number>();
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 8, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    s;  // Set<number>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 8, 12))
+
+    if (s instanceof Set) {
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 8, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        s;  // Set<number>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 8, 12))
+    }
+    s;  // Set<number>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 8, 12))
+
+    s.add(42);
+>s.add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 8, 12))
+>add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
+}
+
+function f2(s: Set<string> | Set<number>) {
+>f2 : Symbol(f2, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 16, 1))
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 18, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    s = new Set<number>();
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 18, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    s;  // Set<number>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 18, 12))
+
+    if (s instanceof Promise) {
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 18, 12))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        s;  // Set<number> & Promise<any>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 18, 12))
+    }
+    s;  // Set<number>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 18, 12))
+
+    s.add(42);
+>s.add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 18, 12))
+>add : Symbol(Set.add, Decl(lib.es2015.collection.d.ts, --, --))
+}
+
+function f3(s: Set<string> | Set<number>) {
+>f3 : Symbol(f3, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 26, 1))
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 28, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    s;  // Set<string> | Set<number>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 28, 12))
+
+    if (s instanceof Set) {
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 28, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        s;  // Set<string> | Set<number>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 28, 12))
+    }
+    else {
+        s;  // never
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 28, 12))
+    }
+}
+
+function f4(s: Set<string> | Set<number>) {
+>f4 : Symbol(f4, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 36, 1))
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 38, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    s = new Set<number>();
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 38, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    s;  // Set<number>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 38, 12))
+
+    if (s instanceof Set) {
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 38, 12))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+        s;  // Set<number>
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 38, 12))
+    }
+    else {
+        s;  // never
+>s : Symbol(s, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 38, 12))
+    }
+}
+
+// More tests
+
+class A {
+>A : Symbol(A, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 47, 1))
+
+    a: string;
+>a : Symbol(A.a, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 51, 9))
+
+    static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
+>[Symbol.hasInstance] : Symbol(A[Symbol.hasInstance], Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 52, 14))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 53, 32))
+>this : Symbol(this, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 53, 35))
+>T : Symbol(T, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 53, 32))
+>value : Symbol(value, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 53, 43))
+>value : Symbol(value, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 53, 43))
+
+        T extends (abstract new (...args: any) => infer U) ? U :
+>T : Symbol(T, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 53, 32))
+>args : Symbol(args, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 54, 33))
+>U : Symbol(U, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 54, 55))
+>U : Symbol(U, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 54, 55))
+
+        never
+    ) {
+        return Function.prototype[Symbol.hasInstance].call(this, value);
+>Function.prototype[Symbol.hasInstance].call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>Function.prototype : Symbol(FunctionConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>prototype : Symbol(FunctionConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(this, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 53, 35))
+>value : Symbol(value, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 53, 43))
+    }
+}
+class B extends A { b: string }
+>B : Symbol(B, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 59, 1))
+>A : Symbol(A, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 47, 1))
+>b : Symbol(B.b, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 60, 19))
+
+class C extends A { c: string }
+>C : Symbol(C, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 60, 31))
+>A : Symbol(A, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 47, 1))
+>c : Symbol(C.c, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 61, 19))
+
+function foo(x: A | undefined) {
+>foo : Symbol(foo, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 61, 31))
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+>A : Symbol(A, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 47, 1))
+
+    x;  // A | undefined
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+
+    if (x instanceof B || x instanceof C) {
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+>B : Symbol(B, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 59, 1))
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+>C : Symbol(C, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 60, 31))
+
+        x;  // B | C
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+    }
+    x;  // A | undefined
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+
+    if (x instanceof B && x instanceof C) {
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+>B : Symbol(B, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 59, 1))
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+>C : Symbol(C, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 60, 31))
+
+        x;  // B & C
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+    }
+    x;  // A | undefined
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+
+    if (!x) {
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+
+        return;
+    }
+    x;  // A
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+
+    if (x instanceof B) {
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+>B : Symbol(B, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 59, 1))
+
+        x;  // B
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+
+        if (x instanceof C) {
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+>C : Symbol(C, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 60, 31))
+
+            x;  // B & C
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+        }
+        else {
+            x;  // B
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+        }
+        x;  // B
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+    }
+    else {
+        x;  // A
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+    }
+    x;  // A
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 63, 13))
+}
+
+// X is neither assignable to Y nor a subtype of Y
+// Y is assignable to X, but not a subtype of X
+
+interface X {
+>X : Symbol(X, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 91, 1))
+
+    x?: string;
+>x : Symbol(X.x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 96, 13))
+}
+
+class Y {
+>Y : Symbol(Y, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 98, 1))
+
+    y: string;
+>y : Symbol(Y.y, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 100, 9))
+}
+
+function goo(x: X) {
+>goo : Symbol(goo, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 102, 1))
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 104, 13))
+>X : Symbol(X, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 91, 1))
+
+    x;
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 104, 13))
+
+    if (x instanceof Y) {
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 104, 13))
+>Y : Symbol(Y, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 98, 1))
+
+        x.y;
+>x.y : Symbol(Y.y, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 100, 9))
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 104, 13))
+>y : Symbol(Y.y, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 100, 9))
+    }
+    x;
+>x : Symbol(x, Decl(controlFlowInstanceofWithSymbolHasInstance.ts, 104, 13))
+}
+
+

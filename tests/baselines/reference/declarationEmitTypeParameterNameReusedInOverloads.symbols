@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/declarationEmitTypeParameterNameReusedInOverloads.ts] ////
+
+=== declarationEmitTypeParameterNameReusedInOverloads.ts ===
+export class Base { foo: string; }
+>Base : Symbol(Base, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 0, 19))
+
+export class Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 0, 34))
+>Base : Symbol(Base, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 1, 35))
+
+export class Derived2 extends Derived { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 1, 50))
+>Derived : Symbol(Derived, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 0, 34))
+>baz : Symbol(Derived2.baz, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 2, 39))
+
+export type Foo = {
+>Foo : Symbol(Foo, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 2, 54))
+
+    new (x: {
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 5, 9))
+
+        new <T extends Derived>(a: T): T;
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 6, 13))
+>Derived : Symbol(Derived, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 0, 34))
+>a : Symbol(a, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 6, 32))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 6, 13))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 6, 13))
+
+        new <T extends Base>(a: T): T;
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 7, 13))
+>Base : Symbol(Base, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 0, 0))
+>a : Symbol(a, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 7, 29))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 7, 13))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 7, 13))
+
+    }): any[];
+    new (x: {
+>x : Symbol(x, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 9, 9))
+
+        new <T extends Derived2>(a: T): T;
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 10, 13))
+>Derived2 : Symbol(Derived2, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 1, 50))
+>a : Symbol(a, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 10, 33))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 10, 13))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 10, 13))
+
+            new <T extends Base>(a: T): T;
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 11, 17))
+>Base : Symbol(Base, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 0, 0))
+>a : Symbol(a, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 11, 33))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 11, 17))
+>T : Symbol(T, Decl(declarationEmitTypeParameterNameReusedInOverloads.ts, 11, 17))
+
+    }): any[];
+}
+

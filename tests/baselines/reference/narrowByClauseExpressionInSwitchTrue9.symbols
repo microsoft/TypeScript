@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue9.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue9.ts ===
+interface IProps {
+>IProps : Symbol(IProps, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 0, 0))
+
+    one: boolean;
+>one : Symbol(IProps.one, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 0, 18))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 2, 1))
+
+    mine: string = "";
+>mine : Symbol(Foo.mine, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 4, 11))
+
+    myMethod(x: IProps) {
+>myMethod : Symbol(Foo.myMethod, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 5, 22))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 7, 13))
+>IProps : Symbol(IProps, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 0, 0))
+
+        const { one } = x;
+>one : Symbol(one, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 8, 15))
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 7, 13))
+
+        switch (true) {
+            case one:
+>one : Symbol(one, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 8, 15))
+
+                break;
+            default:
+                let x = this.mine;
+>x : Symbol(x, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 13, 19))
+>this.mine : Symbol(Foo.mine, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 4, 11))
+>this : Symbol(Foo, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 2, 1))
+>mine : Symbol(Foo.mine, Decl(narrowByClauseExpressionInSwitchTrue9.ts, 4, 11))
+        }
+    }
+}
+

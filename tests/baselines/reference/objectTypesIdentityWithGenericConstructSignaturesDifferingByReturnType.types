@@ -114,7 +114,7 @@ function foo5(x: typeof b): string; // ok
 >b : { "new"<T>(x: T): T; }
 
 function foo5(x: any): any { }
->foo5 : { (x: new <T>(x: T) => T): number; (x: { "new"<T>(x: T): T; }): string; }
+>foo5 : { (x: new <T>(x: T) => T): number; (x: { "new"<T_1>(x: T_1): T_1; }): string; }
 >x : any
 
 function foo8(x: B<string>);

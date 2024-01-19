@@ -1,0 +1,138 @@
+//// [tests/cases/conformance/controlFlow/dependentDestructuredVariablesFromNestedPatterns.ts] ////
+
+=== dependentDestructuredVariablesFromNestedPatterns.ts ===
+function test1(arg: [[undefined, Error] | [number, undefined]]) {
+>test1 : Symbol(test1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 0, 0))
+>arg : Symbol(arg, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 0, 15))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+  const [[p1, p1Error]] = arg;
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 1, 10))
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 1, 13))
+>arg : Symbol(arg, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 0, 15))
+
+  if (p1Error) {
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 1, 13))
+
+    return;
+  }
+
+  p1;
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 1, 10))
+}
+
+function test2([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
+>test2 : Symbol(test2, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 8, 1))
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 10, 17))
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 10, 20))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+  if (p1Error) {
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 10, 20))
+
+    return;
+  }
+
+  p1;
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 10, 17))
+}
+
+async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
+>myAllSettled : Symbol(myAllSettled, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 16, 1))
+>T : Symbol(T, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 18, 28))
+>fn : Symbol(fn, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 18, 58))
+>T : Symbol(T, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 18, 28))
+
+  const promises = await Promise.allSettled(fn());
+>promises : Symbol(promises, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 19, 7))
+>Promise.allSettled : Symbol(PromiseConstructor.allSettled, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>allSettled : Symbol(PromiseConstructor.allSettled, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+>fn : Symbol(fn, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 18, 58))
+
+  return promises.map((result) =>
+>promises.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>promises : Symbol(promises, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 19, 7))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 21, 23))
+
+    result.status === "fulfilled"
+>result.status : Symbol(status, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+>result : Symbol(result, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 21, 23))
+>status : Symbol(status, Decl(lib.es2020.promise.d.ts, --, --), Decl(lib.es2020.promise.d.ts, --, --))
+
+      ? [result.value, undefined]
+>result.value : Symbol(PromiseFulfilledResult.value, Decl(lib.es2020.promise.d.ts, --, --))
+>result : Symbol(result, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 21, 23))
+>value : Symbol(PromiseFulfilledResult.value, Decl(lib.es2020.promise.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+      : [undefined, new Error(String(result.reason))],
+>undefined : Symbol(undefined)
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 6 more)
+>result.reason : Symbol(PromiseRejectedResult.reason, Decl(lib.es2020.promise.d.ts, --, --))
+>result : Symbol(result, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 21, 23))
+>reason : Symbol(PromiseRejectedResult.reason, Decl(lib.es2020.promise.d.ts, --, --))
+
+  ) as { [K in keyof T]: [Awaited<T[K]>, undefined] | [undefined, Error] };
+>K : Symbol(K, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 25, 10))
+>T : Symbol(T, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 18, 28))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 18, 28))
+>K : Symbol(K, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 25, 10))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+async function test3() {
+>test3 : Symbol(test3, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 26, 1))
+
+  const [[p1, p1Error], _] = await myAllSettled(
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 29, 10))
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 29, 13))
+>_ : Symbol(_, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 29, 23))
+>myAllSettled : Symbol(myAllSettled, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 16, 1))
+
+    () => [Promise.resolve(0), Promise.reject(1)] as const,
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
+>const : Symbol(const)
+
+  );
+
+  if (p1Error) return;
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 29, 13))
+
+  p1;
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 29, 10))
+}
+
+function test4([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
+>test4 : Symbol(test4, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 36, 1))
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 17))
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 20))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+
+  if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    p1 = undefined;
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 17))
+>undefined : Symbol(undefined)
+  }
+  if (p1Error) {
+>p1Error : Symbol(p1Error, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 20))
+
+    return;
+  }
+
+  p1;
+>p1 : Symbol(p1, Decl(dependentDestructuredVariablesFromNestedPatterns.ts, 38, 17))
+}
+

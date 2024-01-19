@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/b/projects/project/src/file1.ts]
 
 
@@ -24,10 +24,30 @@ interface Array<T> { length: number; [n: number]: T; }
 {}
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/projects/project/src/file1.ts",
+        "projectRootPath": "/a/b/projects/project"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /a/b/projects/project/src
 Info seq  [hh:mm:ss:mss] For info: /a/b/projects/project/src/file1.ts :: Config file name: /a/b/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/a/b/projects/project/src/tsconfig.json",
+        "reason": "Creating possible configured project for /a/b/projects/project/src/file1.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /a/b/projects/project/src/tsconfig.json : {
  "rootNames": [
   "/a/b/projects/project/src/file1.ts"
@@ -59,6 +79,67 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/a/b/projects/project/src/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "2e567923a2cc9e23a12e22614a2d8eed877ac4d288450c8e08e7f46c19481f1b",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/a/b/projects/project/src/file1.ts",
+        "configFile": "/a/b/projects/project/src/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -66,6 +147,30 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/projects/project/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/a/b/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/a/b/projects/project/src/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/projects/project/src/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/project/src: *new*
+  {}
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/projects/project/src/tsconfig.json 2:: WatchInfo: /a/b/projects/project/src/tsconfig.json 2000 undefined Project: /a/b/projects/project/src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/project/src/tsconfig.json' (Configured)
@@ -97,9 +202,28 @@ Before running Timeout callback:: count: 1
 1: *ensureProjectForOpenFiles*
 //// [/a/b/projects/project/src/tsconfig.json] deleted
 
+PolledWatches *deleted*::
+/a/b/projects/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/src/node_modules/@types:
+  {"pollingInterval":500}
+
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/a/lib/lib.d.ts:
   {}
+
+FsWatches *deleted*::
+/a/b/projects/project/src/tsconfig.json:
+  {}
+
+FsWatchesRecursive *deleted*::
+/a/b/projects/project/src:
+  {}
+
+Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles* *new*
 
 Host is moving to new time
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
@@ -137,6 +261,18 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/projects/project/src/file1.ts ProjectRootPath: /a/b/projects/project
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/projects/project/src/file1.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/a/b/projects/project/src/file1.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
 
 PolledWatches::

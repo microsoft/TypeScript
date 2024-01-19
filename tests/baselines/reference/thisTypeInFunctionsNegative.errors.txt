@@ -174,7 +174,7 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
 !!! error TS2353: Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
     
     ok.f(); // not enough arguments
-       ~~~
+       ~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 thisTypeInFunctionsNegative.ts:61:46: An argument for 'x' was not provided.
     ok.f('wrong type');
@@ -196,7 +196,7 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
     
     let c = new C();
     c.explicitC(); // not enough arguments
-      ~~~~~~~~~~~
+      ~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 thisTypeInFunctionsNegative.ts:9:24: An argument for 'm' was not provided.
     c.explicitC('wrong type');
@@ -206,7 +206,7 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
                     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitThis(); // not enough arguments
-      ~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 thisTypeInFunctionsNegative.ts:3:30: An argument for 'm' was not provided.
     c.explicitThis('wrong type 2');
@@ -216,7 +216,7 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
                        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.implicitThis(); // not enough arguments
-      ~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 thisTypeInFunctionsNegative.ts:6:18: An argument for 'm' was not provided.
     c.implicitThis('wrong type 2');
@@ -226,7 +226,7 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
                        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitProperty(); // not enough arguments
-      ~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 thisTypeInFunctionsNegative.ts:12:41: An argument for 'm' was not provided.
     c.explicitProperty('wrong type 3');

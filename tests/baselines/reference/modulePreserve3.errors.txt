@@ -1,0 +1,15 @@
+error TS2688: Cannot find type definition file for 'react'.
+  The file is in the program because:
+    Entry point for implicit type library 'react'
+
+
+!!! error TS2688: Cannot find type definition file for 'react'.
+!!! error TS2688:   The file is in the program because:
+!!! error TS2688:     Entry point for implicit type library 'react'
+==== /node_modules/@types/react/jsx-runtime.d.ts (0 errors) ====
+    export namespace JSX {}
+    
+==== /index.tsx (0 errors) ====
+    export {};
+    (<div />);
+    

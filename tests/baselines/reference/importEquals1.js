@@ -40,7 +40,7 @@ var A = /** @class */ (function () {
 exports.A = A;
 //// [b.js]
 "use strict";
-module.exports = types;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

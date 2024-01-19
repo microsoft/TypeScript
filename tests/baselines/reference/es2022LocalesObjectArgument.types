@@ -1,0 +1,63 @@
+//// [tests/cases/conformance/es2022/es2022LocalesObjectArgument.ts] ////
+
+=== es2022LocalesObjectArgument.ts ===
+const enUS = new Intl.Locale("en-US");
+>enUS : Intl.Locale
+>new Intl.Locale("en-US") : Intl.Locale
+>Intl.Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>Intl : typeof Intl
+>Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>"en-US" : "en-US"
+
+const deDE = new Intl.Locale("de-DE");
+>deDE : Intl.Locale
+>new Intl.Locale("de-DE") : Intl.Locale
+>Intl.Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>Intl : typeof Intl
+>Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>"de-DE" : "de-DE"
+
+const jaJP = new Intl.Locale("ja-JP");
+>jaJP : Intl.Locale
+>new Intl.Locale("ja-JP") : Intl.Locale
+>Intl.Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>Intl : typeof Intl
+>Locale : new (tag: string | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+>"ja-JP" : "ja-JP"
+
+new Intl.Segmenter(enUS);
+>new Intl.Segmenter(enUS) : Intl.Segmenter
+>Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
+>Intl : typeof Intl
+>Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
+>enUS : Intl.Locale
+
+new Intl.Segmenter([deDE, jaJP]);
+>new Intl.Segmenter([deDE, jaJP]) : Intl.Segmenter
+>Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
+>Intl : typeof Intl
+>Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
+>[deDE, jaJP] : Intl.Locale[]
+>deDE : Intl.Locale
+>jaJP : Intl.Locale
+
+Intl.Segmenter.supportedLocalesOf(enUS);
+>Intl.Segmenter.supportedLocalesOf(enUS) : string[]
+>Intl.Segmenter.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => string[]
+>Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
+>Intl : typeof Intl
+>Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
+>supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => string[]
+>enUS : Intl.Locale
+
+Intl.Segmenter.supportedLocalesOf([deDE, jaJP]);
+>Intl.Segmenter.supportedLocalesOf([deDE, jaJP]) : string[]
+>Intl.Segmenter.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => string[]
+>Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
+>Intl : typeof Intl
+>Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): string[]; }
+>supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => string[]
+>[deDE, jaJP] : Intl.Locale[]
+>deDE : Intl.Locale
+>jaJP : Intl.Locale
+

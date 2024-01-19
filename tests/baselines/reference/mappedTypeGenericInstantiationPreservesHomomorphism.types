@@ -10,14 +10,14 @@ type PrivateMapped<Obj> = {[K in keyof Obj]: Obj[K]};
 
 === api.ts ===
 import {usePrivateType} from './internal';
->usePrivateType : <T extends unknown[]>(...args: T) => { [K in keyof T[any]]: T[any][K]; }
+>usePrivateType : <T extends unknown[]>(...args: T) => T[any] extends infer T_1 ? { [K in keyof T_1]: T[any][K]; } : never
 
 export const mappedUnionWithPrivateType = <T extends unknown[]>(...args: T) => usePrivateType(...args);
->mappedUnionWithPrivateType : <T extends unknown[]>(...args: T) => { [K in keyof T[any]]: T[any][K]; }
-><T extends unknown[]>(...args: T) => usePrivateType(...args) : <T extends unknown[]>(...args: T) => { [K in keyof T[any]]: T[any][K]; }
+>mappedUnionWithPrivateType : <T extends unknown[]>(...args: T) => T[any] extends infer T_1 ? { [K in keyof T_1]: T[any][K]; } : never
+><T extends unknown[]>(...args: T) => usePrivateType(...args) : <T extends unknown[]>(...args: T) => T[any] extends infer T_1 ? { [K in keyof T_1]: T[any][K]; } : never
 >args : T
->usePrivateType(...args) : { [K in keyof T[any]]: T[any][K]; }
->usePrivateType : <T extends unknown[]>(...args: T) => { [K in keyof T[any]]: T[any][K]; }
+>usePrivateType(...args) : T[any] extends infer T_1 ? { [K in keyof T_1]: T[any][K]; } : never
+>usePrivateType : <T_1 extends unknown[]>(...args: T_1) => T_1[any] extends infer T_2 ? { [K in keyof T_2]: T_1[any][K]; } : never
 >...args : unknown
 >args : T
 

@@ -36,8 +36,8 @@ interface Printable {
 }
 
 const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>
->Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
-><T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>    class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
+>Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & {    message: string;} & T
+><T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>    class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & {    message: string;} & T
 >superClass : T
 >message : string
 

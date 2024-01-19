@@ -468,9 +468,9 @@ function possiblyNullOrUndefined<T>(x: T) {
 
     return possiblyUndefined(possiblyNull(x));  // T | null | undefined
 >possiblyUndefined(possiblyNull(x)) : T | null | undefined
->possiblyUndefined : <T>(x: T) => T | undefined
+>possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
 >possiblyNull(x) : T | null
->possiblyNull : <T>(x: T) => T | null
+>possiblyNull : <T_1>(x: T_1) => T_1 | null
 >x : T
 }
 
@@ -509,9 +509,9 @@ function ensureNotNullOrUndefined<T>(x: T) {
 
     return ensureNotUndefined(ensureNotNull(x));  // T & {}
 >ensureNotUndefined(ensureNotNull(x)) : T & {}
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >ensureNotNull(x) : T & ({} | undefined)
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >x : T
 }
 
@@ -543,73 +543,73 @@ function f41<T>(a: T) {
     let a1 = ensureNotUndefined(ensureNotNull(a));  // T & {}
 >a1 : T & {}
 >ensureNotUndefined(ensureNotNull(a)) : T & {}
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >ensureNotNull(a) : T & ({} | undefined)
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >a : T
 
     let a2 = ensureNotNull(ensureNotUndefined(a));  // T & {}
 >a2 : T & {}
 >ensureNotNull(ensureNotUndefined(a)) : T & {}
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >ensureNotUndefined(a) : T & ({} | null)
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >a : T
 
     let a3 = ensureNotNull(ensureNotNull(a));  // T & {} | T & undefined
 >a3 : (T & undefined) | (T & {})
 >ensureNotNull(ensureNotNull(a)) : (T & undefined) | (T & {})
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >ensureNotNull(a) : T & ({} | undefined)
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >a : T
 
     let a4 = ensureNotUndefined(ensureNotUndefined(a));  // T & {} | T & null
 >a4 : (T & {}) | (T & null)
 >ensureNotUndefined(ensureNotUndefined(a)) : (T & {}) | (T & null)
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >ensureNotUndefined(a) : T & ({} | null)
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >a : T
 
     let a5 = ensureNotNullOrUndefined(ensureNotNullOrUndefined(a));  // T & {}
 >a5 : T & {}
 >ensureNotNullOrUndefined(ensureNotNullOrUndefined(a)) : T & {}
->ensureNotNullOrUndefined : <T>(x: T) => T & {}
+>ensureNotNullOrUndefined : <T_1>(x: T_1) => T_1 & {}
 >ensureNotNullOrUndefined(a) : T & {}
->ensureNotNullOrUndefined : <T>(x: T) => T & {}
+>ensureNotNullOrUndefined : <T_1>(x: T_1) => T_1 & {}
 >a : T
 
     let a6 = ensureNotNull(possiblyNullOrUndefined(a));  // T & {} | undefined
 >a6 : (T & {}) | undefined
 >ensureNotNull(possiblyNullOrUndefined(a)) : (T & {}) | undefined
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >possiblyNullOrUndefined(a) : T | null | undefined
->possiblyNullOrUndefined : <T>(x: T) => T | null | undefined
+>possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
 >a : T
 
     let a7 = ensureNotUndefined(possiblyNullOrUndefined(a));  // T & {} | null
 >a7 : (T & {}) | null
 >ensureNotUndefined(possiblyNullOrUndefined(a)) : (T & {}) | null
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >possiblyNullOrUndefined(a) : T | null | undefined
->possiblyNullOrUndefined : <T>(x: T) => T | null | undefined
+>possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
 >a : T
 
     let a8 = ensureNotNull(possiblyUndefined(a));  // T & {} | undefined
 >a8 : (T & {}) | undefined
 >ensureNotNull(possiblyUndefined(a)) : (T & {}) | undefined
->ensureNotNull : <T>(x: T) => T & ({} | undefined)
+>ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 >possiblyUndefined(a) : T | undefined
->possiblyUndefined : <T>(x: T) => T | undefined
+>possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
 >a : T
 
     let a9 = ensureNotUndefined(possiblyNull(a));  // T & {} | null
 >a9 : (T & {}) | null
 >ensureNotUndefined(possiblyNull(a)) : (T & {}) | null
->ensureNotUndefined : <T>(x: T) => T & ({} | null)
+>ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 >possiblyNull(a) : T | null
->possiblyNull : <T>(x: T) => T | null
+>possiblyNull : <T_1>(x: T_1) => T_1 | null
 >a : T
 }
 
@@ -819,47 +819,29 @@ function fx1<T extends unknown>(value: T & ({} | null)) {
 
 function fx2<T extends {}>(value: T & ({} | null)) {
 >fx2 : <T extends {}>(value: T & ({} | null)) => void
->value : T & ({} | null)
+>value : T
 
     if (value === 42) {
 >value === 42 : boolean
->value : T & ({} | null)
+>value : T
 >42 : 42
 
         value;  // T & {}
->value : T & ({} | null)
+>value : never
     }
     else {
         value;  // T & ({} | null)
->value : T & ({} | null)
+>value : T
     }
 }
 
 function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 >fx3 : <T extends {} | undefined>(value: T & ({} | null)) => void
->value : T & ({} | null)
+>value : T & {}
 
     if (value === 42) {
 >value === 42 : boolean
->value : T & ({} | null)
->42 : 42
-
-        value;  // T & {}
->value : T & ({} | null)
-    }
-    else {
-        value;  // T & ({} | null)
->value : T & ({} | null)
-    }
-}
-
-function fx4<T extends {} | null>(value: T & ({} | null)) {
->fx4 : <T extends {} | null>(value: T & ({} | null)) => void
->value : T & ({} | null)
-
-    if (value === 42) {
->value === 42 : boolean
->value : T & ({} | null)
+>value : T & {}
 >42 : 42
 
         value;  // T & {}
@@ -867,7 +849,25 @@ function fx4<T extends {} | null>(value: T & ({} | null)) {
     }
     else {
         value;  // T & ({} | null)
->value : T & ({} | null)
+>value : T & {}
+    }
+}
+
+function fx4<T extends {} | null>(value: T & ({} | null)) {
+>fx4 : <T extends {} | null>(value: T & ({} | null)) => void
+>value : T
+
+    if (value === 42) {
+>value === 42 : boolean
+>value : T
+>42 : 42
+
+        value;  // T & {}
+>value : never
+    }
+    else {
+        value;  // T & ({} | null)
+>value : T
     }
 }
 
@@ -1036,12 +1036,12 @@ type AB = "A" | "B";
 
 function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
 >x : <T_AB extends AB>(x: T_AB & undefined, y: any) => void
->x : T_AB & undefined
+>x : never
 >y : any
 
     let r2: never = y as T_AB & undefined;
 >r2 : never
->y as T_AB & undefined : T_AB & undefined
+>y as T_AB & undefined : never
 >y : any
 } 
 

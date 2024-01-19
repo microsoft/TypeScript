@@ -230,7 +230,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 >x : Program
 >isBuilderProgram(program) ? program.getProgram() : program : Program
 >isBuilderProgram(program) : boolean
->isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
+>isBuilderProgram : <T_1 extends BuilderProgram>(program: Program | T_1) => program is T_1
 >program : Program | T
 >program.getProgram() : Program
 >program.getProgram : () => Program

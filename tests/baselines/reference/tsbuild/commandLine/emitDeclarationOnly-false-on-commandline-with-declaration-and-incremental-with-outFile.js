@@ -28,7 +28,15 @@ import { a } from "./a";export const c = a;
 import { b } from "./b";export const d = b;
 
 //// [/src/project1/src/tsconfig.json]
-{"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true,
+    "outFile": "../outFile.js",
+    "module": "amd",
+    "emitDeclarationOnly": true
+  }
+}
 
 //// [/src/project2/src/e.ts]
 export const e = 10;
@@ -40,7 +48,20 @@ import { a } from "a"; export const f = a;
 import { b } from "b"; export const g = b;
 
 //// [/src/project2/src/tsconfig.json]
-{"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "declaration": true,
+    "outFile": "../outFile.js",
+    "module": "amd",
+    "emitDeclarationOnly": true
+  },
+  "references": [
+    {
+      "path": "../../project1/src"
+    }
+  ]
+}
 
 
 
@@ -58,17 +79,33 @@ Output::
 
 [[90m12:00:28 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -81,8 +118,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -213,17 +261,32 @@ Output::
 
 [[90m12:00:32 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -260,17 +323,33 @@ Output::
 
 [[90m12:00:43 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -283,8 +362,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -384,17 +474,33 @@ Output::
 
 [[90m12:00:53 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -407,8 +513,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -597,17 +714,32 @@ Output::
 
 [[90m12:00:57 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":true,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": true,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -639,17 +771,32 @@ Output::
 
 [[90m12:01:01 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -686,17 +833,33 @@ Output::
 
 [[90m12:01:13 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
-[96msrc/project2/src/tsconfig.json[0m:[93m1[0m:[93m142[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
+[96msrc/project2/src/tsconfig.json[0m:[93m10[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
-[7m1[0m {"compilerOptions":{"incremental":true,"declaration":true,"outFile":"../outFile.js","module":"amd","emitDeclarationOnly":true},"references":[{"path":"../../project1/src"}]}
-[7m [0m [91m                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m10[0m     {
+[7m  [0m [91m    ~[0m
+[7m11[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m12[0m     }
+[7m  [0m [91m~~~~~[0m
 
 
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-Program root files: ["/src/project1/src/a.ts","/src/project1/src/b.ts","/src/project1/src/c.ts","/src/project1/src/d.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project1/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project1/src/tsconfig.json"}
+Program root files: [
+  "/src/project1/src/a.ts",
+  "/src/project1/src/b.ts",
+  "/src/project1/src/c.ts",
+  "/src/project1/src/d.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project1/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project1/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts
@@ -709,8 +872,19 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-Program root files: ["/src/project2/src/e.ts","/src/project2/src/f.ts","/src/project2/src/g.ts"]
-Program options: {"incremental":true,"declaration":true,"outFile":"/src/project2/outFile.js","module":2,"emitDeclarationOnly":false,"configFilePath":"/src/project2/src/tsconfig.json"}
+Program root files: [
+  "/src/project2/src/e.ts",
+  "/src/project2/src/f.ts",
+  "/src/project2/src/g.ts"
+]
+Program options: {
+  "incremental": true,
+  "declaration": true,
+  "outFile": "/src/project2/outFile.js",
+  "module": 2,
+  "emitDeclarationOnly": false,
+  "configFilePath": "/src/project2/src/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /lib/lib.d.ts

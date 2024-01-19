@@ -32,7 +32,10 @@ typerefs: {
 }
 
 
-MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
+MissingPaths:: [
+  "non-existing-file.ts",
+  "lib.d.ts"
+]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
 a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs'.
@@ -73,7 +76,10 @@ typerefs: {
 }
 
 
-MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
+MissingPaths:: [
+  "non-existing-file.ts",
+  "lib.d.ts"
+]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
 a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs'.

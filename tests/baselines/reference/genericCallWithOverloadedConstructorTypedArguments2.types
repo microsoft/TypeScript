@@ -102,7 +102,7 @@ module GenericParameter {
 >a : new <T>(x: T) => T
 
     var c: { new<T>(x: T): number; new<T>(x: number): T; }
->c : { new <T>(x: T): number; new <T>(x: number): T; }
+>c : { new <T>(x: T): number; new <T_1>(x: number): T_1; }
 >x : T
 >x : number
 
@@ -111,5 +111,5 @@ module GenericParameter {
 >foo7(1, c) : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >1 : 1
->c : { new <T>(x: T): number; new <T>(x: number): T; }
+>c : { new <T>(x: T): number; new <T_1>(x: number): T_1; }
 }

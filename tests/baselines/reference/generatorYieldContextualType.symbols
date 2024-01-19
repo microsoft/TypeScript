@@ -44,3 +44,322 @@ f2<0, 0, 1>(async function* () {
 
 	return 0;
 });
+
+// repro from #41428
+enum Directive {
+>Directive : Symbol(Directive, Decl(generatorYieldContextualType.ts, 10, 3), Decl(generatorYieldContextualType.ts, 18, 1))
+
+  Back,
+>Back : Symbol(Directive.Back, Decl(generatorYieldContextualType.ts, 13, 16))
+
+  Cancel,
+>Cancel : Symbol(Directive.Cancel, Decl(generatorYieldContextualType.ts, 14, 7))
+
+  LoadMore,
+>LoadMore : Symbol(Directive.LoadMore, Decl(generatorYieldContextualType.ts, 15, 9))
+
+  Noop,
+>Noop : Symbol(Directive.Noop, Decl(generatorYieldContextualType.ts, 16, 11))
+}
+
+namespace Directive {
+>Directive : Symbol(Directive, Decl(generatorYieldContextualType.ts, 10, 3), Decl(generatorYieldContextualType.ts, 18, 1))
+
+  export function is<T>(value: Directive | T): value is Directive {
+>is : Symbol(is, Decl(generatorYieldContextualType.ts, 20, 21))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 21, 21))
+>value : Symbol(value, Decl(generatorYieldContextualType.ts, 21, 24))
+>Directive : Symbol(Directive, Decl(generatorYieldContextualType.ts, 10, 3), Decl(generatorYieldContextualType.ts, 18, 1))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 21, 21))
+>value : Symbol(value, Decl(generatorYieldContextualType.ts, 21, 24))
+>Directive : Symbol(Directive, Decl(generatorYieldContextualType.ts, 10, 3), Decl(generatorYieldContextualType.ts, 18, 1))
+
+    return typeof value === "number" && Directive[value] != null;
+>value : Symbol(value, Decl(generatorYieldContextualType.ts, 21, 24))
+>Directive : Symbol(Directive, Decl(generatorYieldContextualType.ts, 10, 3), Decl(generatorYieldContextualType.ts, 18, 1))
+>value : Symbol(value, Decl(generatorYieldContextualType.ts, 21, 24))
+  }
+}
+
+interface QuickPickItem {
+>QuickPickItem : Symbol(QuickPickItem, Decl(generatorYieldContextualType.ts, 24, 1))
+
+  label: string;
+>label : Symbol(QuickPickItem.label, Decl(generatorYieldContextualType.ts, 26, 25))
+
+  description?: string;
+>description : Symbol(QuickPickItem.description, Decl(generatorYieldContextualType.ts, 27, 16))
+
+  detail?: string;
+>detail : Symbol(QuickPickItem.detail, Decl(generatorYieldContextualType.ts, 28, 23))
+
+  picked?: boolean;
+>picked : Symbol(QuickPickItem.picked, Decl(generatorYieldContextualType.ts, 29, 18))
+
+  alwaysShow?: boolean;
+>alwaysShow : Symbol(QuickPickItem.alwaysShow, Decl(generatorYieldContextualType.ts, 30, 19))
+}
+
+interface QuickInputStep {
+>QuickInputStep : Symbol(QuickInputStep, Decl(generatorYieldContextualType.ts, 32, 1))
+
+  placeholder?: string;
+>placeholder : Symbol(QuickInputStep.placeholder, Decl(generatorYieldContextualType.ts, 34, 26))
+
+  prompt?: string;
+>prompt : Symbol(QuickInputStep.prompt, Decl(generatorYieldContextualType.ts, 35, 23))
+
+  title?: string;
+>title : Symbol(QuickInputStep.title, Decl(generatorYieldContextualType.ts, 36, 18))
+}
+
+interface QuickPickStep<T extends QuickPickItem = QuickPickItem> {
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 40, 24))
+>QuickPickItem : Symbol(QuickPickItem, Decl(generatorYieldContextualType.ts, 24, 1))
+>QuickPickItem : Symbol(QuickPickItem, Decl(generatorYieldContextualType.ts, 24, 1))
+
+  placeholder?: string;
+>placeholder : Symbol(QuickPickStep.placeholder, Decl(generatorYieldContextualType.ts, 40, 66))
+
+  title?: string;
+>title : Symbol(QuickPickStep.title, Decl(generatorYieldContextualType.ts, 41, 23))
+}
+
+type StepGenerator =
+>StepGenerator : Symbol(StepGenerator, Decl(generatorYieldContextualType.ts, 43, 1))
+
+  | Generator<
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+      QuickPickStep | QuickInputStep,
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>QuickInputStep : Symbol(QuickInputStep, Decl(generatorYieldContextualType.ts, 32, 1))
+
+      StepResult<void | undefined>,
+>StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+
+      any | undefined
+    >
+  | AsyncGenerator<
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+      QuickPickStep | QuickInputStep,
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>QuickInputStep : Symbol(QuickInputStep, Decl(generatorYieldContextualType.ts, 32, 1))
+
+      StepResult<void | undefined>,
+>StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+
+      any | undefined
+    >;
+
+type StepItemType<T> = T extends QuickPickStep<infer U>
+>StepItemType : Symbol(StepItemType, Decl(generatorYieldContextualType.ts, 55, 6))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 57, 18))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 57, 18))
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>U : Symbol(U, Decl(generatorYieldContextualType.ts, 57, 52))
+
+  ? U[]
+>U : Symbol(U, Decl(generatorYieldContextualType.ts, 57, 52))
+
+  : T extends QuickInputStep
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 57, 18))
+>QuickInputStep : Symbol(QuickInputStep, Decl(generatorYieldContextualType.ts, 32, 1))
+
+  ? string
+  : never;
+namespace StepResult {
+>StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+
+  export const Break = Symbol("BreakStep");
+>Break : Symbol(Break, Decl(generatorYieldContextualType.ts, 63, 14))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+}
+type StepResult<T> = typeof StepResult.Break | T;
+>StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 65, 16))
+>StepResult.Break : Symbol(StepResult.Break, Decl(generatorYieldContextualType.ts, 63, 14))
+>StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+>Break : Symbol(StepResult.Break, Decl(generatorYieldContextualType.ts, 63, 14))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 65, 16))
+
+type StepResultGenerator<T> =
+>StepResultGenerator : Symbol(StepResultGenerator, Decl(generatorYieldContextualType.ts, 65, 49))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 66, 25))
+
+  | Generator<QuickPickStep | QuickInputStep, StepResult<T>, any | undefined>
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>QuickInputStep : Symbol(QuickInputStep, Decl(generatorYieldContextualType.ts, 32, 1))
+>StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 66, 25))
+
+  | AsyncGenerator<
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+      QuickPickStep | QuickInputStep,
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>QuickInputStep : Symbol(QuickInputStep, Decl(generatorYieldContextualType.ts, 32, 1))
+
+      StepResult<T>,
+>StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 66, 25))
+
+      any | undefined
+    >;
+type StepSelection<T> = T extends QuickPickStep<infer U>
+>StepSelection : Symbol(StepSelection, Decl(generatorYieldContextualType.ts, 72, 6))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 73, 19))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 73, 19))
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>U : Symbol(U, Decl(generatorYieldContextualType.ts, 73, 53))
+
+  ? U[] | Directive
+>U : Symbol(U, Decl(generatorYieldContextualType.ts, 73, 53))
+>Directive : Symbol(Directive, Decl(generatorYieldContextualType.ts, 10, 3), Decl(generatorYieldContextualType.ts, 18, 1))
+
+  : T extends QuickInputStep
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 73, 19))
+>QuickInputStep : Symbol(QuickInputStep, Decl(generatorYieldContextualType.ts, 32, 1))
+
+  ? string | Directive
+>Directive : Symbol(Directive, Decl(generatorYieldContextualType.ts, 10, 3), Decl(generatorYieldContextualType.ts, 18, 1))
+
+  : never;
+type PartialStepState<T = unknown> = Partial<T> & {
+>PartialStepState : Symbol(PartialStepState, Decl(generatorYieldContextualType.ts, 77, 10))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 78, 22))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 78, 22))
+
+  counter: number;
+>counter : Symbol(counter, Decl(generatorYieldContextualType.ts, 78, 51))
+
+  confirm?: boolean;
+>confirm : Symbol(confirm, Decl(generatorYieldContextualType.ts, 79, 18))
+
+  startingStep?: number;
+>startingStep : Symbol(startingStep, Decl(generatorYieldContextualType.ts, 80, 20))
+
+};
+type StepState<T = Record<string, unknown>> = T & {
+>StepState : Symbol(StepState, Decl(generatorYieldContextualType.ts, 82, 2))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 83, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 83, 15))
+
+  counter: number;
+>counter : Symbol(counter, Decl(generatorYieldContextualType.ts, 83, 51))
+
+  confirm?: boolean;
+>confirm : Symbol(confirm, Decl(generatorYieldContextualType.ts, 84, 18))
+
+  startingStep?: number;
+>startingStep : Symbol(startingStep, Decl(generatorYieldContextualType.ts, 85, 20))
+
+};
+
+function canPickStepContinue<T extends QuickPickStep>(
+>canPickStepContinue : Symbol(canPickStepContinue, Decl(generatorYieldContextualType.ts, 87, 2))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 89, 29))
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+
+  _step: T,
+>_step : Symbol(_step, Decl(generatorYieldContextualType.ts, 89, 54))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 89, 29))
+
+  _state: PartialStepState,
+>_state : Symbol(_state, Decl(generatorYieldContextualType.ts, 90, 11))
+>PartialStepState : Symbol(PartialStepState, Decl(generatorYieldContextualType.ts, 77, 10))
+
+  _selection: StepItemType<T> | Directive
+>_selection : Symbol(_selection, Decl(generatorYieldContextualType.ts, 91, 27))
+>StepItemType : Symbol(StepItemType, Decl(generatorYieldContextualType.ts, 55, 6))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 89, 29))
+>Directive : Symbol(Directive, Decl(generatorYieldContextualType.ts, 10, 3), Decl(generatorYieldContextualType.ts, 18, 1))
+
+): _selection is StepItemType<T> {
+>_selection : Symbol(_selection, Decl(generatorYieldContextualType.ts, 91, 27))
+>StepItemType : Symbol(StepItemType, Decl(generatorYieldContextualType.ts, 55, 6))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 89, 29))
+
+  return false;
+}
+
+function createPickStep<T extends QuickPickItem>(
+>createPickStep : Symbol(createPickStep, Decl(generatorYieldContextualType.ts, 95, 1))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 97, 24))
+>QuickPickItem : Symbol(QuickPickItem, Decl(generatorYieldContextualType.ts, 24, 1))
+
+  step: QuickPickStep<T>
+>step : Symbol(step, Decl(generatorYieldContextualType.ts, 97, 49))
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 97, 24))
+
+): QuickPickStep<T> {
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>T : Symbol(T, Decl(generatorYieldContextualType.ts, 97, 24))
+
+  return step;
+>step : Symbol(step, Decl(generatorYieldContextualType.ts, 97, 49))
+}
+
+function* showStep<
+>showStep : Symbol(showStep, Decl(generatorYieldContextualType.ts, 101, 1))
+
+  State extends PartialStepState & { repo: any },
+>State : Symbol(State, Decl(generatorYieldContextualType.ts, 103, 19))
+>PartialStepState : Symbol(PartialStepState, Decl(generatorYieldContextualType.ts, 77, 10))
+>repo : Symbol(repo, Decl(generatorYieldContextualType.ts, 104, 36))
+
+  Context extends { repos: any[]; title: string; status: any }
+>Context : Symbol(Context, Decl(generatorYieldContextualType.ts, 104, 49))
+>repos : Symbol(repos, Decl(generatorYieldContextualType.ts, 105, 19))
+>title : Symbol(title, Decl(generatorYieldContextualType.ts, 105, 33))
+>status : Symbol(status, Decl(generatorYieldContextualType.ts, 105, 48))
+
+>(state: State, _context: Context): StepResultGenerator<QuickPickItem> {
+>state : Symbol(state, Decl(generatorYieldContextualType.ts, 106, 2))
+>State : Symbol(State, Decl(generatorYieldContextualType.ts, 103, 19))
+>_context : Symbol(_context, Decl(generatorYieldContextualType.ts, 106, 15))
+>Context : Symbol(Context, Decl(generatorYieldContextualType.ts, 104, 49))
+>StepResultGenerator : Symbol(StepResultGenerator, Decl(generatorYieldContextualType.ts, 65, 49))
+>QuickPickItem : Symbol(QuickPickItem, Decl(generatorYieldContextualType.ts, 24, 1))
+
+  const step: QuickPickStep<QuickPickItem> = createPickStep<QuickPickItem>({
+>step : Symbol(step, Decl(generatorYieldContextualType.ts, 107, 7))
+>QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
+>QuickPickItem : Symbol(QuickPickItem, Decl(generatorYieldContextualType.ts, 24, 1))
+>createPickStep : Symbol(createPickStep, Decl(generatorYieldContextualType.ts, 95, 1))
+>QuickPickItem : Symbol(QuickPickItem, Decl(generatorYieldContextualType.ts, 24, 1))
+
+    title: "",
+>title : Symbol(title, Decl(generatorYieldContextualType.ts, 107, 76))
+
+    placeholder: "",
+>placeholder : Symbol(placeholder, Decl(generatorYieldContextualType.ts, 108, 14))
+
+  });
+  const selection: StepSelection<typeof step> = yield step;
+>selection : Symbol(selection, Decl(generatorYieldContextualType.ts, 111, 7))
+>StepSelection : Symbol(StepSelection, Decl(generatorYieldContextualType.ts, 72, 6))
+>step : Symbol(step, Decl(generatorYieldContextualType.ts, 107, 7))
+>step : Symbol(step, Decl(generatorYieldContextualType.ts, 107, 7))
+
+  return canPickStepContinue(step, state, selection)
+>canPickStepContinue : Symbol(canPickStepContinue, Decl(generatorYieldContextualType.ts, 87, 2))
+>step : Symbol(step, Decl(generatorYieldContextualType.ts, 107, 7))
+>state : Symbol(state, Decl(generatorYieldContextualType.ts, 106, 2))
+>selection : Symbol(selection, Decl(generatorYieldContextualType.ts, 111, 7))
+
+    ? selection[0]
+>selection : Symbol(selection, Decl(generatorYieldContextualType.ts, 111, 7))
+
+    : StepResult.Break;
+>StepResult.Break : Symbol(StepResult.Break, Decl(generatorYieldContextualType.ts, 63, 14))
+>StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))
+>Break : Symbol(StepResult.Break, Decl(generatorYieldContextualType.ts, 63, 14))
+}
+

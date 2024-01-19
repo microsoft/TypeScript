@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/project1/src/file1.js]
 import {x} from 'glob';
@@ -100,38 +100,84 @@ FsWatchesRecursive::
 /user/username/projects/project1/src/node_modules: *new*
   {}
 
-TI:: [hh:mm:ss:mss] Global cache location '/a/data/', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Trying to find '/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data/'
+TI:: [hh:mm:ss:mss] Finished processing cache location '/a/data'
 TI:: [hh:mm:ss:mss] Npm config file: /a/data/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/data/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
 
 //// [/a/data/node_modules/types-registry/index.json]
 {
- "entries": {}
+  "entries": {}
 }
 
 
-TI:: [hh:mm:ss:mss] Got install request {"projectName":"/dev/null/inferredProject1*","fileNames":["/a/lib/lib.d.ts","/user/username/projects/project1/src/file1.js"],"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typeAcquisition":{"enable":true,"include":[],"exclude":[]},"unresolvedImports":["glob","minimatch","path"],"projectRootPath":"/","cachePath":"/a/data/","kind":"discover"}
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "fileNames": [
+        "/a/lib/lib.d.ts",
+        "/user/username/projects/project1/src/file1.js"
+      ],
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [
+        "glob",
+        "minimatch",
+        "path"
+      ],
+      "projectRootPath": "/",
+      "kind": "discover"
+    }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Searching for typing names in /user/username/projects/project1/src/node_modules; all files: []
 TI:: [hh:mm:ss:mss]     Found package names: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["glob","minimatch","node"]
-TI:: [hh:mm:ss:mss] Result: {"cachedTypingPaths":[],"newTypingNames":["glob","minimatch","node"],"filesToWatch":["/user/username/projects/project1/src/bower_components","/user/username/projects/project1/src/node_modules","/bower_components","/node_modules"]}
-TI:: [hh:mm:ss:mss] Finished typings discovery: {"cachedTypingPaths":[],"newTypingNames":["glob","minimatch","node"],"filesToWatch":["/user/username/projects/project1/src/bower_components","/user/username/projects/project1/src/node_modules","/bower_components","/node_modules"]}
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "glob",
+        "minimatch",
+        "node"
+      ],
+      "filesToWatch": [
+        "/user/username/projects/project1/src/bower_components",
+        "/user/username/projects/project1/src/node_modules",
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 TI:: [hh:mm:ss:mss] Sending response:
-    {"kind":"action::watchTypingLocations","projectName":"/dev/null/inferredProject1*","files":["/user/username/projects/project1/src/bower_components","/user/username/projects/project1/src/node_modules","/bower_components","/node_modules"]}
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/dev/null/inferredProject1*",
+      "files": [
+        "/user/username/projects/project1/src/bower_components",
+        "/user/username/projects/project1/src/node_modules",
+        "/bower_components",
+        "/node_modules"
+      ]
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
@@ -144,7 +190,58 @@ TI:: [hh:mm:ss:mss] 'minimatch':: Entry for package 'minimatch' does not exist i
 TI:: [hh:mm:ss:mss] 'node':: Entry for package 'node' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
 TI:: [hh:mm:ss:mss] Sending response:
-    {"projectName":"/dev/null/inferredProject1*","typeAcquisition":{"enable":true,"include":[],"exclude":[]},"compilerOptions":{"target":1,"jsx":1,"allowNonTsExtensions":true,"allowJs":true,"noEmitForJsFiles":true,"maxNodeModuleJsDepth":2},"typings":[],"unresolvedImports":["glob","minimatch","path"],"kind":"action::set"}
+    {
+      "projectName": "/dev/null/inferredProject1*",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "target": 1,
+        "jsx": 1,
+        "allowNonTsExtensions": true,
+        "allowJs": true,
+        "noEmitForJsFiles": true,
+        "maxNodeModuleJsDepth": 2
+      },
+      "typings": [],
+      "unresolvedImports": [
+        "glob",
+        "minimatch",
+        "path"
+      ],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [
+          "glob",
+          "minimatch",
+          "path"
+        ],
+        "kind": "action::set"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 

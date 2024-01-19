@@ -1,3 +1,4 @@
+// === Smart Selection ===
 `a /**/b ${
   'c'
 } d`

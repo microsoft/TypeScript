@@ -37,11 +37,11 @@ module Editor {
             var entry = this.listFactory.MakeEntry(data);
 >entry : List<T>
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
 >this.listFactory : ListFactory<T>
 >this : this
 >listFactory : ListFactory<T>
->MakeEntry : <T>(data: T) => List<T>
+>MakeEntry : <T_1>(data: T_1) => List<T_1>
 >data : T
             
             this.prev.next = entry;
@@ -205,11 +205,11 @@ module Editor {
             var entry = this.listFactory.MakeEntry(data);
 >entry : List<T>
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
 >this.listFactory : ListFactory<T>
 >this : this
 >listFactory : ListFactory<T>
->MakeEntry : <T>(data: T) => List<T>
+>MakeEntry : <T_1>(data: T_1) => List<T_1>
 >data : T
 
             entry.data = data;
@@ -275,11 +275,11 @@ module Editor {
             else {
                 return this.listFactory.RemoveEntry(this.next);
 >this.listFactory.RemoveEntry(this.next) : List<T>
->this.listFactory.RemoveEntry : <T>(entry: List<T>) => List<T>
+>this.listFactory.RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
 >this.listFactory : ListFactory<T>
 >this : this
 >listFactory : ListFactory<T>
->RemoveEntry : <T>(entry: List<T>) => List<T>
+>RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
 >this.next : List<T>
 >this : this
 >next : List<T>
@@ -340,11 +340,11 @@ module Editor {
             var entry: List<T> = this.listFactory.MakeEntry(data);
 >entry : List<T>
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
 >this.listFactory : ListFactory<T>
 >this : this
 >listFactory : ListFactory<T>
->MakeEntry : <T>(data: T) => List<T>
+>MakeEntry : <T_1>(data: T_1) => List<T_1>
 >data : T
 
             entry.next = this.next;
@@ -430,11 +430,11 @@ module Editor {
             var entry = this.listFactory.MakeEntry(data);
 >entry : List<T>
 >this.listFactory.MakeEntry(data) : List<T>
->this.listFactory.MakeEntry : <T>(data: T) => List<T>
+>this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
 >this.listFactory : ListFactory<T>
 >this : this
 >listFactory : ListFactory<T>
->MakeEntry : <T>(data: T) => List<T>
+>MakeEntry : <T_1>(data: T_1) => List<T_1>
 >data : T
 
             return this.insertEntryBefore(entry);

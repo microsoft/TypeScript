@@ -7,21 +7,21 @@ Fs::
 
 //// [/apath/tsconfig.json]
 {
- "compilerOptions": {
-  "moduleSuffixes": [
-   ""
-  ]
- }
+  "compilerOptions": {
+    "moduleSuffixes": [
+      ""
+    ]
+  }
 }
 
 
 configFileName:: tsconfig.json
 CompilerOptions::
 {
- "moduleSuffixes": [
-  ""
- ],
- "configFilePath": "tsconfig.json"
+  "moduleSuffixes": [
+    ""
+  ],
+  "configFilePath": "tsconfig.json"
 }
 Errors::
 

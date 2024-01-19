@@ -1,7 +1,13 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/src/tsconfig.json]
-{"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out"}}
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "Node16",
+    "outDir": "../out"
+  }
+}
 
 //// [/user/username/projects/myproject/src/fileA.ts]
 import { foo } from "./fileB.mjs";
@@ -14,7 +20,11 @@ export function foo() {
 
 
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
 //// [/a/lib/lib.es2016.full.d.ts]
 /// <reference no-default-lib="true"/>
@@ -83,20 +93,11 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 un
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.es2016.full.d.ts
-/user/username/projects/myproject/src/fileA.ts
+//// [/user/username/projects/myproject/out/fileA.js]
+import { foo } from "./fileB.mjs";
+foo();
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.es2016.full.d.ts
-/user/username/projects/myproject/src/fileA.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.es2016.full.d.ts (used version)
-/user/username/projects/myproject/src/filea.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -115,7 +116,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src: *new*
   {}
-/user/username/projects/myproject/src/filea.ts: *new*
+/user/username/projects/myproject/src/fileA.ts: *new*
   {}
 /user/username/projects/myproject/src/tsconfig.json: *new*
   {}
@@ -124,33 +125,71 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/user/username/projects/myproject/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.es2016.full.d.ts
+/user/username/projects/myproject/src/fileA.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.es2016.full.d.ts (used version)
+/user/username/projects/myproject/src/filea.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/out/fileA.js]
-import { foo } from "./fileB.mjs";
-foo();
-
-
 
 Change:: Modify package.json file to remove type module
 
 Input::
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
 
-Before running Timeout callback:: count: 1
-1: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-2: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
+
+
+Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+1: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
@@ -198,23 +237,18 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.es2016.full.d.ts
-/user/username/projects/myproject/src/fileA.ts
+//// [/user/username/projects/myproject/out/fileA.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const fileB_mjs_1 = require("./fileB.mjs");
+(0, fileB_mjs_1.foo)();
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/src/fileA.ts
 
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs: *new*
+/user/username/projects/myproject/src/fileB.mjs: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -230,7 +264,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -239,35 +273,71 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/user/username/projects/myproject/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/src/fileA.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/src/filea.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/out/fileA.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const fileB_mjs_1 = require("./fileB.mjs");
-(0, fileB_mjs_1.foo)();
-
-
 
 Change:: Modify package json file to add type module
 
 Input::
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
+{
+  "name": "app",
+  "version": "1.0.0",
+  "type": "module"
+}
 
 
-Before running Timeout callback:: count: 1
-3: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-4: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
+
+
+Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+3: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
 
@@ -310,18 +380,11 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.es2016.full.d.ts
-/user/username/projects/myproject/src/fileA.ts
+//// [/user/username/projects/myproject/out/fileA.js]
+import { foo } from "./fileB.mjs";
+foo();
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/src/fileA.ts
 
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -334,7 +397,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileB.mjs:
   {"pollingInterval":500}
 
 FsWatches::
@@ -344,7 +407,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -353,31 +416,65 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/user/username/projects/myproject/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/src/fileA.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/src/filea.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/out/fileA.js]
-import { foo } from "./fileB.mjs";
-foo();
-
-
 
 Change:: Delete package.json
 
 Input::
 //// [/user/username/projects/myproject/package.json] deleted
 
-Before running Timeout callback:: count: 1
-5: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-6: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-6: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
+
+
+Timeout callback:: count: 1
+5: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+5: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+6: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
@@ -434,23 +531,18 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.es2016.full.d.ts
-/user/username/projects/myproject/src/fileA.ts
+//// [/user/username/projects/myproject/out/fileA.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const fileB_mjs_1 = require("./fileB.mjs");
+(0, fileB_mjs_1.foo)();
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/src/fileA.ts
 
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs: *new*
+/user/username/projects/myproject/src/fileB.mjs: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -468,7 +560,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -477,35 +569,70 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/user/username/projects/myproject/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/src/fileA.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/src/filea.ts (computed .d.ts)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/out/fileA.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const fileB_mjs_1 = require("./fileB.mjs");
-(0, fileB_mjs_1.foo)();
-
-
 
 Change:: Modify package json file to without type module
 
 Input::
 //// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
+{
+  "name": "app",
+  "version": "1.0.0"
+}
 
 
-Before running Timeout callback:: count: 1
-7: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-8: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-8: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
+
+
+Timeout callback:: count: 1
+7: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+7: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+8: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+8: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:04 AM[0m] File change detected. Starting incremental compilation...
 
@@ -538,21 +665,11 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.es2016.full.d.ts
-/user/username/projects/myproject/src/fileA.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileB.mjs:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -572,7 +689,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -581,26 +698,63 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-exitCode:: ExitStatus.undefined
 
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/user/username/projects/myproject/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
 
 Change:: Delete package.json
 
 Input::
 //// [/user/username/projects/myproject/package.json] deleted
 
-Before running Timeout callback:: count: 1
-9: timerToInvalidateFailedLookupResolutions
-After running Timeout callback:: count: 1
-10: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-10: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
+
+
+Timeout callback:: count: 1
+9: timerToInvalidateFailedLookupResolutions *new*
+
+Before running Timeout callback:: count: 1
+9: timerToInvalidateFailedLookupResolutions
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+10: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 
@@ -641,21 +795,11 @@ src/fileA.ts
 
 
 
-Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
-Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.es2016.full.d.ts
-/user/username/projects/myproject/src/fileA.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/fileb.mjs:
+/user/username/projects/myproject/src/fileB.mjs:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
@@ -673,7 +817,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/src:
   {}
-/user/username/projects/myproject/src/filea.ts:
+/user/username/projects/myproject/src/fileA.ts:
   {}
 /user/username/projects/myproject/src/tsconfig.json:
   {}
@@ -682,5 +826,28 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-exitCode:: ExitStatus.undefined
 
+Program root files: [
+  "/user/username/projects/myproject/src/fileA.ts"
+]
+Program options: {
+  "target": 3,
+  "module": 100,
+  "outDir": "/user/username/projects/myproject/out",
+  "watch": true,
+  "project": "/user/username/projects/myproject/src",
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/src/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/user/username/projects/myproject/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

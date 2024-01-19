@@ -134,10 +134,10 @@ function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     let obj = arg;
     const isFoo = obj.kind === 'foo';
     if (isFoo) {
-        obj.foo;  // Not narrowed because obj is mutable
+        obj.foo;
     }
     else {
-        obj.bar;  // Not narrowed because obj is mutable
+        obj.bar;
     }
 }
 
@@ -423,10 +423,10 @@ function f25(arg) {
     var obj = arg;
     var isFoo = obj.kind === 'foo';
     if (isFoo) {
-        obj.foo; // Not narrowed because obj is mutable
+        obj.foo;
     }
     else {
-        obj.bar; // Not narrowed because obj is mutable
+        obj.bar;
     }
 }
 function f26(outer) {

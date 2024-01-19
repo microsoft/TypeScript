@@ -2,16 +2,16 @@
 
 === destructuringArrayBindingPatternAndAssignment3.ts ===
 const [a, b = a] = [1]; // ok
->a : any
->b : any
->a : any
+>a : number
+>b : number
+>a : number
 >[1] : [number]
 >1 : 1
 
 const [c, d = c, e = e] = [1]; // error for e = e
->c : any
->d : any
->c : any
+>c : number
+>d : number
+>c : number
 >e : any
 >e : any
 >[1] : [number]

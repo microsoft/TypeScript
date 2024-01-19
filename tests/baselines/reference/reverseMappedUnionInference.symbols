@@ -1,0 +1,172 @@
+//// [tests/cases/compiler/reverseMappedUnionInference.ts] ////
+
+=== reverseMappedUnionInference.ts ===
+interface AnyExtractor<Result> {
+>AnyExtractor : Symbol(AnyExtractor, Decl(reverseMappedUnionInference.ts, 0, 0))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 0, 23))
+
+  matches: (node: any) => boolean;
+>matches : Symbol(AnyExtractor.matches, Decl(reverseMappedUnionInference.ts, 0, 32))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 1, 12))
+
+  extract: (node: any) => Result | undefined;
+>extract : Symbol(AnyExtractor.extract, Decl(reverseMappedUnionInference.ts, 1, 34))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 2, 12))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 0, 23))
+}
+
+interface Extractor<T, Result> {
+>Extractor : Symbol(Extractor, Decl(reverseMappedUnionInference.ts, 3, 1))
+>T : Symbol(T, Decl(reverseMappedUnionInference.ts, 5, 20))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 5, 22))
+
+  matches: (node: unknown) => node is T;
+>matches : Symbol(Extractor.matches, Decl(reverseMappedUnionInference.ts, 5, 32))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 6, 12))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 6, 12))
+>T : Symbol(T, Decl(reverseMappedUnionInference.ts, 5, 20))
+
+  extract: (node: T) => Result | undefined;
+>extract : Symbol(Extractor.extract, Decl(reverseMappedUnionInference.ts, 6, 40))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 7, 12))
+>T : Symbol(T, Decl(reverseMappedUnionInference.ts, 5, 20))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 5, 22))
+}
+
+declare function createExtractor<T, Result>(params: {
+>createExtractor : Symbol(createExtractor, Decl(reverseMappedUnionInference.ts, 8, 1))
+>T : Symbol(T, Decl(reverseMappedUnionInference.ts, 10, 33))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 10, 35))
+>params : Symbol(params, Decl(reverseMappedUnionInference.ts, 10, 44))
+
+  matcher: (node: unknown) => node is T;
+>matcher : Symbol(matcher, Decl(reverseMappedUnionInference.ts, 10, 53))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 11, 12))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 11, 12))
+>T : Symbol(T, Decl(reverseMappedUnionInference.ts, 10, 33))
+
+  extract: (node: T) => Result;
+>extract : Symbol(extract, Decl(reverseMappedUnionInference.ts, 11, 40))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 12, 12))
+>T : Symbol(T, Decl(reverseMappedUnionInference.ts, 10, 33))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 10, 35))
+
+}): Extractor<T, Result>;
+>Extractor : Symbol(Extractor, Decl(reverseMappedUnionInference.ts, 3, 1))
+>T : Symbol(T, Decl(reverseMappedUnionInference.ts, 10, 33))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 10, 35))
+
+interface Identifier {
+>Identifier : Symbol(Identifier, Decl(reverseMappedUnionInference.ts, 13, 25))
+
+  kind: "identifier";
+>kind : Symbol(Identifier.kind, Decl(reverseMappedUnionInference.ts, 15, 22))
+
+  name: string;
+>name : Symbol(Identifier.name, Decl(reverseMappedUnionInference.ts, 16, 21))
+}
+
+declare function isIdentifier(node: unknown): node is Identifier;
+>isIdentifier : Symbol(isIdentifier, Decl(reverseMappedUnionInference.ts, 18, 1))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 20, 30))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 20, 30))
+>Identifier : Symbol(Identifier, Decl(reverseMappedUnionInference.ts, 13, 25))
+
+const identifierExtractor = createExtractor({
+>identifierExtractor : Symbol(identifierExtractor, Decl(reverseMappedUnionInference.ts, 22, 5))
+>createExtractor : Symbol(createExtractor, Decl(reverseMappedUnionInference.ts, 8, 1))
+
+  matcher: isIdentifier,
+>matcher : Symbol(matcher, Decl(reverseMappedUnionInference.ts, 22, 45))
+>isIdentifier : Symbol(isIdentifier, Decl(reverseMappedUnionInference.ts, 18, 1))
+
+  extract: (node) => {
+>extract : Symbol(extract, Decl(reverseMappedUnionInference.ts, 23, 24))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 24, 12))
+
+    return {
+      node,
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 25, 12))
+
+      kind: "identifier" as const,
+>kind : Symbol(kind, Decl(reverseMappedUnionInference.ts, 26, 11))
+>const : Symbol(const)
+
+      value: node.name,
+>value : Symbol(value, Decl(reverseMappedUnionInference.ts, 27, 34))
+>node.name : Symbol(Identifier.name, Decl(reverseMappedUnionInference.ts, 16, 21))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 24, 12))
+>name : Symbol(Identifier.name, Decl(reverseMappedUnionInference.ts, 16, 21))
+
+    };
+  },
+});
+
+interface StringLiteral {
+>StringLiteral : Symbol(StringLiteral, Decl(reverseMappedUnionInference.ts, 31, 3))
+
+  kind: "stringLiteral";
+>kind : Symbol(StringLiteral.kind, Decl(reverseMappedUnionInference.ts, 33, 25))
+
+  value: string;
+>value : Symbol(StringLiteral.value, Decl(reverseMappedUnionInference.ts, 34, 24))
+}
+
+declare function isStringLiteral(node: unknown): node is StringLiteral;
+>isStringLiteral : Symbol(isStringLiteral, Decl(reverseMappedUnionInference.ts, 36, 1))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 38, 33))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 38, 33))
+>StringLiteral : Symbol(StringLiteral, Decl(reverseMappedUnionInference.ts, 31, 3))
+
+const stringExtractor = createExtractor({
+>stringExtractor : Symbol(stringExtractor, Decl(reverseMappedUnionInference.ts, 40, 5))
+>createExtractor : Symbol(createExtractor, Decl(reverseMappedUnionInference.ts, 8, 1))
+
+  matcher: isStringLiteral,
+>matcher : Symbol(matcher, Decl(reverseMappedUnionInference.ts, 40, 41))
+>isStringLiteral : Symbol(isStringLiteral, Decl(reverseMappedUnionInference.ts, 36, 1))
+
+  extract: (node) => {
+>extract : Symbol(extract, Decl(reverseMappedUnionInference.ts, 41, 27))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 42, 12))
+
+    return {
+      node,
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 43, 12))
+
+      kind: "string" as const,
+>kind : Symbol(kind, Decl(reverseMappedUnionInference.ts, 44, 11))
+>const : Symbol(const)
+
+      value: node.value,
+>value : Symbol(value, Decl(reverseMappedUnionInference.ts, 45, 30))
+>node.value : Symbol(StringLiteral.value, Decl(reverseMappedUnionInference.ts, 34, 24))
+>node : Symbol(node, Decl(reverseMappedUnionInference.ts, 42, 12))
+>value : Symbol(StringLiteral.value, Decl(reverseMappedUnionInference.ts, 34, 24))
+
+    };
+  },
+});
+
+declare function unionType<Result extends readonly unknown[]>(parsers: {
+>unionType : Symbol(unionType, Decl(reverseMappedUnionInference.ts, 49, 3))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 51, 27))
+>parsers : Symbol(parsers, Decl(reverseMappedUnionInference.ts, 51, 62))
+
+  [K in keyof Result]: AnyExtractor<Result[K]>;
+>K : Symbol(K, Decl(reverseMappedUnionInference.ts, 52, 3))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 51, 27))
+>AnyExtractor : Symbol(AnyExtractor, Decl(reverseMappedUnionInference.ts, 0, 0))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 51, 27))
+>K : Symbol(K, Decl(reverseMappedUnionInference.ts, 52, 3))
+
+}): AnyExtractor<Result[number]>;
+>AnyExtractor : Symbol(AnyExtractor, Decl(reverseMappedUnionInference.ts, 0, 0))
+>Result : Symbol(Result, Decl(reverseMappedUnionInference.ts, 51, 27))
+
+const myUnion = unionType([identifierExtractor, stringExtractor]);
+>myUnion : Symbol(myUnion, Decl(reverseMappedUnionInference.ts, 55, 5))
+>unionType : Symbol(unionType, Decl(reverseMappedUnionInference.ts, 49, 3))
+>identifierExtractor : Symbol(identifierExtractor, Decl(reverseMappedUnionInference.ts, 22, 5))
+>stringExtractor : Symbol(stringExtractor, Decl(reverseMappedUnionInference.ts, 40, 5))
+

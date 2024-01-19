@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/externalModules/typeOnly/importDefaultNamedType2.ts] ////
+
+=== /a.ts ===
+export default class A {}
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== /b.ts ===
+import type from from './a';
+>from : Symbol(from, Decl(b.ts, 0, 6))
+

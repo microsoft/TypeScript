@@ -57,8 +57,10 @@ conditionalTypes1.ts(136,22): error TS2540: Cannot assign to 'id' because it is 
 conditionalTypes1.ts(137,10): error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<Part>'.
 conditionalTypes1.ts(159,5): error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
   'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-    Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
-      'T' could be instantiated with an arbitrary type which could be unrelated to '0 | (T extends string ? "" : false)'.
+    Type 'string | number' is not assignable to type 'T'.
+      'string | number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+        Type 'string' is not assignable to type 'T'.
+          'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
 conditionalTypes1.ts(160,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
@@ -86,6 +88,7 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
 !!! error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
 !!! error TS2322:   Type 'T' is not assignable to type '{}'.
 !!! related TS2208 conditionalTypes1.ts:10:13: This type parameter might need an `extends {}` constraint.
+!!! related TS2208 conditionalTypes1.ts:10:13: This type parameter might need an `extends NonNullable<T>` constraint.
     }
     
     function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
@@ -306,8 +309,10 @@ conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to t
         ~
 !!! error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
 !!! error TS2322:   'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-!!! error TS2322:     Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
-!!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to '0 | (T extends string ? "" : false)'.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'T'.
+!!! error TS2322:       'string | number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:         Type 'string' is not assignable to type 'T'.
+!!! error TS2322:           'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
         y = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
