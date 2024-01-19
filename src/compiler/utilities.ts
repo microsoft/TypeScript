@@ -9140,7 +9140,8 @@ export const commonPackageFolders: readonly string[] = ["node_modules", "bower_c
 
 const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
 
-interface WildcardMatcher {
+/** @internal */
+export interface WildcardMatcher {
     singleAsteriskRegexFragment: string;
     doubleAsteriskRegexFragment: string;
     replaceWildcardCharacter: (match: string) => string;
@@ -9222,7 +9223,13 @@ export function getPatternFromSpec(spec: string, basePath: string, usage: "files
     return pattern && `^(${pattern})${usage === "exclude" ? "($|/)" : "$"}`;
 }
 
-function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
+/** @internal */
+export function getSubPatternFromSpec(
+    spec: string,
+    basePath: string,
+    usage: "files" | "directories" | "exclude",
+    { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher = wildcardMatchers[usage],
+): string | undefined {
     let subpattern = "";
     let hasWrittenComponent = false;
     const components = getNormalizedPathComponents(spec, basePath);
