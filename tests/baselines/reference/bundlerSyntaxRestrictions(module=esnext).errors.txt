@@ -25,12 +25,12 @@ error TS2468: Cannot find global value 'Promise'.
     import("./a");
     ~~~~~~~~~~~~~
 !!! error TS2712: A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-    const _ = require("./a"); // No resolution
+    const _ = require("./a");
     _.a; // any
     
 ==== /main.ts (2 errors) ====
     import {} from "./a";
-    import _ = require("./a"); // Error
+    import _ = require("./a"); // Error in esnext
     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
     export = {}; // Error
