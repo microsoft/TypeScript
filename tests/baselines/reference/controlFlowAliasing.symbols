@@ -370,12 +370,16 @@ function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     if (isFoo) {
 >isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 131, 9))
 
-        obj.foo;  // Not narrowed because obj is mutable
+        obj.foo;
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 129, 32))
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 7))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 129, 32))
     }
     else {
-        obj.bar;  // Not narrowed because obj is mutable
+        obj.bar;
+>obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 129, 63))
 >obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 7))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 129, 63))
     }
 }
 

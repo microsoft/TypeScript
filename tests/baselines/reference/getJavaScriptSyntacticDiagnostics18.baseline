@@ -1,3 +1,4 @@
+// === Syntax Diagnostics ===
 Syntactic Diagnostics for file '/tests/cases/fourslash/getJavaScriptSyntacticDiagnostics18.ts':
 /tests/cases/fourslash/a.js(4,5): error TS8009: The 'public' modifier can only be used in TypeScript files.
 /tests/cases/fourslash/b.js(2,8): error TS8010: Type annotations can only be used in TypeScript files.

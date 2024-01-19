@@ -1,16 +1,66 @@
+import {
+    dedent,
+} from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
+import {
+    jsonToReadableText,
+} from "../helpers";
 import {
     verifyTsc,
 } from "../helpers/tsc";
 import {
-    loadProjectFromDisk,
+    loadProjectFromFiles,
     replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
     let projFs: vfs.FileSystem;
     before(() => {
-        projFs = loadProjectFromDisk("tests/projects/emitDeclarationOnly");
+        projFs = loadProjectFromFiles({
+            "/src/src/a.ts": dedent`
+                import { B } from "./b";
+
+                export interface A {
+                    b: B;
+                }
+            `,
+            "/src/src/b.ts": dedent`
+                import { C } from "./c";
+
+                export interface B {
+                    b: C;
+                }
+            `,
+            "/src/src/c.ts": dedent`
+                import { A } from "./a";
+
+                export interface C {
+                    a: A;
+                }
+            `,
+            "/src/src/index.ts": dedent`
+                export { A } from "./a";
+                export { B } from "./b";
+                export { C } from "./c";
+            `,
+            "/src/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    incremental: true,
+                    target: "es5",
+                    module: "commonjs",
+                    declaration: true,
+                    declarationMap: true,
+                    sourceMap: true,
+                    outDir: "./lib",
+                    composite: true,
+                    strict: true,
+                    esModuleInterop: true,
+                    alwaysStrict: true,
+                    rootDir: "src",
+                    emitDeclarationOnly: true,
+                },
+            }),
+        });
     });
     after(() => {
         projFs = undefined!;

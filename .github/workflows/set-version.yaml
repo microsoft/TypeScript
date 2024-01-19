@@ -2,7 +2,7 @@ name: Set branch version
 
 on:
   repository_dispatch:
-    types: set-version
+    types: [set-version]
 
 permissions:
   contents: read
@@ -17,11 +17,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
           ref: ${{ github.event.client_payload.branch_name }}
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
       - run: |
           npm --version
           # corepack enable npm

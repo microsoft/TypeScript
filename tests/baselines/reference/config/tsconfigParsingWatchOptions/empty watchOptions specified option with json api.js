@@ -4,7 +4,7 @@ Fs::
 
 //// [/tsconfig.json]
 {
- "watchOptions": {}
+  "watchOptions": {}
 }
 
 

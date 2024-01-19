@@ -1,9 +1,9 @@
 config:
 {
- "include": [
-  "x/.y/a.ts",
-  "c:/dev/.z/.b.ts"
- ]
+  "include": [
+    "x/.y/a.ts",
+    "c:/dev/.z/.b.ts"
+  ]
 }
 Fs::
 //// [c:/dev/.z/.b.ts]
@@ -34,26 +34,26 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/dev/x/.y/a.ts",
-  "c:/dev/.z/.b.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "x/.y/a.ts",
-   "c:/dev/.z/.b.ts"
-  ]
- },
- "wildcardDirectories": {},
- "compileOnSave": false
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/dev/x/.y/a.ts",
+    "c:/dev/.z/.b.ts"
+  ],
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "x/.y/a.ts",
+      "c:/dev/.z/.b.ts"
+    ]
+  },
+  "wildcardDirectories": {},
+  "compileOnSave": false
 }
 Errors::
 
