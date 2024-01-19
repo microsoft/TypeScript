@@ -2448,7 +2448,13 @@ export class TestState {
         const annotations = this.annotateContentWithTooltips(
             result,
             "completions",
-            item => item.optionalReplacementSpan,
+            item => {
+                if (item.optionalReplacementSpan) {
+                    const { start, length } = item.optionalReplacementSpan;
+                    return start && length === 0 ? { start, length: 1 } : item.optionalReplacementSpan;
+                }
+                return undefined;
+            },
             item =>
                 item.entries?.flatMap(
                     entry =>

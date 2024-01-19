@@ -5,6 +5,42 @@ type Named = { name: string }
 >Named : { name: string; }
 >name : string
 
+// Resons we can't remove aliases that are not used in the function signature: 
+
+// 1.Causes duplicate identifier if we remove alias
+function duplicateIndetifiers({ name: alias, name: alias2 }: Named) { }
+>duplicateIndetifiers : ({ name: alias, name: alias2 }: Named) => void
+>name : any
+>alias : string
+>name : any
+>alias2 : string
+
+function duplicateIndetifiers2(name: string, { name: alias }: Named) { }
+>duplicateIndetifiers2 : (name: string, { name: alias }: Named) => void
+>name : string
+>name : any
+>alias : string
+
+function duplicateIndetifiers3({ name: alias }: Named, { name: alias2 }: Named) { }
+>duplicateIndetifiers3 : ({ name: alias }: Named, { name: alias2 }: Named) => void
+>name : any
+>alias : string
+>name : any
+>alias2 : string
+
+let value = "";
+>value : string
+>"" : ""
+
+// 2.Can change in meaning for typeof value if we remove alias
+function shadowedVariable({ value: alias }: { value: string }): typeof value { return value }
+>shadowedVariable : ({ value: alias }: {    value: string;}) => typeof value
+>value : any
+>alias : string
+>value : string
+>value : string
+>value : string
+
 function notReferenced({ name: alias }: Named) {
 >notReferenced : ({ name: alias }: Named) => void
 >name : any
@@ -25,8 +61,6 @@ function notReferencedArrayAlias([a, b, { name: alias }]: Named[]) {
 >name : any
 >alias : string
 }
-
-
 
 function referencedInCode({ name: alias }: Named) {
 >referencedInCode : ({ name: alias }: Named) => string

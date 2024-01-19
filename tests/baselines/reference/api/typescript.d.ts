@@ -7076,6 +7076,7 @@ declare namespace ts {
         Default = "default",
         This = "this",
         InstantiationExpression = "__instantiationExpression",
+        ImportAttributes = "__importAttributes",
     }
     /**
      * This represents a string whose leading underscore have been escaped by adding extra leading underscores.
@@ -9197,6 +9198,7 @@ declare namespace ts {
     function isForInitializer(node: Node): node is ForInitializer;
     function isModuleBody(node: Node): node is ModuleBody;
     function isNamedImportBindings(node: Node): node is NamedImportBindings;
+    function isDeclarationStatement(node: Node): node is DeclarationStatement;
     function isStatement(node: Node): node is Statement;
     function isModuleReference(node: Node): node is ModuleReference;
     function isJsxTagNameExpression(node: Node): node is JsxTagNameExpression;
@@ -9216,11 +9218,13 @@ declare namespace ts {
     function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
     function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
     function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
+    function isInternalDeclaration(node: Node, sourceFile?: SourceFile): boolean;
     const unchangedTextChangeRange: TextChangeRange;
     type ParameterPropertyDeclaration = ParameterDeclaration & {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    function isPartOfTypeNode(node: Node): boolean;
     /**
      * This function checks multiple locations for JSDoc comments that apply to a host node.
      * At each location, the whole comment may apply to the node, or only a specific tag in
@@ -9859,7 +9863,7 @@ declare namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext): T;
+    function visitEachChild<T extends Node>(node: T, visitor: Visitor, context: TransformationContext | undefined): T;
     /**
      * Visits each child of a Node using the supplied visitor, possibly returning a new Node of the same kind in its place.
      *
@@ -9867,7 +9871,7 @@ declare namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
+    function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext | undefined, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
     function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions): string | undefined;
     function getOutputFileNames(commandLine: ParsedCommandLine, inputFileName: string, ignoreCase: boolean): readonly string[];
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
