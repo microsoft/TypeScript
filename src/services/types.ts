@@ -55,7 +55,7 @@ declare module "../compiler/types" {
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
         /** @internal */
         getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
-         /** @deprecated use {@link pos} */
+        /** @deprecated use {@link pos} */
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFileLike): number;
