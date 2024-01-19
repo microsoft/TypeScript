@@ -1,0 +1,55 @@
+// [[Reason: Function declarations are not fixed.]] ////
+
+//// [tests/cases/compiler/isolatedDeclarationErrorsExpandoFunctions.ts] ////
+
+===================================================================
+--- TSC	declarations
++++ DTE	declarations
+@@ -1,12 +1,38 @@
+ 
+ 
+ //// [isolatedDeclarationErrorsExpandoFunctions.d.ts]
+ export declare function foo(): void;
+-export declare namespace foo {
+-    var apply: () => void;
+-    var call: () => void;
+-    var bind: () => void;
+-    var caller: () => void;
+-    var toString: () => void;
+-    var length: number;
+-}
++
++/// [Errors] ////
++
++isolatedDeclarationErrorsExpandoFunctions.ts(3,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++isolatedDeclarationErrorsExpandoFunctions.ts(4,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++isolatedDeclarationErrorsExpandoFunctions.ts(5,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++isolatedDeclarationErrorsExpandoFunctions.ts(6,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++isolatedDeclarationErrorsExpandoFunctions.ts(7,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++isolatedDeclarationErrorsExpandoFunctions.ts(8,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++
++
++==== isolatedDeclarationErrorsExpandoFunctions.ts (6 errors) ====
++    export function foo(): void {}
++    
++    foo.apply = () => {}
++    ~~~~~~~~~
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++    foo.call = ()=> {}
++    ~~~~~~~~
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++    foo.bind = ()=> {}
++    ~~~~~~~~
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++    foo.caller = ()=> {}
++    ~~~~~~~~~~
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++    foo.toString = ()=> {}
++    ~~~~~~~~~~~~
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++    foo.length = 10
++    ~~~~~~~~~~
++!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
++    foo.length = 10
++    
+\ No newline at end of file

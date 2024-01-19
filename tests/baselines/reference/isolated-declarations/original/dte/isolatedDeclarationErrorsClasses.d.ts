@@ -89,8 +89,6 @@ export declare class C {
     [missing]: number;
     [noAnnotationLiteralName](): void;
     [noParamAnnotationLiteralName](v: string): void;
-    [noAnnotationStringName](): invalid;
-    [noParamAnnotationStringName](v: invalid): void;
     get [noAnnotationStringName](): invalid;
     set [noParamAnnotationStringName](value: invalid);
 }
@@ -114,9 +112,7 @@ isolatedDeclarationErrorsClasses.ts(12,17): error TS9009: At least one accessor 
 isolatedDeclarationErrorsClasses.ts(14,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(36,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 isolatedDeclarationErrorsClasses.ts(36,6): error TS2304: Cannot find name 'missing'.
-isolatedDeclarationErrorsClasses.ts(42,5): error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(44,35): error TS7006: Parameter 'v' implicitly has an 'any' type.
-isolatedDeclarationErrorsClasses.ts(44,35): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(46,9): error TS9009: At least one accessor must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsClasses.ts(48,9): error TS7032: Property '[noParamAnnotationStringName]' implicitly has type 'any', because its set accessor lacks a parameter type annotation.
 isolatedDeclarationErrorsClasses.ts(48,39): error TS7006: Parameter 'value' implicitly has an 'any' type.
@@ -126,7 +122,7 @@ isolatedDeclarationErrorsClasses.ts(55,5): error TS1169: A computed property nam
 isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
-==== isolatedDeclarationErrorsClasses.ts (22 errors) ====
+==== isolatedDeclarationErrorsClasses.ts (20 errors) ====
     export class Cls {
     
         field = 1 + 1;
@@ -201,16 +197,10 @@ isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralNa
         [noParamAnnotationLiteralName](v: string): void { }
     
         [noAnnotationStringName]() { }
-        ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS9008: Method must have an explicit return type annotation with --isolatedDeclarations.
-!!! related TS9034 isolatedDeclarationErrorsClasses.ts:42:5: Add a return type to the method
     
         [noParamAnnotationStringName](v): void { }
                                       ~
 !!! error TS7006: Parameter 'v' implicitly has an 'any' type.
-                                      ~
-!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
-!!! related TS9028 isolatedDeclarationErrorsClasses.ts:44:35: Add a type annotation to the parameter v.
     
         get [noAnnotationStringName]() { return 0;}
             ~~~~~~~~~~~~~~~~~~~~~~~~

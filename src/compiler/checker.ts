@@ -116,6 +116,7 @@ import {
     createModeAwareCacheKey,
     createModuleNotFoundChain,
     createMultiMap,
+    createNameResolver,
     createPrinterWithDefaults,
     createPrinterWithRemoveComments,
     createPrinterWithRemoveCommentsNeverAsciiEscape,
@@ -189,6 +190,7 @@ import {
     find,
     findAncestor,
     findBestPatternMatch,
+    findConstructorDeclaration,
     findIndex,
     findLast,
     findLastIndex,
@@ -323,7 +325,6 @@ import {
     getJSXTransformEnabled,
     getLeftmostAccessExpression,
     getLineAndCharacterOfPosition,
-    getLocalSymbolForExportDefault,
     getMembersOfDeclaration,
     getModeForUsageLocation,
     getModifiers,
@@ -486,7 +487,6 @@ import {
     isCatchClauseVariableDeclarationOrBindingElement,
     isCheckJsEnabledForFile,
     isClassDeclaration,
-    isClassElement,
     isClassExpression,
     isClassInstanceProperty,
     isClassLike,
@@ -497,6 +497,7 @@ import {
     isCompoundAssignment,
     isComputedNonLiteralName,
     isComputedPropertyName,
+    isConstAssertion,
     isConstructorDeclaration,
     isConstructorTypeNode,
     isConstructSignatureDeclaration,
@@ -602,7 +603,6 @@ import {
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
     isJSDocPropertyTag,
-    isJSDocReturnTag,
     isJSDocSatisfiesExpression,
     isJSDocSatisfiesTag,
     isJSDocSignature,
@@ -613,7 +613,6 @@ import {
     isJSDocTypedefTag,
     isJSDocTypeExpression,
     isJSDocTypeLiteral,
-    isJSDocTypeTag,
     isJSDocUnknownType,
     isJSDocVariadicType,
     isJsonSourceFile,
@@ -658,7 +657,6 @@ import {
     isNewExpression,
     isNodeDescendantOf,
     isNonNullAccess,
-    isNullishCoalesce,
     isNumericLiteral,
     isNumericLiteralName,
     isObjectBindingPattern,
@@ -1870,6 +1868,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typeHasCallOrConstructSignatures,
     };
 
+    var resolveNameHelper = createNameResolver(
+        compilerOptions,
+        getSymbolOfDeclaration,
+        error,
+        globals,
+        argumentsSymbol,
+        requireSymbol,
+        emptySymbols,
+        extendedResolveErrorReporting,
+        getSymbol,
+        getNodeLinks,
+    );
+    var resolveNameHelperForSuggestions = createNameResolver(
+        compilerOptions,
+        getSymbolOfDeclaration,
+        error,
+        globals,
+        argumentsSymbol,
+        requireSymbol,
+        emptySymbols,
+        extendedResolveErrorReporting,
+        suggestionGetSymbol,
+        getNodeLinks,
+    );
+
     function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node) {
         const candidatesSet = new Set<Signature>();
         const candidates: Signature[] = [];
@@ -3011,74 +3034,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function useOuterVariableScopeInParameter(result: Symbol, location: Node, lastLocation: Node) {
-        const target = getEmitScriptTarget(compilerOptions);
-        const functionLocation = location as FunctionLikeDeclaration;
-        if (
-            isParameter(lastLocation)
-            && functionLocation.body
-            && result.valueDeclaration
-            && result.valueDeclaration.pos >= functionLocation.body.pos
-            && result.valueDeclaration.end <= functionLocation.body.end
-        ) {
-            // check for several cases where we introduce temporaries that require moving the name/initializer of the parameter to the body
-            // - static field in a class expression
-            // - optional chaining pre-es2020
-            // - nullish coalesce pre-es2020
-            // - spread assignment in binding pattern pre-es2017
-            if (target >= ScriptTarget.ES2015) {
-                const links = getNodeLinks(functionLocation);
-                if (links.declarationRequiresScopeChange === undefined) {
-                    links.declarationRequiresScopeChange = forEach(functionLocation.parameters, requiresScopeChange) || false;
-                }
-                return !links.declarationRequiresScopeChange;
-            }
-        }
-        return false;
-
-        function requiresScopeChange(node: ParameterDeclaration): boolean {
-            return requiresScopeChangeWorker(node.name)
-                || !!node.initializer && requiresScopeChangeWorker(node.initializer);
-        }
-
-        function requiresScopeChangeWorker(node: Node): boolean {
-            switch (node.kind) {
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.Constructor:
-                    // do not descend into these
-                    return false;
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.PropertyAssignment:
-                    return requiresScopeChangeWorker((node as MethodDeclaration | AccessorDeclaration | PropertyAssignment).name);
-                case SyntaxKind.PropertyDeclaration:
-                    // static properties in classes introduce temporary variables
-                    if (hasStaticModifier(node)) {
-                        return !emitStandardClassFields;
-                    }
-                    return requiresScopeChangeWorker((node as PropertyDeclaration).name);
-                default:
-                    // null coalesce and optional chain pre-es2020 produce temporary variables
-                    if (isNullishCoalesce(node) || isOptionalChain(node)) {
-                        return target < ScriptTarget.ES2020;
-                    }
-                    if (isBindingElement(node) && node.dotDotDotToken && isObjectBindingPattern(node.parent)) {
-                        return target < ScriptTarget.ES2017;
-                    }
-                    if (isTypeNode(node)) return false;
-                    return forEachChild(node, requiresScopeChangeWorker) || false;
-            }
-        }
-    }
-
-    function isConstAssertion(location: Node) {
-        return (isAssertionExpression(location) && isConstTypeReference(location.type))
-            || (isJSDocTypeTag(location) && isConstTypeReference(location.typeExpression));
-    }
-
     /**
      * Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
      * the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
@@ -3097,413 +3052,46 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         excludeGlobals = false,
         getSpellingSuggestions = true,
     ): Symbol | undefined {
-        return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggestions, getSymbol);
+        return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggestions);
     }
 
-    function resolveNameHelper(
-        location: Node | undefined,
+    // The invalid initializer error is needed in two situation:
+    // 1. When result of name lookup is undefined, after checking for a missing "this."
+    // 2. When result of name lookup is defined
+    function checkAndReportErrorForInvalidInitializer(errorLocation: Node | undefined, propertyWithInvalidInitializer: PropertyDeclaration | undefined, nameArg: __String | Identifier | undefined) {
+        if (propertyWithInvalidInitializer && !emitStandardClassFields) {
+            // We have a match, but the reference occurred within a property initializer and the identifier also binds
+            // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
+            // with emitStandardClassFields because the scope semantics are different.
+            error(
+                errorLocation,
+                errorLocation && propertyWithInvalidInitializer.type && textRangeContainsPositionInclusive(propertyWithInvalidInitializer.type, errorLocation.pos)
+                    ? Diagnostics.Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor
+                    : Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
+                declarationNameToString(propertyWithInvalidInitializer.name),
+                diagnosticName(nameArg!),
+            );
+            return true;
+        }
+        return false;
+    }
+
+    function extendedResolveErrorReporting(
+        result: Symbol | undefined,
+        originalLocation: Node | undefined,
         name: __String,
         meaning: SymbolFlags,
         nameNotFoundMessage: DiagnosticMessage | undefined,
         nameArg: __String | Identifier | undefined,
-        isUse: boolean,
-        excludeGlobals: boolean,
         getSpellingSuggestions: boolean,
-        lookup: typeof getSymbol,
-    ): Symbol | undefined {
-        const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
-        let result: Symbol | undefined;
-        let lastLocation: Node | undefined;
-        let lastSelfReferenceLocation: Declaration | undefined;
-        let propertyWithInvalidInitializer: PropertyDeclaration | undefined;
-        let associatedDeclarationForContainingInitializerOrBindingName: ParameterDeclaration | BindingElement | undefined;
-        let withinDeferredContext = false;
-        const errorLocation = location;
-        let grandparent: Node;
-        let isInExternalModule = false;
-
-        loop:
-        while (location) {
-            if (name === "const" && isConstAssertion(location)) {
-                // `const` in an `as const` has no symbol, but issues no error because there is no *actual* lookup of the type
-                // (it refers to the constant type of the expression instead)
-                return undefined;
-            }
-            if (isModuleOrEnumDeclaration(location) && lastLocation && location.name === lastLocation) {
-                // If lastLocation is the name of a namespace or enum, skip the parent since it will have is own locals that could
-                // conflict.
-                lastLocation = location;
-                location = location.parent;
-            }
-            // Locals of a source file are not in scope (because they get merged into the global symbol table)
-            if (canHaveLocals(location) && location.locals && !isGlobalSourceFile(location)) {
-                if (result = lookup(location.locals, name, meaning)) {
-                    let useResult = true;
-                    if (isFunctionLike(location) && lastLocation && lastLocation !== (location as FunctionLikeDeclaration).body) {
-                        // symbol lookup restrictions for function-like declarations
-                        // - Type parameters of a function are in scope in the entire function declaration, including the parameter
-                        //   list and return type. However, local types are only in scope in the function body.
-                        // - parameters are only in the scope of function body
-                        // This restriction does not apply to JSDoc comment types because they are parented
-                        // at a higher level than type parameters would normally be
-                        if (meaning & result.flags & SymbolFlags.Type && lastLocation.kind !== SyntaxKind.JSDoc) {
-                            useResult = result.flags & SymbolFlags.TypeParameter
-                                // type parameters are visible in parameter list, return type and type parameter list
-                                ? lastLocation === (location as FunctionLikeDeclaration).type ||
-                                    lastLocation.kind === SyntaxKind.Parameter ||
-                                    lastLocation.kind === SyntaxKind.JSDocParameterTag ||
-                                    lastLocation.kind === SyntaxKind.JSDocReturnTag ||
-                                    lastLocation.kind === SyntaxKind.TypeParameter
-                                // local types not visible outside the function body
-                                : false;
-                        }
-                        if (meaning & result.flags & SymbolFlags.Variable) {
-                            // expression inside parameter will lookup as normal variable scope when targeting es2015+
-                            if (useOuterVariableScopeInParameter(result, location, lastLocation)) {
-                                useResult = false;
-                            }
-                            else if (result.flags & SymbolFlags.FunctionScopedVariable) {
-                                // parameters are visible only inside function body, parameter list and return type
-                                // technically for parameter list case here we might mix parameters and variables declared in function,
-                                // however it is detected separately when checking initializers of parameters
-                                // to make sure that they reference no variables declared after them.
-                                useResult = lastLocation.kind === SyntaxKind.Parameter ||
-                                    (
-                                        lastLocation === (location as FunctionLikeDeclaration).type &&
-                                        !!findAncestor(result.valueDeclaration, isParameter)
-                                    );
-                            }
-                        }
-                    }
-                    else if (location.kind === SyntaxKind.ConditionalType) {
-                        // A type parameter declared using 'infer T' in a conditional type is visible only in
-                        // the true branch of the conditional type.
-                        useResult = lastLocation === location.trueType;
-                    }
-
-                    if (useResult) {
-                        break loop;
-                    }
-                    else {
-                        result = undefined;
-                    }
-                }
-            }
-            withinDeferredContext = withinDeferredContext || getIsDeferredContext(location, lastLocation);
-            switch (location.kind) {
-                case SyntaxKind.SourceFile:
-                    if (!isExternalOrCommonJsModule(location as SourceFile)) break;
-                    isInExternalModule = true;
-                    // falls through
-                case SyntaxKind.ModuleDeclaration:
-                    const moduleExports = getSymbolOfDeclaration(location as SourceFile | ModuleDeclaration)?.exports || emptySymbols;
-                    if (location.kind === SyntaxKind.SourceFile || (isModuleDeclaration(location) && location.flags & NodeFlags.Ambient && !isGlobalScopeAugmentation(location))) {
-                        // It's an external module. First see if the module has an export default and if the local
-                        // name of that export default matches.
-                        if (result = moduleExports.get(InternalSymbolName.Default)) {
-                            const localSymbol = getLocalSymbolForExportDefault(result);
-                            if (localSymbol && (result.flags & meaning) && localSymbol.escapedName === name) {
-                                break loop;
-                            }
-                            result = undefined;
-                        }
-
-                        // Because of module/namespace merging, a module's exports are in scope,
-                        // yet we never want to treat an export specifier as putting a member in scope.
-                        // Therefore, if the name we find is purely an export specifier, it is not actually considered in scope.
-                        // Two things to note about this:
-                        //     1. We have to check this without calling getSymbol. The problem with calling getSymbol
-                        //        on an export specifier is that it might find the export specifier itself, and try to
-                        //        resolve it as an alias. This will cause the checker to consider the export specifier
-                        //        a circular alias reference when it might not be.
-                        //     2. We check === SymbolFlags.Alias in order to check that the symbol is *purely*
-                        //        an alias. If we used &, we'd be throwing out symbols that have non alias aspects,
-                        //        which is not the desired behavior.
-                        const moduleExport = moduleExports.get(name);
-                        if (
-                            moduleExport &&
-                            moduleExport.flags === SymbolFlags.Alias &&
-                            (getDeclarationOfKind(moduleExport, SyntaxKind.ExportSpecifier) || getDeclarationOfKind(moduleExport, SyntaxKind.NamespaceExport))
-                        ) {
-                            break;
-                        }
-                    }
-
-                    // ES6 exports are also visible locally (except for 'default'), but commonjs exports are not (except typedefs)
-                    if (name !== InternalSymbolName.Default && (result = lookup(moduleExports, name, meaning & SymbolFlags.ModuleMember))) {
-                        if (isSourceFile(location) && location.commonJsModuleIndicator && !result.declarations?.some(isJSDocTypeAlias)) {
-                            result = undefined;
-                        }
-                        else {
-                            break loop;
-                        }
-                    }
-                    break;
-                case SyntaxKind.EnumDeclaration:
-                    if (result = lookup(getSymbolOfDeclaration(location as EnumDeclaration)?.exports || emptySymbols, name, meaning & SymbolFlags.EnumMember)) {
-                        if (nameNotFoundMessage && getIsolatedModules(compilerOptions) && !(location.flags & NodeFlags.Ambient) && getSourceFileOfNode(location) !== getSourceFileOfNode(result.valueDeclaration)) {
-                            error(
-                                errorLocation,
-                                Diagnostics.Cannot_access_0_from_another_file_without_qualification_when_1_is_enabled_Use_2_instead,
-                                unescapeLeadingUnderscores(name),
-                                isolatedModulesLikeFlagName,
-                                `${unescapeLeadingUnderscores(getSymbolOfNode(location)!.escapedName)}.${unescapeLeadingUnderscores(name)}`,
-                            );
-                        }
-                        break loop;
-                    }
-                    break;
-                case SyntaxKind.PropertyDeclaration:
-                    // TypeScript 1.0 spec (April 2014): 8.4.1
-                    // Initializer expressions for instance member variables are evaluated in the scope
-                    // of the class constructor body but are not permitted to reference parameters or
-                    // local variables of the constructor. This effectively means that entities from outer scopes
-                    // by the same name as a constructor parameter or local variable are inaccessible
-                    // in initializer expressions for instance member variables.
-                    if (!isStatic(location)) {
-                        const ctor = findConstructorDeclaration(location.parent as ClassLikeDeclaration);
-                        if (ctor && ctor.locals) {
-                            if (lookup(ctor.locals, name, meaning & SymbolFlags.Value)) {
-                                // Remember the property node, it will be used later to report appropriate error
-                                Debug.assertNode(location, isPropertyDeclaration);
-                                propertyWithInvalidInitializer = location;
-                            }
-                        }
-                    }
-                    break;
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.InterfaceDeclaration:
-                    // The below is used to lookup type parameters within a class or interface, as they are added to the class/interface locals
-                    // These can never be latebound, so the symbol's raw members are sufficient. `getMembersOfNode` cannot be used, as it would
-                    // trigger resolving late-bound names, which we may already be in the process of doing while we're here!
-                    if (result = lookup(getSymbolOfDeclaration(location as ClassLikeDeclaration | InterfaceDeclaration).members || emptySymbols, name, meaning & SymbolFlags.Type)) {
-                        if (!isTypeParameterSymbolDeclaredInContainer(result, location)) {
-                            // ignore type parameters not declared in this container
-                            result = undefined;
-                            break;
-                        }
-                        if (lastLocation && isStatic(lastLocation)) {
-                            // TypeScript 1.0 spec (April 2014): 3.4.1
-                            // The scope of a type parameter extends over the entire declaration with which the type
-                            // parameter list is associated, with the exception of static member declarations in classes.
-                            if (nameNotFoundMessage) {
-                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
-                            }
-                            return undefined;
-                        }
-                        break loop;
-                    }
-                    if (isClassExpression(location) && meaning & SymbolFlags.Class) {
-                        const className = location.name;
-                        if (className && name === className.escapedText) {
-                            result = location.symbol;
-                            break loop;
-                        }
-                    }
-                    break;
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    // The type parameters of a class are not in scope in the base class expression.
-                    if (lastLocation === (location as ExpressionWithTypeArguments).expression && (location.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword) {
-                        const container = location.parent.parent;
-                        if (isClassLike(container) && (result = lookup(getSymbolOfDeclaration(container).members!, name, meaning & SymbolFlags.Type))) {
-                            if (nameNotFoundMessage) {
-                                error(errorLocation, Diagnostics.Base_class_expressions_cannot_reference_class_type_parameters);
-                            }
-                            return undefined;
-                        }
-                    }
-                    break;
-                // It is not legal to reference a class's own type parameters from a computed property name that
-                // belongs to the class. For example:
-                //
-                //   function foo<T>() { return '' }
-                //   class C<T> { // <-- Class's own type parameter T
-                //       [foo<T>()]() { } // <-- Reference to T from class's own computed property
-                //   }
-                //
-                case SyntaxKind.ComputedPropertyName:
-                    grandparent = location.parent.parent;
-                    if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
-                        // A reference to this grandparent's type parameters would be an error
-                        if (result = lookup(getSymbolOfDeclaration(grandparent as ClassLikeDeclaration | InterfaceDeclaration).members!, name, meaning & SymbolFlags.Type)) {
-                            if (nameNotFoundMessage) {
-                                error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
-                            }
-                            return undefined;
-                        }
-                    }
-                    break;
-                case SyntaxKind.ArrowFunction:
-                    // when targeting ES6 or higher there is no 'arguments' in an arrow function
-                    // for lower compile targets the resolved symbol is used to emit an error
-                    if (getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015) {
-                        break;
-                    }
-                    // falls through
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.Constructor:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.FunctionDeclaration:
-                    if (meaning & SymbolFlags.Variable && name === "arguments") {
-                        result = argumentsSymbol;
-                        break loop;
-                    }
-                    break;
-                case SyntaxKind.FunctionExpression:
-                    if (meaning & SymbolFlags.Variable && name === "arguments") {
-                        result = argumentsSymbol;
-                        break loop;
-                    }
-
-                    if (meaning & SymbolFlags.Function) {
-                        const functionName = (location as FunctionExpression).name;
-                        if (functionName && name === functionName.escapedText) {
-                            result = (location as FunctionExpression).symbol;
-                            break loop;
-                        }
-                    }
-                    break;
-                case SyntaxKind.Decorator:
-                    // Decorators are resolved at the class declaration. Resolving at the parameter
-                    // or member would result in looking up locals in the method.
-                    //
-                    //   function y() {}
-                    //   class C {
-                    //       method(@y x, y) {} // <-- decorator y should be resolved at the class declaration, not the parameter.
-                    //   }
-                    //
-                    if (location.parent && location.parent.kind === SyntaxKind.Parameter) {
-                        location = location.parent;
-                    }
-                    //
-                    //   function y() {}
-                    //   class C {
-                    //       @y method(x, y) {} // <-- decorator y should be resolved at the class declaration, not the method.
-                    //   }
-                    //
-
-                    // class Decorators are resolved outside of the class to avoid referencing type parameters of that class.
-                    //
-                    //   type T = number;
-                    //   declare function y(x: T): any;
-                    //   @param(1 as T) // <-- T should resolve to the type alias outside of class C
-                    //   class C<T> {}
-                    if (location.parent && (isClassElement(location.parent) || location.parent.kind === SyntaxKind.ClassDeclaration)) {
-                        location = location.parent;
-                    }
-                    break;
-                case SyntaxKind.JSDocTypedefTag:
-                case SyntaxKind.JSDocCallbackTag:
-                case SyntaxKind.JSDocEnumTag:
-                    // js type aliases do not resolve names from their host, so skip past it
-                    const root = getJSDocRoot(location);
-                    if (root) {
-                        location = root.parent;
-                    }
-                    break;
-                case SyntaxKind.Parameter:
-                    if (
-                        lastLocation && (
-                            lastLocation === (location as ParameterDeclaration).initializer ||
-                            lastLocation === (location as ParameterDeclaration).name && isBindingPattern(lastLocation)
-                        )
-                    ) {
-                        if (!associatedDeclarationForContainingInitializerOrBindingName) {
-                            associatedDeclarationForContainingInitializerOrBindingName = location as ParameterDeclaration;
-                        }
-                    }
-                    break;
-                case SyntaxKind.BindingElement:
-                    if (
-                        lastLocation && (
-                            lastLocation === (location as BindingElement).initializer ||
-                            lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation)
-                        )
-                    ) {
-                        if (isParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
-                            associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
-                        }
-                    }
-                    break;
-                case SyntaxKind.InferType:
-                    if (meaning & SymbolFlags.TypeParameter) {
-                        const parameterName = (location as InferTypeNode).typeParameter.name;
-                        if (parameterName && name === parameterName.escapedText) {
-                            result = (location as InferTypeNode).typeParameter.symbol;
-                            break loop;
-                        }
-                    }
-                    break;
-                case SyntaxKind.ExportSpecifier:
-                    // External module export bindings shouldn't be resolved to local symbols.
-                    if (
-                        lastLocation &&
-                        lastLocation === (location as ExportSpecifier).propertyName &&
-                        (location as ExportSpecifier).parent.parent.moduleSpecifier
-                    ) {
-                        location = location.parent.parent.parent;
-                    }
-                    break;
-            }
-            if (isSelfReferenceLocation(location)) {
-                lastSelfReferenceLocation = location;
-            }
-            lastLocation = location;
-            location = isJSDocTemplateTag(location) ? getEffectiveContainerForJSDocTemplateTag(location) || location.parent :
-                isJSDocParameterTag(location) || isJSDocReturnTag(location) ? getHostSignatureFromJSDoc(location) || location.parent :
-                location.parent;
-        }
-
-        // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
-        // If `result === lastSelfReferenceLocation.symbol`, that means that we are somewhere inside `lastSelfReferenceLocation` looking up a name, and resolving to `lastLocation` itself.
-        // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
-        if (isUse && result && (!lastSelfReferenceLocation || result !== lastSelfReferenceLocation.symbol)) {
-            result.isReferenced! |= meaning;
-        }
-
-        if (!result) {
-            if (lastLocation) {
-                Debug.assertNode(lastLocation, isSourceFile);
-                if (lastLocation.commonJsModuleIndicator && name === "exports" && meaning & lastLocation.symbol.flags) {
-                    return lastLocation.symbol;
-                }
-            }
-
-            if (!excludeGlobals) {
-                result = lookup(globals, name, meaning);
-            }
-        }
-        if (!result) {
-            if (originalLocation && isInJSFile(originalLocation) && originalLocation.parent) {
-                if (isRequireCall(originalLocation.parent, /*requireStringLiteralLikeArgument*/ false)) {
-                    return requireSymbol;
-                }
-            }
-        }
-
-        // The invalid initializer error is needed in two situation:
-        // 1. When result is undefined, after checking for a missing "this."
-        // 2. When result is defined
-        function checkAndReportErrorForInvalidInitializer() {
-            if (propertyWithInvalidInitializer && !emitStandardClassFields) {
-                // We have a match, but the reference occurred within a property initializer and the identifier also binds
-                // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
-                // with emitStandardClassFields because the scope semantics are different.
-                error(
-                    errorLocation,
-                    errorLocation && propertyWithInvalidInitializer.type && textRangeContainsPositionInclusive(propertyWithInvalidInitializer.type, errorLocation.pos)
-                        ? Diagnostics.Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor
-                        : Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
-                    declarationNameToString(propertyWithInvalidInitializer.name),
-                    diagnosticName(nameArg!),
-                );
-                return true;
-            }
-            return false;
-        }
-
+        lookup: (symbols: SymbolTable, name: __String, meaning: SymbolFlags) => Symbol | undefined,
+        lastLocation: Node | undefined,
+        errorLocation: Node | undefined,
+        propertyWithInvalidInitializer: PropertyDeclaration | undefined,
+        associatedDeclarationForContainingInitializerOrBindingName: ParameterDeclaration | BindingElement | undefined,
+        withinDeferredContext: boolean,
+        isInExternalModule: boolean,
+    ) {
         if (!result) {
             if (nameNotFoundMessage) {
                 addLazyDiagnostic(() => {
@@ -3511,7 +3099,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         !errorLocation ||
                         errorLocation.parent.kind !== SyntaxKind.JSDocLink &&
                             !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
-                            !checkAndReportErrorForInvalidInitializer() &&
+                            !checkAndReportErrorForInvalidInitializer(errorLocation, propertyWithInvalidInitializer, nameArg) &&
                             !checkAndReportErrorForExtendingInterface(errorLocation) &&
                             !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                             !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
@@ -3561,7 +3149,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return undefined;
         }
-        else if (nameNotFoundMessage && checkAndReportErrorForInvalidInitializer()) {
+        else if (nameNotFoundMessage && checkAndReportErrorForInvalidInitializer(errorLocation, propertyWithInvalidInitializer, nameArg)) {
             return undefined;
         }
 
@@ -3584,7 +3172,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     (meaning & SymbolFlags.BlockScopedVariable ||
                         ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))
                 ) {
-                    const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result!);
+                    const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
                     if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
                         checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
                     }
@@ -3657,63 +3245,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function getIsDeferredContext(location: Node, lastLocation: Node | undefined): boolean {
-        if (location.kind !== SyntaxKind.ArrowFunction && location.kind !== SyntaxKind.FunctionExpression) {
-            // initializers in instance property declaration of class like entities are executed in constructor and thus deferred
-            return isTypeQueryNode(location) || ((
-                isFunctionLikeDeclaration(location) ||
-                (location.kind === SyntaxKind.PropertyDeclaration && !isStatic(location))
-            ) && (!lastLocation || lastLocation !== (location as SignatureDeclaration | PropertyDeclaration).name)); // A name is evaluated within the enclosing scope - so it shouldn't count as deferred
-        }
-        if (lastLocation && lastLocation === (location as FunctionExpression | ArrowFunction).name) {
-            return false;
-        }
-        // generator functions and async functions are not inlined in control flow when immediately invoked
-        if ((location as FunctionExpression | ArrowFunction).asteriskToken || hasSyntacticModifier(location, ModifierFlags.Async)) {
-            return true;
-        }
-        return !getImmediatelyInvokedFunctionExpression(location);
-    }
-
-    type SelfReferenceLocation =
-        | FunctionDeclaration
-        | ClassDeclaration
-        | InterfaceDeclaration
-        | EnumDeclaration
-        | TypeAliasDeclaration
-        | ModuleDeclaration;
-
-    function isSelfReferenceLocation(node: Node): node is SelfReferenceLocation {
-        switch (node.kind) {
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.InterfaceDeclaration:
-            case SyntaxKind.EnumDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-            case SyntaxKind.ModuleDeclaration: // For `namespace N { N; }`
-                return true;
-            default:
-                return false;
-        }
-    }
-
     function diagnosticName(nameArg: __String | Identifier | PrivateIdentifier) {
         return isString(nameArg) ? unescapeLeadingUnderscores(nameArg as __String) : declarationNameToString(nameArg as Identifier);
-    }
-
-    function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
-        if (symbol.declarations) {
-            for (const decl of symbol.declarations) {
-                if (decl.kind === SyntaxKind.TypeParameter) {
-                    const parent = isJSDocTemplateTag(decl.parent) ? getJSDocHost(decl.parent) : decl.parent;
-                    if (parent === container) {
-                        return !(isJSDocTemplateTag(decl.parent) && find((decl.parent.parent as JSDoc).tags, isJSDocTypeAlias));
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: __String, nameArg: __String | Identifier): boolean {
@@ -5729,15 +5262,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             symbol.flags & SymbolFlags.Value ||
             symbol.flags & SymbolFlags.Alias && getSymbolFlags(symbol, !includeTypeOnlyMembers) & SymbolFlags.Value
         );
-    }
-
-    function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
-        const members = node.members;
-        for (const member of members) {
-            if (member.kind === SyntaxKind.Constructor && nodeIsPresent((member as ConstructorDeclaration).body)) {
-                return member as ConstructorDeclaration;
-            }
-        }
     }
 
     function createType(flags: TypeFlags): Type {
@@ -10350,7 +9874,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         return false;
     }
-
 
     /**
      * Push an entry on the type resolution stack. If an entry with the given target and the given property name
@@ -33086,30 +32609,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return suggestion && symbolName(suggestion);
     }
 
+    function suggestionGetSymbol(symbols: SymbolTable, name: __String, meaning: SymbolFlags) {
+        // Debug.assertEqual(outerName, name, "name should equal outerName");
+        const symbol = getSymbol(symbols, name, meaning);
+        // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
+        // So the table *contains* `x` but `x` isn't actually in scope.
+        // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
+        if (symbol) return symbol;
+        let candidates: Symbol[];
+        if (symbols === globals) {
+            const primitives = mapDefined(
+                ["string", "number", "boolean", "object", "bigint", "symbol"],
+                s => symbols.has((s.charAt(0).toUpperCase() + s.slice(1)) as __String)
+                    ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
+                    : undefined,
+            );
+            candidates = primitives.concat(arrayFrom(symbols.values()));
+        }
+        else {
+            candidates = arrayFrom(symbols.values());
+        }
+        return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), candidates, meaning);
+    }
     function getSuggestedSymbolForNonexistentSymbol(location: Node | undefined, outerName: __String, meaning: SymbolFlags): Symbol | undefined {
         Debug.assert(outerName !== undefined, "outername should always be defined");
-        const result = resolveNameHelper(location, outerName, meaning, /*nameNotFoundMessage*/ undefined, outerName, /*isUse*/ false, /*excludeGlobals*/ false, /*getSpellingSuggestions*/ true, (symbols, name, meaning) => {
-            Debug.assertEqual(outerName, name, "name should equal outerName");
-            const symbol = getSymbol(symbols, name, meaning);
-            // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
-            // So the table *contains* `x` but `x` isn't actually in scope.
-            // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
-            if (symbol) return symbol;
-            let candidates: Symbol[];
-            if (symbols === globals) {
-                const primitives = mapDefined(
-                    ["string", "number", "boolean", "object", "bigint", "symbol"],
-                    s => symbols.has((s.charAt(0).toUpperCase() + s.slice(1)) as __String)
-                        ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
-                        : undefined,
-                );
-                candidates = primitives.concat(arrayFrom(symbols.values()));
-            }
-            else {
-                candidates = arrayFrom(symbols.values());
-            }
-            return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), candidates, meaning);
-        });
+        const result = resolveNameHelperForSuggestions(location, outerName, meaning, /*nameNotFoundMessage*/ undefined, outerName, /*isUse*/ false, /*excludeGlobals*/ false, /*getSpellingSuggestions*/ true);
         return result;
     }
 

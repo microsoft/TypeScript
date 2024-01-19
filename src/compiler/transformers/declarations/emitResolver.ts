@@ -1,13 +1,15 @@
 import {
     __String,
     bindSourceFile,
-    canHaveLocals,
     CompilerOptions,
     ComputedPropertyName,
     CoreEmitResolver,
     createEntityVisibilityChecker,
     createEvaluator,
+    createNameResolver,
+    createSymbolTable,
     Debug,
+    Declaration,
     DeclarationName,
     determineIfDeclarationIsVisible,
     ElementAccessExpression,
@@ -21,16 +23,20 @@ import {
     forEachEntry,
     FunctionDeclaration,
     FunctionLikeDeclaration,
+    getMembersOfDeclaration,
     getNameOfDeclaration,
     getNodeId,
     getParseTreeNode,
     getPropertyNameForPropertyNameNode,
     hasDynamicName,
     hasProperty,
+    hasStaticModifier,
     hasSyntacticModifier,
     Identifier,
+    InternalSymbolName,
     isAccessor,
     isBigIntLiteral,
+    isBinaryExpression,
     isComputedPropertyName,
     isDeclarationReadonly,
     isElementAccessExpression,
@@ -55,17 +61,18 @@ import {
     isPropertyName,
     isSetAccessor,
     isSetAccessorDeclaration,
-    isSourceFile,
     isStringLiteralLike,
     isTemplateExpression,
     isVarConst,
     isVariableDeclaration,
     LateBoundDeclaration,
+    MemberName,
     ModifierFlags,
     Node,
     NodeFlags,
     nodeIsPresent,
     NoSubstitutionTemplateLiteral,
+    objectAllocator,
     ParameterDeclaration,
     parsePseudoBigInt,
     PropertyAccessExpression,
@@ -73,6 +80,7 @@ import {
     PropertyName,
     PropertySignature,
     skipParentheses,
+    some,
     SourceFile,
     Symbol,
     SymbolAccessibility,
@@ -82,38 +90,25 @@ import {
     VariableDeclaration,
 } from "../../_namespaces/ts";
 
-
-
-// /**
-//  * Assigning values to a property of a function will usually cause those members to be implicitly declared on the function
-//  * even if they were were not declared (expando functions)
-//  * DTE needs to detect these members and error on them since this behavior is not supported in isolated declarations
-//  * There are however members that can be assigned on a function that are not expando members, namely members that come from Function
-//  * In DTE we do not load the full d.ts so we keep a list of known members of function that can be assigned without considering them expando members.
-//  */
-// // const knownFunctionMembers = new Set([
-// //     "I:apply",
-// //     "I:call",
-// //     "I:bind",
-// //     "I:toString",
-// //     "I:prototype",
-// //     "I:length",
-// // ]);
-
-
-/** @internal */
-export interface EmitDeclarationNodeLinks {
+interface EmitSymbolLinks {
+    lateBoundSymbol?: Symbol;
+    signatureDeclarations?: Node[];
+    lateBoundMembers?: SymbolTable;
+    lateBoundExports?: SymbolTable;
+}
+interface EmitDeclarationNodeLinks {
     signatureDeclarations?: Node[];
     isVisible?: boolean;
     enumValue?: string | number | undefined;
-    isVisibilityComputed?: boolean
+    isVisibilityComputed?: boolean;
+    declarationRequiresScopeChange?: boolean;
+    resolvedSymbol?: Symbol;
 }
-
 
 /** @internal */
 export function createEmitDeclarationResolver(file: SourceFile, options: CompilerOptions): CoreEmitResolver {
     const nodeLinks: EmitDeclarationNodeLinks[] = [];
-    
+
     const { isEntityNameVisible, collectLinkedAliases } = createEntityVisibilityChecker({
         defaultSymbolAccessibility: SymbolAccessibility.Accessible,
         isDeclarationVisible,
@@ -124,20 +119,27 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
             return { accessibility: SymbolAccessibility.Accessible };
         },
         resolveName,
-        getTargetOfExportSpecifier
+        getTargetOfExportSpecifier,
     });
+    /* eslint-disable-next-line no-var */
+    var Symbol = objectAllocator.getSymbolConstructor();
+    const resolverWorker = createNameResolver(
+        options,
+        getSymbolOfDeclaration,
+        () => {},
+        createSymbolTable(),
+        new Symbol(SymbolFlags.Property, "arguments" as __String),
+        new Symbol(SymbolFlags.Property, "require" as __String),
+        createSymbolTable(),
+        r => r,
+        lookupSymbolName,
+        getNodeLinks,
+    );
+
     bindSourceFile(file, options);
     collectAllLinkedAliases(file);
 
     function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags): Symbol | undefined {
-        // throw new Error("getTargetOfExportSpecifier");
-        // if (idText(node.propertyName || node.name) === InternalSymbolName.Default) {
-        //     const specifier = getModuleSpecifierForImportOrExport(node);
-        //     const moduleSymbol = specifier && resolveEntityName(node, specifier, SymbolFlags.Module);
-        //     if (moduleSymbol) {
-        //         return resolveEntityName(moduleSymbol, node);
-        //     }
-        // }
         const resolved = resolveEntityName(node, node.propertyName || node.name, meaning);
         return resolved;
     }
@@ -186,27 +188,123 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
         }
     }
 
-    function resolveName(enclosingDeclaration: Node, key: __String, meaning: SymbolFlags) {
-        function getSymbolFromScope(table: SymbolTable | undefined) {
-            const symbol = table?.get(key);
-            if (symbol && ((symbol.flags & meaning) || (symbol.flags & SymbolFlags.Alias))) {
-                return symbol;
-            }
-        }
-        let currentScope = enclosingDeclaration;
-        while (currentScope) {
-            if(canHaveLocals(currentScope)) {
-                let symbol = getSymbolFromScope(currentScope.locals);
-                if (!symbol && (isModuleDeclaration(currentScope) || isSourceFile(currentScope)) && currentScope.symbol) {
-                    symbol = getSymbolFromScope(currentScope.symbol.exports);
-                }
-                if (symbol) return symbol;
-            }
-            currentScope = currentScope.parent;
-        }
-        return undefined;
+    function resolveName(enclosingDeclaration: Node, name: __String, meaning: SymbolFlags) {
+        return resolverWorker(enclosingDeclaration, name, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false, /*excludeGlobals*/ true, /*getSpellingSuggestions*/ false);
     }
 
+    const symbolLinks = new Map<Symbol, EmitSymbolLinks>();
+    function getSymbolLinks(symbol: Symbol) {
+        let links = symbolLinks.get(symbol);
+        if (!links) symbolLinks.set(symbol, links = {});
+        return links;
+    }
+    function getSymbolOfDeclaration(node: Declaration): Symbol {
+        const symbol = node.symbol;
+        if (symbol.escapedName !== InternalSymbolName.Computed) {
+            return symbol;
+        }
+
+        const links = getSymbolLinks(symbol);
+        if (!links.lateBoundSymbol) {
+            const parentSymbol = symbol.parent;
+            if (parentSymbol) {
+                const isStatic = some(symbol.declarations, hasStaticModifier);
+                resolveAllLateBoundSymbols(parentSymbol, isStatic);
+            }
+        }
+        return links.lateBoundSymbol ?? symbol;
+    }
+
+    function resolveAllLateBoundSymbols(symbol: Symbol, isStatic: boolean) {
+        const links = getSymbolLinks(symbol);
+        let lateSymbols: SymbolTable;
+        if (isStatic) {
+            if (links.lateBoundExports) {
+                return links.lateBoundExports;
+            }
+            lateSymbols = links.lateBoundExports = createSymbolTable();
+        }
+        else {
+            if (links.lateBoundMembers) {
+                return links.lateBoundMembers;
+            }
+            lateSymbols = links.lateBoundMembers = createSymbolTable();
+        }
+        if (symbol.declarations) {
+            for (const decl of symbol.declarations) {
+                const members = getMembersOfDeclaration(decl);
+                if (members) {
+                    for (const member of members) {
+                        if (isStatic === hasStaticModifier(member)) {
+                            const memberName = member.name && getDynamicSymbolName(member.name);
+                            if (memberName) {
+                                lateBindMember(symbol, lateSymbols, memberName, member);
+                            }
+                        }
+                    }
+                }
+            }
+            const expandoFunction = symbol.valueDeclaration?.kind === SyntaxKind.ArrowFunction || symbol.valueDeclaration?.kind === SyntaxKind.FunctionExpression
+                ? getSymbolOfDeclaration(symbol.valueDeclaration.parent as VariableDeclaration) || symbol
+                : symbol;
+            const assignments = expandoFunction.assignmentDeclarationMembers;
+            if (assignments) {
+                for (const member of assignments.values()) {
+                    if (!isBinaryExpression(member)) continue;
+                    const memberNameNode = isPropertyAccessExpression(member.left) ? member.left.name :
+                        isElementAccessExpression(member.left) ? member.left :
+                        undefined;
+
+                    const memberName = memberNameNode && getDynamicSymbolName(memberNameNode);
+                    if (memberName) {
+                        lateBindMember(symbol, lateSymbols, memberName, member);
+                    }
+                }
+            }
+        }
+        return lateSymbols;
+    }
+
+    function lateBindMember(parent: Symbol, lateSymbols: SymbolTable, memberName: __String, member: Declaration) {
+        const links = getNodeLinks(member);
+        if (links.resolvedSymbol) return links.resolvedSymbol;
+        let lateSymbol = lateSymbols.get(memberName);
+        if (!lateSymbol) {
+            lateSymbols.set(memberName, lateSymbol = new Symbol(SymbolFlags.None, memberName));
+            lateSymbol.parent = parent;
+        }
+        Debug.assert(lateSymbol.parent === parent, "Existing symbol parent should match new one");
+        const symbolFlags = member.symbol.flags;
+
+        lateSymbol.flags |= symbolFlags;
+        if (!lateSymbol.declarations) {
+            lateSymbol.declarations = [member];
+        }
+        else if (!member.symbol.isReplaceableByMethod) {
+            lateSymbol.declarations.push(member);
+        }
+        if (symbolFlags & SymbolFlags.Value) {
+            if (!lateSymbol.valueDeclaration || lateSymbol.valueDeclaration.kind !== member.kind) {
+                lateSymbol.valueDeclaration = member;
+            }
+        }
+        getSymbolLinks(member.symbol).lateBoundSymbol = links.resolvedSymbol = lateSymbol;
+    }
+
+    function lookupSymbolName(symbols: SymbolTable, name: __String, meaning: SymbolFlags): Symbol | undefined {
+        if (meaning) {
+            const symbol = symbols.get(name);
+            if (symbol) {
+                if (symbol.flags & meaning) {
+                    return symbol;
+                }
+                if (symbol.flags & SymbolFlags.Alias) {
+                    return symbol;
+                }
+            }
+        }
+        // return undefined if we can't find a symbol.
+    }
 
     function getEnumValueFromName(name: PropertyName | NoSubstitutionTemplateLiteral, location: EnumDeclaration) {
         const enumKey = getSymbolName(name);
@@ -346,7 +444,6 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
         if (!declaration) {
             return false;
         }
-        const symbol = declaration.symbol;
         if (isVariableDeclaration(declaration)) {
             if (declaration.type || !isVarConst(declaration)) {
                 return false;
@@ -355,7 +452,13 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
                 return false;
             }
         }
-        return !!symbol.exports && !!forEachEntry(symbol.exports, p => p.flags & SymbolFlags.Value && isExpandoPropertyDeclaration(p.valueDeclaration));
+
+        const symbol = getSymbolOfDeclaration(declaration);
+        if (!!symbol.exports && !!forEachEntry(symbol.exports, p => p.flags & SymbolFlags.Value && isExpandoPropertyDeclaration(p.valueDeclaration))) {
+            return true;
+        }
+        const lateBoundSymbols = resolveAllLateBoundSymbols(symbol, /*isStatic*/ true);
+        return !!forEachEntry(lateBoundSymbols, p => p.flags & SymbolFlags.Value && isExpandoPropertyDeclaration(p.valueDeclaration));
     }
 
     return {
@@ -366,10 +469,11 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
             return undefined;
         },
         getPropertiesOfContainerFunction(node: FunctionDeclaration | VariableDeclaration) {
-            return [...node.symbol.exports?.values() ?? []];
+            const symbol = getSymbolOfDeclaration(node);
+            return [...symbol.exports?.values() ?? [], ...resolveAllLateBoundSymbols(symbol, /*isStatic*/ true).values()];
         },
         getAllAccessorDeclarations(declaration) {
-            const symbol = declaration.symbol;
+            const symbol = getSymbolOfDeclaration(declaration);
             const declaredAccessors = symbol?.declarations?.filter(isAccessor);
             const declarations = declaredAccessors?.length ? declaredAccessors : [declaration];
             return {
@@ -426,9 +530,8 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
             return !hasDynamicName(node) || isIdentifierComputedName(name);
         },
         isImplementationOfOverload(node) {
-            function getSignaturesOfSymbol(symbol: Symbol | undefined): Node[] {
-                if (!symbol || !symbol.valueDeclaration) return emptyArray;
-                const links = getNodeLinks(symbol.valueDeclaration);
+            function getSignaturesOfSymbol(symbol: Symbol): Node[] {
+                const links = getSymbolLinks(symbol);
                 if (links.signatureDeclarations) return links.signatureDeclarations;
 
                 if (!symbol || !symbol.declarations) return (links.signatureDeclarations = emptyArray);
@@ -436,14 +539,7 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
                 const result: Node[] = links.signatureDeclarations = [];
                 for (let i = 0; i < symbol.declarations.length; i++) {
                     const decl = symbol.declarations[i];
-                    if (!isFunctionLike(decl) || isGetAccessor(decl) || isSetAccessor(decl)) {
-                        // If non methods got merged in a class member bail with an empty array
-                        // This is TS error behavior and we want to preserve iot as much as possible
-                        // if(isClassElement(decl)) {
-                        //     return emptyArray;
-                        // }
-                        continue;
-                    }
+                    if (!isFunctionLike(decl)) continue;
                     // Don't include signature if node is the implementation of an overloaded function. A node is considered
                     // an implementation node if it has a body and the previous node is of the same kind and immediately
                     // precedes the implementation node (i.e. has the same parent and ends where the implementation starts).
@@ -462,7 +558,7 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
 
             if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
                 if (isGetAccessor(node) || isSetAccessor(node)) return false; // Get or set accessors can never be overload implementations, but can have up to 2 signatures
-                const symbol = node.symbol;
+                const symbol = getSymbolOfDeclaration(node);
                 const signaturesOfSymbol = getSignaturesOfSymbol(symbol);
                 // If this function body corresponds to function with multiple signature, it is implementation of overload
                 // e.g.: function foo(a: string): string;
@@ -510,7 +606,6 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
 
     function isDeclarationVisible(node: Node): boolean {
         if (node) {
-            
             const links = getNodeLinks(node);
             links.isVisible ??= !!determineIfDeclarationIsVisible(node, isDeclarationVisible);
             return links.isVisible;
@@ -520,26 +615,29 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
     }
 }
 
-/**
- * Gets the symbolic name for a member from its type.
- * @internal
- */
-export function getSymbolName(name: Exclude<PropertyName, ComputedPropertyName>): __String;
-/**
- * Gets the symbolic name for a member from its type.
- * @internal
- */
-export function getSymbolName(name: ElementAccessExpression | PropertyName): __String | undefined;
-export function getSymbolName(name: ElementAccessExpression | PropertyName): __String | undefined {
-
+function getSymbolName(name: Exclude<PropertyName, ComputedPropertyName>): __String;
+function getSymbolName(name: ElementAccessExpression | PropertyName): __String | undefined;
+function getSymbolName(name: ElementAccessExpression | PropertyName): __String | undefined {
     const staticName = isPropertyName(name) ? getPropertyNameForPropertyNameNode(name) :
-        isElementAccessExpression(name) && isPropertyName(name.argumentExpression) ? getPropertyNameForPropertyNameNode(name.argumentExpression):
+        isElementAccessExpression(name) && isPropertyName(name.argumentExpression) ? getPropertyNameForPropertyNameNode(name.argumentExpression) :
         undefined;
 
-    if(staticName) return staticName;
+    if (staticName) return staticName;
 
-    let computedName = isComputedPropertyName(name) ? name.expression:
-        isElementAccessExpression(name) ? name.argumentExpression:
+    return getDynamicSymbolName(name);
+}
+
+function getEntityNameComponent(identifier: MemberName): __String {
+    const name = getPropertyNameForPropertyNameNode(identifier);
+    if (name && name.indexOf(".")) {
+        return name.replace(/\./g, "..") as __String;
+    }
+    return name;
+}
+
+function getDynamicSymbolName(name: ElementAccessExpression | PropertyName) {
+    let computedName = isComputedPropertyName(name) ? name.expression :
+        isElementAccessExpression(name) ? name.argumentExpression :
         undefined;
 
     if (computedName) {
@@ -547,19 +645,19 @@ export function getSymbolName(name: ElementAccessExpression | PropertyName): __S
         // We only support dotted identifiers as property keys
         while (true) {
             if (isIdentifier(computedName)) {
-                fullId += computedName.escapedText;
-                break;
+                const componentName = getEntityNameComponent(computedName);
+                fullId += componentName;
+                return fullId as __String;
             }
             else if (isPropertyAccessExpression(computedName)) {
-                fullId += computedName.name.escapedText;
+                const componentName = getEntityNameComponent(computedName.name);
                 computedName = computedName.expression;
+                fullId += componentName + ".";
             }
             else {
-                // Can't compute a property key, bail
                 return undefined;
             }
         }
-        return fullId as __String;
     }
     return undefined;
 }
