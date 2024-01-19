@@ -7001,7 +7001,7 @@ declare namespace ts {
         Transient = 33554432,
         Assignment = 67108864,
         ModuleExports = 134217728,
-        All = 67108863,
+        All = -1,
         Enum = 384,
         Variable = 3,
         Value = 111551,
