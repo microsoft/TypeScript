@@ -3036,10 +3036,18 @@ declare namespace ts {
                 ES6 = "ES6",
                 ES2015 = "ES2015",
                 ESNext = "ESNext",
+                Node16 = "Node16",
+                NodeNext = "NodeNext",
+                Preserve = "Preserve",
             }
             enum ModuleResolutionKind {
                 Classic = "Classic",
+                /** @deprecated Renamed to `Node10` */
                 Node = "Node",
+                Node10 = "Node10",
+                Node16 = "Node16",
+                NodeNext = "NodeNext",
+                Bundler = "Bundler",
             }
             enum NewLineKind {
                 Crlf = "Crlf",
