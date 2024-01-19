@@ -5148,7 +5148,7 @@ function tryGetObjectLikeCompletionContainer(contextToken: Node | undefined, pos
 function getRelevantTokens(position: number, sourceFile: SourceFile): { contextToken: Node; previousToken: Node; } | { contextToken: undefined; previousToken: undefined; } {
     const previousToken = findPrecedingToken(position, sourceFile);
     if (previousToken && position <= previousToken.end && (isMemberName(previousToken) || isKeyword(previousToken.kind))) {
-        const contextToken = findPrecedingToken(previousToken.getFullStart(), sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
+        const contextToken = findPrecedingToken(previousToken.pos, sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
         return { contextToken, previousToken };
     }
     return { contextToken: previousToken as Node, previousToken: previousToken as Node };

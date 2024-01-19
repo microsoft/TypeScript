@@ -197,7 +197,7 @@ function groupByNewlineContiguous<T extends ImportDeclaration | ExportDeclaratio
 // a new group is created if an import/export includes at least two new line
 // new line from multi-line comment doesn't count
 function isNewGroup(sourceFile: SourceFile, decl: ImportDeclaration | ExportDeclaration, scanner: Scanner) {
-    const startPos = decl.getFullStart();
+    const startPos = decl.pos;
     const endPos = decl.getStart();
     scanner.setText(sourceFile.text, startPos, endPos - startPos);
 

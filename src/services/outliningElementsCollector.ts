@@ -331,10 +331,10 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
     }
 
     function spanForArrowFunction(node: ArrowFunction): OutliningSpan | undefined {
-        if (isBlock(node.body) || isParenthesizedExpression(node.body) || positionsAreOnSameLine(node.body.getFullStart(), node.body.getEnd(), sourceFile)) {
+        if (isBlock(node.body) || isParenthesizedExpression(node.body) || positionsAreOnSameLine(node.body.pos, node.body.getEnd(), sourceFile)) {
             return undefined;
         }
-        const textSpan = createTextSpanFromBounds(node.body.getFullStart(), node.body.getEnd());
+        const textSpan = createTextSpanFromBounds(node.body.pos, node.body.getEnd());
         return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(node));
     }
 
@@ -397,7 +397,7 @@ function functionSpan(node: SignatureDeclaration, body: Block, sourceFile: Sourc
 }
 
 function spanBetweenTokens(openToken: Node, closeToken: Node, hintSpanNode: Node, sourceFile: SourceFile, autoCollapse = false, useFullStart = true): OutliningSpan {
-    const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
+    const textSpan = createTextSpanFromBounds(useFullStart ? openToken.pos : openToken.getStart(sourceFile), closeToken.getEnd());
     return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
 }
 

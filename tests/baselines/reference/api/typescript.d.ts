@@ -4816,6 +4816,7 @@ declare namespace ts {
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+        /** @deprecated use {@link pos} */
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFileLike): number;

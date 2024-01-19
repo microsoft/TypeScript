@@ -51,7 +51,7 @@ import {
 /** @internal */
 export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {
     let selectionRange: SelectionRange = {
-        textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd()),
+        textSpan: createTextSpanFromBounds(sourceFile.pos, sourceFile.getEnd()),
     };
 
     let parentNode: Node = sourceFile;
@@ -102,7 +102,7 @@ export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): Sel
 
                 // Synthesize a stop for '${ ... }' since '${' and '}' actually belong to siblings.
                 if (isTemplateSpan(parentNode) && nextNode && isTemplateMiddleOrTemplateTail(nextNode)) {
-                    const start = node.getFullStart() - "${".length;
+                    const start = node.pos - "${".length;
                     const end = nextNode.getStart() + "}".length;
                     pushSelectionRange(start, end);
                 }

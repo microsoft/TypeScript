@@ -53,7 +53,7 @@ function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, e
         heritageClauses[1].token === SyntaxKind.ImplementsKeyword
     ) {
         const implementsToken = heritageClauses[1].getFirstToken()!;
-        const implementsFullStart = implementsToken.getFullStart();
+        const implementsFullStart = implementsToken.pos;
         changes.replaceRange(sourceFile, { pos: implementsFullStart, end: implementsFullStart }, factory.createToken(SyntaxKind.CommaToken));
 
         // Rough heuristic: delete trailing whitespace after keyword so that it's not excessive.

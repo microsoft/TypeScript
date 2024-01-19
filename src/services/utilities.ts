@@ -1609,7 +1609,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
                 return Comparison.LessThan;
             }
 
-            const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDocComment*/ true);
+            const start = allowPositionInLeadingTrivia ? children[middle].pos : children[middle].getStart(sourceFile, /*includeJsDocComment*/ true);
             if (start > position) {
                 return Comparison.GreaterThan;
             }
@@ -1648,7 +1648,7 @@ function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allo
         if (end < position) {
             return false;
         }
-        start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDocComment*/ true);
+        start ??= allowPositionInLeadingTrivia ? node.pos : node.getStart(sourceFile, /*includeJsDocComment*/ true);
         if (start > position) {
             // If this child begins after position, then all subsequent children will as well.
             return false;
@@ -1959,7 +1959,7 @@ export function isInsideJsxElement(sourceFile: SourceFile, position: number): bo
 export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile) {
     const closeTokenText = tokenToString(token.kind)!;
     const matchingTokenText = tokenToString(matchingTokenKind);
-    const tokenFullStart = token.getFullStart();
+    const tokenFullStart = token.pos;
     // Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
     // a good, fast approximation without too much extra work in the cases where it fails.
     const bestGuessIndex = sourceFile.text.lastIndexOf(matchingTokenText, tokenFullStart);
@@ -1976,7 +1976,7 @@ export function findPrecedingMatchingToken(token: Node, matchingTokenKind: Synta
     const tokenKind = token.kind;
     let remainingMatchingTokens = 0;
     while (true) {
-        const preceding = findPrecedingToken(token.getFullStart(), sourceFile);
+        const preceding = findPrecedingToken(token.pos, sourceFile);
         if (!preceding) {
             return undefined;
         }
@@ -2054,9 +2054,9 @@ export function getPossibleTypeArgumentsInfo(tokenIn: Node | undefined, sourceFi
         switch (token.kind) {
             case SyntaxKind.LessThanToken:
                 // Found the beginning of the generic argument expression
-                token = findPrecedingToken(token.getFullStart(), sourceFile);
+                token = findPrecedingToken(token.pos, sourceFile);
                 if (token && token.kind === SyntaxKind.QuestionDotToken) {
-                    token = findPrecedingToken(token.getFullStart(), sourceFile);
+                    token = findPrecedingToken(token.pos, sourceFile);
                 }
                 if (!token || !isIdentifier(token)) return undefined;
                 if (!remainingLessThanTokens) {
@@ -2130,7 +2130,7 @@ export function getPossibleTypeArgumentsInfo(tokenIn: Node | undefined, sourceFi
                 return undefined;
         }
 
-        token = findPrecedingToken(token.getFullStart(), sourceFile);
+        token = findPrecedingToken(token.pos, sourceFile);
     }
 
     return undefined;
@@ -3256,7 +3256,7 @@ export function copyComments(sourceNode: Node, targetNode: Node) {
 }
 
 function hasLeadingLineBreak(node: Node, text: string) {
-    const start = node.getFullStart();
+    const start = node.pos;
     const end = node.getStart();
     for (let i = start; i < end; i++) {
         if (text.charCodeAt(i) === CharacterCodes.lineFeed) return true;
