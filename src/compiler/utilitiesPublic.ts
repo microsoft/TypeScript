@@ -2641,6 +2641,6 @@ export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
     }
     const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, sourceFile);
     return !!forEach(leadingCommentRanges, range => {
-        return hasInternalAnnotation(range, sourceFile!);
+        return hasInternalAnnotation(range, sourceFile);
     });
 }
