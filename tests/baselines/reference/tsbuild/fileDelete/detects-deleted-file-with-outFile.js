@@ -28,7 +28,13 @@ export function child2() {
 
 
 //// [/src/child/tsconfig.json]
-{"compilerOptions":{"composite":true,"outFile":"../childResult.js","module":"amd"}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outFile": "../childResult.js",
+    "module": "amd"
+  }
+}
 
 //// [/src/main/main.ts]
 import { child } from "child";
@@ -38,7 +44,18 @@ export function main() {
 
 
 //// [/src/main/tsconfig.json]
-{"compilerOptions":{"composite":true,"outFile":"../mainResult.js","module":"amd"},"references":[{"path":"../child"}]}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outFile": "../mainResult.js",
+    "module": "amd"
+  },
+  "references": [
+    {
+      "path": "../child"
+    }
+  ]
+}
 
 
 

@@ -5,7 +5,11 @@ class C { get prop() { return 1; } }
 class D extends C { prop = 1; }
 
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6"}}
+{
+  "compilerOptions": {
+    "target": "es6"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -35,35 +39,6 @@ Output::
 
 
 
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"watch":true,"configFilePath":"/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a.ts
-/a/lib/lib.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a.ts
-/a/lib/lib.d.ts
-
-Shape signatures in builder refreshed for::
-/a.ts (used version)
-/a/lib/lib.d.ts (used version)
-
-FsWatches::
-/a.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/a.js]
 class C {
     get prop() { return 1; }
@@ -77,15 +52,60 @@ class D extends C {
 
 
 
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
+
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a.ts
+/a/lib/lib.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a.ts
+/a/lib/lib.d.ts
+
+Shape signatures in builder refreshed for::
+/a.ts (used version)
+/a/lib/lib.d.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Enable useDefineForClassFields
 
 Input::
 //// [/tsconfig.json]
-{"compilerOptions":{"target":"es6","useDefineForClassFields":true}}
+{
+  "compilerOptions": {
+    "target": "es6",
+    "useDefineForClassFields": true
+  }
+}
 
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -99,21 +119,6 @@ Output::
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/a.ts","/a/lib/lib.d.ts"]
-Program options: {"target":2,"useDefineForClassFields":true,"watch":true,"configFilePath":"/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/a.ts
-/a/lib/lib.d.ts
-
-Semantic diagnostics in builder refreshed for::
-/a.ts
-/a/lib/lib.d.ts
-
-No shapes updated in the builder::
-
-exitCode:: ExitStatus.undefined
 
 //// [/a.js]
 class C {
@@ -132,3 +137,27 @@ class D extends C {
 }
 
 
+
+
+Program root files: [
+  "/a.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "target": 2,
+  "useDefineForClassFields": true,
+  "watch": true,
+  "configFilePath": "/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a.ts
+/a/lib/lib.d.ts
+
+Semantic diagnostics in builder refreshed for::
+/a.ts
+/a/lib/lib.d.ts
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

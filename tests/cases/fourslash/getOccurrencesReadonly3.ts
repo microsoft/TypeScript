@@ -9,7 +9,5 @@
 ////  }
 ////}
 
-verify.baselineCommands(
-    { type: "documentHighlights" },
-    { type: "documentHighlights", markerOrRange: "" },
-);
+verify.baselineDocumentHighlights();
+verify.baselineDocumentHighlights("");

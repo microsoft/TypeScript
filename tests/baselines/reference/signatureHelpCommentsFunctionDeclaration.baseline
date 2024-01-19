@@ -1,3 +1,4 @@
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpCommentsFunctionDeclaration.ts ===
 // /** This comment should appear for foo*/
 // function foo() {

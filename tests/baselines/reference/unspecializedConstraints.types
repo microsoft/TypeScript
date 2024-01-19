@@ -592,7 +592,7 @@ module ts {
             if (!arrayContains(b, a[i])) return false;
 >!arrayContains(b, a[i]) : boolean
 >arrayContains(b, a[i]) : boolean
->arrayContains : <T extends Equals<T>>(a: T[], item: T) => boolean
+>arrayContains : <T_1 extends Equals<T_1>>(a: T_1[], item: T_1) => boolean
 >b : T[]
 >a[i] : T
 >a : T[]

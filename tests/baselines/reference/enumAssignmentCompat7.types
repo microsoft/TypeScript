@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/enumAssignmentCompat7.ts] ////
+
+=== enumAssignmentCompat7.ts ===
+namespace first {
+>first : typeof first
+
+    export enum E { A = 1 }
+>E : E
+>A : E.A
+>1 : 1
+}
+
+namespace second {
+>second : typeof second
+
+    export enum E { A = 2 }
+>E : E
+>A : E.A
+>2 : 2
+}
+
+class Base {
+>Base : Base
+
+    method(param: first.E) {
+>method : (param: first.E) => void
+>param : first.E
+>first : any
+
+    }
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    override method(param: second.E) {
+>method : (param: second.E) => void
+>param : second.E
+>second : any
+    }
+}
+
+function overloadingFunction(): first.E
+>overloadingFunction : () => first.E
+>first : any
+
+function overloadingFunction(): second.E {
+>overloadingFunction : () => first.E
+>second : any
+
+    return second.E.B
+>second.E.B : any
+>second.E : typeof second.E
+>second : typeof second
+>E : typeof second.E
+>B : any
+}

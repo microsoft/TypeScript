@@ -25,3 +25,7 @@ interface Symbol {
 export interface FsContents {
     [path: string]: string;
 }
+
+export function libPath(forLib: string) {
+    return `${ts.getDirectoryPath(libFile.path)}/lib.${forLib}.d.ts`;
+}

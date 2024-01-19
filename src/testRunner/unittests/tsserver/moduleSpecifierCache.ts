@@ -1,9 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -41,7 +43,7 @@ const ambientDeclaration: File = {
 };
 const mobxPackageJson: File = {
     path: "/node_modules/mobx/package.json",
-    content: `{ "name": "mobx", "version": "1.0.0" }`,
+    content: jsonToReadableText({ name: "mobx", version: "1.0.0" }),
 };
 const mobxDts: File = {
     path: "/node_modules/mobx/index.d.ts",
@@ -59,7 +61,7 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         const { session, moduleSpecifierCache, triggerCompletions } = setup();
         // Completion at an import statement will calculate and cache module specifiers
         triggerCompletions({ file: cTs.path, line: 1, offset: cTs.content.length + 1 });
-        session.logger.info(`mobxCache: ${JSON.stringify(moduleSpecifierCache.get(cTs.path as ts.Path, mobxDts.path as ts.Path, {}, {}), undefined, " ")}`);
+        session.logger.info(`mobxCache: ${jsonToReadableText(moduleSpecifierCache.get(cTs.path as ts.Path, mobxDts.path as ts.Path, {}, {}))}`);
         baselineTsserverLogs("moduleSpecifierCache", "caches module specifiers within a file", session);
     });
 
@@ -132,17 +134,16 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         baselineTsserverLogs("moduleSpecifierCache", "invalidates the cache when user preferences change", session);
 
         function getWithPreferences(preferences: ts.UserPreferences) {
-            session.logger.info(`moduleSpecifierCache for ${JSON.stringify(preferences)} (${bTs.path} -> ${aTs.path}) ${JSON.stringify(moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}), undefined, " ")}`);
+            session.logger.info(`moduleSpecifierCache for ${jsonToReadableText(preferences)} (${bTs.path} -> ${aTs.path}) ${jsonToReadableText(moduleSpecifierCache.get(bTs.path as ts.Path, aTs.path as ts.Path, preferences, {}))}`);
         }
     });
 });
 
 function setup() {
     const host = createServerHost([aTs, bTs, cTs, bSymlink, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts]);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+    const session = new TestSession(host);
     openFilesForSession([aTs, bTs, cTs], session);
-    const projectService = session.getProjectService();
-    const project = projectService.configuredProjects.get(tsconfig.path)!;
+    const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
     session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
         command: ts.server.protocol.CommandTypes.Configure,
         arguments: {
@@ -156,7 +157,7 @@ function setup() {
     });
     triggerCompletions({ file: bTs.path, line: 1, offset: 3 });
 
-    return { host, project, projectService, session, moduleSpecifierCache: project.getModuleSpecifierCache(), triggerCompletions };
+    return { host, project, session, moduleSpecifierCache: project.getModuleSpecifierCache(), triggerCompletions };
 
     function triggerCompletions(requestLocation: ts.server.protocol.FileLocationRequestArgs) {
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({

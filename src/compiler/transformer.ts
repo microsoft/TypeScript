@@ -82,6 +82,7 @@ function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<Source
         case ModuleKind.ES2022:
         case ModuleKind.ES2020:
         case ModuleKind.ES2015:
+        case ModuleKind.Preserve:
             return transformECMAScriptModule;
         case ModuleKind.System:
             return transformSystemModule;

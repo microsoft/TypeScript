@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace5.ts] ////
+
+=== three.d.ts ===
+export type Named = 0;
+>Named : 0
+
+declare const Named: 0;
+>Named : 0
+
+=== two.d.ts ===
+export * as default from "./three";
+>default : typeof import("three")
+
+=== one.ts ===
+import ns from "./two";
+>ns : typeof ns
+
+type Alias = ns.Named;
+>Alias : 0
+>ns : any
+
+ns.Named;
+>ns.Named : 0
+>ns : typeof ns
+>Named : 0
+

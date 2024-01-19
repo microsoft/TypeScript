@@ -1,10 +1,10 @@
 inheritedConstructorWithRestParams2.ts(32,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-inheritedConstructorWithRestParams2.ts(33,1): error TS2769: No overload matches this call.
+inheritedConstructorWithRestParams2.ts(33,5): error TS2769: No overload matches this call.
   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
     Argument of type 'number' is not assignable to parameter of type 'string'.
-inheritedConstructorWithRestParams2.ts(34,1): error TS2769: No overload matches this call.
+inheritedConstructorWithRestParams2.ts(34,5): error TS2769: No overload matches this call.
   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'number'.
   Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
@@ -47,14 +47,14 @@ inheritedConstructorWithRestParams2.ts(34,1): error TS2769: No overload matches 
                 ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     new Derived("", 3, "", 3);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
 !!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
 !!! error TS2769:   Overload 2 of 3, '(x1: string, x2: string, ...y: number[]): Derived', gave the following error.
 !!! error TS2769:     Argument of type 'number' is not assignable to parameter of type 'string'.
     new Derived("", 3, "", "");
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(x: string, ...y: number[]): Derived', gave the following error.
 !!! error TS2769:     Argument of type 'string' is not assignable to parameter of type 'number'.
