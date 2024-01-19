@@ -3,6 +3,9 @@ import {
     dedent,
 } from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     compilerOptionsToConfigJson,
 } from "../helpers/contents";
 import {
@@ -25,7 +28,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
                 export function child2() {
                 }
             `,
-            "/src/child/tsconfig.json": JSON.stringify({
+            "/src/child/tsconfig.json": jsonToReadableText({
                 compilerOptions: compilerOptionsToConfigJson(childOptions),
             }),
             ...(mainOptions ? {
@@ -35,7 +38,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
                         child();
                     }
                 `,
-                "/src/main/tsconfig.json": JSON.stringify({
+                "/src/main/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson(mainOptions),
                     references: [{ path: "../child" }],
                 }),

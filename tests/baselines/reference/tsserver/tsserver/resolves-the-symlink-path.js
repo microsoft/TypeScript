@@ -1,11 +1,20 @@
 currentDirectory:: /users/user/projects/myproject useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/user/projects/myconfigs/node_modules/@something/tsconfig-node/tsconfig.json]
-{"extends":"@something/tsconfig-base/tsconfig.json","compilerOptions":{"removeComments":true}}
+{
+  "extends": "@something/tsconfig-base/tsconfig.json",
+  "compilerOptions": {
+    "removeComments": true
+  }
+}
 
 //// [/users/user/projects/myconfigs/node_modules/@something/tsconfig-base/tsconfig.json]
-{"compilerOptions":{"composite":true}}
+{
+  "compilerOptions": {
+    "composite": true
+  }
+}
 
 //// [/users/user/projects/myproject/src/index.ts]
 // some comment
@@ -13,7 +22,9 @@ export const x = 10;
 
 
 //// [/users/user/projects/myproject/src/tsconfig.json]
-{"extends":"@something/tsconfig-node/tsconfig.json"}
+{
+  "extends": "@something/tsconfig-node/tsconfig.json"
+}
 
 //// [/users/user/projects/myproject/node_modules/@something/tsconfig-node] symlink(/users/user/projects/myconfigs/node_modules/@something/tsconfig-node)
 //// [/a/lib/lib.d.ts]
@@ -45,13 +56,13 @@ Info seq  [hh:mm:ss:mss] Creating configuration project /users/user/projects/myp
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/user/projects/myproject/src/tsconfig.json 2000 undefined Project: /users/user/projects/myproject/src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingStart",
-     "body": {
-      "projectName": "/users/user/projects/myproject/src/tsconfig.json",
-      "reason": "Creating possible configured project for /users/user/projects/myproject/src/index.ts to open"
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/users/user/projects/myproject/src/tsconfig.json",
+        "reason": "Creating possible configured project for /users/user/projects/myproject/src/index.ts to open"
+      }
     }
 Info seq  [hh:mm:ss:mss] Config: /users/user/projects/myproject/src/tsconfig.json : {
  "rootNames": [
@@ -90,67 +101,67 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectLoadingFinish",
-     "body": {
-      "projectName": "/users/user/projects/myproject/src/tsconfig.json"
-     }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "telemetry",
-     "body": {
-      "telemetryEventName": "projectInfo",
-      "payload": {
-       "projectId": "76e1e6d2d13c83a9d2d8c2e5a527acf3bddb950312dc88f9e3cb7bb546d3f955",
-       "fileStats": {
-        "js": 0,
-        "jsSize": 0,
-        "jsx": 0,
-        "jsxSize": 0,
-        "ts": 1,
-        "tsSize": 37,
-        "tsx": 0,
-        "tsxSize": 0,
-        "dts": 1,
-        "dtsSize": 334,
-        "deferred": 0,
-        "deferredSize": 0
-       },
-       "compilerOptions": {
-        "composite": true,
-        "removeComments": true
-       },
-       "typeAcquisition": {
-        "enable": false,
-        "include": false,
-        "exclude": false
-       },
-       "extends": true,
-       "files": false,
-       "include": false,
-       "exclude": false,
-       "compileOnSave": false,
-       "configFileName": "tsconfig.json",
-       "projectType": "configured",
-       "languageServiceEnabled": true,
-       "version": "FakeVersion"
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/users/user/projects/myproject/src/tsconfig.json"
       }
-     }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "configFileDiag",
-     "body": {
-      "triggerFile": "/users/user/projects/myproject/src/index.ts",
-      "configFile": "/users/user/projects/myproject/src/tsconfig.json",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "76e1e6d2d13c83a9d2d8c2e5a527acf3bddb950312dc88f9e3cb7bb546d3f955",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 37,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "composite": true,
+            "removeComments": true
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": true,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/users/user/projects/myproject/src/index.ts",
+        "configFile": "/users/user/projects/myproject/src/tsconfig.json",
+        "diagnostics": []
+      }
     }
 Info seq  [hh:mm:ss:mss] Search path: /users/user/projects/myproject/src
 Info seq  [hh:mm:ss:mss] For info: /users/user/projects/myproject/src/tsconfig.json :: No config files found.

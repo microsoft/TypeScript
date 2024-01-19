@@ -9,7 +9,7 @@ declare module TypeScript {
 >s : string
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
->createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
+>createIntrinsicsObject : { <T>(): IIndexable<T>; <T_1>(): IIndexable<T_1>; }
 
     interface IHashTable<T> {
         getAllKeys(): string[];
@@ -168,7 +168,7 @@ declare module TypeScript {
 >s : string
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
->createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
+>createIntrinsicsObject : { <T_1>(): IIndexable<T_1>; <T>(): IIndexable<T>; }
 
     interface IHashTable<T> {
         getAllKeys(): string[];

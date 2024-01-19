@@ -1,16 +1,19 @@
 import {
     IncrementalVerifierCallbacks,
 } from "../../../harness/incrementalUtils";
+import {
+    LoggerWithInMemoryLogs,
+} from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createProjectService,
-    createSession,
     logDiagnostics,
-    Logger,
     openFilesForSession,
-    TestProjectService,
+    setCompilerOptionsForInferredProjectsRequestForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -74,13 +77,13 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             return calledMap;
         }
 
-        function logCacheEntry(logger: Logger, callback: CalledMaps) {
+        function logCacheEntry(logger: LoggerWithInMemoryLogs, callback: CalledMaps) {
             const result = Array.from<[string, (true | CalledWithFiveArgs)[]], { key: string; count: number; }>(calledMaps[callback].entries(), ([key, arr]) => ({ key, count: arr.length }));
-            logger.info(`${callback}:: ${JSON.stringify(result)}`);
+            logger.info(`${callback}:: ${jsonToReadableText(result)}`);
             calledMaps[callback].clear();
         }
 
-        function logCacheAndClear(logger: Logger) {
+        function logCacheAndClear(logger: LoggerWithInMemoryLogs) {
             forEachHostProperty(prop => logCacheEntry(logger, prop));
         }
 
@@ -93,9 +96,9 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         }
     }
 
-    function logSemanticDiagnostics(projectService: TestProjectService, project: ts.server.Project, file: File) {
+    function logSemanticDiagnostics(session: TestSession, project: ts.server.Project, file: File) {
         logDiagnostics(
-            projectService,
+            session,
             `getSemanticDiagnostics:: ${file.path}`,
             project,
             project.getLanguageService().getSemanticDiagnostics(file.path),
@@ -115,15 +118,18 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
 
         const host = createServerHost([root, imported]);
-        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true });
-        projectService.openClientFile(root.path);
-        const project = projectService.inferredProjects[0];
+        const session = new TestSession(host);
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            module: ts.server.protocol.ModuleKind.AMD,
+            noLib: true,
+        }, session);
+        openFilesForSession([root], session);
+        const project = session.getProjectService().inferredProjects[0];
         const rootScriptInfo = project.getRootScriptInfos()[0];
         assert.equal(rootScriptInfo.fileName, root.path);
 
         // ensure that imported file was found
-        logSemanticDiagnostics(projectService, project, imported);
+        logSemanticDiagnostics(session, project, imported);
 
         const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
@@ -131,29 +137,33 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         // ensure file has correct number of errors after edit
         editContent(`import {x} from "f1";
                  var x: string = 1;`);
-        logSemanticDiagnostics(projectService, project, imported);
-        logCacheAndClear(projectService.logger);
+        logSemanticDiagnostics(session, project, imported);
+        logCacheAndClear(session.logger);
 
         // trigger synchronization to make sure that the host will try to find 'f2' module on disk
         editContent(`import {x} from "f2"`);
         try {
             // trigger synchronization to make sure that the host will try to find 'f2' module on disk
-            logSemanticDiagnostics(projectService, project, imported);
+            logSemanticDiagnostics(session, project, imported);
         }
         catch (e) {
-            projectService.logger.info(e.message);
+            session.logger.info(e.message);
         }
-        logCacheAndClear(projectService.logger);
+        logCacheAndClear(session.logger);
 
         editContent(`import {x} from "f1"`);
-        logSemanticDiagnostics(projectService, project, imported);
-        logCacheAndClear(projectService.logger);
+        logSemanticDiagnostics(session, project, imported);
+        logCacheAndClear(session.logger);
 
         // setting compiler options discards module resolution cache
-        projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true, target: ts.ScriptTarget.ES5 });
-        logSemanticDiagnostics(projectService, project, imported);
-        logCacheAndClear(projectService.logger);
-        baselineTsserverLogs("cachingFileSystemInformation", "works using legacy resolution logic", projectService);
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            module: ts.server.protocol.ModuleKind.AMD,
+            noLib: true,
+            target: ts.server.protocol.ScriptTarget.ES5,
+        }, session);
+        logSemanticDiagnostics(session, project, imported);
+        logCacheAndClear(session.logger);
+        baselineTsserverLogs("cachingFileSystemInformation", "works using legacy resolution logic", session);
 
         function editContent(newContent: string) {
             rootScriptInfo.editContent(0, rootContent.length, newContent);
@@ -173,22 +183,25 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
 
         const host = createServerHost([root]);
-        const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        projectService.setCompilerOptionsForInferredProjects({ module: ts.ModuleKind.AMD, noLib: true });
+        const session = new TestSession(host);
+        setCompilerOptionsForInferredProjectsRequestForSession({
+            module: ts.server.protocol.ModuleKind.AMD,
+            noLib: true,
+        }, session);
         const logCacheAndClear = createLoggerTrackingHostCalls(host);
-        projectService.openClientFile(root.path);
-        const project = projectService.inferredProjects[0];
+        openFilesForSession([root], session);
+        const project = session.getProjectService().inferredProjects[0];
         const rootScriptInfo = project.getRootScriptInfos()[0];
         assert.equal(rootScriptInfo.fileName, root.path);
 
-        logSemanticDiagnostics(projectService, project, root);
-        logCacheAndClear(projectService.logger);
+        logSemanticDiagnostics(session, project, root);
+        logCacheAndClear(session.logger);
 
         host.writeFile(imported.path, imported.content);
         host.runQueuedTimeoutCallbacks();
-        logSemanticDiagnostics(projectService, project, root);
-        logCacheAndClear(projectService.logger);
-        baselineTsserverLogs("cachingFileSystemInformation", "loads missing files from disk", projectService);
+        logSemanticDiagnostics(session, project, root);
+        logCacheAndClear(session.logger);
+        baselineTsserverLogs("cachingFileSystemInformation", "loads missing files from disk", session);
     });
 
     it("when calling goto definition of module", () => {
@@ -212,7 +225,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
         const tsconfigFile: File = {
             path: "/a/b/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     target: "es6",
                     module: "es6",
@@ -234,7 +247,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
         const projectFiles = [clientFile, anotherModuleFile, moduleFile, tsconfigFile];
         const host = createServerHost(projectFiles);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([clientFile], session);
         const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
@@ -281,7 +294,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 const types = ["node", "jest"];
                 const tsconfigFile: File = {
                     path: `${frontendDir}/tsconfig.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: {
                             strict: true,
                             strictNullChecks: true,
@@ -314,19 +327,19 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                 };
                 const projectFiles = [file1, file2, es2016LibFile, tsconfigFile];
                 const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
-                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-                projectService.openClientFile(file1.path);
+                const session = new TestSession(host);
+                openFilesForSession([file1], session);
 
                 const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
                 // Create file cookie.ts
                 host.writeFile(file3.path, file3.content);
                 host.runQueuedTimeoutCallbacks();
-                logCacheAndClear(projectService.logger);
+                logCacheAndClear(session.logger);
 
-                projectService.openClientFile(file3.path);
-                logCacheAndClear(projectService.logger);
-                baselineTsserverLogs("cachingFileSystemInformation", `watchDirectories for config file with case ${useCaseSensitiveFileNames ? "" : "in"}sensitive file system`, projectService);
+                openFilesForSession([file3], session);
+                logCacheAndClear(session.logger);
+                baselineTsserverLogs("cachingFileSystemInformation", `watchDirectories for config file with case ${useCaseSensitiveFileNames ? "" : "in"}sensitive file system`, session);
             });
         }
         verifyWatchDirectoriesCaseSensitivity(/*useCaseSensitiveFileNames*/ false);
@@ -346,7 +359,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             };
             const tsconfig: File = {
                 path: `${projectLocation}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     files: ["foo/boo/app.ts", "foo/boo/moo/app.ts"],
                     moduleResolution: resolution,
                 }),
@@ -354,12 +367,12 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
             const files = [file1, file2, tsconfig, libFile];
             const host = createServerHost(files);
-            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-            service.openClientFile(file1.path);
+            const session = new TestSession(host);
+            openFilesForSession([file1], session);
 
-            const project = service.configuredProjects.get(tsconfig.path)!;
-            logSemanticDiagnostics(service, project, file1);
-            logSemanticDiagnostics(service, project, file2);
+            const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
+            logSemanticDiagnostics(session, project, file1);
+            logSemanticDiagnostics(session, project, file2);
 
             const debugTypesFile: File = {
                 path: `${projectLocation}/node_modules/debug/index.d.ts`,
@@ -369,9 +382,9 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
             host.runQueuedTimeoutCallbacks(); // Actual update
 
-            logSemanticDiagnostics(service, project, file1);
-            logSemanticDiagnostics(service, project, file2);
-            baselineTsserverLogs("cachingFileSystemInformation", `includes the parent folder FLLs in ${resolution} module resolution mode`, service);
+            logSemanticDiagnostics(session, project, file1);
+            logSemanticDiagnostics(session, project, file2);
+            baselineTsserverLogs("cachingFileSystemInformation", `includes the parent folder FLLs in ${resolution} module resolution mode`, session);
         }
 
         it("Includes the parent folder FLLs in node module resolution mode", () => {
@@ -423,9 +436,12 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 `,
             });
             const host = createServerHost([app, libFile, tsconfigJson, packageJson]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-            projectService.setHostConfiguration({ preferences: { includePackageJsonAutoImports: "off" } });
-            projectService.openClientFile(app.path);
+            const session = new TestSession(host);
+            session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                command: ts.server.protocol.CommandTypes.Configure,
+                arguments: { preferences: { includePackageJsonAutoImports: "off" } },
+            });
+            openFilesForSession([app], session);
 
             let npmInstallComplete = false;
 
@@ -527,7 +543,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             baselineTsserverLogs(
                 "cachingFileSystemInformation",
                 `npm install works when ${timeoutDuringPartialInstallation ? "timeout occurs inbetween installation" : "timeout occurs after installation"}`,
-                projectService,
+                session,
             );
 
             function verifyAfterPartialOrCompleteNpmInstall() {
@@ -537,7 +553,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
                     host.runQueuedTimeoutCallbacks(); // Actual update
                 }
                 else {
-                    projectService.testhost.logTimeoutQueueLength();
+                    session.host.baselineHost("After partial npm install");
                 }
             }
         }
@@ -563,11 +579,11 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
 
         const files = [app, tsconfig, libFile];
         const host = createServerHost(files);
-        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(app.path);
+        const session = new TestSession(host);
+        openFilesForSession([app], session);
 
-        const project = service.configuredProjects.get(tsconfig.path)!;
-        logSemanticDiagnostics(service, project, app);
+        const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
+        logSemanticDiagnostics(session, project, app);
 
         const debugTypesFile: File = {
             path: `${projectLocation}/node_modules/@types/debug/index.d.ts`,
@@ -582,8 +598,8 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
         host.writeFile(debugTypesFile.path, debugTypesFile.content);
         host.runQueuedTimeoutCallbacks();
-        logSemanticDiagnostics(service, project, app);
-        baselineTsserverLogs("cachingFileSystemInformation", "when node_modules dont receive event for the @types file addition", service);
+        logSemanticDiagnostics(session, project, app);
+        baselineTsserverLogs("cachingFileSystemInformation", "when node_modules dont receive event for the @types file addition", session);
     });
 
     it("when creating new file in symlinked folder", () => {
@@ -601,7 +617,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         };
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     baseUrl: "client",
                     paths: { "*": ["*"] },
@@ -610,10 +626,10 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             }),
         };
         const host = createServerHost([module1, module2, symlink, config, libFile]);
-        const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
-        service.openClientFile(`${symlink.path}/module2.ts`);
+        const session = new TestSession(host);
+        openFilesForSession([`${symlink.path}/module2.ts`], session);
         host.writeFile(`${symlink.path}/module3.ts`, `import * as M from "folder1/module1";`);
         host.runQueuedTimeoutCallbacks();
-        baselineTsserverLogs("cachingFileSystemInformation", "when creating new file in symlinked folder", service);
+        baselineTsserverLogs("cachingFileSystemInformation", "when creating new file in symlinked folder", session);
     });
 });

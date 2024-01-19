@@ -331,7 +331,7 @@ export function verifyResolutionCache(
                 resolvedTypeReferenceDirective: (resolved as any).resolvedTypeReferenceDirective,
                 failedLookupLocations: resolved.failedLookupLocations,
                 affectingLocations: resolved.affectingLocations,
-                node10Result: resolved.node10Result,
+                alternateResult: resolved.alternateResult,
             };
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
@@ -431,6 +431,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
     const getDefaultLibLocation = compilerHost.getDefaultLibLocation!;
     compilerHost.getDefaultLibLocation = () => ts.getNormalizedAbsolutePath(getDefaultLibLocation(), service.host.getCurrentDirectory());
     compilerHost.getDefaultLibFileName = options => ts.combinePaths(compilerHost.getDefaultLibLocation!(), ts.getDefaultLibFileName(options));
+    compilerHost.trace = ts.noop; // We dont want to update host just because of trace
     const readFile = compilerHost.readFile;
     compilerHost.readFile = fileName => {
         const path = project.toPath(fileName);
@@ -513,7 +514,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
 
 interface ResolveSingleModuleNameWithoutWatchingData {
     resolutionToData: Map<ts.ResolutionWithFailedLookupLocations, Pick<ts.ResolvedModuleWithFailedLookupLocations, "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics">>;
-    packageJsonMap: Map<ts.Path, ts.PackageJsonInfo | boolean> | undefined;
+    packageJsonMap: Map<ts.Path, ts.PackageJsonInfoCacheEntry> | undefined;
 }
 
 function beforeResolveSingleModuleNameWithoutWatching(

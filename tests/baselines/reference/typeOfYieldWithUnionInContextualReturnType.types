@@ -1,0 +1,106 @@
+//// [tests/cases/compiler/typeOfYieldWithUnionInContextualReturnType.ts] ////
+
+=== typeOfYieldWithUnionInContextualReturnType.ts ===
+// https://github.com/microsoft/TypeScript/issues/42439
+
+type SyncSequenceFactory = () => Generator<string, string, string>;
+>SyncSequenceFactory : () => Generator<string, string, string>
+
+type AsyncSequenceFactory = () => AsyncGenerator<string, string, string>;
+>AsyncSequenceFactory : () => AsyncGenerator<string, string, string>
+
+type SequenceFactory = SyncSequenceFactory | AsyncSequenceFactory
+>SequenceFactory : SyncSequenceFactory | AsyncSequenceFactory
+
+const syncFactory: SyncSequenceFactory = function* (){
+>syncFactory : SyncSequenceFactory
+>function* (){  let name = "";  while(!name){    name = yield "What is your name?"  }  return `That's the end of the game, ${name}`} : () => Generator<string, string, string>
+
+  let name = "";
+>name : string
+>"" : ""
+
+  while(!name){
+>!name : boolean
+>name : string
+
+    name = yield "What is your name?"
+>name = yield "What is your name?" : string
+>name : string
+>yield "What is your name?" : string
+>"What is your name?" : "What is your name?"
+  }
+  return `That's the end of the game, ${name}`
+>`That's the end of the game, ${name}` : string
+>name : string
+} 
+
+const asyncFactory: AsyncSequenceFactory = async function* (){
+>asyncFactory : AsyncSequenceFactory
+>async function* (){  let name = "";  while(!name){    name = yield "What is your name?"  }  return `That's the end of the game, ${name}`} : () => AsyncGenerator<string, string, string>
+
+  let name = "";
+>name : string
+>"" : ""
+
+  while(!name){
+>!name : boolean
+>name : string
+
+    name = yield "What is your name?"
+>name = yield "What is your name?" : string
+>name : string
+>yield "What is your name?" : string
+>"What is your name?" : "What is your name?"
+  }
+  return `That's the end of the game, ${name}`
+>`That's the end of the game, ${name}` : string
+>name : string
+} 
+
+const looserSyncFactory: SequenceFactory = function* (){
+>looserSyncFactory : SequenceFactory
+>function* (){  let name = "";  while(!name){    name = yield "What is your name?"  }  return `That's the end of the game, ${name}`} : () => Generator<string, string, string>
+
+  let name = "";
+>name : string
+>"" : ""
+
+  while(!name){
+>!name : boolean
+>name : string
+
+    name = yield "What is your name?"
+>name = yield "What is your name?" : string
+>name : string
+>yield "What is your name?" : string
+>"What is your name?" : "What is your name?"
+  }
+  return `That's the end of the game, ${name}`
+>`That's the end of the game, ${name}` : string
+>name : string
+} 
+
+const looserAsyncFactory: SequenceFactory = async function* (){
+>looserAsyncFactory : SequenceFactory
+>async function* (){  let name = "";  while(!name){    name = yield "What is your name?"  }  return `That's the end of the game, ${name}`} : () => AsyncGenerator<string, string, string>
+
+  let name = "";
+>name : string
+>"" : ""
+
+  while(!name){
+>!name : boolean
+>name : string
+
+    name = yield "What is your name?"
+>name = yield "What is your name?" : string
+>name : string
+>yield "What is your name?" : string
+>"What is your name?" : "What is your name?"
+  }
+  return `That's the end of the game, ${name}`
+>`That's the end of the game, ${name}` : string
+>name : string
+} 
+

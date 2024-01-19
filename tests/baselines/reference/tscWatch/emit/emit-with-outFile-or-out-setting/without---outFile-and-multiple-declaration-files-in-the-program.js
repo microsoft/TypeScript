@@ -26,7 +26,18 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/project/tsconfig.json]
-{"compilerOptions":{"outDir":"../output","target":"es5"},"files":["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]}
+{
+  "compilerOptions": {
+    "outDir": "../output",
+    "target": "es5"
+  },
+  "files": [
+    "/a/b/output/AnotherDependency/file1.d.ts",
+    "/a/b/dependencies/file2.d.ts",
+    "/a/b/project/src/main.ts",
+    "/a/b/project/src/main2.ts"
+  ]
+}
 
 
 /a/lib/tsc.js --w -p /a/b/project/tsconfig.json
@@ -43,8 +54,57 @@ Output::
 
 
 
-Program root files: ["/a/b/output/AnotherDependency/file1.d.ts","/a/b/dependencies/file2.d.ts","/a/b/project/src/main.ts","/a/b/project/src/main2.ts"]
-Program options: {"outDir":"/a/b/output","target":1,"watch":true,"project":"/a/b/project/tsconfig.json","configFilePath":"/a/b/project/tsconfig.json"}
+//// [/a/b/output/main.js]
+var Main;
+(function (Main) {
+    function fooBar() { }
+    Main.fooBar = fooBar;
+})(Main || (Main = {}));
+
+
+//// [/a/b/output/main2.js]
+var main;
+(function (main) {
+    var file4;
+    (function (file4) {
+        function foo(a) { }
+        file4.foo = foo;
+    })(file4 = main.file4 || (main.file4 = {}));
+})(main || (main = {}));
+
+
+
+PolledWatches::
+/a/b/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/dependencies/file2.d.ts: *new*
+  {}
+/a/b/output/AnotherDependency/file1.d.ts: *new*
+  {}
+/a/b/project/src/main.ts: *new*
+  {}
+/a/b/project/src/main2.ts: *new*
+  {}
+/a/b/project/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/b/output/AnotherDependency/file1.d.ts",
+  "/a/b/dependencies/file2.d.ts",
+  "/a/b/project/src/main.ts",
+  "/a/b/project/src/main2.ts"
+]
+Program options: {
+  "outDir": "/a/b/output",
+  "target": 1,
+  "watch": true,
+  "project": "/a/b/project/tsconfig.json",
+  "configFilePath": "/a/b/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -67,42 +127,4 @@ Shape signatures in builder refreshed for::
 /a/b/project/src/main.ts (used version)
 /a/b/project/src/main2.ts (used version)
 
-PolledWatches::
-/a/b/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/dependencies/file2.d.ts: *new*
-  {}
-/a/b/output/anotherdependency/file1.d.ts: *new*
-  {}
-/a/b/project/src/main.ts: *new*
-  {}
-/a/b/project/src/main2.ts: *new*
-  {}
-/a/b/project/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/output/main.js]
-var Main;
-(function (Main) {
-    function fooBar() { }
-    Main.fooBar = fooBar;
-})(Main || (Main = {}));
-
-
-//// [/a/b/output/main2.js]
-var main;
-(function (main) {
-    var file4;
-    (function (file4) {
-        function foo(a) { }
-        file4.foo = foo;
-    })(file4 = main.file4 || (main.file4 = {}));
-})(main || (main = {}));
-
-
