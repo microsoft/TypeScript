@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/b/f1.ts]
 export * from "./f2"
 
@@ -11,6 +11,15 @@ export let x = 1
 export let y = 1;
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/b/f1.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /a/b
 Info seq  [hh:mm:ss:mss] For info: /a/b/f1.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -36,6 +45,31 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/f2.ts: *new*
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/c/f3.ts"
+      },
+      "seq": 2,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /a/c
 Info seq  [hh:mm:ss:mss] For info: /a/c/f3.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
@@ -63,6 +97,12 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /a/c/f3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/f2.ts 1:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -74,13 +114,9 @@ Before running Timeout callback:: count: 2
 export * from "../c/f3"
 
 
-PolledWatches::
-/a/lib/lib.d.ts: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/f2.ts: *new*
-  {}
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -138,6 +174,19 @@ Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /a/c/f3.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/b/f1.ts,/a/c/f3.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/a/b/f1.ts",
+          "/a/c/f3.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false

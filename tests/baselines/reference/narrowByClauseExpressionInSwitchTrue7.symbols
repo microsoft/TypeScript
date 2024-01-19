@@ -1,0 +1,229 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue7.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue7.ts ===
+class Base {
+>Base : Symbol(Base, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 0))
+
+    basey: string = "";
+>basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
+}
+
+class Derived1 extends Base {
+>Derived1 : Symbol(Derived1, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 2, 1))
+>Base : Symbol(Base, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 0))
+
+    d: string = "";
+>d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+}
+
+class Derived2 extends Base {
+>Derived2 : Symbol(Derived2, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 6, 1))
+>Base : Symbol(Base, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 0))
+
+    d: string = "";
+>d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+
+    other: string = "";
+>other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
+}
+
+function classy(base: Base, someDerived: Derived1 | Derived2) {
+>classy : Symbol(classy, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 11, 1))
+>base : Symbol(base, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 16))
+>Base : Symbol(Base, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 0))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived1 : Symbol(Derived1, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 2, 1))
+>Derived2 : Symbol(Derived2, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 6, 1))
+
+    switch (true) {
+        case base instanceof Derived1:
+>base : Symbol(base, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 16))
+>Derived1 : Symbol(Derived1, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 2, 1))
+
+            base.d
+>base.d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+>base : Symbol(base, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 16))
+>d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+
+            // fallthrough
+        default:
+            base.basey
+>base.basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
+>base : Symbol(base, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 16))
+>basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
+    }
+
+    switch (true) {
+        case someDerived instanceof Derived1:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived1 : Symbol(Derived1, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 2, 1))
+
+            someDerived.d
+>someDerived.d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+
+            break;
+        case someDerived instanceof Derived2:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived2 : Symbol(Derived2, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 6, 1))
+
+            someDerived.d
+>someDerived.d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+
+            break
+        default:
+            const never: never = someDerived;
+>never : Symbol(never, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 30, 17))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+    }
+
+    switch (true) {
+        case someDerived instanceof Derived1:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived1 : Symbol(Derived1, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 2, 1))
+
+            someDerived.d
+>someDerived.d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+
+            // fallthrough
+        case someDerived instanceof Derived2:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived2 : Symbol(Derived2, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 6, 1))
+
+            someDerived.d
+>someDerived.d : Symbol(d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29), Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29), Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+
+            break
+        default:
+            const never: never = someDerived;
+>never : Symbol(never, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 41, 17))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+    }
+
+    switch (true) {
+        default:
+            const never: never = someDerived;
+>never : Symbol(never, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 46, 17))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+
+        case someDerived instanceof Derived1:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived1 : Symbol(Derived1, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 2, 1))
+
+            someDerived.d;
+>someDerived.d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+
+            someDerived.basey;
+>someDerived.basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
+
+            break
+        case someDerived instanceof Derived2:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived2 : Symbol(Derived2, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 6, 1))
+
+            someDerived.d;
+>someDerived.d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+
+            someDerived.other;
+>someDerived.other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
+    }
+
+    switch (true) {
+        case someDerived instanceof Derived1:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived1 : Symbol(Derived1, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 2, 1))
+
+            someDerived.d;
+>someDerived.d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+
+            someDerived.basey;
+>someDerived.basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
+
+            break
+        default:
+            const never: never = someDerived;
+>never : Symbol(never, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 62, 17))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+
+        case someDerived instanceof Derived2:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived2 : Symbol(Derived2, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 6, 1))
+
+            someDerived.d;
+>someDerived.d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+
+            someDerived.other;
+>someDerived.other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
+    }
+
+    switch (true) {
+        case someDerived instanceof Derived1:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived1 : Symbol(Derived1, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 2, 1))
+
+            someDerived.d;
+>someDerived.d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived1.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 4, 29))
+
+            someDerived.basey;
+>someDerived.basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>basey : Symbol(Base.basey, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 0, 12))
+
+            break
+        case someDerived instanceof Derived2:
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>Derived2 : Symbol(Derived2, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 6, 1))
+
+            someDerived.d;
+>someDerived.d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+
+            someDerived.other;
+>someDerived.other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
+
+        default:
+            someDerived.d;
+>someDerived.d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>d : Symbol(Derived2.d, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 8, 29))
+
+            someDerived.other;
+>someDerived.other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+>other : Symbol(Derived2.other, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 9, 19))
+
+            const never: never = someDerived;
+>never : Symbol(never, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 79, 17))
+>someDerived : Symbol(someDerived, Decl(narrowByClauseExpressionInSwitchTrue7.ts, 13, 27))
+    }
+
+}
+

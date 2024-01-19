@@ -1,17 +1,36 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
 //// [/user/username/projects/myproject/packages/pkg1/package.json]
-{"name":"pkg1","version":"1.0.0","main":"build/index.js"}
+{
+  "name": "pkg1",
+  "version": "1.0.0",
+  "main": "build/index.js"
+}
 
 //// [/user/username/projects/myproject/packages/pkg1/index.ts]
 import type { TheNum } from 'pkg2'
 export const theNum: TheNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg1/tsconfig.json]
-{"compilerOptions":{"outDir":"build"},"references":[{"path":"../pkg2"}]}
+{
+  "compilerOptions": {
+    "outDir": "build"
+  },
+  "references": [
+    {
+      "path": "../pkg2"
+    }
+  ]
+}
 
 //// [/user/username/projects/myproject/packages/pkg2/tsconfig.json]
-{"compilerOptions":{"composite":true,"outDir":"build","baseUrl":"."}}
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "build",
+    "baseUrl": "."
+  }
+}
 
 //// [/user/username/projects/myproject/packages/pkg2/const.ts]
 export type TheNum = 42;
@@ -23,7 +42,11 @@ export type { TheNum } from './const.js';
 export type TheStr = string;
 
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
-{"name":"pkg2","version":"1.0.0","main":"build/index.js"}
+{
+  "name": "pkg2",
+  "version": "1.0.0",
+  "main": "build/index.js"
+}
 
 //// [/user/username/projects/myproject/node_modules/pkg2] symlink(/user/username/projects/myproject/packages/pkg2)
 //// [/a/lib/lib.d.ts]
@@ -98,72 +121,6 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 [[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/packages/pkg2/const.ts","/user/username/projects/myproject/packages/pkg2/index.ts","/user/username/projects/myproject/packages/pkg2/other.ts"]
-Program options: {"composite":true,"outDir":"/user/username/projects/myproject/packages/pkg2/build","baseUrl":"/user/username/projects/myproject/packages/pkg2","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg2/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/packages/pkg2/const.ts
-/user/username/projects/myproject/packages/pkg2/index.ts
-/user/username/projects/myproject/packages/pkg2/other.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/packages/pkg2/const.ts
-/user/username/projects/myproject/packages/pkg2/index.ts
-/user/username/projects/myproject/packages/pkg2/other.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/packages/pkg2/const.ts (computed .d.ts during emit)
-/user/username/projects/myproject/packages/pkg2/index.ts (computed .d.ts during emit)
-/user/username/projects/myproject/packages/pkg2/other.ts (computed .d.ts during emit)
-
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts
-/user/username/projects/myproject/packages/pkg1/index.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts
-/user/username/projects/myproject/packages/pkg1/index.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts (used version)
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
-/user/username/projects/myproject/packages/pkg1/index.ts (used version)
-
-FsWatches::
-/user/username/projects/myproject/packages/pkg1/index.ts: *new*
-  {}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/packages/pkg2/const.ts: *new*
-  {}
-/user/username/projects/myproject/packages/pkg2/index.ts: *new*
-  {}
-/user/username/projects/myproject/packages/pkg2/other.ts: *new*
-  {}
-/user/username/projects/myproject/packages/pkg2/package.json: *new*
-  {}
-/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/packages/pkg1: *new*
-  {}
-/user/username/projects/myproject/packages/pkg2: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.js]
 "use strict";
@@ -291,15 +248,107 @@ exports.theNum = 42;
 
 
 
+FsWatches::
+/user/username/projects/myproject/packages/pkg1/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/const.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/index.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/other.ts: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/package.json: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/packages/pkg1: *new*
+  {}
+/user/username/projects/myproject/packages/pkg2: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg2/const.ts",
+  "/user/username/projects/myproject/packages/pkg2/index.ts",
+  "/user/username/projects/myproject/packages/pkg2/other.ts"
+]
+Program options: {
+  "composite": true,
+  "outDir": "/user/username/projects/myproject/packages/pkg2/build",
+  "baseUrl": "/user/username/projects/myproject/packages/pkg2",
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg2/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/packages/pkg2/const.ts
+/user/username/projects/myproject/packages/pkg2/index.ts
+/user/username/projects/myproject/packages/pkg2/other.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/packages/pkg2/const.ts
+/user/username/projects/myproject/packages/pkg2/index.ts
+/user/username/projects/myproject/packages/pkg2/other.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/packages/pkg2/const.ts (computed .d.ts during emit)
+/user/username/projects/myproject/packages/pkg2/index.ts (computed .d.ts during emit)
+/user/username/projects/myproject/packages/pkg2/other.ts (computed .d.ts during emit)
+
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts
+/user/username/projects/myproject/packages/pkg1/index.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts
+/user/username/projects/myproject/packages/pkg1/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts (used version)
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
+/user/username/projects/myproject/packages/pkg1/index.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: reports import errors after change to package file
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
-{"name":"pkg2","version":"1.0.0","main":"build/other.js"}
+{
+  "name": "pkg2",
+  "version": "1.0.0",
+  "main": "build/other.js"
+}
 
+
+Timeout callback:: count: 1
+1: timerToBuildInvalidatedProject *new*
 
 Before running Timeout callback:: count: 1
 1: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -341,8 +390,17 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -359,16 +417,23 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: removes those errors when a package file is changed back
 
 Input::
 //// [/user/username/projects/myproject/packages/pkg2/package.json]
-{"name":"pkg2","version":"1.0.0","main":"build/index.js"}
+{
+  "name": "pkg2",
+  "version": "1.0.0",
+  "main": "build/index.js"
+}
 
+
+Timeout callback:: count: 1
+2: timerToBuildInvalidatedProject *new*
 
 Before running Timeout callback:: count: 1
 2: timerToBuildInvalidatedProject
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -414,8 +479,18 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists -
 
 
 
-Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
-Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
+//// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/packages/pkg1/index.ts"
+]
+Program options: {
+  "outDir": "/user/username/projects/myproject/packages/pkg1/build",
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/packages/pkg1/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -434,5 +509,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents

@@ -20,32 +20,17 @@ export const x = 10;
 export const y = 20;
 
 //// [/users/username/projects/project/tsconfig.json]
-{"compilerOptions":{"incremental":true,"module":"amd"}}
+{
+  "compilerOptions": {
+    "incremental": true,
+    "module": "amd"
+  }
+}
 
 
 /a/lib/tsc.js -i
 Output::
 
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"module":2,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/file1.ts (used version)
-/users/username/projects/project/file2.ts (used version)
-
-exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
@@ -121,6 +106,33 @@ define(["require", "exports"], function (require, exports) {
 }
 
 
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "module": 2,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/file1.ts (used version)
+/users/username/projects/project/file2.ts (used version)
+
+exitCode:: ExitStatus.Success
+
 Change::
 
 Input::
@@ -130,22 +142,6 @@ export const z = 10;
 
 Output::
 
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"module":2,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/file2.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/file2.ts (computed .d.ts)
-
-exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/file2.js]
 define(["require", "exports"], function (require, exports) {
@@ -215,3 +211,26 @@ define(["require", "exports"], function (require, exports) {
   "size": 778
 }
 
+
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "module": 2,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/file2.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/file2.ts (computed .d.ts)
+
+exitCode:: ExitStatus.Success
