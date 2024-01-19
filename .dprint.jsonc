@@ -30,6 +30,7 @@
         "importDeclaration.sortNamedImports": "maintain"
     },
     "prettier": {
+        "newLineKind": "lf",
         "associations": [
             "**/*.{yaml,yml}"
         ],
@@ -55,8 +56,8 @@
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     "plugins": [
-        "https://plugins.dprint.dev/typescript-0.88.7.wasm",
+        "https://plugins.dprint.dev/typescript-0.88.8.wasm",
         "https://plugins.dprint.dev/json-0.19.1.wasm",
-        "https://plugins.dprint.dev/prettier-0.30.0.json@17f1975e77b53f95c642a25588bf27b0d3f36ebb70cbe134875f6b3c75736eed"
+        "https://plugins.dprint.dev/prettier-0.32.1.json@19aa403ef0862ba8c41164e3dc6f84c0b7a66c2b11e42726b23dd25e6302ada9"
     ]
 }

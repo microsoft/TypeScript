@@ -462,7 +462,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
-Change:: delete the node10Result in @types
+Change:: delete the alternateResult in @types
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] unlink
 
@@ -915,7 +915,7 @@ No shapes updated in the builder::
 
 
 
-Change:: add the node10Result in @types
+Change:: add the alternateResult in @types
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
 export declare const bar: number;
@@ -2474,7 +2474,7 @@ Shape signatures in builder refreshed for::
 
 
 
-Change:: delete the node10Result in @types
+Change:: delete the alternateResult in @types
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] unlink
 
@@ -2927,7 +2927,7 @@ No shapes updated in the builder::
 
 
 
-Change:: add the node10Result in @types
+Change:: add the alternateResult in @types
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]
 export declare const bar2: number;

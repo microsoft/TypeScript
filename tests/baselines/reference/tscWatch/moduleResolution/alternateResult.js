@@ -522,7 +522,7 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: delete the node10Result in @types
+Change:: delete the alternateResult in @types
 
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts] deleted
@@ -832,7 +832,7 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-Change:: add the node10Result in @types
+Change:: add the alternateResult in @types
 
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar/index.d.ts]
@@ -985,7 +985,7 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-Change:: add the ndoe10Result in package/types
+Change:: add the alternateResult in package/types
 
 Input::
 //// [/home/src/projects/project/node_modules/foo/index.d.ts]
@@ -2227,7 +2227,7 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-Change:: delete the node10Result in @types
+Change:: delete the alternateResult in @types
 
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts] deleted
@@ -2536,7 +2536,7 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-Change:: add the node10Result in @types
+Change:: add the alternateResult in @types
 
 Input::
 //// [/home/src/projects/project/node_modules/@types/bar2/index.d.ts]

@@ -217,8 +217,7 @@ export function start() {
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
         for (const runner of runners) {
-            for (const test of runner.getTestFiles()) {
-                const file = typeof test === "string" ? test : test.file;
+            for (const file of runner.getTestFiles()) {
                 let size: number;
                 if (!perfData) {
                     try {

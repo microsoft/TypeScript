@@ -168,7 +168,7 @@ export interface ResolutionWithFailedLookupLocations {
     refCount?: number;
     // Files that have this resolution using
     files?: Set<Path>;
-    node10Result?: string;
+    alternateResult?: string;
 }
 
 /** @internal */
@@ -1092,9 +1092,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     function watchFailedLookupLocationOfResolution(resolution: ResolutionWithFailedLookupLocations) {
         Debug.assert(!!resolution.refCount);
 
-        const { failedLookupLocations, affectingLocations, node10Result } = resolution;
-        if (!failedLookupLocations?.length && !affectingLocations?.length && !node10Result) return;
-        if (failedLookupLocations?.length || node10Result) resolutionsWithFailedLookups.add(resolution);
+        const { failedLookupLocations, affectingLocations, alternateResult } = resolution;
+        if (!failedLookupLocations?.length && !affectingLocations?.length && !alternateResult) return;
+        if (failedLookupLocations?.length || alternateResult) resolutionsWithFailedLookups.add(resolution);
 
         let setAtRoot = false;
         if (failedLookupLocations) {
@@ -1102,12 +1102,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 setAtRoot = watchFailedLookupLocation(failedLookupLocation, setAtRoot);
             }
         }
-        if (node10Result) setAtRoot = watchFailedLookupLocation(node10Result, setAtRoot);
+        if (alternateResult) setAtRoot = watchFailedLookupLocation(alternateResult, setAtRoot);
         if (setAtRoot) {
             // This is always non recursive
             setDirectoryWatcher(rootDir, rootPath, /*nonRecursive*/ true);
         }
-        watchAffectingLocationsOfResolution(resolution, !failedLookupLocations?.length && !node10Result);
+        watchAffectingLocationsOfResolution(resolution, !failedLookupLocations?.length && !alternateResult);
     }
 
     function watchAffectingLocationsOfResolution(resolution: ResolutionWithFailedLookupLocations, addToResolutionsWithOnlyAffectingLocations: boolean) {
@@ -1247,7 +1247,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             if (resolutions?.delete(resolution) && !resolutions.size) resolvedFileToResolution.delete(key);
         }
 
-        const { failedLookupLocations, affectingLocations, node10Result } = resolution;
+        const { failedLookupLocations, affectingLocations, alternateResult } = resolution;
         if (resolutionsWithFailedLookups.delete(resolution)) {
             let removeAtRoot = false;
             if (failedLookupLocations) {
@@ -1255,7 +1255,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     removeAtRoot = stopWatchFailedLookupLocation(failedLookupLocation, removeAtRoot, syncDirWatcherRemove);
                 }
             }
-            if (node10Result) removeAtRoot = stopWatchFailedLookupLocation(node10Result, removeAtRoot, syncDirWatcherRemove);
+            if (alternateResult) removeAtRoot = stopWatchFailedLookupLocation(alternateResult, removeAtRoot, syncDirWatcherRemove);
             if (removeAtRoot) removeDirectoryWatcher(rootPath, syncDirWatcherRemove);
         }
         else if (affectingLocations?.length) {
@@ -1462,7 +1462,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         if (canInvalidatedFailedLookupResolutionWithAffectingLocation(resolution)) return true;
         if (!failedLookupChecks && !startsWithPathChecks && !isInDirectoryChecks) return false;
         return resolution.failedLookupLocations?.some(location => isInvalidatedFailedLookup(resolutionHost.toPath(location))) ||
-            (!!resolution.node10Result && isInvalidatedFailedLookup(resolutionHost.toPath(resolution.node10Result)));
+            (!!resolution.alternateResult && isInvalidatedFailedLookup(resolutionHost.toPath(resolution.alternateResult)));
     }
 
     function isInvalidatedFailedLookup(locationPath: Path) {
