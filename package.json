@@ -40,7 +40,7 @@
     ],
     "devDependencies": {
         "@esfx/canceltoken": "^1.0.0",
-        "@octokit/rest": "^19.0.13",
+        "@octokit/rest": "^20.0.2",
         "@types/chai": "^4.3.11",
         "@types/glob": "^8.1.0",
         "@types/microsoft__typescript-etw": "^0.1.3",
