@@ -7792,6 +7792,30 @@
         "category": "Message",
         "code": 95187
     },
+    "Add missing parameter to '{0}'": {
+        "category": "Message",
+        "code": 95188
+    },
+    "Add missing parameters to '{0}'": {
+        "category": "Message",
+        "code": 95189
+    },
+    "Add all missing parameters": {
+        "category": "Message",
+        "code": 95190
+    },
+    "Add optional parameter to '{0}'": {
+        "category": "Message",
+        "code": 95191
+    },
+    "Add optional parameters to '{0}'": {
+        "category": "Message",
+        "code": 95192
+    },
+    "Add all optional parameters": {
+        "category": "Message",
+        "code": 95193
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
