@@ -54,7 +54,7 @@
         "@typescript-eslint/parser": "^6.19.0",
         "@typescript-eslint/utils": "^6.19.0",
         "azure-devops-node-api": "^12.3.0",
-        "c8": "^8.0.1",
+        "c8": "^9.1.0",
         "chai": "^4.4.1",
         "chalk": "^4.1.2",
         "chokidar": "^3.5.3",
