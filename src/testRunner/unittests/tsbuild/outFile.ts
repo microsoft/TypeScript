@@ -608,7 +608,7 @@ ${internal} enum internalEnum { a, b, c }`,
                     fs.writeFileSync(
                         "/src/third/tsconfig.json",
                         jsonToReadableText({
-                            ...JSON.parse(fs.readFileSync("/src/third/tsconfig.json", "utf-8")!),
+                            ...JSON.parse(fs.readFileSync("/src/third/tsconfig.json", "utf-8")),
                             references: [{ path: "../second", prepend: true }],
                         }),
                     );

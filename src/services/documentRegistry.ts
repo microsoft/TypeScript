@@ -327,7 +327,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             // the script snapshot.  If so, update it appropriately.  Otherwise, we can just
             // return it as is.
             if (entry.sourceFile.version !== version) {
-                entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot!)); // TODO: GH#18217
+                entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version, scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
                 if (externalCache) {
                     externalCache.setDocument(keyWithMode, path, entry.sourceFile);
                 }

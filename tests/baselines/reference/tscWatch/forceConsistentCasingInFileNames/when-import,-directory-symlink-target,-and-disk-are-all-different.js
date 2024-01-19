@@ -110,7 +110,7 @@ System.register("XY/a", [], function (exports_3, context_3) {
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/yx: *new*
+/user/username/projects/myproject/yX: *new*
   {"pollingInterval":500}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
@@ -118,13 +118,13 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
+/user/username/projects/myproject/XY/a.ts: *new*
+  {}
 /user/username/projects/myproject/b.ts: *new*
   {}
 /user/username/projects/myproject/link/a.ts: *new*
   {}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
-/user/username/projects/myproject/xy/a.ts: *new*
   {}
 
 FsWatchesRecursive::

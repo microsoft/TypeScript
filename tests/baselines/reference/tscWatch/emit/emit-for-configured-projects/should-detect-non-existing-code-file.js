@@ -50,11 +50,11 @@ exports.x = Foo();
 
 
 PolledWatches::
-/a/b/modulefile2.ts: *new*
+/a/b/moduleFile2.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/referencefile1.ts: *new*
+/a/b/referenceFile1.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -166,11 +166,11 @@ export var Foo4 = 10;
 
 
 PolledWatches *deleted*::
-/a/b/modulefile2.ts:
+/a/b/moduleFile2.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/referencefile1.ts:
+/a/b/referenceFile1.ts:
   {}
 /a/b/tsconfig.json:
   {}
@@ -216,9 +216,9 @@ exports.Foo4 = 10;
 
 
 FsWatches::
-/a/b/modulefile2.ts: *new*
+/a/b/moduleFile2.ts: *new*
   {}
-/a/b/referencefile1.ts:
+/a/b/referenceFile1.ts:
   {}
 /a/b/tsconfig.json:
   {}

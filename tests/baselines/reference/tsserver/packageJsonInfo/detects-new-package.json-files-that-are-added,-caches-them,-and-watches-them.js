@@ -150,7 +150,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: /tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: a/data/package.json
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: /a/data/package.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/data/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project: /tsconfig.json Detected file add/remove of non supported extension: a/data/package.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with a/data/package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
@@ -216,12 +216,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -327,7 +323,7 @@ FsWatchesRecursive::
   {}
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: package.json
+Info seq  [hh:mm:ss:mss] Config: /tsconfig.json Detected new package.json: /package.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project: /tsconfig.json Detected file add/remove of non supported extension: package.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with package.json :: WatchInfo:  1 undefined Config: /tsconfig.json WatchType: Wild card directory

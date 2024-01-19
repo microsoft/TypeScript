@@ -158,6 +158,7 @@ import {
     FunctionExpression,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
+    getAllJSDocTags,
     getBaseFileName,
     GetCanonicalFileName,
     getCombinedModifierFlags,
@@ -219,6 +220,7 @@ import {
     idText,
     IfStatement,
     ignoredPaths,
+    ImportAttribute,
     ImportCall,
     ImportClause,
     ImportDeclaration,
@@ -281,6 +283,7 @@ import {
     isJSDoc,
     isJSDocAugmentsTag,
     isJSDocFunctionType,
+    isJSDocImplementsTag,
     isJSDocLinkLike,
     isJSDocMemberName,
     isJSDocNameReference,
@@ -350,9 +353,11 @@ import {
     isWhiteSpaceLike,
     isWhiteSpaceSingleLine,
     JSDoc,
+    JSDocArray,
     JSDocCallbackTag,
     JSDocEnumTag,
     JSDocMemberName,
+    JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
     JSDocSatisfiesExpression,
@@ -464,7 +469,6 @@ import {
     RequireOrImportCall,
     RequireVariableStatement,
     ResolutionMode,
-    ResolutionNameAndModeGetter,
     ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
@@ -762,18 +766,23 @@ export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFaile
             oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
             oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
             packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId) &&
-            oldResolution.node10Result === newResolution.node10Result;
+            oldResolution.alternateResult === newResolution.alternateResult;
 }
 
 /** @internal */
 export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeCheckerHost, moduleReference: string, mode: ResolutionMode, packageName: string) {
-    const node10Result = host.getResolvedModule(sourceFile, moduleReference, mode)?.node10Result;
-    const result = node10Result
+    const alternateResult = host.getResolvedModule(sourceFile, moduleReference, mode)?.alternateResult;
+    const alternateResultMessage = alternateResult && (getEmitModuleResolutionKind(host.getCompilerOptions()) === ModuleResolutionKind.Node10
+        ? [Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_under_your_current_moduleResolution_setting_Consider_updating_to_node16_nodenext_or_bundler, [alternateResult]] as const
+        : [
+            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+            [alternateResult, alternateResult.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName],
+        ] as const);
+    const result = alternateResultMessage
         ? chainDiagnosticMessages(
             /*details*/ undefined,
-            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
-            node10Result,
-            node10Result.includes(nodeModulesPathPart + "@types/") ? `@types/${mangleScopedPackageName(packageName)}` : packageName,
+            alternateResultMessage[0],
+            ...alternateResultMessage[1],
         )
         : host.typesPackageExists(packageName)
         ? chainDiagnosticMessages(
@@ -827,20 +836,16 @@ export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirec
 /** @internal */
 export function hasChangesInResolutions<K, V>(
     names: readonly K[],
-    newSourceFile: SourceFile,
     newResolutions: readonly V[],
-    getOldResolution: (name: string, mode: ResolutionMode) => V | undefined,
+    getOldResolution: (name: K) => V | undefined,
     comparer: (oldResolution: V, newResolution: V) => boolean,
-    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
 ): boolean {
     Debug.assert(names.length === newResolutions.length);
 
     for (let i = 0; i < names.length; i++) {
         const newResolution = newResolutions[i];
         const entry = names[i];
-        const name = nameAndModeGetter.getName(entry);
-        const mode = nameAndModeGetter.getMode(entry, newSourceFile);
-        const oldResolution = getOldResolution(name, mode);
+        const oldResolution = getOldResolution(entry);
         const changed = oldResolution
             ? !newResolution || !comparer(oldResolution, newResolution)
             : newResolution;
@@ -2427,7 +2432,6 @@ export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\
 const fullTripleSlashAMDModuleRegEx = /^\/\/\/\s*<amd-module\s+.*?\/>/;
 const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)(('[^']*')|("[^"]*"))\s*\/>/;
 
-/** @internal */
 export function isPartOfTypeNode(node: Node): boolean {
     if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
         return true;
@@ -2449,7 +2453,7 @@ export function isPartOfTypeNode(node: Node): boolean {
         case SyntaxKind.VoidKeyword:
             return node.parent.kind !== SyntaxKind.VoidExpression;
         case SyntaxKind.ExpressionWithTypeArguments:
-            return isHeritageClause(node.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(node);
+            return isPartOfTypeExpressionWithTypeArguments(node);
         case SyntaxKind.TypeParameter:
             return node.parent.kind === SyntaxKind.MappedType || node.parent.kind === SyntaxKind.InferType;
 
@@ -2488,7 +2492,7 @@ export function isPartOfTypeNode(node: Node): boolean {
             }
             switch (parent.kind) {
                 case SyntaxKind.ExpressionWithTypeArguments:
-                    return isHeritageClause(parent.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
+                    return isPartOfTypeExpressionWithTypeArguments(parent);
                 case SyntaxKind.TypeParameter:
                     return node === (parent as TypeParameterDeclaration).constraint;
                 case SyntaxKind.JSDocTemplateTag:
@@ -2522,6 +2526,12 @@ export function isPartOfTypeNode(node: Node): boolean {
     }
 
     return false;
+}
+
+function isPartOfTypeExpressionWithTypeArguments(node: Node) {
+    return isJSDocImplementsTag(node.parent)
+        || isJSDocAugmentsTag(node.parent)
+        || isHeritageClause(node.parent) && !isExpressionWithTypeArgumentsInClassExtendsClause(node);
 }
 
 /** @internal */
@@ -4282,13 +4292,13 @@ export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): read
     let result: (JSDoc | JSDocTag)[] | undefined;
     // Pull parameter comments from declaring function as well
     if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-        result = addRange(result, filterOwnedJSDocTags(hostNode, last((hostNode.initializer as HasJSDoc).jsDoc!)));
+        result = addRange(result, filterOwnedJSDocTags(hostNode, hostNode.initializer.jsDoc!));
     }
 
     let node: Node | undefined = hostNode;
     while (node && node.parent) {
         if (hasJSDocNodes(node)) {
-            result = addRange(result, filterOwnedJSDocTags(hostNode, last(node.jsDoc!)));
+            result = addRange(result, filterOwnedJSDocTags(hostNode, node.jsDoc!));
         }
 
         if (node.kind === SyntaxKind.Parameter) {
@@ -4304,12 +4314,17 @@ export function getJSDocCommentsAndTags(hostNode: Node, noCache?: boolean): read
     return result || emptyArray;
 }
 
-function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
-    if (isJSDoc(jsDoc)) {
-        const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag));
-        return jsDoc.tags === ownedTags ? [jsDoc] : ownedTags;
-    }
-    return ownsJSDocTag(hostNode, jsDoc) ? [jsDoc] : undefined;
+function filterOwnedJSDocTags(hostNode: Node, comments: JSDocArray) {
+    const lastJsDoc = last(comments);
+    return flatMap<JSDoc, JSDoc | JSDocTag>(comments, jsDoc => {
+        if (jsDoc === lastJsDoc) {
+            const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag));
+            return jsDoc.tags === ownedTags ? [jsDoc] : ownedTags;
+        }
+        else {
+            return filter(jsDoc.tags, isJSDocOverloadTag);
+        }
+    });
 }
 
 /**
@@ -4392,6 +4407,11 @@ export function getEffectiveContainerForJSDocTemplateTag(node: JSDocTemplateTag)
     }
     // otherwise it belongs to the host it annotates
     return getHostSignatureFromJSDoc(node);
+}
+
+/** @internal */
+export function getJSDocOverloadTags(node: Node): readonly JSDocOverloadTag[] {
+    return getAllJSDocTags(node, isJSDocOverloadTag);
 }
 
 /** @internal */
@@ -5823,7 +5843,8 @@ export function createDiagnosticCollection(): DiagnosticCollection {
 }
 
 const templateSubstitutionRegExp = /\$\{/g;
-function escapeTemplateSubstitution(str: string): string {
+/** @internal */
+export function escapeTemplateSubstitution(str: string): string {
     return str.replace(templateSubstitutionRegExp, "\\${");
 }
 
@@ -7471,6 +7492,16 @@ export function readJson(path: string, host: { readFile(fileName: string): strin
 }
 
 /** @internal */
+export function tryParseJson(text: string) {
+    try {
+        return JSON.parse(text);
+    }
+    catch {
+        return undefined;
+    }
+}
+
+/** @internal */
 export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean; }): boolean {
     // if host does not support 'directoryExists' assume that directory will exist
     return !host.directoryExists || host.directoryExists(directoryName);
@@ -7829,9 +7860,12 @@ export function clearMap<K, T>(map: { forEach: Map<K, T>["forEach"]; clear: Map<
 }
 
 /** @internal */
-export interface MutateMapSkippingNewValuesOptions<K, T, U> {
+export interface MutateMapSkippingNewValuesDelete<K, T> {
     onDeleteValue(existingValue: T, key: K): void;
+}
 
+/** @internal */
+export interface MutateMapSkippingNewValuesOptions<K, T, U> extends MutateMapSkippingNewValuesDelete<K, T> {
     /**
      * If present this is called with the key when there is value for that key both in new map as well as existing map provided
      * Caller can then decide to update or remove this key.
@@ -7846,30 +7880,48 @@ export interface MutateMapSkippingNewValuesOptions<K, T, U> {
  *
  * @internal
  */
+export function mutateMapSkippingNewValues<K, T>(
+    map: Map<K, T>,
+    newMap: ReadonlySet<K> | undefined,
+    options: MutateMapSkippingNewValuesDelete<K, T>,
+): void;
+/** @internal */
 export function mutateMapSkippingNewValues<K, T, U>(
     map: Map<K, T>,
-    newMap: ReadonlyMap<K, U>,
+    newMap: ReadonlyMap<K, U> | undefined,
+    options: MutateMapSkippingNewValuesOptions<K, T, U>,
+): void;
+export function mutateMapSkippingNewValues<K, T, U>(
+    map: Map<K, T>,
+    newMap: ReadonlyMap<K, U> | ReadonlySet<K> | undefined,
     options: MutateMapSkippingNewValuesOptions<K, T, U>,
 ) {
     const { onDeleteValue, onExistingValue } = options;
     // Needs update
     map.forEach((existingValue, key) => {
-        const valueInNewMap = newMap.get(key);
         // Not present any more in new map, remove it
-        if (valueInNewMap === undefined) {
+        if (!newMap?.has(key)) {
             map.delete(key);
             onDeleteValue(existingValue, key);
         }
         // If present notify about existing values
         else if (onExistingValue) {
-            onExistingValue(existingValue, valueInNewMap, key);
+            onExistingValue(existingValue, (newMap as Map<K, U>).get?.(key)!, key);
         }
     });
 }
 
 /** @internal */
-export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U> {
+export interface MutateMapOptionsCreate<K, T, U> {
     createNewValue(key: K, valueInNewMap: U): T;
+}
+
+/** @internal */
+export interface MutateMapWithNewSetOptions<K, T> extends MutateMapSkippingNewValuesDelete<K, T>, MutateMapOptionsCreate<K, T, K> {
+}
+
+/** @internal */
+export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U>, MutateMapOptionsCreate<K, T, U> {
 }
 
 /**
@@ -7877,16 +7929,19 @@ export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOpt
  *
  * @internal
  */
-export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U>, options: MutateMapOptions<K, T, U>) {
+export function mutateMap<K, T>(map: Map<K, T>, newMap: ReadonlySet<K> | undefined, options: MutateMapWithNewSetOptions<K, T>): void;
+/** @internal */
+export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U> | undefined, options: MutateMapOptions<K, T, U>): void;
+export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U> | ReadonlySet<K> | undefined, options: MutateMapOptions<K, T, U>) {
     // Needs update
-    mutateMapSkippingNewValues(map, newMap, options);
+    mutateMapSkippingNewValues(map, newMap as ReadonlyMap<K, U>, options);
 
     const { createNewValue } = options;
     // Add new values that are not already present
-    newMap.forEach((valueInNewMap, key) => {
+    newMap?.forEach((valueInNewMap, key) => {
         if (!map.has(key)) {
             // New values
-            map.set(key, createNewValue(key, valueInNewMap));
+            map.set(key, createNewValue(key, valueInNewMap as U & K));
         }
     });
 }
@@ -8130,7 +8185,7 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     this.exportSymbol = undefined;
     this.constEnumOnlyModule = undefined;
     this.isReferenced = undefined;
-    this.isAssigned = undefined;
+    this.lastAssignmentPos = undefined;
     (this as any).links = undefined; // used by TransientSymbol
 }
 
@@ -8549,20 +8604,270 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
     }
 }
 
-/** @internal */
-export function getEmitScriptTarget(compilerOptions: { module?: CompilerOptions["module"]; target?: CompilerOptions["target"]; }): ScriptTarget {
-    return compilerOptions.target ??
-        ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
-            (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
-            ScriptTarget.ES5);
+type CompilerOptionKeys = keyof { [K in keyof CompilerOptions as string extends K ? never : K]: any; };
+function createComputedCompilerOptions<T extends Record<string, CompilerOptionKeys[]>>(
+    options: {
+        [K in keyof T & CompilerOptionKeys | StrictOptionName]: {
+            dependencies: T[K];
+            computeValue: (compilerOptions: Pick<CompilerOptions, K | T[K][number]>) => Exclude<CompilerOptions[K], undefined>;
+        };
+    },
+) {
+    return options;
 }
 
 /** @internal */
-export function getEmitModuleKind(compilerOptions: { module?: CompilerOptions["module"]; target?: CompilerOptions["target"]; }) {
-    return typeof compilerOptions.module === "number" ?
-        compilerOptions.module :
-        getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
-}
+export const computedOptions = createComputedCompilerOptions({
+    target: {
+        dependencies: ["module"],
+        computeValue: compilerOptions => {
+            return compilerOptions.target ??
+                ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
+                    (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
+                    ScriptTarget.ES5);
+        },
+    },
+    module: {
+        dependencies: ["target"],
+        computeValue: (compilerOptions): ModuleKind => {
+            return typeof compilerOptions.module === "number" ?
+                compilerOptions.module :
+                computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
+        },
+    },
+    moduleResolution: {
+        dependencies: ["module", "target"],
+        computeValue: (compilerOptions): ModuleResolutionKind => {
+            let moduleResolution = compilerOptions.moduleResolution;
+            if (moduleResolution === undefined) {
+                switch (computedOptions.module.computeValue(compilerOptions)) {
+                    case ModuleKind.CommonJS:
+                        moduleResolution = ModuleResolutionKind.Node10;
+                        break;
+                    case ModuleKind.Node16:
+                        moduleResolution = ModuleResolutionKind.Node16;
+                        break;
+                    case ModuleKind.NodeNext:
+                        moduleResolution = ModuleResolutionKind.NodeNext;
+                        break;
+                    case ModuleKind.Preserve:
+                        moduleResolution = ModuleResolutionKind.Bundler;
+                        break;
+                    default:
+                        moduleResolution = ModuleResolutionKind.Classic;
+                        break;
+                }
+            }
+            return moduleResolution;
+        },
+    },
+    moduleDetection: {
+        dependencies: ["module", "target"],
+        computeValue: (compilerOptions): ModuleDetectionKind => {
+            return compilerOptions.moduleDetection ||
+                (computedOptions.module.computeValue(compilerOptions) === ModuleKind.Node16 ||
+                        computedOptions.module.computeValue(compilerOptions) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
+        },
+    },
+    isolatedModules: {
+        dependencies: ["verbatimModuleSyntax"],
+        computeValue: compilerOptions => {
+            return !!(compilerOptions.isolatedModules || compilerOptions.verbatimModuleSyntax);
+        },
+    },
+    esModuleInterop: {
+        dependencies: ["module", "target"],
+        computeValue: (compilerOptions): boolean => {
+            if (compilerOptions.esModuleInterop !== undefined) {
+                return compilerOptions.esModuleInterop;
+            }
+            switch (computedOptions.module.computeValue(compilerOptions)) {
+                case ModuleKind.Node16:
+                case ModuleKind.NodeNext:
+                case ModuleKind.Preserve:
+                    return true;
+            }
+            return false;
+        },
+    },
+    allowSyntheticDefaultImports: {
+        dependencies: ["module", "target", "moduleResolution"],
+        computeValue: (compilerOptions): boolean => {
+            if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
+                return compilerOptions.allowSyntheticDefaultImports;
+            }
+            return computedOptions.esModuleInterop.computeValue(compilerOptions)
+                || computedOptions.module.computeValue(compilerOptions) === ModuleKind.System
+                || computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
+        },
+    },
+    resolvePackageJsonExports: {
+        dependencies: ["moduleResolution"],
+        computeValue: (compilerOptions): boolean => {
+            const moduleResolution = computedOptions.moduleResolution.computeValue(compilerOptions);
+            if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+                return false;
+            }
+            if (compilerOptions.resolvePackageJsonExports !== undefined) {
+                return compilerOptions.resolvePackageJsonExports;
+            }
+            switch (moduleResolution) {
+                case ModuleResolutionKind.Node16:
+                case ModuleResolutionKind.NodeNext:
+                case ModuleResolutionKind.Bundler:
+                    return true;
+            }
+            return false;
+        },
+    },
+    resolvePackageJsonImports: {
+        dependencies: ["moduleResolution", "resolvePackageJsonExports"],
+        computeValue: (compilerOptions): boolean => {
+            const moduleResolution = computedOptions.moduleResolution.computeValue(compilerOptions);
+            if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+                return false;
+            }
+            if (compilerOptions.resolvePackageJsonExports !== undefined) {
+                return compilerOptions.resolvePackageJsonExports;
+            }
+            switch (moduleResolution) {
+                case ModuleResolutionKind.Node16:
+                case ModuleResolutionKind.NodeNext:
+                case ModuleResolutionKind.Bundler:
+                    return true;
+            }
+            return false;
+        },
+    },
+    resolveJsonModule: {
+        dependencies: ["moduleResolution", "module", "target"],
+        computeValue: (compilerOptions): boolean => {
+            if (compilerOptions.resolveJsonModule !== undefined) {
+                return compilerOptions.resolveJsonModule;
+            }
+            return computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
+        },
+    },
+    declaration: {
+        dependencies: ["composite"],
+        computeValue: compilerOptions => {
+            return !!(compilerOptions.declaration || compilerOptions.composite);
+        },
+    },
+    preserveConstEnums: {
+        dependencies: ["isolatedModules", "verbatimModuleSyntax"],
+        computeValue: (compilerOptions): boolean => {
+            return !!(compilerOptions.preserveConstEnums || computedOptions.isolatedModules.computeValue(compilerOptions));
+        },
+    },
+    incremental: {
+        dependencies: ["composite"],
+        computeValue: compilerOptions => {
+            return !!(compilerOptions.incremental || compilerOptions.composite);
+        },
+    },
+    declarationMap: {
+        dependencies: ["declaration", "composite"],
+        computeValue: (compilerOptions): boolean => {
+            return !!(compilerOptions.declarationMap && computedOptions.declaration.computeValue(compilerOptions));
+        },
+    },
+    allowJs: {
+        dependencies: ["checkJs"],
+        computeValue: compilerOptions => {
+            return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
+        },
+    },
+    useDefineForClassFields: {
+        dependencies: ["target", "module"],
+        computeValue: (compilerOptions): boolean => {
+            return compilerOptions.useDefineForClassFields === undefined
+                ? computedOptions.target.computeValue(compilerOptions) >= ScriptTarget.ES2022
+                : compilerOptions.useDefineForClassFields;
+        },
+    },
+    noImplicitAny: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "noImplicitAny");
+        },
+    },
+    noImplicitThis: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "noImplicitThis");
+        },
+    },
+    strictNullChecks: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictNullChecks");
+        },
+    },
+    strictFunctionTypes: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictFunctionTypes");
+        },
+    },
+    strictBindCallApply: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictBindCallApply");
+        },
+    },
+    strictPropertyInitialization: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
+        },
+    },
+    alwaysStrict: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "alwaysStrict");
+        },
+    },
+    useUnknownInCatchVariables: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
+        },
+    },
+});
+
+/** @internal */
+export const getEmitScriptTarget = computedOptions.target.computeValue;
+/** @internal */
+export const getEmitModuleKind = computedOptions.module.computeValue;
+/** @internal */
+export const getEmitModuleResolutionKind = computedOptions.moduleResolution.computeValue;
+/** @internal */
+export const getEmitModuleDetectionKind = computedOptions.moduleDetection.computeValue;
+/** @internal */
+export const getIsolatedModules = computedOptions.isolatedModules.computeValue;
+/** @internal */
+export const getESModuleInterop = computedOptions.esModuleInterop.computeValue;
+/** @internal */
+export const getAllowSyntheticDefaultImports = computedOptions.allowSyntheticDefaultImports.computeValue;
+/** @internal */
+export const getResolvePackageJsonExports = computedOptions.resolvePackageJsonExports.computeValue;
+/** @internal */
+export const getResolvePackageJsonImports = computedOptions.resolvePackageJsonImports.computeValue;
+/** @internal */
+export const getResolveJsonModule = computedOptions.resolveJsonModule.computeValue;
+/** @internal */
+export const getEmitDeclarations = computedOptions.declaration.computeValue;
+/** @internal */
+export const shouldPreserveConstEnums = computedOptions.preserveConstEnums.computeValue;
+/** @internal */
+export const isIncrementalCompilation = computedOptions.incremental.computeValue;
+/** @internal */
+export const getAreDeclarationMapsEnabled = computedOptions.declarationMap.computeValue;
+/** @internal */
+export const getAllowJSCompilerOption = computedOptions.allowJs.computeValue;
+/** @internal */
+export const getUseDefineForClassFields = computedOptions.useDefineForClassFields.computeValue;
 
 /** @internal */
 export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
@@ -8570,53 +8875,14 @@ export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
 }
 
 /** @internal */
-export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
-    let moduleResolution = compilerOptions.moduleResolution;
-    if (moduleResolution === undefined) {
-        switch (getEmitModuleKind(compilerOptions)) {
-            case ModuleKind.CommonJS:
-                moduleResolution = ModuleResolutionKind.Node10;
-                break;
-            case ModuleKind.Node16:
-                moduleResolution = ModuleResolutionKind.Node16;
-                break;
-            case ModuleKind.NodeNext:
-                moduleResolution = ModuleResolutionKind.NodeNext;
-                break;
-            default:
-                moduleResolution = ModuleResolutionKind.Classic;
-                break;
-        }
-    }
-    return moduleResolution;
-}
-
-/** @internal */
-export function getEmitModuleDetectionKind(options: CompilerOptions) {
-    return options.moduleDetection ||
-        (getEmitModuleKind(options) === ModuleKind.Node16 || getEmitModuleKind(options) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
-}
-
-/** @internal */
 export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
     switch (getEmitModuleKind(options)) {
-        case ModuleKind.CommonJS:
-        case ModuleKind.AMD:
-        case ModuleKind.ES2015:
-        case ModuleKind.ES2020:
-        case ModuleKind.ES2022:
-        case ModuleKind.ESNext:
-        case ModuleKind.Node16:
-        case ModuleKind.NodeNext:
-            return true;
-        default:
+        case ModuleKind.None:
+        case ModuleKind.System:
+        case ModuleKind.UMD:
             return false;
     }
-}
-
-/** @internal */
-export function getIsolatedModules(options: CompilerOptions) {
-    return !!(options.isolatedModules || options.verbatimModuleSyntax);
+    return true;
 }
 
 /** @internal */
@@ -8635,102 +8901,9 @@ export function unusedLabelIsError(options: CompilerOptions): boolean {
 }
 
 /** @internal */
-export function getAreDeclarationMapsEnabled(options: CompilerOptions) {
-    return !!(getEmitDeclarations(options) && options.declarationMap);
-}
-
-/** @internal */
-export function getESModuleInterop(compilerOptions: CompilerOptions) {
-    if (compilerOptions.esModuleInterop !== undefined) {
-        return compilerOptions.esModuleInterop;
-    }
-    switch (getEmitModuleKind(compilerOptions)) {
-        case ModuleKind.Node16:
-        case ModuleKind.NodeNext:
-            return true;
-    }
-    return undefined;
-}
-
-/** @internal */
-export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
-    if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
-        return compilerOptions.allowSyntheticDefaultImports;
-    }
-    return getESModuleInterop(compilerOptions)
-        || getEmitModuleKind(compilerOptions) === ModuleKind.System
-        || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler;
-}
-
-/** @internal */
 export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {
     return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
         || moduleResolution === ModuleResolutionKind.Bundler;
-}
-
-/** @internal */
-export function shouldResolveJsRequire(compilerOptions: CompilerOptions): boolean {
-    // `bundler` doesn't support resolving `require`, but needs to in `noDtsResolution` to support Find Source Definition
-    return !!compilerOptions.noDtsResolution || getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler;
-}
-
-/** @internal */
-export function getResolvePackageJsonExports(compilerOptions: CompilerOptions) {
-    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
-    if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-        return false;
-    }
-    if (compilerOptions.resolvePackageJsonExports !== undefined) {
-        return compilerOptions.resolvePackageJsonExports;
-    }
-    switch (moduleResolution) {
-        case ModuleResolutionKind.Node16:
-        case ModuleResolutionKind.NodeNext:
-        case ModuleResolutionKind.Bundler:
-            return true;
-    }
-    return false;
-}
-
-/** @internal */
-export function getResolvePackageJsonImports(compilerOptions: CompilerOptions) {
-    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
-    if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-        return false;
-    }
-    if (compilerOptions.resolvePackageJsonExports !== undefined) {
-        return compilerOptions.resolvePackageJsonExports;
-    }
-    switch (moduleResolution) {
-        case ModuleResolutionKind.Node16:
-        case ModuleResolutionKind.NodeNext:
-        case ModuleResolutionKind.Bundler:
-            return true;
-    }
-    return false;
-}
-
-/** @internal */
-export function getResolveJsonModule(compilerOptions: CompilerOptions) {
-    if (compilerOptions.resolveJsonModule !== undefined) {
-        return compilerOptions.resolveJsonModule;
-    }
-    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler;
-}
-
-/** @internal */
-export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
-    return !!(compilerOptions.declaration || compilerOptions.composite);
-}
-
-/** @internal */
-export function shouldPreserveConstEnums(compilerOptions: CompilerOptions): boolean {
-    return !!(compilerOptions.preserveConstEnums || getIsolatedModules(compilerOptions));
-}
-
-/** @internal */
-export function isIncrementalCompilation(options: CompilerOptions) {
-    return !!(options.incremental || options.composite);
 }
 
 /** @internal */
@@ -8747,16 +8920,6 @@ export type StrictOptionName =
 /** @internal */
 export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
     return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
-}
-
-/** @internal */
-export function getAllowJSCompilerOption(compilerOptions: CompilerOptions): boolean {
-    return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
-}
-
-/** @internal */
-export function getUseDefineForClassFields(compilerOptions: CompilerOptions): boolean {
-    return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022 : compilerOptions.useDefineForClassFields;
 }
 
 /** @internal */
@@ -8977,7 +9140,8 @@ export const commonPackageFolders: readonly string[] = ["node_modules", "bower_c
 
 const implicitExcludePathRegexPattern = `(?!(${commonPackageFolders.join("|")})(/|$))`;
 
-interface WildcardMatcher {
+/** @internal */
+export interface WildcardMatcher {
     singleAsteriskRegexFragment: string;
     doubleAsteriskRegexFragment: string;
     replaceWildcardCharacter: (match: string) => string;
@@ -9059,7 +9223,13 @@ export function getPatternFromSpec(spec: string, basePath: string, usage: "files
     return pattern && `^(${pattern})${usage === "exclude" ? "($|/)" : "$"}`;
 }
 
-function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
+/** @internal */
+export function getSubPatternFromSpec(
+    spec: string,
+    basePath: string,
+    usage: "files" | "directories" | "exclude",
+    { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher = wildcardMatchers[usage],
+): string | undefined {
     let subpattern = "";
     let hasWrittenComponent = false;
     const components = getNormalizedPathComponents(spec, basePath);
@@ -9419,7 +9589,8 @@ export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (
 
 /** @internal */
 export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile): ModuleSpecifierEnding {
-    if (preference === "js" || resolutionMode === ModuleKind.ESNext) {
+    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+    if (preference === "js" || resolutionMode === ModuleKind.ESNext && ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext) {
         // Extensions are explicitly requested or required. Now choose between .js and .ts.
         if (!shouldAllowImportingTsExtension(compilerOptions)) {
             return ModuleSpecifierEnding.JsExtension;
@@ -10188,12 +10359,6 @@ export function isCatchClauseVariableDeclaration(node: Node) {
 }
 
 /** @internal */
-export function isParameterOrCatchClauseVariable(symbol: Symbol) {
-    const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
-    return !!declaration && (isParameter(declaration) || isCatchClauseVariableDeclaration(declaration));
-}
-
-/** @internal */
 export function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
     return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
 }
@@ -10479,4 +10644,20 @@ export function hasResolutionModeOverride(node: ImportTypeNode | ImportDeclarati
         return false;
     }
     return !!getResolutionModeOverride(node.attributes);
+}
+
+const stringReplace = String.prototype.replace;
+
+/** @internal */
+export function replaceFirstStar(s: string, replacement: string): string {
+    // `s.replace("*", replacement)` triggers CodeQL as they think it's a potentially incorrect string escaping.
+    // See: https://codeql.github.com/codeql-query-help/javascript/js-incomplete-sanitization/
+    // But, we really do want to replace only the first star.
+    // Attempt to defeat this analysis by indirectly calling the method.
+    return stringReplace.call(s, "*", replacement);
+}
+
+/** @internal */
+export function getNameFromImportAttribute(node: ImportAttribute) {
+    return isIdentifier(node.name) ? node.name.escapedText : escapeLeadingUnderscores(node.name.text);
 }

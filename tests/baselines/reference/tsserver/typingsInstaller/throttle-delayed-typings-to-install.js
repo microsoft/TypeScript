@@ -196,12 +196,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a/app",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","moment","lodash","commander"]
 TI:: [hh:mm:ss:mss] Typing names in '/a/b/package.json' dependencies: ["express"]
@@ -541,12 +537,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a/app",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","moment","lodash","commander"]
 TI:: [hh:mm:ss:mss] Typing names in '/a/b/package.json' dependencies: ["express"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash","commander"]

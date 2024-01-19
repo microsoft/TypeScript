@@ -84,31 +84,31 @@ export {};
 
 
 PolledWatches::
-/users/name/projects/lib-boilerplate/node_modules/@types: *new*
+/Users/name/projects/lib-boilerplate/node_modules/@types: *new*
   {"pollingInterval":500}
-/users/name/projects/lib-boilerplate/src/package.json: *new*
+/Users/name/projects/lib-boilerplate/src/package.json: *new*
   {"pollingInterval":2000}
-/users/name/projects/lib-boilerplate/test/package.json: *new*
+/Users/name/projects/lib-boilerplate/test/package.json: *new*
   {"pollingInterval":2000}
-/users/name/projects/node_modules/@types: *new*
+/Users/name/projects/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
+/Users/name/projects/lib-boilerplate/package.json: *new*
+  {}
+/Users/name/projects/lib-boilerplate/src/index.ts: *new*
+  {}
+/Users/name/projects/lib-boilerplate/test/basic.spec.ts: *new*
+  {}
+/Users/name/projects/lib-boilerplate/tsconfig.json: *new*
+  {}
 /a/lib/lib.es2021.full.d.ts: *new*
-  {}
-/users/name/projects/lib-boilerplate/package.json: *new*
-  {}
-/users/name/projects/lib-boilerplate/src/index.ts: *new*
-  {}
-/users/name/projects/lib-boilerplate/test/basic.spec.ts: *new*
-  {}
-/users/name/projects/lib-boilerplate/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/users/name/projects/lib-boilerplate: *new*
+/Users/name/projects/lib-boilerplate: *new*
   {}
-/users/name/projects/lib-boilerplate/test: *new*
+/Users/name/projects/lib-boilerplate/test: *new*
   {}
 
 Program root files: [

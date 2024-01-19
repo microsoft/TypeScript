@@ -537,87 +537,242 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         baselineTsserverLogs("typingsInstaller", "throttle delayed typings to install", session);
     });
 
-    it("Throttle - delayed run install requests", () => {
-        const lodashJs = {
-            path: "/a/b/lodash.js",
-            content: "",
-        };
-        const commanderJs = {
-            path: "/a/b/commander.js",
-            content: "",
-        };
-        const file3 = {
-            path: "/a/b/file3.d.ts",
-            content: "",
-        };
+    describe("throttled testing", () => {
+        function setup() {
+            const lodashJs = {
+                path: "/a/b/lodash.js",
+                content: "",
+            };
+            const commanderJs = {
+                path: "/a/b/commander.js",
+                content: "",
+            };
+            const file3 = {
+                path: "/a/b/file3.d.ts",
+                content: "",
+            };
 
-        const commander: FileWithPackageName = {
-            path: "/a/data/node_modules/@types/commander/index.d.ts",
-            content: "declare const commander: { x: number }",
-            package: "commander",
-        };
-        const jquery: FileWithPackageName = {
-            path: "/a/data/node_modules/@types/jquery/index.d.ts",
-            content: "declare const jquery: { x: number }",
-            package: "jquery",
-        };
-        const lodash: FileWithPackageName = {
-            path: "/a/data/node_modules/@types/lodash/index.d.ts",
-            content: "declare const lodash: { x: number }",
-            package: "lodash",
-        };
-        const cordova: FileWithPackageName = {
-            path: "/a/data/node_modules/@types/cordova/index.d.ts",
-            content: "declare const cordova: { x: number }",
-            package: "cordova",
-        };
-        const grunt: FileWithPackageName = {
-            path: "/a/data/node_modules/@types/grunt/index.d.ts",
-            content: "declare const grunt: { x: number }",
-            package: "grunt",
-        };
-        const gulp: FileWithPackageName = {
-            path: "/a/data/node_modules/@types/gulp/index.d.ts",
-            content: "declare const gulp: { x: number }",
-            package: "gulp",
-        };
+            const commander: FileWithPackageName = {
+                path: "/a/data/node_modules/@types/commander/index.d.ts",
+                content: "declare const commander: { x: number }",
+                package: "commander",
+            };
+            const jquery: FileWithPackageName = {
+                path: "/a/data/node_modules/@types/jquery/index.d.ts",
+                content: "declare const jquery: { x: number }",
+                package: "jquery",
+            };
+            const lodash: FileWithPackageName = {
+                path: "/a/data/node_modules/@types/lodash/index.d.ts",
+                content: "declare const lodash: { x: number }",
+                package: "lodash",
+            };
+            const cordova: FileWithPackageName = {
+                path: "/a/data/node_modules/@types/cordova/index.d.ts",
+                content: "declare const cordova: { x: number }",
+                package: "cordova",
+            };
+            const grunt: FileWithPackageName = {
+                path: "/a/data/node_modules/@types/grunt/index.d.ts",
+                content: "declare const grunt: { x: number }",
+                package: "grunt",
+            };
+            const gulp: FileWithPackageName = {
+                path: "/a/data/node_modules/@types/gulp/index.d.ts",
+                content: "declare const gulp: { x: number }",
+                package: "gulp",
+            };
 
-        const host = createServerHost([lodashJs, commanderJs, file3, customTypesMap]);
-        // Create project #1 with 4 typings
-        const session = new TestSession({
-            host,
-            installAction: [commander, jquery, lodash, cordova, grunt, gulp],
-            throttleLimit: 1,
-            typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"],
+            const host = createServerHost([lodashJs, commanderJs, file3, customTypesMap]);
+            return { lodashJs, commanderJs, file3, commander, jquery, lodash, cordova, grunt, gulp, host };
+        }
+        it("Throttle - delayed run install requests", () => {
+            const { lodashJs, commanderJs, file3, commander, jquery, lodash, cordova, grunt, gulp, host } = setup();
+
+            // Create project #1 with 4 typings
+            const session = new TestSession({
+                host,
+                installAction: [commander, jquery, lodash, cordova, grunt, gulp],
+                throttleLimit: 1,
+                typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"],
+            });
+            const projectFileName1 = "/a/app/test1.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName1,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                typeAcquisition: { include: ["jquery", "cordova"] },
+            }, session);
+
+            // Create project #2 with 2 typings
+            const projectFileName2 = "/a/app/test2.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName2,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(file3.path)],
+                typeAcquisition: { include: ["grunt", "gulp"] },
+            }, session);
+
+            host.runPendingInstalls();
+            host.runPendingInstalls();
+            host.runQueuedTimeoutCallbacks(); // for 2 projects
+            baselineTsserverLogs("typingsInstaller", "throttle delayed run install requests", session);
         });
-        const projectFileName1 = "/a/app/test1.csproj";
-        openExternalProjectForSession({
-            projectFileName: projectFileName1,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
-            rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
-            typeAcquisition: { include: ["jquery", "cordova"] },
-        }, session);
 
-        assert.equal(session.typingsInstaller.installer.pendingRunRequests.length, 0, "expect no throttled requests");
+        it("Throttle - scheduled run install requests without reaching limit", () => {
+            const { lodashJs, commanderJs, file3, commander, jquery, lodash, cordova, grunt, gulp, host } = setup();
 
-        // Create project #2 with 2 typings
-        const projectFileName2 = "/a/app/test2.csproj";
-        openExternalProjectForSession({
-            projectFileName: projectFileName2,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
-            rootFiles: [toExternalFile(file3.path)],
-            typeAcquisition: { include: ["grunt", "gulp"] },
-        }, session);
-        assert.equal(session.typingsInstaller.installer.pendingRunRequests.length, 1, "expect one throttled request");
+            const session = new TestSession({
+                host,
+                installAction: [commander, jquery, lodash, cordova, grunt, gulp],
+                throttledRequests: 1,
+                typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"],
+            });
+            const projectFileName1 = "/a/app/test1.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName1,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                typeAcquisition: { include: ["jquery", "cordova"] },
+            }, session);
 
-        host.runPendingInstalls();
+            host.runQueuedTimeoutCallbacks(); // Send the request to worker for project1
+            host.runPendingInstalls(); // Actual install for project1
 
-        // expected one install request from the second project
-        assert.equal(session.typingsInstaller.installer.pendingRunRequests.length, 0, "expected no throttled requests");
+            const id = host.getNextTimeoutId();
+            const projectFileName2 = "/a/app/test2.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName2,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(file3.path)],
+                typeAcquisition: { include: ["grunt", "gulp"] },
+            }, session);
 
-        host.runPendingInstalls();
-        host.runQueuedTimeoutCallbacks(); // for 2 projects
-        baselineTsserverLogs("typingsInstaller", "throttle delayed run install requests", session);
+            host.runQueuedTimeoutCallbacks(id); // Send the request to worker for project2
+            host.runPendingInstalls(); // Actual install for project2
+            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests without reaching limit", session);
+        });
+
+        it("Throttle - scheduled run install requests with defer", () => {
+            const { lodashJs, commanderJs, file3, commander, jquery, lodash, cordova, grunt, gulp, host } = setup();
+
+            const session = new TestSession({
+                host,
+                installAction: [commander, jquery, lodash, cordova, grunt, gulp],
+                throttledRequests: 1,
+                typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"],
+            });
+            const projectFileName1 = "/a/app/test1.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName1,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                typeAcquisition: { include: ["jquery", "cordova"] },
+            }, session);
+
+            // this will be deferred
+            const projectFileName2 = "/a/app/test2.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName2,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(file3.path)],
+                typeAcquisition: { include: ["grunt", "gulp"] },
+            }, session);
+            const id = host.getNextTimeoutId();
+            host.runQueuedTimeoutCallbacks(); // Send the request to worker for project1
+            host.runPendingInstalls(); // Actual install for project1
+
+            host.runQueuedTimeoutCallbacks(id); // Send the request to worker for project2
+            host.runPendingInstalls(); // Actual install for project2
+            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests with defer", session);
+        });
+
+        it("Throttle - scheduled run install requests with defer refreshed", () => {
+            const { lodashJs, commanderJs, file3, commander, jquery, lodash, cordova, grunt, gulp, host } = setup();
+
+            const session = new TestSession({
+                host,
+                installAction: [commander, jquery, lodash, cordova, grunt, gulp],
+                throttledRequests: 1,
+                typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"],
+            });
+            const projectFileName1 = "/a/app/test1.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName1,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                typeAcquisition: { include: ["jquery", "cordova"] },
+            }, session);
+
+            // Create project #2 with 2 typings - this will be deferred
+            const projectFileName2 = "/a/app/test2.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName2,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(file3.path)],
+                typeAcquisition: { include: ["grunt", "gulp"] },
+            }, session);
+            // Update project for 3 typings and this should be used instead of first one
+            openExternalProjectForSession({
+                projectFileName: projectFileName2,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(file3.path)],
+                typeAcquisition: { include: ["grunt", "gulp"] },
+            }, session);
+            const id = host.getNextTimeoutId();
+            host.runQueuedTimeoutCallbacks(); // Send the request to worker for project1
+            host.runPendingInstalls(); // Actual install for project1
+
+            host.runQueuedTimeoutCallbacks(id); // Send the request to worker for project2
+            host.runPendingInstalls(); // Actual install for project2
+            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests with defer refreshed", session);
+        });
+
+        it("Throttle - scheduled run install requests with defer while queuing again", () => {
+            const { lodashJs, commanderJs, file3, commander, jquery, lodash, cordova, grunt, gulp, host } = setup();
+
+            const session = new TestSession({
+                host,
+                installAction: [commander, jquery, lodash, cordova, grunt, gulp],
+                throttledRequests: 1,
+                typesRegistry: ["commander", "jquery", "lodash", "cordova", "gulp", "grunt"],
+            });
+            const projectFileName1 = "/a/app/test1.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName1,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(commanderJs.path), toExternalFile(file3.path)],
+                typeAcquisition: { include: ["jquery"] },
+            }, session);
+
+            const projectFileName2 = "/a/app/test2.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName2,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(file3.path)],
+                typeAcquisition: { include: ["grunt", "gulp"] },
+            }, session);
+
+            const projectFileName3 = "/a/app/test3.csproj";
+            openExternalProjectForSession({
+                projectFileName: projectFileName3,
+                options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
+                rootFiles: [toExternalFile(lodashJs.path), toExternalFile(file3.path)],
+                typeAcquisition: { include: ["cordova"] },
+            }, session);
+            const id = host.getNextTimeoutId();
+            host.runQueuedTimeoutCallbacks(); // Send the request to worker for project1
+            host.runPendingInstalls(); // Actual install for project1
+
+            const id2 = host.getNextTimeoutId();
+            host.runQueuedTimeoutCallbacks(id); // Send the request to worker for project2
+            host.runPendingInstalls(); // Actual install for project2
+
+            host.runQueuedTimeoutCallbacks(id2); // Send the request to worker for project3
+            host.runPendingInstalls(); // Actual install for project3
+
+            baselineTsserverLogs("typingsInstaller", "throttle scheduled run install requests with defer while queuing again", session);
+        });
     });
 
     it("configured scoped name projects discover from node_modules", () => {

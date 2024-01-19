@@ -161,12 +161,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/san2",
-      "cachePath": "/users/username/Library/Caches/typescript/2.7",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/users/username/Library/Caches/typescript/2.7', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/users/username/Library/Caches/typescript/2.7'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []

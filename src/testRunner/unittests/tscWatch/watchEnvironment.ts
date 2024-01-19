@@ -689,6 +689,42 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         });
     });
 
+    describe("with fsWatch with fsWatchWithTimestamp", () => {
+        function verify(fsWatchWithTimestamp: boolean) {
+            verifyTscWatch({
+                scenario,
+                subScenario: `fsWatch/fsWatchWithTimestamp ${fsWatchWithTimestamp}`,
+                commandLineArgs: ["-w", "--extendedDiagnostics"],
+                sys: () =>
+                    createWatchedSystem(
+                        {
+                            [libFile.path]: libFile.content,
+                            "/user/username/projects/myproject/main.ts": `export const x = 10;`,
+                            "/user/username/projects/myproject/tsconfig.json": jsonToReadableText({ files: ["main.ts"] }),
+                        },
+                        {
+                            currentDirectory: "/user/username/projects/myproject",
+                            fsWatchWithTimestamp,
+                        },
+                    ),
+                edits: [
+                    {
+                        caption: "emulate access",
+                        edit: sys => sys.invokeFsWatches("/user/username/projects/myproject/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "modify file contents",
+                        edit: sys => sys.appendFile("/user/username/projects/myproject/main.ts", "export const y = 10;"),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                ],
+            });
+        }
+        verify(/*fsWatchWithTimestamp*/ true);
+        verify(/*fsWatchWithTimestamp*/ false);
+    });
+
     verifyTscWatch({
         scenario,
         subScenario: "fsEvent for change is repeated",
