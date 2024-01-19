@@ -36,20 +36,10 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-Program root files: ["main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-main.ts
+//// [/user/username/projects/project/main.js]
+var a = "Hello";
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-main.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/project/main.ts (used version)
 
 PolledWatches::
 /user/username/projects/node_modules/@types: *new*
@@ -63,12 +53,27 @@ FsWatches::
 /user/username/projects/project/main.ts: *new*
   {}
 
+Program root files: [
+  "main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+main.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/project/main.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/project/main.js]
-var a = "Hello";
-
-
 
 Change:: change main.ts
 
@@ -77,13 +82,20 @@ Input::
 let a: string = "Hello World"
 
 
-Before running Timeout callback:: count: 1
-1: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
 
@@ -94,8 +106,19 @@ CreatingProgramWith::
 
 
 
-Program root files: ["main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true}
+//// [/user/username/projects/project/main.js]
+var a = "Hello World";
+
+
+
+
+Program root files: [
+  "main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -110,27 +133,30 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/project/main.js]
-var a = "Hello World";
-
-
-
 Change:: receive another change event without modifying the file
 
 Input::
 
-Before running Timeout callback:: count: 1
-2: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 
 
-exitCode:: ExitStatus.undefined
 
+
+exitCode:: ExitStatus.undefined
 
 Change:: change main.ts to empty text
 
@@ -139,13 +165,20 @@ Input::
 
 
 
-Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
@@ -156,8 +189,18 @@ CreatingProgramWith::
 
 
 
-Program root files: ["main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true}
+//// [/user/username/projects/project/main.js]
+
+
+
+
+Program root files: [
+  "main.ts"
+]
+Program options: {
+  "watch": true,
+  "extendedDiagnostics": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -171,23 +214,27 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/project/main.js]
-
-
-
 Change:: receive another change event without modifying the file
 
 Input::
 
-Before running Timeout callback:: count: 1
-4: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
+
+
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Synchronizing program
 
 
-exitCode:: ExitStatus.undefined
 
+
+exitCode:: ExitStatus.undefined

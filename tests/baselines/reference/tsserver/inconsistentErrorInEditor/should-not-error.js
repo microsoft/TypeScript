@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -129,72 +129,80 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "^/untitled/ts-nul-authority/Untitled-1",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "syntaxDiag",
+      "body": {
+        "file": "^/untitled/ts-nul-authority/Untitled-1",
+        "diagnostics": []
+      }
     }
 After running Timeout callback:: count: 0
+
+Immedidate callback:: count: 1
+1: semanticCheck *new*
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "semanticDiag",
-     "body": {
-      "file": "^/untitled/ts-nul-authority/Untitled-1",
-      "diagnostics": []
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "semanticDiag",
+      "body": {
+        "file": "^/untitled/ts-nul-authority/Untitled-1",
+        "diagnostics": []
+      }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
 
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "suggestionDiag",
-     "body": {
-      "file": "^/untitled/ts-nul-authority/Untitled-1",
-      "diagnostics": [
-       {
-        "start": {
-         "line": 9,
-         "offset": 5
-        },
-        "end": {
-         "line": 9,
-         "offset": 6
-        },
-        "text": "'x' is declared but its value is never read.",
-        "code": 6133,
-        "category": "suggestion",
-        "reportsUnnecessary": true
-       }
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "suggestionDiag",
+      "body": {
+        "file": "^/untitled/ts-nul-authority/Untitled-1",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 9,
+              "offset": 5
+            },
+            "end": {
+              "line": 9,
+              "offset": 6
+            },
+            "text": "'x' is declared but its value is never read.",
+            "code": 6133,
+            "category": "suggestion",
+            "reportsUnnecessary": true
+          }
+        ]
+      }
     }
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "requestCompleted",
-     "body": {
-      "request_seq": 3
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "requestCompleted",
+      "body": {
+        "request_seq": 3
+      }
     }
 After running Immedidate callback:: count: 0

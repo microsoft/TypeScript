@@ -126,6 +126,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /folderAtRoot
 
@@ -248,6 +269,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /folderAtRoot/folder1
 
@@ -370,6 +412,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2
 
@@ -492,6 +555,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3
 
@@ -614,6 +698,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -736,6 +841,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -858,6 +984,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /users
 
@@ -980,6 +1127,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /users/username
 
@@ -1102,6 +1270,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /users/username/folderAtRoot
 
@@ -1224,6 +1413,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1
 
@@ -1346,6 +1556,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2
 
@@ -1468,6 +1699,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3
 
@@ -1590,6 +1842,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -1712,6 +1985,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -1834,6 +2128,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /user
 
@@ -1956,6 +2271,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /user/username
 
@@ -2078,6 +2414,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /user/username/folderAtRoot
 
@@ -2200,6 +2557,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1
 
@@ -2322,6 +2700,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2
 
@@ -2444,6 +2843,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3
 
@@ -2566,6 +2986,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -2688,6 +3129,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -2810,6 +3272,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /usr
 
@@ -2932,6 +3415,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /usr/username
 
@@ -3054,6 +3558,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot
 
@@ -3176,6 +3701,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1
 
@@ -3298,6 +3844,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2
 
@@ -3420,6 +3987,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3
 
@@ -3542,6 +4130,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -3664,6 +4273,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -3786,6 +4416,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /home
 
@@ -3908,6 +4559,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /home/username
 
@@ -4030,6 +4702,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /home/username/folderAtRoot
 
@@ -4152,6 +4845,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1                                                          | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1                                                          | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1                                                          | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1
 
@@ -4274,6 +4988,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2
 
@@ -4396,6 +5131,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3                                          | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3
 
@@ -4518,6 +5274,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -4640,6 +5417,27 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
 
 ## RootDirForResolution: /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -4762,4 +5560,1026 @@ It also determines the directory to watch and whether to watch it recursively or
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                          | false     |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
 | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                      | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
+
+## RootDirForResolution: /workspaces
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       | /folderAtRoot/dir/subdir                                                                     | true      |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              | /users/dir/subdir                                                                            | true      |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            | /users/username/dir                                                                          | true      |
+| /users/username/dir/subdir/somefile.d.ts                                                     | /users/username/dir                                                                          | true      |
+| /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /users/username/folderAtRoot                                                                 | true      |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               | /user/dir/subdir                                                                             | true      |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             | /user/username/dir                                                                           | true      |
+| /user/username/dir/subdir/somefile.d.ts                                                      | /user/username/dir                                                                           | true      |
+| /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot                                                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                | /usr/dir/subdir                                                                              | true      |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              | /usr/username/dir                                                                            | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir                                                                            | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot                                                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               | /home/dir/subdir                                                                             | true      |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             | /home/username/dir                                                                           | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir                                                                           | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot                                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot                                                                     | true      |
+
+## RootDirForResolution: /workspaces/folderAtRoot
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       | /folderAtRoot/dir/subdir                                                                     | true      |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              | /users/dir/subdir                                                                            | true      |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            | /users/username/dir                                                                          | true      |
+| /users/username/dir/subdir/somefile.d.ts                                                     | /users/username/dir                                                                          | true      |
+| /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /users/username/folderAtRoot                                                                 | true      |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               | /user/dir/subdir                                                                             | true      |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             | /user/username/dir                                                                           | true      |
+| /user/username/dir/subdir/somefile.d.ts                                                      | /user/username/dir                                                                           | true      |
+| /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot                                                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                | /usr/dir/subdir                                                                              | true      |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              | /usr/username/dir                                                                            | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir                                                                            | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot                                                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               | /home/dir/subdir                                                                             | true      |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             | /home/username/dir                                                                           | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir                                                                           | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | false     |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot/folder1                                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot/folder1                                                             | true      |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       | /folderAtRoot/dir/subdir                                                                     | true      |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              | /users/dir/subdir                                                                            | true      |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            | /users/username/dir                                                                          | true      |
+| /users/username/dir/subdir/somefile.d.ts                                                     | /users/username/dir                                                                          | true      |
+| /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /users/username/folderAtRoot                                                                 | true      |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               | /user/dir/subdir                                                                             | true      |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             | /user/username/dir                                                                           | true      |
+| /user/username/dir/subdir/somefile.d.ts                                                      | /user/username/dir                                                                           | true      |
+| /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot                                                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                | /usr/dir/subdir                                                                              | true      |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              | /usr/username/dir                                                                            | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir                                                                            | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot                                                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               | /home/dir/subdir                                                                             | true      |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             | /home/username/dir                                                                           | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir                                                                           | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | false     |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot/folder1                                                             | false     |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot/folder1/folder2                                                     | true      |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1/folder2
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       | /folderAtRoot/dir/subdir                                                                     | true      |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              | /users/dir/subdir                                                                            | true      |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            | /users/username/dir                                                                          | true      |
+| /users/username/dir/subdir/somefile.d.ts                                                     | /users/username/dir                                                                          | true      |
+| /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /users/username/folderAtRoot                                                                 | true      |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               | /user/dir/subdir                                                                             | true      |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             | /user/username/dir                                                                           | true      |
+| /user/username/dir/subdir/somefile.d.ts                                                      | /user/username/dir                                                                           | true      |
+| /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot                                                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                | /usr/dir/subdir                                                                              | true      |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              | /usr/username/dir                                                                            | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir                                                                            | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot                                                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               | /home/dir/subdir                                                                             | true      |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             | /home/username/dir                                                                           | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir                                                                           | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | false     |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot/folder1                                                             | false     |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot/folder1/folder2                                                     | false     |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot/folder1/folder2/dir                                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot/folder1/folder2/dir                                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | true      |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1/folder2/folder3
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       | /folderAtRoot/dir/subdir                                                                     | true      |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              | /users/dir/subdir                                                                            | true      |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            | /users/username/dir                                                                          | true      |
+| /users/username/dir/subdir/somefile.d.ts                                                     | /users/username/dir                                                                          | true      |
+| /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /users/username/folderAtRoot                                                                 | true      |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               | /user/dir/subdir                                                                             | true      |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             | /user/username/dir                                                                           | true      |
+| /user/username/dir/subdir/somefile.d.ts                                                      | /user/username/dir                                                                           | true      |
+| /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot                                                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                | /usr/dir/subdir                                                                              | true      |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              | /usr/username/dir                                                                            | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir                                                                            | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot                                                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               | /home/dir/subdir                                                                             | true      |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             | /home/username/dir                                                                           | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir                                                                           | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | false     |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot/folder1                                                             | false     |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot/folder1/folder2                                                     | false     |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot/folder1/folder2/dir                                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot/folder1/folder2/dir                                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | false     |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot/folder1/folder2/folder3/dir                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot/folder1/folder2/folder3/dir                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                     | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                     | true      |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1/folder2/folder3/folder4
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       | /folderAtRoot/dir/subdir                                                                     | true      |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              | /users/dir/subdir                                                                            | true      |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            | /users/username/dir                                                                          | true      |
+| /users/username/dir/subdir/somefile.d.ts                                                     | /users/username/dir                                                                          | true      |
+| /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /users/username/folderAtRoot                                                                 | true      |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               | /user/dir/subdir                                                                             | true      |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             | /user/username/dir                                                                           | true      |
+| /user/username/dir/subdir/somefile.d.ts                                                      | /user/username/dir                                                                           | true      |
+| /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot                                                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                | /usr/dir/subdir                                                                              | true      |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              | /usr/username/dir                                                                            | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir                                                                            | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot                                                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               | /home/dir/subdir                                                                             | true      |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             | /home/username/dir                                                                           | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir                                                                           | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | false     |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot/folder1                                                             | false     |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot/folder1/folder2                                                     | false     |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot/folder1/folder2/dir                                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot/folder1/folder2/dir                                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | false     |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot/folder1/folder2/folder3/dir                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot/folder1/folder2/folder3/dir                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                     | false     |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5                             | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5                             | true      |
+
+## RootDirForResolution: /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+| Location                                                                                     | getDirectoryToWatchFailedLookupLocation                                                      | Recursive |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| /somefile.d.ts                                                                               |                                                                                              |           |
+| /dir/somefile.d.ts                                                                           |                                                                                              |           |
+| /dir/subdir/somefile.d.ts                                                                    |                                                                                              |           |
+| /folderAtRoot/somefile.d.ts                                                                  |                                                                                              |           |
+| /folderAtRoot/dir/somefile.d.ts                                                              |                                                                                              |           |
+| /folderAtRoot/dir/subdir/somefile.d.ts                                                       | /folderAtRoot/dir/subdir                                                                     | true      |
+| /folderAtRoot/folder1/somefile.d.ts                                                          |                                                                                              |           |
+| /folderAtRoot/folder1/dir/somefile.d.ts                                                      | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/dir/subdir/somefile.d.ts                                               | /folderAtRoot/folder1/dir                                                                    | true      |
+| /folderAtRoot/folder1/folder2/somefile.d.ts                                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/somefile.d.ts                                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/somefile.d.ts                                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                                  | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                              | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts                       | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts                          | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts                      | /folderAtRoot/folder1/folder2                                                                | true      |
+| /folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts               | /folderAtRoot/folder1/folder2                                                                | true      |
+| /users/somefile.d.ts                                                                         |                                                                                              |           |
+| /users/dir/somefile.d.ts                                                                     |                                                                                              |           |
+| /users/dir/subdir/somefile.d.ts                                                              | /users/dir/subdir                                                                            | true      |
+| /users/username/somefile.d.ts                                                                |                                                                                              |           |
+| /users/username/dir/somefile.d.ts                                                            | /users/username/dir                                                                          | true      |
+| /users/username/dir/subdir/somefile.d.ts                                                     | /users/username/dir                                                                          | true      |
+| /users/username/folderAtRoot/somefile.d.ts                                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/somefile.d.ts                                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/dir/subdir/somefile.d.ts                                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/somefile.d.ts                                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/somefile.d.ts                                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/somefile.d.ts                                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                   | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts               | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts        | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts           | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts       | /users/username/folderAtRoot                                                                 | true      |
+| /users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /users/username/folderAtRoot                                                                 | true      |
+| /user/somefile.d.ts                                                                          |                                                                                              |           |
+| /user/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /user/dir/subdir/somefile.d.ts                                                               | /user/dir/subdir                                                                             | true      |
+| /user/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /user/username/dir/somefile.d.ts                                                             | /user/username/dir                                                                           | true      |
+| /user/username/dir/subdir/somefile.d.ts                                                      | /user/username/dir                                                                           | true      |
+| /user/username/folderAtRoot/somefile.d.ts                                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/somefile.d.ts                                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/somefile.d.ts                                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /user/username/folderAtRoot                                                                  | true      |
+| /user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /user/username/folderAtRoot                                                                  | true      |
+| /usr/somefile.d.ts                                                                           |                                                                                              |           |
+| /usr/dir/somefile.d.ts                                                                       |                                                                                              |           |
+| /usr/dir/subdir/somefile.d.ts                                                                | /usr/dir/subdir                                                                              | true      |
+| /usr/username/somefile.d.ts                                                                  |                                                                                              |           |
+| /usr/username/dir/somefile.d.ts                                                              | /usr/username/dir                                                                            | true      |
+| /usr/username/dir/subdir/somefile.d.ts                                                       | /usr/username/dir                                                                            | true      |
+| /usr/username/folderAtRoot/somefile.d.ts                                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/somefile.d.ts                                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/dir/subdir/somefile.d.ts                                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/somefile.d.ts                                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/somefile.d.ts                                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/somefile.d.ts                                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                  | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                     | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                 | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts          | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts             | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts         | /usr/username/folderAtRoot                                                                   | true      |
+| /usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts  | /usr/username/folderAtRoot                                                                   | true      |
+| /home/somefile.d.ts                                                                          |                                                                                              |           |
+| /home/dir/somefile.d.ts                                                                      |                                                                                              |           |
+| /home/dir/subdir/somefile.d.ts                                                               | /home/dir/subdir                                                                             | true      |
+| /home/username/somefile.d.ts                                                                 |                                                                                              |           |
+| /home/username/dir/somefile.d.ts                                                             | /home/username/dir                                                                           | true      |
+| /home/username/dir/subdir/somefile.d.ts                                                      | /home/username/dir                                                                           | true      |
+| /home/username/folderAtRoot/somefile.d.ts                                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/somefile.d.ts                                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/dir/subdir/somefile.d.ts                                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/somefile.d.ts                                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/somefile.d.ts                                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/somefile.d.ts                                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                 | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                    | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts         | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts            | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts        | /home/username/folderAtRoot                                                                  | true      |
+| /home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts | /home/username/folderAtRoot                                                                  | true      |
+| /workspaces/somefile.d.ts                                                                    |                                                                                              |           |
+| /workspaces/dir/somefile.d.ts                                                                | /workspaces/dir                                                                              | true      |
+| /workspaces/dir/subdir/somefile.d.ts                                                         | /workspaces/dir                                                                              | true      |
+| /workspaces/folderAtRoot/somefile.d.ts                                                       | /workspaces/folderAtRoot                                                                     | false     |
+| /workspaces/folderAtRoot/dir/somefile.d.ts                                                   | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/dir/subdir/somefile.d.ts                                            | /workspaces/folderAtRoot/dir                                                                 | true      |
+| /workspaces/folderAtRoot/folder1/somefile.d.ts                                               | /workspaces/folderAtRoot/folder1                                                             | false     |
+| /workspaces/folderAtRoot/folder1/dir/somefile.d.ts                                           | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/dir/subdir/somefile.d.ts                                    | /workspaces/folderAtRoot/folder1/dir                                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/somefile.d.ts                                       | /workspaces/folderAtRoot/folder1/folder2                                                     | false     |
+| /workspaces/folderAtRoot/folder1/folder2/dir/somefile.d.ts                                   | /workspaces/folderAtRoot/folder1/folder2/dir                                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/dir/subdir/somefile.d.ts                            | /workspaces/folderAtRoot/folder1/folder2/dir                                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/somefile.d.ts                               | /workspaces/folderAtRoot/folder1/folder2/folder3                                             | false     |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/somefile.d.ts                           | /workspaces/folderAtRoot/folder1/folder2/folder3/dir                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/dir/subdir/somefile.d.ts                    | /workspaces/folderAtRoot/folder1/folder2/folder3/dir                                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/somefile.d.ts                       | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                     | false     |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/somefile.d.ts                   | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir/subdir/somefile.d.ts            | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/dir                                 | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/somefile.d.ts               | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5                             | false     |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/somefile.d.ts           | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                         | true      |
+| /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir/subdir/somefile.d.ts    | /workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/dir                         | true      |
 

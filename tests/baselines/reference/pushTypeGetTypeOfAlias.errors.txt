@@ -1,0 +1,11 @@
+bar.js(2,1): error TS2303: Circular definition of import alias 'blah'.
+bar.js(2,24): error TS2339: Property 'someProp' does not exist on type '{ (): void; blah: any; }'.
+
+
+==== bar.js (2 errors) ====
+    module.exports = function () {};
+    exports.blah = exports.someProp;
+    ~~~~~~~~~~~~
+!!! error TS2303: Circular definition of import alias 'blah'.
+                           ~~~~~~~~
+!!! error TS2339: Property 'someProp' does not exist on type '{ (): void; blah: any; }'.

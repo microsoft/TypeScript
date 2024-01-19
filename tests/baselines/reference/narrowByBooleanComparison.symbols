@@ -1,0 +1,264 @@
+//// [tests/cases/compiler/narrowByBooleanComparison.ts] ////
+
+=== narrowByBooleanComparison.ts ===
+type A = { type: "A" };
+>A : Symbol(A, Decl(narrowByBooleanComparison.ts, 0, 0))
+>type : Symbol(type, Decl(narrowByBooleanComparison.ts, 0, 10))
+
+type B = { type: "B" };
+>B : Symbol(B, Decl(narrowByBooleanComparison.ts, 0, 23))
+>type : Symbol(type, Decl(narrowByBooleanComparison.ts, 1, 10))
+
+type C = { type: "C" };
+>C : Symbol(C, Decl(narrowByBooleanComparison.ts, 1, 23))
+>type : Symbol(type, Decl(narrowByBooleanComparison.ts, 2, 10))
+
+type MyUnion = A | B | C;
+>MyUnion : Symbol(MyUnion, Decl(narrowByBooleanComparison.ts, 2, 23))
+>A : Symbol(A, Decl(narrowByBooleanComparison.ts, 0, 0))
+>B : Symbol(B, Decl(narrowByBooleanComparison.ts, 0, 23))
+>C : Symbol(C, Decl(narrowByBooleanComparison.ts, 1, 23))
+
+const isA = (x: MyUnion): x is A => x.type === "A";
+>isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 5, 13))
+>MyUnion : Symbol(MyUnion, Decl(narrowByBooleanComparison.ts, 2, 23))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 5, 13))
+>A : Symbol(A, Decl(narrowByBooleanComparison.ts, 0, 0))
+>x.type : Symbol(type, Decl(narrowByBooleanComparison.ts, 0, 10), Decl(narrowByBooleanComparison.ts, 1, 10), Decl(narrowByBooleanComparison.ts, 2, 10))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 5, 13))
+>type : Symbol(type, Decl(narrowByBooleanComparison.ts, 0, 10), Decl(narrowByBooleanComparison.ts, 1, 10), Decl(narrowByBooleanComparison.ts, 2, 10))
+
+function test1(x: MyUnion) {
+>test1 : Symbol(test1, Decl(narrowByBooleanComparison.ts, 5, 51))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+>MyUnion : Symbol(MyUnion, Decl(narrowByBooleanComparison.ts, 2, 23))
+
+    if (isA(x) !== true) {
+>isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+    }
+
+    if (isA(x) !== false) {
+>isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+    }
+
+    if (isA(x) === false) {
+>isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+    }
+
+    if (isA(x) === true) {
+>isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+    }
+
+    if (isA(x) != true) {
+>isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+    }
+
+    if (isA(x) == true) {
+>isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+    }
+
+    if (true !== isA(x)) {
+>isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+    }
+
+    if (true === isA(x)) {
+>isA : Symbol(isA, Decl(narrowByBooleanComparison.ts, 5, 5))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 7, 15))
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/53093
+function test2(x: unknown) {
+>test2 : Symbol(test2, Decl(narrowByBooleanComparison.ts, 39, 1))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 42, 15))
+
+    if (x instanceof Error === false) {
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 42, 15))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        return;
+    }
+    x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 42, 15))
+}
+
+// https://github.com/microsoft/TypeScript/issues/50712
+function test3(foo: unknown) {
+>test3 : Symbol(test3, Decl(narrowByBooleanComparison.ts, 47, 1))
+>foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+
+    if (typeof foo !== 'string' && Array.isArray(foo) === false) {
+>foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+
+        throw new Error('Not a string or an array');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    foo;
+>foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
+}
+
+// https://github.com/microsoft/TypeScript/issues/55395
+class WebError extends URIError {
+>WebError : Symbol(WebError, Decl(narrowByBooleanComparison.ts, 55, 1))
+>URIError : Symbol(URIError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    status?: number;
+>status : Symbol(WebError.status, Decl(narrowByBooleanComparison.ts, 58, 33))
+}
+function test4() {
+>test4 : Symbol(test4, Decl(narrowByBooleanComparison.ts, 60, 1))
+
+    try {
+        // make a request
+    } catch (err) {
+>err : Symbol(err, Decl(narrowByBooleanComparison.ts, 64, 13))
+
+        if (err instanceof WebError === false || err.status != 401) {
+>err : Symbol(err, Decl(narrowByBooleanComparison.ts, 64, 13))
+>WebError : Symbol(WebError, Decl(narrowByBooleanComparison.ts, 55, 1))
+>err.status : Symbol(WebError.status, Decl(narrowByBooleanComparison.ts, 58, 33))
+>err : Symbol(err, Decl(narrowByBooleanComparison.ts, 64, 13))
+>status : Symbol(WebError.status, Decl(narrowByBooleanComparison.ts, 58, 33))
+
+            console.error(err);
+>console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
+>err : Symbol(err, Decl(narrowByBooleanComparison.ts, 64, 13))
+        }
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/44366
+interface Entity {
+>Entity : Symbol(Entity, Decl(narrowByBooleanComparison.ts, 69, 1))
+
+    type: string;
+>type : Symbol(Entity.type, Decl(narrowByBooleanComparison.ts, 72, 18))
+}
+const ACTOR_TYPE = "actor";
+>ACTOR_TYPE : Symbol(ACTOR_TYPE, Decl(narrowByBooleanComparison.ts, 75, 5))
+
+interface Actor extends Entity {
+>Actor : Symbol(Actor, Decl(narrowByBooleanComparison.ts, 75, 27))
+>Entity : Symbol(Entity, Decl(narrowByBooleanComparison.ts, 69, 1))
+
+    type: typeof ACTOR_TYPE;
+>type : Symbol(Actor.type, Decl(narrowByBooleanComparison.ts, 76, 32))
+>ACTOR_TYPE : Symbol(ACTOR_TYPE, Decl(narrowByBooleanComparison.ts, 75, 5))
+}
+function isActor(entity: Entity): entity is Actor {
+>isActor : Symbol(isActor, Decl(narrowByBooleanComparison.ts, 78, 1))
+>entity : Symbol(entity, Decl(narrowByBooleanComparison.ts, 79, 17))
+>Entity : Symbol(Entity, Decl(narrowByBooleanComparison.ts, 69, 1))
+>entity : Symbol(entity, Decl(narrowByBooleanComparison.ts, 79, 17))
+>Actor : Symbol(Actor, Decl(narrowByBooleanComparison.ts, 75, 27))
+
+    return entity.type === ACTOR_TYPE;
+>entity.type : Symbol(Entity.type, Decl(narrowByBooleanComparison.ts, 72, 18))
+>entity : Symbol(entity, Decl(narrowByBooleanComparison.ts, 79, 17))
+>type : Symbol(Entity.type, Decl(narrowByBooleanComparison.ts, 72, 18))
+>ACTOR_TYPE : Symbol(ACTOR_TYPE, Decl(narrowByBooleanComparison.ts, 75, 5))
+}
+function test5(bin: Entity) {
+>test5 : Symbol(test5, Decl(narrowByBooleanComparison.ts, 81, 1))
+>bin : Symbol(bin, Decl(narrowByBooleanComparison.ts, 82, 15))
+>Entity : Symbol(Entity, Decl(narrowByBooleanComparison.ts, 69, 1))
+
+    if (isActor(bin) === false) {
+>isActor : Symbol(isActor, Decl(narrowByBooleanComparison.ts, 78, 1))
+>bin : Symbol(bin, Decl(narrowByBooleanComparison.ts, 82, 15))
+
+        bin;
+>bin : Symbol(bin, Decl(narrowByBooleanComparison.ts, 82, 15))
+
+    } else {
+        bin;
+>bin : Symbol(bin, Decl(narrowByBooleanComparison.ts, 82, 15))
+    }
+}
+function test6(bin: Entity) {
+>test6 : Symbol(test6, Decl(narrowByBooleanComparison.ts, 88, 1))
+>bin : Symbol(bin, Decl(narrowByBooleanComparison.ts, 89, 15))
+>Entity : Symbol(Entity, Decl(narrowByBooleanComparison.ts, 69, 1))
+
+    if (isActor(bin) == false) {
+>isActor : Symbol(isActor, Decl(narrowByBooleanComparison.ts, 78, 1))
+>bin : Symbol(bin, Decl(narrowByBooleanComparison.ts, 89, 15))
+
+        bin;
+>bin : Symbol(bin, Decl(narrowByBooleanComparison.ts, 89, 15))
+
+    } else {
+        bin;
+>bin : Symbol(bin, Decl(narrowByBooleanComparison.ts, 89, 15))
+    }
+}
+
+// https://github.com/microsoft/TypeScript/issues/53005
+function isFunction(x: unknown): x is Function {
+>isFunction : Symbol(isFunction, Decl(narrowByBooleanComparison.ts, 95, 1))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 98, 20))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 98, 20))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    return typeof x === "function";
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 98, 20))
+}
+
+function test7(x: unknown) {
+>test7 : Symbol(test7, Decl(narrowByBooleanComparison.ts, 100, 1))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 102, 15))
+
+    if (isFunction(x) !== false) {
+>isFunction : Symbol(isFunction, Decl(narrowByBooleanComparison.ts, 95, 1))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 102, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 102, 15))
+    }
+    if (isFunction(x) === true) {
+>isFunction : Symbol(isFunction, Decl(narrowByBooleanComparison.ts, 95, 1))
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 102, 15))
+
+        x;
+>x : Symbol(x, Decl(narrowByBooleanComparison.ts, 102, 15))
+    }
+}
+
