@@ -1294,7 +1294,7 @@ function createModuleOrTypeReferenceResolutionCache<T>(
         ...nonRelativeNameResolutionCache,
         clear,
         update,
-        getPackageJsonInfoCache: () => packageJsonInfoCache!,
+        getPackageJsonInfoCache: () => packageJsonInfoCache,
         clearAllExceptPackageJsonInfoCache,
         optionsToRedirectsKey,
     };

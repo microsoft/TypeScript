@@ -2547,7 +2547,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const resolutionsChanged = hasChangesInResolutions(
                 moduleNames,
                 resolutions,
-                name => oldProgram!.getResolvedModule(newSourceFile, name.text, getModeForUsageLocation(newSourceFile, name)),
+                name => oldProgram.getResolvedModule(newSourceFile, name.text, getModeForUsageLocation(newSourceFile, name)),
                 moduleResolutionIsEqualTo,
             );
             if (resolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
@@ -2558,7 +2558,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const typeReferenceResolutionsChanged = hasChangesInResolutions(
                 typesReferenceDirectives,
                 typeReferenceResolutions,
-                name => oldProgram!.getResolvedTypeReferenceDirective(newSourceFile, getTypeReferenceResolutionName(name), getModeForFileReference(name, newSourceFile.impliedNodeFormat)),
+                name => oldProgram.getResolvedTypeReferenceDirective(newSourceFile, getTypeReferenceResolutionName(name), getModeForFileReference(name, newSourceFile.impliedNodeFormat)),
                 typeDirectiveIsEqualTo,
             );
             if (typeReferenceResolutionsChanged) structureIsReused = StructureIsReused.SafeModules;
@@ -2601,7 +2601,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
             if (oldFile.path === path) {
                 // Set the file as found during node modules search if it was found that way in old progra,
-                if (oldProgram!.isSourceFileFromExternalLibrary(oldFile)) {
+                if (oldProgram.isSourceFileFromExternalLibrary(oldFile)) {
                     sourceFilesFoundSearchingNodeModules.set(oldFile.path, true);
                 }
                 return;

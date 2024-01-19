@@ -3566,7 +3566,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     (meaning & SymbolFlags.BlockScopedVariable ||
                         ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))
                 ) {
-                    const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result!);
+                    const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
                     if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
                         checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
                     }
