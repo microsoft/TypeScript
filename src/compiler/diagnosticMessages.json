@@ -967,10 +967,6 @@
         "category": "Error",
         "code": 1292
     },
-    "A non-null assertion may not be preceded by whitespace.": {
-        "category": "Error",
-        "code": 1293
-    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1652,6 +1648,10 @@
     "Identifier, string literal, or number literal expected.": {
         "category": "Error",
         "code": 1496
+    },
+    "A non-null assertion may not be preceded by whitespace.": {
+        "category": "Error",
+        "code": 1497
     },
 
     "The types of '{0}' are incompatible between these types.": {
