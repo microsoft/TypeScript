@@ -33,23 +33,23 @@ declare module "path" {
 === /mainJs.js ===
 import {} from "./a";
 import("./a");
->import("./a") : Promise<typeof import("/a")>
+>import("./a") : Promise<typeof _>
 >"./a" : "./a"
 
-const _ = require("./a"); // No resolution
->_ : any
->require("./a") : any
+const _ = require("./a");
+>_ : typeof _
+>require("./a") : typeof _
 >require : (...args: any[]) => any
 >"./a" : "./a"
 
 _.a; // any
->_.a : any
->_ : any
->a : any
+>_.a : "a"
+>_ : typeof _
+>a : "a"
 
 === /main.ts ===
 import {} from "./a";
-import _ = require("./a"); // Error
+import _ = require("./a"); // Error in esnext
 >_ : typeof _
 
 export = {}; // Error

@@ -322,7 +322,6 @@ import {
     getLineAndCharacterOfPosition,
     getLocalSymbolForExportDefault,
     getMembersOfDeclaration,
-    getModeForUsageLocation,
     getModifiers,
     getModuleInstanceState,
     getNameFromImportAttribute,
@@ -960,7 +959,6 @@ import {
     ShorthandPropertyAssignment,
     shouldAllowImportingTsExtension,
     shouldPreserveConstEnums,
-    shouldResolveJsRequire,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
@@ -2053,7 +2051,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noConstraintType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var circularConstraintType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
     var resolvingDefaultType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
-    var resolvingApparentMappedType = createAnonymousType(/*symbol*/ undefined, emptySymbols, emptyArray, emptyArray, emptyArray);
 
     var markerSuperType = createTypeParameter();
     var markerSubType = createTypeParameter();
@@ -4060,7 +4057,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getUsageModeForExpression(usage: Expression) {
-        return isStringLiteralLike(usage) ? getModeForUsageLocation(getSourceFileOfNode(usage), usage) : undefined;
+        return isStringLiteralLike(usage) ? host.getModeForUsageLocation(getSourceFileOfNode(usage), usage) : undefined;
     }
 
     function isESMFormatImportImportingCommonjsFormatFile(usageMode: ResolutionMode, targetMode: ResolutionMode) {
@@ -4074,7 +4071,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
         const usageMode = file && getUsageModeForExpression(usage);
-        if (file && usageMode !== undefined) {
+        if (file && usageMode !== undefined && ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
             const result = isESMFormatImportImportingCommonjsFormatFile(usageMode, file.impliedNodeFormat);
             if (usageMode === ModuleKind.ESNext || result) {
                 return result;
@@ -5006,13 +5003,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const currentSourceFile = getSourceFileOfNode(location);
         const contextSpecifier = isStringLiteralLike(location)
             ? location
-            : findAncestor(location, isImportCall)?.arguments[0] ||
+            : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
+                (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
+                (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
+                findAncestor(location, isImportCall)?.arguments[0] ||
                 findAncestor(location, isImportDeclaration)?.moduleSpecifier ||
                 findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression ||
-                findAncestor(location, isExportDeclaration)?.moduleSpecifier ||
-                (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
-                (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
-        const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
+                findAncestor(location, isExportDeclaration)?.moduleSpecifier;
+        const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? host.getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const resolvedModule = host.getResolvedModule(currentSourceFile, moduleReference, mode)?.resolvedModule;
         const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
@@ -14539,32 +14537,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getApparentTypeOfMappedType(type: MappedType) {
-        if (type.resolvedApparentType) {
-            if (type.resolvedApparentType === resolvingApparentMappedType) {
-                return type.resolvedApparentType = type;
-            }
-            return type.resolvedApparentType;
-        }
-        type.resolvedApparentType = resolvingApparentMappedType;
-        return type.resolvedApparentType = getResolvedApparentTypeOfMappedType(type);
+        return type.resolvedApparentType || (type.resolvedApparentType = getResolvedApparentTypeOfMappedType(type));
     }
 
     function getResolvedApparentTypeOfMappedType(type: MappedType) {
-        const mappedType = type.target as MappedType || type;
-        const typeVariable = getHomomorphicTypeVariable(mappedType);
-        if (typeVariable && !mappedType.declaration.nameType) {
-            let constraint: Type | undefined;
-            if (!type.target) {
-                constraint = getConstraintOfTypeParameter(typeVariable);
-            }
-            else {
-                const modifiersConstraint = getConstraintOfType(getModifiersTypeFromMappedType(type));
-                if (modifiersConstraint) {
-                    constraint = getApparentType(modifiersConstraint);
-                }
-            }
+        const typeVariable = getHomomorphicTypeVariable(type);
+        if (typeVariable && !type.declaration.nameType) {
+            const constraint = getConstraintOfTypeParameter(typeVariable);
             if (constraint && everyType(constraint, isArrayOrTupleType)) {
-                return instantiateType(mappedType, prependTypeMapping(typeVariable, constraint, mappedType.mapper));
+                return instantiateType(type, prependTypeMapping(typeVariable, constraint, type.mapper));
             }
         }
         return type;
@@ -19777,11 +19758,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 ) {
                                     return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable, t, mapper));
                                 }
-                                if (isGenericTupleType(t)) {
-                                    return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
-                                }
                                 if (isTupleType(t)) {
-                                    return instantiateMappedTupleType(t, type, prependTypeMapping(typeVariable, t, mapper));
+                                    return instantiateMappedTupleType(t, type, typeVariable, mapper);
                                 }
                             }
                             return instantiateAnonymousType(type, prependTypeMapping(typeVariable, t, mapper));
@@ -19801,44 +19779,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return modifiers & MappedTypeModifiers.IncludeReadonly ? true : modifiers & MappedTypeModifiers.ExcludeReadonly ? false : state;
     }
 
-    function instantiateMappedGenericTupleType(tupleType: TupleTypeReference, mappedType: MappedType, typeVariable: TypeVariable, mapper: TypeMapper) {
-        // When a tuple type is generic (i.e. when it contains variadic elements), we want to eagerly map the
-        // non-generic elements and defer mapping the generic elements. In order to facilitate this, we transform
-        // M<[A, B?, ...T, ...C[]] into [...M<[A]>, ...M<[B?]>, ...M<T>, ...M<C[]>] and then rely on tuple type
-        // normalization to resolve the non-generic parts of the resulting tuple.
+    function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, typeVariable: TypeVariable, mapper: TypeMapper) {
+        // We apply the mapped type's template type to each of the fixed part elements. For variadic elements, we
+        // apply the mapped type itself to the variadic element type. For other elements in the variable part of the
+        // tuple, we surround the element type with an array type and apply the mapped type to that. This ensures
+        // that we get sequential property key types for the fixed part of the tuple, and property key type number
+        // for the remaining elements. For example
+        //
+        //   type Keys<T> = { [K in keyof T]: K };
+        //   type Foo<T extends any[]> = Keys<[string, string, ...T, string]>; // ["0", "1", ...Keys<T>, number]
+        //
         const elementFlags = tupleType.target.elementFlags;
-        const elementTypes = map(getElementTypes(tupleType), (t, i) => {
-            const singleton = elementFlags[i] & ElementFlags.Variadic ? t :
-                elementFlags[i] & ElementFlags.Rest ? createArrayType(t) :
-                createTupleType([t], [elementFlags[i]]);
-            // avoid infinite recursion, if the singleton is the type variable itself
-            // then we'd just get back here with the same arguments from within instantiateMappedType
-            if (singleton === typeVariable) {
-                return mappedType;
-            }
-            // The singleton is never a generic tuple type, so it is safe to recurse here.
-            return instantiateMappedType(mappedType, prependTypeMapping(typeVariable, singleton, mapper));
+        const fixedLength = tupleType.target.fixedLength;
+        const fixedMapper = fixedLength ? prependTypeMapping(typeVariable, tupleType, mapper) : mapper;
+        const newElementTypes = map(getElementTypes(tupleType), (type, i) => {
+            const flags = elementFlags[i];
+            return i < fixedLength ? instantiateMappedTypeTemplate(mappedType, getStringLiteralType("" + i), !!(flags & ElementFlags.Optional), fixedMapper) :
+                flags & ElementFlags.Variadic ? instantiateType(mappedType, prependTypeMapping(typeVariable, type, mapper)) :
+                getElementTypeOfArrayType(instantiateType(mappedType, prependTypeMapping(typeVariable, createArrayType(type), mapper))) ?? unknownType;
         });
+        const modifiers = getMappedTypeModifiers(mappedType);
+        const newElementFlags = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
+            modifiers & MappedTypeModifiers.ExcludeOptional ? map(elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
+            elementFlags;
         const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, getMappedTypeModifiers(mappedType));
-        return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly);
+        return contains(newElementTypes, errorType) ? errorType :
+            createTupleType(newElementTypes, newElementFlags, newReadonly, tupleType.target.labeledElementDeclarations);
     }
 
     function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
         const elementType = instantiateMappedTypeTemplate(mappedType, numberType, /*isOptional*/ true, mapper);
         return isErrorType(elementType) ? errorType :
             createArrayType(elementType, getModifiedReadonlyState(isReadonlyArrayType(arrayType), getMappedTypeModifiers(mappedType)));
-    }
-
-    function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
-        const elementFlags = tupleType.target.elementFlags;
-        const elementTypes = map(getElementTypes(tupleType), (_, i) => instantiateMappedTypeTemplate(mappedType, getStringLiteralType("" + i), !!(elementFlags[i] & ElementFlags.Optional), mapper));
-        const modifiers = getMappedTypeModifiers(mappedType);
-        const newTupleModifiers = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
-            modifiers & MappedTypeModifiers.ExcludeOptional ? map(elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
-            elementFlags;
-        const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, modifiers);
-        return contains(elementTypes, errorType) ? errorType :
-            createTupleType(elementTypes, newTupleModifiers, newReadonly, tupleType.target.labeledElementDeclarations);
     }
 
     function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
@@ -32110,7 +32082,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const errorMessage = isClassic
             ? Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
             : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations;
-        const mod = resolveExternalModule(location!, runtimeImportSpecifier, errorMessage, location!);
+        // Synthesized JSX import is either first or after tslib
+        const jsxImportIndex = compilerOptions.importHelpers ? 1 : 0;
+        const specifier = file?.imports[jsxImportIndex];
+        if (specifier) {
+            Debug.assert(nodeIsSynthesized(specifier) && specifier.text === runtimeImportSpecifier, `Expected sourceFile.imports[${jsxImportIndex}] to be the synthesized JSX runtime import`);
+        }
+        const mod = resolveExternalModule(specifier || location!, runtimeImportSpecifier, errorMessage, location!);
         const result = mod && mod !== unknownSymbol ? getMergedSymbol(resolveSymbol(mod)) : undefined;
         if (links) {
             links.jsxImplicitImportContainer = result || false;
@@ -35838,7 +35816,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // In JavaScript files, calls to any identifier 'require' are treated as external module imports
-        if (isInJSFile(node) && shouldResolveJsRequire(compilerOptions) && isCommonJsRequire(node)) {
+        if (isInJSFile(node) && isCommonJsRequire(node)) {
             return resolveExternalModuleTypeByLiteral(node.arguments![0] as StringLiteral);
         }
 
@@ -37772,6 +37750,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // fallthrough
                         case ModuleKind.ES2022:
                         case ModuleKind.ESNext:
+                        case ModuleKind.Preserve:
                         case ModuleKind.System:
                             if (languageVersion >= ScriptTarget.ES2017) {
                                 break;
@@ -37779,8 +37758,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // fallthrough
                         default:
                             span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
-                            const message = isAwaitExpression(node) ? Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher :
-                                Diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher;
+                            const message = isAwaitExpression(node) ? Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher :
+                                Diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher;
                             diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, message));
                             hasError = true;
                             break;
@@ -40459,11 +40438,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkTupleType(node: TupleTypeNode) {
-        const elementTypes = node.elements;
         let seenOptionalElement = false;
         let seenRestElement = false;
-        for (const e of elementTypes) {
-            const flags = getTupleElementFlags(e);
+        for (const e of node.elements) {
+            let flags = getTupleElementFlags(e);
             if (flags & ElementFlags.Variadic) {
                 const type = getTypeFromTypeNode((e as RestTypeNode | NamedTupleMember).type);
                 if (!isArrayLikeType(type)) {
@@ -40471,10 +40449,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 }
                 if (isArrayType(type) || isTupleType(type) && type.target.combinedFlags & ElementFlags.Rest) {
-                    seenRestElement = true;
+                    flags |= ElementFlags.Rest;
                 }
             }
-            else if (flags & ElementFlags.Rest) {
+            if (flags & ElementFlags.Rest) {
                 if (seenRestElement) {
                     grammarErrorOnNode(e, Diagnostics.A_rest_element_cannot_follow_another_rest_element);
                     break;
@@ -40488,7 +40466,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 seenOptionalElement = true;
             }
-            else if (seenOptionalElement) {
+            else if (flags & ElementFlags.Required && seenOptionalElement) {
                 grammarErrorOnNode(e, Diagnostics.A_required_element_cannot_follow_an_optional_element);
                 break;
             }
@@ -46084,14 +46062,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const mode = (moduleKind === ModuleKind.NodeNext) && declaration.moduleSpecifier && getUsageModeForExpression(declaration.moduleSpecifier);
-            if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext) {
+            if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
                 const message = isImportAttributes
                     ? moduleKind === ModuleKind.NodeNext
                         ? Diagnostics.Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-                        : Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext
+                        : Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve
                     : moduleKind === ModuleKind.NodeNext
                     ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-                    : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext;
+                    : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve;
                 return grammarErrorOnNode(node, message);
             }
 
@@ -46175,7 +46153,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
-                if (moduleKind >= ModuleKind.ES2015 && getSourceFileOfNode(node).impliedNodeFormat === undefined && !node.isTypeOnly && !(node.flags & NodeFlags.Ambient)) {
+                if (moduleKind >= ModuleKind.ES2015 && moduleKind !== ModuleKind.Preserve && getSourceFileOfNode(node).impliedNodeFormat === undefined && !node.isTypeOnly && !(node.flags & NodeFlags.Ambient)) {
                     // Import equals declaration is deprecated in es6 or above
                     grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                 }
@@ -46461,6 +46439,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Forbid export= in esm implementation files, and esm mode declaration files
             if (
                 moduleKind >= ModuleKind.ES2015 &&
+                moduleKind !== ModuleKind.Preserve &&
                 ((node.flags & NodeFlags.Ambient && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.ESNext) ||
                     (!(node.flags & NodeFlags.Ambient) && getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.CommonJS))
             ) {
@@ -47633,7 +47612,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (
                     (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                     ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (node.parent as ImportDeclaration).moduleSpecifier === node) ||
-                    ((isInJSFile(node) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler && isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false)) || isImportCall(node.parent)) ||
+                    ((isInJSFile(node) && isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false)) || isImportCall(node.parent)) ||
                     (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
                 ) {
                     return resolveExternalModuleName(node, node as LiteralExpression, ignoreErrors);
@@ -50032,7 +50011,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 // fallthrough
                             default:
                                 diagnostics.add(
-                                    createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher),
+                                    createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher),
                                 );
                                 break;
                         }
