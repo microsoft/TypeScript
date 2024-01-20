@@ -156,7 +156,6 @@
         "unicorn/error-message": "off", // good, but a false positive
 
         // maybe
-        "unicorn/prefer-code-point": "off",
         "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
 
         // likely not
@@ -177,6 +176,7 @@
         "unicorn/prefer-string-slice": "off",
         "unicorn/explicit-length-check": "off", // I like it, but it's a lot of changes
         "unicorn/prefer-node-protocol": "off", // I like it, but it's pure style
+        "unicorn/prefer-code-point": "off", // I suspect this is correct, but it's a lot of changes in fiddly bits of the code
 
         // no
         "unicorn/filename-case": "off",
