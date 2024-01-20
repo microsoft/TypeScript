@@ -1,4 +1,10 @@
 import {
+    dedent,
+} from "../../_namespaces/Utils";
+import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     libContent,
 } from "../helpers/contents";
 import {
@@ -6,7 +12,6 @@ import {
 } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
-    getTsBuildProjectFile,
     libFile,
 } from "../helpers/virtualFileSystemWithWatch";
 
@@ -16,21 +21,44 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
         subScenario: "Reports errors correctly",
         commandLineArgs: ["-b", "-w", "-verbose", "src"],
         sys: () =>
-            createWatchedSystem(
-                [
-                    ...[
-                        "src/tsconfig.json",
-                        "src/main/tsconfig.json",
-                        "src/main/index.ts",
-                        "src/pure/tsconfig.json",
-                        "src/pure/index.ts",
-                        "src/pure/session.ts",
-                    ]
-                        .map(f => getTsBuildProjectFile("reexport", f)),
-                    { path: libFile.path, content: libContent },
-                ],
-                { currentDirectory: `/user/username/projects/reexport` },
-            ),
+            createWatchedSystem({
+                "/user/username/projects/reexport/src/tsconfig.json": jsonToReadableText({
+                    files: [],
+                    include: [],
+                    references: [{ path: "./pure" }, { path: "./main" }],
+                }),
+                "/user/username/projects/reexport/src/main/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        outDir: "../../out",
+                        rootDir: "../",
+                    },
+                    include: ["**/*.ts"],
+                    references: [{ path: "../pure" }],
+                }),
+                "/user/username/projects/reexport/src/main/index.ts": dedent`
+                    import { Session } from "../pure";
+
+                    export const session: Session = {
+                        foo: 1
+                    };
+                `,
+                "/user/username/projects/reexport/src/pure/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "../../out",
+                        rootDir: "../",
+                    },
+                    include: ["**/*.ts"],
+                }),
+                "/user/username/projects/reexport/src/pure/index.ts": `export * from "./session";\n`,
+                "/user/username/projects/reexport/src/pure/session.ts": dedent`
+                    export interface Session {
+                        foo: number;
+                        // bar: number;
+                    }
+                `,
+                [libFile.path]: libContent,
+            }, { currentDirectory: `/user/username/projects/reexport` }),
         edits: [
             {
                 caption: "Introduce error",

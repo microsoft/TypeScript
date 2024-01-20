@@ -1,7 +1,7 @@
 --incremental 0.ts
 CompilerOptions::
 {
- "incremental": true
+  "incremental": true
 }
 WatchOptions::
 

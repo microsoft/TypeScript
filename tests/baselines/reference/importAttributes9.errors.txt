@@ -1,0 +1,41 @@
+b.ts(7,27): error TS2322: Type '{ type: "not-json"; }' is not assignable to type 'ImportAttributes'.
+  Types of property 'type' are incompatible.
+    Type '"not-json"' is not assignable to type '"json"'.
+b.ts(11,25): error TS2322: Type '{ with: { type: "not-json"; }; }' is not assignable to type 'ImportCallOptions'.
+  The types of 'with.type' are incompatible between these types.
+    Type '"not-json"' is not assignable to type '"json"'.
+
+
+==== ./a.ts (0 errors) ====
+    export default {};
+    
+==== ./b.ts (2 errors) ====
+    declare global {
+        interface  ImportAttributes {
+            type: "json"
+        }
+    }
+    
+    import * as ns from "./a" with { type: "not-json" };
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ type: "not-json"; }' is not assignable to type 'ImportAttributes'.
+!!! error TS2322:   Types of property 'type' are incompatible.
+!!! error TS2322:     Type '"not-json"' is not assignable to type '"json"'.
+    void ns;
+    
+    async function f() {
+        await import("./a", {
+                            ~
+            with: {
+    ~~~~~~~~~~~~~~~
+                type: "not-json",
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            },
+    ~~~~~~~~~~
+        });
+    ~~~~~
+!!! error TS2322: Type '{ with: { type: "not-json"; }; }' is not assignable to type 'ImportCallOptions'.
+!!! error TS2322:   The types of 'with.type' are incompatible between these types.
+!!! error TS2322:     Type '"not-json"' is not assignable to type '"json"'.
+    }
+    

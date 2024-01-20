@@ -1,5 +1,8 @@
 import * as Utils from "../../_namespaces/Utils";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     verifyTscWatch,
 } from "../helpers/tscWatch";
 import {
@@ -50,7 +53,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
 
     describe("with symlinks in sibling folders and common package referenced from both folders", () => {
         function pluginOneConfig() {
-            return JSON.stringify({
+            return jsonToReadableText({
                 compilerOptions: {
                     target: "es5",
                     declaration: true,
@@ -93,7 +96,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     export default _default;`;
         }
         function fsaPackageJson() {
-            return JSON.stringify({
+            return jsonToReadableText({
                 name: "typescript-fsa",
                 version: "3.0.0-beta-2",
             });
@@ -139,7 +142,7 @@ describe("unittests:: tsc:: declarationEmit::", () => {
             files: [
                 {
                     path: `/user/username/projects/myproject/plugin-two/package.json`,
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         name: "plugin-two",
                         version: "0.1.3",
                         main: "dist/commonjs/index.js",
@@ -192,7 +195,7 @@ ${pluginOneAction()}`,
             },
             {
                 path: `/user/username/projects/myproject/pkg1/package.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "@raymondfeng/pkg1",
                     version: "1.0.0",
                     main: "dist/index.js",
@@ -211,7 +214,7 @@ ${pluginOneAction()}`,
             },
             {
                 path: `/user/username/projects/myproject/pkg2/package.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     name: "@raymondfeng/pkg2",
                     version: "1.0.0",
                     main: "dist/index.js",
@@ -231,7 +234,7 @@ ${pluginOneAction()}`,
             },
             {
                 path: `/user/username/projects/myproject/pkg3/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         outDir: "dist",
                         rootDir: "src",

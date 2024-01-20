@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/narrowByParenthesizedSwitchExpression.ts] ////
+
+=== narrowByParenthesizedSwitchExpression.ts ===
+interface Base {
+>Base : Symbol(Base, Decl(narrowByParenthesizedSwitchExpression.ts, 0, 0))
+
+  type: "foo" | "bar";
+>type : Symbol(Base.type, Decl(narrowByParenthesizedSwitchExpression.ts, 0, 16))
+}
+
+interface Foo extends Base {
+>Foo : Symbol(Foo, Decl(narrowByParenthesizedSwitchExpression.ts, 2, 1))
+>Base : Symbol(Base, Decl(narrowByParenthesizedSwitchExpression.ts, 0, 0))
+
+  type: "foo";
+>type : Symbol(Foo.type, Decl(narrowByParenthesizedSwitchExpression.ts, 4, 28))
+
+  foo: string;
+>foo : Symbol(Foo.foo, Decl(narrowByParenthesizedSwitchExpression.ts, 5, 14))
+}
+
+interface Bar extends Base {
+>Bar : Symbol(Bar, Decl(narrowByParenthesizedSwitchExpression.ts, 7, 1))
+>Base : Symbol(Base, Decl(narrowByParenthesizedSwitchExpression.ts, 0, 0))
+
+  type: "bar";
+>type : Symbol(Bar.type, Decl(narrowByParenthesizedSwitchExpression.ts, 9, 28))
+
+  bar: number;
+>bar : Symbol(Bar.bar, Decl(narrowByParenthesizedSwitchExpression.ts, 10, 14))
+}
+
+function getV(): Foo | Bar {
+>getV : Symbol(getV, Decl(narrowByParenthesizedSwitchExpression.ts, 12, 1))
+>Foo : Symbol(Foo, Decl(narrowByParenthesizedSwitchExpression.ts, 2, 1))
+>Bar : Symbol(Bar, Decl(narrowByParenthesizedSwitchExpression.ts, 7, 1))
+
+  return null!;
+}
+
+const v = getV();
+>v : Symbol(v, Decl(narrowByParenthesizedSwitchExpression.ts, 18, 5))
+>getV : Symbol(getV, Decl(narrowByParenthesizedSwitchExpression.ts, 12, 1))
+
+switch ((v.type)) {
+>v.type : Symbol(type, Decl(narrowByParenthesizedSwitchExpression.ts, 4, 28), Decl(narrowByParenthesizedSwitchExpression.ts, 9, 28))
+>v : Symbol(v, Decl(narrowByParenthesizedSwitchExpression.ts, 18, 5))
+>type : Symbol(type, Decl(narrowByParenthesizedSwitchExpression.ts, 4, 28), Decl(narrowByParenthesizedSwitchExpression.ts, 9, 28))
+
+  case "bar":
+    v.bar;
+>v.bar : Symbol(Bar.bar, Decl(narrowByParenthesizedSwitchExpression.ts, 10, 14))
+>v : Symbol(v, Decl(narrowByParenthesizedSwitchExpression.ts, 18, 5))
+>bar : Symbol(Bar.bar, Decl(narrowByParenthesizedSwitchExpression.ts, 10, 14))
+
+    break;
+
+  case "foo":
+    v.foo;
+>v.foo : Symbol(Foo.foo, Decl(narrowByParenthesizedSwitchExpression.ts, 5, 14))
+>v : Symbol(v, Decl(narrowByParenthesizedSwitchExpression.ts, 18, 5))
+>foo : Symbol(Foo.foo, Decl(narrowByParenthesizedSwitchExpression.ts, 5, 14))
+
+    break;
+}
+

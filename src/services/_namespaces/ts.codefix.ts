@@ -31,6 +31,7 @@ export * from "../codefixes/fixSpelling";
 export * from "../codefixes/returnValueCorrect";
 export * from "../codefixes/fixAddMissingMember";
 export * from "../codefixes/fixAddMissingNewOperator";
+export * from "../codefixes/fixAddMissingParam";
 export * from "../codefixes/fixCannotFindModule";
 export * from "../codefixes/fixClassDoesntImplementInheritedAbstractMember";
 export * from "../codefixes/fixClassSuperMustPrecedeThisAccess";

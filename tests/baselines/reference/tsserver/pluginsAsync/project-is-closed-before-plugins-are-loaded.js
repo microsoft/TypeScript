@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -86,4 +86,4 @@ After request
 
 Info seq  [hh:mm:ss:mss] Plugin validation succeeded
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for 
+Info seq  [hh:mm:ss:mss] got projects updated in background 

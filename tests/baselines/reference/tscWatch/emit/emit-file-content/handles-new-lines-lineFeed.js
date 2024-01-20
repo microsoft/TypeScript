@@ -27,8 +27,24 @@ Output::
 
 
 
-Program root files: ["/a/app.ts"]
-Program options: {"watch":true}
+//// [/a/app.js]
+var x = 1;
+var y = 2;
+
+
+
+FsWatches::
+/a/app.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+
+Program root files: [
+  "/a/app.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -42,19 +58,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/app.ts (used version)
 
-FsWatches::
-/a/app.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/app.js]
-var x = 1;
-var y = 2;
-
-
 
 Change:: Append a line
 
@@ -65,8 +69,12 @@ var y = 2;
 var z = 3;
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -76,8 +84,20 @@ Output::
 
 
 
-Program root files: ["/a/app.ts"]
-Program options: {"watch":true}
+//// [/a/app.js]
+var x = 1;
+var y = 2;
+var z = 3;
+
+
+
+
+Program root files: [
+  "/a/app.ts"
+]
+Program options: {
+  "watch": true
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -91,10 +111,3 @@ Shape signatures in builder refreshed for::
 /a/app.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/app.js]
-var x = 1;
-var y = 2;
-var z = 3;
-
-
