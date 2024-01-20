@@ -2,6 +2,7 @@
 
 declare function isFoo(): boolean;
 declare function isBar(): boolean;
+declare function isFooPromise(): Promise<boolean | undefined>;
 declare const isUndefinedFoo: (() => boolean) | undefined;
 
 if (isFoo) {
@@ -54,4 +55,24 @@ if (ux || y || uz || isFoo) {
 if (x && z) {
     // no error
     z();
+}
+
+if (!isFoo) {
+    // error on isFoo
+}
+
+if (!isFoo || !isFoo()) {
+    // error on isFoo
+}
+
+if (!isFooPromise()) {
+    // ts2801 error on isFooPromise
+}
+
+if (!isUndefinedFoo) {
+    // no error
+}
+
+if (!isFooPromise) {
+    // error on isFooPromise
 }

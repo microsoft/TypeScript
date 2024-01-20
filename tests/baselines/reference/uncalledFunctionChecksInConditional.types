@@ -7,6 +7,9 @@ declare function isFoo(): boolean;
 declare function isBar(): boolean;
 >isBar : () => boolean
 
+declare function isFooPromise(): Promise<boolean | undefined>;
+>isFooPromise : () => Promise<boolean | undefined>
+
 declare const isUndefinedFoo: (() => boolean) | undefined;
 >isUndefinedFoo : (() => boolean) | undefined
 
@@ -131,4 +134,44 @@ if (x && z) {
     z();
 >z() : boolean
 >z : () => boolean
+}
+
+if (!isFoo) {
+>!isFoo : false
+>isFoo : () => boolean
+
+    // error on isFoo
+}
+
+if (!isFoo || !isFoo()) {
+>!isFoo || !isFoo() : boolean
+>!isFoo : false
+>isFoo : () => boolean
+>!isFoo() : boolean
+>isFoo() : boolean
+>isFoo : () => boolean
+
+    // error on isFoo
+}
+
+if (!isFooPromise()) {
+>!isFooPromise() : false
+>isFooPromise() : Promise<boolean | undefined>
+>isFooPromise : () => Promise<boolean | undefined>
+
+    // ts2801 error on isFooPromise
+}
+
+if (!isUndefinedFoo) {
+>!isUndefinedFoo : boolean
+>isUndefinedFoo : (() => boolean) | undefined
+
+    // no error
+}
+
+if (!isFooPromise) {
+>!isFooPromise : false
+>isFooPromise : () => Promise<boolean | undefined>
+
+    // error on isFooPromise
 }

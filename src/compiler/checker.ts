@@ -42919,7 +42919,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function helper(condExpr: Expression, body: Expression | Statement | undefined) {
-            const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
+            const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right)
+                : isPrefixUnaryExpression(condExpr) ? condExpr.operand 
+                : condExpr;
             if (isModuleExportsAccessExpression(location)) {
                 return;
             }
@@ -42936,7 +42938,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // the block as a heuristic to identify the most common bugs. There
             // are too many false positives for values sourced from type
             // definitions without strictNullChecks otherwise.
-            const callSignatures = getSignaturesOfType(type, SignatureKind.Call);
+            const testedType = isPrefixUnaryExpression(condExpr) ? checkExpression(location) : type;
+            const callSignatures = getSignaturesOfType(testedType, SignatureKind.Call);
             const isPromise = !!getAwaitedTypeOfPromise(type);
             if (callSignatures.length === 0 && !isPromise) {
                 return;

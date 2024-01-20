@@ -1,17 +1,22 @@
-uncalledFunctionChecksInConditional.ts(5,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-uncalledFunctionChecksInConditional.ts(9,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-uncalledFunctionChecksInConditional.ts(9,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-uncalledFunctionChecksInConditional.ts(13,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-uncalledFunctionChecksInConditional.ts(32,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-uncalledFunctionChecksInConditional.ts(36,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-uncalledFunctionChecksInConditional.ts(40,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-uncalledFunctionChecksInConditional.ts(44,16): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-uncalledFunctionChecksInConditional.ts(48,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(6,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(10,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(10,14): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(14,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(33,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(37,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(41,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(45,16): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(49,22): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(58,6): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(62,6): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional.ts(66,6): error TS2801: This condition will always return true since this 'Promise<boolean | undefined>' is always defined.
+uncalledFunctionChecksInConditional.ts(74,6): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 
 
-==== uncalledFunctionChecksInConditional.ts (9 errors) ====
+==== uncalledFunctionChecksInConditional.ts (13 errors) ====
     declare function isFoo(): boolean;
     declare function isBar(): boolean;
+    declare function isFooPromise(): Promise<boolean | undefined>;
     declare const isUndefinedFoo: (() => boolean) | undefined;
     
     if (isFoo) {
@@ -82,4 +87,33 @@ uncalledFunctionChecksInConditional.ts(48,22): error TS2774: This condition will
     if (x && z) {
         // no error
         z();
+    }
+    
+    if (!isFoo) {
+         ~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        // error on isFoo
+    }
+    
+    if (!isFoo || !isFoo()) {
+         ~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        // error on isFoo
+    }
+    
+    if (!isFooPromise()) {
+         ~~~~~~~~~~~~~~
+!!! error TS2801: This condition will always return true since this 'Promise<boolean | undefined>' is always defined.
+!!! related TS2773 uncalledFunctionChecksInConditional.ts:66:6: Did you forget to use 'await'?
+        // ts2801 error on isFooPromise
+    }
+    
+    if (!isUndefinedFoo) {
+        // no error
+    }
+    
+    if (!isFooPromise) {
+         ~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+        // error on isFooPromise
     }
