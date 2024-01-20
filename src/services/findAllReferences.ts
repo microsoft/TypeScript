@@ -1837,6 +1837,9 @@ export namespace Core {
                 }
                 // falls through I guess
             case SyntaxKind.Identifier:
+                if (node.flags & NodeFlags.JSDoc && !isInJSFile(node)) {
+                    return false;
+                }
                 return (node as PrivateIdentifier | Identifier).text.length === searchSymbolName.length;
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.StringLiteral: {

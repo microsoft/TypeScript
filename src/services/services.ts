@@ -151,6 +151,7 @@ import {
     isIdentifier,
     isImportMeta,
     isInComment,
+    isInJSFile,
     isInsideJsxElement,
     isInsideJsxElementOrAttribute,
     isInString,
@@ -2064,6 +2065,9 @@ export function createLanguageService(
 
         const typeChecker = program.getTypeChecker();
         const nodeForQuickInfo = getNodeForQuickInfo(node);
+        if (!nodeForQuickInfo) {
+            return undefined;
+        }
         const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
 
         if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
@@ -2089,7 +2093,7 @@ export function createLanguageService(
         };
     }
 
-    function getNodeForQuickInfo(node: Node): Node {
+    function getNodeForQuickInfo(node: Node): Node | undefined {
         if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
             return node.parent.expression;
         }
@@ -2101,6 +2105,9 @@ export function createLanguageService(
         }
         if (isJsxNamespacedName(node.parent)) {
             return node.parent;
+        }
+        if (node.flags & NodeFlags.JSDoc && !isInJSFile(node)) {
+            return undefined;
         }
         return node;
     }
