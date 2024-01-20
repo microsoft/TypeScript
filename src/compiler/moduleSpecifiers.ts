@@ -919,7 +919,7 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
     else if (typeof exports === "object" && exports !== null) { // eslint-disable-line no-null/no-null
         // conditional mapping
         for (const key of getOwnKeys(exports as MapLike<unknown>)) {
-            if (key === "default" || conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(conditions, key)) {
+            if (key === "default" || conditions.includes(key) || isApplicableVersionedTypesKey(conditions, key)) {
                 const subTarget = (exports as MapLike<unknown>)[key];
                 const result = tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, subTarget, conditions, mode, isImports);
                 if (result) {
