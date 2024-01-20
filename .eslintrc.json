@@ -149,24 +149,17 @@
         "unicorn/prefer-string-trim-start-end": "error",
         "unicorn/no-zero-fractions": "error",
 
-        // maybe
-        "unicorn/prefer-node-protocol": "off",
-        "unicorn/prefer-code-point": "off",
-        "unicorn/prefer-spread": "off",
-        "unicorn/no-null": "off", // if we remove the other plugin
-        "unicorn/no-array-for-each": "off",
-        "unicorn/prefer-string-slice": "off",
+        // likely yes
         "unicorn/no-typeof-undefined": "off",
-        "unicorn/explicit-length-check": "off",
-        "unicorn/no-for-loop": "off",
-        "unicorn/prefer-math-trunc": "off",
+        "unicorn/no-null": "off", // if we remove the other plugin
         "unicorn/prefer-switch": "off",
+
+        // maybe
+        "unicorn/prefer-code-point": "off",
         "unicorn/prefer-reflect-apply": "off",
-        "unicorn/prefer-event-target": "off",
         "unicorn/error-message": "off",
 
         // likely not
-        "unicorn/prefer-at": "off",
         "unicorn/prefer-number-properties": "off",
         "unicorn/prefer-string-replace-all": "off",
         "unicorn/no-array-push-push": "off",
@@ -179,6 +172,11 @@
         "unicorn/no-useless-switch-case": "off",
         "unicorn/prefer-native-coercion-functions": "off",
         "unicorn/prefer-top-level-await": "off",
+        "unicorn/prefer-spread": "off",
+        "unicorn/prefer-event-target": "off",
+        "unicorn/prefer-string-slice": "off",
+        "unicorn/explicit-length-check": "off", // I like it, but it's a lot of changes
+        "unicorn/prefer-node-protocol": "off", // I like it, but it's pure style
 
         // no
         "unicorn/filename-case": "off",
@@ -207,6 +205,10 @@
         "unicorn/no-useless-undefined": "off",
         "unicorn/no-negated-condition": "off",
         "unicorn/no-lonely-if": "off",
+        "unicorn/prefer-math-trunc": "off", // Treats `1 << 0` as invalid
+        "unicorn/no-array-for-each": "off", // false positives
+        "unicorn/no-for-loop": "off", // quick fix produces slower `.entries()`
+        "unicorn/prefer-at": "off", // perf
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
