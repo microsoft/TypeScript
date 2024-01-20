@@ -394,7 +394,7 @@ export function tryGetSourceMappingURL(lineInfo: LineInfo) {
             return comment[1].trimEnd();
         }
         // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
-        else if (!line.match(whitespaceOrMapCommentRegExp)) {
+        else if (!whitespaceOrMapCommentRegExp.test(line)) {
             break;
         }
     }

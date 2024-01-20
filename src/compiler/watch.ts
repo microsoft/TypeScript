@@ -776,7 +776,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
 /** @internal */
 export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string) {
     // If text can contain the sourceMapUrl ignore sourceMapUrl for calcualting hash
-    if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
+    if (sourceMapCommentRegExpDontCareLineStart.test(text)) {
         let lineEnd = text.length;
         let lineStart = lineEnd;
         for (let pos = lineEnd - 1; pos >= 0; pos--) {
@@ -798,12 +798,12 @@ export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "cre
             }
             // This is start of the line
             const line = text.substring(lineStart, lineEnd);
-            if (line.match(sourceMapCommentRegExp)) {
+            if (sourceMapCommentRegExp.test(line)) {
                 text = text.substring(0, lineStart);
                 break;
             }
             // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
-            else if (!line.match(whitespaceOrMapCommentRegExp)) {
+            else if (!whitespaceOrMapCommentRegExp.test(line)) {
                 break;
             }
             lineEnd = lineStart;

@@ -90,7 +90,7 @@ function createNodeIO(): IO {
             let paths: string[] = [];
             for (const file of files) {
                 const pathToFile = pathModule.join(folder, file);
-                if (!spec || file.match(spec)) {
+                if (!spec || spec.test(file)) {
                     paths.push(pathToFile);
                 }
             }
@@ -805,7 +805,7 @@ export namespace Compiler {
                         typeLines += codeLines.slice(0, result.line + 1).join("\r\n") + "\r\n";
                     }
                     else if (result.line !== lastIndexWritten) {
-                        if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                        if (!((lastIndexWritten + 1 < codeLines.length) && (/^\s*[{|}]\s*$/.test(codeLines[lastIndexWritten + 1]) || codeLines[lastIndexWritten + 1].trim() === ""))) {
                             typeLines += "\r\n";
                         }
                         typeLines += codeLines.slice(lastIndexWritten + 1, result.line + 1).join("\r\n") + "\r\n";
@@ -818,7 +818,7 @@ export namespace Compiler {
 
                 lastIndexWritten ??= -1;
                 if (lastIndexWritten + 1 < codeLines.length) {
-                    if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                    if (!((lastIndexWritten + 1 < codeLines.length) && (/^\s*[{|}]\s*$/.test(codeLines[lastIndexWritten + 1]) || codeLines[lastIndexWritten + 1].trim() === ""))) {
                         typeLines += "\r\n";
                     }
                     typeLines += codeLines.slice(lastIndexWritten + 1).join("\r\n");

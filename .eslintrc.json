@@ -148,6 +148,7 @@
         "unicorn/prefer-set-has": "error",
         "unicorn/prefer-string-trim-start-end": "error",
         "unicorn/no-zero-fractions": "error",
+        "unicorn/prefer-regexp-test": "error",
 
         // likely yes
         "unicorn/error-message": "off", // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2265
@@ -156,10 +157,6 @@
         "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
 
         // likely not
-        "unicorn/prefer-number-properties": "off",
-        "unicorn/prefer-string-replace-all": "off",
-        "unicorn/no-array-push-push": "off",
-        "unicorn/prefer-regexp-test": "off",
         "unicorn/better-regex": "off",
         "unicorn/no-new-array": "off",
         "unicorn/number-literal-case": "off",
@@ -209,6 +206,9 @@
         "unicorn/prefer-switch": "off", // quick fix produces non-idiomatic code for this repo
         "unicorn/no-typeof-undefined": "off", // False positive when checking for a global without throwing
         "unicorn/no-null": "off", // if we remove the other plugin
+        "unicorn/prefer-number-properties": "off",
+        "unicorn/prefer-string-replace-all": "off", // not available in node 14
+        "unicorn/no-array-push-push": "off",
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
