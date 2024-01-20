@@ -7337,19 +7337,19 @@ function getExpandedCharCodes(input: string): number[] {
             output.push(charCode);
         }
         else if (charCode < 0x800) {
-            output.push((charCode >> 6) | 0B11000000);
-            output.push((charCode & 0B00111111) | 0B10000000);
+            output.push((charCode >> 6) | 0b11000000);
+            output.push((charCode & 0b00111111) | 0b10000000);
         }
         else if (charCode < 0x10000) {
-            output.push((charCode >> 12) | 0B11100000);
-            output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
-            output.push((charCode & 0B00111111) | 0B10000000);
+            output.push((charCode >> 12) | 0b11100000);
+            output.push(((charCode >> 6) & 0b00111111) | 0b10000000);
+            output.push((charCode & 0b00111111) | 0b10000000);
         }
         else if (charCode < 0x20000) {
-            output.push((charCode >> 18) | 0B11110000);
-            output.push(((charCode >> 12) & 0B00111111) | 0B10000000);
-            output.push(((charCode >> 6) & 0B00111111) | 0B10000000);
-            output.push((charCode & 0B00111111) | 0B10000000);
+            output.push((charCode >> 18) | 0b11110000);
+            output.push(((charCode >> 12) & 0b00111111) | 0b10000000);
+            output.push(((charCode >> 6) & 0b00111111) | 0b10000000);
+            output.push((charCode & 0b00111111) | 0b10000000);
         }
         else {
             Debug.assert(false, "Unexpected code point");
@@ -7377,9 +7377,9 @@ export function convertToBase64(input: string): string {
         // Convert every 6-bits in the input 3 character points
         // into a base64 digit
         byte1 = charCodes[i] >> 2;
-        byte2 = (charCodes[i] & 0B00000011) << 4 | charCodes[i + 1] >> 4;
-        byte3 = (charCodes[i + 1] & 0B00001111) << 2 | charCodes[i + 2] >> 6;
-        byte4 = charCodes[i + 2] & 0B00111111;
+        byte2 = (charCodes[i] & 0b00000011) << 4 | charCodes[i + 1] >> 4;
+        byte3 = (charCodes[i + 1] & 0b00001111) << 2 | charCodes[i + 2] >> 6;
+        byte4 = charCodes[i + 2] & 0b00111111;
 
         // We are out of characters in the input, set the extra
         // digits to 64 (padding character).
@@ -7410,12 +7410,12 @@ function getStringFromExpandedCharCodes(codes: number[]): string {
             output += String.fromCharCode(charCode);
             i++;
         }
-        else if ((charCode & 0B11000000) === 0B11000000) {
-            let value = charCode & 0B00111111;
+        else if ((charCode & 0b11000000) === 0b11000000) {
+            let value = charCode & 0b00111111;
             i++;
             let nextCode: number = codes[i];
-            while ((nextCode & 0B11000000) === 0B10000000) {
-                value = (value << 6) | (nextCode & 0B00111111);
+            while ((nextCode & 0b11000000) === 0b10000000) {
+                value = (value << 6) | (nextCode & 0b00111111);
                 i++;
                 nextCode = codes[i];
             }
@@ -7459,9 +7459,9 @@ export function base64decode(host: { base64decode?(input: string): string; } | u
         const ch3 = base64Digits.indexOf(input[i + 2]);
         const ch4 = base64Digits.indexOf(input[i + 3]);
 
-        const code1 = ((ch1 & 0B00111111) << 2) | ((ch2 >> 4) & 0B00000011);
-        const code2 = ((ch2 & 0B00001111) << 4) | ((ch3 >> 2) & 0B00001111);
-        const code3 = ((ch3 & 0B00000011) << 6) | (ch4 & 0B00111111);
+        const code1 = ((ch1 & 0b00111111) << 2) | ((ch2 >> 4) & 0b00000011);
+        const code2 = ((ch2 & 0b00001111) << 4) | ((ch3 >> 2) & 0b00001111);
+        const code3 = ((ch3 & 0b00000011) << 6) | (ch4 & 0b00111111);
 
         if (code2 === 0 && ch3 !== 0) { // code2 decoded to zero, but ch3 was padding - elide code2 and code3
             expandedCharCodes.push(code1);

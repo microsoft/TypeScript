@@ -7618,7 +7618,7 @@ export const enum CharacterCodes {
     W = 0x57,
     X = 0x58,
     Y = 0x59,
-    Z = 0x5a,
+    Z = 0x5A,
 
     ampersand = 0x26,             // &
     asterisk = 0x2A,              // *

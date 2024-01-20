@@ -21754,7 +21754,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const sourceSize = sourceUnionOrIntersection.types.length;
                 const targetSize = targetUnionOrIntersection.types.length;
-                if (sourceSize * targetSize > 1E6) {
+                if (sourceSize * targetSize > 1e6) {
                     tracing.instant(tracing.Phase.CheckTypes, "traceUnionsOrIntersectionsTooLarge_DepthLimit", {
                         sourceId: source.id,
                         sourceSize,

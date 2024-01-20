@@ -149,6 +149,7 @@
         "unicorn/prefer-string-trim-start-end": "error",
         "unicorn/no-zero-fractions": "error",
         "unicorn/prefer-regexp-test": "error",
+        "unicorn/number-literal-case": "error",
 
         // likely yes
         "unicorn/error-message": "off", // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2265
@@ -158,7 +159,6 @@
 
         // likely not
         "unicorn/better-regex": "off",
-        "unicorn/number-literal-case": "off",
         "unicorn/prefer-negative-index": "off",
         "unicorn/no-array-reduce": "off",
         "unicorn/no-useless-switch-case": "off",

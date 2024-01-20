@@ -2575,7 +2575,7 @@ export function isTypeReferenceType(node: Node): node is TypeReferenceType {
     return node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.ExpressionWithTypeArguments;
 }
 
-const MAX_SMI_X86 = 0x3fff_ffff;
+const MAX_SMI_X86 = 0x3FFF_FFFF;
 /** @internal */
 export function guessIndentation(lines: string[]) {
     let indentation = MAX_SMI_X86;
