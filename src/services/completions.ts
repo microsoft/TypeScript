@@ -2807,7 +2807,7 @@ export function getCompletionEntryDetails(
 
     const { previousToken, contextToken } = getRelevantTokens(position, sourceFile);
     if (isInString(sourceFile, position, previousToken)) {
-        return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, previousToken, typeChecker, compilerOptions, host, cancellationToken, preferences);
+        return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, previousToken, program, host, cancellationToken, preferences);
     }
 
     // Compute all the completion symbols again.
@@ -5369,7 +5369,7 @@ function getContextualKeywords(
             && tokenLine === currentLine
         ) {
             entries.push({
-                name: tokenToString(SyntaxKind.AssertKeyword)!,
+                name: tokenToString(SyntaxKind.AssertKeyword),
                 kind: ScriptElementKind.keyword,
                 kindModifiers: ScriptElementKindModifier.none,
                 sortText: SortText.GlobalsOrKeywords,

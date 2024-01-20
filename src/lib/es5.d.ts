@@ -626,6 +626,7 @@ interface ImportCallOptions {
 
 /**
  * The type for the `assert` property of the optional second argument to `import()`.
+ * @deprecated
  */
 interface ImportAssertions {
     [key: string]: string;
@@ -1647,6 +1648,11 @@ type Capitalize<S extends string> = intrinsic;
  * Convert first character of string literal type to lowercase
  */
 type Uncapitalize<S extends string> = intrinsic;
+
+/**
+ * Marker for non-inference type position
+ */
+type NoInfer<T> = intrinsic;
 
 /**
  * Marker for contextual 'this' type

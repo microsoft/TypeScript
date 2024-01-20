@@ -74,6 +74,8 @@
         "esnext.intl",
         "esnext.disposable",
         "esnext.promise",
+        "esnext.object",
+        "esnext.collection",
         "decorators",
         "decorators.legacy",
         // Default libraries

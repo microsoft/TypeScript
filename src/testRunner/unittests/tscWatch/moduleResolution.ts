@@ -3,11 +3,11 @@ import {
     jsonToReadableText,
 } from "../helpers";
 import {
-    getFsConentsForNode10ResultAtTypesPackageJson,
-    getFsContentsForNode10Result,
-    getFsContentsForNode10ResultDts,
-    getFsContentsForNode10ResultPackageJson,
-} from "../helpers/node10Result";
+    getFsConentsForAlternateResultAtTypesPackageJson,
+    getFsContentsForAlternateResult,
+    getFsContentsForAlternateResultDts,
+    getFsContentsForAlternateResultPackageJson,
+} from "../helpers/alternateResult";
 import {
     verifyTscWatch,
 } from "../helpers/tscWatch";
@@ -542,12 +542,12 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
 
     verifyTscWatch({
         scenario: "moduleResolution",
-        subScenario: "node10Result",
-        sys: () => createWatchedSystem(getFsContentsForNode10Result(), { currentDirectory: "/home/src/projects/project" }),
+        subScenario: "alternateResult",
+        sys: () => createWatchedSystem(getFsContentsForAlternateResult(), { currentDirectory: "/home/src/projects/project" }),
         commandLineArgs: ["-w", "--extendedDiagnostics"],
         edits: [
             {
-                caption: "delete the node10Result in @types",
+                caption: "delete the alternateResult in @types",
                 edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts"),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
@@ -563,16 +563,16 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
             },
             {
-                caption: "add the node10Result in @types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForNode10ResultDts("bar")),
+                caption: "add the alternateResult in @types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar")),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
                 },
             },
             {
-                caption: "add the ndoe10Result in package/types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForNode10ResultDts("foo")),
+                caption: "add the alternateResult in package/types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo")),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -580,7 +580,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "update package.json from @types so error is fixed",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true)),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -588,7 +588,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "update package.json so error is fixed",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForNode10ResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true)),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -596,7 +596,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "update package.json from @types so error is introduced",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForNode10ResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false)),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -604,14 +604,14 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "update package.json so error is introduced",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForNode10ResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false)),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
                 },
             },
             {
-                caption: "delete the node10Result in @types",
+                caption: "delete the alternateResult in @types",
                 edit: sys => sys.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts"),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
@@ -627,8 +627,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
             },
             {
-                caption: "add the node10Result in @types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForNode10ResultDts("bar2")),
+                caption: "add the alternateResult in @types",
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2")),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -636,7 +636,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "add the ndoe10Result in package/types",
-                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForNode10ResultDts("foo2")),
+                edit: sys => sys.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2")),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
