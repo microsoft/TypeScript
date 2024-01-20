@@ -159,9 +159,7 @@
         "unicorn/prefer-top-level-await": "off",
 
         // likely not
-        "unicorn/better-regex": "off",
         "unicorn/prefer-negative-index": "off",
-        "unicorn/prefer-string-slice": "off",
 
         // no
         "unicorn/filename-case": "off",
@@ -209,6 +207,8 @@
         "unicorn/prefer-native-coercion-functions": "off",
         "unicorn/prefer-spread": "off",
         "unicorn/prefer-event-target": "off",
+        "unicorn/better-regex": "off", // crashes
+        "unicorn/prefer-string-slice": "off", // Probably good, but most are not fixed
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
