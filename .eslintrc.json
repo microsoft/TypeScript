@@ -150,9 +150,7 @@
         "unicorn/no-zero-fractions": "error",
 
         // likely yes
-        "unicorn/no-typeof-undefined": "off",
         "unicorn/no-null": "off", // if we remove the other plugin
-        "unicorn/prefer-switch": "off",
         "unicorn/error-message": "off", // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2265
 
         // maybe
@@ -209,6 +207,8 @@
         "unicorn/no-array-for-each": "off", // false positives
         "unicorn/no-for-loop": "off", // quick fix produces slower `.entries()`
         "unicorn/prefer-at": "off", // perf
+        "unicorn/prefer-switch": "off", // quick fix produces non-idiomatic code for this repo
+        "unicorn/no-typeof-undefined": "off", // False positive when checking for a global without throwing
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
