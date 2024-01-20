@@ -6,7 +6,7 @@
         "module": "Node16",
         "moduleResolution": "Node16",
         "target": "es2018",
-        "noEmit": true,
+        "noEmit": false,
         // "declaration": true,
         // "emitDeclarationOnly": true,
 
