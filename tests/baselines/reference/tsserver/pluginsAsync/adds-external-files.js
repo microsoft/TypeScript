@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -65,36 +65,28 @@ FsWatches::
 External files before plugin is loaded: 
 Info seq  [hh:mm:ss:mss] Plugin validation succeeded
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] got projects updated in background, updating diagnostics for ^memfs:/foo.ts
+Info seq  [hh:mm:ss:mss] got projects updated in background ^memfs:/foo.ts
 Info seq  [hh:mm:ss:mss] event:
     {
-     "seq": 0,
-     "type": "event",
-     "event": "projectsUpdatedInBackground",
-     "body": {
-      "openFiles": [
-       "^memfs:/foo.ts"
-      ]
-     }
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "^memfs:/foo.ts"
+        ]
+      }
     }
-Before running Timeout callback:: count: 2
+Before running Timeout callback:: count: 1
 1: /dev/null/inferredProject1*
-2: checkOne
+
+Timeout callback:: count: 1
+1: /dev/null/inferredProject1* *new*
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
-Info seq  [hh:mm:ss:mss] event:
-    {
-     "seq": 0,
-     "type": "event",
-     "event": "syntaxDiag",
-     "body": {
-      "file": "^memfs:/foo.ts",
-      "diagnostics": []
-     }
-    }
 After running Timeout callback:: count: 0
 
 External files before plugin after plugin is loaded: external.txt

@@ -75,61 +75,6 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/d.ts
-/user/username/projects/myproject/e.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/d.ts
-/user/username/projects/myproject/e.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (computed .d.ts during emit)
-/user/username/projects/myproject/b.ts (computed .d.ts during emit)
-/user/username/projects/myproject/c.ts (computed .d.ts during emit)
-/user/username/projects/myproject/d.ts (computed .d.ts during emit)
-/user/username/projects/myproject/e.ts (computed .d.ts during emit)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/a.ts: *new*
-  {}
-/user/username/projects/myproject/b.ts: *new*
-  {}
-/user/username/projects/myproject/c.ts: *new*
-  {}
-/user/username/projects/myproject/d.ts: *new*
-  {}
-/user/username/projects/myproject/e.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -201,6 +146,72 @@ import "./d";
 
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/c.ts: *new*
+  {}
+/user/username/projects/myproject/d.ts: *new*
+  {}
+/user/username/projects/myproject/e.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Rename property x2 to x of interface Coords to initialize signatures
 
 Input::
@@ -215,8 +226,12 @@ export interface Coords {
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -226,8 +241,37 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/a.d.ts]
+export interface Point {
+    name: string;
+    c: Coords;
+}
+export interface Coords {
+    x: number;
+    y: number;
+}
+
+
+//// [/user/username/projects/myproject/b.d.ts] file written with same contents
+//// [/user/username/projects/myproject/c.d.ts] file written with same contents
+//// [/user/username/projects/myproject/d.d.ts] file written with same contents
+//// [/user/username/projects/myproject/e.d.ts] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -253,23 +297,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/a.d.ts]
-export interface Point {
-    name: string;
-    c: Coords;
-}
-export interface Coords {
-    x: number;
-    y: number;
-}
-
-
-//// [/user/username/projects/myproject/b.d.ts] file written with same contents
-//// [/user/username/projects/myproject/c.d.ts] file written with same contents
-//// [/user/username/projects/myproject/d.d.ts] file written with same contents
-//// [/user/username/projects/myproject/e.d.ts] file written with same contents
-
 Change:: Rename property x to x2 of interface Coords to revert back to original text
 
 Input::
@@ -284,8 +311,12 @@ export interface Coords {
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -310,33 +341,6 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/d.ts
-/user/username/projects/myproject/e.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/d.ts
-/user/username/projects/myproject/e.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/a.ts (computed .d.ts)
-/user/username/projects/myproject/b.ts (computed .d.ts during emit)
-/user/username/projects/myproject/c.ts (computed .d.ts during emit)
-/user/username/projects/myproject/d.ts (computed .d.ts during emit)
-/user/username/projects/myproject/e.ts (computed .d.ts during emit)
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/a.d.ts]
 export interface Point {
@@ -354,33 +358,20 @@ export interface Coords {
 //// [/user/username/projects/myproject/d.d.ts] file written with same contents
 //// [/user/username/projects/myproject/e.d.ts] file written with same contents
 
-Change:: Rename property x2 to x of interface Coords
 
-Input::
-//// [/user/username/projects/myproject/a.ts]
-export interface Point {
-    name: string;
-    c: Coords;
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
-export interface Coords {
-    x: number;
-    y: number;
-}
-
-
-Before running Timeout callback:: count: 1
-3: timerToUpdateProgram
-After running Timeout callback:: count: 0
-Output::
->> Screen clear
-[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
-
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -406,6 +397,35 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
+Change:: Rename property x2 to x of interface Coords
+
+Input::
+//// [/user/username/projects/myproject/a.ts]
+export interface Point {
+    name: string;
+    c: Coords;
+}
+export interface Coords {
+    x: number;
+    y: number;
+}
+
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
 //// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/a.d.ts]
 export interface Point {
@@ -422,3 +442,42 @@ export interface Coords {
 //// [/user/username/projects/myproject/c.d.ts] file written with same contents
 //// [/user/username/projects/myproject/d.d.ts] file written with same contents
 //// [/user/username/projects/myproject/e.d.ts] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "isolatedModules": true,
+  "declaration": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined

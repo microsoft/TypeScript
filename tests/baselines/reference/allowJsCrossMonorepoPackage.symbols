@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/allowJsCrossMonorepoPackage.ts] ////
+
+=== /packages/main/index.ts ===
+import { x } from "shared";
+>x : Symbol(x, Decl(index.ts, 0, 8))
+
+=== /node_modules/pkg/index.d.ts ===
+export declare function pkg(): "pkg";
+>pkg : Symbol(pkg, Decl(index.d.ts, 0, 0))
+
+=== /packages/shared/utils.js ===
+export { pkg } from "pkg";
+>pkg : Symbol(pkg, Decl(utils.js, 0, 8))
+
+=== /packages/shared/index.js ===
+import { pkg } from "./utils.js";
+>pkg : Symbol(pkg, Decl(index.js, 0, 8))
+
+export const x = pkg();
+>x : Symbol(x, Decl(index.js, 1, 12))
+>pkg : Symbol(pkg, Decl(index.js, 0, 8))
+

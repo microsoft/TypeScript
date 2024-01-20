@@ -1,5 +1,8 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
+import {
+    jsonToReadableText,
+} from "../helpers";
 
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
@@ -8,9 +11,9 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
             baseline.push(commandLine.join(" "));
             const parsed = ts.parseCommandLineWorker(workerDiagnostic?.() || ts.compilerOptionsDidYouMeanDiagnostics, commandLine);
             baseline.push("CompilerOptions::");
-            baseline.push(JSON.stringify(parsed.options, /*replacer*/ undefined, " "));
+            baseline.push(jsonToReadableText(parsed.options));
             baseline.push("WatchOptions::");
-            baseline.push(JSON.stringify(parsed.watchOptions, /*replacer*/ undefined, " "));
+            baseline.push(jsonToReadableText(parsed.watchOptions));
             baseline.push("FileNames::");
             baseline.push(parsed.fileNames.join());
             baseline.push("Errors::");
@@ -200,9 +203,9 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
             baseline.push(commandLine.join(" "));
             const parsed = ts.parseBuildCommand(commandLine);
             baseline.push("buildOptions::");
-            baseline.push(JSON.stringify(parsed.buildOptions, /*replacer*/ undefined, " "));
+            baseline.push(jsonToReadableText(parsed.buildOptions));
             baseline.push("WatchOptions::");
-            baseline.push(JSON.stringify(parsed.watchOptions, /*replacer*/ undefined, " "));
+            baseline.push(jsonToReadableText(parsed.watchOptions));
             baseline.push("Projects::");
             baseline.push(parsed.projects.join());
             baseline.push("Errors::");

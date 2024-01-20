@@ -39,7 +39,7 @@ function f2<A extends string>(a: A) {
 
     return f1(a, 'x');
 >f1(a, 'x') : { [P in A | "x"]: any; }
->f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any; }
+>f1 : <A_1 extends string, B extends string>(a: A_1, b: B) => { [P in A_1 | B]: any; }
 >a : A
 >'x' : "x"
 }

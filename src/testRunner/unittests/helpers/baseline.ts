@@ -2,6 +2,9 @@ import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     TscCompileSystem,
 } from "./tsc";
 import {
@@ -45,19 +48,17 @@ export function commandLineCallbacks(
     };
 }
 
-export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
-    const programs = getPrograms();
+export function baselinePrograms(baseline: string[], programs: readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
     for (let i = 0; i < programs.length; i++) {
         baselineProgram(baseline, programs[i], oldPrograms[i], baselineDependencies);
     }
-    return programs;
 }
 
 function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram, oldProgram: CommandLineProgram | undefined, baselineDependencies: boolean | undefined) {
     if (program !== oldProgram?.[0]) {
         const options = program.getCompilerOptions();
-        baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
-        baseline.push(`Program options: ${JSON.stringify(options)}`);
+        baseline.push(`Program root files: ${jsonToReadableText(program.getRootFileNames())}`);
+        baseline.push(`Program options: ${jsonToReadableText(options)}`);
         baseline.push(`Program structureReused: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
         baseline.push("Program files::");
         for (const file of program.getSourceFiles()) {
@@ -178,14 +179,15 @@ export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo,
 };
 export type ReadableProgramBuildInfoRoot =
     | [original: ts.ProgramBuildInfoFileId, readable: string]
-    | [orginal: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
-export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
+    | [original: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
+export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
     fileNamesList: readonly (readonly string[])[] | undefined;
     fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
     root: readonly ReadableProgramBuildInfoRoot[];
     referencedMap: ts.MapLike<string[]> | undefined;
     exportedModulesMap: ts.MapLike<string[]> | undefined;
     semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
+    emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
     affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
     changeFileSet: readonly string[] | undefined;
     emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
@@ -239,11 +241,8 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
             exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
-            semanticDiagnosticsPerFile: buildInfo.program.semanticDiagnosticsPerFile?.map(d =>
-                ts.isNumber(d) ?
-                    toFileName(d) :
-                    [toFileName(d[0]), d[1]]
-            ),
+            semanticDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.semanticDiagnosticsPerFile),
+            emitDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.emitDiagnosticsPerFile),
             affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(value => toReadableProgramBuilderInfoFilePendingEmit(value, fullEmitForOptions!)),
             changeFileSet: buildInfo.program.changeFileSet?.map(toFileName),
             emitSignatures: buildInfo.program.emitSignatures?.map(s =>
@@ -277,7 +276,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         size: ts.getBuildInfoText({ ...buildInfo, version }).length,
     };
     // For now its just JSON.stringify
-    sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
+    sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, jsonToReadableText(result));
 
     function toFileName(fileId: ts.ProgramBuildInfoFileId) {
         return buildInfo.program!.fileNames[fileId - 1];
@@ -333,6 +332,14 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             result = result ? `${result} | ${flag}` : flag;
         }
     }
+
+    function toReadableProgramBuildInfoDiagnosticsPerFile(diagnostics: ts.ProgramBuildInfoDiagnostic[] | undefined): readonly ReadableProgramBuildInfoDiagnostic[] | undefined {
+        return diagnostics?.map(d =>
+            ts.isNumber(d) ?
+                toFileName(d) :
+                [toFileName(d[0]), d[1]]
+        );
+    }
 }
 
 export function toPathWithSystem(sys: ts.System, fileName: string): ts.Path {
@@ -348,7 +355,7 @@ export function baselineBuildInfo(
     if (!buildInfoPath || !sys.writtenFiles!.has(toPathWithSystem(sys, buildInfoPath))) return;
     if (!sys.fileExists(buildInfoPath)) return;
 
-    const buildInfo = ts.getBuildInfo(buildInfoPath, (originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
+    const buildInfo = ts.getBuildInfo(buildInfoPath, (originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8"));
     if (!buildInfo) return sys.writeFile(`${buildInfoPath}.baseline.txt`, "Error reading valid buildinfo file");
     generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
 

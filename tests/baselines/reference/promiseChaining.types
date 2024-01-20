@@ -26,7 +26,7 @@ class Chain<T> {
 >this.then(x => result)/*S*/.then(x => "abc")/*string*/.then(x => x.length) : Chain<number>
 >this.then(x => result)/*S*/.then(x => "abc")/*string*/.then : <S>(cb: (x: string) => S) => Chain<S>
 >this.then(x => result)/*S*/.then(x => "abc") : Chain<string>
->this.then(x => result)/*S*/.then : <S>(cb: (x: S) => S) => Chain<S>
+>this.then(x => result)/*S*/.then : <S>(cb: (x: S_1) => S) => Chain<S>
 >this.then(x => result) : Chain<S>
 >this.then : <S>(cb: (x: T) => S) => Chain<S>
 >this : this
@@ -34,7 +34,7 @@ class Chain<T> {
 >x => result : (x: T) => S
 >x : T
 >result : S
->then : <S>(cb: (x: S) => S) => Chain<S>
+>then : <S>(cb: (x: S_1) => S) => Chain<S>
 >x => "abc" : (x: S) => string
 >x : S
 >"abc" : "abc"

@@ -7,7 +7,7 @@ type OrGen = () => (number | Generator<string, (arg: number) => void, undefined>
 
 const g: OrGen = function* () {
 >g : OrGen
->function* () {    return (num) => console.log(num);} : () => Generator<never, (num: number) => void, unknown>
+>function* () {    return (num) => console.log(num);} : () => Generator<never, (num: number) => void, undefined>
 
     return (num) => console.log(num);
 >(num) => console.log(num) : (num: number) => void

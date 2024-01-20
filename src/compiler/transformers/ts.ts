@@ -1902,7 +1902,7 @@ export function transformTypeScript(context: TransformationContext) {
         const value = resolver.getConstantValue(member);
         if (value !== undefined) {
             return typeof value === "string" ? factory.createStringLiteral(value) :
-                value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(value))) :
+                value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) :
                 factory.createNumericLiteral(value);
         }
         else {
@@ -2227,7 +2227,7 @@ export function transformTypeScript(context: TransformationContext) {
                 /*modifiers*/ undefined,
                 importClause,
                 node.moduleSpecifier,
-                node.assertClause,
+                node.attributes,
             )
             : undefined;
     }
@@ -2323,7 +2323,7 @@ export function transformTypeScript(context: TransformationContext) {
                 node.isTypeOnly,
                 exportClause,
                 node.moduleSpecifier,
-                node.assertClause,
+                node.attributes,
             )
             : undefined;
     }
@@ -2393,7 +2393,7 @@ export function transformTypeScript(context: TransformationContext) {
                             /*modifiers*/ undefined,
                             /*importClause*/ undefined,
                             node.moduleReference.expression,
-                            /*assertClause*/ undefined,
+                            /*attributes*/ undefined,
                         ),
                         node,
                     ),
@@ -2689,7 +2689,7 @@ export function transformTypeScript(context: TransformationContext) {
             // track the constant value on the node for the printer in mayNeedDotDotForPropertyAccess
             setConstantValue(node, constantValue);
             const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
-                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(Math.abs(constantValue))) :
+                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constantValue)) :
                 factory.createNumericLiteral(constantValue);
 
             if (!compilerOptions.removeComments) {
