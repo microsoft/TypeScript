@@ -156,16 +156,11 @@
 
         // maybe
         "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
+        "unicorn/prefer-top-level-await": "off",
 
         // likely not
         "unicorn/better-regex": "off",
         "unicorn/prefer-negative-index": "off",
-        "unicorn/no-array-reduce": "off",
-        "unicorn/no-useless-switch-case": "off",
-        "unicorn/prefer-native-coercion-functions": "off",
-        "unicorn/prefer-top-level-await": "off",
-        "unicorn/prefer-spread": "off",
-        "unicorn/prefer-event-target": "off",
         "unicorn/prefer-string-slice": "off",
 
         // no
@@ -209,6 +204,11 @@
         "unicorn/explicit-length-check": "off", // I like it, but it's a lot of changes
         "unicorn/prefer-node-protocol": "off", // I like it, but it's pure style
         "unicorn/prefer-code-point": "off", // I suspect this is correct, but it's a lot of changes in fiddly bits of the code
+        "unicorn/no-array-reduce": "off",
+        "unicorn/no-useless-switch-case": "off",
+        "unicorn/prefer-native-coercion-functions": "off",
+        "unicorn/prefer-spread": "off",
+        "unicorn/prefer-event-target": "off",
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
