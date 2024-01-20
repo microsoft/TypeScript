@@ -203,7 +203,7 @@ export const nullCancellationToken: ServerCancellationToken = {
 function hrTimeToMilliseconds(time: [number, number]): number {
     const seconds = time[0];
     const nanoseconds = time[1];
-    return ((1e9 * seconds) + nanoseconds) / 1000000.0;
+    return ((1e9 * seconds) + nanoseconds) / 1000000;
 }
 
 function isDeclarationFileInJSOnlyNonConfiguredProject(project: Project, file: NormalizedPath) {

@@ -147,26 +147,22 @@
         "unicorn/no-new-buffer": "error",
         "unicorn/prefer-set-has": "error",
         "unicorn/prefer-string-trim-start-end": "error",
+        "unicorn/no-zero-fractions": "error",
 
         // maybe
         "unicorn/prefer-node-protocol": "off",
         "unicorn/prefer-code-point": "off",
-        "unicorn/no-negated-condition": "off",
         "unicorn/prefer-spread": "off",
-        "unicorn/no-useless-undefined": "off",
-        "unicorn/no-null": "off",
+        "unicorn/no-null": "off", // if we remove the other plugin
         "unicorn/no-array-for-each": "off",
         "unicorn/prefer-string-slice": "off",
         "unicorn/no-typeof-undefined": "off",
         "unicorn/explicit-length-check": "off",
         "unicorn/no-for-loop": "off",
         "unicorn/prefer-math-trunc": "off",
-        "unicorn/no-lonely-if": "off",
-        "unicorn/no-zero-fractions": "off",
         "unicorn/prefer-switch": "off",
         "unicorn/prefer-reflect-apply": "off",
         "unicorn/prefer-event-target": "off",
-        "unicorn/prefer-top-level-await": "off",
         "unicorn/error-message": "off",
 
         // likely not
@@ -182,6 +178,7 @@
         "unicorn/no-array-reduce": "off",
         "unicorn/no-useless-switch-case": "off",
         "unicorn/prefer-native-coercion-functions": "off",
+        "unicorn/prefer-top-level-await": "off",
 
         // no
         "unicorn/filename-case": "off",
@@ -207,6 +204,9 @@
         "unicorn/escape-case": "off",
         "unicorn/prefer-type-error": "off",
         "unicorn/no-await-expression-member": "off",
+        "unicorn/no-useless-undefined": "off",
+        "unicorn/no-negated-condition": "off",
+        "unicorn/no-lonely-if": "off",
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
