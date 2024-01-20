@@ -1,0 +1,19 @@
+cannotIndexGenericWritingError.ts(4,5): error TS2862: Type 'T' is generic and can only be indexed for reading.
+cannotIndexGenericWritingError.ts(8,5): error TS2862: Type 'T' is generic and can only be indexed for reading.
+
+
+==== cannotIndexGenericWritingError.ts (2 errors) ====
+    // From #47357
+    
+    function foo<T extends Record<string | symbol, any>>(target: T, p: string | symbol) {
+        target[p] = ""; // error
+        ~~~~~~~~~
+!!! error TS2862: Type 'T' is generic and can only be indexed for reading.
+    }
+    
+    function foo2<T extends number[] & { [s: string]: number | string }>(target: T, p: string | number) {
+        target[p] = 1; // error
+        ~~~~~~~~~
+!!! error TS2862: Type 'T' is generic and can only be indexed for reading.
+        target[1] = 1; // ok
+    }

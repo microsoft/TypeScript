@@ -1,11 +1,11 @@
 config:
 {
- "include": [
-  "c:/ext/**/*"
- ],
- "exclude": [
-  "c:/ext/b/a..b.ts"
- ]
+  "include": [
+    "c:/ext/**/*"
+  ],
+  "exclude": [
+    "c:/ext/b/a..b.ts"
+  ]
 }
 Fs::
 //// [c:/dev/a.d.ts]
@@ -81,29 +81,29 @@ Fs::
 configFileName:: c:/dev/tsconfig.json
 Result
 {
- "options": {
-  "configFilePath": "c:/dev/tsconfig.json"
- },
- "fileNames": [
-  "c:/ext/ext.ts"
- ],
- "typeAcquisition": {
-  "enable": false,
-  "include": [],
-  "exclude": []
- },
- "raw": {
-  "include": [
-   "c:/ext/**/*"
+  "options": {
+    "configFilePath": "c:/dev/tsconfig.json"
+  },
+  "fileNames": [
+    "c:/ext/ext.ts"
   ],
-  "exclude": [
-   "c:/ext/b/a..b.ts"
-  ]
- },
- "wildcardDirectories": {
-  "c:/ext": "WatchDirectoryFlags.Recursive"
- },
- "compileOnSave": false
+  "typeAcquisition": {
+    "enable": false,
+    "include": [],
+    "exclude": []
+  },
+  "raw": {
+    "include": [
+      "c:/ext/**/*"
+    ],
+    "exclude": [
+      "c:/ext/b/a..b.ts"
+    ]
+  },
+  "wildcardDirectories": {
+    "c:/ext": "WatchDirectoryFlags.Recursive"
+  },
+  "compileOnSave": false
 }
 Errors::
 

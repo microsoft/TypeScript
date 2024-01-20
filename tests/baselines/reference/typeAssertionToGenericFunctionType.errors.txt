@@ -11,6 +11,6 @@ typeAssertionToGenericFunctionType.ts(6,3): error TS2554: Expected 1 arguments, 
                 ~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     x.b<string>(); // error
-      ~~~~~~~~~~~
+      ~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 typeAssertionToGenericFunctionType.ts:3:12: An argument for 'x' was not provided.

@@ -51,6 +51,7 @@ export interface InstallPackageRequest extends TypingInstallerRequestWithProject
     readonly fileName: Path;
     readonly packageName: string;
     readonly projectRootPath: Path;
+    readonly id: number;
 }
 
 /** @internal */
@@ -61,6 +62,7 @@ export interface TypesRegistryResponse extends TypingInstallerResponse {
 
 export interface PackageInstalledResponse extends ProjectResponse {
     readonly kind: ActionPackageInstalled;
+    readonly id: number;
     readonly success: boolean;
     readonly message: string;
 }

@@ -1,9 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
@@ -18,7 +19,7 @@ function checkDeclarationFiles(file: File, session: TestSession): void {
     const project = ts.Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false));
     const program = project.getCurrentProgram()!;
     const output = ts.getFileEmitOutput(program, ts.Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
-    session.logger.log(`ts.getFileEmitOutput: ${file.path}: ${JSON.stringify(output, undefined, " ")}`);
+    session.logger.log(`ts.getFileEmitOutput: ${file.path}: ${jsonToReadableText(output)}`);
     closeFilesForSession([file], session);
 }
 
@@ -33,7 +34,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         declarationMap: true,
         composite: true,
     };
-    const configContent = JSON.stringify({ compilerOptions });
+    const configContent = jsonToReadableText({ compilerOptions });
     const aTsconfig: File = { path: "/a/tsconfig.json", content: configContent };
 
     const aDtsMapContent: ts.RawSourceMap = {
@@ -46,7 +47,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     };
     const aDtsMap: File = {
         path: "/a/bin/a.d.ts.map",
-        content: JSON.stringify(aDtsMapContent),
+        content: jsonToReadableText(aDtsMapContent),
     };
     const aDts: File = {
         path: "/a/bin/a.d.ts",
@@ -70,7 +71,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     };
     const bDtsMap: File = {
         path: "/b/bin/b.d.ts.map",
-        content: JSON.stringify(bDtsMapContent),
+        content: jsonToReadableText(bDtsMapContent),
     };
     const bDts: File = {
         // ${""} is need to mangle the sourceMappingURL part so it doesn't break the build
@@ -95,7 +96,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     const userTsconfig: File = {
         path: "/user/tsconfig.json",
-        content: JSON.stringify({
+        content: jsonToReadableText({
             file: ["user.ts"],
             references: [{ path: "../a" }, { path: "../b" }],
         }),
@@ -103,7 +104,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
         const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         checkDeclarationFiles(aTs, session);
         checkDeclarationFiles(bTs, session);
@@ -269,18 +270,18 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const aTs: File = { path: "/a/a.ts", content: `function f() {}` };
         const aTsconfig: File = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } }),
+            content: jsonToReadableText({ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } }),
         };
         const bTs: File = { path: "/b/b.ts", content: `f();` };
-        const bTsconfig: File = { path: "/b/tsconfig.json", content: JSON.stringify({ references: [{ path: "../a" }] }) };
+        const bTsconfig: File = { path: "/b/tsconfig.json", content: jsonToReadableText({ references: [{ path: "../a" }] }) };
         const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
         const aDtsMap: File = {
             path: "/bin/a.d.ts.map",
-            content: JSON.stringify({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
+            content: jsonToReadableText({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
         };
 
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         checkDeclarationFiles(aTs, session);
         openFilesForSession([bTs], session);
 
@@ -359,7 +360,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const aTs: File = { path: "/a/src/a.ts", content: "" };
         const aTsconfig: File = {
             path: "/a/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     declaration: true,
@@ -371,7 +372,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const bTs: File = { path: "/b/src/b.ts", content: "" };
         const bTsconfig: File = {
             path: "/b/tsconfig.json",
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     composite: true,
                     outDir: "./build",
@@ -382,7 +383,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         };
 
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs, bTs], session);
         session.executeCommandSeq<ts.server.protocol.GetEditsForFileRenameRequest>({
             command: ts.server.protocol.CommandTypes.GetEditsForFileRename,
@@ -401,10 +402,10 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         };
         const aDtsMapInlinedSources: File = {
             path: aDtsMap.path,
-            content: JSON.stringify(aDtsInlinedSources),
+            content: jsonToReadableText(aDtsInlinedSources),
         };
         const host = createServerHost([aTs, aDtsMapInlinedSources, aDts, bTs, bDtsMap, bDts, userTs, dummyFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
 
         openFilesForSession([userTs], session);
         // If config file then userConfig project and bConfig project since it is referenced

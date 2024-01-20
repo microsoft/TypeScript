@@ -3,9 +3,13 @@ import * as fakes from "../_namespaces/fakes";
 import * as Harness from "../_namespaces/Harness";
 import * as ts from "../_namespaces/ts";
 import * as vfs from "../_namespaces/vfs";
+import {
+    jsonToReadableText,
+} from "./helpers";
 
-function verifyMissingFilePaths(missingPaths: readonly ts.Path[], expected: readonly string[]) {
-    assert.isDefined(missingPaths);
+function verifyMissingFilePaths(missing: ReturnType<ts.Program["getMissingFilePaths"]>, expected: readonly string[]) {
+    assert.isDefined(missing);
+    const missingPaths = ts.arrayFrom(missing.keys());
     const map = new Set(expected);
     for (const missing of missingPaths) {
         const value = map.has(missing);
@@ -79,8 +83,8 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
     it("normalizes file paths", () => {
         const program0 = ts.createProgram(["./nonexistent.ts", "./NONEXISTENT.ts"], options, testCompilerHost);
         const program1 = ts.createProgram(["./NONEXISTENT.ts", "./nonexistent.ts"], options, testCompilerHost);
-        const missing0 = program0.getMissingFilePaths();
-        const missing1 = program1.getMissingFilePaths();
+        const missing0 = ts.arrayFrom(program0.getMissingFilePaths().keys());
+        const missing1 = ts.arrayFrom(program1.getMissingFilePaths().keys());
         assert.equal(missing0.length, 1);
         assert.deepEqual(missing0, missing1);
     });
@@ -135,7 +139,7 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
 
         const program = ts.createProgram(["test.ts"], { module: ts.ModuleKind.ES2015 }, host);
         assert(program.getSourceFiles().length === 1, "expected 'getSourceFiles' length to be 1");
-        assert(program.getMissingFilePaths().length === 0, "expected 'getMissingFilePaths' length to be 0");
+        assert(program.getMissingFilePaths().size === 0, "expected 'getMissingFilePaths' length to be 0");
         assert((program.getFileProcessingDiagnostics()?.length || 0) === 0, "expected 'getFileProcessingDiagnostics' length to be 0");
     });
 });
@@ -145,7 +149,7 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
         // In this example '/node_modules/foo/index.d.ts' will redirect to '/node_modules/bar/node_modules/foo/index.d.ts'.
         const a = new documents.TextDocument("/a.ts", 'import * as bar from "bar"; import * as foo from "foo";');
         const bar = new documents.TextDocument("/node_modules/bar/index.d.ts", 'import * as foo from "foo";');
-        const fooPackageJsonText = '{ "name": "foo", "version": "1.2.3" }';
+        const fooPackageJsonText = jsonToReadableText({ name: "foo", version: "1.2.3" });
         const fooIndexText = "export const x: number;";
         const barFooPackage = new documents.TextDocument("/node_modules/bar/node_modules/foo/package.json", fooPackageJsonText);
         const barFooIndex = new documents.TextDocument("/node_modules/bar/node_modules/foo/index.d.ts", fooIndexText);
@@ -177,7 +181,7 @@ describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
 describe("unittests:: Program.getNodeCount / Program.getIdentifierCount", () => {
     it("works on projects that have .json files", () => {
         const main = new documents.TextDocument("/main.ts", 'export { version } from "./package.json";');
-        const pkg = new documents.TextDocument("/package.json", '{"version": "1.0.0"}');
+        const pkg = new documents.TextDocument("/package.json", jsonToReadableText({ version: "1.0.0" }));
 
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, pkg], cwd: "/" });
         const program = ts.createProgram(["/main.ts"], { resolveJsonModule: true }, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));

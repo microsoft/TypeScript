@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     compilerOptionsToConfigJson,
 } from "../helpers/contents";
 import {
@@ -71,7 +74,7 @@ describe("unittests:: tsbuild:: commandLine::", () => {
         }
         function fs(options: ts.CompilerOptions) {
             return loadProjectFromFiles({
-                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: compilerOptionsToConfigJson(options) }),
+                "/src/project/tsconfig.json": jsonToReadableText({ compilerOptions: compilerOptionsToConfigJson(options) }),
                 "/src/project/a.ts": `export const a = 10;const aLocal = 10;`,
                 "/src/project/b.ts": `export const b = 10;const bLocal = 10;`,
                 "/src/project/c.ts": `import { a } from "./a";export const c = a;`,
@@ -168,14 +171,14 @@ describe("unittests:: tsbuild:: commandLine::", () => {
     describe("emitDeclarationOnly::", () => {
         function fs(options: ts.CompilerOptions) {
             return loadProjectFromFiles({
-                "/src/project1/src/tsconfig.json": JSON.stringify({
+                "/src/project1/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson(options),
                 }),
                 "/src/project1/src/a.ts": `export const a = 10;const aLocal = 10;`,
                 "/src/project1/src/b.ts": `export const b = 10;const bLocal = 10;`,
                 "/src/project1/src/c.ts": `import { a } from "./a";export const c = a;`,
                 "/src/project1/src/d.ts": `import { b } from "./b";export const d = b;`,
-                "/src/project2/src/tsconfig.json": JSON.stringify({
+                "/src/project2/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson(options),
                     references: [{ path: "../../project1/src" }],
                 }),

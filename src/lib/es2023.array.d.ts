@@ -191,7 +191,7 @@ interface Int8Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Uint8Array.from([11, 2, 22, 1]);
      * myNums.toSorted((a, b) => a - b) // Uint8Array(4) [1, 2, 11, 22]
@@ -255,7 +255,7 @@ interface Uint8Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Uint8Array.from([11, 2, 22, 1]);
      * myNums.toSorted((a, b) => a - b) // Uint8Array(4) [1, 2, 11, 22]
@@ -327,7 +327,7 @@ interface Uint8ClampedArray {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Uint8ClampedArray.from([11, 2, 22, 1]);
      * myNums.toSorted((a, b) => a - b) // Uint8ClampedArray(4) [1, 2, 11, 22]
@@ -391,7 +391,7 @@ interface Int16Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Int16Array.from([11, 2, -22, 1]);
      * myNums.toSorted((a, b) => a - b) // Int16Array(4) [-22, 1, 2, 11]
@@ -463,7 +463,7 @@ interface Uint16Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Uint16Array.from([11, 2, 22, 1]);
      * myNums.toSorted((a, b) => a - b) // Uint16Array(4) [1, 2, 11, 22]
@@ -527,7 +527,7 @@ interface Int32Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Int32Array.from([11, 2, -22, 1]);
      * myNums.toSorted((a, b) => a - b) // Int32Array(4) [-22, 1, 2, 11]
@@ -599,7 +599,7 @@ interface Uint32Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Uint32Array.from([11, 2, 22, 1]);
      * myNums.toSorted((a, b) => a - b) // Uint32Array(4) [1, 2, 11, 22]
@@ -671,7 +671,7 @@ interface Float32Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Float32Array.from([11.25, 2, -22.5, 1]);
      * myNums.toSorted((a, b) => a - b) // Float32Array(4) [-22.5, 1, 2, 11.5]
@@ -743,7 +743,7 @@ interface Float64Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = Float64Array.from([11.25, 2, -22.5, 1]);
      * myNums.toSorted((a, b) => a - b) // Float64Array(4) [-22.5, 1, 2, 11.5]
@@ -815,7 +815,7 @@ interface BigInt64Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = BigInt64Array.from([11n, 2n, -22n, 1n]);
      * myNums.toSorted((a, b) => Number(a - b)) // BigInt64Array(4) [-22n, 1n, 2n, 11n]
@@ -887,7 +887,7 @@ interface BigUint64Array {
      * Copies and sorts the array.
      * @param compareFn Function used to determine the order of the elements. It is expected to return
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
-     * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
+     * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
      * const myNums = BigUint64Array.from([11n, 2n, 22n, 1n]);
      * myNums.toSorted((a, b) => Number(a - b)) // BigUint64Array(4) [1n, 2n, 11n, 22n]
