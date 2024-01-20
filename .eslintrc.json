@@ -153,11 +153,11 @@
         "unicorn/no-typeof-undefined": "off",
         "unicorn/no-null": "off", // if we remove the other plugin
         "unicorn/prefer-switch": "off",
+        "unicorn/error-message": "off", // good, but a false positive
 
         // maybe
         "unicorn/prefer-code-point": "off",
-        "unicorn/prefer-reflect-apply": "off",
-        "unicorn/error-message": "off",
+        "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
 
         // likely not
         "unicorn/prefer-number-properties": "off",
