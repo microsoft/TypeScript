@@ -51,9 +51,10 @@ export class CompilerBaselineRunner extends RunnerBase {
         return this.testSuiteName;
     }
 
+    private testFiles: string[] | undefined;
     public enumerateTestFiles() {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
-        return this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true }).map(CompilerTest.getConfigurations);
+        return this.testFiles ??= this.enumerateFiles(this.basePath, /\.tsx?$/, { recursive: true });
     }
 
     public initializeTests() {
@@ -64,9 +65,8 @@ export class CompilerBaselineRunner extends RunnerBase {
 
             // this will set up a series of describe/it blocks to run between the setup and cleanup phases
             const files = this.tests.length > 0 ? this.tests : IO.enumerateTestFiles(this);
-            files.forEach(test => {
-                const file = typeof test === "string" ? test : test.file;
-                this.checkTestCodeOutput(vpath.normalizeSeparators(file), typeof test === "string" ? CompilerTest.getConfigurations(test) : test);
+            files.forEach(file => {
+                this.checkTestCodeOutput(vpath.normalizeSeparators(file), CompilerTest.getConfigurations(file));
             });
         });
     }

@@ -8,6 +8,7 @@ import {
     CompletionEntry,
     CompletionEntryDetails,
     Completions,
+    concatenate,
     ConstructorDeclaration,
     contains,
     Declaration,
@@ -258,15 +259,19 @@ export function getJsDocTagsFromDeclarations(declarations?: Declaration[], check
         }
         for (const tag of tags) {
             infos.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
-
-            if (isJSDocPropertyLikeTag(tag) && tag.isNameFirst && tag.typeExpression && isJSDocTypeLiteral(tag.typeExpression.type)) {
-                forEach(tag.typeExpression.type.jsDocPropertyTags, propTag => {
-                    infos.push({ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) });
-                });
-            }
+            infos.push(...getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(tag), checker));
         }
     });
     return infos;
+}
+
+function getJSDocPropertyTagsInfo(nodes: readonly JSDocTag[] | undefined, checker: TypeChecker | undefined): readonly JSDocTagInfo[] {
+    return flatMap(nodes, propTag => concatenate([{ name: propTag.tagName.text, text: getCommentDisplayParts(propTag, checker) }], getJSDocPropertyTagsInfo(tryGetJSDocPropertyTags(propTag), checker)));
+}
+
+function tryGetJSDocPropertyTags(node: JSDocTag) {
+    return isJSDocPropertyLikeTag(node) && node.isNameFirst && node.typeExpression &&
+            isJSDocTypeLiteral(node.typeExpression.type) ? node.typeExpression.type.jsDocPropertyTags : undefined;
 }
 
 function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {

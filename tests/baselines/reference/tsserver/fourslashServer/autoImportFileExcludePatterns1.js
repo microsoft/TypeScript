@@ -22,7 +22,7 @@ export * from "./clients/s3";
 { "name": "aws-sdk", "version": "2.0.0", "main": "index.js" }
 
 //// [/project/package.json]
-{ "dependencies": "aws-sdk" }
+{ "dependencies": { "aws-sdk": "*" } }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -113,12 +113,34 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/aws-sdk/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/aws-sdk/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/node_modules/aws-sdk/clients/s3.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/project/node_modules/aws-sdk/clients/s3.d.ts Text-1 "export declare class S3 {}"
+	/project/node_modules/aws-sdk/index.d.ts Text-1 "export * from \"./clients/s3\";"
+
+
+	node_modules/aws-sdk/clients/s3.d.ts
+	  Imported via "./clients/s3" from file 'node_modules/aws-sdk/index.d.ts' with packageId 'aws-sdk/clients/s3.d.ts@2.0.0'
+	node_modules/aws-sdk/index.d.ts
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -134,6 +156,12 @@ watchedFiles::
   {"pollingInterval":500}
 /lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
+/project/node_modules/aws-sdk/clients/s3.d.ts: *new*
+  {"pollingInterval":500}
+/project/node_modules/aws-sdk/index.d.ts: *new*
+  {"pollingInterval":500}
+/project/node_modules/aws-sdk/package.json: *new*
+  {"pollingInterval":2000}
 /project/package.json: *new*
   {"pollingInterval":250}
 
@@ -984,6 +1012,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getCodeFixes"
     }
+Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

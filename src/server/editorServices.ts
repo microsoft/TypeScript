@@ -953,12 +953,12 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
         callbacks.add(callback);
         return {
             close() {
-                const callbacks = idToCallbacks.get(id!);
+                const callbacks = idToCallbacks.get(id);
                 if (!callbacks?.delete(callback)) return;
                 if (callbacks.size) return;
-                idToCallbacks.delete(id!);
+                idToCallbacks.delete(id);
                 pathToId.delete(key);
-                service.eventHandler!({ eventName: CloseFileWatcherEvent, data: { id: id! } });
+                service.eventHandler!({ eventName: CloseFileWatcherEvent, data: { id } });
             },
         };
     }
@@ -3899,7 +3899,7 @@ export class ProjectService {
         for (const project of arrayFrom(this.configuredProjects.values())) {
             // If this project has potential project reference for any of the project we are loading ancestor tree for
             // load this project first
-            if (forEachPotentialProjectReference(project, potentialRefPath => forProjects!.has(potentialRefPath))) {
+            if (forEachPotentialProjectReference(project, potentialRefPath => forProjects.has(potentialRefPath))) {
                 updateProjectIfDirty(project);
             }
             this.ensureProjectChildren(project, forProjects, seenProjects);
