@@ -153,7 +153,7 @@
         "unicorn/no-typeof-undefined": "off",
         "unicorn/no-null": "off", // if we remove the other plugin
         "unicorn/prefer-switch": "off",
-        "unicorn/error-message": "off", // good, but a false positive
+        "unicorn/error-message": "off", // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2265
 
         // maybe
         "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
