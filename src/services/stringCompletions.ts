@@ -1182,6 +1182,7 @@ function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: Com
 }
 
 function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): readonly string[] {
+    if (host.readFile === undefined || host.fileExists === undefined) return emptyArray;
     const result: string[] = [];
     for (const packageJson of findPackageJsons(scriptPath, host)) {
         const contents = readJson(packageJson, host as { readFile: (filename: string) => string | undefined; }); // Cast to assert that readFile is defined

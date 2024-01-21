@@ -3670,6 +3670,9 @@ export function findPackageJson(directory: string, host: LanguageServiceHost): s
 
 /** @internal */
 export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly ProjectPackageJsonInfo[] {
+    if (host.fileExists === undefined) {
+        return [];
+    }
     const packageJsons: ProjectPackageJsonInfo[] = [];
     forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
         const packageJsonFileName = combinePaths(ancestor, "package.json");
