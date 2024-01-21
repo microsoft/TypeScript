@@ -996,7 +996,7 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
 }
 
 function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, canonicalSourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
-    if (host.fileExists === undefined || !host.readFile) {
+    if (!host.readFile) {
         return undefined;
     }
     const parts: NodeModulePathParts = getNodeModulePathParts(path)!;
@@ -1145,7 +1145,6 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
 }
 
 function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string) {
-    if (host.fileExists === undefined) return;
     // We check all js, `node` and `json` extensions in addition to TS, since node module resolution would also choose those over the directory
     const extensions = flatten(getSupportedExtensions({ allowJs: true }, [{ extension: "node", isMixedContent: false }, { extension: "json", isMixedContent: false, scriptKind: ScriptKind.JSON }]));
     for (const e of extensions) {
