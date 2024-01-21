@@ -16173,7 +16173,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSubstitutionType(baseType: Type, constraint: Type) {
-        return constraint.flags & TypeFlags.AnyOrUnknown || constraint === baseType || baseType.flags & TypeFlags.Any ?
+        return constraint.flags & TypeFlags.AnyOrUnknown || constraint === baseType || baseType.flags & TypeFlags.Any || !isGenericType(constraint) && !isGenericType(baseType) && isTypeAssignableTo(baseType, constraint) ?
             baseType :
             getOrCreateSubstitutionType(baseType, constraint);
     }
