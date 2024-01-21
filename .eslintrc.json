@@ -154,13 +154,6 @@
         // likely yes
         "unicorn/error-message": "off", // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2265
 
-        // maybe
-        "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
-        "unicorn/prefer-top-level-await": "off",
-
-        // likely not
-        "unicorn/prefer-negative-index": "off",
-
         // no
         "unicorn/filename-case": "off",
         "unicorn/prevent-abbreviations": "off",
@@ -209,6 +202,9 @@
         "unicorn/prefer-event-target": "off",
         "unicorn/better-regex": "off", // crashes
         "unicorn/prefer-string-slice": "off", // Probably good, but most are not fixed
+        "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
+        "unicorn/prefer-top-level-await": "off",
+        "unicorn/prefer-negative-index": "off",
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
