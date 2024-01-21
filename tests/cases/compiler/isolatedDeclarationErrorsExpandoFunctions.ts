@@ -2,7 +2,7 @@
 // @isolatedDeclarations: true
 // @declarationMap: false
 // @target: ESNext
-// @isolatedDeclarationFixedDiffReason: Function declarations are not fixed.
+// @isolatedDeclarationFixedDiffReason: Expando function declarations are not fixed.
 
 export function foo() {}
 

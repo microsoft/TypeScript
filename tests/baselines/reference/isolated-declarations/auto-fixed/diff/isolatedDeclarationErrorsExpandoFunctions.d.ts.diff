@@ -1,4 +1,4 @@
-// [[Reason: Function declarations are not fixed.]] ////
+// [[Reason: Expando function declarations are not fixed.]] ////
 
 //// [tests/cases/compiler/isolatedDeclarationErrorsExpandoFunctions.ts] ////
 

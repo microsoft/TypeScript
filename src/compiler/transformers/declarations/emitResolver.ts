@@ -1,5 +1,6 @@
 import {
     __String,
+    BigIntLiteral,
     bindSourceFile,
     CompilerOptions,
     ComputedPropertyName,
@@ -14,6 +15,7 @@ import {
     determineIfDeclarationIsVisible,
     ElementAccessExpression,
     emptyArray,
+    entityNameToString,
     EnumDeclaration,
     EnumMember,
     ExportSpecifier,
@@ -35,7 +37,6 @@ import {
     Identifier,
     InternalSymbolName,
     isAccessor,
-    isBigIntLiteral,
     isBinaryExpression,
     isComputedPropertyName,
     isDeclarationReadonly,
@@ -54,27 +55,25 @@ import {
     isIdentifier,
     isInfinityOrNaNString,
     isModuleDeclaration,
-    isNumericLiteral,
-    isPrefixUnaryExpression,
     isPrimitiveLiteralValue,
     isPropertyAccessExpression,
     isPropertyName,
     isSetAccessor,
     isSetAccessorDeclaration,
     isStringLiteralLike,
-    isTemplateExpression,
     isVarConst,
     isVariableDeclaration,
     LateBoundDeclaration,
-    MemberName,
     ModifierFlags,
     Node,
     NodeFlags,
     nodeIsPresent,
     NoSubstitutionTemplateLiteral,
+    NumericLiteral,
     objectAllocator,
     ParameterDeclaration,
     parsePseudoBigInt,
+    PrefixUnaryExpression,
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
@@ -82,11 +81,13 @@ import {
     skipParentheses,
     some,
     SourceFile,
+    StringLiteralLike,
     Symbol,
     SymbolAccessibility,
     SymbolFlags,
     SymbolTable,
     SyntaxKind,
+    TemplateExpression,
     VariableDeclaration,
 } from "../../_namespaces/ts";
 
@@ -357,48 +358,44 @@ export function createEmitDeclarationResolver(file: SourceFile, options: Compile
         onNumericLiteral() {},
     });
     function clonePrimitiveLiteralValue(node: Expression): Expression {
-        if (isNumericLiteral(node)) {
-            return factory.createNumericLiteral(node.text);
+        switch(node.kind) {
+            case SyntaxKind.NumericLiteral: 
+                return factory.createNumericLiteral((node as NumericLiteral).text);
+            case SyntaxKind.BigIntLiteral: 
+                return factory.createBigIntLiteral({ negative: false, base10Value: parsePseudoBigInt((node as BigIntLiteral).text) });
+            case SyntaxKind.StringLiteral: 
+            case SyntaxKind.NoSubstitutionTemplateLiteral: 
+                return factory.createStringLiteral((node as StringLiteralLike).text);
+            case SyntaxKind.FalseKeyword: 
+                return factory.createFalse();
+            case SyntaxKind.TrueKeyword: 
+                return factory.createTrue();
+            case SyntaxKind.PrefixUnaryExpression:
+                return factory.createPrefixUnaryExpression(
+                    (node as PrefixUnaryExpression).operator,
+                    clonePrimitiveLiteralValue((node as PrefixUnaryExpression).operand),
+                );
+            case SyntaxKind.TemplateExpression: 
+                const templateExpression = node as TemplateExpression
+                const evaluatedValue = evaluate(templateExpression);
+                if (evaluatedValue !== undefined) {
+                    return factory.createStringLiteral(evaluatedValue);
+                }
+                const templateHead = templateExpression.head
+                return factory.createTemplateExpression(
+                    factory.createTemplateHead(templateHead.text, templateHead.rawText, templateHead.templateFlags),
+                    templateExpression.templateSpans.map(t =>
+                        factory.createTemplateSpan(
+                            clonePrimitiveLiteralValue(t.expression),
+                            t.literal.kind === SyntaxKind.TemplateMiddle ?
+                                factory.createTemplateMiddle(t.literal.text, t.literal.rawText, t.literal.templateFlags) :
+                                factory.createTemplateTail(t.literal.text, t.literal.rawText, t.literal.templateFlags),
+                        )
+                    ),
+                );
+            default:
+                Debug.assert(false, `Unable to clone unknown literal type. Kind: ${node.kind}`);
         }
-        if (isBigIntLiteral(node)) {
-            return factory.createBigIntLiteral({ negative: false, base10Value: parsePseudoBigInt(node.text) });
-        }
-        if (isStringLiteralLike(node)) {
-            return factory.createStringLiteral(node.text);
-        }
-
-        if (node.kind === SyntaxKind.FalseKeyword) {
-            return factory.createFalse();
-        }
-
-        if (node.kind === SyntaxKind.TrueKeyword) {
-            return factory.createTrue();
-        }
-
-        if (isPrefixUnaryExpression(node)) {
-            return factory.createPrefixUnaryExpression(
-                node.operator,
-                clonePrimitiveLiteralValue(node.operand),
-            );
-        }
-        if (isTemplateExpression(node)) {
-            const evaluatedValue = evaluate(node);
-            if (evaluatedValue !== undefined) {
-                return factory.createStringLiteral(evaluatedValue);
-            }
-            return factory.createTemplateExpression(
-                factory.createTemplateHead(node.head.text, node.head.rawText, node.head.templateFlags),
-                node.templateSpans.map(t =>
-                    factory.createTemplateSpan(
-                        clonePrimitiveLiteralValue(t.expression),
-                        t.literal.kind === SyntaxKind.TemplateMiddle ?
-                            factory.createTemplateMiddle(t.literal.text, t.literal.rawText, t.literal.templateFlags) :
-                            factory.createTemplateTail(t.literal.text, t.literal.rawText, t.literal.templateFlags),
-                    )
-                ),
-            );
-        }
-        Debug.assert(false, `Unable to clone unknown literal type. Kind: ${node.kind}`);
     }
 
     function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
@@ -627,37 +624,12 @@ function getSymbolName(name: ElementAccessExpression | PropertyName): __String |
     return getDynamicSymbolName(name);
 }
 
-function getEntityNameComponent(identifier: MemberName): __String {
-    const name = getPropertyNameForPropertyNameNode(identifier);
-    if (name && name.indexOf(".")) {
-        return name.replace(/\./g, "..") as __String;
-    }
-    return name;
-}
-
 function getDynamicSymbolName(name: ElementAccessExpression | PropertyName) {
-    let computedName = isComputedPropertyName(name) ? name.expression :
+    const computedName = isComputedPropertyName(name) ? name.expression :
         isElementAccessExpression(name) ? name.argumentExpression :
         undefined;
-
-    if (computedName) {
-        let fullId = "__!";
-        // We only support dotted identifiers as property keys
-        while (true) {
-            if (isIdentifier(computedName)) {
-                const componentName = getEntityNameComponent(computedName);
-                fullId += componentName;
-                return fullId as __String;
-            }
-            else if (isPropertyAccessExpression(computedName)) {
-                const componentName = getEntityNameComponent(computedName.name);
-                computedName = computedName.expression;
-                fullId += componentName + ".";
-            }
-            else {
-                return undefined;
-            }
-        }
+    if (computedName && isEntityNameExpression(computedName)) {
+        return ("__!" + entityNameToString(computedName)) as __String;
     }
     return undefined;
 }
