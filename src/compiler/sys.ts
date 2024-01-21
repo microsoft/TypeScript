@@ -131,7 +131,7 @@ let pollingChunkSize = createPollingIntervalBasedLevels(defaultChunkLevels);
 export let unchangedPollThresholds = createPollingIntervalBasedLevels(defaultChunkLevels);
 
 function setCustomPollingValues(system: System) {
-    if (!system.getEnvironmentVariable) {
+    if (system.getEnvironmentVariable === undefined) {
         return;
     }
     const pollingIntervalChanged = setCustomLevels("TSC_WATCH_POLLINGINTERVAL", PollingInterval);
