@@ -42920,7 +42920,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function helper(condExpr: Expression, body: Expression | Statement | undefined) {
             const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right)
-                : isPrefixUnaryExpression(condExpr) ? condExpr.operand 
+                : isPrefixUnaryExpression(condExpr) ? condExpr.operand
                 : condExpr;
             if (isModuleExportsAccessExpression(location)) {
                 return;
