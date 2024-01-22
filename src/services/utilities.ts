@@ -1958,7 +1958,7 @@ export function isInsideJsxElement(sourceFile: SourceFile, position: number): bo
 /** @internal */
 export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile) {
     const closeTokenText = tokenToString(token.kind)!;
-    const matchingTokenText = tokenToString(matchingTokenKind)!;
+    const matchingTokenText = tokenToString(matchingTokenKind);
     const tokenFullStart = token.getFullStart();
     // Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
     // a good, fast approximation without too much extra work in the cases where it fails.
