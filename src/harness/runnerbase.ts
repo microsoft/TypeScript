@@ -1,5 +1,4 @@
 import {
-    FileBasedTest,
     IO,
     userSpecifiedRoot,
 } from "./_namespaces/Harness";
@@ -7,7 +6,7 @@ import * as ts from "./_namespaces/ts";
 
 export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project";
 export type CompilerTestKind = "conformance" | "compiler";
-export type FourslashTestKind = "fourslash" | "fourslash-shims" | "fourslash-shims-pp" | "fourslash-server";
+export type FourslashTestKind = "fourslash" | "fourslash-server";
 
 export let shards = 1;
 export let shardId = 1;
@@ -22,20 +21,20 @@ export function setShardId(id: number) {
 
 export abstract class RunnerBase {
     // contains the tests to run
-    public tests: (string | FileBasedTest)[] = [];
+    public tests: string[] = [];
 
     /** Add a source file to the runner's list of tests that need to be initialized with initializeTests */
     public addTest(fileName: string) {
         this.tests.push(fileName);
     }
 
-    public enumerateFiles(folder: string, regex?: RegExp, options?: { recursive: boolean }): string[] {
+    public enumerateFiles(folder: string, regex?: RegExp, options?: { recursive: boolean; }): string[] {
         return ts.map(IO.listFiles(userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
     }
 
     abstract kind(): TestRunnerKind;
 
-    abstract enumerateTestFiles(): (string | FileBasedTest)[];
+    abstract enumerateTestFiles(): string[];
 
     getTestFiles(): ReturnType<this["enumerateTestFiles"]> {
         const all = this.enumerateTestFiles();

@@ -1,0 +1,20 @@
+classExtendsNull3.ts(3,5): error TS2531: Object is possibly 'null'.
+classExtendsNull3.ts(9,5): error TS2531: Object is possibly 'null'.
+
+
+==== classExtendsNull3.ts (2 errors) ====
+    class C1 extends null {
+      static method() {
+        super.oops;
+        ~~~~~
+!!! error TS2531: Object is possibly 'null'.
+      }
+    }
+    
+    class C2 extends null {
+      method() {
+        super.oops;
+        ~~~~~
+!!! error TS2531: Object is possibly 'null'.
+      }
+    }

@@ -24,7 +24,11 @@ import {
     textChanges,
     TypeAliasDeclaration,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "convertTypedefToType";
 const errorCodes = [Diagnostics.JSDoc_typedef_may_be_converted_to_TypeScript_type.code];
@@ -35,7 +39,7 @@ registerCodeFix({
         const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
         const node = getTokenAtPosition(
             context.sourceFile,
-            context.span.start
+            context.span.start,
         );
         if (!node) return;
 
@@ -53,16 +57,17 @@ registerCodeFix({
             ];
         }
     },
-    getAllCodeActions: context => codeFixAll(
-        context,
-        errorCodes,
-        (changes, diag) => {
-            const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
-            const node = getTokenAtPosition(diag.file, diag.start);
-            const fixAll = true;
-            if (node) doChange(changes, node, diag.file, newLineCharacter, fixAll);
-        }
-    )
+    getAllCodeActions: context =>
+        codeFixAll(
+            context,
+            errorCodes,
+            (changes, diag) => {
+                const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext.options);
+                const node = getTokenAtPosition(diag.file, diag.start);
+                const fixAll = true;
+                if (node) doChange(changes, node, diag.file, newLineCharacter, fixAll);
+            },
+        ),
 });
 
 function doChange(
@@ -70,7 +75,7 @@ function doChange(
     node: Node,
     sourceFile: SourceFile,
     newLine: string,
-    fixAll = false
+    fixAll = false,
 ) {
     if (!isJSDocTypedefTag(node)) return;
 
@@ -120,13 +125,12 @@ function doChange(
     changes.replaceRange(sourceFile, { pos, end }, declaration, { prefix, suffix });
 }
 
-function getLeftAndRightSiblings(typedefNode: JSDocTypedefTag): { leftSibling?: Node, rightSibling?: Node } {
-
+function getLeftAndRightSiblings(typedefNode: JSDocTypedefTag): { leftSibling?: Node; rightSibling?: Node; } {
     const commentNode = typedefNode.parent;
     const maxChildIndex = commentNode.getChildCount() - 1;
 
     const currentNodeIndex = commentNode.getChildren().findIndex(
-        (n) => n.getStart() === typedefNode.getStart() && n.getEnd() === typedefNode.getEnd()
+        n => n.getStart() === typedefNode.getStart() && n.getEnd() === typedefNode.getEnd(),
     );
 
     const leftSibling = currentNodeIndex > 0 ? commentNode.getChildAt(currentNodeIndex - 1) : undefined;
@@ -143,7 +147,7 @@ function findEndOfTextBetween(jsDocComment: JSDoc, from: number, to: number): nu
     const comment = jsDocComment.getText().substring(from - jsDocComment.getStart(), to - jsDocComment.getStart());
 
     for (let i = comment.length; i > 0; i--) {
-        if(!/[*/\s]/g.test(comment.substring(i - 1, i))) {
+        if (!/[*/\s]/g.test(comment.substring(i - 1, i))) {
             return from + i;
         }
     }
@@ -171,7 +175,7 @@ function createDeclaration(tag: JSDocTypedefTag): InterfaceDeclaration | TypeAli
 
 function createInterfaceForTypeLiteral(
     typeName: string,
-    typeLiteral: JSDocTypeLiteral
+    typeLiteral: JSDocTypeLiteral,
 ): InterfaceDeclaration | undefined {
     const propertySignatures = createSignatureFromTypeLiteral(typeLiteral);
     if (!some(propertySignatures)) return;
@@ -187,7 +191,7 @@ function createInterfaceForTypeLiteral(
 
 function createTypeAliasForTypeExpression(
     typeName: string,
-    typeExpression: JSDocTypeExpression
+    typeExpression: JSDocTypeExpression,
 ): TypeAliasDeclaration | undefined {
     const typeReference = getSynthesizedDeepClone(typeExpression.type);
     if (!typeReference) return;
@@ -196,7 +200,7 @@ function createTypeAliasForTypeExpression(
         /*modifiers*/ undefined,
         factory.createIdentifier(typeName),
         /*typeParameters*/ undefined,
-        typeReference
+        typeReference,
     );
 }
 
@@ -227,7 +231,7 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
                 /*modifiers*/ undefined,
                 name,
                 questionToken,
-                typeReference
+                typeReference,
             );
         }
     };
@@ -242,7 +246,7 @@ function getPropertyName(tag: JSDocPropertyLikeTag): string | undefined {
 /** @internal */
 export function getJSDocTypedefNodes(node: Node): readonly JSDocTag[] {
     if (hasJSDocNodes(node)) {
-        return flatMap(node.jsDoc, (doc) => doc.tags?.filter((tag) => isJSDocTypedefTag(tag)));
+        return flatMap(node.jsDoc, doc => doc.tags?.filter(tag => isJSDocTypedefTag(tag)));
     }
 
     return [];

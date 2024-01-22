@@ -1,13 +1,21 @@
-import { CancelError } from "@esfx/canceltoken";
+import {
+    CancelError,
+} from "@esfx/canceltoken";
 import chalk from "chalk";
-import del from "del";
 import fs from "fs";
 import os from "os";
 import path from "path";
 
-import { findUpFile, findUpRoot } from "./findUpDir.mjs";
+import {
+    findUpFile,
+    findUpRoot,
+} from "./findUpDir.mjs";
 import cmdLineOptions from "./options.mjs";
-import { exec, ExecError } from "./utils.mjs";
+import {
+    exec,
+    ExecError,
+    rimraf,
+} from "./utils.mjs";
 
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
@@ -40,16 +48,14 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
         }
         await cleanTestDirs();
-        await cleanCoverageDir();
+        await rimraf(coverageDir);
 
         if (options.token?.signaled) {
             return;
         }
     }
 
-    if (fs.existsSync(testConfigFile)) {
-        fs.unlinkSync(testConfigFile);
-    }
+    await rimraf(testConfigFile);
 
     let workerCount, taskConfigsFolder;
     if (runInParallel) {
@@ -59,7 +65,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         do {
             taskConfigsFolder = prefix + i;
             i++;
-        } while (fs.existsSync(taskConfigsFolder));
+        }
+        while (fs.existsSync(taskConfigsFolder));
         fs.mkdirSync(taskConfigsFolder);
 
         workerCount = cmdLineOptions.workers;
@@ -106,7 +113,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
             args.push("--no-colors");
         }
         if (inspect !== undefined) {
-            args.unshift((inspect === "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
+            args.unshift((inspect === "" || inspect === true) ? "--inspect-brk" : "--inspect-brk=" + inspect);
             args.push("-t", "0");
         }
         else {
@@ -149,8 +156,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         process.env.NODE_ENV = savedNodeEnv;
     }
 
-    await del("test.config");
-    await deleteTemporaryProjectOutput();
+    await rimraf("test.config");
+    await rimraf(path.join(localBaseline, "projectOutput"));
 
     if (error !== undefined) {
         if (error instanceof CancelError) {
@@ -168,12 +175,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 }
 
 export async function cleanTestDirs() {
-    await del([localBaseline]);
+    await rimraf(localBaseline);
     await fs.promises.mkdir(localBaseline, { recursive: true });
-}
-
-async function cleanCoverageDir() {
-    await del([coverageDir]);
 }
 
 /**
@@ -201,14 +204,10 @@ export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, wo
         timeout,
         keepFailed,
         shards,
-        shardId
+        shardId,
     });
     console.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
-}
-
-function deleteTemporaryProjectOutput() {
-    return del(path.join(localBaseline, "projectOutput/"));
 }
 
 /**

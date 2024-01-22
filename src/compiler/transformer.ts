@@ -72,7 +72,7 @@ import {
     transformNodeModule,
     transformSystemModule,
     transformTypeScript,
-    VariableDeclaration
+    VariableDeclaration,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -82,6 +82,7 @@ function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<Source
         case ModuleKind.ES2022:
         case ModuleKind.ES2020:
         case ModuleKind.ES2015:
+        case ModuleKind.Preserve:
             return transformECMAScriptModule;
         case ModuleKind.System:
             return transformSystemModule;
@@ -97,7 +98,7 @@ const enum TransformationState {
     Uninitialized,
     Initialized,
     Completed,
-    Disposed
+    Disposed,
 }
 
 const enum SyntaxKindFeatureFlags {
@@ -290,13 +291,17 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         enableEmitNotification,
         isSubstitutionEnabled,
         isEmitNotificationEnabled,
-        get onSubstituteNode() { return onSubstituteNode; },
+        get onSubstituteNode() {
+            return onSubstituteNode;
+        },
         set onSubstituteNode(value) {
             Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
             Debug.assert(value !== undefined, "Value must not be 'undefined'");
             onSubstituteNode = value;
         },
-        get onEmitNode() { return onEmitNode; },
+        get onEmitNode() {
+            return onEmitNode;
+        },
         set onEmitNode(value) {
             Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
             Debug.assert(value !== undefined, "Value must not be 'undefined'");
@@ -304,7 +309,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         },
         addDiagnostic(diag) {
             diagnostics.push(diag);
-        }
+        },
     };
 
     // Ensure the parse tree is clean before applying transformations
@@ -346,7 +351,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         emitNodeWithNotification,
         isEmitNotificationEnabled,
         dispose,
-        diagnostics
+        diagnostics,
     };
 
     function transformRoot(node: T) {
@@ -517,9 +522,11 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
         let statements: Statement[] | undefined;
-        if (lexicalEnvironmentVariableDeclarations ||
+        if (
+            lexicalEnvironmentVariableDeclarations ||
             lexicalEnvironmentFunctionDeclarations ||
-            lexicalEnvironmentStatements) {
+            lexicalEnvironmentStatements
+        ) {
             if (lexicalEnvironmentFunctionDeclarations) {
                 statements = [...lexicalEnvironmentFunctionDeclarations];
             }
@@ -527,7 +534,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
             if (lexicalEnvironmentVariableDeclarations) {
                 const statement = factory.createVariableStatement(
                     /*modifiers*/ undefined,
-                    factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
+                    factory.createVariableDeclarationList(lexicalEnvironmentVariableDeclarations),
                 );
 
                 setEmitFlags(statement, EmitFlags.CustomPrologue);
@@ -598,9 +605,9 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
                         blockScopedVariableDeclarations.map(identifier => factory.createVariableDeclaration(identifier)),
-                        NodeFlags.Let
-                    )
-                )
+                        NodeFlags.Let,
+                    ),
+                ),
             ] : undefined;
         blockScopeStackOffset--;
         blockScopedVariableDeclarations = blockScopedVariableDeclarationsStack[blockScopeStackOffset];

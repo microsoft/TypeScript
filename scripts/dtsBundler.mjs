@@ -5,7 +5,10 @@
  * bundle as namespaces again, even though the project is modules.
  */
 
-import assert, { fail } from "assert";
+import assert, {
+    fail,
+} from "assert";
+import cp from "child_process";
 import fs from "fs";
 import minimist from "minimist";
 import path from "path";
@@ -37,18 +40,7 @@ console.log(`Bundling ${entrypoint} to ${output} and ${internalOutput}`);
 const newLineKind = ts.NewLineKind.LineFeed;
 const newLine = newLineKind === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
 
-/** @type {(node: ts.Node) => node is ts.DeclarationStatement} */
-function isDeclarationStatement(node) {
-    return /** @type {any} */ (ts).isDeclarationStatement(node);
-}
-
-/** @type {(node: ts.Node) => boolean} */
-function isInternalDeclaration(node) {
-    return /** @type {any} */ (ts).isInternalDeclaration(node, node.getSourceFile());
-}
-
 /**
- *
  * @param {ts.VariableDeclaration} node
  * @returns {ts.VariableStatement}
  */
@@ -62,7 +54,6 @@ function getParentVariableStatement(node) {
 }
 
 /**
- *
  * @param {ts.Declaration} node
  * @returns {ts.Statement | undefined}
  */
@@ -70,14 +61,11 @@ function getDeclarationStatement(node) {
     if (ts.isVariableDeclaration(node)) {
         return getParentVariableStatement(node);
     }
-    else if (isDeclarationStatement(node)) {
+    else if (ts.isDeclarationStatement(node)) {
         return node;
     }
     return undefined;
 }
-
-/** @type {ts.TransformationContext} */
-const nullTransformationContext = /** @type {any} */ (ts).nullTransformationContext;
 
 const program = ts.createProgram([entrypoint], { target: ts.ScriptTarget.ES5 });
 
@@ -88,7 +76,31 @@ assert(sourceFile, "Failed to load source file");
 const moduleSymbol = typeChecker.getSymbolAtLocation(sourceFile);
 assert(moduleSymbol, "Failed to get module's symbol");
 
-const printer = ts.createPrinter({ newLine: newLineKind });
+/** @type {{ writeNode(hint: ts.EmitHint, node: ts.Node, sourceFile: ts.SourceFile | undefined, writer: any): void }} */
+const printer = /** @type {any} */ (ts.createPrinter({ newLine: newLineKind }));
+/** @type {{ writeComment(s: string): void; getText(): string; clear(): void }} */
+const writer = /** @type {any} */ (ts).createTextWriter("\n");
+const originalWriteComment = writer.writeComment.bind(writer);
+writer.writeComment = s => {
+    // Hack; undo https://github.com/microsoft/TypeScript/pull/50097
+    // We printNode directly, so we get all of the original source comments.
+    // If we were using actual declaration emit instead, this wouldn't be needed.
+    if (s.startsWith("//")) {
+        return;
+    }
+    originalWriteComment(s);
+};
+
+/**
+ * @param {ts.Node} node
+ * @param {ts.SourceFile} sourceFile
+ */
+function printNode(node, sourceFile) {
+    printer.writeNode(ts.EmitHint.Unspecified, node, sourceFile, writer);
+    const text = writer.getText();
+    writer.clear();
+    return text;
+}
 
 /** @type {string[]} */
 const publicLines = [];
@@ -140,7 +152,7 @@ function write(s, target) {
  * @param {WriteTarget} target
  */
 function writeNode(node, sourceFile, target) {
-    write(printer.printNode(ts.EmitHint.Unspecified, node, sourceFile), target);
+    write(printNode(node, sourceFile), target);
 }
 
 /** @type {Map<ts.Symbol, boolean>} */
@@ -182,7 +194,7 @@ function containsPublicAPI(symbol) {
 
         for (const decl of symbol.declarations) {
             const statement = getDeclarationStatement(decl);
-            if (statement && !isInternalDeclaration(statement)) {
+            if (statement && !ts.isInternalDeclaration(statement)) {
                 return true;
             }
         }
@@ -207,8 +219,8 @@ function nodeToLocation(node) {
 function removeDeclareConstExport(node) {
     switch (node.kind) {
         case ts.SyntaxKind.DeclareKeyword: // No need to emit this in d.ts files.
-        case ts.SyntaxKind.ConstKeyword:   // Remove const from const enums.
-        case ts.SyntaxKind.ExportKeyword:  // No export modifier; we are already in the namespace.
+        case ts.SyntaxKind.ConstKeyword: // Remove const from const enums.
+        case ts.SyntaxKind.ExportKeyword: // No export modifier; we are already in the namespace.
             return undefined;
     }
     return node;
@@ -239,17 +251,10 @@ function isNonLocalAlias(symbol, excludes = ts.SymbolFlags.Value | ts.SymbolFlag
 
 /**
  * @param {ts.Symbol} symbol
- */
-function resolveAlias(symbol) {
-    return typeChecker.getAliasedSymbol(symbol);
-}
-
-/**
- * @param {ts.Symbol} symbol
  * @param {boolean | undefined} [dontResolveAlias]
  */
 function resolveSymbol(symbol, dontResolveAlias = undefined) {
-    return !dontResolveAlias && isNonLocalAlias(symbol) ? resolveAlias(symbol) : symbol;
+    return !dontResolveAlias && isNonLocalAlias(symbol) ? typeChecker.getAliasedSymbol(symbol) : symbol;
 }
 
 /**
@@ -257,7 +262,7 @@ function resolveSymbol(symbol, dontResolveAlias = undefined) {
  * @returns {ts.Symbol}
  */
 function getMergedSymbol(symbol) {
-    return /** @type {any} */ (typeChecker).getMergedSymbol(symbol);
+    return typeChecker.getMergedSymbol(symbol);
 }
 
 /**
@@ -284,19 +289,11 @@ function symbolsConflict(s1, s2) {
 }
 
 /**
- * @param {ts.Node} node
- * @returns {boolean}
- */
-function isPartOfTypeNode(node) {
-    return /** @type {any} */ (ts).isPartOfTypeNode(node);
-}
-
-/**
  * @param {ts.Statement} decl
  */
 function verifyMatchingSymbols(decl) {
     ts.visitEachChild(decl, /** @type {(node: ts.Node) => ts.Node} */ function visit(node) {
-        if (ts.isIdentifier(node) && isPartOfTypeNode(node)) {
+        if (ts.isIdentifier(node) && ts.isPartOfTypeNode(node)) {
             if (ts.isQualifiedName(node.parent) && node !== node.parent.left) {
                 return node;
             }
@@ -322,8 +319,8 @@ function verifyMatchingSymbols(decl) {
             }
         }
 
-        return ts.visitEachChild(node, visit, nullTransformationContext);
-    }, nullTransformationContext);
+        return ts.visitEachChild(node, visit, /*context*/ undefined);
+    }, /*context*/ undefined);
 }
 
 /**
@@ -372,20 +369,20 @@ function emitAsNamespace(name, moduleSymbol) {
 
             verifyMatchingSymbols(statement);
 
-            const isInternal = isInternalDeclaration(statement);
+            const isInternal = ts.isInternalDeclaration(statement);
             if (!isInternal) {
-                const publicStatement = ts.visitEachChild(statement, (node) => {
+                const publicStatement = ts.visitEachChild(statement, node => {
                     // No @internal comments in the public API.
-                    if (isInternalDeclaration(node)) {
+                    if (ts.isInternalDeclaration(node)) {
                         return undefined;
                     }
                     return removeDeclareConstExport(node);
-                }, nullTransformationContext);
+                }, /*context*/ undefined);
 
                 writeNode(publicStatement, sourceFile, WriteTarget.Public);
             }
 
-            const internalStatement = ts.visitEachChild(statement, removeDeclareConstExport, nullTransformationContext);
+            const internalStatement = ts.visitEachChild(statement, removeDeclareConstExport, /*context*/ undefined);
 
             writeNode(internalStatement, sourceFile, WriteTarget.Internal);
         }
@@ -409,5 +406,25 @@ if (publicContents.includes("@internal")) {
     console.error("Output includes untrimmed @internal nodes!");
 }
 
-fs.writeFileSync(output, publicContents);
-fs.writeFileSync(internalOutput, internalContents);
+const dprintPath = path.resolve(__dirname, "..", "node_modules", "dprint", "bin.js");
+
+/**
+ * @param {string} contents
+ * @returns {string}
+ */
+function dprint(contents) {
+    const result = cp.execFileSync(
+        process.execPath,
+        [dprintPath, "fmt", "--stdin", "ts"],
+        {
+            stdio: ["pipe", "pipe", "inherit"],
+            encoding: "utf-8",
+            input: contents,
+            maxBuffer: 100 * 1024 * 1024, // 100 MB "ought to be enough for anyone"; https://github.com/nodejs/node/issues/9829
+        },
+    );
+    return result.replace(/\r\n/g, "\n");
+}
+
+fs.writeFileSync(output, dprint(publicContents));
+fs.writeFileSync(internalOutput, dprint(internalContents));

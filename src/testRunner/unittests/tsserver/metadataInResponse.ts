@@ -1,10 +1,12 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -16,9 +18,9 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
     const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
     const tsconfig: File = {
         path: "/tsconfig.json",
-        content: JSON.stringify({
-            compilerOptions: { plugins: [{ name: "myplugin" }] }
-        })
+        content: jsonToReadableText({
+            compilerOptions: { plugins: [{ name: "myplugin" }] },
+        }),
     };
     function createHostWithPlugin(files: readonly File[]) {
         const host = createServerHost(files);
@@ -36,9 +38,9 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
                             return result;
                         };
                         return proxy;
-                    }
+                    },
                 }),
-                error: undefined
+                error: undefined,
             };
         };
         return host;
@@ -48,27 +50,27 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
         const completionRequestArgs: ts.server.protocol.CompletionsRequestArgs = {
             file: aTs.path,
             line: 1,
-            offset: aTs.content.indexOf("this.") + 1 + "this.".length
+            offset: aTs.content.indexOf("this.") + 1 + "this.".length,
         };
 
         it("can pass through metadata when the command returns array", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([aTs], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.Completions,
-                arguments: completionRequestArgs
+                arguments: completionRequestArgs,
             });
             baselineTsserverLogs("metadataInResponse", "can pass through metadata when the command returns array", session);
         });
 
         it("can pass through metadata when the command returns object", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([aTs], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
-                arguments: completionRequestArgs
+                arguments: completionRequestArgs,
             });
             baselineTsserverLogs("metadataInResponse", "can pass through metadata when the command returns object", session);
         });
@@ -76,11 +78,11 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
         it("returns undefined correctly", () => {
             const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
             const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             openFilesForSession([aTs], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.Completions,
-                arguments: { file: aTs.path, line: 1, offset: aTs.content.indexOf("x") + 1 }
+                arguments: { file: aTs.path, line: 1, offset: aTs.content.indexOf("x") + 1 },
             });
             baselineTsserverLogs("metadataInResponse", "returns undefined correctly", session);
         });

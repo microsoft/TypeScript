@@ -49,6 +49,6 @@
             "problemMatcher": [
                 "$tsc"
             ]
-        },
+        }
     ]
 }

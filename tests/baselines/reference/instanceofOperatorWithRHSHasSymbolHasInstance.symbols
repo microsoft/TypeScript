@@ -1,0 +1,557 @@
+//// [tests/cases/conformance/expressions/binaryOperators/instanceofOperator/instanceofOperatorWithRHSHasSymbolHasInstance.ts] ////
+
+=== instanceofOperatorWithRHSHasSymbolHasInstance.ts ===
+interface Point { x: number, y: number }
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>x : Symbol(Point.x, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 17))
+>y : Symbol(Point.y, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 28))
+
+interface Point3D { x: number, y: number, z: number }
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+>x : Symbol(Point3D.x, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 1, 19))
+>y : Symbol(Point3D.y, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 1, 30))
+>z : Symbol(Point3D.z, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 1, 41))
+
+interface Point3D2 extends Point { z: number }
+>Point3D2 : Symbol(Point3D2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 1, 53))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>z : Symbol(Point3D2.z, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 34))
+
+interface Line { start: Point, end: Point }
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+>start : Symbol(Line.start, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 3, 16))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>end : Symbol(Line.end, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 3, 30))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+
+declare var rhs0: { [Symbol.hasInstance](value: unknown): boolean; };
+>rhs0 : Symbol(rhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 5, 11))
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 5, 19))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 5, 41))
+
+declare var rhs1: { [Symbol.hasInstance](value: any): boolean; };
+>rhs1 : Symbol(rhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 6, 11))
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 6, 19))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 6, 41))
+
+declare var rhs2: { [Symbol.hasInstance](value: any): value is Point; };
+>rhs2 : Symbol(rhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 7, 11))
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 7, 19))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 7, 41))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 7, 41))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+
+declare var rhs3: { [Symbol.hasInstance](value: Point | Line): value is Point; };
+>rhs3 : Symbol(rhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 8, 11))
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 8, 19))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 8, 41))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 8, 41))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+
+declare var rhs4: { [Symbol.hasInstance](value: Point | Line): value is Line; };
+>rhs4 : Symbol(rhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 9, 11))
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 9, 19))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 9, 41))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 9, 41))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+
+declare var rhs5: { [Symbol.hasInstance](value: Point | Point3D | Line): value is Point3D; };
+>rhs5 : Symbol(rhs5, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 10, 11))
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 10, 19))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 10, 41))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 10, 41))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+
+declare var rhs6: { [Symbol.hasInstance](value: Point3D | Line): value is Point3D; };
+>rhs6 : Symbol(rhs6, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 11))
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 19))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 41))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 41))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+
+declare class Rhs7 { static [Symbol.hasInstance](value: unknown): boolean; }
+>Rhs7 : Symbol(Rhs7, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 85))
+>[Symbol.hasInstance] : Symbol(Rhs7[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 13, 20))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 13, 49))
+
+declare class Rhs8 { static [Symbol.hasInstance](value: any): boolean; }
+>Rhs8 : Symbol(Rhs8, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 13, 76))
+>[Symbol.hasInstance] : Symbol(Rhs8[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 14, 20))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 14, 49))
+
+declare class Rhs9 { static [Symbol.hasInstance](value: any): value is Point; }
+>Rhs9 : Symbol(Rhs9, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 14, 72))
+>[Symbol.hasInstance] : Symbol(Rhs9[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 15, 20))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 15, 49))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 15, 49))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+
+declare class Rhs10 { static [Symbol.hasInstance](value: Point | Line): value is Point; }
+>Rhs10 : Symbol(Rhs10, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 15, 79))
+>[Symbol.hasInstance] : Symbol(Rhs10[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 16, 21))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 16, 50))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 16, 50))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+
+declare class Rhs11 { static [Symbol.hasInstance](value: Point | Line): value is Line; }
+>Rhs11 : Symbol(Rhs11, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 16, 89))
+>[Symbol.hasInstance] : Symbol(Rhs11[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 17, 21))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 17, 50))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 17, 50))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+
+declare class Rhs12 { static [Symbol.hasInstance](value: Point | Point3D | Line): value is Point3D; }
+>Rhs12 : Symbol(Rhs12, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 17, 88))
+>[Symbol.hasInstance] : Symbol(Rhs12[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 18, 21))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 18, 50))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 18, 50))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+
+declare class Rhs13 { static [Symbol.hasInstance](value: Point3D | Line): value is Point3D; }
+>Rhs13 : Symbol(Rhs13, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 18, 101))
+>[Symbol.hasInstance] : Symbol(Rhs13[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 19, 21))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 19, 50))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 19, 50))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+
+declare var lhs0: any;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+declare var lhs1: object;
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+
+declare var lhs2: Point | Point3D | Line;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+
+declare var lhs3: Point3D | Line;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>Point3D : Symbol(Point3D, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 40))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+
+declare var lhs4: Point | Point3D2 | Line;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>Point : Symbol(Point, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 0, 0))
+>Point3D2 : Symbol(Point3D2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 1, 53))
+>Line : Symbol(Line, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 2, 46))
+
+lhs0 instanceof rhs0 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>rhs0 : Symbol(rhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 5, 11))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof rhs1 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>rhs1 : Symbol(rhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 6, 11))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof rhs2 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>rhs2 : Symbol(rhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 7, 11))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof rhs3 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>rhs3 : Symbol(rhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 8, 11))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof rhs4 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>rhs4 : Symbol(rhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 9, 11))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof rhs5 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>rhs5 : Symbol(rhs5, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 10, 11))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof rhs6 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>rhs6 : Symbol(rhs6, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 11))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof Rhs7 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>Rhs7 : Symbol(Rhs7, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 85))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof Rhs8 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>Rhs8 : Symbol(Rhs8, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 13, 76))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof Rhs9 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>Rhs9 : Symbol(Rhs9, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 14, 72))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof Rhs10 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>Rhs10 : Symbol(Rhs10, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 15, 79))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof Rhs11 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>Rhs11 : Symbol(Rhs11, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 16, 89))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof Rhs12 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>Rhs12 : Symbol(Rhs12, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 17, 88))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs0 instanceof Rhs13 && lhs0;
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+>Rhs13 : Symbol(Rhs13, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 18, 101))
+>lhs0 : Symbol(lhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 21, 11))
+
+lhs1 instanceof rhs0 && lhs1;
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+>rhs0 : Symbol(rhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 5, 11))
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+
+lhs1 instanceof rhs1 && lhs1;
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+>rhs1 : Symbol(rhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 6, 11))
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+
+lhs1 instanceof rhs2 && lhs1;
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+>rhs2 : Symbol(rhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 7, 11))
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+
+lhs1 instanceof Rhs7 && lhs1;
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+>Rhs7 : Symbol(Rhs7, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 85))
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+
+lhs1 instanceof Rhs8 && lhs1;
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+>Rhs8 : Symbol(Rhs8, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 13, 76))
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+
+lhs1 instanceof Rhs9 && lhs1;
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+>Rhs9 : Symbol(Rhs9, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 14, 72))
+>lhs1 : Symbol(lhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 22, 11))
+
+lhs2 instanceof rhs0 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>rhs0 : Symbol(rhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 5, 11))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof rhs1 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>rhs1 : Symbol(rhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 6, 11))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof rhs2 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>rhs2 : Symbol(rhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 7, 11))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof rhs3 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>rhs3 : Symbol(rhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 8, 11))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof rhs4 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>rhs4 : Symbol(rhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 9, 11))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof rhs5 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>rhs5 : Symbol(rhs5, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 10, 11))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof Rhs7 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>Rhs7 : Symbol(Rhs7, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 85))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof Rhs8 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>Rhs8 : Symbol(Rhs8, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 13, 76))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof Rhs9 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>Rhs9 : Symbol(Rhs9, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 14, 72))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof Rhs10 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>Rhs10 : Symbol(Rhs10, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 15, 79))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof Rhs11 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>Rhs11 : Symbol(Rhs11, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 16, 89))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs2 instanceof Rhs12 && lhs2;
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+>Rhs12 : Symbol(Rhs12, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 17, 88))
+>lhs2 : Symbol(lhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 23, 11))
+
+lhs3 instanceof rhs0 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>rhs0 : Symbol(rhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 5, 11))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof rhs1 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>rhs1 : Symbol(rhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 6, 11))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof rhs2 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>rhs2 : Symbol(rhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 7, 11))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof rhs3 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>rhs3 : Symbol(rhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 8, 11))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof rhs4 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>rhs4 : Symbol(rhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 9, 11))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof rhs5 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>rhs5 : Symbol(rhs5, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 10, 11))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof rhs6 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>rhs6 : Symbol(rhs6, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 11))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof Rhs7 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>Rhs7 : Symbol(Rhs7, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 85))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof Rhs8 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>Rhs8 : Symbol(Rhs8, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 13, 76))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof Rhs9 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>Rhs9 : Symbol(Rhs9, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 14, 72))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof Rhs10 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>Rhs10 : Symbol(Rhs10, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 15, 79))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof Rhs11 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>Rhs11 : Symbol(Rhs11, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 16, 89))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof Rhs12 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>Rhs12 : Symbol(Rhs12, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 17, 88))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs3 instanceof Rhs13 && lhs3;
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+>Rhs13 : Symbol(Rhs13, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 18, 101))
+>lhs3 : Symbol(lhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 24, 11))
+
+lhs4 instanceof rhs0 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>rhs0 : Symbol(rhs0, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 5, 11))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof rhs1 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>rhs1 : Symbol(rhs1, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 6, 11))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof rhs2 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>rhs2 : Symbol(rhs2, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 7, 11))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof rhs3 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>rhs3 : Symbol(rhs3, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 8, 11))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof rhs4 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>rhs4 : Symbol(rhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 9, 11))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof rhs5 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>rhs5 : Symbol(rhs5, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 10, 11))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof Rhs7 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>Rhs7 : Symbol(Rhs7, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 11, 85))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof Rhs8 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>Rhs8 : Symbol(Rhs8, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 13, 76))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof Rhs9 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>Rhs9 : Symbol(Rhs9, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 14, 72))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof Rhs10 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>Rhs10 : Symbol(Rhs10, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 15, 79))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof Rhs11 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>Rhs11 : Symbol(Rhs11, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 16, 89))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+lhs4 instanceof Rhs12 && lhs4;
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+>Rhs12 : Symbol(Rhs12, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 17, 88))
+>lhs4 : Symbol(lhs4, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 25, 11))
+
+declare class A {
+>A : Symbol(A, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 88, 30))
+
+    #x: number;
+>#x : Symbol(A.#x, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 90, 17))
+
+    // approximation of `getInstanceType` behavior, with one caveat: the checker versions unions the return types of
+    // all construct signatures, but we have no way of extracting individual construct signatures from a type.
+    static [Symbol.hasInstance]<T>(this: T, value: unknown): value is (
+>[Symbol.hasInstance] : Symbol(A[Symbol.hasInstance], Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 91, 15))
+>Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 95, 32))
+>this : Symbol(this, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 95, 35))
+>T : Symbol(T, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 95, 32))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 95, 43))
+>value : Symbol(value, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 95, 43))
+
+        T extends globalThis.Function ?
+>T : Symbol(T, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 95, 32))
+>globalThis : Symbol(globalThis)
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+            T extends { readonly prototype: infer U } ?
+>T : Symbol(T, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 95, 32))
+>prototype : Symbol(prototype, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 97, 23))
+>U : Symbol(U, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 97, 49))
+
+                boolean extends (U extends never ? true : false) ? // <- tests whether 'U' is 'any'
+>U : Symbol(U, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 97, 49))
+
+                    T extends (abstract new (...args: any) => infer V) ? V : {} :
+>T : Symbol(T, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 95, 32))
+>args : Symbol(args, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 99, 45))
+>V : Symbol(V, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 99, 67))
+>V : Symbol(V, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 99, 67))
+
+                U :
+>U : Symbol(U, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 97, 49))
+
+            never :
+        never
+    );
+}
+
+declare class B extends A { #y: number; }
+>B : Symbol(B, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 104, 1))
+>A : Symbol(A, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 88, 30))
+>#y : Symbol(B.#y, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 106, 27))
+
+declare const obj: unknown;
+>obj : Symbol(obj, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 108, 13))
+
+if (obj instanceof A) {
+>obj : Symbol(obj, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 108, 13))
+>A : Symbol(A, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 88, 30))
+
+    obj; // A
+>obj : Symbol(obj, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 108, 13))
+}
+if (obj instanceof B) {
+>obj : Symbol(obj, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 108, 13))
+>B : Symbol(B, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 104, 1))
+
+    obj; // B
+>obj : Symbol(obj, Decl(instanceofOperatorWithRHSHasSymbolHasInstance.ts, 108, 13))
+}

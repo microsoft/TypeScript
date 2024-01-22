@@ -27,7 +27,8 @@ export class TextDocument {
             file.unitName,
             file.content,
             file.fileOptions && Object.keys(file.fileOptions)
-                .reduce((meta, key) => meta.set(key, file.fileOptions[key]), new Map<string, string>()));
+                .reduce((meta, key) => meta.set(key, file.fileOptions[key]), new Map<string, string>()),
+        );
     }
 
     public asTestFile() {
@@ -35,7 +36,7 @@ export class TextDocument {
             unitName: this.file,
             content: this.text,
             fileOptions: ts.arrayFrom(this.meta)
-                .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>)
+                .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>),
         });
     }
 }

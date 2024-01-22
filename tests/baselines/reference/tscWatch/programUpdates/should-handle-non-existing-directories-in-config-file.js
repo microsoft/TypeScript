@@ -4,7 +4,13 @@ Input::
 let x = 1;
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{},"include":["src/**/*","notexistingfolder/*"]}
+{
+  "compilerOptions": {},
+  "include": [
+    "src/**/*",
+    "notexistingfolder/*"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -29,20 +35,10 @@ Output::
 
 
 
-Program root files: ["/a/src/app.ts"]
-Program options: {"watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/a/src/app.ts
+//// [/a/src/app.js]
+var x = 1;
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/src/app.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/src/app.ts (used version)
 
 PolledWatches::
 /a/notexistingfolder: *new*
@@ -60,9 +56,25 @@ FsWatchesRecursive::
 /a/src: *new*
   {}
 
+Program root files: [
+  "/a/src/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/a/src/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/a/src/app.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/src/app.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/a/src/app.js]
-var x = 1;
-
-

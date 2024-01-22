@@ -18,14 +18,14 @@ class C {
      * @readonly
      */
     static readonlyStaticType;
->readonlyStaticType : symbol
+>readonlyStaticType : unique symbol
 
     /**
      * @type {unique symbol}
      * @readonly
      */
     static readonlyStaticTypeAndCall = Symbol();
->readonlyStaticTypeAndCall : symbol
+>readonlyStaticTypeAndCall : unique symbol
 >Symbol() : unique symbol
 >Symbol : SymbolConstructor
 
@@ -50,7 +50,7 @@ class C {
 
 /** @type {unique symbol} */
 const a = Symbol();
->a : symbol
+>a : unique symbol
 >Symbol() : unique symbol
 >Symbol : SymbolConstructor
 

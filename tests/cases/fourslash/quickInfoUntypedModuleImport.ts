@@ -15,8 +15,5 @@ verify.quickInfoIs("");
 
 goTo.marker("foo");
 verify.quickInfoIs("import foo");
-
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['foo', 'fooModule', 'fooCall'] },
-    { type: "getDefinitionAtPosition", markerOrRange: ["fooModule", "foo"] },
-);
+verify.baselineFindAllReferences('foo', 'fooModule', 'fooCall');
+verify.baselineGetDefinitionAtPosition("fooModule", "foo");

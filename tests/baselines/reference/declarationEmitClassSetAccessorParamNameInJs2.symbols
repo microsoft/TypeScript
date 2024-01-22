@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/declarationEmitClassSetAccessorParamNameInJs2.ts] ////
+
+=== foo.js ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(foo.js, 0, 0))
+
+    /**
+     * Bar.
+     *
+     * @param {{ prop: string }} baz Baz.
+     */
+    set bar({}) {}
+>bar : Symbol(Foo.bar, Decl(foo.js, 0, 18))
+}
+

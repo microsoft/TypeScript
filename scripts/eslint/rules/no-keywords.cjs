@@ -35,15 +35,15 @@ module.exports = createRule({
         ];
 
         /** @type {(name: string) => boolean} */
-        const isKeyword = (name) => keywords.includes(name);
+        const isKeyword = name => keywords.includes(name);
 
         /** @type {(node: TSESTree.Identifier) => void} */
-        const report = (node) => {
+        const report = node => {
             context.report({ messageId: "noKeywordsError", data: { name: node.name }, node });
         };
 
         /** @type {(node: TSESTree.ObjectPattern) => void} */
-        const checkProperties = (node) => {
+        const checkProperties = node => {
             node.properties.forEach(property => {
                 if (
                     property &&
@@ -57,7 +57,7 @@ module.exports = createRule({
         };
 
         /** @type {(node: TSESTree.ArrayPattern) => void} */
-        const checkElements = (node) => {
+        const checkElements = node => {
             node.elements.forEach(element => {
                 if (
                     element &&
@@ -70,7 +70,7 @@ module.exports = createRule({
         };
 
         /** @type {(node: TSESTree.ArrowFunctionExpression | TSESTree.FunctionDeclaration | TSESTree.FunctionExpression | TSESTree.TSMethodSignature | TSESTree.TSFunctionType) => void} */
-        const checkParams = (node) => {
+        const checkParams = node => {
             if (!node || !node.params || !node.params.length) {
                 return;
             }

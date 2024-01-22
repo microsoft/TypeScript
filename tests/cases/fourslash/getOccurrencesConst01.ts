@@ -7,7 +7,5 @@
 ////
 /////*2*/const c = 0;
 
-verify.baselineCommands(
-    { type: "documentHighlights" },
-    { type: "documentHighlights", markerOrRange: "2" }
-);
+verify.baselineDocumentHighlights();
+verify.baselineDocumentHighlights("2");

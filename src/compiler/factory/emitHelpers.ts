@@ -26,6 +26,7 @@ import {
     isIdentifier,
     memoize,
     ObjectLiteralElementLike,
+    ParameterDeclaration,
     PrivateIdentifier,
     ScriptTarget,
     setEmitFlags,
@@ -41,7 +42,7 @@ import {
 export const enum PrivateIdentifierKind {
     Field = "f",
     Method = "m",
-    Accessor = "a"
+    Accessor = "a",
 }
 
 /**
@@ -88,15 +89,13 @@ export interface ESDecorateClassElementAccess {
 
 /** @internal */
 export type ESDecorateName =
-    | { computed: true, name: Expression }
-    | { computed: false, name: Identifier | PrivateIdentifier }
-    ;
+    | { computed: true; name: Expression; }
+    | { computed: false; name: Identifier | PrivateIdentifier; };
 
 /** @internal */
 export type ESDecorateContext =
     | ESDecorateClassContext
-    | ESDecorateClassElementContext
-    ;
+    | ESDecorateClassElementContext;
 
 /** @internal */
 export interface EmitHelperFactory {
@@ -117,7 +116,7 @@ export interface EmitHelperFactory {
     // ES2018 Destructuring Helpers
     createRestHelper(value: Expression, elements: readonly BindingOrAssignmentElement[], computedTempVariables: readonly Expression[] | undefined, location: TextRange): Expression;
     // ES2017 Helpers
-    createAwaiterHelper(hasLexicalThis: boolean, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block): Expression;
+    createAwaiterHelper(hasLexicalThis: boolean, argumentsExpression: Expression | undefined, promiseConstructor: EntityName | Expression | undefined, parameters: readonly ParameterDeclaration[] | undefined, body: Block): Expression;
     // ES2015 Helpers
     createExtendsHelper(name: Identifier): Expression;
     createTemplateObjectHelper(cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression): Expression;
@@ -220,7 +219,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__decorate"),
             /*typeArguments*/ undefined,
-            argumentsArray
+            argumentsArray,
         );
     }
 
@@ -231,8 +230,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             /*typeArguments*/ undefined,
             [
                 factory.createStringLiteral(metadataKey),
-                metadataValue
-            ]
+                metadataValue,
+            ],
         );
     }
 
@@ -244,10 +243,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 /*typeArguments*/ undefined,
                 [
                     factory.createNumericLiteral(parameterOffset + ""),
-                    expression
-                ]
+                    expression,
+                ],
             ),
-            location
+            location,
         );
     }
 
@@ -276,12 +275,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 [factory.createParameterDeclaration(
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("obj")
+                    factory.createIdentifier("obj"),
                 )],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
-                accessor
-            )
+                accessor,
+            ),
         );
     }
 
@@ -295,33 +294,34 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             factory.createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
-                [factory.createParameterDeclaration(
-                    /*modifiers*/ undefined,
-                    /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("obj")
-                ),
-                factory.createParameterDeclaration(
-                    /*modifiers*/ undefined,
-                    /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("value")
-                )],
+                [
+                    factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        factory.createIdentifier("obj"),
+                    ),
+                    factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        factory.createIdentifier("value"),
+                    ),
+                ],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 factory.createBlock([
                     factory.createExpressionStatement(
                         factory.createAssignment(
                             accessor,
-                            factory.createIdentifier("value")
-                        )
-                    )
-                ])
-            )
+                            factory.createIdentifier("value"),
+                        ),
+                    ),
+                ]),
+            ),
         );
     }
 
     function createESDecorateClassElementAccessHasMethod(elementName: ESDecorateName) {
-        const propertyName =
-            elementName.computed ? elementName.name :
+        const propertyName = elementName.computed ? elementName.name :
             isIdentifier(elementName.name) ? factory.createStringLiteralFromNode(elementName.name) :
             elementName.name;
 
@@ -333,16 +333,16 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 [factory.createParameterDeclaration(
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("obj")
+                    factory.createIdentifier("obj"),
                 )],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 factory.createBinaryExpression(
                     propertyName,
                     SyntaxKind.InKeyword,
-                    factory.createIdentifier("obj")
-                )
-            )
+                    factory.createIdentifier("obj"),
+                ),
+            ),
         );
     }
 
@@ -382,8 +382,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 decorators,
                 createESDecorateContextObject(contextIn),
                 initializers,
-                extraInitializers
-            ]);
+                extraInitializers,
+            ],
+        );
     }
 
     function createRunInitializersHelper(thisArg: Expression, initializers: Expression, value?: Expression) {
@@ -391,22 +392,20 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__runInitializers"),
             /*typeArguments*/ undefined,
-            value ? [thisArg, initializers, value] : [thisArg, initializers]
+            value ? [thisArg, initializers, value] : [thisArg, initializers],
         );
     }
     // ES2018 Helpers
 
     function createAssignHelper(attributesSegments: Expression[]) {
         if (getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
-            return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"),
-                              /*typeArguments*/ undefined,
-                              attributesSegments);
+            return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
         }
         context.requestEmitHelper(assignHelper);
         return factory.createCallExpression(
             getUnscopedHelperName("__assign"),
             /*typeArguments*/ undefined,
-            attributesSegments
+            attributesSegments,
         );
     }
 
@@ -428,8 +427,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             [
                 hasLexicalThis ? factory.createThis() : factory.createVoidZero(),
                 factory.createIdentifier("arguments"),
-                generatorFunc
-            ]
+                generatorFunc,
+            ],
         );
     }
 
@@ -439,7 +438,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__asyncDelegator"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -448,7 +447,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__asyncValues"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -475,8 +474,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                             /*questionToken*/ undefined,
                             temp,
                             /*colonToken*/ undefined,
-                            factory.createAdd(temp, factory.createStringLiteral(""))
-                        )
+                            factory.createAdd(temp, factory.createStringLiteral("")),
+                        ),
                     );
                 }
                 else {
@@ -491,14 +490,15 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 value,
                 setTextRange(
                     factory.createArrayLiteralExpression(propertyNames),
-                    location
-                )]
+                    location,
+                ),
+            ],
         );
     }
 
     // ES2017 Helpers
 
-    function createAwaiterHelper(hasLexicalThis: boolean, hasLexicalArguments: boolean, promiseConstructor: EntityName | Expression | undefined, body: Block) {
+    function createAwaiterHelper(hasLexicalThis: boolean, argumentsExpression: Expression | undefined, promiseConstructor: EntityName | Expression | undefined, parameters: readonly ParameterDeclaration[], body: Block) {
         context.requestEmitHelper(awaiterHelper);
 
         const generatorFunc = factory.createFunctionExpression(
@@ -506,9 +506,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             factory.createToken(SyntaxKind.AsteriskToken),
             /*name*/ undefined,
             /*typeParameters*/ undefined,
-            /*parameters*/ [],
+            parameters ?? [],
             /*type*/ undefined,
-            body
+            body,
         );
 
         // Mark this node as originally an async function
@@ -519,10 +519,10 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             /*typeArguments*/ undefined,
             [
                 hasLexicalThis ? factory.createThis() : factory.createVoidZero(),
-                hasLexicalArguments ? factory.createIdentifier("arguments") : factory.createVoidZero(),
+                argumentsExpression ?? factory.createVoidZero(),
                 promiseConstructor ? createExpressionFromEntityName(factory, promiseConstructor) : factory.createVoidZero(),
-                generatorFunc
-            ]
+                generatorFunc,
+            ],
         );
     }
 
@@ -533,7 +533,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__extends"),
             /*typeArguments*/ undefined,
-            [name, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)]
+            [name, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)],
         );
     }
 
@@ -542,7 +542,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__makeTemplateObject"),
             /*typeArguments*/ undefined,
-            [cooked, raw]
+            [cooked, raw],
         );
     }
 
@@ -551,7 +551,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__spreadArray"),
             /*typeArguments*/ undefined,
-            [to, from, packFrom ? immutableTrue() : immutableFalse()]
+            [to, from, packFrom ? immutableTrue() : immutableFalse()],
         );
     }
 
@@ -560,7 +560,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__propKey"),
             /*typeArguments*/ undefined,
-            [expr]
+            [expr],
         );
     }
 
@@ -569,7 +569,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return context.factory.createCallExpression(
             getUnscopedHelperName("__setFunctionName"),
             /*typeArguments*/ undefined,
-            prefix ? [f, name, context.factory.createStringLiteral(prefix)] : [f, name]
+            prefix ? [f, name, context.factory.createStringLiteral(prefix)] : [f, name],
         );
     }
 
@@ -580,7 +580,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__values"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -591,7 +591,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             /*typeArguments*/ undefined,
             count !== undefined
                 ? [iteratorRecord, factory.createNumericLiteral(count + "")]
-                : [iteratorRecord]
+                : [iteratorRecord],
         );
     }
 
@@ -602,7 +602,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__generator"),
             /*typeArguments*/ undefined,
-            [factory.createThis(), body]);
+            [factory.createThis(), body],
+        );
     }
 
     // ES Module Helpers
@@ -612,7 +613,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__createBinding"),
             /*typeArguments*/ undefined,
-            [factory.createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])]);
+            [factory.createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])],
+        );
     }
 
     function createImportStarHelper(expression: Expression) {
@@ -620,7 +622,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__importStar"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -634,7 +636,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__importDefault"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -644,7 +646,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__exportStar"),
             /*typeArguments*/ undefined,
-            [moduleExpression, exportsExpression]
+            [moduleExpression, exportsExpression],
         );
     }
 
@@ -684,7 +686,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__addDisposableResource"),
             /*typeArguments*/ undefined,
-            [envBinding, value, async ? factory.createTrue() : factory.createFalse()]
+            [envBinding, value, async ? factory.createTrue() : factory.createFalse()],
         );
     }
 
@@ -735,7 +737,7 @@ export const decorateHelper: UnscopedEmitHelper = {
                 if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
                 else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
                 return c > 3 && r && Object.defineProperty(target, key, r), r;
-            };`
+            };`,
 };
 
 /** @internal */
@@ -747,7 +749,7 @@ export const metadataHelper: UnscopedEmitHelper = {
     text: `
             var __metadata = (this && this.__metadata) || function (k, v) {
                 if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-            };`
+            };`,
 };
 
 /** @internal */
@@ -759,7 +761,7 @@ export const paramHelper: UnscopedEmitHelper = {
     text: `
             var __param = (this && this.__param) || function (paramIndex, decorator) {
                 return function (target, key) { decorator(target, key, paramIndex); }
-            };`
+            };`,
 };
 
 // ES Decorators Helpers
@@ -796,7 +798,7 @@ export const esDecorateHelper: UnscopedEmitHelper = {
             }
             if (target) Object.defineProperty(target, contextIn.name, descriptor);
             done = true;
-        };`
+        };`,
 };
 
 /** @internal */
@@ -812,7 +814,7 @@ export const runInitializersHelper: UnscopedEmitHelper = {
                 value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
             }
             return useValue ? value : void 0;
-        };`
+        };`,
 };
 
 // ES2018 Helpers
@@ -834,7 +836,7 @@ export const assignHelper: UnscopedEmitHelper = {
                     return t;
                 };
                 return __assign.apply(this, arguments);
-            };`
+            };`,
 };
 
 /** @internal */
@@ -843,7 +845,7 @@ export const awaitHelper: UnscopedEmitHelper = {
     importName: "__await",
     scoped: false,
     text: `
-            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`
+            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }`,
 };
 
 /** @internal */
@@ -853,17 +855,18 @@ export const asyncGeneratorHelper: UnscopedEmitHelper = {
     scoped: false,
     dependencies: [awaitHelper],
     text: `
-            var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
-                if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-                var g = generator.apply(thisArg, _arguments || []), i, q = [];
-                return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-                function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-                function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
-                function fulfill(value) { resume("next", value); }
-                function reject(value) { resume("throw", value); }
-                function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-            };`
+        var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+            if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+            var g = generator.apply(thisArg, _arguments || []), i, q = [];
+            return i = {}, verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+            function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+            function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
+            function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+            function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+            function fulfill(value) { resume("next", value); }
+            function reject(value) { resume("throw", value); }
+            function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+        };`,
 };
 
 /** @internal */
@@ -877,7 +880,7 @@ export const asyncDelegator: UnscopedEmitHelper = {
                 var i, p;
                 return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
                 function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v; } : f; }
-            };`
+            };`,
 };
 
 /** @internal */
@@ -892,7 +895,7 @@ export const asyncValues: UnscopedEmitHelper = {
                 return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
                 function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
                 function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-            };`
+            };`,
 };
 
 // ES2018 Destructuring Helpers
@@ -913,7 +916,7 @@ export const restHelper: UnscopedEmitHelper = {
                             t[p[i]] = s[p[i]];
                     }
                 return t;
-            };`
+            };`,
 };
 
 // ES2017 Helpers
@@ -933,7 +936,7 @@ export const awaiterHelper: UnscopedEmitHelper = {
                     function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
                     step((generator = generator.apply(thisArg, _arguments || [])).next());
                 });
-            };`
+            };`,
 };
 
 // ES2015 Helpers
@@ -960,7 +963,7 @@ export const extendsHelper: UnscopedEmitHelper = {
                     function __() { this.constructor = d; }
                     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
                 };
-            })();`
+            })();`,
 };
 
 /** @internal */
@@ -973,7 +976,7 @@ export const templateObjectHelper: UnscopedEmitHelper = {
             var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
                 if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
                 return cooked;
-            };`
+            };`,
 };
 
 /** @internal */
@@ -997,7 +1000,7 @@ export const readHelper: UnscopedEmitHelper = {
                     finally { if (e) throw e.error; }
                 }
                 return ar;
-            };`
+            };`,
 };
 
 /** @internal */
@@ -1014,7 +1017,7 @@ export const spreadArrayHelper: UnscopedEmitHelper = {
                     }
                 }
                 return to.concat(ar || Array.prototype.slice.call(from));
-            };`
+            };`,
 };
 
 /** @internal */
@@ -1025,7 +1028,7 @@ export const propKeyHelper: UnscopedEmitHelper = {
     text: `
         var __propKey = (this && this.__propKey) || function (x) {
             return typeof x === "symbol" ? x : "".concat(x);
-        };`
+        };`,
 };
 
 // https://tc39.es/ecma262/#sec-setfunctionname
@@ -1038,7 +1041,7 @@ export const setFunctionNameHelper: UnscopedEmitHelper = {
         var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
             if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
             return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
-        };`
+        };`,
 };
 
 // ES2015 Destructuring Helpers
@@ -1059,7 +1062,7 @@ export const valuesHelper: UnscopedEmitHelper = {
                     }
                 };
                 throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-            };`
+            };`,
 };
 
 // ES2015 Generator Helpers
@@ -1158,7 +1161,7 @@ export const generatorHelper: UnscopedEmitHelper = {
                     } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
                     if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
                 }
-            };`
+            };`,
 };
 
 // ES Module Helpers
@@ -1180,7 +1183,7 @@ export const createBindingHelper: UnscopedEmitHelper = {
             }) : (function(o, m, k, k2) {
                 if (k2 === undefined) k2 = k;
                 o[k2] = m[k];
-            }));`
+            }));`,
 };
 
 /** @internal */
@@ -1194,7 +1197,7 @@ export const setModuleDefaultHelper: UnscopedEmitHelper = {
                 Object.defineProperty(o, "default", { enumerable: true, value: v });
             }) : function(o, v) {
                 o["default"] = v;
-            });`
+            });`,
 };
 
 // emit helper for `import * as Name from "foo"`
@@ -1212,7 +1215,7 @@ export const importStarHelper: UnscopedEmitHelper = {
                 if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
                 __setModuleDefault(result, mod);
                 return result;
-            };`
+            };`,
 };
 
 // emit helper for `import Name from "foo"`
@@ -1224,7 +1227,7 @@ export const importDefaultHelper: UnscopedEmitHelper = {
     text: `
             var __importDefault = (this && this.__importDefault) || function (mod) {
                 return (mod && mod.__esModule) ? mod : { "default": mod };
-            };`
+            };`,
 };
 
 /** @internal */
@@ -1237,7 +1240,7 @@ export const exportStarHelper: UnscopedEmitHelper = {
     text: `
             var __exportStar = (this && this.__exportStar) || function(m, exports) {
                 for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-            };`
+            };`,
 };
 
 /**
@@ -1299,7 +1302,7 @@ export const classPrivateFieldGetHelper: UnscopedEmitHelper = {
                 if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
                 if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
                 return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
-            };`
+            };`,
 };
 
 /**
@@ -1365,7 +1368,7 @@ export const classPrivateFieldSetHelper: UnscopedEmitHelper = {
                 if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
                 if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
                 return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
-            };`
+            };`,
 };
 
 /**
@@ -1390,7 +1393,7 @@ export const classPrivateFieldInHelper: UnscopedEmitHelper = {
             var __classPrivateFieldIn = (this && this.__classPrivateFieldIn) || function(state, receiver) {
                 if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
                 return typeof state === "function" ? receiver === state : state.has(receiver);
-            };`
+            };`,
 };
 
 /**
@@ -1420,7 +1423,7 @@ export const addDisposableResourceHelper: UnscopedEmitHelper = {
                 env.stack.push({ async: true });
             }
             return value;
-        };`
+        };`,
 };
 
 /**
@@ -1455,7 +1458,7 @@ export const disposeResourcesHelper: UnscopedEmitHelper = {
         })(typeof SuppressedError === "function" ? SuppressedError : function (error, suppressed, message) {
             var e = new Error(message);
             return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
-        });`
+        });`,
 };
 
 let allUnscopedEmitHelpers: ReadonlyMap<string, UnscopedEmitHelper> | undefined;
@@ -1501,7 +1504,7 @@ export const asyncSuperHelper: EmitHelper = {
     name: "typescript:async-super",
     scoped: true,
     text: helperString`
-            const ${"_superIndex"} = name => super[name];`
+            const ${"_superIndex"} = name => super[name];`,
 };
 
 /** @internal */
@@ -1512,7 +1515,7 @@ export const advancedAsyncSuperHelper: EmitHelper = {
             const ${"_superIndex"} = (function (geti, seti) {
                 const cache = Object.create(null);
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-            })(name => super[name], (name, value) => super[name] = value);`
+            })(name => super[name], (name, value) => super[name] = value);`,
 };
 
 /** @internal */

@@ -107,14 +107,69 @@ var example3 = {
 
 //// [jsFileAlternativeUseOfOverloadTag.d.ts]
 declare namespace example1 {
-    function constructor(value: any, options: any): void;
+    /**
+     * @overload Example1(value)
+     *   Creates Example1
+     *   @param value [String]
+     */
+    function constructor(value: any): any;
 }
 declare namespace example2 {
-    export function constructor_1(): void;
+    /**
+     * Example 2
+     *
+     * @overload Example2(value)
+     *   Creates Example2
+     *   @param value [String]
+     *   @param secretAccessKey [String]
+     *   @param sessionToken [String]
+     *   @example Creates with string value
+     *     const example = new Example('');
+     * @overload Example2(options)
+     *   Creates Example2
+     *   @option options value [String]
+     *   @example Creates with options object
+     *     const example = new Example2({
+     *       value: '',
+     *     });
+     */
+    export function constructor_1(value: any, secretAccessKey: any, sessionToken: any): any;
+    /**
+     * Example 2
+     *
+     * @overload Example2(value)
+     *   Creates Example2
+     *   @param value [String]
+     *   @param secretAccessKey [String]
+     *   @param sessionToken [String]
+     *   @example Creates with string value
+     *     const example = new Example('');
+     * @overload Example2(options)
+     *   Creates Example2
+     *   @option options value [String]
+     *   @example Creates with options object
+     *     const example = new Example2({
+     *       value: '',
+     *     });
+     */
+    export function constructor_1(): any;
     export { constructor_1 as constructor };
 }
 declare namespace example3 {
-    function evaluate(options: any, callback: any): void;
+    /**
+     * @overload evaluate(options = {}, [callback])
+     *   Evaluate something
+     *   @note Something interesting
+     *   @param options [map]
+     *   @return [string] returns evaluation result
+     *   @return [null] returns nothing if callback provided
+     *   @callback callback function (error, result)
+     *     If callback is provided it will be called with evaluation result
+     *     @param error [Error]
+     *     @param result [String]
+     *   @see callback
+     */
+    function evaluate(): any;
 }
 /**
  * function (error, result)
