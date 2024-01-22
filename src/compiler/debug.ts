@@ -4,6 +4,7 @@ import {
     AssertionLevel,
     BigIntLiteralType,
     CheckMode,
+    Comparer,
     compareValues,
     EmitFlags,
     every,
@@ -357,15 +358,6 @@ export namespace Debug {
     }
 
     /**
-     * Asserts the symbol is defined and is of the right kind (originating in TSC or sample DTE depending o the test that is currently being run)
-     * The default implementation just asserts the symbol is not null
-     * In tests it is overridden to ensure we don't accidentally use TSC symbols in DTE
-     */
-    // eslint-disable-next-line prefer-const
-    export let assertSymbolValid = (symbol: Symbol) => {
-        assert(symbol, "Symbol not defined");
-    };
-    /**
      * Asserts a value has the specified type in typespace only (does not perform a runtime assertion).
      * This is useful in cases where we switch on `node.kind` and can be reasonably sure the type is accurate, and
      * as a result can reduce the number of unnecessary casts.
@@ -395,7 +387,7 @@ export namespace Debug {
      * Formats an enum value as a string for debugging and debug assertions.
      */
     export function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
-        const members = getEnumMembers(enumObject);
+        const members = getEnumMembers(enumObject, isFlags);
         if (value === 0) {
             return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
         }
@@ -403,10 +395,10 @@ export namespace Debug {
             const result: string[] = [];
             let remainingFlags = value;
             for (const [enumValue, enumName] of members) {
-                if (enumValue > value) {
+                if (enumValue > remainingFlags) {
                     break;
                 }
-                if (enumValue !== 0 && enumValue & value) {
+                if (enumValue !== 0 && enumValue & remainingFlags) {
                     result.push(enumName);
                     remainingFlags &= ~enumValue;
                 }
@@ -427,7 +419,7 @@ export namespace Debug {
 
     const enumMemberCache = new Map<any, SortedReadonlyArray<[number, string]>>();
 
-    function getEnumMembers(enumObject: any) {
+    function getEnumMembers(enumObject: any, isFlags?: boolean) {
         // Assuming enum objects do not change at runtime, we can cache the enum members list
         // to reuse later. This saves us from reconstructing this each and every time we call
         // a formatting function (which can be expensive for large enums like SyntaxKind).
@@ -444,7 +436,10 @@ export namespace Debug {
             }
         }
 
-        const sorted = stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+        const comparer: Comparer<[number, string]> = isFlags ?
+            (x, y) => compareValues(x[0] >>> 0, y[0] >>> 0) :
+            (x, y) => compareValues(x[0], y[0]);
+        const sorted = stableSort(result, comparer);
         enumMemberCache.set(enumObject, sorted);
         return sorted;
     }

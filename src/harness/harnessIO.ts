@@ -651,32 +651,20 @@ export namespace Compiler {
             if (!file) {
                 return;
             }
-            const assertSymbolValid = ts.Debug.assertSymbolValid;
-            ts.Debug.assertSymbolValid = symbol => {
-                assertSymbolValid(symbol);
-                if (symbol.name) {
-                    ts.Debug.assert(symbol.name[1] === ":", "Symbol is not from DTE");
-                }
-            };
-            try {
-                const {
-                    diagnostics: fileDiagnostics = [],
-                    declaration,
-                    declarationPath,
-                    declarationMap,
-                    declarationMapPath,
-                } = transpileDeclaration(file, transpileOptions);
-                // Ensure file will be rebound.
-                file.locals = undefined;
-                dts.set(declarationPath, new documents.TextDocument(declarationPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declaration) : declaration));
-                if (declarationMapPath && declarationMap) {
-                    dtsMap.set(declarationMapPath, new documents.TextDocument(declarationMapPath, declarationMap));
-                }
-                diagnostics.push(...fileDiagnostics);
+            const {
+                diagnostics: fileDiagnostics = [],
+                declaration,
+                declarationPath,
+                declarationMap,
+                declarationMapPath,
+            } = transpileDeclaration(file, transpileOptions);
+            // Ensure file will be rebound.
+            file.locals = undefined;
+            dts.set(declarationPath, new documents.TextDocument(declarationPath, options.emitBOM ? Utils.addUTF8ByteOrderMark(declaration) : declaration));
+            if (declarationMapPath && declarationMap) {
+                dtsMap.set(declarationMapPath, new documents.TextDocument(declarationMapPath, declarationMap));
             }
-            finally {
-                ts.Debug.assertSymbolValid = assertSymbolValid;
-            }
+            diagnostics.push(...fileDiagnostics);
         });
         return { dts, dtsMap, diagnostics };
     }

@@ -1,7 +1,5 @@
 //@target: ES6
 //@declaration: true
-//@isolatedDeclarationDiffReason: Invalid computed property can only be detected by TSC
-//@isolatedDeclarationFixedDiffReason: Can't fix computed properties
 module M {
     interface I { }
     export class C {
