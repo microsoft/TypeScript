@@ -16,6 +16,9 @@ import {
     task,
 } from "hereby";
 import path from "path";
+import {
+    pathToFileURL,
+} from "url";
 
 import {
     localizationDirectories,
@@ -41,6 +44,9 @@ import {
     readJson,
     rimraf,
 } from "./scripts/build/utils.mjs";
+import {
+    inspect,
+} from "util";
 
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
@@ -208,7 +214,8 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // Name the variable ts, matching our old big bundle and so we can use the code below.
             options.globalName = "ts";
             // If we are in a CJS context, export the ts namespace.
-            options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }` };
+            options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) {\n  module.exports = ts;\n}` };
+            options.metafile = true;
 
             // esbuild converts calls to "require" to "__require"; this function
             // calls the real require if it exists, or throws if it does not (rather than
@@ -232,6 +239,25 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
                             contents = contents.replace(fakeNameRegExp, require);
+                            await fs.promises.writeFile(outfile, contents);
+
+                            // This is a trick esbuild uses when emitting CJS to ensure that
+                            // cjs-module-lexer sees the named exports. For example:
+                            //
+                            // module.exports = someComplicatedThing();
+                            // 0 && (module.exports = {
+                            //    foo,
+                            //    bar,
+                            // });
+                            // TODO(jakebailey): this is slow; can we do this statically?
+                            // esbuild's metafile option does not show exports...
+                            // https://github.com/evanw/esbuild/issues/3110
+                            // https://github.com/evanw/esbuild/issues/3281
+                            const importUrl = pathToFileURL(outfile).toString();
+                            const obj = await import(importUrl);
+                            const names = Object.keys(obj.default);
+                            const fakeExport = `  0 && (module.exports = {\n${names.map(name => `    ${name},\n`).join("")}  });`;
+                            contents = contents.replace("module.exports = ts;", `module.exports = ts;\n${fakeExport}`);
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },

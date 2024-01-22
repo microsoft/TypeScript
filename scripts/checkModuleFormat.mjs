@@ -24,7 +24,7 @@ const fns = [
     [() => __importDefault(require(typescript)).default.version, true],
     [() => __importStar(require(typescript)).version, true],
     [() => __importStar(require(typescript)).default.version, true],
-    [async () => (await import(typescript)).version, false],
+    [async () => (await import(typescript)).version, true],
     [async () => (await import(typescript)).default.version, true],
 ];
 
