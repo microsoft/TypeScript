@@ -26,7 +26,6 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     getEmitScriptTarget,
-    getModeForUsageLocation,
     getQuotePreference,
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
@@ -107,7 +106,7 @@ function fixImportOfModuleExports(
     quotePreference: QuotePreference,
 ) {
     for (const moduleSpecifier of importingFile.imports) {
-        const imported = program.getResolvedModule(importingFile, moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier))?.resolvedModule;
+        const imported = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
         if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
             continue;
         }
