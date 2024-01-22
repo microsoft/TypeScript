@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/es2020/modules/exportAsNamespace5.ts] ////
+
+=== three.d.ts ===
+export type Named = 0;
+>Named : Symbol(Named, Decl(three.d.ts, 0, 0), Decl(three.d.ts, 1, 13))
+
+declare const Named: 0;
+>Named : Symbol(Named, Decl(three.d.ts, 0, 0), Decl(three.d.ts, 1, 13))
+
+=== two.d.ts ===
+export * as default from "./three";
+>default : Symbol(default, Decl(two.d.ts, 0, 6))
+
+=== one.ts ===
+import ns from "./two";
+>ns : Symbol(ns, Decl(one.ts, 0, 6))
+
+type Alias = ns.Named;
+>Alias : Symbol(Alias, Decl(one.ts, 0, 23))
+>ns : Symbol(ns, Decl(one.ts, 0, 6))
+>Named : Symbol(ns.Named, Decl(three.d.ts, 0, 0), Decl(three.d.ts, 1, 13))
+
+ns.Named;
+>ns.Named : Symbol(ns.Named, Decl(three.d.ts, 0, 0), Decl(three.d.ts, 1, 13))
+>ns : Symbol(ns, Decl(one.ts, 0, 6))
+>Named : Symbol(ns.Named, Decl(three.d.ts, 0, 0), Decl(three.d.ts, 1, 13))
+

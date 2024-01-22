@@ -2,8 +2,6 @@ import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     TestSession,
@@ -42,7 +40,7 @@ import { something } from "something";
             content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
         return { host, session, file1, file2, file3, something, configFile };
     }
 
@@ -153,7 +151,7 @@ function fooB() { }`,
             content: "{}",
         };
         const host = createServerHost([file1, file2, file3, something, libFile, configFile]);
-        const session = createSession(host, { serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, serverMode: ts.LanguageServiceMode.Syntactic, useSingleInferredProject: true });
         const service = session.getProjectService();
         openFilesForSession([file1], session);
         const project = service.inferredProjects[0];

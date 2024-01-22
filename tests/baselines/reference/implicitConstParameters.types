@@ -103,7 +103,7 @@ function f4(x: string | undefined) {
 >f4 : (x: string | undefined) => void
 >x : string | undefined
 
-    x = "abc";  // causes x to be considered non-const
+    x = "abc";
 >x = "abc" : "abc"
 >x : string | undefined
 >"abc" : "abc"
@@ -116,7 +116,7 @@ function f4(x: string | undefined) {
 >doSomething : (cb: () => void) => void
 >() => x.length : () => number
 >x.length : number
->x : string | undefined
+>x : string
 >length : number
     }
 }
