@@ -5459,17 +5459,13 @@
         "category": "Message",
         "code": 6281
     },
-    "Package is not installed using pnpm, skipping peerDependencies version resolution.": {
+    "Found peerDependency '{0}' with '{1}' version.": {
         "category": "Message",
         "code": 6282
     },
-    "Found peerDependency '{0}' with '{1}' version.": {
-        "category": "Message",
-        "code": 6283
-    },
     "Failed to find peerDependency '{0}'.": {
         "category": "Message",
-        "code": 6284
+        "code": 6283
     },
 
     "Enable project compilation": {

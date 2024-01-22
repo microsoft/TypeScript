@@ -2416,11 +2416,6 @@ function readPackageJsonPeerDependencies(packageJsonInfo: PackageJsonInfo, state
     if (peerDependencies === undefined) return undefined;
     if (state.traceEnabled) trace(state.host, Diagnostics.package_json_has_a_peerDependencies_field);
     const packageDirectory = realPath(packageJsonInfo.packageDirectory, state.host, state.traceEnabled);
-    if (packageDirectory.indexOf(".pnpm") === -1) {
-        // For now skip extra work for anything else
-        if (state.traceEnabled) trace(state.host, Diagnostics.Package_is_not_installed_using_pnpm_skipping_peerDependencies_version_resolution);
-        return undefined;
-    }
     const nodeModules = packageDirectory.substring(0, packageDirectory.lastIndexOf("node_modules") + "node_modules".length) + directorySeparator;
     let result = "";
     for (const key in peerDependencies) {
