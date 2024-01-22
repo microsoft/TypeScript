@@ -35,7 +35,7 @@ module.exports = createRule({
 
     create(context) {
         /** @type {(node: TSESTree.Node) => void} */
-        const checkProgram = (node) => {
+        const checkProgram = node => {
             const parserServices = ESLintUtils.getParserServices(context, /*allowWithoutFullTypeInformation*/ true);
             const ast = parserServices.esTreeNodeToTSNodeMap.get(node);
 
