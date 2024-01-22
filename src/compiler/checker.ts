@@ -14542,11 +14542,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getResolvedApparentTypeOfMappedType(type: MappedType) {
-        const typeVariable = getHomomorphicTypeVariable(type);
-        if (typeVariable && !type.declaration.nameType) {
-            const constraint = getConstraintOfTypeParameter(typeVariable);
-            if (constraint && everyType(constraint, isArrayOrTupleType)) {
-                return instantiateType(type, prependTypeMapping(typeVariable, constraint, type.mapper));
+        const target = (type.target ?? type) as MappedType;
+        const typeVariable = getHomomorphicTypeVariable(target);
+        if (typeVariable && !target.declaration.nameType) {
+            const constraint = getConstraintTypeFromMappedType(type);
+            if (constraint.flags & TypeFlags.Index) {
+                const baseConstraint = getBaseConstraintOfType((constraint as IndexType).type);
+                if (baseConstraint && everyType(baseConstraint, isArrayOrTupleType)) {
+                    return instantiateType(target, prependTypeMapping(typeVariable, baseConstraint, type.mapper));
+                }
             }
         }
         return type;
