@@ -34,7 +34,7 @@ jobs:
           - true
         include:
           - { runtime: { name: node, version: 20 }, bundle: false }
-          - { runtime: { name: bun, version: '1.0.25' }, bundle: true }
+          - { runtime: { name: bun, version: 'latest' }, bundle: true }
 
     name: Test ${{ matrix.runtime.name }} ${{ matrix.runtime.version }} with --bundle=${{ matrix.bundle }}
 
@@ -49,7 +49,7 @@ jobs:
         if: matrix.runtime.name == 'node'
 
       - name: Use bun version ${{ matrix.runtime.version }}
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@9b21598af8d4dfc302e5a30250007de0fda92acc # v1.1.1
         with:
           bun-version: ${{ matrix.runtime.version }}
         if: matrix.runtime.name == 'bun'
