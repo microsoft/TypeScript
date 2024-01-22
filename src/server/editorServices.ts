@@ -504,7 +504,7 @@ export function convertScriptKindName(scriptKindName: protocol.ScriptKindName) {
 
 /** @internal */
 export function convertUserPreferences(preferences: protocol.UserPreferences): UserPreferences {
-    const { lazyConfiguredProjectsFromExternalProject, ...userPreferences } = preferences;
+    const { _lazyConfiguredProjectsFromExternalProject, ...userPreferences } = preferences;
     return userPreferences;
 }
 

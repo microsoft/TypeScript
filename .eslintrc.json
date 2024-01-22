@@ -109,8 +109,7 @@
             "error",
             {
                 "argsIgnorePattern": "^_([^_]|_*$)",
-                "varsIgnorePattern": "^_[^_]",
-                "ignoreRestSiblings": true
+                "varsIgnorePattern": "^_([^_]|_*$)"
             }
         ],
 
