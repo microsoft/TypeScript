@@ -75,61 +75,6 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/d.ts
-/user/username/projects/myproject/e.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/b.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/d.ts
-/user/username/projects/myproject/e.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/b.ts (used version)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/d.ts (used version)
-/user/username/projects/myproject/e.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/a.ts: *new*
-  {}
-/user/username/projects/myproject/b.ts: *new*
-  {}
-/user/username/projects/myproject/c.ts: *new*
-  {}
-/user/username/projects/myproject/d.ts: *new*
-  {}
-/user/username/projects/myproject/e.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
-
 //// [/user/username/projects/myproject/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -171,6 +116,70 @@ require("./d");
 
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/a.ts: *new*
+  {}
+/user/username/projects/myproject/b.ts: *new*
+  {}
+/user/username/projects/myproject/c.ts: *new*
+  {}
+/user/username/projects/myproject/d.ts: *new*
+  {}
+/user/username/projects/myproject/e.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/b.ts
+/user/username/projects/myproject/c.ts
+/user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/b.ts (used version)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/e.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Rename property x2 to x of interface Coords to initialize signatures
 
 Input::
@@ -185,8 +194,12 @@ export interface Coords {
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -196,8 +209,24 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js] file written with same contents
+//// [/user/username/projects/myproject/c.js] file written with same contents
+//// [/user/username/projects/myproject/d.js] file written with same contents
+//// [/user/username/projects/myproject/e.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -223,12 +252,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents
-//// [/user/username/projects/myproject/c.js] file written with same contents
-//// [/user/username/projects/myproject/d.js] file written with same contents
-//// [/user/username/projects/myproject/e.js] file written with same contents
-
 Change:: Rename property x to x2 of interface Coords to revert back to original text
 
 Input::
@@ -243,8 +266,12 @@ export interface Coords {
 }
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -269,8 +296,21 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -294,9 +334,6 @@ Shape signatures in builder refreshed for::
 
 exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents
-
 Change:: Rename property x2 to x of interface Coords
 
 Input::
@@ -311,8 +348,12 @@ export interface Coords {
 }
 
 
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -322,8 +363,21 @@ Output::
 
 
 
-Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/b.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/b.ts",
+  "/user/username/projects/myproject/c.ts",
+  "/user/username/projects/myproject/d.ts",
+  "/user/username/projects/myproject/e.ts"
+]
+Program options: {
+  "watch": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -348,6 +402,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/e.ts (used version)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/b.js] file written with same contents

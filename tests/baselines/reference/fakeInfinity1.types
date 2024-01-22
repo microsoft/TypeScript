@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/fakeInfinity1.ts] ////
+
+=== fakeInfinity1.ts ===
+// These are not actually the real infinity.
+export type PositiveInfinity = 1e999;
+>PositiveInfinity : Infinity
+
+export type NegativeInfinity = -1e999;
+>NegativeInfinity : -Infinity
+>-1e999 : -Infinity
+>1e999 : Infinity
+
+export type TypeOfInfinity = typeof Infinity;
+>TypeOfInfinity : number
+>Infinity : number
+
+export type TypeOfNaN = typeof NaN;
+>TypeOfNaN : number
+>NaN : number
+
+type A = 1e999;
+>A : Infinity
+
+type B = 1e9999;
+>B : Infinity
+
+declare let a: A;
+>a : Infinity
+
+declare let b: B;
+>b : Infinity
+
+a = b;
+>a = b : Infinity
+>a : Infinity
+>b : Infinity
+
+b = a;
+>b = a : Infinity
+>b : Infinity
+>a : Infinity
+
+a = Infinity;
+>a = Infinity : number
+>a : Infinity
+>Infinity : number
+
+a = 1e999;
+>a = 1e999 : Infinity
+>a : Infinity
+>1e999 : Infinity
+
+a = 1e9999;
+>a = 1e9999 : Infinity
+>a : Infinity
+>1e9999 : Infinity
+
+export type Oops = 123456789123456789123456789123456789123456789123456789;
+>Oops : 1.2345678912345678e+53
+
+export const oops = 123456789123456789123456789123456789123456789123456789;
+>oops : 1.2345678912345678e+53
+>123456789123456789123456789123456789123456789123456789 : 1.2345678912345678e+53
+

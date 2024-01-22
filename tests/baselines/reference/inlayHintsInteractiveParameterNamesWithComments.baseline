@@ -1,3 +1,4 @@
+// === Inlay Hints ===
 fn(/* nobody knows exactly what this param is */ 42);
                                                  ^
 {

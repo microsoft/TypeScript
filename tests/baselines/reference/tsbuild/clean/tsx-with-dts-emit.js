@@ -19,7 +19,15 @@ declare const console: { log(msg: any): void; };
 export const x = 10;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"declaration":true},"include":["src/**/*.tsx","src/**/*.ts"]}
+{
+  "compilerOptions": {
+    "declaration": true
+  },
+  "include": [
+    "src/**/*.tsx",
+    "src/**/*.ts"
+  ]
+}
 
 
 

@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts] ////
+
+=== avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts ===
+declare const foo: ["a", string, number] | ["b", string, boolean];
+>foo : Symbol(foo, Decl(avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts, 0, 13))
+
+export function test(arg: { index?: number }) {
+>test : Symbol(test, Decl(avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts, 0, 66))
+>arg : Symbol(arg, Decl(avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts, 2, 21))
+>index : Symbol(index, Decl(avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts, 2, 27))
+
+  const { index = 0 } = arg;
+>index : Symbol(index, Decl(avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts, 3, 9))
+>arg : Symbol(arg, Decl(avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts, 2, 21))
+
+  if (foo[index] === "a") {
+>foo : Symbol(foo, Decl(avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts, 0, 13))
+>index : Symbol(index, Decl(avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts, 3, 9))
+
+    foo;
+>foo : Symbol(foo, Decl(avoidNarrowingUsingConstVariableFromBindingElementWithLiteralInitializer.ts, 0, 13))
+  }
+}
+

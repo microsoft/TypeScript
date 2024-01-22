@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/mappedTypeInferenceToMappedType.ts] ////
+
+=== mappedTypeInferenceToMappedType.ts ===
+// #56133
+
+declare class Base<T> {
+>Base : Symbol(Base, Decl(mappedTypeInferenceToMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeInferenceToMappedType.ts, 2, 19))
+
+    someProp: T;
+>someProp : Symbol(Base.someProp, Decl(mappedTypeInferenceToMappedType.ts, 2, 23))
+>T : Symbol(T, Decl(mappedTypeInferenceToMappedType.ts, 2, 19))
+
+    method<U extends unknown[]>(x: { [K in keyof U]: U[K] }): Base<U>;
+>method : Symbol(Base.method, Decl(mappedTypeInferenceToMappedType.ts, 3, 16))
+>U : Symbol(U, Decl(mappedTypeInferenceToMappedType.ts, 4, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceToMappedType.ts, 4, 32))
+>K : Symbol(K, Decl(mappedTypeInferenceToMappedType.ts, 4, 38))
+>U : Symbol(U, Decl(mappedTypeInferenceToMappedType.ts, 4, 11))
+>U : Symbol(U, Decl(mappedTypeInferenceToMappedType.ts, 4, 11))
+>K : Symbol(K, Decl(mappedTypeInferenceToMappedType.ts, 4, 38))
+>Base : Symbol(Base, Decl(mappedTypeInferenceToMappedType.ts, 0, 0))
+>U : Symbol(U, Decl(mappedTypeInferenceToMappedType.ts, 4, 11))
+}
+
+declare class Derived<T> extends Base<T> {
+>Derived : Symbol(Derived, Decl(mappedTypeInferenceToMappedType.ts, 5, 1))
+>T : Symbol(T, Decl(mappedTypeInferenceToMappedType.ts, 7, 22))
+>Base : Symbol(Base, Decl(mappedTypeInferenceToMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeInferenceToMappedType.ts, 7, 22))
+
+    method<V extends unknown[]>(x: { [K in keyof V]: V[K] }): Base<V>;
+>method : Symbol(Derived.method, Decl(mappedTypeInferenceToMappedType.ts, 7, 42))
+>V : Symbol(V, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceToMappedType.ts, 8, 32))
+>K : Symbol(K, Decl(mappedTypeInferenceToMappedType.ts, 8, 38))
+>V : Symbol(V, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
+>V : Symbol(V, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
+>K : Symbol(K, Decl(mappedTypeInferenceToMappedType.ts, 8, 38))
+>Base : Symbol(Base, Decl(mappedTypeInferenceToMappedType.ts, 0, 0))
+>V : Symbol(V, Decl(mappedTypeInferenceToMappedType.ts, 8, 11))
+}

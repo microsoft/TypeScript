@@ -1,3 +1,4 @@
+// === SignatureHelp ===
 === /tests/cases/fourslash/signatureHelpCommentsClass.ts ===
 // /** This is class c2 without constructor*/
 // class c2 {

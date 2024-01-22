@@ -1100,3 +1100,71 @@ function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
     }
 }
 
+// https://github.com/microsoft/TypeScript/issues/56312
+
+function parameterReassigned1([x, y]: [1, 2] | [3, 4]) {
+>parameterReassigned1 : Symbol(parameterReassigned1, Decl(dependentDestructuredVariables.ts, 432, 1))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 436, 31))
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 436, 33))
+
+  if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    x = 1;
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 436, 31))
+  }
+  if (y === 2) {
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 436, 33))
+
+    x; // 1 | 3
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 436, 31))
+  }
+}
+
+function parameterReassigned2([x, y]: [1, 2] | [3, 4]) {
+>parameterReassigned2 : Symbol(parameterReassigned2, Decl(dependentDestructuredVariables.ts, 443, 1))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 445, 31))
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 445, 33))
+
+  if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    y = 2;
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 445, 33))
+  }
+  if (y === 2) {
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 445, 33))
+
+    x; // 1 | 3
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 445, 31))
+  }
+}
+
+// https://github.com/microsoft/TypeScript/pull/56313#discussion_r1416482490
+
+const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (x, y) => {
+>parameterReassignedContextualRest1 : Symbol(parameterReassignedContextualRest1, Decl(dependentDestructuredVariables.ts, 456, 5))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 456, 43))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 456, 80))
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 456, 82))
+
+  if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+    y = 2;
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 456, 82))
+  }
+  if (y === 2) {
+>y : Symbol(y, Decl(dependentDestructuredVariables.ts, 456, 82))
+
+    x; // 1 | 3
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 456, 80))
+  }
+}
+

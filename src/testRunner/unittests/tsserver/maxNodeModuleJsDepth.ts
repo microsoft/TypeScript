@@ -5,10 +5,9 @@ import {
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     setCompilerOptionsForInferredProjectsRequestForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
@@ -28,13 +27,13 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
         };
 
         const host = createServerHost([file1, moduleFile]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([file1], session);
 
         session.logger.log(`maxNodeModuleJsDepth: ${session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth}`);
 
         // Assert the option sticks
-        setCompilerOptionsForInferredProjectsRequestForSession({ target: ts.ScriptTarget.ES2016 }, session);
+        setCompilerOptionsForInferredProjectsRequestForSession({ target: ts.server.protocol.ScriptTarget.ES2016 }, session);
         session.logger.log(`maxNodeModuleJsDepth: ${session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth}`);
         baselineTsserverLogs("maxNodeModuleJsDepth", "should be set to 2 if the project has js root files", session);
     });
@@ -50,7 +49,7 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
         };
 
         const host = createServerHost([file1, file2, libFile]);
-        const session = createSession(host, { useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, useSingleInferredProject: true });
 
         openFilesForSession([file1], session);
         session.logger.log(`maxNodeModuleJsDepth: ${session.getProjectService().inferredProjects[0].getCompilationSettings().maxNodeModuleJsDepth}`);
@@ -82,7 +81,7 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
             `,
             [libFile.path]: libFile.content,
         });
-        const session = createSession(host, { useSingleInferredProject: true, logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession({ host, useSingleInferredProject: true });
 
         openFilesForSession(["/user/username/projects/project1/src/file1.js"], session);
         baselineTsserverLogs("maxNodeModuleJsDepth", "handles resolutions when currentNodeModulesDepth changes when referencing file from another file", session);
