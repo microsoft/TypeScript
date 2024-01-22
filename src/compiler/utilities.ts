@@ -5340,10 +5340,6 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
     return node.escapedText === "push" || node.escapedText === "unshift";
 }
 
-// TODO(jakebailey): this function should not be named this. While it does technically
-// return true if the argument is a ParameterDeclaration, it also returns true for nodes
-// that are children of ParameterDeclarations inside binding elements.
-// Probably, this should be called `rootDeclarationIsParameter`.
 /**
  * This function returns true if the this node's root declaration is a parameter.
  * For example, passing a `ParameterDeclaration` will return true, as will passing a
@@ -5353,7 +5349,7 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
  *
  * @internal
  */
-export function isParameterDeclaration(node: Declaration): boolean {
+export function isPartOfParameterDeclaration(node: Declaration): boolean {
     const root = getRootDeclaration(node);
     return root.kind === SyntaxKind.Parameter;
 }
@@ -11239,7 +11235,7 @@ export function createNameResolver({
                             lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation)
                         )
                     ) {
-                        if (isParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
+                        if (isPartOfParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
                             associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
                         }
                     }
