@@ -93,7 +93,7 @@
         "build:tests:notypecheck": "hereby tests --no-typecheck",
         "clean": "hereby clean",
         "gulp": "hereby",
-        "lint": "DEBUG=eslint:cli-engine hereby lint",
+        "lint": "hereby lint",
         "format": "dprint fmt",
         "setup-hooks": "node scripts/link-hooks.mjs"
     },
