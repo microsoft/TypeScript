@@ -3036,10 +3036,18 @@ declare namespace ts {
                 ES6 = "ES6",
                 ES2015 = "ES2015",
                 ESNext = "ESNext",
+                Node16 = "Node16",
+                NodeNext = "NodeNext",
+                Preserve = "Preserve",
             }
             enum ModuleResolutionKind {
                 Classic = "Classic",
+                /** @deprecated Renamed to `Node10` */
                 Node = "Node",
+                Node10 = "Node10",
+                Node16 = "Node16",
+                NodeNext = "NodeNext",
+                Bundler = "Bundler",
             }
             enum NewLineKind {
                 Crlf = "Crlf",
@@ -6660,6 +6668,22 @@ declare namespace ts {
         };
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
+        /**
+         * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
+         * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
+         * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
+         * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
+         * impact on module resolution, emit, or type checking.
+         */
+        getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
+        /**
+         * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
+         * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
+         * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
+         * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
+         * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
+         */
+        getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
         getProjectReferences(): readonly ProjectReference[] | undefined;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
     }
@@ -6868,6 +6892,7 @@ declare namespace ts {
          * True if this type is assignable to `ReadonlyArray<any>`.
          */
         isArrayLikeType(type: Type): boolean;
+        resolveName(name: string, location: Node | undefined, meaning: SymbolFlags, excludeGlobals: boolean): Symbol | undefined;
         getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /**
          * Depending on the operation performed, it may be appropriate to throw away the checker
@@ -7007,6 +7032,7 @@ declare namespace ts {
         Transient = 33554432,
         Assignment = 67108864,
         ModuleExports = 134217728,
+        All = -1,
         Enum = 384,
         Variable = 3,
         Value = 111551,
@@ -7641,6 +7667,7 @@ declare namespace ts {
         ESNext = 99,
         Node16 = 100,
         NodeNext = 199,
+        Preserve = 200,
     }
     enum JsxEmit {
         None = 0,
@@ -9902,25 +9929,38 @@ declare namespace ts {
      */
     function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ResolutionMode;
     /**
-     * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
-     * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
-     * If you have an actual import node, prefer using getModeForUsageLocation on the reference string node.
+     * Use `program.getModeForResolutionAtIndex`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
+     * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
+     * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
+     * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
+     * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
+     * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
      * @param file File to fetch the resolution mode within
      * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
+     * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
+     * should be the options of the referenced project, not the referencing project.
      */
-    function getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+    function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
     /**
-     * Calculates the final resolution mode for a given module reference node. This is generally the explicitly provided resolution mode, if
-     * one exists, or the mode of the containing source file. (Excepting import=require, which is always commonjs, and dynamic import, which is always esm).
-     * Notably, this function always returns `undefined` if the containing file has an `undefined` `impliedNodeFormat` - this field is only set when
-     * `moduleResolution` is `node16`+.
+     * Use `program.getModeForUsageLocation`, which retrieves the correct `compilerOptions`, instead of this function whenever possible.
+     * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
+     * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
+     * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
+     * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
+     * impact on module resolution, emit, or type checking.
      * @param file The file the import or import-like reference is contained within
      * @param usage The module reference string
+     * @param compilerOptions The compiler options for the program that owns the file. If the file belongs to a referenced project, the compiler options
+     * should be the options of the referenced project, not the referencing project.
      * @returns The final resolution mode of the import
      */
-    function getModeForUsageLocation(file: {
-        impliedNodeFormat?: ResolutionMode;
-    }, usage: StringLiteralLike): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+    function getModeForUsageLocation(
+        file: {
+            impliedNodeFormat?: ResolutionMode;
+        },
+        usage: StringLiteralLike,
+        compilerOptions: CompilerOptions,
+    ): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the

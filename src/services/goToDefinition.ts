@@ -29,7 +29,6 @@ import {
     getDirectoryPath,
     getEffectiveBaseTypeNode,
     getInvokedExpression,
-    getModeForUsageLocation,
     getNameFromPropertyName,
     getNameOfDeclaration,
     getObjectFlags,
@@ -203,7 +202,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     if (!symbol && isModuleSpecifierLike(fallbackNode)) {
         // We couldn't resolve the module specifier as an external module, but it could
         // be that module resolution succeeded but the target was not a module.
-        const ref = program.getResolvedModule(sourceFile, fallbackNode.text, getModeForUsageLocation(sourceFile, fallbackNode))?.resolvedModule;
+        const ref = program.getResolvedModuleFromModuleSpecifier(fallbackNode)?.resolvedModule;
         if (ref) {
             return [{
                 name: fallbackNode.text,
@@ -359,7 +358,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
     if (sourceFile.imports.length || sourceFile.moduleAugmentations.length) {
         const node = getTouchingToken(sourceFile, position);
         let resolution: ResolvedModuleWithFailedLookupLocations | undefined;
-        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && (resolution = program.getResolvedModule(sourceFile, node.text, getModeForUsageLocation(sourceFile, node)))) {
+        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && (resolution = program.getResolvedModuleFromModuleSpecifier(node))) {
             const verifiedFileName = resolution.resolvedModule?.resolvedFileName;
             const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
             return {

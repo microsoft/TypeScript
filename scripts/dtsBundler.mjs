@@ -40,16 +40,6 @@ console.log(`Bundling ${entrypoint} to ${output} and ${internalOutput}`);
 const newLineKind = ts.NewLineKind.LineFeed;
 const newLine = newLineKind === ts.NewLineKind.LineFeed ? "\n" : "\r\n";
 
-/** @type {(node: ts.Node) => node is ts.DeclarationStatement} */
-function isDeclarationStatement(node) {
-    return /** @type {any} */ (ts).isDeclarationStatement(node);
-}
-
-/** @type {(node: ts.Node) => boolean} */
-function isInternalDeclaration(node) {
-    return /** @type {any} */ (ts).isInternalDeclaration(node, node.getSourceFile());
-}
-
 /**
  * @param {ts.VariableDeclaration} node
  * @returns {ts.VariableStatement}
@@ -71,14 +61,11 @@ function getDeclarationStatement(node) {
     if (ts.isVariableDeclaration(node)) {
         return getParentVariableStatement(node);
     }
-    else if (isDeclarationStatement(node)) {
+    else if (ts.isDeclarationStatement(node)) {
         return node;
     }
     return undefined;
 }
-
-/** @type {ts.TransformationContext} */
-const nullTransformationContext = /** @type {any} */ (ts).nullTransformationContext;
 
 const program = ts.createProgram([entrypoint], { target: ts.ScriptTarget.ES5 });
 
@@ -207,7 +194,7 @@ function containsPublicAPI(symbol) {
 
         for (const decl of symbol.declarations) {
             const statement = getDeclarationStatement(decl);
-            if (statement && !isInternalDeclaration(statement)) {
+            if (statement && !ts.isInternalDeclaration(statement)) {
                 return true;
             }
         }
@@ -264,17 +251,10 @@ function isNonLocalAlias(symbol, excludes = ts.SymbolFlags.Value | ts.SymbolFlag
 
 /**
  * @param {ts.Symbol} symbol
- */
-function resolveAlias(symbol) {
-    return typeChecker.getAliasedSymbol(symbol);
-}
-
-/**
- * @param {ts.Symbol} symbol
  * @param {boolean | undefined} [dontResolveAlias]
  */
 function resolveSymbol(symbol, dontResolveAlias = undefined) {
-    return !dontResolveAlias && isNonLocalAlias(symbol) ? resolveAlias(symbol) : symbol;
+    return !dontResolveAlias && isNonLocalAlias(symbol) ? typeChecker.getAliasedSymbol(symbol) : symbol;
 }
 
 /**
@@ -282,7 +262,7 @@ function resolveSymbol(symbol, dontResolveAlias = undefined) {
  * @returns {ts.Symbol}
  */
 function getMergedSymbol(symbol) {
-    return /** @type {any} */ (typeChecker).getMergedSymbol(symbol);
+    return typeChecker.getMergedSymbol(symbol);
 }
 
 /**
@@ -309,19 +289,11 @@ function symbolsConflict(s1, s2) {
 }
 
 /**
- * @param {ts.Node} node
- * @returns {boolean}
- */
-function isPartOfTypeNode(node) {
-    return /** @type {any} */ (ts).isPartOfTypeNode(node);
-}
-
-/**
  * @param {ts.Statement} decl
  */
 function verifyMatchingSymbols(decl) {
     ts.visitEachChild(decl, /** @type {(node: ts.Node) => ts.Node} */ function visit(node) {
-        if (ts.isIdentifier(node) && isPartOfTypeNode(node)) {
+        if (ts.isIdentifier(node) && ts.isPartOfTypeNode(node)) {
             if (ts.isQualifiedName(node.parent) && node !== node.parent.left) {
                 return node;
             }
@@ -347,8 +319,8 @@ function verifyMatchingSymbols(decl) {
             }
         }
 
-        return ts.visitEachChild(node, visit, nullTransformationContext);
-    }, nullTransformationContext);
+        return ts.visitEachChild(node, visit, /*context*/ undefined);
+    }, /*context*/ undefined);
 }
 
 /**
@@ -397,20 +369,20 @@ function emitAsNamespace(name, moduleSymbol) {
 
             verifyMatchingSymbols(statement);
 
-            const isInternal = isInternalDeclaration(statement);
+            const isInternal = ts.isInternalDeclaration(statement);
             if (!isInternal) {
                 const publicStatement = ts.visitEachChild(statement, node => {
                     // No @internal comments in the public API.
-                    if (isInternalDeclaration(node)) {
+                    if (ts.isInternalDeclaration(node)) {
                         return undefined;
                     }
                     return removeDeclareConstExport(node);
-                }, nullTransformationContext);
+                }, /*context*/ undefined);
 
                 writeNode(publicStatement, sourceFile, WriteTarget.Public);
             }
 
-            const internalStatement = ts.visitEachChild(statement, removeDeclareConstExport, nullTransformationContext);
+            const internalStatement = ts.visitEachChild(statement, removeDeclareConstExport, /*context*/ undefined);
 
             writeNode(internalStatement, sourceFile, WriteTarget.Internal);
         }

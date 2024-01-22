@@ -322,7 +322,6 @@ import {
     getLineAndCharacterOfPosition,
     getLocalSymbolForExportDefault,
     getMembersOfDeclaration,
-    getModeForUsageLocation,
     getModifiers,
     getModuleInstanceState,
     getNameFromImportAttribute,
@@ -701,6 +700,7 @@ import {
     isRightSideOfQualifiedNameOrPropertyAccess,
     isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName,
     isSameEntityName,
+    isSatisfiesExpression,
     isSetAccessor,
     isSetAccessorDeclaration,
     isShorthandAmbientModuleSymbol,
@@ -960,7 +960,6 @@ import {
     ShorthandPropertyAssignment,
     shouldAllowImportingTsExtension,
     shouldPreserveConstEnums,
-    shouldResolveJsRequire,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
@@ -3568,7 +3567,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     (meaning & SymbolFlags.BlockScopedVariable ||
                         ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))
                 ) {
-                    const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result!);
+                    const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
                     if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
                         checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
                     }
@@ -4059,7 +4058,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getUsageModeForExpression(usage: Expression) {
-        return isStringLiteralLike(usage) ? getModeForUsageLocation(getSourceFileOfNode(usage), usage) : undefined;
+        return isStringLiteralLike(usage) ? host.getModeForUsageLocation(getSourceFileOfNode(usage), usage) : undefined;
     }
 
     function isESMFormatImportImportingCommonjsFormatFile(usageMode: ResolutionMode, targetMode: ResolutionMode) {
@@ -4073,7 +4072,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
         const usageMode = file && getUsageModeForExpression(usage);
-        if (file && usageMode !== undefined) {
+        if (file && usageMode !== undefined && ModuleKind.Node16 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
             const result = isESMFormatImportImportingCommonjsFormatFile(usageMode, file.impliedNodeFormat);
             if (usageMode === ModuleKind.ESNext || result) {
                 return result;
@@ -5005,13 +5004,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const currentSourceFile = getSourceFileOfNode(location);
         const contextSpecifier = isStringLiteralLike(location)
             ? location
-            : findAncestor(location, isImportCall)?.arguments[0] ||
+            : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
+                (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
+                (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
+                findAncestor(location, isImportCall)?.arguments[0] ||
                 findAncestor(location, isImportDeclaration)?.moduleSpecifier ||
                 findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression ||
-                findAncestor(location, isExportDeclaration)?.moduleSpecifier ||
-                (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
-                (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
-        const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
+                findAncestor(location, isExportDeclaration)?.moduleSpecifier;
+        const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? host.getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const resolvedModule = host.getResolvedModule(currentSourceFile, moduleReference, mode)?.resolvedModule;
         const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
@@ -16225,7 +16225,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // Given a homomorphic mapped type { [K in keyof T]: XXX }, where T is constrained to an array or tuple type, in the
             // template type XXX, K has an added constraint of number | `${number}`.
-            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && node === (parent as MappedTypeNode).type) {
+            else if (type.flags & TypeFlags.TypeParameter && parent.kind === SyntaxKind.MappedType && !(parent as MappedTypeNode).nameType && node === (parent as MappedTypeNode).type) {
                 const mappedType = getTypeFromTypeNode(parent as TypeNode) as MappedType;
                 if (getTypeParameterFromMappedType(mappedType) === getActualTypeVariable(type)) {
                     const typeParameter = getHomomorphicTypeVariable(mappedType);
@@ -20655,7 +20655,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const elem = node.elements[i];
             if (isOmittedExpression(elem)) continue;
             const nameType = getNumberLiteralType(i);
-            yield { errorNode: elem, innerExpression: elem, nameType };
+            const checkNode = getEffectiveCheckNode(elem);
+            yield { errorNode: checkNode, innerExpression: checkNode, nameType };
         }
     }
 
@@ -32083,7 +32084,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const errorMessage = isClassic
             ? Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
             : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations;
-        const mod = resolveExternalModule(location!, runtimeImportSpecifier, errorMessage, location!);
+        // Synthesized JSX import is either first or after tslib
+        const jsxImportIndex = compilerOptions.importHelpers ? 1 : 0;
+        const specifier = file?.imports[jsxImportIndex];
+        if (specifier) {
+            Debug.assert(nodeIsSynthesized(specifier) && specifier.text === runtimeImportSpecifier, `Expected sourceFile.imports[${jsxImportIndex}] to be the synthesized JSX runtime import`);
+        }
+        const mod = resolveExternalModule(specifier || location!, runtimeImportSpecifier, errorMessage, location!);
         const result = mod && mod !== unknownSymbol ? getMergedSymbol(resolveSymbol(mod)) : undefined;
         if (links) {
             links.jsxImplicitImportContainer = result || false;
@@ -34185,6 +34192,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function getEffectiveCheckNode(argument: Expression): Expression {
+        argument = skipParentheses(argument);
+        return isSatisfiesExpression(argument) ? skipParentheses(argument.expression) : argument;
+    }
+
     function getSignatureApplicabilityError(
         node: CallLikeExpression,
         args: readonly Expression[],
@@ -34228,7 +34240,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // we obtain the regular type of any object literal arguments because we may not have inferred complete
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                 const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
-                if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage, containingMessageChain, errorOutputContainer)) {
+                const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
+                if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? effectiveCheckArgumentNode : undefined, effectiveCheckArgumentNode, headMessage, containingMessageChain, errorOutputContainer)) {
                     Debug.assert(!reportErrors || !!errorOutputContainer.errors, "parameter should have errors when reporting errors");
                     maybeAddMissingAwaitInfo(arg, checkArgType, paramType);
                     return errorOutputContainer.errors || emptyArray;
@@ -34240,7 +34253,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const restArgCount = args.length - argCount;
             const errorNode = !reportErrors ? undefined :
                 restArgCount === 0 ? node :
-                restArgCount === 1 ? args[argCount] :
+                restArgCount === 1 ? getEffectiveCheckNode(args[argCount]) :
                 setTextRangePosEnd(createSyntheticExpression(node, spreadType), args[argCount].pos, args[args.length - 1].end);
             if (!checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage, /*containingMessageChain*/ undefined, errorOutputContainer)) {
                 Debug.assert(!reportErrors || !!errorOutputContainer.errors, "rest parameter should have errors when reporting errors");
@@ -35811,7 +35824,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // In JavaScript files, calls to any identifier 'require' are treated as external module imports
-        if (isInJSFile(node) && shouldResolveJsRequire(compilerOptions) && isCommonJsRequire(node)) {
+        if (isInJSFile(node) && isCommonJsRequire(node)) {
             return resolveExternalModuleTypeByLiteral(node.arguments![0] as StringLiteral);
         }
 
@@ -37531,12 +37544,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const exprType = checkExpression(node.body);
                 const returnOrPromisedType = returnType && unwrapReturnType(returnType, functionFlags);
                 if (returnOrPromisedType) {
+                    const effectiveCheckNode = getEffectiveCheckNode(node.body);
                     if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) { // Async function
-                        const awaitedType = checkAwaitedType(exprType, /*withAlias*/ false, node.body, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
-                        checkTypeAssignableToAndOptionallyElaborate(awaitedType, returnOrPromisedType, node.body, node.body);
+                        const awaitedType = checkAwaitedType(exprType, /*withAlias*/ false, effectiveCheckNode, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+                        checkTypeAssignableToAndOptionallyElaborate(awaitedType, returnOrPromisedType, effectiveCheckNode, effectiveCheckNode);
                     }
                     else { // Normal function
-                        checkTypeAssignableToAndOptionallyElaborate(exprType, returnOrPromisedType, node.body, node.body);
+                        checkTypeAssignableToAndOptionallyElaborate(exprType, returnOrPromisedType, effectiveCheckNode, effectiveCheckNode);
                     }
                 }
             }
@@ -37745,6 +37759,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // fallthrough
                         case ModuleKind.ES2022:
                         case ModuleKind.ESNext:
+                        case ModuleKind.Preserve:
                         case ModuleKind.System:
                             if (languageVersion >= ScriptTarget.ES2017) {
                                 break;
@@ -37752,8 +37767,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // fallthrough
                         default:
                             span ??= getSpanOfTokenAtPosition(sourceFile, node.pos);
-                            const message = isAwaitExpression(node) ? Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher :
-                                Diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher;
+                            const message = isAwaitExpression(node) ? Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher :
+                                Diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher;
                             diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, message));
                             hasError = true;
                             break;
@@ -46056,14 +46071,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const mode = (moduleKind === ModuleKind.NodeNext) && declaration.moduleSpecifier && getUsageModeForExpression(declaration.moduleSpecifier);
-            if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext) {
+            if (mode !== ModuleKind.ESNext && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
                 const message = isImportAttributes
                     ? moduleKind === ModuleKind.NodeNext
                         ? Diagnostics.Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-                        : Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext
+                        : Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve
                     : moduleKind === ModuleKind.NodeNext
                     ? Diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-                    : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_or_nodenext;
+                    : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve;
                 return grammarErrorOnNode(node, message);
             }
 
@@ -46147,7 +46162,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
-                if (moduleKind >= ModuleKind.ES2015 && getSourceFileOfNode(node).impliedNodeFormat === undefined && !node.isTypeOnly && !(node.flags & NodeFlags.Ambient)) {
+                if (moduleKind >= ModuleKind.ES2015 && moduleKind !== ModuleKind.Preserve && getSourceFileOfNode(node).impliedNodeFormat === undefined && !node.isTypeOnly && !(node.flags & NodeFlags.Ambient)) {
                     // Import equals declaration is deprecated in es6 or above
                     grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                 }
@@ -46433,6 +46448,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Forbid export= in esm implementation files, and esm mode declaration files
             if (
                 moduleKind >= ModuleKind.ES2015 &&
+                moduleKind !== ModuleKind.Preserve &&
                 ((node.flags & NodeFlags.Ambient && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.ESNext) ||
                     (!(node.flags & NodeFlags.Ambient) && getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.CommonJS))
             ) {
@@ -47605,7 +47621,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (
                     (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                     ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (node.parent as ImportDeclaration).moduleSpecifier === node) ||
-                    ((isInJSFile(node) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler && isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false)) || isImportCall(node.parent)) ||
+                    ((isInJSFile(node) && isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false)) || isImportCall(node.parent)) ||
                     (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
                 ) {
                     return resolveExternalModuleName(node, node as LiteralExpression, ignoreErrors);
@@ -50004,7 +50020,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 // fallthrough
                             default:
                                 diagnostics.add(
-                                    createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher),
+                                    createDiagnosticForNode(forInOrOfStatement.awaitModifier, Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher),
                                 );
                                 break;
                         }
