@@ -20,18 +20,22 @@ export const emptyMap: ReadonlyMap<never, never> = createReadonlyMap();
 export const emptySet: ReadonlySet<never> = createReadonlySet();
 
 function createReadonlyMap<K, V>(): ReadonlyMap<K, V> {
-    const map: ReadonlyMap<K, V> & Partial<Map<K, V>> = new Map();
-    map.clear = notImplemented;
-    map.delete = notImplemented;
-    map.set = notImplemented;
+    const map: ReadonlyMap<K, V> = new Map();
+    Object.defineProperties(map, {
+        clear: { value: notImplemented },
+        delete: { value: notImplemented },
+        set: { value: notImplemented },
+    });
     return Object.freeze(map);
 }
 
 function createReadonlySet<T>(): ReadonlySet<T> {
-    const set: ReadonlySet<T> & Partial<Set<T>> = new Set();
-    set.add = notImplemented;
-    set.clear = notImplemented;
-    set.delete = notImplemented;
+    const set: ReadonlySet<T> = new Set();
+    Object.defineProperties(set, {
+        add: { value: notImplemented },
+        clear: { value: notImplemented },
+        delete: { value: notImplemented },
+    });
     return Object.freeze(set);
 }
 
