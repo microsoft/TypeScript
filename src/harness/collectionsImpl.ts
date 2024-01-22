@@ -243,6 +243,7 @@ export class Metadata {
     public get size(): number {
         if (this._size === -1 || (this._parent && this._parent._version !== this._parentVersion)) {
             let size = 0;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             for (const _ in this._map) size++;
             this._size = size;
             if (this._parent) {

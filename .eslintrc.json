@@ -105,9 +105,13 @@
                 }
             }
         ],
-
-        // Todo: For each of these, investigate whether we want to enable them ✨
-        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "args": "none",
+                "ignoreRestSiblings": true
+            }
+        ],
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
         "@typescript-eslint/prefer-optional-chain": "off",

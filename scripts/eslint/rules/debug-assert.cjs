@@ -1,4 +1,5 @@
-const { AST_NODE_TYPES, TSESTree } = require("@typescript-eslint/utils");
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { AST_NODE_TYPES, TSESTree /* used in JSDoc */ } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
 module.exports = createRule({

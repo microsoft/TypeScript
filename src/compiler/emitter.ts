@@ -4131,7 +4131,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeSpace();
         nextPos = emitTokenWithComment(SyntaxKind.AsKeyword, nextPos, writeKeyword, node);
         writeSpace();
-        nextPos = emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
+        emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
         writeSpace();
         emit(node.name);
         writeTrailingSemicolon();
