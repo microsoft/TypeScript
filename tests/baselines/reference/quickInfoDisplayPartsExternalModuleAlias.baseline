@@ -1,3 +1,4 @@
+// === QuickInfo ===
 === /tests/cases/fourslash/quickInfoDisplayPartsExternalModuleAlias_file1.ts ===
 // import a1 = require("./quickInfoDisplayPartsExternalModuleAlias_file0");
 //        ^^

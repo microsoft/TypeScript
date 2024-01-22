@@ -1,8 +1,8 @@
 --clean --watch
 buildOptions::
 {
- "clean": true,
- "watch": true
+  "clean": true,
+  "watch": true
 }
 WatchOptions::
 

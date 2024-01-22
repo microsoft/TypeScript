@@ -1,11 +1,11 @@
 --fallbackPolling PriorityInterval --verbose
 buildOptions::
 {
- "verbose": true
+  "verbose": true
 }
 WatchOptions::
 {
- "fallbackPolling": 1
+  "fallbackPolling": 1
 }
 Projects::
 .

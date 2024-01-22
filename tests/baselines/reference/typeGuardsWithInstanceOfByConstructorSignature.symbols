@@ -159,7 +159,7 @@ var obj5: C1 | A;
 >C1 : Symbol(C1, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 47, 1))
 >A : Symbol(A, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 2, 1), Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 6, 11))
 
-if (obj5 instanceof C) { // narrowed to C1|C2.
+if (obj5 instanceof C) { // narrowed to C1.
 >obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 60, 3))
 >C : Symbol(C, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 58, 11))
 
@@ -280,7 +280,7 @@ var obj9: E1 | A;
 >E1 : Symbol(E1, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 96, 1))
 >A : Symbol(A, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 2, 1), Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 6, 11))
 
-if (obj9 instanceof E) { // narrowed to E1 | E2
+if (obj9 instanceof E) { // narrowed to E1
 >obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 107, 3))
 >E : Symbol(E, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 105, 11))
 

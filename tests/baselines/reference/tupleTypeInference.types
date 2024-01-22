@@ -6,15 +6,15 @@ declare var $q: IQService;
 
 interface IQService {
     all<T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>;
->all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+>all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1_1, T2_1>(x: [IPromise<T1_1>, IPromise<T2_1>]): IPromise<[T1_1, T2_1]>; <T1_2>(x: [IPromise<T1_2>]): IPromise<[T1_2]>; }
 >x : [IPromise<T1>, IPromise<T2>, IPromise<T3>]
 
     all<T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>;
->all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+>all : { <T1_1, T2_1, T3>(x: [IPromise<T1_1>, IPromise<T2_1>, IPromise<T3>]): IPromise<[T1_1, T2_1, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1_2>(x: [IPromise<T1_2>]): IPromise<[T1_2]>; }
 >x : [IPromise<T1>, IPromise<T2>]
 
     all<T1>(x: [IPromise<T1>]): IPromise<[T1]>;
->all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+>all : { <T1_1, T2, T3>(x: [IPromise<T1_1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1_1, T2, T3]>; <T1_2, T2_1>(x: [IPromise<T1_2>, IPromise<T2_1>]): IPromise<[T1_2, T2_1]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
 >x : [IPromise<T1>]
 
     when<T>(t?: T): IPromise<T>;
@@ -33,9 +33,9 @@ interface IPromise<T> {
 var a = $q.all([$q.when<string>(), $q.when<number>()]);
 >a : IPromise<[string, number]>
 >$q.all([$q.when<string>(), $q.when<number>()]) : IPromise<[string, number]>
->$q.all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+>$q.all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1_1, T2_1>(x: [IPromise<T1_1>, IPromise<T2_1>]): IPromise<[T1_1, T2_1]>; <T1_2>(x: [IPromise<T1_2>]): IPromise<[T1_2]>; }
 >$q : IQService
->all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+>all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1_1, T2_1>(x: [IPromise<T1_1>, IPromise<T2_1>]): IPromise<[T1_1, T2_1]>; <T1_2>(x: [IPromise<T1_2>]): IPromise<[T1_2]>; }
 >[$q.when<string>(), $q.when<number>()] : [IPromise<string>, IPromise<number>]
 >$q.when<string>() : IPromise<string>
 >$q.when : <T>(t?: T) => IPromise<T>
@@ -50,9 +50,9 @@ var a = $q.all([$q.when<string>(), $q.when<number>()]);
 var b = $q.all<string, number>([$q.when<string>(), $q.when<number>()]);
 >b : IPromise<[string, number]>
 >$q.all<string, number>([$q.when<string>(), $q.when<number>()]) : IPromise<[string, number]>
->$q.all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+>$q.all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1_1, T2_1>(x: [IPromise<T1_1>, IPromise<T2_1>]): IPromise<[T1_1, T2_1]>; <T1_2>(x: [IPromise<T1_2>]): IPromise<[T1_2]>; }
 >$q : IQService
->all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+>all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1_1, T2_1>(x: [IPromise<T1_1>, IPromise<T2_1>]): IPromise<[T1_1, T2_1]>; <T1_2>(x: [IPromise<T1_2>]): IPromise<[T1_2]>; }
 >[$q.when<string>(), $q.when<number>()] : [IPromise<string>, IPromise<number>]
 >$q.when<string>() : IPromise<string>
 >$q.when : <T>(t?: T) => IPromise<T>
@@ -67,9 +67,9 @@ var b = $q.all<string, number>([$q.when<string>(), $q.when<number>()]);
 var c = $q.all([$q.when<string>(), $q.when<string>()]);
 >c : IPromise<[string, string]>
 >$q.all([$q.when<string>(), $q.when<string>()]) : IPromise<[string, string]>
->$q.all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+>$q.all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1_1, T2_1>(x: [IPromise<T1_1>, IPromise<T2_1>]): IPromise<[T1_1, T2_1]>; <T1_2>(x: [IPromise<T1_2>]): IPromise<[T1_2]>; }
 >$q : IQService
->all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1, T2>(x: [IPromise<T1>, IPromise<T2>]): IPromise<[T1, T2]>; <T1>(x: [IPromise<T1>]): IPromise<[T1]>; }
+>all : { <T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>; <T1_1, T2_1>(x: [IPromise<T1_1>, IPromise<T2_1>]): IPromise<[T1_1, T2_1]>; <T1_2>(x: [IPromise<T1_2>]): IPromise<[T1_2]>; }
 >[$q.when<string>(), $q.when<string>()] : [IPromise<string>, IPromise<string>]
 >$q.when<string>() : IPromise<string>
 >$q.when : <T>(t?: T) => IPromise<T>

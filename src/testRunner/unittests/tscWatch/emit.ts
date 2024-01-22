@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    jsonToReadableText,
+} from "../helpers";
+import {
     TscWatchCompileChange,
     verifyTscWatch,
 } from "../helpers/tscWatch";
@@ -21,7 +24,7 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
                 createWatchedSystem({
                     "/a/a.ts": "let x = 1",
                     "/a/b.ts": "let y = 1",
-                    "/a/tsconfig.json": JSON.stringify({ compilerOptions: { out, outFile } }),
+                    "/a/tsconfig.json": jsonToReadableText({ compilerOptions: { out, outFile } }),
                     [libFile.path]: libFile.content,
                 }),
             edits: [
@@ -66,7 +69,7 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
                 };
                 const configFile: File = {
                     path: "/a/b/project/tsconfig.json",
-                    content: JSON.stringify({
+                    content: jsonToReadableText({
                         compilerOptions: useOutFile ?
                             { outFile: "../output/common.js", target: "es5" } :
                             { outDir: "../output", target: "es5" },
@@ -136,7 +139,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                 };
                 const configFile: File = {
                     path: configFilePath,
-                    content: JSON.stringify(configObj || {}),
+                    content: jsonToReadableText(configObj || {}),
                 };
                 const additionalFiles = getAdditionalFileOrFolder?.() || ts.emptyArray;
                 const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
@@ -469,7 +472,7 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             };
             const configFile: File = {
                 path: `${projectLocation}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     include: [
                         "app/**/*.ts",
                     ],
@@ -496,7 +499,7 @@ describe("unittests:: tsc-watch:: emit with when module emit is specified as nod
         sys: () => {
             const configFile: File = {
                 path: "/a/rootFolder/project/tsconfig.json",
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: {
                         module: "none",
                         allowJs: true,

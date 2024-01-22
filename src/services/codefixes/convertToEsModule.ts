@@ -26,9 +26,7 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     getEmitScriptTarget,
-    getModeForUsageLocation,
     getQuotePreference,
-    getResolvedModule,
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
     getSynthesizedDeepClonesWithReplacements,
@@ -61,6 +59,7 @@ import {
     NodeFlags,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
+    Program,
     PropertyAccessExpression,
     QuotePreference,
     rangeContainsRange,
@@ -89,7 +88,7 @@ registerCodeFix({
             const moduleExportsChangedToDefault = convertFileToEsModule(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
             if (moduleExportsChangedToDefault) {
                 for (const importingFile of program.getSourceFiles()) {
-                    fixImportOfModuleExports(importingFile, sourceFile, changes, getQuotePreference(importingFile, preferences));
+                    fixImportOfModuleExports(importingFile, sourceFile, program, changes, getQuotePreference(importingFile, preferences));
                 }
             }
         });
@@ -98,9 +97,15 @@ registerCodeFix({
     },
 });
 
-function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker, quotePreference: QuotePreference) {
+function fixImportOfModuleExports(
+    importingFile: SourceFile,
+    exportingFile: SourceFile,
+    program: Program,
+    changes: textChanges.ChangeTracker,
+    quotePreference: QuotePreference,
+) {
     for (const moduleSpecifier of importingFile.imports) {
-        const imported = getResolvedModule(importingFile, moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier));
+        const imported = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
         if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
             continue;
         }

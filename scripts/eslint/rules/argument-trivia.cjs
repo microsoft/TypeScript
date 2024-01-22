@@ -157,7 +157,7 @@ module.exports = createRule({
                 }
             }
 
-            const hasNewLine = sourceCodeText.slice(commentRangeEnd, argRangeStart).indexOf("\n") >= 0;
+            const hasNewLine = sourceCodeText.slice(commentRangeEnd, argRangeStart).includes("\n");
             if (argRangeStart !== commentRangeEnd + 1 && !hasNewLine) {
                 // TODO(jakebailey): range should be whitespace
                 context.report({
@@ -177,8 +177,8 @@ module.exports = createRule({
             }
 
             const getSignature = memoize(() => {
-                if (context.parserServices?.program) {
-                    const parserServices = ESLintUtils.getParserServices(context);
+                const parserServices = ESLintUtils.getParserServices(context, /*allowWithoutFullTypeInformation*/ true);
+                if (parserServices.program) {
                     const checker = parserServices.program.getTypeChecker();
                     const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
                     return checker.getResolvedSignature(tsNode);

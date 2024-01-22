@@ -22,7 +22,7 @@ declare global {
 //// [index.ts]
 /// <reference types="pkg" resolution-mode="require" />
 /// <reference types="pkg" resolution-mode="import" />
-foo; // `resolution-mode` is an error in old resolution settings, which resolves is arbitrary
+foo;
 bar;
 export {};
 
@@ -31,5 +31,5 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" resolution-mode="require" />
 /// <reference types="pkg" resolution-mode="import" />
-foo; // `resolution-mode` is an error in old resolution settings, which resolves is arbitrary
+foo;
 bar;

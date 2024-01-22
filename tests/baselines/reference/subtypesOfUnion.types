@@ -78,7 +78,7 @@ interface I1<T> {
 >x : any
 
     foo13: <T>(x: T) => T; // error
->foo13 : <T>(x: T) => T
+>foo13 : <T_1>(x: T_1) => T_1
 >x : T
 
     foo14: typeof f; // error
@@ -141,7 +141,7 @@ interface I2<T> {
 >x : any
 
     foo13: <T>(x: T) => T; // error
->foo13 : <T>(x: T) => T
+>foo13 : <T_1>(x: T_1) => T_1
 >x : T
 
     foo14: typeof f; // error

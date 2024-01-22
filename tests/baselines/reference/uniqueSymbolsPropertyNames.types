@@ -150,3 +150,72 @@ const t3 = {
 
 };
 
+class Cls1 {
+>Cls1 : Cls1
+
+  [uniqueSymbol0] = "first";
+>[uniqueSymbol0] : string
+>uniqueSymbol0 : unique symbol
+>"first" : "first"
+
+  [uniqueSymbol0] = "last";
+>[uniqueSymbol0] : string
+>uniqueSymbol0 : unique symbol
+>"last" : "last"
+
+  [uniqueSymbol1] = "first";
+>[uniqueSymbol1] : string
+>uniqueSymbol1 : unique symbol
+>"first" : "first"
+
+  [uniqueSymbol1] = "last";
+>[uniqueSymbol1] : string
+>uniqueSymbol1 : unique symbol
+>"last" : "last"
+}
+
+class Cls2 {
+>Cls2 : Cls2
+
+  [OpNamespace.equal] = "first";
+>[OpNamespace.equal] : string
+>OpNamespace.equal : unique symbol
+>OpNamespace : typeof OpNamespace
+>equal : unique symbol
+>"first" : "first"
+
+  [OpNamespace.equal] = "last";
+>[OpNamespace.equal] : string
+>OpNamespace.equal : unique symbol
+>OpNamespace : typeof OpNamespace
+>equal : unique symbol
+>"last" : "last"
+}
+
+class Cls3 {
+>Cls3 : Cls3
+
+  [getUniqueSymbol0()] = "first";
+>[getUniqueSymbol0()] : string
+>getUniqueSymbol0() : unique symbol
+>getUniqueSymbol0 : () => unique symbol
+>"first" : "first"
+
+  [getUniqueSymbol0()] = "last";
+>[getUniqueSymbol0()] : string
+>getUniqueSymbol0() : unique symbol
+>getUniqueSymbol0 : () => unique symbol
+>"last" : "last"
+
+  [getUniqueSymbol1()] = "first";
+>[getUniqueSymbol1()] : string
+>getUniqueSymbol1() : unique symbol
+>getUniqueSymbol1 : () => unique symbol
+>"first" : "first"
+
+  [getUniqueSymbol1()] = "last";
+>[getUniqueSymbol1()] : string
+>getUniqueSymbol1() : unique symbol
+>getUniqueSymbol1 : () => unique symbol
+>"last" : "last"
+}

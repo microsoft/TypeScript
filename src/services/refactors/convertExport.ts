@@ -275,7 +275,7 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
         }
         case SyntaxKind.ImportType:
             const importTypeNode = parent as ImportTypeNode;
-            changes.replaceNode(importingSourceFile, parent, factory.createImportTypeNode(importTypeNode.argument, importTypeNode.assertions, factory.createIdentifier(exportName), importTypeNode.typeArguments, importTypeNode.isTypeOf));
+            changes.replaceNode(importingSourceFile, parent, factory.createImportTypeNode(importTypeNode.argument, importTypeNode.attributes, factory.createIdentifier(exportName), importTypeNode.typeArguments, importTypeNode.isTypeOf));
             break;
         default:
             Debug.failBadSyntaxKind(parent);

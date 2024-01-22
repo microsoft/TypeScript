@@ -70,3 +70,15 @@ uncalledFunctionChecksInConditional2.ts(49,5): error TS2774: This condition will
       }
     };
     
+    let _isMobile: boolean;
+    function isMobile() {
+      if (_isMobile === undefined) {
+        const isMobileMatch =
+          typeof window !== 'undefined' &&
+          window.matchMedia && // no error
+          window.matchMedia('(max-device-width: 680px)');
+        _isMobile = isMobileMatch && isMobileMatch.matches;
+      }
+      return _isMobile;
+    }
+    

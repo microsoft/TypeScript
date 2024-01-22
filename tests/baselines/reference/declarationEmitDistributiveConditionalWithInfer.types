@@ -3,11 +3,11 @@
 === declarationEmitDistributiveConditionalWithInfer.ts ===
 // This function's type is changed on declaration
 export const fun = (
->fun : (subFun: <Collection, Field extends keyof Collection>() => (Collection[Field] extends readonly (infer InnerArr)[] ? InnerArr : Collection[Field])[]) => void
->(    subFun: <Collection, Field extends keyof Collection>()        => FlatArray<Collection[Field], 0>[]) => { } : (subFun: <Collection, Field extends keyof Collection>() => (Collection[Field] extends readonly (infer InnerArr)[] ? InnerArr : Collection[Field])[]) => void
+>fun : (subFun: <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]) => void
+>(    subFun: <Collection, Field extends keyof Collection>()        => FlatArray<Collection[Field], 0>[]) => { } : (subFun: <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]) => void
 
     subFun: <Collection, Field extends keyof Collection>()
->subFun : <Collection, Field extends keyof Collection>() => (Collection[Field] extends readonly (infer InnerArr)[] ? InnerArr : Collection[Field])[]
+>subFun : <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]
 
         => FlatArray<Collection[Field], 0>[]) => { };
 

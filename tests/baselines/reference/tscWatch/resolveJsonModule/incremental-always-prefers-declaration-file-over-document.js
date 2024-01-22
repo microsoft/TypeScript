@@ -11,9 +11,9 @@ declare var val: string; export default val;
 
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "resolveJsonModule": true
-    }
+  "compilerOptions": {
+    "resolveJsonModule": true
+  }
 }
 
 //// [/a/lib/lib.d.ts]
@@ -43,40 +43,6 @@ Output::
 [[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: ["/src/project/data.d.json.ts","/src/project/main.ts"]
-Program options: {"resolveJsonModule":true,"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/src/project/data.d.json.ts
-/src/project/main.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/src/project/data.d.json.ts
-/src/project/main.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/src/project/data.d.json.ts (used version)
-/src/project/main.ts (used version)
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/src/project/data.d.json.ts: *new*
-  {}
-/src/project/main.ts: *new*
-  {}
-/src/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/src/project: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/src/project/main.js]
 "use strict";
@@ -150,19 +116,66 @@ var x = data_json_1.default;
 }
 
 
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/src/project/data.d.json.ts: *new*
+  {}
+/src/project/main.ts: *new*
+  {}
+/src/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/src/project: *new*
+  {}
+
+Program root files: [
+  "/src/project/data.d.json.ts",
+  "/src/project/main.ts"
+]
+Program options: {
+  "resolveJsonModule": true,
+  "project": "/src/project",
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/src/project/data.d.json.ts
+/src/project/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/src/project/data.d.json.ts
+/src/project/main.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/src/project/data.d.json.ts (used version)
+/src/project/main.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Change json setting
 
 Input::
 //// [/src/project/tsconfig.json]
 {
-    "compilerOptions": {
-        "resolveJsonModule": false
-    }
+  "compilerOptions": {
+    "resolveJsonModule": false
+  }
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -177,8 +190,19 @@ Output::
 
 
 
-Program root files: ["/src/project/data.d.json.ts","/src/project/main.ts"]
-Program options: {"resolveJsonModule":false,"project":"/src/project","incremental":true,"watch":true,"configFilePath":"/src/project/tsconfig.json"}
+
+
+Program root files: [
+  "/src/project/data.d.json.ts",
+  "/src/project/main.ts"
+]
+Program options: {
+  "resolveJsonModule": false,
+  "project": "/src/project",
+  "incremental": true,
+  "watch": true,
+  "configFilePath": "/src/project/tsconfig.json"
+}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -190,4 +214,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-

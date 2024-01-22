@@ -1,0 +1,97 @@
+a.js(18,1): error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
+  Type 'unknown' is not assignable to type 'string'.
+a.js(36,1): error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
+  Type 'unknown' is not assignable to type 'string'.
+a.js(55,1): error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
+  Types of property 'f' are incompatible.
+    Type '(x: string) => string' is not assignable to type '(x: unknown) => unknown'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'unknown' is not assignable to type 'string'.
+a.js(56,1): error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
+  The types returned by 'f(...)' are incompatible between these types.
+    Type 'unknown' is not assignable to type 'string'.
+a.js(59,14): error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+
+
+==== a.js (5 errors) ====
+    /**
+     * @template out T
+     * @typedef {Object} Covariant
+     * @property {T} x
+     */
+    
+    /**
+     * @type {Covariant<unknown>}
+     */
+    let super_covariant = { x: 1 };
+    
+    /**
+     * @type {Covariant<string>}
+     */
+    let sub_covariant = { x: '' };
+    
+    super_covariant = sub_covariant;
+    sub_covariant   = super_covariant; // Error
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type 'Covariant<unknown>' is not assignable to type 'Covariant<string>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    
+    /**
+     * @template in T
+     * @typedef {Object} Contravariant
+     * @property {(x: T) => void} f
+     */
+    
+    /**
+     * @type {Contravariant<unknown>}
+     */
+    let super_contravariant = { f: (x) => {} };
+    
+    /**
+     * @type {Contravariant<string>}
+     */
+    let sub_contravariant = { f: (x) => {} };
+    
+    super_contravariant = sub_contravariant;  // Error
+    ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Contravariant<string>' is not assignable to type 'Contravariant<unknown>'.
+!!! error TS2322:   Type 'unknown' is not assignable to type 'string'.
+    sub_contravariant = super_contravariant;
+    
+    /**
+     * @template in out T
+     * @typedef {Object} Invariant
+     * @property {(x: T) => T} f
+     */
+    
+    /**
+     * @type {Invariant<unknown>}
+     */
+    let super_invariant = { f: (x) => {} };
+    
+    /**
+     * @type {Invariant<string>}
+     */
+    let sub_invariant = { f: (x) => { return "" } };
+    
+    super_invariant = sub_invariant;  // Error
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'Invariant<string>' is not assignable to type 'Invariant<unknown>'.
+!!! error TS2322:   Types of property 'f' are incompatible.
+!!! error TS2322:     Type '(x: string) => string' is not assignable to type '(x: unknown) => unknown'.
+!!! error TS2322:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:         Type 'unknown' is not assignable to type 'string'.
+    sub_invariant = super_invariant;  // Error
+    ~~~~~~~~~~~~~
+!!! error TS2322: Type 'Invariant<unknown>' is not assignable to type 'Invariant<string>'.
+!!! error TS2322:   The types returned by 'f(...)' are incompatible between these types.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'string'.
+    
+    /**
+     * @template in T
+                 ~~
+!!! error TS1274: 'in' modifier can only appear on a type parameter of a class, interface or type alias
+     * @param {T} x
+     */
+    function f(x) {}
+    

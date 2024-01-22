@@ -11,8 +11,7 @@ interface ClassificationEntry {
 }
 
 describe("unittests:: services:: Colorization", () => {
-    // Use the shim adapter to ensure test coverage of the shim layer for the classifier
-    const languageServiceAdapter = new Harness.LanguageService.ShimLanguageServiceAdapter(/*preprocessToResolve*/ false);
+    const languageServiceAdapter = new Harness.LanguageService.NativeLanguageServiceAdapter();
     const classifier = languageServiceAdapter.getClassifier();
 
     function getEntryAtPosition(result: ts.ClassificationResult, position: number) {
@@ -238,7 +237,7 @@ describe("unittests:: services:: Colorization", () => {
         it("LexicallyClassifiesConflictTokens", () => {
             // Test conflict markers.
             testLexicalClassification(
-"class C {\r\n\
+                "class C {\r\n\
 <<<<<<< HEAD\r\n\
     v = 1;\r\n\
 =======\r\n\
@@ -261,7 +260,7 @@ describe("unittests:: services:: Colorization", () => {
             );
 
             testLexicalClassification(
-"<<<<<<< HEAD\r\n\
+                "<<<<<<< HEAD\r\n\
 class C { }\r\n\
 =======\r\n\
 class D { }\r\n\
@@ -278,7 +277,7 @@ class D { }\r\n\
             );
 
             testLexicalClassification(
-"class C {\r\n\
+                "class C {\r\n\
 <<<<<<< HEAD\r\n\
     v = 1;\r\n\
 ||||||| merged common ancestors\r\n\
@@ -304,7 +303,7 @@ class D { }\r\n\
             );
 
             testLexicalClassification(
-"<<<<<<< HEAD\r\n\
+                "<<<<<<< HEAD\r\n\
 class C { }\r\n\
 ||||||| merged common ancestors\r\n\
 class E { }\r\n\

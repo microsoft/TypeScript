@@ -84,20 +84,13 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib/app.ts
+//// [/user/username/projects/myproject/lib/app.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var ts_types_1 = require("@myapp/ts-types");
+var x = ts_types_1.myapp;
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/lib/app.ts
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/lib/app.ts (used version)
 
 PolledWatches::
 /user/username/projects/myproject/node_modules: *new*
@@ -123,21 +116,61 @@ FsWatchesRecursive::
 /user/username/projects/myproject/lib: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/lib/app.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/lib/app.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/lib/app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var ts_types_1 = require("@myapp/ts-types");
-var x = ts_types_1.myapp;
-
-
 
 Change:: npm install unrelated non scoped
 
 Input::
 //// [/user/username/projects/myproject/node_modules/unrelated/index.d.ts]
 export const unrelated = 10;
+
+
+Output::
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+Scheduling update
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+Scheduling update
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+Scheduling update
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
 
 PolledWatches::
@@ -168,38 +201,29 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
+Timeout callback:: count: 2
+6: timerToInvalidateFailedLookupResolutions *new*
+7: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 2
 6: timerToInvalidateFailedLookupResolutions
 7: timerToUpdateProgram
+
 After running Timeout callback:: count: 1
-8: timerToUpdateProgram
+Output::
+Scheduling update
+
+
+
+Timeout callback:: count: 1
+7: timerToUpdateProgram *deleted*
+8: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 8: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-sysLog:: /user/username/projects/myproject/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-Scheduling update
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-Scheduling update
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-Scheduling update
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-Scheduling update
 Reloading new file names and options
 Synchronizing program
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
@@ -240,8 +264,18 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -253,7 +287,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: npm install unrelated scoped in myapp
 
 Input::
@@ -261,14 +294,6 @@ Input::
 export const myappUnrelated = 10;
 
 
-Before running Timeout callback:: count: 2
-13: timerToInvalidateFailedLookupResolutions
-14: timerToUpdateProgram
-After running Timeout callback:: count: 1
-15: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-15: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -288,7 +313,31 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/unrelated/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+
+
+Timeout callback:: count: 2
+13: timerToInvalidateFailedLookupResolutions *new*
+14: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 2
+13: timerToInvalidateFailedLookupResolutions
+14: timerToUpdateProgram
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+14: timerToUpdateProgram *deleted*
+15: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+15: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
 [[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
@@ -334,8 +383,18 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+
+
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
@@ -347,7 +406,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-
 Change:: npm install unrelated2 scoped in myapp
 
 Input::
@@ -355,12 +413,6 @@ Input::
 export const myappUnrelated2 = 10;
 
 
-Before running Timeout callback:: count: 2
-18: timerToInvalidateFailedLookupResolutions
-19: timerToUpdateProgram
-After running Timeout callback:: count: 0
-Before running Timeout callback:: count: 0
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/unrelated2 :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -374,12 +426,29 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/unrelated2/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/unrelated2/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+
+
+Timeout callback:: count: 2
+18: timerToInvalidateFailedLookupResolutions *new*
+19: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 2
+18: timerToInvalidateFailedLookupResolutions
+19: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
 
 
-exitCode:: ExitStatus.undefined
 
+Before running Timeout callback:: count: 0
+
+After running Timeout callback:: count: 0
+
+
+exitCode:: ExitStatus.undefined
 
 Change:: npm install ts-types
 
@@ -388,14 +457,6 @@ Input::
 export const myapp = 10;
 
 
-Before running Timeout callback:: count: 2
-22: timerToInvalidateFailedLookupResolutions
-23: timerToUpdateProgram
-After running Timeout callback:: count: 1
-24: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-24: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/ts-types :: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -409,7 +470,31 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
+
+
+Timeout callback:: count: 2
+22: timerToInvalidateFailedLookupResolutions *new*
+23: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 2
+22: timerToInvalidateFailedLookupResolutions
+23: timerToUpdateProgram
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+23: timerToUpdateProgram *deleted*
+24: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+24: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
@@ -439,21 +524,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node
 
 
 
-Program root files: ["/user/username/projects/myproject/lib/app.ts"]
-Program options: {"watch":true,"project":"/user/username/projects/myproject","traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts
-/user/username/projects/myproject/lib/app.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts
-/user/username/projects/myproject/lib/app.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts (used version)
-/user/username/projects/myproject/lib/app.ts (computed .d.ts)
+//// [/user/username/projects/myproject/lib/app.js] file written with same contents
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -483,6 +554,29 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
   {}
 
-exitCode:: ExitStatus.undefined
 
-//// [/user/username/projects/myproject/lib/app.js] file written with same contents
+Program root files: [
+  "/user/username/projects/myproject/lib/app.ts"
+]
+Program options: {
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "traceResolution": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts
+/user/username/projects/myproject/lib/app.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts
+/user/username/projects/myproject/lib/app.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts (used version)
+/user/username/projects/myproject/lib/app.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
