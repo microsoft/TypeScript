@@ -142,7 +142,7 @@ const myUnion = unionType([identifierExtractor, stringExtractor]);
 >myUnion : AnyExtractor<{ node: Identifier; kind: "identifier"; value: string; } | { node: StringLiteral; kind: "string"; value: string; }>
 >unionType([identifierExtractor, stringExtractor]) : AnyExtractor<{ node: Identifier; kind: "identifier"; value: string; } | { node: StringLiteral; kind: "string"; value: string; }>
 >unionType : <Result extends readonly unknown[]>(parsers: { [K in keyof Result]: AnyExtractor<Result[K]>; }) => AnyExtractor<Result[number]>
->[identifierExtractor, stringExtractor] : (Extractor<Identifier, { node: Identifier; kind: "identifier"; value: string; }> | Extractor<StringLiteral, { node: StringLiteral; kind: "string"; value: string; }>)[]
+>[identifierExtractor, stringExtractor] : [Extractor<Identifier, { node: Identifier; kind: "identifier"; value: string; }>, Extractor<StringLiteral, { node: StringLiteral; kind: "string"; value: string; }>]
 >identifierExtractor : Extractor<Identifier, { node: Identifier; kind: "identifier"; value: string; }>
 >stringExtractor : Extractor<StringLiteral, { node: StringLiteral; kind: "string"; value: string; }>
 
