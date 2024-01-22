@@ -11,25 +11,27 @@ import {
 // so it can be tested on a separate install of TypeScript.
 
 const require = createRequire(process.cwd() + "/index.js");
+const typescript = process.argv[2];
 
-console.log(`Testing ${process.argv[2]}...`);
-const ts = require(process.argv[2]);
+console.log(`Testing ${typescript}...`);
 
 // See: https://github.com/microsoft/TypeScript/pull/51474#issuecomment-1310871623
-/** @type {[fn: (() => any), shouldSucceed: boolean][]} */
+/** @type {[fn: (() => Promise<any>), shouldSucceed: boolean][]} */
 const fns = [
-    [() => ts.version, true],
-    [() => ts.default.version, false],
-    [() => __importDefault(ts).version, false],
-    [() => __importDefault(ts).default.version, true],
-    [() => __importStar(ts).version, true],
-    [() => __importStar(ts).default.version, true],
+    [() => require(typescript).version, true],
+    [() => require(typescript).default.version, false],
+    [() => __importDefault(require(typescript)).version, false],
+    [() => __importDefault(require(typescript)).default.version, true],
+    [() => __importStar(require(typescript)).version, true],
+    [() => __importStar(require(typescript)).default.version, true],
+    [async () => (await import(typescript)).version, false],
+    [async () => (await import(typescript)).default.version, true],
 ];
 
 for (const [fn, shouldSucceed] of fns) {
     let success = false;
     try {
-        success = !!fn();
+        success = !!(await fn());
     }
     catch {
         // Ignore
@@ -43,4 +45,10 @@ for (const [fn, shouldSucceed] of fns) {
         process.exitCode = 1;
     }
 }
-console.log("ok");
+
+if (!!process.exitCode) {
+    console.log("fail");
+}
+else {
+    console.log("ok");
+}
