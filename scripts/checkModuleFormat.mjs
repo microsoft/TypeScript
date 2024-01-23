@@ -46,7 +46,7 @@ for (const [fn, shouldSucceed] of fns) {
     }
 }
 
-if (!!process.exitCode) {
+if (process.exitCode) {
     console.log("fail");
 }
 else {
