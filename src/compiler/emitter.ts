@@ -4131,7 +4131,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeSpace();
         nextPos = emitTokenWithComment(SyntaxKind.AsKeyword, nextPos, writeKeyword, node);
         writeSpace();
-        emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        nextPos = emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
         writeSpace();
         emit(node.name);
         writeTrailingSemicolon();
