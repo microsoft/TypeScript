@@ -212,7 +212,6 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             options.globalName = "ts";
             // If we are in a CJS context, export the ts namespace.
             options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) {\n  module.exports = ts;\n}` };
-            options.metafile = true;
 
             // esbuild converts calls to "require" to "__require"; this function
             // calls the real require if it exists, or throws if it does not (rather than
