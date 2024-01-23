@@ -5,6 +5,7 @@ import {
     __importDefault,
     __importStar,
 } from "tslib";
+import { pathToFileURL } from "url";
 
 // This script tests that TypeScript's CJS API is structured
 // as expected. It calls "require" as though it were in CWD,
@@ -12,6 +13,7 @@ import {
 
 const require = createRequire(process.cwd() + "/index.js");
 const typescript = process.argv[2];
+const resolvedTypeScript = pathToFileURL(require.resolve(typescript)).toString();
 
 console.log(`Testing ${typescript}...`);
 
@@ -24,8 +26,8 @@ const fns = [
     [() => __importDefault(require(typescript)).default.version, true],
     [() => __importStar(require(typescript)).version, true],
     [() => __importStar(require(typescript)).default.version, true],
-    [async () => (await import(typescript)).version, true],
-    [async () => (await import(typescript)).default.version, true],
+    [async () => (await import(resolvedTypeScript)).version, true],
+    [async () => (await import(resolvedTypeScript)).default.version, true],
 ];
 
 for (const [fn, shouldSucceed] of fns) {
