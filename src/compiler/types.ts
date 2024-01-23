@@ -6621,8 +6621,6 @@ export interface TypeParameter extends InstantiableType {
     isThisType?: boolean;
     /** @internal */
     resolvedDefaultType?: Type;
-    /** @internal */
-    exprName?: EntityName | null;
 }
 
 /** @internal */
