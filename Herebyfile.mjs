@@ -44,9 +44,6 @@ import {
     readJson,
     rimraf,
 } from "./scripts/build/utils.mjs";
-import {
-    inspect,
-} from "util";
 
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
