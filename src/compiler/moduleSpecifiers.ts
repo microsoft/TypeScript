@@ -437,7 +437,16 @@ function computeModuleSpecifiers(
                 redirectPathsSpecifiers = append(redirectPathsSpecifiers, local);
             }
             else if (pathIsBareSpecifier(local)) {
-                pathsSpecifiers = append(pathsSpecifiers, local);
+                if (pathContainsNodeModules(local)) {
+                    // We could be in this branch due to inappropriate use of `baseUrl`, not intentional `paths`
+                    // usage. It's impossible to reason about where to prioritize baseUrl-generated module
+                    // specifiers, but if they contain `/node_modules/`, they're going to trigger a portability
+                    // error, so *at least* don't prioritize those.
+                    relativeSpecifiers = append(relativeSpecifiers, local);
+                }
+                else {
+                    pathsSpecifiers = append(pathsSpecifiers, local);
+                }
             }
             else if (forAutoImport || !importedFileIsInNodeModules || modulePath.isInNodeModules) {
                 // Why this extra conditional, not just an `else`? If some path to the file contained
