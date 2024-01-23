@@ -44783,7 +44783,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasAbstractModifier(member),
             isStatic(member),
             memberIsParameterProperty,
-            symbolName(declaredProp),
+            declaredProp,
             reportErrors ? member : undefined,
         );
     }
@@ -44807,22 +44807,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         memberHasAbstractModifier: boolean,
         memberIsStatic: boolean,
         memberIsParameterProperty: boolean,
-        memberName: string,
+        member: Symbol,
         errorNode?: Node,
     ): MemberOverrideStatus {
         const isJs = isInJSFile(node);
         const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
         if (baseWithThis && (memberHasOverrideModifier || compilerOptions.noImplicitOverride)) {
-            const memberEscapedName = escapeLeadingUnderscores(memberName);
             const thisType = memberIsStatic ? staticType : typeWithThis;
             const baseType = memberIsStatic ? baseStaticType : baseWithThis;
-            const prop = getPropertyOfType(thisType, memberEscapedName);
-            const baseProp = getPropertyOfType(baseType, memberEscapedName);
+            const prop = getPropertyOfType(thisType, member.escapedName);
+            const baseProp = getPropertyOfType(baseType, member.escapedName);
 
             const baseClassName = typeToString(baseWithThis);
             if (prop && !baseProp && memberHasOverrideModifier) {
                 if (errorNode) {
-                    const suggestion = getSuggestedSymbolForNonexistentClassMember(memberName, baseType); // Again, using symbol name: note that's different from `symbol.escapedName`
+                    const suggestion = getSuggestedSymbolForNonexistentClassMember(symbolName(member), baseType); // Again, using symbol name: note that's different from `symbol.escapedName`
                     suggestion ?
                         error(
                             errorNode,
@@ -44968,7 +44967,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             hasAbstractModifier(member),
             isStatic(member),
             /*memberIsParameterProperty*/ false,
-            symbolName(memberSymbol),
+            memberSymbol,
         );
     }
 
