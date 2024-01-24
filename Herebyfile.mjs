@@ -15,10 +15,10 @@ import {
 import {
     task,
 } from "hereby";
-import path from "path";
 import {
-    pathToFileURL,
-} from "url";
+    createRequire,
+} from "module";
+import path from "path";
 
 import {
     localizationDirectories,
@@ -176,6 +176,8 @@ async function runDtsBundler(entrypoint, output) {
     ]);
 }
 
+const requireFn = createRequire(import.meta.url);
+
 /**
  * @param {string} entrypoint
  * @param {string} outfile
@@ -230,7 +232,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             options.define = { [require]: fakeName };
             options.plugins = [
                 {
-                    name: "fix-require",
+                    name: "post-process",
                     setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
@@ -249,9 +251,10 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                             // esbuild's metafile option does not show exports...
                             // https://github.com/evanw/esbuild/issues/3110
                             // https://github.com/evanw/esbuild/issues/3281
-                            const importUrl = pathToFileURL(outfile).toString();
-                            const obj = await import(importUrl);
-                            const names = Object.keys(obj.default);
+
+                            // Using createRequire here is emperically faster than await import.
+                            const obj = requireFn(outfile);
+                            const names = Object.keys(obj);
                             const fakeExport = `  0 && (module.exports = {\n${names.map(name => `    ${name},\n`).join("")}  });`;
                             contents = contents.replace("module.exports = ts;", `module.exports = ts;\n${fakeExport}`);
                             await fs.promises.writeFile(outfile, contents);
