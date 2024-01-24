@@ -211,7 +211,7 @@ export interface Request extends Message {
 /**
  * Request to reload the project structure for all the opened files
  */
-export interface ReloadProjectsRequest extends Message {
+export interface ReloadProjectsRequest extends Request {
     command: CommandTypes.ReloadProjects;
 }
 
