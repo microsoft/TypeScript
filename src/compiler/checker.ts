@@ -17928,14 +17928,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTemplateLiteralType(texts: readonly string[], types: readonly Type[]): Type {
-        if (texts.length === 2 && texts[0] === "" && texts[1] === ""
-            // literals (including string enums) are stringified below
-            && !(types[0].flags & TypeFlags.Literal)
-            // infer T extends StringLike can't be unwrapped eagerly
-            && !types[0].symbol?.declarations?.some(d => d.parent.kind === SyntaxKind.InferType)
-            && isTypeAssignableTo(types[0], stringType)) {
-            return types[0];
-        }
         const unionIndex = findIndex(types, t => !!(t.flags & (TypeFlags.Never | TypeFlags.Union)));
         if (unionIndex >= 0) {
             return checkCrossProductUnion(types) ?
@@ -17944,6 +17936,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (contains(types, wildcardType)) {
             return wildcardType;
+        }
+        if (
+            texts.length === 2 && texts[0] === "" && texts[1] === ""
+            // literals (including string enums) are stringified below
+            && !(types[0].flags & TypeFlags.Literal)
+            // infer T extends StringLike can't be unwrapped eagerly
+            && !types[0].symbol?.declarations?.some(d => d.parent.kind === SyntaxKind.InferType)
+            && isTypeAssignableTo(types[0], stringType)
+        ) {
+            return types[0];
         }
         const newTypes: Type[] = [];
         const newTexts: string[] = [];
