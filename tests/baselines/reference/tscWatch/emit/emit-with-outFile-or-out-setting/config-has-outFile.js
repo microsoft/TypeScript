@@ -7,7 +7,11 @@ let x = 1
 let y = 1
 
 //// [/a/tsconfig.json]
-{"compilerOptions":{"outFile":"/a/out.js"}}
+{
+  "compilerOptions": {
+    "outFile": "/a/out.js"
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -32,17 +36,11 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/a.ts
-/a/b.ts
-/a/lib/lib.d.ts
+//// [/a/out.js]
+var x = 1;
+var y = 1;
 
-No cached semantic diagnostics in the builder::
 
-No shapes updated in the builder::
 
 FsWatches::
 /a/a.ts: *new*
@@ -58,13 +56,28 @@ FsWatchesRecursive::
 /a: *new*
   {}
 
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/a.ts
+/a/b.ts
+/a/lib/lib.d.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var x = 1;
-var y = 1;
-
-
 
 Change:: Make change in the file
 
@@ -73,8 +86,12 @@ Input::
 let x = 11
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -84,8 +101,24 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+//// [/a/out.js]
+var x = 11;
+var y = 1;
+
+
+
+
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/a.ts
@@ -98,12 +131,6 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/out.js]
-var x = 11;
-var y = 1;
-
-
-
 Change:: Make change in the file again
 
 Input::
@@ -111,8 +138,12 @@ Input::
 let xy = 11
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
@@ -122,8 +153,24 @@ Output::
 
 
 
-Program root files: ["/a/a.ts","/a/b.ts","/a/lib/lib.d.ts"]
-Program options: {"outFile":"/a/out.js","watch":true,"project":"/a/tsconfig.json","configFilePath":"/a/tsconfig.json"}
+//// [/a/out.js]
+var xy = 11;
+var y = 1;
+
+
+
+
+Program root files: [
+  "/a/a.ts",
+  "/a/b.ts",
+  "/a/lib/lib.d.ts"
+]
+Program options: {
+  "outFile": "/a/out.js",
+  "watch": true,
+  "project": "/a/tsconfig.json",
+  "configFilePath": "/a/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/a.ts
@@ -135,9 +182,3 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var xy = 11;
-var y = 1;
-
-

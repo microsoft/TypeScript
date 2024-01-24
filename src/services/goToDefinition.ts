@@ -29,7 +29,6 @@ import {
     getDirectoryPath,
     getEffectiveBaseTypeNode,
     getInvokedExpression,
-    getModeForUsageLocation,
     getNameFromPropertyName,
     getNameOfDeclaration,
     getObjectFlags,
@@ -53,6 +52,7 @@ import {
     isClassStaticBlockDeclaration,
     isConstructorDeclaration,
     isDeclarationFileName,
+    isDefaultClause,
     isExternalModuleNameRelative,
     isFunctionLike,
     isFunctionLikeDeclaration,
@@ -69,6 +69,7 @@ import {
     isPropertyName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
+    isSwitchStatement,
     isTypeAliasDeclaration,
     isTypeReferenceNode,
     isVariableDeclaration,
@@ -82,6 +83,7 @@ import {
     NodeFlags,
     ObjectFlags,
     Program,
+    ResolvedModuleWithFailedLookupLocations,
     resolvePath,
     ScriptElementKind,
     SignatureDeclaration,
@@ -90,6 +92,7 @@ import {
     skipTrivia,
     some,
     SourceFile,
+    SwitchStatement,
     Symbol,
     SymbolDisplay,
     SymbolFlags,
@@ -104,6 +107,9 @@ import {
     TypeReference,
     unescapeLeadingUnderscores,
 } from "./_namespaces/ts";
+import {
+    isContextWithStartAndEndNode,
+} from "./_namespaces/ts.FindAllReferences";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
@@ -132,9 +138,26 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
     }
 
-    if (node.kind === SyntaxKind.ReturnKeyword) {
-        const functionDeclaration = findAncestor(node.parent, n => isClassStaticBlockDeclaration(n) ? "quit" : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
-        return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+    switch (node.kind) {
+        case SyntaxKind.ReturnKeyword:
+            const functionDeclaration = findAncestor(node.parent, n =>
+                isClassStaticBlockDeclaration(n)
+                    ? "quit"
+                    : isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+            return functionDeclaration
+                ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)]
+                : undefined;
+        case SyntaxKind.DefaultKeyword:
+            if (!isDefaultClause(node.parent)) {
+                break;
+            }
+        // falls through
+        case SyntaxKind.CaseKeyword:
+            const switchStatement = findAncestor(node.parent, isSwitchStatement);
+            if (switchStatement) {
+                return [createDefinitionInfoFromSwitch(switchStatement, sourceFile)];
+            }
+            break;
     }
 
     if (node.kind === SyntaxKind.AwaitKeyword) {
@@ -179,7 +202,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     if (!symbol && isModuleSpecifierLike(fallbackNode)) {
         // We couldn't resolve the module specifier as an external module, but it could
         // be that module resolution succeeded but the target was not a module.
-        const ref = sourceFile.resolvedModules?.get(fallbackNode.text, getModeForUsageLocation(sourceFile, fallbackNode))?.resolvedModule;
+        const ref = program.getResolvedModuleFromModuleSpecifier(fallbackNode)?.resolvedModule;
         if (ref) {
             return [{
                 name: fallbackNode.text,
@@ -332,10 +355,11 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
         return file && { reference: libReferenceDirective, fileName: file.fileName, file, unverified: false };
     }
 
-    if (sourceFile.resolvedModules?.size()) {
+    if (sourceFile.imports.length || sourceFile.moduleAugmentations.length) {
         const node = getTouchingToken(sourceFile, position);
-        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text, getModeForUsageLocation(sourceFile, node))) {
-            const verifiedFileName = sourceFile.resolvedModules.get(node.text, getModeForUsageLocation(sourceFile, node))?.resolvedModule?.resolvedFileName;
+        let resolution: ResolvedModuleWithFailedLookupLocations | undefined;
+        if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && (resolution = program.getResolvedModuleFromModuleSpecifier(node))) {
+            const verifiedFileName = resolution.resolvedModule?.resolvedFileName;
             const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
             return {
                 file: program.getSourceFile(fileName),
@@ -629,6 +653,24 @@ function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declara
         isAmbient: !!(declaration.flags & NodeFlags.Ambient),
         unverified,
         failedAliasResolution,
+    };
+}
+
+function createDefinitionInfoFromSwitch(statement: SwitchStatement, sourceFile: SourceFile): DefinitionInfo {
+    const keyword = FindAllReferences.getContextNode(statement)!;
+    const textSpan = createTextSpanFromNode(isContextWithStartAndEndNode(keyword) ? keyword.start : keyword, sourceFile);
+    return {
+        fileName: sourceFile.fileName,
+        textSpan,
+        kind: ScriptElementKind.keyword,
+        name: "switch",
+        containerKind: undefined!,
+        containerName: "",
+        ...FindAllReferences.toContextSpan(textSpan, sourceFile, keyword),
+        isLocal: true,
+        isAmbient: false,
+        unverified: false,
+        failedAliasResolution: undefined,
     };
 }
 

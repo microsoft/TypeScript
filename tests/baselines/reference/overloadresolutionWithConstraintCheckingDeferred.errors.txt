@@ -53,7 +53,7 @@ overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2344: Type '
     declare function foo(arg: (x: B) => any): number;
     
     var result: number = foo(x => new G(x)); // x has type D, new G(x) fails, so first overload is picked.
-                         ~~~~~~~~~~~~~~~~~~
+                         ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(arg: (x: D) => number): string', gave the following error.
 !!! error TS2769:     Type 'G<A>' is not assignable to type 'number'.
@@ -74,7 +74,7 @@ overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2344: Type '
 !!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
     
     var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.
-                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(arg: (x: D) => number): string', gave the following error.
 !!! error TS2769:     Type 'G<D>' is not assignable to type 'number'.

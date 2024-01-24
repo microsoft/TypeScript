@@ -1,6 +1,6 @@
 import {
     AffectedFileResult,
-    arrayToMap,
+    arrayFrom,
     assertType,
     BuilderProgram,
     BuildInfo,
@@ -10,11 +10,11 @@ import {
     clearMap,
     closeFileWatcher,
     closeFileWatcherOf,
+    combinePaths,
     commonOptionsWithBuild,
     CompilerHost,
     CompilerOptions,
     CompilerOptionsValue,
-    ConfigFileProgramReloadLevel,
     convertToRelativePath,
     copyProperties,
     createCompilerDiagnostic,
@@ -49,6 +49,7 @@ import {
     findIndex,
     flattenDiagnosticMessageText,
     forEach,
+    forEachKey,
     ForegroundColorEscapeSequences,
     formatColorAndReset,
     getAllProjectOutputs,
@@ -73,10 +74,10 @@ import {
     isArray,
     isIgnoredFileFromWildCardWatching,
     isIncrementalCompilation,
+    isPackageJsonInfo,
     isString,
     listFiles,
     loadWithModeAwareCache,
-    map,
     maybeBind,
     missingFileModifiedTime,
     ModuleResolutionCache,
@@ -95,6 +96,7 @@ import {
     ProgramBundleEmitBuildInfo,
     ProgramHost,
     ProgramMultiFileEmitBuildInfo,
+    ProgramUpdateLevel,
     readBuilderProgram,
     ReadBuildProgramHost,
     resolveConfigFileProjectName,
@@ -287,7 +289,7 @@ export interface SolutionBuilder<T extends BuilderProgram> {
 
     // Testing only
     /** @internal */ getUpToDateStatusOfProject(project: string): UpToDateStatus;
-    /** @internal */ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
+    /** @internal */ invalidateProject(configFilePath: ResolvedConfigFilePath, updateLevel?: ProgramUpdateLevel): void;
     /** @internal */ close(): void;
 }
 
@@ -389,7 +391,7 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
 
     readonly builderPrograms: Map<ResolvedConfigFilePath, T>;
     readonly diagnostics: Map<ResolvedConfigFilePath, readonly Diagnostic[]>;
-    readonly projectPendingBuild: Map<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
+    readonly projectPendingBuild: Map<ResolvedConfigFilePath, ProgramUpdateLevel>;
     readonly projectErrorsReported: Map<ResolvedConfigFilePath, true>;
 
     readonly compilerHost: CompilerHost & ReadBuildProgramHost;
@@ -409,14 +411,14 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     // Watch state
     readonly watch: boolean;
     readonly allWatchedWildcardDirectories: Map<ResolvedConfigFilePath, Map<string, WildcardDirectoryWatcher>>;
-    readonly allWatchedInputFiles: Map<ResolvedConfigFilePath, Map<Path, FileWatcher>>;
+    readonly allWatchedInputFiles: Map<ResolvedConfigFilePath, Map<string, FileWatcher>>;
     readonly allWatchedConfigFiles: Map<ResolvedConfigFilePath, FileWatcher>;
     readonly allWatchedExtendedConfigFiles: Map<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
     readonly allWatchedPackageJsonFiles: Map<ResolvedConfigFilePath, Map<Path, FileWatcher>>;
     readonly filesWatched: Map<Path, FileWatcherWithModifiedTime | Date>;
     readonly outputTimeStamps: Map<ResolvedConfigFilePath, Map<Path, Date>>;
 
-    readonly lastCachedPackageJsonLookups: Map<ResolvedConfigFilePath, readonly (readonly [Path, object | boolean])[] | undefined>;
+    readonly lastCachedPackageJsonLookups: Map<ResolvedConfigFilePath, Set<string> | undefined>;
 
     timerToBuildInvalidatedProject: any;
     reportFileChangeDetected: boolean;
@@ -660,9 +662,9 @@ function createStateBuildOrder<T extends BuilderProgram>(state: SolutionBuilderS
     state.resolvedConfigFilePaths.clear();
 
     // TODO(rbuckton): Should be a `Set`, but that requires changing the code below that uses `mutateMapSkippingNewValues`
-    const currentProjects = new Map(
+    const currentProjects = new Set(
         getBuildOrderFromAnyBuildOrder(buildOrder).map(
-            resolved => [toResolvedConfigFilePath(state, resolved), true as const],
+            resolved => toResolvedConfigFilePath(state, resolved),
         ),
     );
 
@@ -676,6 +678,7 @@ function createStateBuildOrder<T extends BuilderProgram>(state: SolutionBuilderS
     mutateMapSkippingNewValues(state.projectErrorsReported, currentProjects, noopOnDelete);
     mutateMapSkippingNewValues(state.buildInfoCache, currentProjects, noopOnDelete);
     mutateMapSkippingNewValues(state.outputTimeStamps, currentProjects, noopOnDelete);
+    mutateMapSkippingNewValues(state.lastCachedPackageJsonLookups, currentProjects, noopOnDelete);
 
     // Remove watches for the program no longer in the solution
     if (state.watch) {
@@ -795,13 +798,13 @@ function clearProjectStatus<T extends BuilderProgram>(state: SolutionBuilderStat
     state.diagnostics.delete(resolved);
 }
 
-function addProjToQueue<T extends BuilderProgram>({ projectPendingBuild }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
+function addProjToQueue<T extends BuilderProgram>({ projectPendingBuild }: SolutionBuilderState<T>, proj: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
     const value = projectPendingBuild.get(proj);
     if (value === undefined) {
-        projectPendingBuild.set(proj, reloadLevel);
+        projectPendingBuild.set(proj, updateLevel);
     }
-    else if (value < reloadLevel) {
-        projectPendingBuild.set(proj, reloadLevel);
+    else if (value < updateLevel) {
+        projectPendingBuild.set(proj, updateLevel);
     }
 }
 
@@ -815,7 +818,7 @@ function setupInitialBuild<T extends BuilderProgram>(state: SolutionBuilderState
     buildOrder.forEach(configFileName =>
         state.projectPendingBuild.set(
             toResolvedConfigFilePath(state, configFileName),
-            ConfigFileProgramReloadLevel.None,
+            ProgramUpdateLevel.Update,
         )
     );
 
@@ -1083,14 +1086,17 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             config.projectReferences,
         );
         if (state.watch) {
+            const internalMap = state.moduleResolutionCache?.getPackageJsonInfoCache().getInternalMap();
             state.lastCachedPackageJsonLookups.set(
                 projectPath,
-                state.moduleResolutionCache && map(
-                    state.moduleResolutionCache.getPackageJsonInfoCache().entries(),
-                    ([path, data]) => ([state.host.realpath && data ? toPath(state, state.host.realpath(path)) : path, data] as const),
-                ),
+                internalMap && new Set(arrayFrom(
+                    internalMap.values(),
+                    data =>
+                        state.host.realpath && (isPackageJsonInfo(data) || data.directoryExists) ?
+                            state.host.realpath(combinePaths(data.packageDirectory, "package.json")) :
+                            combinePaths(data.packageDirectory, "package.json"),
+                )),
             );
-
             state.builderPrograms.set(projectPath, program);
         }
         step++;
@@ -1402,8 +1408,8 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
     for (let projectIndex = 0; projectIndex < buildOrder.length; projectIndex++) {
         const project = buildOrder[projectIndex];
         const projectPath = toResolvedConfigFilePath(state, project);
-        const reloadLevel = state.projectPendingBuild.get(projectPath);
-        if (reloadLevel === undefined) continue;
+        const updateLevel = state.projectPendingBuild.get(projectPath);
+        if (updateLevel === undefined) continue;
 
         if (reportQueue) {
             reportQueue = false;
@@ -1417,14 +1423,14 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
             continue;
         }
 
-        if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+        if (updateLevel === ProgramUpdateLevel.Full) {
             watchConfigFile(state, project, projectPath, config);
             watchExtendedConfigFiles(state, projectPath, config);
             watchWildCardDirectories(state, project, projectPath, config);
             watchInputFiles(state, project, projectPath, config);
             watchPackageJsonFiles(state, project, projectPath, config);
         }
-        else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+        else if (updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
             // Update file names
             config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
             updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
@@ -1809,7 +1815,8 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             if (
                 (buildInfo.program as ProgramMultiFileEmitBuildInfo).changeFileSet?.length ||
                 (!project.options.noEmit ?
-                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length :
+                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).affectedFilesPendingEmit?.length ||
+                    (buildInfo.program as ProgramMultiFileEmitBuildInfo).emitDiagnosticsPerFile?.length :
                     some((buildInfo.program as ProgramMultiFileEmitBuildInfo).semanticDiagnosticsPerFile, isArray))
             ) {
                 return {
@@ -1982,9 +1989,10 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     if (extendedConfigStatus) return extendedConfigStatus;
 
     // Check package file time
-    const dependentPackageFileStatus = forEach(
-        state.lastCachedPackageJsonLookups.get(resolvedPath) || emptyArray,
-        ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName!),
+    const packageJsonLookups = state.lastCachedPackageJsonLookups.get(resolvedPath);
+    const dependentPackageFileStatus = packageJsonLookups && forEachKey(
+        packageJsonLookups,
+        path => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName!),
     );
     if (dependentPackageFileStatus) return dependentPackageFileStatus;
 
@@ -2169,7 +2177,7 @@ function queueReferencingProjects<T extends BuilderProgram>(
                         break;
                 }
             }
-            addProjToQueue(state, nextProjectPath, ConfigFileProgramReloadLevel.None);
+            addProjToQueue(state, nextProjectPath, ProgramUpdateLevel.Update);
             break;
         }
     }
@@ -2251,7 +2259,7 @@ function cleanWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, p
                 }
                 else {
                     host.deleteFile(output);
-                    invalidateProject(state, resolvedPath, ConfigFileProgramReloadLevel.None);
+                    invalidateProject(state, resolvedPath, ProgramUpdateLevel.Update);
                 }
             }
         }
@@ -2264,24 +2272,24 @@ function cleanWorker<T extends BuilderProgram>(state: SolutionBuilderState<T>, p
     return ExitStatus.Success;
 }
 
-function invalidateProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
+function invalidateProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolved: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
     // If host implements getParsedCommandLine, we cant get list of files from parseConfigFileHost
-    if (state.host.getParsedCommandLine && reloadLevel === ConfigFileProgramReloadLevel.Partial) {
-        reloadLevel = ConfigFileProgramReloadLevel.Full;
+    if (state.host.getParsedCommandLine && updateLevel === ProgramUpdateLevel.RootNamesAndUpdate) {
+        updateLevel = ProgramUpdateLevel.Full;
     }
-    if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+    if (updateLevel === ProgramUpdateLevel.Full) {
         state.configFileCache.delete(resolved);
         state.buildOrder = undefined;
     }
     state.needsSummary = true;
     clearProjectStatus(state, resolved);
-    addProjToQueue(state, resolved, reloadLevel);
+    addProjToQueue(state, resolved, updateLevel);
     enableCache(state);
 }
 
-function invalidateProjectAndScheduleBuilds<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolvedPath: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
+function invalidateProjectAndScheduleBuilds<T extends BuilderProgram>(state: SolutionBuilderState<T>, resolvedPath: ResolvedConfigFilePath, updateLevel: ProgramUpdateLevel) {
     state.reportFileChangeDetected = true;
-    invalidateProject(state, resolvedPath, reloadLevel);
+    invalidateProject(state, resolvedPath, updateLevel);
     scheduleBuildInvalidatedProject(state, 250, /*changeDetected*/ true);
 }
 
@@ -2344,7 +2352,7 @@ function watchConfigFile<T extends BuilderProgram>(state: SolutionBuilderState<T
         watchFile(
             state,
             resolved,
-            () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full),
+            () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ProgramUpdateLevel.Full),
             PollingInterval.High,
             parsed?.watchOptions,
             WatchType.ConfigFile,
@@ -2362,7 +2370,7 @@ function watchExtendedConfigFiles<T extends BuilderProgram>(state: SolutionBuild
             watchFile(
                 state,
                 extendedConfigFileName,
-                () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath => invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full)),
+                () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath => invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ProgramUpdateLevel.Full)),
                 PollingInterval.High,
                 parsed?.watchOptions,
                 WatchType.ExtendedConfigFile,
@@ -2375,7 +2383,7 @@ function watchWildCardDirectories<T extends BuilderProgram>(state: SolutionBuild
     if (!state.watch) return;
     updateWatchingWildcardDirectories(
         getOrCreateValueMapFromConfigFileMap(state.allWatchedWildcardDirectories, resolvedPath),
-        new Map(Object.entries(parsed.wildcardDirectories!)),
+        parsed.wildcardDirectories,
         (dir, flags) =>
             state.watchDirectory(
                 dir,
@@ -2395,7 +2403,7 @@ function watchWildCardDirectories<T extends BuilderProgram>(state: SolutionBuild
                         })
                     ) return;
 
-                    invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Partial);
+                    invalidateProjectAndScheduleBuilds(state, resolvedPath, ProgramUpdateLevel.RootNamesAndUpdate);
                 },
                 flags,
                 parsed?.watchOptions,
@@ -2409,13 +2417,13 @@ function watchInputFiles<T extends BuilderProgram>(state: SolutionBuilderState<T
     if (!state.watch) return;
     mutateMap(
         getOrCreateValueMapFromConfigFileMap(state.allWatchedInputFiles, resolvedPath),
-        arrayToMap(parsed.fileNames, fileName => toPath(state, fileName)),
+        new Set(parsed.fileNames),
         {
-            createNewValue: (_path, input) =>
+            createNewValue: input =>
                 watchFile(
                     state,
                     input,
-                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
+                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ProgramUpdateLevel.Update),
                     PollingInterval.Low,
                     parsed?.watchOptions,
                     WatchType.SourceFile,
@@ -2430,13 +2438,13 @@ function watchPackageJsonFiles<T extends BuilderProgram>(state: SolutionBuilderS
     if (!state.watch || !state.lastCachedPackageJsonLookups) return;
     mutateMap(
         getOrCreateValueMapFromConfigFileMap(state.allWatchedPackageJsonFiles, resolvedPath),
-        new Map(state.lastCachedPackageJsonLookups.get(resolvedPath)),
+        state.lastCachedPackageJsonLookups.get(resolvedPath),
         {
-            createNewValue: (path, _input) =>
+            createNewValue: input =>
                 watchFile(
                     state,
-                    path,
-                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.None),
+                    input,
+                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ProgramUpdateLevel.Update),
                     PollingInterval.High,
                     parsed?.watchOptions,
                     WatchType.PackageJson,
@@ -2503,7 +2511,7 @@ function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, h
             const configFilePath = toResolvedConfigFilePath(state, configFileName);
             return getUpToDateStatus(state, parseConfigFile(state, configFileName, configFilePath), configFilePath);
         },
-        invalidateProject: (configFilePath, reloadLevel) => invalidateProject(state, configFilePath, reloadLevel || ConfigFileProgramReloadLevel.None),
+        invalidateProject: (configFilePath, updateLevel) => invalidateProject(state, configFilePath, updateLevel || ProgramUpdateLevel.Update),
         close: () => stopWatching(state),
     };
 }

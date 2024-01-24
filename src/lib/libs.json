@@ -15,9 +15,11 @@
         // Host only
         "dom.generated",
         "dom.iterable.generated",
+        "dom.asynciterable.generated",
         "webworker.generated",
         "webworker.importscripts",
         "webworker.iterable.generated",
+        "webworker.asynciterable.generated",
         "scripthost",
         // By-feature options
         "es2015.core",
@@ -30,6 +32,7 @@
         "es2015.symbol",
         "es2015.symbol.wellknown",
         "es2016.array.include",
+        "es2016.intl",
         "es2017.date",
         "es2017.object",
         "es2017.sharedmemory",
@@ -70,6 +73,9 @@
         "esnext.decorators",
         "esnext.intl",
         "esnext.disposable",
+        "esnext.promise",
+        "esnext.object",
+        "esnext.collection",
         "decorators",
         "decorators.legacy",
         // Default libraries
@@ -88,8 +94,10 @@
     "paths": {
         "dom.generated": "lib.dom.d.ts",
         "dom.iterable.generated": "lib.dom.iterable.d.ts",
+        "dom.asynciterable.generated": "lib.dom.asynciterable.d.ts",
         "webworker.generated": "lib.webworker.d.ts",
         "webworker.iterable.generated": "lib.webworker.iterable.d.ts",
+        "webworker.asynciterable.generated": "lib.webworker.asynciterable.d.ts",
         "es5.full": "lib.d.ts",
         "es2015.full": "lib.es6.d.ts"
     }

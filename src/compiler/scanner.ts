@@ -12,21 +12,21 @@ import {
     DiagnosticMessage,
     Diagnostics,
     identity,
+    JSDocParsingMode,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
     LanguageVariant,
     LineAndCharacter,
     MapLike,
-    padLeft,
     parsePseudoBigInt,
     positionIsSynthesized,
     PunctuationOrKeywordSyntaxKind,
+    ScriptKind,
     ScriptTarget,
     SourceFileLike,
     SyntaxKind,
     TokenFlags,
-    trimStringStart,
 } from "./_namespaces/ts";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
@@ -97,6 +97,8 @@ export interface Scanner {
     setOnError(onError: ErrorCallback | undefined): void;
     setScriptTarget(scriptTarget: ScriptTarget): void;
     setLanguageVariant(variant: LanguageVariant): void;
+    setScriptKind(scriptKind: ScriptKind): void;
+    setJSDocParsingMode(kind: JSDocParsingMode): void;
     /** @deprecated use {@link resetTokenState} */
     setTextPos(textPos: number): void;
     resetTokenState(pos: number): void;
@@ -344,6 +346,8 @@ const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)
  * Test for whether a multi-line comment with leading whitespace trimmed's last line contains a directive.
  */
 const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
+
+const jsDocSeeOrLink = /@(?:see|link)/i;
 
 function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     // Bail out quickly if it couldn't possibly be in the map.
@@ -1003,6 +1007,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     var commentDirectives: CommentDirective[] | undefined;
     var inJSDocType = 0;
 
+    var scriptKind = ScriptKind.Unknown;
+    var jsDocParsingMode = JSDocParsingMode.ParseAll;
+
     setText(text, start, length);
 
     var scanner: Scanner = {
@@ -1047,6 +1054,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         setText,
         setScriptTarget,
         setLanguageVariant,
+        setScriptKind,
+        setJSDocParsingMode,
         setOnError,
         resetTokenState,
         setTextPos: resetTokenState,
@@ -1354,7 +1363,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 start = pos;
                 continue;
             }
-            if (isLineBreak(ch) && !jsxAttributeString) {
+
+            if ((ch === CharacterCodes.lineFeed || ch === CharacterCodes.carriageReturn) && !jsxAttributeString) {
                 result += text.substring(start, pos);
                 tokenFlags |= TokenFlags.Unterminated;
                 error(Diagnostics.Unterminated_string_literal);
@@ -1490,7 +1500,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                 if (shouldEmitInvalidEscapeError) {
                     const code = parseInt(text.substring(start + 1, pos), 8);
-                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + padLeft(code.toString(16), 2, "0"));
+                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
                     return String.fromCharCode(code);
                 }
                 return text.substring(start, pos);
@@ -1785,12 +1795,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
             const ch = codePointAt(text, pos);
             if (pos === 0) {
-                // If a file wasn't valid text at all, it will usually be apparent at
-                // position 0 because UTF-8 decode will fail and produce U+FFFD.
+                // If a file isn't valid text at all, it will usually be apparent
+                // in the first few characters because UTF-8 decode will fail and produce U+FFFD.
                 // If that happens, just issue one error and refuse to try to scan further;
-                // this is likely a binary file that cannot be parsed
-                if (ch === CharacterCodes.replacementCharacter) {
-                    // Jump to the end of the file and fail.
+                // this is likely a binary file that cannot be parsed.
+                //
+                // It's safe to slice the text; U+FFFD can only be produced by an invalid decode,
+                // so even if we cut a surrogate pair in half, they wouldn't be U+FFFD.
+                if (text.slice(0, 256).includes("\uFFFD")) {
                     error(Diagnostics.File_appears_to_be_binary);
                     pos = end;
                     return token = SyntaxKind.NonTextFileMarkerTrivia;
@@ -1973,9 +1985,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     // Multi-line comment
                     if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
                         pos += 2;
-                        if (text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash) {
-                            tokenFlags |= TokenFlags.PrecedingJSDocComment;
-                        }
+                        const isJSDoc = text.charCodeAt(pos) === CharacterCodes.asterisk && text.charCodeAt(pos + 1) !== CharacterCodes.slash;
 
                         let commentClosed = false;
                         let lastLineStart = tokenStart;
@@ -1994,6 +2004,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 lastLineStart = pos;
                                 tokenFlags |= TokenFlags.PrecedingLineBreak;
                             }
+                        }
+
+                        if (isJSDoc && shouldParseJSDoc()) {
+                            tokenFlags |= TokenFlags.PrecedingJSDocComment;
                         }
 
                         commentDirectives = appendIfCommentDirective(commentDirectives, text.slice(lastLineStart, pos), commentDirectiveRegExMultiLine, lastLineStart);
@@ -2277,6 +2291,28 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
     }
 
+    function shouldParseJSDoc() {
+        switch (jsDocParsingMode) {
+            case JSDocParsingMode.ParseAll:
+                return true;
+            case JSDocParsingMode.ParseNone:
+                return false;
+        }
+
+        if (scriptKind !== ScriptKind.TS && scriptKind !== ScriptKind.TSX) {
+            // If outside of TS, we need JSDoc to get any type info.
+            return true;
+        }
+
+        if (jsDocParsingMode === JSDocParsingMode.ParseForTypeInfo) {
+            // If we're in TS, but we don't need to produce reliable errors,
+            // we don't need to parse to find @see or @link.
+            return false;
+        }
+
+        return jsDocSeeOrLink.test(text.slice(fullStartPos, pos));
+    }
+
     function reScanInvalidIdentifier(): SyntaxKind {
         Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
         pos = tokenStart = fullStartPos;
@@ -2392,7 +2428,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         commentDirectiveRegEx: RegExp,
         lineStart: number,
     ) {
-        const type = getDirectiveFromComment(trimStringStart(text), commentDirectiveRegEx);
+        const type = getDirectiveFromComment(text.trimStart(), commentDirectiveRegEx);
         if (type === undefined) {
             return commentDirectives;
         }
@@ -2777,6 +2813,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         languageVariant = variant;
     }
 
+    function setScriptKind(kind: ScriptKind) {
+        scriptKind = kind;
+    }
+
+    function setJSDocParsingMode(kind: JSDocParsingMode) {
+        jsDocParsingMode = kind;
+    }
+
     function resetTokenState(position: number) {
         Debug.assert(position >= 0);
         pos = position;
@@ -2793,25 +2837,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 }
 
 /** @internal */
-const codePointAt: (s: string, i: number) => number = (String.prototype as any).codePointAt ? (s, i) => (s as any).codePointAt(i) : function codePointAt(str, i): number {
-    // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/codePointAt
-    const size = str.length;
-    // Account for out-of-bounds indices:
-    if (i < 0 || i >= size) {
-        return undefined!; // String.codePointAt returns `undefined` for OOB indexes
-    }
-    // Get the first code unit
-    const first = str.charCodeAt(i);
-    // check if it's the start of a surrogate pair
-    if (first >= 0xD800 && first <= 0xDBFF && size > i + 1) { // high surrogate and there is a next code unit
-        const second = str.charCodeAt(i + 1);
-        if (second >= 0xDC00 && second <= 0xDFFF) { // low surrogate
-            // https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
-            return (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
-        }
-    }
-    return first;
-};
+function codePointAt(s: string, i: number): number {
+    // TODO(jakebailey): this is wrong and should have ?? 0; but all users are okay with it
+    return s.codePointAt(i)!;
+}
 
 /** @internal */
 function charSize(ch: number) {

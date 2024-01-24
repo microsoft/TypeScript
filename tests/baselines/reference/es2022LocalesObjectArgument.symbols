@@ -1,0 +1,51 @@
+//// [tests/cases/conformance/es2022/es2022LocalesObjectArgument.ts] ////
+
+=== es2022LocalesObjectArgument.ts ===
+const enUS = new Intl.Locale("en-US");
+>enUS : Symbol(enUS, Decl(es2022LocalesObjectArgument.ts, 0, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+const deDE = new Intl.Locale("de-DE");
+>deDE : Symbol(deDE, Decl(es2022LocalesObjectArgument.ts, 1, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+const jaJP = new Intl.Locale("ja-JP");
+>jaJP : Symbol(jaJP, Decl(es2022LocalesObjectArgument.ts, 2, 5))
+>Intl.Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Locale : Symbol(Intl.Locale, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+
+new Intl.Segmenter(enUS);
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>enUS : Symbol(enUS, Decl(es2022LocalesObjectArgument.ts, 0, 5))
+
+new Intl.Segmenter([deDE, jaJP]);
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>deDE : Symbol(deDE, Decl(es2022LocalesObjectArgument.ts, 1, 5))
+>jaJP : Symbol(jaJP, Decl(es2022LocalesObjectArgument.ts, 2, 5))
+
+Intl.Segmenter.supportedLocalesOf(enUS);
+>Intl.Segmenter.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2022.intl.d.ts, --, --))
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2022.intl.d.ts, --, --))
+>enUS : Symbol(enUS, Decl(es2022LocalesObjectArgument.ts, 0, 5))
+
+Intl.Segmenter.supportedLocalesOf([deDE, jaJP]);
+>Intl.Segmenter.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2022.intl.d.ts, --, --))
+>Intl.Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 4 more)
+>Segmenter : Symbol(Intl.Segmenter, Decl(lib.es2022.intl.d.ts, --, --), Decl(lib.es2022.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2022.intl.d.ts, --, --))
+>deDE : Symbol(deDE, Decl(es2022LocalesObjectArgument.ts, 1, 5))
+>jaJP : Symbol(jaJP, Decl(es2022LocalesObjectArgument.ts, 2, 5))
+

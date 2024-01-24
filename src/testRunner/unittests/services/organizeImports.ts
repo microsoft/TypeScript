@@ -1,14 +1,12 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
-    createProjectService,
-} from "../helpers/tsserver";
-import {
     createServerHost,
     File,
 } from "../helpers/virtualFileSystemWithWatch";
 import {
     newLineCharacter,
+    TestProjectService,
 } from "./extract/helpers";
 
 describe("unittests:: services:: organizeImports", () => {
@@ -241,10 +239,10 @@ describe("unittests:: services:: organizeImports", () => {
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
 
-        it("Sort specifiers - type-only", () => {
+        it("Sort specifiers - type-only-inline", () => {
             const sortedImports = parseImports(`import { type z, y, type x, c, type b, a } from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
-            const expectedCoalescedImports = parseImports(`import { a, c, y, type b, type x, type z } from "lib";`);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true, ts.getSourceFileOfNode(sortedImports[0]), { organizeImportsTypeOrder: "inline" });
+            const expectedCoalescedImports = parseImports(`import { a, type b, c, type x, y, type z } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
 
@@ -985,7 +983,7 @@ export * from "lib";
 
         function makeLanguageService(...files: File[]) {
             const host = createServerHost(files);
-            const projectService = createProjectService(host, { useSingleInferredProject: true, allowNonBaseliningLogger: true });
+            const projectService = new TestProjectService({ host, useSingleInferredProject: true });
             projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? ts.JsxEmit.React : ts.JsxEmit.None });
             files.forEach(f => projectService.openClientFile(f.path));
             return projectService.inferredProjects[0].getLanguageService();

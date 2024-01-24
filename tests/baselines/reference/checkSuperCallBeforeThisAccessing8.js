@@ -42,8 +42,7 @@ var Super = /** @class */ (function (_super) {
     function Super() {
         var _this = this;
         var that = _this;
-        _this = _super.call(this) || this;
-        return _this;
+        return _this = _super.call(this) || this;
     }
     return Super;
 }(Base));

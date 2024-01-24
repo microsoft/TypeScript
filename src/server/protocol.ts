@@ -173,6 +173,7 @@ export const enum CommandTypes {
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
     ProvideInlayHints = "provideInlayHints",
+    WatchChange = "watchChange",
 }
 
 /**
@@ -1335,6 +1336,7 @@ export interface RenameInfoSuccess {
 
     /**
      * Full display name of item to be renamed.
+     * If item to be renamed is a file, then this is the original text of the module specifer
      */
     fullDisplayName: string;
 
@@ -1954,6 +1956,17 @@ export interface ExitRequest extends Request {
  */
 export interface CloseRequest extends FileRequest {
     command: CommandTypes.Close;
+}
+
+export interface WatchChangeRequest extends Request {
+    command: CommandTypes.WatchChange;
+    arguments: WatchChangeRequestArgs;
+}
+
+export interface WatchChangeRequestArgs {
+    id: number;
+    path: string;
+    eventType: "create" | "delete" | "update";
 }
 
 /**
@@ -3018,6 +3031,39 @@ export interface LargeFileReferencedEventBody {
     maxFileSize: number;
 }
 
+export type CreateFileWatcherEventName = "createFileWatcher";
+export interface CreateFileWatcherEvent extends Event {
+    readonly event: CreateFileWatcherEventName;
+    readonly body: CreateFileWatcherEventBody;
+}
+
+export interface CreateFileWatcherEventBody {
+    readonly id: number;
+    readonly path: string;
+}
+
+export type CreateDirectoryWatcherEventName = "createDirectoryWatcher";
+export interface CreateDirectoryWatcherEvent extends Event {
+    readonly event: CreateDirectoryWatcherEventName;
+    readonly body: CreateDirectoryWatcherEventBody;
+}
+
+export interface CreateDirectoryWatcherEventBody {
+    readonly id: number;
+    readonly path: string;
+    readonly recursive: boolean;
+}
+
+export type CloseFileWatcherEventName = "closeFileWatcher";
+export interface CloseFileWatcherEvent extends Event {
+    readonly event: CloseFileWatcherEventName;
+    readonly body: CloseFileWatcherEventBody;
+}
+
+export interface CloseFileWatcherEventBody {
+    readonly id: number;
+}
+
 /** @internal */
 export type AnyEvent =
     | RequestCompletedEvent
@@ -3029,7 +3075,10 @@ export type AnyEvent =
     | ProjectLoadingStartEvent
     | ProjectLoadingFinishEvent
     | SurveyReadyEvent
-    | LargeFileReferencedEvent;
+    | LargeFileReferencedEvent
+    | CreateFileWatcherEvent
+    | CreateDirectoryWatcherEvent
+    | CloseFileWatcherEvent;
 
 /**
  * Arguments for reload request.
@@ -3594,11 +3643,23 @@ export interface UserPreferences {
      * Default: `false`
      */
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+    /**
+     * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is
+     * type-only.
+     *
+     * Default: `last`
+     */
+    readonly organizeImportsTypeOrder?: "last" | "first" | "inline";
 
     /**
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
      */
     readonly disableLineTextInReferences?: boolean;
+
+    /**
+     * Indicates whether to exclude standard library and node_modules file symbols from navTo results.
+     */
+    readonly excludeLibrarySymbolsInNavTo?: boolean;
 }
 
 export interface CompilerOptions {
@@ -3690,11 +3751,19 @@ export const enum ModuleKind {
     ES6 = "ES6",
     ES2015 = "ES2015",
     ESNext = "ESNext",
+    Node16 = "Node16",
+    NodeNext = "NodeNext",
+    Preserve = "Preserve",
 }
 
 export const enum ModuleResolutionKind {
     Classic = "Classic",
+    /** @deprecated Renamed to `Node10` */
     Node = "Node",
+    Node10 = "Node10",
+    Node16 = "Node16",
+    NodeNext = "NodeNext",
+    Bundler = "Bundler",
 }
 
 export const enum NewLineKind {

@@ -27,8 +27,7 @@ function runTests(runners: RunnerBase[]) {
         const dupes: [string, string][] = [];
         for (const runner of runners) {
             if (runner instanceof CompilerBaselineRunner || runner instanceof FourSlashRunner) {
-                for (const sf of runner.enumerateTestFiles()) {
-                    const full = typeof sf === "string" ? sf : sf.file;
+                for (const full of runner.enumerateTestFiles()) {
                     const base = vpath.basename(full).toLowerCase();
                     // allow existing dupes in fourslash/shims and fourslash/server
                     if (seen.has(base) && !/fourslash\/(shim|server)/.test(full)) {
@@ -63,10 +62,6 @@ export function createRunner(kind: TestRunnerKind): RunnerBase {
             return new CompilerBaselineRunner(CompilerTestType.Regressions);
         case "fourslash":
             return new FourSlashRunner(FourSlash.FourSlashTestType.Native);
-        case "fourslash-shims":
-            return new FourSlashRunner(FourSlash.FourSlashTestType.Shims);
-        case "fourslash-shims-pp":
-            return new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess);
         case "fourslash-server":
             return new FourSlashRunner(FourSlash.FourSlashTestType.Server);
         case "project":
@@ -161,7 +156,7 @@ function handleTestConfig() {
         const runnerConfig = testConfig.runners || testConfig.test;
         if (runnerConfig && runnerConfig.length > 0) {
             if (testConfig.runners) {
-                runUnitTests = runnerConfig.indexOf("unittest") !== -1;
+                runUnitTests = runnerConfig.includes("unittest");
             }
             for (const option of runnerConfig) {
                 if (!option) {
@@ -189,18 +184,11 @@ function handleTestConfig() {
                     case "fourslash":
                         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
                         break;
-                    case "fourslash-shims":
-                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Shims));
-                        break;
-                    case "fourslash-shims-pp":
-                        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
-                        break;
                     case "fourslash-server":
                         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
                         break;
                     case "fourslash-generated":
                         runners.push(new GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
-                        break;
                         break;
                 }
             }
@@ -216,8 +204,6 @@ function handleTestConfig() {
 
         // language services
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
-        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Shims));
-        runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.ShimsWithPreprocess));
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
     }

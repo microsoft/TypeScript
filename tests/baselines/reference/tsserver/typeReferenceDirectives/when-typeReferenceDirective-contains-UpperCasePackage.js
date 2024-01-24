@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts]
 declare class BrokenTest {
@@ -31,7 +31,15 @@ class TestClass1 {
 }
 
 //// [/user/username/projects/myproject/test/tsconfig.json]
-{"compilerOptions":{"module":"amd","typeRoots":["../lib/@types","../lib/@app"]}}
+{
+  "compilerOptions": {
+    "module": "amd",
+    "typeRoots": [
+      "../lib/@types",
+      "../lib/@app"
+    ]
+  }
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -60,6 +68,16 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/test
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/test/test.ts :: Config file name: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/test/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/myproject/test/test.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/test/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/test/test.ts"
@@ -105,6 +123,73 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Entry point for implicit type library 'lib'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/myproject/test/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "912f29d323a58e00919cbeb836d6f90023f51c45d77161ec3ff25c6eb85adae1",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 153,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 3,
+            "dtsSize": 616,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "module": "amd",
+            "typeRoots": [
+              "",
+              ""
+            ]
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/test/test.ts",
+        "configFile": "/user/username/projects/myproject/test/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/test/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -123,7 +208,7 @@ FsWatches::
   {}
 /user/username/projects/myproject/lib/@app/lib/index.d.ts: *new*
   {}
-/user/username/projects/myproject/lib/@types/uppercasepackage/index.d.ts: *new*
+/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts: *new*
   {}
 /user/username/projects/myproject/test/tsconfig.json: *new*
   {}
@@ -154,6 +239,10 @@ declare class TestLib {
 }
 
 
+Timeout callback:: count: 2
+1: /user/username/projects/myproject/test/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -182,4 +271,16 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/test/test.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/test/tsconfig.json
+Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/test/test.ts
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/user/username/projects/myproject/test/test.ts"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0

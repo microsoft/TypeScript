@@ -15,13 +15,13 @@ interface Collection<T> {
 }
 interface Combinators {
     map<T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>;
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
 >c : Collection<T>
 >f : (x: T) => U
 >x : T
 
     map<T>(c: Collection<T>, f: (x: T) => any): Collection<any>;
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>map : { <T_1, U>(c: Collection<T_1>, f: (x: T_1) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
 >c : Collection<T>
 >f : (x: T) => any
 >x : T
@@ -45,9 +45,9 @@ var rf1 = (x: number) => { return x.toFixed() };
 var r1a = _.map(c2, (x) => { return x.toFixed() });
 >r1a : Collection<string>
 >_.map(c2, (x) => { return x.toFixed() }) : Collection<string>
->_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
 >_ : Combinators
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
 >c2 : Collection<number>
 >(x) => { return x.toFixed() } : (x: number) => string
 >x : number
@@ -59,18 +59,18 @@ var r1a = _.map(c2, (x) => { return x.toFixed() });
 var r1b = _.map(c2, rf1); // this line should not cause the following 2 to have errors 
 >r1b : Collection<string>
 >_.map(c2, rf1) : Collection<string>
->_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
 >_ : Combinators
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
 >c2 : Collection<number>
 >rf1 : (x: number) => string
 
 var r5a = _.map<number, string>(c2, (x) => { return x.toFixed() });
 >r5a : Collection<string>
 >_.map<number, string>(c2, (x) => { return x.toFixed() }) : Collection<string>
->_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
 >_ : Combinators
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
 >c2 : Collection<number>
 >(x) => { return x.toFixed() } : (x: number) => string
 >x : number
@@ -82,9 +82,9 @@ var r5a = _.map<number, string>(c2, (x) => { return x.toFixed() });
 var r5b = _.map<number, string>(c2, rf1);
 >r5b : Collection<string>
 >_.map<number, string>(c2, rf1) : Collection<string>
->_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>_.map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
 >_ : Combinators
->map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T>(c: Collection<T>, f: (x: T) => any): Collection<any>; }
+>map : { <T, U>(c: Collection<T>, f: (x: T) => U): Collection<U>; <T_1>(c: Collection<T_1>, f: (x: T_1) => any): Collection<any>; }
 >c2 : Collection<number>
 >rf1 : (x: number) => string
 
