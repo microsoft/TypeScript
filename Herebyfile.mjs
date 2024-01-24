@@ -176,7 +176,7 @@ async function runDtsBundler(entrypoint, output) {
     ]);
 }
 
-const requireFn = createRequire(import.meta.url);
+const require = createRequire(import.meta.url);
 
 /**
  * @param {string} entrypoint
@@ -226,17 +226,17 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // ensuring that source maps still work.
             //
             // See: https://github.com/evanw/esbuild/issues/1905
-            const require = "require";
-            const fakeName = "Q".repeat(require.length);
+            const requireStr = "require";
+            const fakeName = "Q".repeat(requireStr.length);
             const fakeNameRegExp = new RegExp(fakeName, "g");
-            options.define = { [require]: fakeName };
+            options.define = { [requireStr]: fakeName };
             options.plugins = [
                 {
                     name: "post-process",
                     setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(fakeNameRegExp, require);
+                            contents = contents.replace(fakeNameRegExp, requireStr);
                             await fs.promises.writeFile(outfile, contents);
 
                             // This is a trick esbuild uses when emitting CJS to ensure that
@@ -253,7 +253,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                             // https://github.com/evanw/esbuild/issues/3281
 
                             // Using createRequire here is emperically faster than await import.
-                            const obj = requireFn(outfile);
+                            const obj = require(outfile);
                             const names = Object.keys(obj);
                             const fakeExport = `  0 && (module.exports = {\n${names.map(name => `    ${name},\n`).join("")}  });`;
                             contents = contents.replace("module.exports = ts;", `module.exports = ts;\n${fakeExport}`);
