@@ -17928,6 +17928,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTemplateLiteralType(texts: readonly string[], types: readonly Type[]): Type {
+        if (texts.length === 2 && texts[0] === "" && texts[1] === ""
+            // literals (including string enums) are stringified below
+            && !(types[0].flags & TypeFlags.Literal)
+            // infer T extends StringLike can't be unwrapped eagerly
+            && !types[0].symbol?.declarations?.some(d => d.parent.kind === SyntaxKind.InferType)
+            && isTypeAssignableTo(types[0], stringType)) {
+            return types[0];
+        }
         const unionIndex = findIndex(types, t => !!(t.flags & (TypeFlags.Never | TypeFlags.Union)));
         if (unionIndex >= 0) {
             return checkCrossProductUnion(types) ?
@@ -22647,9 +22655,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
                     instantiateType(source, reportUnreliableMapper);
                 }
-                if (isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(target) && isTypeAssignableTo(source, stringType) && isTypeAssignableTo(target.types[0], stringType)) {
-                    return isRelatedTo(source, target.types[0], RecursionFlags.Both, reportErrors);
-                }
                 if (isTypeMatchedByTemplateLiteralType(source, target as TemplateLiteralType)) {
                     return Ternary.True;
                 }
@@ -22707,9 +22712,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (sourceFlags & TypeFlags.TemplateLiteral && !(targetFlags & TypeFlags.Object)) {
                 if (!(targetFlags & TypeFlags.TemplateLiteral)) {
-                    if (isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(source) && isTypeAssignableTo(source.types[0], stringType) && isTypeAssignableTo(target, stringType)) {
-                        return isRelatedTo(source.types[0], target, RecursionFlags.Both, reportErrors);
-                    }
                     const constraint = getBaseConstraintOfType(source);
                     if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
                         return result;
@@ -25350,14 +25352,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(type: Type): type is TemplateLiteralType {
-        if (!(type.flags & TypeFlags.TemplateLiteral)) {
-            return false;
-        }
-        const texts = (type as TemplateLiteralType).texts;
-        return texts.length === 2 && texts[0] === "" && texts[1] === "";
-    }
-
     function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
         if (target.flags & TypeFlags.Intersection) {
             return every((target as IntersectionType).types, t => t === emptyTypeLiteralType || isValidTypeForTemplateLiteralPlaceholder(source, t));
@@ -25373,8 +25367,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 target.flags & TypeFlags.StringMapping && isMemberOfStringMapping(getStringLiteralType(value), target) ||
                 target.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, target as TemplateLiteralType));
         }
-        if (isTemplateLiteralTypeWithSinglePlaceholderAndNoExtraTexts(source)) {
-            return isTypeAssignableTo(source.types[0], target);
+        if (source.flags & TypeFlags.TemplateLiteral) {
+            const texts = (source as TemplateLiteralType).texts;
+            return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo((source as TemplateLiteralType).types[0], target);
         }
         return false;
     }
