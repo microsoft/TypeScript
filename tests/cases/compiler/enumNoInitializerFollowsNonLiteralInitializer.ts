@@ -1,5 +1,4 @@
 // @isolatedModules: true
-// @noEmit: true
 // @noTypesAndSymbols: true
 
 // @filename: ./helpers.ts
