@@ -583,8 +583,7 @@ describe("unittests:: tsserver:: projectErrors:: dont include overwrite emit err
         const session = new TestSession(host);
         openFilesForSession([f1], session);
 
-        const projectService = session.getProjectService();
-        const projectFileName = projectService.inferredProjects[0].getProjectName();
+        const projectFileName = session.getProjectService().inferredProjects[0].getProjectName();
         session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
             command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
             arguments: { projectFileName },

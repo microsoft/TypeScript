@@ -1,5 +1,106 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Before request
+//// [/user/username/projects/myproject/tsconfig-src.json]
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./target/",
+    "baseUrl": "./src/"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "references": [
+    {
+      "path": "./tsconfig-src.json"
+    }
+  ],
+  "files": []
+}
+
+//// [/user/username/projects/myproject/src/main.ts]
+import { foo } from 'helpers/functions';
+export { foo };
+
+//// [/user/username/projects/myproject/src/helpers/functions.ts]
+export const foo = 1;
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/dummy/dummy.ts]
+let a = 10;
+
+//// [/user/username/projects/myproject/target/src/main.d.ts]
+import { foo } from 'helpers/functions';
+export { foo };
+//# sourceMappingURL=main.d.ts.map
+
+//// [/user/username/projects/myproject/target/src/main.d.ts.map]
+{
+  "version": 3,
+  "file": "main.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../../src/main.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"
+}
+
+//// [/user/username/projects/myproject/target/src/helpers/functions.d.ts]
+export declare const foo = 1;
+//# sourceMappingURL=functions.d.ts.map
+
+//// [/user/username/projects/myproject/target/src/helpers/functions.d.ts.map]
+{
+  "version": 3,
+  "file": "functions.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../../../src/helpers/functions.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"
+}
+
+//// [/user/username/projects/myproject/indirect3/tsconfig.json]
+{
+  "compilerOptions": {
+    "baseUrl": "../target/src/"
+  }
+}
+
+//// [/user/username/projects/myproject/indirect3/main.ts]
+import { foo } from 'main';
+foo;
+export function bar() {}
+
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -212,99 +313,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig-src.json
-Info seq  [hh:mm:ss:mss] getDefaultProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
-Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
-Before request
-//// [/user/username/projects/myproject/tsconfig-src.json]
-{
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "./target/",
-    "baseUrl": "./src/"
-  },
-  "include": [
-    "./src/**/*"
-  ]
-}
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "references": [
+Info seq  [hh:mm:ss:mss] response:
     {
-      "path": "./tsconfig-src.json"
+      "responseRequired": false
     }
-  ],
-  "files": []
-}
-
-//// [/user/username/projects/myproject/src/main.ts]
-import { foo } from 'helpers/functions';
-export { foo };
-
-//// [/user/username/projects/myproject/src/helpers/functions.ts]
-export const foo = 1;
-
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
-//// [/dummy/dummy.ts]
-let a = 10;
-
-//// [/user/username/projects/myproject/target/src/main.d.ts]
-import { foo } from 'helpers/functions';
-export { foo };
-//# sourceMappingURL=main.d.ts.map
-
-//// [/user/username/projects/myproject/target/src/main.d.ts.map]
-{
-  "version": 3,
-  "file": "main.d.ts",
-  "sourceRoot": "",
-  "sources": [
-    "../../src/main.ts"
-  ],
-  "names": [],
-  "mappings": "AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"
-}
-
-//// [/user/username/projects/myproject/target/src/helpers/functions.d.ts]
-export declare const foo = 1;
-//# sourceMappingURL=functions.d.ts.map
-
-//// [/user/username/projects/myproject/target/src/helpers/functions.d.ts.map]
-{
-  "version": 3,
-  "file": "functions.d.ts",
-  "sourceRoot": "",
-  "sources": [
-    "../../../src/helpers/functions.ts"
-  ],
-  "names": [],
-  "mappings": "AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"
-}
-
-//// [/user/username/projects/myproject/indirect3/tsconfig.json]
-{
-  "compilerOptions": {
-    "baseUrl": "../target/src/"
-  }
-}
-
-//// [/user/username/projects/myproject/indirect3/main.ts]
-import { foo } from 'main';
-foo;
-export function bar() {}
-
+After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -326,6 +339,10 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src: *new*
   {}
 
+Info seq  [hh:mm:ss:mss] getDefaultProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-src.json
+Before request
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
@@ -335,7 +352,7 @@ Info seq  [hh:mm:ss:mss] request:
           "/user/username/projects/myproject/src/main.ts"
         ]
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
@@ -402,11 +419,22 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "requestCompleted",
       "body": {
-        "request_seq": 1
+        "request_seq": 2
       }
     }
 After running Immedidate callback:: count: 0
 
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/dummy/dummy.ts"
+      },
+      "seq": 3,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /dummy
 Info seq  [hh:mm:ss:mss] For info: /dummy/dummy.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -440,6 +468,23 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.t
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts"
+      },
+      "seq": 4,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -456,6 +501,45 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/dummy/dummy.ts"
+      },
+      "seq": 5,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /dummy/dummy.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -470,6 +554,47 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/dummy/dummy.ts: *new*
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/dummy/dummy.ts"
+      },
+      "seq": 6,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /dummy/dummy.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Search path: /dummy
 Info seq  [hh:mm:ss:mss] For info: /dummy/dummy.ts :: No config files found.
@@ -521,6 +646,49 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatches *deleted*::
+/dummy/dummy.ts:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive *deleted*::
+/user/username/projects/myproject/src:
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts"
+      },
+      "seq": 7,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -652,6 +820,43 @@ Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig-src.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src: *new*
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/dummy/dummy.ts"
+      },
+      "seq": 8,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /dummy/dummy.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -668,6 +873,45 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/dummy/dummy.ts: *new*
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/dummy/dummy.ts"
+      },
+      "seq": 9,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /dummy/dummy.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Search path: /dummy
 Info seq  [hh:mm:ss:mss] For info: /dummy/dummy.ts :: No config files found.
@@ -691,6 +935,44 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.t
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/dummy/dummy.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "reloadProjects",
+      "seq": 10,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] reload projects.
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig-src.json
@@ -877,47 +1159,15 @@ Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.t
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-Before request
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500} *new*
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500} *new*
-
-PolledWatches *deleted*::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {} *new*
-/user/username/projects/myproject/tsconfig-src.json:
-  {} *new*
-/user/username/projects/myproject/tsconfig.json:
-  {} *new*
-
-FsWatches *deleted*::
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {} *new*
-
-FsWatchesRecursive *deleted*::
-/user/username/projects/myproject/src:
-  {}
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
 
 Timeout callback:: count: 0
+
+Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -927,7 +1177,7 @@ Info seq  [hh:mm:ss:mss] request:
         "line": 2,
         "offset": 10
       },
-      "seq": 2,
+      "seq": 11,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/src/main.ts position 50 in project /user/username/projects/myproject/tsconfig-src.json
@@ -1036,6 +1286,17 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/myproject/src/main.ts"
+      },
+      "seq": 12,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -1052,6 +1313,49 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/dummy/dummy.ts"
+      },
+      "seq": 13,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /dummy/dummy.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -1066,6 +1370,51 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/dummy/dummy.ts: *new*
+  {}
+/user/username/projects/myproject/src/helpers/functions.ts:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts:
+  {}
+/user/username/projects/myproject/target/src/helpers/functions.d.ts.map:
+  {}
+/user/username/projects/myproject/tsconfig-src.json:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/user/username/projects/myproject/indirect3/main.ts"
+      },
+      "seq": 14,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/indirect3
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/indirect3/main.ts :: Config file name: /user/username/projects/myproject/indirect3/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/indirect3/tsconfig.json
@@ -1241,7 +1590,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/indirect3/main.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/indirect3/tsconfig.json
-Before request
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
 
 PolledWatches::
 /user/username/projects/myproject/indirect3/node_modules/@types: *new*
@@ -1266,6 +1619,10 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
+/dummy/dummy.ts:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
 /user/username/projects/myproject/tsconfig-src.json:
   {}
 /user/username/projects/myproject/tsconfig.json:
@@ -1281,6 +1638,8 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/src:
   {}
 
+Before request
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "references",
@@ -1289,7 +1648,7 @@ Info seq  [hh:mm:ss:mss] request:
         "line": 1,
         "offset": 10
       },
-      "seq": 3,
+      "seq": 15,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/myproject/indirect3/main.ts position 9 in project /user/username/projects/myproject/indirect3/tsconfig.json

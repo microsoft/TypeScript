@@ -10,6 +10,7 @@ import {
 } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
+    closeFilesForSession,
     createHostWithSolutionBuild,
     openFilesForSession,
     protocolFileLocationFromSubstring,
@@ -121,12 +122,16 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
 
         it("does not error on container only project", () => {
             const { files, session, containerConfig } = setup();
-            const service = session.getProjectService();
-            service.openExternalProjects([{
-                projectFileName: "/user/username/projects/container/container",
-                rootFiles: files.map(f => ({ fileName: f.path })),
-                options: {},
-            }]);
+            session.executeCommandSeq<ts.server.protocol.OpenExternalProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.OpenExternalProjects,
+                arguments: {
+                    projects: [{
+                        projectFileName: "/user/username/projects/container/container",
+                        rootFiles: files.map(f => ({ fileName: f.path })),
+                        options: {},
+                    }],
+                },
+            });
             files.forEach(f => {
                 const args: ts.server.protocol.FileRequestArgs = {
                     file: f.path,
@@ -141,7 +146,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                     arguments: args,
                 });
             });
-            const containerProject = service.configuredProjects.get(containerConfig.path)!;
+            const containerProject = session.getProjectService().configuredProjects.get(containerConfig.path)!;
             session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
                 command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
                 arguments: { projectFileName: containerProject.projectName },
@@ -168,7 +173,6 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             };
             const { session, containerCompositeExecIndex } = setup(tempFile);
             openFilesForSession([containerCompositeExecIndex], session);
-            const service = session.getProjectService();
 
             // Open temp file and verify all projects alive
             openFilesForSession([tempFile], session);
@@ -184,12 +188,11 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             });
 
             // Open temp file and verify all projects alive
-            service.closeClientFile(tempFile.path);
+            closeFilesForSession([tempFile], session);
             openFilesForSession([tempFile], session);
 
             // Close all files and open temp file, only inferred project should be alive
-            service.closeClientFile(containerCompositeExecIndex.path);
-            service.closeClientFile(tempFile.path);
+            closeFilesForSession([containerCompositeExecIndex, tempFile], session);
             openFilesForSession([tempFile], session);
             baselineTsserverLogs("projectReferences", `ancestor and project ref management`, session);
         });
@@ -1044,36 +1047,35 @@ export function bar() {}`,
                 ...additionalFiles,
             ]);
             const session = new TestSession(host);
-            const service = session.getProjectService();
-            service.openClientFile(main.path);
-            return { session, service, host };
+            openFilesForSession([main], session);
+            return { session, host };
         }
 
         function verifySolutionScenario(input: Setup) {
-            const { session, service } = setup(input);
+            const { session } = setup(input);
 
-            const info = service.getScriptInfoForPath(main.path as ts.Path)!;
+            const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
             session.logger.startGroup();
             session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)!.projectName}`);
+            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)!.projectName}`);
             session.logger.endGroup();
 
             // Verify errors
             verifyGetErrRequest({ session, files: [main] });
 
             // Verify collection of script infos
-            service.openClientFile(dummyFilePath);
+            openFilesForSession([dummyFilePath], session);
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
-            service.openClientFile(dummyFilePath);
+            closeFilesForSession([main, dummyFilePath], session);
+            openFilesForSession([dummyFilePath, main], session);
 
-            service.openClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
-            service.openClientFile(dummyFilePath);
+            closeFilesForSession([dummyFilePath], session);
+            openFilesForSession([dummyFilePath], session);
 
             // Verify Reload projects
-            service.reloadProjects();
+            session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.ReloadProjects,
+            });
 
             // Find all refs
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
@@ -1081,11 +1083,10 @@ export function bar() {}`,
                 arguments: protocolFileLocationFromSubstring(main, "foo", { index: 1 }),
             }).response as ts.server.protocol.ReferencesResponseBody;
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
+            closeFilesForSession([main, dummyFilePath], session);
 
             // Verify when declaration map references the file
-            service.openClientFile(fileResolvingToMainDts.path);
+            openFilesForSession([fileResolvingToMainDts], session);
 
             // Find all refs from dts include
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
@@ -1117,25 +1118,24 @@ export function bar() {}`,
         }
 
         function verifyDisableReferencedProjectLoad(input: Setup) {
-            const { session, service } = setup(input);
+            const { session } = setup(input);
 
-            const info = service.getScriptInfoForPath(main.path as ts.Path)!;
+            const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
             session.logger.startGroup();
             session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)?.projectName}`);
+            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)?.projectName}`);
             session.logger.endGroup();
 
             // Verify collection of script infos
-            service.openClientFile(dummyFilePath);
+            openFilesForSession([dummyFilePath], session);
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
-            service.openClientFile(dummyFilePath);
-
-            service.openClientFile(main.path);
+            closeFilesForSession([main, dummyFilePath], session);
+            openFilesForSession([dummyFilePath, main], session);
 
             // Verify Reload projects
-            service.reloadProjects();
+            session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.ReloadProjects,
+            });
             baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 
