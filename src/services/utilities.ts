@@ -4276,7 +4276,10 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     return preferRequire;
 }
 
-/** @internal */
+/**
+ * Does not perform change matching, only returns a the number of the minimum edit
+ * @internal
+ */
 export function getDiffNum<T>(s1: T[], s2: T[]): number {
     return getDiffOpt(s1, s2);
 
