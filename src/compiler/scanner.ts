@@ -2683,6 +2683,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return token = SyntaxKind.OpenBracketToken;
             case CharacterCodes.closeBracket:
                 return token = SyntaxKind.CloseBracketToken;
+            case CharacterCodes.openParen:
+                return token = SyntaxKind.OpenParenToken;
+            case CharacterCodes.closeParen:
+                return token = SyntaxKind.CloseParenToken;
             case CharacterCodes.lessThan:
                 return token = SyntaxKind.LessThanToken;
             case CharacterCodes.greaterThan:
