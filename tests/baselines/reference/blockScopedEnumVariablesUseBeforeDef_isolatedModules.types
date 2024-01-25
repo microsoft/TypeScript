@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef.ts] ////
+//// [tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts] ////
 
-=== blockScopedEnumVariablesUseBeforeDef.ts ===
+=== blockScopedEnumVariablesUseBeforeDef_isolatedModules.ts ===
 function foo1() {
 >foo1 : () => E
 
