@@ -4,12 +4,13 @@
 import * as intermediate from './intermediate'
 >intermediate : typeof intermediate
 
-const ghost = new intermediate.Ghost()
+const ghost: intermediate.Ghost = new intermediate.Ghost()
 >ghost : intermediate.Ghost
->new intermediate.Ghost() : intermediate.Ghost
->intermediate.Ghost : typeof intermediate.Ghost
+>intermediate : any
+>new intermediate.Ghost() : any
+>intermediate.Ghost : any
 >intermediate : typeof intermediate
->Ghost : typeof intermediate.Ghost
+>Ghost : any
 
 === intermediate.ts ===
 

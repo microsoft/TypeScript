@@ -2,8 +2,7 @@
 
 //// [main.ts]
 import * as intermediate from './intermediate'
-
-const ghost = new intermediate.Ghost()
+const ghost: intermediate.Ghost = new intermediate.Ghost()
 
 //// [intermediate.ts]
 export type * from './ghost'
