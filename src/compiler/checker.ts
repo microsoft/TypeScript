@@ -39347,20 +39347,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getNonGenericReturnTypeOfSingleCallSignature(funcType: Type) {
+    function getReturnTypeOfSingleNonGenericCallSignature(funcType: Type) {
         const signature = getSingleCallSignature(funcType);
-        if (signature) {
-            const returnType = getReturnTypeOfSignature(signature);
-            if (!signature.typeParameters || !couldContainTypeVariables(returnType)) {
-                return returnType;
-            }
+        if (signature && !signature.typeParameters) {
+            return getReturnTypeOfSignature(signature);
         }
     }
 
     function getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr: CallChain) {
         const funcType = checkExpression(expr.expression);
         const nonOptionalType = getOptionalExpressionType(funcType, expr.expression);
-        const returnType = getNonGenericReturnTypeOfSingleCallSignature(funcType);
+        const returnType = getReturnTypeOfSingleNonGenericCallSignature(funcType);
         return returnType && propagateOptionalTypeMarker(returnType, expr, nonOptionalType !== funcType);
     }
 
@@ -39409,7 +39406,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // signature where we can just fetch the return type without checking the arguments.
         if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr)) {
             return isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
-                getNonGenericReturnTypeOfSingleCallSignature(checkNonNullExpression(expr.expression));
+                getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
         }
         else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
             return getTypeFromTypeNode((expr as TypeAssertion).type);
