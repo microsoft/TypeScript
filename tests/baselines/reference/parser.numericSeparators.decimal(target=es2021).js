@@ -1,6 +1,6 @@
-//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.decimal.es2021.ts] ////
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.decimal.ts] ////
 
-//// [parser.numericSeparators.decimal.es2021.ts]
+//// [parser.numericSeparators.decimal.ts]
 1_000_000_000
 1.1_00_01
 1e1_0
@@ -17,7 +17,7 @@
 1_2.3_4e-5_6
 
 
-//// [parser.numericSeparators.decimal.es2021.js]
+//// [parser.numericSeparators.decimal.js]
 1_000_000_000;
 1.1_00_01;
 1e1_0;
