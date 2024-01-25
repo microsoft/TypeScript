@@ -41,6 +41,7 @@ import {
     readJson,
     rimraf,
 } from "./scripts/build/utils.mjs";
+import assert from "assert";
 
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
@@ -225,6 +226,10 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             const fakeName = "Q".repeat(require.length);
             const fakeNameRegExp = new RegExp(fakeName, "g");
             options.define = { [require]: fakeName };
+
+            const toCommonJsRegExp = /var __toCommonJS .*/;
+            const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod);";
+
             options.plugins = [
                 {
                     name: "fix-require",
@@ -232,6 +237,9 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
                             contents = contents.replace(fakeNameRegExp, require);
+                            const toCommonJsMatch = contents.match(toCommonJsRegExp);
+                            assert(toCommonJsMatch);
+                            contents = contents.replace(toCommonJsRegExp, toCommonJsRegExpReplacement + ";".repeat(toCommonJsMatch[0].length - toCommonJsRegExpReplacement.length));
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },
