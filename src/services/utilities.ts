@@ -4275,3 +4275,33 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     }
     return preferRequire;
 }
+
+/** @internal */
+export function getDiffNum<T>(s1: T[], s2: T[]): number {
+    return getDiffOpt(s1, s2);
+
+    function getDiffOpt<T>(s1: T[], s2: T[]): number {
+        const diffTable = new Array<number[]>(s1.length + 1);
+        diffTable[s1.length] = Array.from({ length: s2.length + 1 }, (_, i) => s2.length - i);
+
+        for (let i = s1.length - 1; i >= 0; i--) {
+            diffTable[i] = new Array<number>(s2.length + 1);
+            diffTable[i][s2.length] = s2.length - i;
+
+            for (let j = s2.length - 1; j >= 0; j--) {
+                if (s1[i] === s2[j]) {
+                    diffTable[i][j] = diffTable[i + 1][j + 1];
+                }
+                else {
+                    // all change types are currently weighted the same
+                    diffTable[i][j] = 1 + Math.min(
+                        diffTable[i + 1][j],
+                        diffTable[i + 1][j + 1],
+                        diffTable[i][j + 1],
+                    );
+                }
+            }
+        }
+        return diffTable[0][0];
+    }
+}

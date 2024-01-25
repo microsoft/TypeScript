@@ -838,6 +838,46 @@ export function sortAndDeduplicate<T>(array: readonly T[], comparer?: Comparer<T
     return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
 }
 
+/**
+ * Merges two sorted arrays so that the resulting array is sorted and has no duplicates.
+ * @internal
+ */
+export function mergeAndDeduplicateSorted<T>(array1: readonly T[], array2: readonly T[], comparer: Comparer<T>): SortedReadonlyArray<T> {
+    if (array1.length === 0) return array2 as any as SortedReadonlyArray<T>;
+    if (array2.length === 0) return array1 as any as SortedReadonlyArray<T>;
+
+    const finalArray: T[] = [];
+    let i = 0, j = 0;
+    while (i < array1.length && j < array2.length) {
+        switch (comparer(array1[i], array2[j])) {
+            case Comparison.LessThan:
+                finalArray.push(array1[i]);
+                i++;
+                break;
+            case Comparison.EqualTo:
+                finalArray.push(array1[i]);
+                i++, j++;
+                break;
+            case Comparison.GreaterThan:
+                finalArray.push(array2[j]);
+                j++;
+                break;
+            default:
+                Debug.fail("not a valid Comparison");
+        }
+    }
+    if (i === array1.length && j === array2.length) {
+        return finalArray as any as SortedReadonlyArray<T>;
+    }
+    if (i === array1.length) {
+        return finalArray.concat(array2.slice(j)) as any as SortedReadonlyArray<T>;
+    }
+    if (j === array2.length) {
+        return finalArray.concat(array1.slice(i)) as any as SortedReadonlyArray<T>;
+    }
+    return Debug.fail("unreachable");
+}
+
 /** @internal */
 export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
     if (array.length < 2) return true;
