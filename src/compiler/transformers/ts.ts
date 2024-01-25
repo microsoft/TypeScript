@@ -1873,7 +1873,12 @@ export function transformTypeScript(context: TransformationContext) {
             ),
             valueExpression,
         );
-        const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
+        const isString = valueExpression.kind === SyntaxKind.StringLiteral ||
+            // Fix ts.transpileModule() emit: we may not have been able to determine a known string due
+            // to missing type information, but we know syntactically that it's a string. The checker
+            // ensures that only syntactically determined strings are allowed under isolatedModules.
+            (member.initializer && resolver.isSyntacticallyString(member.initializer));
+        const outerAssignment = isString ?
             innerAssignment :
             factory.createAssignment(
                 factory.createElementAccessExpression(
