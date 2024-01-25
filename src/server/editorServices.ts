@@ -4196,7 +4196,10 @@ export class ProjectService {
         }
     }
 
-    closeExternalProject(uncheckedFileName: string): void {
+    closeExternalProject(uncheckedFileName: string): void;
+    /** @internal */
+    closeExternalProject(uncheckedFileName: string, print: boolean): void;
+    closeExternalProject(uncheckedFileName: string, print?: boolean): void {
         const fileName = toNormalizedPath(uncheckedFileName);
         const configFiles = this.externalProjectToConfiguredProjectMap.get(fileName);
         if (configFiles) {
@@ -4212,6 +4215,7 @@ export class ProjectService {
                 this.removeProject(externalProject);
             }
         }
+        if (print) this.printProjects();
     }
 
     openExternalProjects(projects: protocol.ExternalProject[]): void {
@@ -4222,15 +4226,17 @@ export class ProjectService {
         });
 
         for (const externalProject of projects) {
-            this.openExternalProject(externalProject);
+            this.openExternalProject(externalProject, /*print*/ false);
             // delete project that is present in input list
             projectsToClose.delete(externalProject.projectFileName);
         }
 
         // close projects that were missing in the input list
         forEachKey(projectsToClose, externalProjectName => {
-            this.closeExternalProject(externalProjectName);
+            this.closeExternalProject(externalProjectName, /*print*/ false);
         });
+
+        this.printProjects();
     }
 
     /** Makes a filename safe to insert in a RegExp */
@@ -4352,7 +4358,10 @@ export class ProjectService {
         return excludedFiles;
     }
 
-    openExternalProject(proj: protocol.ExternalProject): void {
+    openExternalProject(proj: protocol.ExternalProject): void;
+    /** @internal */
+    openExternalProject(proj: protocol.ExternalProject, print: boolean): void;
+    openExternalProject(proj: protocol.ExternalProject, print?: boolean): void {
         proj.typeAcquisition = proj.typeAcquisition || {};
         proj.typeAcquisition.include = proj.typeAcquisition.include || [];
         proj.typeAcquisition.exclude = proj.typeAcquisition.exclude || [];
@@ -4400,17 +4409,18 @@ export class ProjectService {
                 // The graph update here isnt postponed since any file open operation needs all updated external projects
                 this.updateRootAndOptionsOfNonInferredProject(externalProject, proj.rootFiles, externalFilePropertyReader, compilerOptions, proj.typeAcquisition, proj.options.compileOnSave, watchOptionsAndErrors?.watchOptions);
                 externalProject.updateGraph();
+                if (print) this.printProjects();
                 return;
             }
             // some config files were added to external project (that previously were not there)
             // close existing project and later we'll open a set of configured projects for these files
-            this.closeExternalProject(proj.projectFileName);
+            this.closeExternalProject(proj.projectFileName, /*print*/ false);
         }
         else if (this.externalProjectToConfiguredProjectMap.get(proj.projectFileName)) {
             // this project used to include config files
             if (!tsConfigFiles) {
                 // config files were removed from the project - close existing external project which in turn will close configured projects
-                this.closeExternalProject(proj.projectFileName);
+                this.closeExternalProject(proj.projectFileName, /*print*/ false);
             }
             else {
                 // project previously had some config files - compare them with new set of files and close all configured projects that correspond to unused files
@@ -4465,6 +4475,7 @@ export class ProjectService {
             const project = this.createExternalProject(proj.projectFileName, rootFiles, proj.options, proj.typeAcquisition, excludedFiles);
             project.updateGraph();
         }
+        if (print) this.printProjects();
     }
 
     hasDeferredExtension() {

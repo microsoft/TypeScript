@@ -74,6 +74,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'externalproject' (External)
+Info seq  [hh:mm:ss:mss] 	Files (0) NoProgram
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 After request
 
 Projects::
