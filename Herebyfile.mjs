@@ -2,6 +2,7 @@
 import {
     CancelToken,
 } from "@esfx/canceltoken";
+import assert from "assert";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
@@ -41,7 +42,6 @@ import {
     readJson,
     rimraf,
 } from "./scripts/build/utils.mjs";
-import assert from "assert";
 
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
