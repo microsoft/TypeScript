@@ -27453,9 +27453,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Apply a mapping function to a type and return the resulting type. If the source type
     // is a union type, the mapping function is applied to each constituent type and a union
     // of the resulting types is returned.
-    function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean, useIntersection?: boolean, skipIfAnyUnchanged?: boolean): Type;
-    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean, useIntersection?: boolean, skipIfAnyUnchanged?: boolean): Type | undefined;
-    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean, useIntersection = false): Type | undefined {
+    function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type;
+    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined;
+    function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined {
         if (type.flags & TypeFlags.Never) {
             return type;
         }
@@ -27467,7 +27467,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let mappedTypes: Type[] | undefined;
         let changed = false;
         for (const t of types) {
-            const mapped = t.flags & TypeFlags.Union ? mapType(t, mapper, noReductions, useIntersection) : mapper(t);
+            const mapped = t.flags & TypeFlags.Union ? mapType(t, mapper, noReductions) : mapper(t);
             changed ||= t !== mapped;
             if (mapped) {
                 if (!mappedTypes) {
@@ -27478,15 +27478,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        return changed ? mappedTypes && (useIntersection ? getIntersectionType(mappedTypes) : getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal)) : type;
+        return changed ? mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal) : type;
     }
 
-    function mapTypeWithAlias(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, useIntersection = false) {
+    function mapTypeWithAlias(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
         return type.flags & TypeFlags.Union && aliasSymbol ?
-            (useIntersection ?
-                getIntersectionType(map((type as UnionType).types, mapper), aliasSymbol, aliasTypeArguments) :
-                getUnionType(map((type as UnionType).types, mapper), UnionReduction.Literal, aliasSymbol, aliasTypeArguments)) :
-            mapType(type, mapper, /*noReductions*/ undefined, useIntersection);
+            getUnionType(map((type as UnionType).types, mapper), UnionReduction.Literal, aliasSymbol, aliasTypeArguments) :
+            mapType(type, mapper, /*noReductions*/ undefined);
     }
 
     function extractTypesOfKind(type: Type, kind: TypeFlags) {
