@@ -3926,7 +3926,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
-                if (compilerOptions.isolatedModules) {
+                if (getIsolatedModules(compilerOptions)) {
                     diagnosticMessage = error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationName);
                 }
             }
