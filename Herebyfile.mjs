@@ -254,7 +254,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
 
                             // Using createRequire here is emperically faster than await import.
                             const obj = require(outfile);
-                            const names = Object.keys(obj);
+                            const names = Object.keys(obj).sort();
                             const fakeExport = `  0 && (module.exports = {\n${names.map(name => `    ${name},\n`).join("")}  });`;
                             contents = contents.replace("module.exports = ts;", `module.exports = ts;\n${fakeExport}`);
                             await fs.promises.writeFile(outfile, contents);
