@@ -3514,6 +3514,9 @@ export class ProjectService {
         });
         this.inferredProjects.forEach(project => this.clearSemanticCache(project));
         this.ensureProjectForOpenFiles();
+
+        this.logger.info("After reloading projects..");
+        this.printProjects();
     }
 
     /**
