@@ -282,7 +282,6 @@ import {
     setValueDeclaration,
     ShorthandPropertyAssignment,
     shouldPreserveConstEnums,
-    shouldResolveJsRequire,
     SignatureDeclaration,
     skipParentheses,
     sliceAfter,
@@ -3570,7 +3569,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
             if (
                 isInJSFile(node) &&
-                shouldResolveJsRequire(options) &&
                 isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
                 !getJSDocTypeTag(node) &&
                 !(getCombinedModifierFlags(node) & ModifierFlags.Export)

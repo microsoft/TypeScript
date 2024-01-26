@@ -656,8 +656,8 @@ export class FileSystem {
         if (isDirectory(node)) throw createIOError("EISDIR");
         if (!isFile(node)) throw createIOError("EBADF");
 
-        const buffer = this._getBuffer(node).slice();
-        return encoding ? buffer.toString(encoding) : buffer;
+        const fileBuffer = this._getBuffer(node, encoding ?? undefined);
+        return !fileBuffer.encoding ? fileBuffer.data.slice() : fileBuffer.data;
     }
 
     /**
@@ -681,8 +681,11 @@ export class FileSystem {
 
         if (isDirectory(node)) throw createIOError("EISDIR");
         if (!isFile(node)) throw createIOError("EBADF");
-        node.buffer = Buffer.isBuffer(data) ? data.slice() : ts.sys.bufferFrom!("" + data, encoding || "utf8") as Buffer;
-        node.size = node.buffer.byteLength;
+        node.buffer = Buffer.isBuffer(data) ?
+            { encoding: undefined, data: data.slice() } :
+            { encoding: (encoding ?? "utf8") as BufferEncoding, data };
+        // Updated the size if it's easy to get, otherwise set to undefined. _getSize will compute the correct size
+        node.size = !node.buffer.encoding ? node.buffer.data.byteLength : undefined;
         node.mtimeMs = time;
         node.ctimeMs = time;
     }
@@ -700,6 +703,7 @@ export class FileSystem {
         return hasDifferences ? differences : undefined;
     }
 
+    public static defaultEncoding: BufferEncoding | undefined = "utf8";
     /**
      * Generates a `FileSet` patch containing all the entries in `changed` that are not in `base`.
      */
@@ -800,24 +804,28 @@ export class FileSystem {
             baseNode.resolver === changedNode.resolver && baseNode.source === changedNode.source
         ) return false;
 
-        const changedBuffer = changed._getBuffer(changedNode);
-        const baseBuffer = base._getBuffer(baseNode);
+        const encoding = changedNode.buffer?.encoding ?? baseNode.buffer?.encoding ?? FileSystem.defaultEncoding;
+        const changedBuffer = changed._getBuffer(changedNode, encoding);
+        const baseBuffer = base._getBuffer(baseNode, encoding);
 
         // no difference if both buffers are the same reference
         if (changedBuffer === baseBuffer) {
             if (!options.includeChangedFileWithSameContent || changedNode.mtimeMs === baseNode.mtimeMs) return false;
-            container[basename] = new SameFileWithModifiedTime(changedBuffer);
+            container[basename] = new SameFileWithModifiedTime(changedBuffer.data, { encoding: changedBuffer.encoding });
             return true;
         }
 
         // no difference if both buffers are identical
-        if (Buffer.compare(changedBuffer, baseBuffer) === 0) {
+        if (
+            !changedBuffer.encoding && !baseBuffer.encoding && Buffer.compare(changedBuffer.data, baseBuffer.data) === 0 // same buffer content
+            || changedBuffer.encoding === baseBuffer.encoding && changedBuffer.data === baseBuffer.data // same string content
+        ) {
             if (!options.includeChangedFileWithSameContent) return false;
-            container[basename] = new SameFileContentFile(changedBuffer);
+            container[basename] = new SameFileContentFile(changedBuffer.data, { encoding: changedBuffer.encoding });
             return true;
         }
 
-        container[basename] = new File(changedBuffer);
+        container[basename] = new File(changedBuffer.data, { encoding: changedBuffer.encoding });
         return true;
     }
 
@@ -838,7 +846,8 @@ export class FileSystem {
             container[basename] = new Symlink(node.symlink);
         }
         else {
-            container[basename] = new File(changed._getBuffer(node));
+            const buffer = changed._getBuffer(node, FileSystem.defaultEncoding);
+            container[basename] = new File(buffer.data, { encoding: buffer.encoding ?? undefined });
         }
         return true;
     }
@@ -984,14 +993,14 @@ export class FileSystem {
     }
 
     private _getSize(node: FileInode): number {
-        if (node.buffer) return node.buffer.byteLength;
+        if (node.buffer) return Buffer.byteLength(node.buffer.data);
         if (node.size !== undefined) return node.size;
         if (node.source && node.resolver) return node.size = node.resolver.statSync(node.source).size;
         if (this._shadowRoot && node.shadowRoot) return node.size = this._shadowRoot._getSize(node.shadowRoot);
         return 0;
     }
 
-    private _getBuffer(node: FileInode): Buffer {
+    private _getBuffer(node: FileInode, encoding: BufferEncoding | undefined): FileDataBuffer {
         if (!node.buffer) {
             const { source, resolver } = node;
             if (source && resolver) {
@@ -1001,12 +1010,13 @@ export class FileSystem {
                 node.buffer = resolver.readFileSync(source);
             }
             else if (this._shadowRoot && node.shadowRoot) {
-                node.buffer = this._shadowRoot._getBuffer(node.shadowRoot);
+                node.buffer = this._shadowRoot._getBuffer(node.shadowRoot, encoding);
             }
             else {
-                node.buffer = Buffer.allocUnsafe(0);
+                node.buffer = { encoding: undefined, data: Buffer.allocUnsafe(0) };
             }
         }
+        ensureBufferEncoding(node.buffer, encoding);
         return node.buffer;
     }
 
@@ -1189,7 +1199,7 @@ export interface Traversal {
 export interface FileSystemResolver {
     statSync(path: string): { mode: number; size: number; };
     readdirSync(path: string): string[];
-    readFileSync(path: string): Buffer;
+    readFileSync(path: string): FileDataBuffer;
 }
 
 export interface FileSystemResolverHost {
@@ -1219,8 +1229,8 @@ export function createResolver(host: FileSystemResolverHost): FileSystemResolver
                 throw new Error("ENOENT: path does not exist");
             }
         },
-        readFileSync(path: string): Buffer {
-            return ts.sys.bufferFrom!(host.readFile(path)!, "utf8") as Buffer; // TODO: GH#18217
+        readFileSync(path: string): FileDataBuffer {
+            return { encoding: "utf8", data: host.readFile(path)! };
         },
     };
 }
@@ -1444,6 +1454,17 @@ export class Mount {
 // a generic POSIX inode
 type Inode = FileInode | DirectoryInode | SymlinkInode;
 
+type FileDataBuffer = { encoding?: undefined; data: Buffer; } | { encoding: BufferEncoding; data: string; };
+
+function ensureBufferEncoding(fileBuffer: FileDataBuffer, encoding: BufferEncoding | undefined) {
+    if (fileBuffer.encoding === encoding) return;
+
+    const buffer = !fileBuffer.encoding ? fileBuffer.data : ts.sys.bufferFrom!(fileBuffer.data, fileBuffer.encoding);
+
+    fileBuffer.encoding = encoding;
+    fileBuffer.data = !encoding ? buffer as Buffer : buffer.toString(encoding);
+}
+
 interface FileInode {
     dev: number; // device id
     ino: number; // inode id
@@ -1454,7 +1475,7 @@ interface FileInode {
     birthtimeMs: number; // creation time
     nlink: number; // number of hard links
     size?: number;
-    buffer?: Buffer;
+    buffer?: FileDataBuffer;
     source?: string;
     resolver?: FileSystemResolver;
     shadowRoot?: FileInode;

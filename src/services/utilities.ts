@@ -294,7 +294,6 @@ import {
     normalizePath,
     NoSubstitutionTemplateLiteral,
     notImplemented,
-    nullTransformationContext,
     NumericLiteral,
     or,
     OrganizeImports,
@@ -1959,7 +1958,7 @@ export function isInsideJsxElement(sourceFile: SourceFile, position: number): bo
 /** @internal */
 export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile) {
     const closeTokenText = tokenToString(token.kind)!;
-    const matchingTokenText = tokenToString(matchingTokenKind)!;
+    const matchingTokenText = tokenToString(matchingTokenKind);
     const tokenFullStart = token.getFullStart();
     // Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
     // a good, fast approximation without too much extra work in the cases where it fails.
@@ -2979,10 +2978,11 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
     }
     else {
         const symbol = checker?.getSymbolAtLocation(link.name);
+        const targetSymbol = symbol && checker ? getSymbolTarget(symbol, checker) : undefined;
         const suffix = findLinkNameEnd(link.text);
         const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
         const text = skipSeparatorFromLinkText(link.text.slice(suffix));
-        const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
+        const decl = targetSymbol?.valueDeclaration || targetSymbol?.declarations?.[0];
         if (decl) {
             parts.push(linkNamePart(name, decl));
             if (text) parts.push(linkTextPart(text));
@@ -3174,7 +3174,7 @@ function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (n
     const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
         ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
         : ns => ns && getSynthesizedDeepClones(ns);
-    const visited = visitEachChild(node, nodeClone, nullTransformationContext, nodesClone, nodeClone);
+    const visited = visitEachChild(node, nodeClone, /*context*/ undefined, nodesClone, nodeClone);
 
     if (visited === node) {
         // This only happens for leaf nodes - internal nodes always see their children change.

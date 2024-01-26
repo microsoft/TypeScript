@@ -7,7 +7,6 @@ import {
     getEffectiveBaseTypeNode,
     getEmitScriptTarget,
     getMeaningFromLocation,
-    getModeForUsageLocation,
     getTextOfNode,
     getTokenAtPosition,
     hasOverrideModifier,
@@ -119,7 +118,7 @@ function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBas
     else if (isImportSpecifier(parent) && parent.name === node) {
         Debug.assertNode(node, isIdentifier, "Expected an identifier for spelling (import)");
         const importDeclaration = findAncestor(node, isImportDeclaration)!;
-        const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(sourceFile, context, importDeclaration);
+        const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(context, importDeclaration);
         if (resolvedSourceFile && resolvedSourceFile.symbol) {
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentModule(node, resolvedSourceFile.symbol);
         }
@@ -178,10 +177,10 @@ function convertSemanticMeaningToSymbolFlags(meaning: SemanticMeaning): SymbolFl
     return flags;
 }
 
-function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
+function getResolvedSourceFileFromImportDeclaration(context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
     if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
-    const resolvedModule = context.program.getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier))?.resolvedModule;
+    const resolvedModule = context.program.getResolvedModuleFromModuleSpecifier(importDeclaration.moduleSpecifier)?.resolvedModule;
     if (!resolvedModule) return undefined;
 
     return context.program.getSourceFile(resolvedModule.resolvedFileName);

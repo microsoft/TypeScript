@@ -331,7 +331,7 @@ export function verifyResolutionCache(
                 resolvedTypeReferenceDirective: (resolved as any).resolvedTypeReferenceDirective,
                 failedLookupLocations: resolved.failedLookupLocations,
                 affectingLocations: resolved.affectingLocations,
-                node10Result: resolved.node10Result,
+                alternateResult: resolved.alternateResult,
             };
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);

@@ -211,7 +211,7 @@ export interface Request extends Message {
 /**
  * Request to reload the project structure for all the opened files
  */
-export interface ReloadProjectsRequest extends Message {
+export interface ReloadProjectsRequest extends Request {
     command: CommandTypes.ReloadProjects;
 }
 
@@ -3643,6 +3643,13 @@ export interface UserPreferences {
      * Default: `false`
      */
     readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
+    /**
+     * Indicates where named type-only imports should sort. "inline" sorts named imports without regard to if the import is
+     * type-only.
+     *
+     * Default: `last`
+     */
+    readonly organizeImportsTypeOrder?: "last" | "first" | "inline";
 
     /**
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
@@ -3744,11 +3751,19 @@ export const enum ModuleKind {
     ES6 = "ES6",
     ES2015 = "ES2015",
     ESNext = "ESNext",
+    Node16 = "Node16",
+    NodeNext = "NodeNext",
+    Preserve = "Preserve",
 }
 
 export const enum ModuleResolutionKind {
     Classic = "Classic",
+    /** @deprecated Renamed to `Node10` */
     Node = "Node",
+    Node10 = "Node10",
+    Node16 = "Node16",
+    NodeNext = "NodeNext",
+    Bundler = "Bundler",
 }
 
 export const enum NewLineKind {

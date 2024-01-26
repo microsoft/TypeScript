@@ -105,8 +105,19 @@ type Nested = {
     }    
 }
 
+function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {
+  const { data: data2, isSuccess: isSuccess2 } = useQuery();
+
+  const areSuccess = isSuccess1 && isSuccess2;
+  if (areSuccess) {
+    data1.toExponential();
+    data2.toExponential();
+  }
+}
+
 
 //// [controlFlowAliasedDiscriminants.js]
+"use strict";
 function useQuery() {
     return {
         isSuccess: false,
@@ -178,5 +189,14 @@ if (areSuccess) {
     }
     if (resp.type === 'string') {
         resp.resp.data;
+    }
+}
+function bindingPatternInParameter(_a) {
+    var data1 = _a.data, isSuccess1 = _a.isSuccess;
+    var _b = useQuery(), data2 = _b.data, isSuccess2 = _b.isSuccess;
+    var areSuccess = isSuccess1 && isSuccess2;
+    if (areSuccess) {
+        data1.toExponential();
+        data2.toExponential();
     }
 }
