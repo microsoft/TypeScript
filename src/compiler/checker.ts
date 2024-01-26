@@ -20117,14 +20117,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     *
      * @param narrowMapper special mapper that has mappings originating from type parameter narrowing, and should only be considered in some places
      * @param mapper the usual mapper that should be used for all instantiations
      */
     function instantiateNarrowTypeWorker(
         type: Type,
         narrowMapper: TypeMapper,
-        mapper: TypeMapper | undefined): Type {
+        mapper: TypeMapper | undefined,
+    ): Type {
         type = instantiateType(type, mapper);
         const flags = type.flags;
         if (flags & TypeFlags.IndexedAccess) {
@@ -20144,7 +20144,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const result = getIndexedAccessType(
                 objectType,
                 indexType,
-                accessFlags);
+                accessFlags,
+            );
             // >> NOTE: We need to detect if result is different from just putting the already resolved types together
             return instantiateNarrowType(result, narrowMapper, mapper);
         }
@@ -20152,7 +20153,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getNarrowConditionalTypeInstantiation(
                 type as ConditionalType,
                 narrowMapper,
-                mapper ? combineTypeMappers((type as ConditionalType).mapper, mapper) : (type as ConditionalType).mapper);
+                mapper ? combineTypeMappers((type as ConditionalType).mapper, mapper) : (type as ConditionalType).mapper,
+            );
         }
 
         return type;
@@ -20172,7 +20174,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNarrowConditionalTypeInstantiation(
         type: ConditionalType,
         narrowMapper: TypeMapper,
-        mapper: TypeMapper | undefined): Type {
+        mapper: TypeMapper | undefined,
+    ): Type {
         const root = type.root;
         if (root.outerTypeParameters) {
             // We are instantiating a conditional type that has one or more type parameters in scope. Apply the
@@ -20202,7 +20205,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         distributionType: Type,
         checkTypeVariable: TypeParameter,
         narrowMapper: TypeMapper,
-        mapper: TypeMapper): Type {
+        mapper: TypeMapper,
+    ): Type {
         distributionType = getReducedType(distributionType);
         if (distributionType.flags & TypeFlags.Never) {
             return distributionType;
@@ -44366,7 +44370,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         container: SignatureDeclaration,
         returnType: Type,
         node: ReturnStatement,
-        expr: Expression | undefined): void {
+        expr: Expression | undefined,
+    ): void {
         const functionFlags = getFunctionFlags(container);
         const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
         // let actualReturnType = unwrappedReturnType;
@@ -44383,7 +44388,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 exprType,
                 /*withAlias*/ false,
                 node,
-                Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+                Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member,
+            )
             : exprType;
 
         const errorNode = node.expression && isConditionalExpression(skipParentheses(node.expression)) ? expr : node;
@@ -44444,7 +44450,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             narrowedReturnType = instantiateNarrowType(
                 unwrappedReturnType,
                 narrowMapper,
-                /*mapper*/ undefined
+                /*mapper*/ undefined,
             );
         }
 
@@ -44461,7 +44467,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 narrowedExprType,
                 /*withAlias*/ false,
                 node,
-                Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+                Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member,
+            )
             : narrowedExprType;
         checkTypeAssignableToAndOptionallyElaborate(narrowedUnwrappedExprType, narrowedReturnType, errorNode, expr);
     }
@@ -44470,7 +44477,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         container: SignatureDeclaration,
         returnType: Type,
         node: ReturnStatement,
-        expr: ConditionalExpression): void {
+        expr: ConditionalExpression,
+    ): void {
         checkExpression(expr.condition);
         checkReturnStatementExpression(container, returnType, node, expr.whenTrue);
         checkReturnStatementExpression(container, returnType, node, expr.whenFalse);
@@ -44543,10 +44551,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // `node` is `expr.hasOwnExpression(prop)`
                     if (isPropertyAccessExpression(callAccess = (node as CallExpression).expression) && isIdentifier(callAccess.name) && callAccess.name.escapedText === "hasOwnProperty" && (node as CallExpression).arguments.length === 1 && isStringLiteralLike((node as CallExpression).arguments[0])) {
                         const propName = (node as CallExpression).arguments[0] as StringLiteralLike;
-                        const synthPropertyAccess =
-                            canUsePropertyAccess(propName.text, languageVersion) ?
-                                factory.createPropertyAccessExpression(callAccess.expression, propName.text) :
-                                factory.createElementAccessExpression(callAccess.expression, propName);
+                        const synthPropertyAccess = canUsePropertyAccess(propName.text, languageVersion) ?
+                            factory.createPropertyAccessExpression(callAccess.expression, propName.text) :
+                            factory.createElementAccessExpression(callAccess.expression, propName);
                         setParent(synthPropertyAccess, node.parent);
                         addReference(synthPropertyAccess);
                     }
@@ -44573,16 +44580,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return;
                 case SyntaxKind.MetaProperty:
                     if ((node as MetaProperty).keywordToken === SyntaxKind.ImportKeyword) {
-                        addReference((node as ImportMetaProperty));
+                        addReference(node as ImportMetaProperty);
                     }
                     // >> TODO: I think you can never actually have `import.meta` or
                     // `new.target` involved in narrowing, so this might be pointless
                     return;
                 case SyntaxKind.ThisKeyword:
-                    addReference((node as ThisExpression));
+                    addReference(node as ThisExpression);
                     return;
                 case SyntaxKind.Identifier:
-                    addReference((node as Identifier));
+                    addReference(node as Identifier);
                     return;
                 case SyntaxKind.PrivateIdentifier:
                     // Don't add private identifiers as a reference.
@@ -44590,11 +44597,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // as in `this.#privateId`.
                     return;
                 case SyntaxKind.SuperKeyword:
-                    addReference((node as SuperExpression));
+                    addReference(node as SuperExpression);
                     return;
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                    addReference((node as PropertyAccessExpression | ElementAccessExpression));
+                    addReference(node as PropertyAccessExpression | ElementAccessExpression);
                     return;
             }
         }
@@ -44606,12 +44613,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Check if we have an optional parameter, an optional property, or an optional tuple element.
             // In this case, its type can be `T | undefined`,
             // and if `T` allows for the undefined type, then we can still narrow `T`.
-            if (((symbol.valueDeclaration && isOptionalDeclaration(symbol.valueDeclaration))
+            if (
+                ((symbol.valueDeclaration && isOptionalDeclaration(symbol.valueDeclaration))
                     || isOptionalTupleElementSymbol(symbol))
                 && type.flags & TypeFlags.Union
                 && ((type as UnionType).types[0] === undefinedType
                     || exactOptionalPropertyTypes && (type as UnionType).types[0] === missingType)
-                && (type as UnionType).types[1].flags & TypeFlags.TypeParameter) {
+                && (type as UnionType).types[1].flags & TypeFlags.TypeParameter
+            ) {
                 const typeParam = (type as UnionType).types[1] as TypeParameter;
                 const constraint = getConstraintOfTypeParameter(typeParam);
                 if (!constraint || constraint.flags & TypeFlags.Unknown || containsUndefinedType(constraint)) {
@@ -44641,7 +44650,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function visit(node: Node) {
             if (node.kind === SyntaxKind.ReturnStatement) {
-                const nodeContainer = getContainingFunctionOrClassStaticBlock((node as ReturnStatement));
+                const nodeContainer = getContainingFunctionOrClassStaticBlock(node as ReturnStatement);
                 if (nodeContainer === container) {
                     visitConditionalReturnExpression((node as ReturnStatement).expression);
                     const flowNode = (node as ReturnStatement).flowNode;
