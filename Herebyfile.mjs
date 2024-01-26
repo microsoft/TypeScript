@@ -2,6 +2,7 @@
 import {
     CancelToken,
 } from "@esfx/canceltoken";
+import assert from "assert";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
@@ -15,9 +16,6 @@ import {
 import {
     task,
 } from "hereby";
-import {
-    createRequire,
-} from "module";
 import path from "path";
 
 import {
@@ -49,7 +47,7 @@ import {
 void 0;
 
 const copyrightFilename = "./scripts/CopyrightNotice.txt";
-const copyright = memoize(async () => {
+const getCopyrightHeader = memoize(async () => {
     const contents = await fs.promises.readFile(copyrightFilename, "utf-8");
     return contents.replace(/\r\n/g, "\n");
 });
@@ -79,7 +77,7 @@ export const generateLibs = task({
     run: async () => {
         await fs.promises.mkdir("./built/local", { recursive: true });
         for (const lib of libs()) {
-            let output = await copyright();
+            let output = await getCopyrightHeader();
 
             for (const source of lib.sources) {
                 const contents = await fs.promises.readFile(source, "utf-8");
@@ -176,8 +174,6 @@ async function runDtsBundler(entrypoint, output) {
     ]);
 }
 
-const require = createRequire(import.meta.url);
-
 /**
  * @param {string} entrypoint
  * @param {string} outfile
@@ -190,10 +186,13 @@ const require = createRequire(import.meta.url);
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
+        const copyright = await getCopyrightHeader();
+        const banner = taskOptions.exportIsTsObject ? "var ts = {}; ((module) => {" : "";
+
         /** @type {esbuild.BuildOptions} */
         const options = {
             entryPoints: [entrypoint],
-            banner: { js: await copyright() },
+            banner: { js: copyright + banner },
             bundle: true,
             outfile,
             platform: "node",
@@ -208,12 +207,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
         };
 
         if (taskOptions.exportIsTsObject) {
-            // We use an IIFE so we can inject the footer, and so that "ts" is global if not loaded as a module.
-            options.format = "iife";
-            // Name the variable ts, matching our old big bundle and so we can use the code below.
-            options.globalName = "ts";
-            // If we are in a CJS context, export the ts namespace.
-            options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) {\n  module.exports = ts;\n}` };
+            options.footer = { js: `})(typeof module !== "undefined" && module.exports ? module : { exports: ts });` };
 
             // esbuild converts calls to "require" to "__require"; this function
             // calls the real require if it exists, or throws if it does not (rather than
@@ -226,37 +220,29 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // ensuring that source maps still work.
             //
             // See: https://github.com/evanw/esbuild/issues/1905
-            const requireStr = "require";
-            const fakeName = "Q".repeat(requireStr.length);
+            const require = "require";
+            const fakeName = "Q".repeat(require.length);
             const fakeNameRegExp = new RegExp(fakeName, "g");
-            options.define = { [requireStr]: fakeName };
+            options.define = { [require]: fakeName };
+
+            // For historical reasons, TypeScript does not set __esModule. Hack esbuild's __toCommonJS to be a noop.
+            // We reference `__copyProps` to ensure the final bundle doesn't have any unreferenced code.
+            const toCommonJsRegExp = /var __toCommonJS .*/;
+            const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod);";
+
             options.plugins = [
                 {
                     name: "post-process",
                     setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(fakeNameRegExp, requireStr);
-                            await fs.promises.writeFile(outfile, contents);
-
-                            // This is a trick esbuild uses when emitting CJS to ensure that
-                            // cjs-module-lexer sees the named exports. For example:
-                            //
-                            // module.exports = someComplicatedThing();
-                            // 0 && (module.exports = {
-                            //    foo,
-                            //    bar,
-                            // });
-                            // TODO(jakebailey): this is slow; can we do this statically?
-                            // esbuild's metafile option does not show exports...
-                            // https://github.com/evanw/esbuild/issues/3110
-                            // https://github.com/evanw/esbuild/issues/3281
-
-                            // Using createRequire here is emperically faster than await import.
-                            const obj = require(outfile);
-                            const names = Object.keys(obj).sort();
-                            const fakeExport = `  0 && (module.exports = {\n${names.map(name => `    ${name},\n`).join("")}  });`;
-                            contents = contents.replace("module.exports = ts;", `module.exports = ts;\n${fakeExport}`);
+                            contents = contents.replace(fakeNameRegExp, require);
+                            let matches = 0;
+                            contents = contents.replace(toCommonJsRegExp, () => {
+                                matches++;
+                                return toCommonJsRegExpReplacement;
+                            });
+                            assert(matches === 1, "Expected exactly one match for __toCommonJS");
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },
@@ -473,7 +459,7 @@ export = ts;
  * @param {string} contents
  */
 async function fileContentsWithCopyright(contents) {
-    return await copyright() + contents.trim().replace(/\r\n/g, "\n") + "\n";
+    return await getCopyrightHeader() + contents.trim().replace(/\r\n/g, "\n") + "\n";
 }
 
 const lssl = task({
