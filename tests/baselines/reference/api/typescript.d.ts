@@ -205,7 +205,7 @@ declare namespace ts {
             /**
              * Request to reload the project structure for all the opened files
              */
-            interface ReloadProjectsRequest extends Message {
+            interface ReloadProjectsRequest extends Request {
                 command: CommandTypes.ReloadProjects;
             }
             /**
