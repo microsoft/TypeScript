@@ -1,10 +1,9 @@
-dependentReturnType5.ts(48,13): error TS2322: Type '3' is not assignable to type '2'.
 dependentReturnType5.ts(54,13): error TS2322: Type '2' is not assignable to type '3'.
 dependentReturnType5.ts(65,5): error TS2322: Type '2' is not assignable to type 'Comp[T]'.
   Type '2' is not assignable to type '3'.
 
 
-==== dependentReturnType5.ts (3 errors) ====
+==== dependentReturnType5.ts (2 errors) ====
     // Indexed access return type
     interface A1 {
         "prop": true;
@@ -53,8 +52,6 @@ dependentReturnType5.ts(65,5): error TS2322: Type '2' is not assignable to type 
         if (x === "foo") {
             if (Math.random()) {
                 return 3; // Error
-                ~~~~~~
-!!! error TS2322: Type '3' is not assignable to type '2'.
             }
             return 2; // Ok
         }

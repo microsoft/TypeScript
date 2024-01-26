@@ -44112,7 +44112,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         expr: Expression | undefined): void {
         const functionFlags = getFunctionFlags(container);
         const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
-        let actualReturnType = unwrappedReturnType;
+        // let actualReturnType = unwrappedReturnType;
         if (expr) {
             const unwrappedExpr = skipParentheses(expr);
             if (isConditionalExpression(unwrappedExpr)) {
@@ -44120,65 +44120,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        if (isNarrowableReturnType(unwrappedReturnType)) {
-            /* Begin weird stuff */
-            const outerTypeParameters = getOuterTypeParameters(container!, /*includeThisTypes*/ false);
-            const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
-            const queryTypeParameters = typeParameters
-                && filterQueryTypeParameters((container as SignatureDeclaration), typeParameters);
-            // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
-            // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
-            // `function foo(...) {
-            //       return cond ? |expr| : ...
-            // }`
-            // - When the return expression is undefined, or it is defined and it is not one of the branches of a conditional expression, then the position is the return statement itself:
-            // `function foo(...) {
-            //       |return expr;|
-            // }`
-            // or
-            // `function foo(...) {
-            //       |return;|
-            // }`
-            let narrowPosition = node;
-            let narrowFlowNode = node.flowNode;
-            if (expr && isConditionalExpression(expr.parent)) {
-                narrowFlowNode = expr.parent.whenTrue === expr ? expr.parent.flowNodeWhenTrue : expr.parent.flowNodeWhenFalse;
-            }
-            if (queryTypeParameters && narrowFlowNode) {
-                const narrowed: [TypeParameter, Type][] = mapDefined(queryTypeParameters, ([tp, symbol, reference]) => {
-                    const narrowReference = factory.cloneNode(reference); // Construct a reference that can be narrowed.
-                    // Don't reuse the original reference's node id,
-                    // because that could cause us to get a type that was cached for the original reference.
-                    narrowReference.id = undefined;
-                    // Set the symbol of the synthetic reference.
-                    // This allows us to get the type of the reference at a location where the reference is possibly shadowed.
-                    getNodeLinks(narrowReference).resolvedSymbol = symbol;
-                    setParent(narrowReference, narrowPosition.parent);
-                    setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
-                    narrowReference.flowNode = narrowFlowNode;
-                    const exprType = getTypeOfExpression(narrowReference);
-                    // Don't narrow the return type if narrowing didn't produce a narrower type for the expression.
-                    if (isTypeAny(exprType) || isErrorType(exprType) || exprType === tp || exprType === mapType(tp, getBaseConstraintOrType)) {
-                        return undefined;
-                    }
-                    return [tp, exprType];
-                });
-                const narrowMapper = createTypeMapper(narrowed.map(([tp, _]) => tp), narrowed.map(([_, t]) => t));
-                actualReturnType = instantiateNarrowType(
-                    unwrappedReturnType,
-                    narrowMapper,
-                    /*mapper*/ undefined
-                );
-            }
-
-            if (expr) {
-                const links = getNodeLinks(expr);
-                if (!links.contextualReturnType) {
-                    links.contextualReturnType = actualReturnType;
-                }
-            }
-            /* End weird stuff */
-        }
         const exprType = expr ? checkExpressionCached(expr) : undefinedType;
         const unwrappedExprType = functionFlags & FunctionFlags.Async
             ? checkAwaitedType(
@@ -44187,13 +44128,85 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 node,
                 Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
             : exprType;
-        if (actualReturnType) {
-            // If the function has a return type, but promisedType is
-            // undefined, an error will be reported in checkAsyncFunctionReturnType
-            // so we don't need to report one here.
-            const errorNode = node.expression && isConditionalExpression(skipParentheses(node.expression)) ? expr : node;
-            checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, actualReturnType, errorNode, expr);
+
+        const errorNode = node.expression && isConditionalExpression(skipParentheses(node.expression)) ? expr : node;
+        if (!isNarrowableReturnType(unwrappedReturnType)) {
+            checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, expr);
+            return;
         }
+
+        // Check if type of return expression is assignable to original return type;
+        // If so, we don't need to narrow.
+        if (checkTypeAssignableTo(unwrappedExprType, unwrappedReturnType, /*errorNode*/ undefined)) {
+            return;
+        }
+        /* Begin narrowing */
+        const outerTypeParameters = getOuterTypeParameters(container!, /*includeThisTypes*/ false);
+        const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
+        const queryTypeParameters = typeParameters
+            && filterQueryTypeParameters((container as SignatureDeclaration), typeParameters);
+        // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
+        // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
+        // `function foo(...) {
+        //       return cond ? |expr| : ...
+        // }`
+        // - When the return expression is undefined, or it is defined and it is not one of the branches of a conditional expression, then the position is the return statement itself:
+        // `function foo(...) {
+        //       |return expr;|
+        // }`
+        // or
+        // `function foo(...) {
+        //       |return;|
+        // }`
+        let narrowPosition = node;
+        let narrowFlowNode = node.flowNode;
+        if (expr && isConditionalExpression(expr.parent)) {
+            narrowFlowNode = expr.parent.whenTrue === expr ? expr.parent.flowNodeWhenTrue : expr.parent.flowNodeWhenFalse;
+        }
+        let narrowedReturnType = unwrappedReturnType;
+        if (queryTypeParameters && narrowFlowNode) {
+            const narrowed: [TypeParameter, Type][] = mapDefined(queryTypeParameters, ([tp, symbol, reference]) => {
+                const narrowReference = factory.cloneNode(reference); // Construct a reference that can be narrowed.
+                // Don't reuse the original reference's node id,
+                // because that could cause us to get a type that was cached for the original reference.
+                narrowReference.id = undefined;
+                // Set the symbol of the synthetic reference.
+                // This allows us to get the type of the reference at a location where the reference is possibly shadowed.
+                getNodeLinks(narrowReference).resolvedSymbol = symbol;
+                setParent(narrowReference, narrowPosition.parent);
+                setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
+                narrowReference.flowNode = narrowFlowNode;
+                const exprType = getTypeOfExpression(narrowReference);
+                // Don't narrow the return type if narrowing didn't produce a narrower type for the expression.
+                if (isTypeAny(exprType) || isErrorType(exprType) || exprType === tp || exprType === mapType(tp, getBaseConstraintOrType)) {
+                    return undefined;
+                }
+                return [tp, exprType];
+            });
+            const narrowMapper = createTypeMapper(narrowed.map(([tp, _]) => tp), narrowed.map(([_, t]) => t));
+            narrowedReturnType = instantiateNarrowType(
+                unwrappedReturnType,
+                narrowMapper,
+                /*mapper*/ undefined
+            );
+        }
+
+        if (expr) {
+            const links = getNodeLinks(expr);
+            if (!links.contextualReturnType) {
+                links.contextualReturnType = narrowedReturnType;
+            }
+        }
+
+        const narrowedExprType = expr ? checkExpression(expr) : undefinedType;
+        const narrowedUnwrappedExprType = functionFlags & FunctionFlags.Async
+            ? checkAwaitedType(
+                narrowedExprType,
+                /*withAlias*/ false,
+                node,
+                Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+            : narrowedExprType;
+        checkTypeAssignableToAndOptionallyElaborate(narrowedUnwrappedExprType, narrowedReturnType, errorNode, expr);
     }
 
     function checkReturnConditionalExpression(
