@@ -44140,11 +44140,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (checkTypeAssignableTo(unwrappedExprType, unwrappedReturnType, /*errorNode*/ undefined)) {
             return;
         }
-        /* Begin narrowing */
-        const outerTypeParameters = getOuterTypeParameters(container!, /*includeThisTypes*/ false);
+        const outerTypeParameters = getOuterTypeParameters(container, /*includeThisTypes*/ false);
         const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
         const queryTypeParameters = typeParameters
-            && filterQueryTypeParameters((container as SignatureDeclaration), typeParameters);
+            && filterQueryTypeParameters(container, typeParameters);
         // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
         // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
         // `function foo(...) {
@@ -44158,10 +44157,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // `function foo(...) {
         //       |return;|
         // }`
-        let narrowPosition = node;
+        let narrowPosition: Node = node;
         let narrowFlowNode = node.flowNode;
         if (expr && isConditionalExpression(expr.parent)) {
             narrowFlowNode = expr.parent.whenTrue === expr ? expr.parent.flowNodeWhenTrue : expr.parent.flowNodeWhenFalse;
+            narrowPosition = expr;
         }
         let narrowedReturnType = unwrappedReturnType;
         if (queryTypeParameters && narrowFlowNode) {
