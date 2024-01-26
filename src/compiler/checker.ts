@@ -1505,7 +1505,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // for most of these, we perform the guard only on `checker` to avoid any possible
     // extra cost of calling `getParseTreeNode` when calling these functions from inside the
     // checker.
-    const checker: TypeChecker = {
+    var checker: TypeChecker = {
         getNodeCount: () => reduceLeft(host.getSourceFiles(), (n, s) => n + s.nodeCount, 0),
         getIdentifierCount: () => reduceLeft(host.getSourceFiles(), (n, s) => n + s.identifierCount, 0),
         getSymbolCount: () => reduceLeft(host.getSourceFiles(), (n, s) => n + s.symbolCount, symbolCount),
