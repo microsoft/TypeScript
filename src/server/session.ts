@@ -106,6 +106,7 @@ import {
     perfLogger,
     PerformanceEvent,
     PossibleProgramFileInfo,
+    PostPasteImportFixes,
     Program,
     QuickInfo,
     RefactorEditInfo,
@@ -2796,10 +2797,23 @@ export class Session<TMessage = string> implements EventSender {
         return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
-    private getPostPasteImportFixes(args: protocol.GetPostPasteImportFixesRequestArgs) {
+    private getPostPasteImportFixes(args: protocol.GetPostPasteImportFixesRequestArgs): protocol.PostPasteImportAction[] {
         const { file, project } = this.getFileAndProject(args);
         const textRange = this.getRange(args.pastes[0].range, project.getScriptInfoForNormalizedPath(file)!);
-        return project.getLanguageService().getPostPasteImportFixes(args.targetFile, [{text: args.pastes[0].text, range: textRange}], this.getPreferences(file), this.getFormatOptions(file), args.originalFile, args.copyRange);
+        const result = project.getLanguageService().getPostPasteImportFixes(args.targetFile, [{text: args.pastes[0].text, range: textRange}], this.getPreferences(file), this.getFormatOptions(file), args.originalFile, args.copyRange);
+        // const seenFiles = new Set<string>();
+        // const textChanges: FileTextChanges[] = [];
+        // for (const textChange of projectTextChanges) {
+        //     if (!seenFiles.has(textChange.fileName)) {
+        //         textChanges.push(textChange);
+        //     }
+        // }
+        if (result === undefined) {
+            return [];
+        }
+        const allResults = result.map(postPasteAction => this.mapPostPasteAction(postPasteAction));
+
+        return allResults;
     }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
@@ -2932,6 +2946,10 @@ export class Session<TMessage = string> implements EventSender {
 
     private mapCodeFixAction({ fixName, description, changes, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
         return { fixName, description, changes: this.mapTextChangesToCodeEdits(changes), commands, fixId, fixAllDescription };
+    }
+
+    private mapPostPasteAction({ changes }: PostPasteImportFixes): protocol.PostPasteImportAction {
+        return { edits: this.mapTextChangesToCodeEdits(changes)};
     }
 
     private mapTextChangesToCodeEdits(textChanges: readonly FileTextChanges[]): protocol.FileCodeEdits[] {

@@ -453,6 +453,7 @@ declare namespace FourSlashInterface {
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
         postPasteImportFix(options: {
+            newFileContents: { readonly [fileName: string]: string };
             targetFile: string, 
             pastes: Array<{text: string; range: {pos: number, end: number}}>
             originalFile?: string,

@@ -51,6 +51,7 @@ import {
     OrganizeImportsArgs,
     OutliningSpan,
     PatternMatchKind,
+    PostPasteImportFixes,
     Program,
     QuickInfo,
     RefactorEditInfo,
@@ -1010,7 +1011,7 @@ export class SessionClient implements LanguageService {
         return getSupportedCodeFixes();
     }
 
-    getPostPasteImportFixes(targetFile: string, pastes: Array<{text: string; range: TextRange}>, _preferences: UserPreferences, _formatOptions: FormatCodeSettings, originalFile?: string, copyRange?: CopyRange): FileTextChanges[]{    
+    getPostPasteImportFixes(targetFile: string, pastes: Array<{text: string; range: TextRange}>, _preferences: UserPreferences, _formatOptions: FormatCodeSettings, originalFile?: string, copyRange?: CopyRange): PostPasteImportFixes[]{    
         const t = this.createFileRangeRequestArgs(targetFile, pastes[0].range.pos, pastes[0].range.end);
         const args = this.createFileLocationOrRangeRequestArgs(pastes[0].range, targetFile) as protocol.GetPostPasteImportFixesRequestArgs; //needs to be fixed
         args.targetFile = targetFile;
@@ -1020,7 +1021,23 @@ export class SessionClient implements LanguageService {
 
         const request = this.processRequest<protocol.GetPostPasteImportFixesRequest>(protocol.CommandTypes.GetPostPasteImportFixes, args);
         const response = this.processResponse<protocol.GetPostPasteImportFixesResponse>(request);
-        return [];
+        if (!response.body) {
+            return [];
+        }
+
+        // return response.body!.map<CodeFixAction>(({ fixName, description, changes, commands, fixId, fixAllDescription }) => // TODO: GH#18217
+        // ({ fixName, description, changes: this.convertChanges(changes, file), commands: commands as CodeActionCommand[], fixId, fixAllDescription }));
+
+        //const q = response.body.map<PostPasteImportFixes>(({changes}) => ({this.convertChanges(changes, targetFile)}));
+        //const r: FileTextChanges[] = response.body.map(item =>({changes: this.convertCodeEditsToTextChanges(item.edits)}));
+        /////////const q = response.body.map(item =>this.convertCodeEditsToTextChanges(item.edits));
+        const e = response.body.map<PostPasteImportFixes>(item => ({changes: this.convertCodeEditsToTextChanges(item.edits)}))
+        // let allEdits: FileTextChanges[] = [];
+        // for (const edits of response.body) {
+        //     allEdits = this.convertCodeEditsToTextChanges(edits);
+        // }
+        // const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body);
+        return e;
     }
 
     getProgram(): Program {

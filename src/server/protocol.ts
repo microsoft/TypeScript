@@ -651,7 +651,10 @@ export type GetPostPasteImportFixesRequestArgs = FileLocationOrRangeRequestArgs 
     copyRange?: CopyRange
 }
 export interface GetPostPasteImportFixesResponse extends Response {
-    filename: string;
+    body: PostPasteImportAction[];
+}
+export interface PostPasteImportAction {
+    edits: FileCodeEdits[];
 }
 
 /**

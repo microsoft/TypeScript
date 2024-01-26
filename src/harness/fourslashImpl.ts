@@ -3554,17 +3554,11 @@ export class TestState {
         assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
     }
 
-    public getPostPasteImportFixes(
-        targetFile: string,
-        pastes: Array<{text: string; range: ts.TextRange}>,//{ pos, end }: ts.TextRange
-        preferences: ts.UserPreferences,
-        originalFile?: string,
-        copyRange?: ts.CopyRange
-        ){
+    public getPostPasteImportFixes(options: FourSlashInterface.PostPasteImportFixOptions): void{
         const range = this.getSelection();
         //const range: ts.TextRange = {pos: pastes[0].range.pos, end: pastes[0].range.end};
-        const t =  this.languageService.getPostPasteImportFixes(this.activeFile.fileName, pastes, preferences, this.formatCodeSettings, originalFile, copyRange);
-        return "hello";
+        const editInfo =  this.languageService.getPostPasteImportFixes(this.activeFile.fileName, options.pastes, options.preferences, this.formatCodeSettings, options.originalFile, options.copyRange);
+        this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo[0].changes);
     }
 
     public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined, options?: ts.DocCommentTemplateOptions) {

@@ -1,9 +1,10 @@
-import { addRange, append } from "../compiler/core";
-import { SourceFile, Statement, UserPreferences, TypeChecker, AnyImportOrRequireStatement, Identifier, ModifierFlags, Program, TextRange } from "../compiler/types";
-import { hasSyntacticModifier, skipAlias } from "../compiler/utilities";
-import { codefix, factory, fileShouldUseJavaScriptRequire, formatting, getLineInfo, getQuotePreference, insertImports, nodeSeenTracker, Symbol, textChanges } from "./_namespaces/ts";
+import { addRange, append, arrayFrom, flatMap, flatMapIterator } from "../compiler/core";
+import { SourceFile, Statement, UserPreferences, TypeChecker, AnyImportOrRequireStatement, Identifier, ModifierFlags, Program, TextRange, CancellationToken, InternalSymbolName, ImportClause, ObjectBindingPattern, TypeOnlyAliasDeclaration } from "../compiler/types";
+import { hasSyntacticModifier, isJSXTagName, isValidTypeOnlyAliasUseSite, skipAlias } from "../compiler/utilities";
+import { codefix, Debug, DiagnosticOrDiagnosticAndArguments, factory, fileShouldUseJavaScriptRequire, formatting, getMeaningFromLocation, getQuotePreference, ImportKind, insertImports, nodeSeenTracker, Symbol, SymbolExportInfo, textChanges } from "./_namespaces/ts";
+import { getSymbolNamesToImport, shouldUseRequire, getExportInfos, getImportFixes, codeActionForFixWorker } from "./codefixes/importFixes";
 import { addExportToChanges, filterImport, forEachImportInStatement, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire, moduleSpecifierFromImport, nameOfTopLevelDeclaration } from "./refactors/moveToFile";
-import { CopyRange, FileTextChanges, LanguageServiceHost } from "./types";
+import { CopyRange, FileTextChanges, LanguageServiceHost, PostPasteImportFixes } from "./types";
 
 /** @internal */
 export function postPastImportFixProvider(
@@ -13,7 +14,7 @@ export function postPastImportFixProvider(
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     originalFile?: SourceFile,
-    copyLocation?: CopyRange): FileTextChanges[] {
+    copyLocation?: CopyRange): PostPasteImportFixes[] {
 
     /**
      * When the source file exists
@@ -21,30 +22,55 @@ export function postPastImportFixProvider(
      * 2.use getUsageInfo() to the symbols that need to be imported
      * 3.use the if and the third part of getTargetFileImportsAndAddExportInOldFile
      *  */ 
-    const { updatedFile, updatedProgram, originalProgram } = host.updatedTargetFile(targetFile.fileName, targetFile.text, pastes[0].text);
+    //const originalText = targetFile.text;
+    const { updatedFile, updatedProgram, originalProgram } = host.updateTargetFile(targetFile.fileName, targetFile.text, pastes[0].text);
     let statements: Statement[] = [];
 
     if (originalFile && originalProgram && updatedFile && updatedProgram) {
-        //addRange(statements, updatedFile?.statements, updatedFile?.statements.length - (targetFileStatements ? targetFileStatements.length : 0) - 1);
-        //addRange(statements, originalFile?.statements, 2);
-        //const start = originalFile.statements[0].getStart(originalFile);//addRange(statements, originalFile.statements, updatedFile.statements[updatedFile.statements.length - targetFileStatements.length].getStart(originalFile))
-        
-        //addRange(statements, updatedFile.statements, a.getStart(originalFile), b.getStart(originalFile));
-        // const a = updatedFile.statements[updatedFile.getLineAndCharacterOfPosition(pastes[0].range.pos).line] //21
-        // const b = updatedFile.statements[updatedFile.getLineAndCharacterOfPosition(pastes[0].range.end).line] //pastes[0].range.end + pastes[0].range.length - 1
-        addRange(statements, originalFile.statements, copyLocation?.start.line, copyLocation?.end.line); 
+        addRange(statements, originalFile.statements, copyLocation?.start.line, copyLocation ? copyLocation.end.line + 1 : undefined); 
         const usage = getUsageInfo(originalFile, statements, originalProgram.getTypeChecker()); 
         const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
 
-        return textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => getImports(originalFile, updatedFile, statements, updatedProgram, importAdder, usage.oldImportsNeededByTargetFile,
-            usage.targetFileImportsFromOldFile, changeTracker, preferences, host, updatedProgram.getTypeChecker()));  
+        const changes = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => getImports(originalFile, updatedFile, statements, updatedProgram, importAdder, usage.oldImportsNeededByTargetFile,
+            usage.targetFileImportsFromOldFile, changeTracker, preferences, host, originalProgram.getTypeChecker()));
+        host.revertUpdatedFile(targetFile.fileName, updatedFile.text, targetFile.text);
+        return [{changes}];
     }
     else {
-        return [];
+        Debug.assert(updatedFile !== undefined && originalProgram !== undefined);
+        Debug.assert(updatedProgram !== undefined);
+        const fixInfo = host.getFakeSourceFile(targetFile.fileName, formatContext, updatedFile, updatedProgram, originalProgram);
+        const fixes = fixInfo.map(({fix, symbolName}) => getImportsForUnknownSourceFile(
+            { host, formatContext, preferences },
+                updatedFile,
+                symbolName,
+                fix,
+                true,
+                updatedProgram,
+                preferences,
+        ));
+        host.revertUpdatedFile(targetFile.fileName, updatedFile.text, targetFile.text);
+        return fixes;
     }
     
 
     //const unknownSymbols = host.getFakeSourceFile(targetFile,pastes[0].text,targetFile, targetFileText);
+}
+
+function getImportsForUnknownSourceFile(
+    context: textChanges.TextChangesContext,
+    sourceFile: SourceFile,
+    symbolName: string,
+    fix: codefix.FixInfo["fix"],
+    includeSymbolNameInDescription: boolean,
+    program: Program,
+    preferences: UserPreferences,
+): PostPasteImportFixes {
+    let diag!: DiagnosticOrDiagnosticAndArguments;
+    const changes = textChanges.ChangeTracker.with(context, tracker => {
+        diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription, program, preferences);
+    });
+    return {changes};
 }
 
 function getImports(
@@ -127,4 +153,79 @@ function getTargetFileImportsForKnownOriginalFile(
     });
 
     return append(copiedOldImports, makeImportOrRequire(targetFile, oldFileDefault, oldFileNamedImports, originalFile.fileName, program, host, useEsModuleSyntax, quotePreference))
+}
+// interface FixInfo {
+//     readonly fix: ImportFix;
+//     readonly symbolName: string;
+//     readonly errorIdentifierText: string | undefined;
+//     readonly isJsxNamespaceFix?: boolean;
+// }
+// export function tempFunction(updatedFile: SourceFile, originalProgram: Program, node: Identifier, languageServiceHost: LanguageServiceHost, cancellationToken: CancellationToken, preferences: UserPreferences) {
+//     return flatMap(getSymbolNamesToImport(updatedFile, originalProgram.getTypeChecker(), node, originalProgram.getCompilerOptions()), symbolName => {
+//         // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
+//         if (symbolName === InternalSymbolName.Default) {
+//             return undefined;
+//         }
+//         const isValidTypeOnlyUseSite = isValidTypeOnlyAliasUseSite(node);
+//         const useRequire = shouldUseRequire(updatedFile, originalProgram);
+//         const exportInfo = getExportInfos(symbolName, isJSXTagName(node), getMeaningFromLocation(node), cancellationToken, updatedFile, originalProgram, true, languageServiceHost, preferences);
+//         //const t1 = exportInfo.values();
+//         //const fix = ts.flatMapIterator(exportInfo.values(), exportInfos => getImportFixes(exportInfos, node.getStart(updatedFile), isValidTypeOnlyUseSite, useRequire, originalProgram, updatedFile, languageServiceHost, preferences).fixes);
+//        return arrayFrom(
+//             flatMapIterator(exportInfo.values(), exportInfos => getImportFixes(exportInfos, node.getStart(updatedFile), isValidTypeOnlyUseSite, useRequire, originalProgram, updatedFile, languageServiceHost, preferences).fixes),
+//             fix => ({ fix, symbolName, errorIdentifierText: node.text, isJsxNamespaceFix: symbolName !== node.text }),
+//         );
+//     });
+
+// }
+
+// type ImportFix = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport | FixPromoteTypeOnlyImport;
+// type ImportFixWithModuleSpecifier = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport;
+
+const enum ImportFixKind {
+    UseNamespace,
+    JsdocTypeImport,
+    AddToExisting,
+    AddNew,
+    PromoteTypeOnly,
+}
+interface ImportFixBase {
+    readonly isReExport?: boolean;
+    readonly exportInfo?: SymbolExportInfo;
+    readonly moduleSpecifier: string;
+}
+const enum AddAsTypeOnly {
+    Allowed = 1 << 0,
+    Required = 1 << 1,
+    NotAllowed = 1 << 2,
+}
+interface FixPromoteTypeOnlyImport {
+    readonly kind: ImportFixKind.PromoteTypeOnly;
+    readonly typeOnlyAliasDeclaration: TypeOnlyAliasDeclaration;
+}
+interface Qualification {
+    readonly usagePosition: number;
+    readonly namespacePrefix: string;
+}
+interface FixUseNamespaceImport extends ImportFixBase, Qualification {
+    readonly kind: ImportFixKind.UseNamespace;
+}
+// interface FixAddJsdocTypeImport extends ImportFixBase {
+//     readonly kind: ImportFixKind.JsdocTypeImport;
+//     readonly usagePosition: number;
+//     readonly isReExport: boolean;
+//     readonly exportInfo: SymbolExportInfo;
+// }
+interface FixAddToExistingImport extends ImportFixBase {
+    readonly kind: ImportFixKind.AddToExisting;
+    readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern;
+    readonly importKind: ImportKind.Default | ImportKind.Named;
+    readonly addAsTypeOnly: AddAsTypeOnly;
+}
+interface FixAddNewImport extends ImportFixBase {
+    readonly kind: ImportFixKind.AddNew;
+    readonly importKind: ImportKind;
+    readonly addAsTypeOnly: AddAsTypeOnly;
+    readonly useRequire: boolean;
+    readonly qualification?: Qualification;
 }

@@ -42,6 +42,8 @@ import {
     TextSpan,
     UserPreferences,
 } from "./_namespaces/ts";
+import { FixInfo } from "./_namespaces/ts.codefix";
+import { FormatContext } from "./formatting/formatting";
 
 declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
@@ -431,8 +433,9 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
-    /** @internal */ getFakeSourceFile(rootFile: string, pastedText: string, targetFileName: string, targetFileText: string) : [] | undefined;
-    /** @internal */ updatedTargetFile(rootFile: string, targetFileText: string, pastedText: string): {updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: Program | undefined};
+    /** @internal */ getFakeSourceFile(rootFile: string, formatContext: FormatContext,  updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: Program | undefined): FixInfo[];
+    /** @internal */ updateTargetFile(rootFile: string, targetFileText: string, pastedText: string): {updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: Program | undefined};
+    /** @internal */ revertUpdatedFile(rootFile: string, updatedText: string, originalText: string): void;
 //needs to be changed to optional
     jsDocParsingMode?: JSDocParsingMode | undefined;
 }
@@ -686,7 +689,7 @@ export interface LanguageService {
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
     dispose(): void;
-    getPostPasteImportFixes (targetFile: string, pastes: Array<{text: string; range: TextRange}>, preferences: UserPreferences, formatOptions: FormatCodeSettings, originalFile: string | undefined, copyLocation: CopyRange | undefined): FileTextChanges[];
+    getPostPasteImportFixes (targetFile: string, pastes: Array<{text: string; range: TextRange}>, preferences: UserPreferences, formatOptions: FormatCodeSettings, originalFile: string | undefined, copyLocation: CopyRange | undefined): PostPasteImportFixes[];
 }
 
 export interface CopyRange {
@@ -714,10 +717,11 @@ export const enum OrganizeImportsMode {
     RemoveUnused = "RemoveUnused",
 }
 
-export interface postPasteImportFix {
-    targetFile: string, 
-    targetFileText: string,
-    pastes: Array<{text: string; range: TextSpan}>
+export interface PostPasteImportFixes {
+    // targetFile: string, 
+    // targetFileText: string,
+    // pastes: Array<{text: string; range: TextSpan}>
+    changes: FileTextChanges[];
 } 
 
 export interface OrganizeImportsArgs extends CombinedCodeFixScope {

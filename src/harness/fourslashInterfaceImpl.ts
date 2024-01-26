@@ -621,8 +621,8 @@ export class Verify extends VerifyNegatable {
         this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 
-    public postPasteImportFix(options: verifyPostPasteImportFix): void {
-        this.state.getPostPasteImportFixes(options.targetFile, options.pastes, options.preferences, options.originalFile, options.copyRange);
+    public postPasteImportFix(options: PostPasteImportFixOptions): void {
+        this.state.getPostPasteImportFixes(options);
     }
 }
 
@@ -1922,6 +1922,14 @@ export interface MoveToFileOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
     readonly interactiveRefactorArguments: ts.InteractiveRefactorArguments;
     readonly preferences?: ts.UserPreferences;
+}
+
+export interface PostPasteImportFixOptions {
+    readonly newFileContents: { readonly [fileName: string]: string; };
+    readonly pastes: Array<{text: string; range: ts.TextRange}>,//{ pos, end }: ts.TextRange
+    readonly preferences: ts.UserPreferences,
+    readonly originalFile?: string,
+    readonly copyRange?: ts.CopyRange
 }
 
 export type RenameLocationsOptions = readonly RenameLocationOptions[] | {

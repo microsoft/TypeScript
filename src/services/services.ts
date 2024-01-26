@@ -321,6 +321,7 @@ import {
     VariableDeclaration,
     postPasteImportFixes,
     CopyRange,
+    PostPasteImportFixes,
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
@@ -2098,7 +2099,7 @@ export function createLanguageService(
         formatOptions: FormatCodeSettings,
         originalFile?: string,
         copyLocation?: CopyRange
-        ): FileTextChanges[]{
+        ): PostPasteImportFixes[]{
         synchronizeHostData();
         const originalSourceFile = originalFile ? getValidSourceFile(originalFile) : undefined;
         const edits = postPasteImportFixes.postPastImportFixProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host), originalSourceFile, copyLocation);

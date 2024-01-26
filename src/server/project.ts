@@ -1,4 +1,6 @@
-import { getExportInfos, getImportFixes, getSymbolNamesToImport, shouldUseRequire } from "../services/codefixes/importFixes";
+import { info } from "console";
+import { FormatContext } from "../services/_namespaces/ts.formatting";
+import { FixInfo, ImportFixWithModuleSpecifier, getFixesInfoForNonUMDImport, sortFixInfo } from "../services/codefixes/importFixes";
 import * as ts from "./_namespaces/ts";
 import {
     addRange,
@@ -21,6 +23,7 @@ import {
     containsPath,
     createCacheableExportInfoMap,
     createLanguageService,
+    createPackageJsonImportFilter,
     createResolutionCache,
     createSymlinkCache,
     Debug,
@@ -66,6 +69,7 @@ import {
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
     HostCancellationToken,
+    ImportClause,
     inferredTypesContainingFile,
     InstallPackageOptions,
     IScriptSnapshot,
@@ -121,6 +125,7 @@ import {
     StringLiteralLike,
     stripQuotes,
     StructureIsReused,
+    SymbolExportInfo,
     SymlinkCache,
     ThrottledCancellationToken,
     timestamp,
@@ -310,6 +315,63 @@ const enum TypingWatcherType {
 
 type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
 
+//=========================
+//type ImportFixWithModuleSpecifier = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport;
+const enum ImportFixKind {
+    UseNamespace,
+    JsdocTypeImport,
+    AddToExisting,
+    AddNew,
+    PromoteTypeOnly,
+}
+const enum AddAsTypeOnly {
+    Allowed = 1 << 0,
+    Required = 1 << 1,
+    NotAllowed = 1 << 2,
+}
+// interface FixInfo {
+//     readonly fix: ImportFix;
+//     readonly symbolName: string;
+//     readonly errorIdentifierText: string | undefined;
+//     readonly isJsxNamespaceFix?: boolean;
+// }
+type ImportFix = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport | FixPromoteTypeOnlyImport;
+interface ImportFixBase {
+    readonly isReExport?: boolean;
+    readonly exportInfo?: SymbolExportInfo;
+    readonly moduleSpecifier: string;
+}
+interface Qualification {
+    readonly usagePosition: number;
+    readonly namespacePrefix: string;
+}
+interface FixUseNamespaceImport extends ImportFixBase, Qualification {
+    readonly kind: ImportFixKind.UseNamespace;
+}
+interface FixAddJsdocTypeImport extends ImportFixBase {
+    readonly kind: ImportFixKind.JsdocTypeImport;
+    readonly usagePosition: number;
+    readonly isReExport: boolean;
+    readonly exportInfo: SymbolExportInfo;
+}
+interface FixAddToExistingImport extends ImportFixBase {
+    readonly kind: ImportFixKind.AddToExisting;
+    readonly importClauseOrBindingPattern: ImportClause | ts.ObjectBindingPattern;
+    readonly importKind: ts.ImportKind.Default | ts.ImportKind.Named;
+    readonly addAsTypeOnly: AddAsTypeOnly;
+}
+interface FixAddNewImport extends ImportFixBase {
+    readonly kind: ImportFixKind.AddNew;
+    readonly importKind: ts.ImportKind;
+    readonly addAsTypeOnly: AddAsTypeOnly;
+    readonly useRequire: boolean;
+    readonly qualification?: Qualification;
+}
+interface FixPromoteTypeOnlyImport {
+    readonly kind: ImportFixKind.PromoteTypeOnly;
+    readonly typeOnlyAliasDeclaration: ts.TypeOnlyAliasDeclaration;
+}
+//=========================
 export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
     private rootFiles: ScriptInfo[] = [];
     private rootFilesMap = new Map<string, ProjectRootFile>();
@@ -2230,7 +2292,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     // }
 
     /** @internal */
-    updatedTargetFile(rootFile: string, targetFileText: string, pastedText: string): {updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: ts.Program | undefined} {
+    updateTargetFile(rootFile: string, targetFileText: string, pastedText: string): {updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: ts.Program | undefined} {
         const originalProgram = this.program;
         this.getScriptInfo(rootFile)?.editContent(0, targetFileText.length-1, pastedText);
         this.updateGraph();
@@ -2238,8 +2300,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         const updatedProgram = this.program;
         return { updatedFile, updatedProgram, originalProgram };
     }
+
     /** @internal */
-    getFakeSourceFile(rootFile: string, pastedText: string, _targetFileName: string, targetFileText: string): [] | undefined {
+    revertUpdatedFile(rootFile: string, updatedText: string, originalText: string) {
+        this.getScriptInfo(rootFile)?.editContent(0, updatedText.length-1, originalText);
+        this.updateGraph();
+    }
+
+
+    /** @internal */
+    getFakeSourceFile(rootFile: string, formatContext: FormatContext, updatedFile?: SourceFile, updatedProgram?: Program, originalProgram?: Program): FixInfo[] {
 
         /**
          * cscriptInfo.editContent()
@@ -2248,16 +2318,17 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
          */
         //const t = this.getScriptInfo(rootFile);
         // const scriptInfo = this.projectService.getScriptInfoForPath(this.toPath(rootFile));
-        this.getScriptInfo(rootFile)?.editContent(0, targetFileText.length, pastedText);
-        this.updateGraph();
-        const updatedFile = this.program?.getSourceFile(rootFile);
-        const updatedProgram = this.program;
+        //this.getScriptInfo(rootFile)?.editContent(0, targetFileText.length, pastedText);
+        //this.updateGraph();
+        //const updatedFile = this.program?.getSourceFile(rootFile);
+        //const updatedProgram = this.program;
 
-        const originalProgram = this.program;
+        //const originalProgram = this.program;
         const cancellationToken = this.cancellationToken;
         const languageServiceHost = this;
         const preferences = this.projectService.getPreferences(toNormalizedPath(rootFile));
-        let allImports:[] | undefined;
+        let imports: FixInfo[] =[];
+        let allImports;
         
         if (updatedFile && updatedProgram && originalProgram) {
             ts.forEachChild(updatedFile, function cb(node) {
@@ -2265,19 +2336,15 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                     if (!updatedProgram.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ true) &&
                         !originalProgram?.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ false)) {
                         //generate imports
-                        const imports = flatMap(getSymbolNamesToImport(updatedFile, originalProgram.getTypeChecker(), node, originalProgram.getCompilerOptions()), symbolName => {
-                            // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
-                            if (symbolName === ts.InternalSymbolName.Default) {
-                                return undefined;
-                            }
-                            const isValidTypeOnlyUseSite = ts.isValidTypeOnlyAliasUseSite(node);
-                            const useRequire = shouldUseRequire(updatedFile, originalProgram);
-                            const exportInfo = getExportInfos(symbolName, ts.isJSXTagName(node), ts.getMeaningFromLocation(node), cancellationToken, updatedFile, originalProgram, true, languageServiceHost, preferences);
-                            const t = arrayFrom(
-                                ts.flatMapIterator(exportInfo.values(), exportInfos => getImportFixes(exportInfos, node.getStart(updatedFile), isValidTypeOnlyUseSite, useRequire, originalProgram, updatedFile, languageServiceHost, preferences).fixes),
-                                fix => ({ fix, symbolName, errorIdentifierText: node.text, isJsxNamespaceFix: symbolName !== node.text }),
-                            );
-                        });
+                        /**
+                         * getImportFixes needs to be called separately and no flat Map is required. 
+                         * the 'fix' can be added to something like an array that can be returned and then done something with changes
+                         * *****none of the flatMaps are required*****
+                         */
+                        const info = tempFunc(updatedFile, updatedProgram, originalProgram, node, languageServiceHost, cancellationToken, preferences, formatContext);
+                        if (info) {
+                            imports = imports.concat(info);
+                        }
                     }
                 }
                 else {
@@ -2285,54 +2352,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 }
             });
         }
-
-        // const program: Program = ts.createProgram([rootFile], this.getCompilerOptions(), {
-        //     getSourceFile:() => ts.createSourceFile("fake source file", pastedText, { languageVersion: ts.ScriptTarget.ES2015, jsDocParsingMode: JSDocParsingMode.ParseNone }, /*setParentNodes*/ false),
-        //     getDefaultLibFileName: () => ts.getDefaultLibFilePath(this.getCompilerOptions()),
-        //     writeFile: noop,
-        //     getCurrentDirectory: () => this.getCurrentDirectory(),
-        //     getCanonicalFileName: () => "fake source file",
-        //     useCaseSensitiveFileNames: () => true,
-        //     getNewLine: () => "\n",
-        //     fileExists(){return true},
-        //     readFile() {
-        //         return pastedText;
-        //     }
-        // });
-        // const fakeSourceFile = program.getSourceFile("fake source file");
-        // const originalProgram = this.program;
-        // const cancellationToken = this.cancellationToken;
-        // const languageServiceHost = this;
-        // const preferences = this.projectService.getPreferences(toNormalizedPath(rootFile));
-        // let imports;
-        
-        // if (fakeSourceFile && originalProgram) {
-        //     ts.forEachChild(fakeSourceFile, function cb(node) {
-        //         if (ts.isIdentifier(node)) {
-        //             if (!program.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ true) &&
-        //                 !originalProgram?.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ false)) {
-        //                 //generate imports
-        //                 imports = flatMap(getSymbolNamesToImport(fakeSourceFile, originalProgram.getTypeChecker(), node, originalProgram.getCompilerOptions()), symbolName => {
-        //                     // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
-        //                     if (symbolName === ts.InternalSymbolName.Default) {
-        //                         return undefined;
-        //                     }
-        //                     const isValidTypeOnlyUseSite = ts.isValidTypeOnlyAliasUseSite(node);
-        //                     const useRequire = shouldUseRequire(fakeSourceFile, originalProgram);
-        //                     const exportInfo = getExportInfos(symbolName, ts.isJSXTagName(node), ts.getMeaningFromLocation(node), cancellationToken, fakeSourceFile, originalProgram, true, languageServiceHost, preferences);
-        //                     return arrayFrom(
-        //                         ts.flatMapIterator(exportInfo.values(), exportInfos => getImportFixes(exportInfos, node.getStart(fakeSourceFile), isValidTypeOnlyUseSite, useRequire, program, fakeSourceFile, languageServiceHost, preferences).fixes),
-        //                         fix => ({ fix, symbolName, errorIdentifierText: node.text, isJsxNamespaceFix: symbolName !== node.text }),
-        //                     );
-        //                 });
-        //             }
-        //         }
-        //         else {
-        //             node.forEachChild(cb);
-        //         }
-        //     });
-        // }
-        return allImports;
+        return imports;
     }
 
     /** @internal */
@@ -2349,6 +2369,30 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             lib: ts.emptyArray,
             noLib: true,
         };
+    }
+}
+
+function tempFunc(updatedFile: SourceFile, updatedProgram: Program, originalProgram: Program, node: ts.Identifier, languageServiceHost: Project, cancellationToken: ts.CancellationToken, preferences: ts.UserPreferences, formatContext: FormatContext):
+readonly FixInfo[] | undefined {
+    if (!updatedProgram.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ true) &&
+    !originalProgram?.getTypeChecker().resolveName(node.text, node, ts.SymbolFlags.All, /*excludeGlobals*/ false)) {
+    //generate imports
+    /**
+     * getImportFixes needs to be called separately and no flat Map is required. 
+     * the 'fix' can be added to something like an array that can be returned and then done something with changes
+     * *****none of the flatMaps are required*****
+     */
+        const t: ts.CodeFixContextBase = {
+            sourceFile: updatedFile,
+            program: originalProgram,
+            cancellationToken: cancellationToken,
+            host: languageServiceHost,
+            preferences: preferences, 
+            formatContext: formatContext
+        }
+        const info = getFixesInfoForNonUMDImport(t, node, true);
+        const packageJsonImportFilter = createPackageJsonImportFilter(updatedFile, preferences, languageServiceHost);
+        return info && sortFixInfo(info,updatedFile, updatedProgram, packageJsonImportFilter, languageServiceHost);
     }
 }
 
