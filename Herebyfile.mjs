@@ -228,7 +228,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // For historical reasons, TypeScript does not set __esModule. Hack esbuild's __toCommonJS to be a noop.
             // We reference `__copyProps` to ensure the final bundle doesn't have any unreferenced code.
             const toCommonJsRegExp = /var __toCommonJS .*/;
-            const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod);";
+            const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
 
             options.plugins = [
                 {
