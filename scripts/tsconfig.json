@@ -16,8 +16,6 @@
         "allowUnusedLabels": false,
         "noImplicitOverride": true,
         "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
         "allowJs": true,
         "checkJs": true
     },
