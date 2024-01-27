@@ -1503,15 +1503,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var lastGetCombinedModifierFlagsNode: Declaration | undefined;
     var lastGetCombinedModifierFlagsResult = ModifierFlags.None;
 
-    type QueryReference =
+    type TypeParameterReference =
         | Identifier
         | PropertyAccessExpression
         | ElementAccessExpression
         | ImportMetaProperty
         | SuperExpression
         | ThisExpression;
-    type QueryReferences = Map<TypeParameter, Map<Symbol, QueryReference>>;
-    var queryTypeParameterReferencesCache = new Map<SignatureDeclaration, QueryReferences>();
+    type TypeParameterToReference = Map<TypeParameter, Map<Symbol, TypeParameterReference>>;
+    var typeParameterReferencesCache = new Map<SignatureDeclaration, TypeParameterToReference>();
     // for public members that accept a Node or one of its subtypes, we must guard against
     // synthetic nodes created during transformations by calling `getParseTreeNode`.
     // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -44403,8 +44403,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const outerTypeParameters = getOuterTypeParameters(container, /*includeThisTypes*/ false);
         const typeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(container as DeclarationWithTypeParameters));
-        const queryTypeParameters = typeParameters
-            && filterQueryTypeParameters(container, typeParameters);
+        const narrowableTypeParameters = typeParameters
+            && filterNarrowableTypeParameters(container, typeParameters);
         // There are two cases for obtaining a position in the control-flow graph on which references will be analyzed:
         // - When the return expression is defined, and it is one of the two branches of a conditional expression, then the position is the expression itself:
         // `function foo(...) {
@@ -44425,8 +44425,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             narrowPosition = expr;
         }
         let narrowedReturnType = unwrappedReturnType;
-        if (queryTypeParameters && narrowFlowNode) {
-            const narrowed: [TypeParameter, Type][] = mapDefined(queryTypeParameters, ([tp, symbol, reference]) => {
+        if (narrowableTypeParameters && narrowFlowNode) {
+            const narrowed: [TypeParameter, Type][] = mapDefined(narrowableTypeParameters, ([tp, symbol, reference]) => {
                 const narrowReference = factory.cloneNode(reference); // Construct a reference that can be narrowed.
                 // Don't reuse the original reference's node id,
                 // because that could cause us to get a type that was cached for the original reference.
@@ -44482,11 +44482,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkReturnStatementExpression(container, returnType, node, expr.whenFalse);
     }
 
-    function filterQueryTypeParameters(container: SignatureDeclaration, typeParameters: TypeParameter[]): [TypeParameter, Symbol, QueryReference][] | undefined {
-        const queryTypeParameterReferences = collectQueryTypeParameterReferences(container);
-        const queryParameters: [TypeParameter, Symbol, QueryReference][] = [];
+    function filterNarrowableTypeParameters(container: SignatureDeclaration, typeParameters: TypeParameter[]): [TypeParameter, Symbol, TypeParameterReference][] | undefined {
+        const narrowableTypeParameterReferences = collectTypeParameterReferences(container);
+        const queryParameters: [TypeParameter, Symbol, TypeParameterReference][] = [];
         for (const typeParam of typeParameters) {
-            const symbolMap = queryTypeParameterReferences.get(typeParam);
+            const symbolMap = narrowableTypeParameterReferences.get(typeParam);
             if (!symbolMap) continue;
             if (symbolMap.size === 1) {
                 const [symbol, reference] = firstIterator(symbolMap.entries());
@@ -44496,14 +44496,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return queryParameters.length ? queryParameters : undefined;
     }
 
-    function collectQueryTypeParameterReferences(container: SignatureDeclaration): QueryReferences {
-        const references: QueryReferences = new Map();
-        if (!queryTypeParameterReferencesCache.has(container)) {
-            queryTypeParameterReferencesCache.set(container, references);
+    function collectTypeParameterReferences(container: SignatureDeclaration): TypeParameterToReference {
+        const references: TypeParameterToReference = new Map();
+        if (!typeParameterReferencesCache.has(container)) {
+            typeParameterReferencesCache.set(container, references);
             const flowNodes = collectReturnStatementFlowNodes(container);
             visitFlowNodes(flowNodes, getNodeFromFlowNode);
         }
-        return queryTypeParameterReferencesCache.get(container)!;
+        return typeParameterReferencesCache.get(container)!;
 
         // Get the node from the flow node that could have references used for narrowing.
         function getNodeFromFlowNode(flow: FlowNode) {
@@ -44604,7 +44604,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function addReference(reference: QueryReference): void {
+        function addReference(reference: TypeParameterReference): void {
             const symbol = getSymbolForExpression(reference);
             const type = symbol && getTypeOfSymbol(symbol);
             if (!type || isErrorType(type)) return;
@@ -44629,7 +44629,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 add(type as TypeParameter, symbol, reference);
             }
 
-            function add(type: TypeParameter, symbol: Symbol, reference: QueryReference) {
+            function add(type: TypeParameter, symbol: Symbol, reference: TypeParameterReference) {
                 if (!references.has(type)) {
                     references.set(type, new Map());
                 }
