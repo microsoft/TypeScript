@@ -1072,6 +1072,17 @@ FsWatches::
 /user/username/projects/container/tsconfig.json:
   {}
 
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/temp/temp.ts"
+      },
+      "seq": 4,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
@@ -1098,7 +1109,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
-Before request
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
 
 PolledWatches::
 /user/username/projects/container/compositeExec/node_modules/@types:
@@ -1138,13 +1153,15 @@ FsWatches::
 /user/username/projects/temp/temp.ts: *new*
   {}
 
+Before request
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/temp/temp.ts"
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
@@ -1224,6 +1241,17 @@ FsWatches *deleted*::
 /user/username/projects/temp/temp.ts:
   {}
 
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/container/compositeExec/index.ts"
+      },
+      "seq": 6,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -1248,6 +1276,59 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/temp/temp.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+PolledWatches::
+/user/username/projects/container/compositeExec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/exec/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/lib/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/container/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/temp/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/temp/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/temp/tsconfig.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/container/compositeExec/index.ts: *new*
+  {}
+/user/username/projects/container/compositeExec/tsconfig.json:
+  {}
+/user/username/projects/container/exec/index.ts:
+  {}
+/user/username/projects/container/exec/tsconfig.json:
+  {}
+/user/username/projects/container/lib/index.ts:
+  {}
+/user/username/projects/container/lib/tsconfig.json:
+  {}
+/user/username/projects/container/tsconfig.json:
+  {}
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "close",
+      "arguments": {
+        "file": "/user/username/projects/temp/temp.ts"
+      },
+      "seq": 7,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
@@ -1272,7 +1353,11 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Before request
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
 
 PolledWatches::
 /user/username/projects/container/compositeExec/node_modules/@types:
@@ -1297,7 +1382,7 @@ PolledWatches *deleted*::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/container/compositeExec/index.ts: *new*
+/user/username/projects/container/compositeExec/index.ts:
   {}
 /user/username/projects/container/compositeExec/tsconfig.json:
   {}
@@ -1314,13 +1399,15 @@ FsWatches::
 /user/username/projects/temp/temp.ts: *new*
   {}
 
+Before request
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/temp/temp.ts"
       },
-      "seq": 5,
+      "seq": 8,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info

@@ -34,8 +34,7 @@ describe("unittests:: tsserver:: reload", () => {
         });
 
         // verify content
-        const projectService = session.getProjectService();
-        const snap1 = projectService.getScriptInfo(f1.path)!.getSnapshot();
+        const snap1 = session.getProjectService().getScriptInfo(f1.path)!.getSnapshot();
         session.logger.log(`Content of ${f1.path}:: ${ts.getSnapshotText(snap1)}`);
 
         // reload from original file file
@@ -45,7 +44,7 @@ describe("unittests:: tsserver:: reload", () => {
         });
 
         // verify content
-        const snap2 = projectService.getScriptInfo(f1.path)!.getSnapshot();
+        const snap2 = session.getProjectService().getScriptInfo(f1.path)!.getSnapshot();
         session.logger.log(`Content of ${f1.path}:: ${ts.getSnapshotText(snap2)}`);
         baselineTsserverLogs("reload", "should work with temp file", session);
     });
