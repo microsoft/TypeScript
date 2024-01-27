@@ -108,8 +108,9 @@
         "@typescript-eslint/no-unused-vars": [
             "error",
             {
-                "argsIgnorePattern": "^_([^_]|_*$)",
-                "varsIgnorePattern": "^_([^_]|_*$)"
+                // Ignore: (solely underscores | starting with exactly one underscore)
+                "argsIgnorePattern": "^(_+$|_[^_])",
+                "varsIgnorePattern": "^(_+$|_[^_])"
             }
         ],
 
