@@ -13,7 +13,6 @@
         "strict": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "allowUnusedLabels": false,
         "noImplicitOverride": true,
         "noImplicitReturns": true,
         "allowJs": true,
