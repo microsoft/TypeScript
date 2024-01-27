@@ -84,3 +84,73 @@ function bar<T extends string | Missing>(x?: T ):
     }
     return 1;
 }
+
+// Aliased narrowing
+function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
+>inlined : Symbol(inlined, Decl(dependentReturnType4.ts, 26, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 29, 17))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 29, 44))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 29, 17))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 29, 17))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 29, 17))
+
+    const t = typeof x === "string";
+>t : Symbol(t, Decl(dependentReturnType4.ts, 30, 9))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 29, 44))
+
+    if (t) {
+>t : Symbol(t, Decl(dependentReturnType4.ts, 30, 9))
+
+        const y: string = x;
+>y : Symbol(y, Decl(dependentReturnType4.ts, 32, 13))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 29, 44))
+
+        return 1;
+    }
+    return "one";
+}
+
+// Don't narrow more than 5 levels of aliasing
+function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
+>inlined6 : Symbol(inlined6, Decl(dependentReturnType4.ts, 36, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 39, 18))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 39, 45))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 39, 18))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 39, 18))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 39, 18))
+
+    const t1 = typeof x === "string";
+>t1 : Symbol(t1, Decl(dependentReturnType4.ts, 40, 9))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 39, 45))
+
+    const t2 = t1;
+>t2 : Symbol(t2, Decl(dependentReturnType4.ts, 41, 9))
+>t1 : Symbol(t1, Decl(dependentReturnType4.ts, 40, 9))
+
+    const t3 = t2;
+>t3 : Symbol(t3, Decl(dependentReturnType4.ts, 42, 9))
+>t2 : Symbol(t2, Decl(dependentReturnType4.ts, 41, 9))
+
+    const t4 = t3;
+>t4 : Symbol(t4, Decl(dependentReturnType4.ts, 43, 9))
+>t3 : Symbol(t3, Decl(dependentReturnType4.ts, 42, 9))
+
+    const t5 = t4;
+>t5 : Symbol(t5, Decl(dependentReturnType4.ts, 44, 9))
+>t4 : Symbol(t4, Decl(dependentReturnType4.ts, 43, 9))
+
+    const t6 = t5;
+>t6 : Symbol(t6, Decl(dependentReturnType4.ts, 45, 9))
+>t5 : Symbol(t5, Decl(dependentReturnType4.ts, 44, 9))
+
+    if (t6) {
+>t6 : Symbol(t6, Decl(dependentReturnType4.ts, 45, 9))
+
+        const y: string = x;
+>y : Symbol(y, Decl(dependentReturnType4.ts, 47, 13))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 39, 45))
+
+        return 1;
+    }
+    return "one";
+}

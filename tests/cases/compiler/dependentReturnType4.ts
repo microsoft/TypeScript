@@ -30,3 +30,28 @@ function bar<T extends string | Missing>(x?: T ):
     }
     return 1;
 }
+
+// Aliased narrowing
+function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
+    const t = typeof x === "string";
+    if (t) {
+        const y: string = x;
+        return 1;
+    }
+    return "one";
+}
+
+// Don't narrow more than 5 levels of aliasing
+function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
+    const t1 = typeof x === "string";
+    const t2 = t1;
+    const t3 = t2;
+    const t4 = t3;
+    const t5 = t4;
+    const t6 = t5;
+    if (t6) {
+        const y: string = x;
+        return 1;
+    }
+    return "one";
+}

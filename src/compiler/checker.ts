@@ -29061,14 +29061,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // up to five levels of aliased conditional expressions that are themselves declared as const variables.
                     if (!isMatchingReference(reference, expr) && inlineLevel < 5) {
                         const symbol = getResolvedSymbol(expr as Identifier);
-                        if (isConstantVariable(symbol)) {
-                            const declaration = symbol.valueDeclaration;
-                            if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isConstantReference(reference)) {
-                                inlineLevel++;
-                                const result = narrowType(type, declaration.initializer, assumeTrue);
-                                inlineLevel--;
-                                return result;
-                            }
+                        const inlineExpression = getNarrowableInlineExpression(symbol);
+                        if (inlineExpression && isConstantReference(reference)) {
+                            inlineLevel++;
+                            const result = narrowType(type, inlineExpression, assumeTrue);
+                            inlineLevel--;
+                            return result;
                         }
                     }
                     // falls through
@@ -29102,6 +29100,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull));
             }
             return type;
+        }
+    }
+
+    function getNarrowableInlineExpression(symbol: Symbol): Expression | undefined {
+        if (isConstantVariable(symbol)) {
+            const declaration = symbol.valueDeclaration;
+            if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer) {
+                return declaration.initializer;
+            }
         }
     }
 
@@ -44505,7 +44512,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return typeParameterReferencesCache.get(container)!;
 
-        // Get the node from the flow node that could have references used for narrowing.
+        // Get the node from the flow node that could have narrowable references.
         function getNodeFromFlowNode(flow: FlowNode) {
             const flags = flow.flags;
             // Based on `getTypeAtFlowX` functions.
@@ -44531,11 +44538,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (node) getReferencesFromNode(node);
         }
 
-        // >> TODO: Based on `isMatchingReference`?
-        // >> TODO: needs to be based on `narrowType` as well.
-        // If `node` came from a flow condition's condition, then it is going to be analyzed by
-        // `narrowType`.
-        function getReferencesFromNode(node: Node): void {
+        // Based on `isMatchingReference` and `narrowType`.
+        function getReferencesFromNode(node: Node, inlineLevel = 0): void {
             switch (node.kind) {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
@@ -44546,21 +44550,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return;
                 case SyntaxKind.CallExpression:
                     let callAccess;
-                    // `node` is `expr.hasOwnExpression(prop)`
+                    // `node` is `expr.hasOwnExpression(prop)`, so we create a synthetic `expr.prop` reference for narrowing.
                     if (isPropertyAccessExpression(callAccess = (node as CallExpression).expression) && isIdentifier(callAccess.name) && callAccess.name.escapedText === "hasOwnProperty" && (node as CallExpression).arguments.length === 1 && isStringLiteralLike((node as CallExpression).arguments[0])) {
                         const propName = (node as CallExpression).arguments[0] as StringLiteralLike;
                         const synthPropertyAccess = canUsePropertyAccess(propName.text, languageVersion) ?
                             factory.createPropertyAccessExpression(callAccess.expression, propName.text) :
                             factory.createElementAccessExpression(callAccess.expression, propName);
                         setParent(synthPropertyAccess, node.parent);
-                        addReference(synthPropertyAccess);
+                        addReference(synthPropertyAccess, inlineLevel);
                     }
-                    getReferencesFromNode((node as CallExpression).expression); // >> TODO: do we need this?
-                    // This is relevant for type predicate-based narrowing.
+                    getReferencesFromNode((node as CallExpression).expression);
                     (node as CallExpression).arguments.forEach(getReferencesFromNode);
                     return;
                 case SyntaxKind.PrefixUnaryExpression:
-                case SyntaxKind.PostfixUnaryExpression: // >> TODO: do we need this?
+                case SyntaxKind.PostfixUnaryExpression:
                     getReferencesFromNode((node as PrefixUnaryExpression | PostfixUnaryExpression).operand);
                     return;
                 case SyntaxKind.TypeOfExpression:
@@ -44578,16 +44581,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return;
                 case SyntaxKind.MetaProperty:
                     if ((node as MetaProperty).keywordToken === SyntaxKind.ImportKeyword) {
-                        addReference(node as ImportMetaProperty);
+                        addReference(node as ImportMetaProperty, inlineLevel);
                     }
                     // >> TODO: I think you can never actually have `import.meta` or
                     // `new.target` involved in narrowing, so this might be pointless
                     return;
                 case SyntaxKind.ThisKeyword:
-                    addReference(node as ThisExpression);
+                    addReference(node as ThisExpression, inlineLevel);
                     return;
                 case SyntaxKind.Identifier:
-                    addReference(node as Identifier);
+                    addReference(node as Identifier, inlineLevel);
                     return;
                 case SyntaxKind.PrivateIdentifier:
                     // Don't add private identifiers as a reference.
@@ -44595,16 +44598,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // as in `this.#privateId`.
                     return;
                 case SyntaxKind.SuperKeyword:
-                    addReference(node as SuperExpression);
+                    addReference(node as SuperExpression, inlineLevel);
                     return;
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                    addReference(node as PropertyAccessExpression | ElementAccessExpression);
+                    addReference(node as PropertyAccessExpression | ElementAccessExpression, inlineLevel);
                     return;
             }
         }
 
-        function addReference(reference: TypeParameterReference): void {
+        function addReference(reference: TypeParameterReference, inlineLevel: number): void {
             const symbol = getSymbolForExpression(reference);
             const type = symbol && getTypeOfSymbol(symbol);
             if (!type || isErrorType(type)) return;
@@ -44627,6 +44630,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (type.flags & TypeFlags.TypeParameter) {
                 add(type as TypeParameter, symbol, reference);
+            }
+            else if (inlineLevel < 5) {
+                const inlineExpression = getNarrowableInlineExpression(symbol);
+                if (inlineExpression) {
+                    getReferencesFromNode(inlineExpression, inlineLevel + 1);
+                }
             }
 
             function add(type: TypeParameter, symbol: Symbol, reference: TypeParameterReference) {

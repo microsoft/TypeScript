@@ -78,3 +78,75 @@ function bar<T extends string | Missing>(x?: T ):
     return 1;
 >1 : 1
 }
+
+// Aliased narrowing
+function inlined<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
+>inlined : <T extends string | number>(x: T) => T extends number ? string : T extends string ? number : string | number
+>x : T
+
+    const t = typeof x === "string";
+>t : boolean
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : T
+>"string" : "string"
+
+    if (t) {
+>t : boolean
+
+        const y: string = x;
+>y : string
+>x : string
+
+        return 1;
+>1 : 1
+    }
+    return "one";
+>"one" : "one"
+}
+
+// Don't narrow more than 5 levels of aliasing
+function inlined6<T extends number | string>(x: T): T extends number ? string : T extends string ? number : string | number {
+>inlined6 : <T extends string | number>(x: T) => T extends number ? string : T extends string ? number : string | number
+>x : T
+
+    const t1 = typeof x === "string";
+>t1 : boolean
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : T
+>"string" : "string"
+
+    const t2 = t1;
+>t2 : boolean
+>t1 : boolean
+
+    const t3 = t2;
+>t3 : boolean
+>t2 : boolean
+
+    const t4 = t3;
+>t4 : boolean
+>t3 : boolean
+
+    const t5 = t4;
+>t5 : boolean
+>t4 : boolean
+
+    const t6 = t5;
+>t6 : boolean
+>t5 : boolean
+
+    if (t6) {
+>t6 : boolean
+
+        const y: string = x;
+>y : string
+>x : string | number
+
+        return 1;
+>1 : 1
+    }
+    return "one";
+>"one" : "one"
+}
