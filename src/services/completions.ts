@@ -188,6 +188,7 @@ import {
     isJSDoc,
     isJSDocAugmentsTag,
     isJSDocImplementsTag,
+    isJSDocImportTypeTag,
     isJSDocParameterTag,
     isJSDocTag,
     isJSDocTemplateTag,
@@ -255,6 +256,7 @@ import {
     isVariableDeclaration,
     isVariableLike,
     JsDoc,
+    JSDocImportTypeTag,
     JSDocParameterTag,
     JSDocPropertyTag,
     JSDocReturnTag,
@@ -5708,9 +5710,9 @@ function getImportStatementCompletionInfo(contextToken: Node, sourceFile: Source
     }
 }
 
-function getSingleLineReplacementSpanForImportCompletionNode(node: ImportDeclaration | ImportEqualsDeclaration | ImportSpecifier | Token<SyntaxKind.ImportKeyword> | undefined) {
+function getSingleLineReplacementSpanForImportCompletionNode(node: ImportDeclaration | ImportEqualsDeclaration | ImportSpecifier | JSDocImportTypeTag | Token<SyntaxKind.ImportKeyword> | undefined) {
     if (!node) return undefined;
-    const top = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration)) ?? node;
+    const top = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration, isJSDocImportTypeTag)) ?? node;
     const sourceFile = top.getSourceFile();
     if (rangeIsOnSingleLine(top, sourceFile)) {
         return createTextSpanFromNode(top, sourceFile);
@@ -5719,7 +5721,7 @@ function getSingleLineReplacementSpanForImportCompletionNode(node: ImportDeclara
     Debug.assert(top.kind !== SyntaxKind.ImportKeyword && top.kind !== SyntaxKind.ImportSpecifier);
     // Guess which point in the import might actually be a later statement parsed as part of the import
     // during parser recovery - either in the middle of named imports, or the module specifier.
-    const potentialSplitPoint = top.kind === SyntaxKind.ImportDeclaration
+    const potentialSplitPoint = top.kind === SyntaxKind.ImportDeclaration || top.kind === SyntaxKind.JSDocImportTypeTag
         ? getPotentiallyInvalidImportSpecifier(top.importClause?.namedBindings) ?? top.moduleSpecifier
         : top.moduleReference;
     const withoutModuleSpecifier: TextRange = {

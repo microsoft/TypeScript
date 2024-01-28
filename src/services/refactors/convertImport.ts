@@ -42,6 +42,7 @@ import {
     SymbolFlags,
     SyntaxKind,
     textChanges,
+    tryCast,
     TypeChecker,
 } from "../_namespaces/ts";
 import {
@@ -188,7 +189,9 @@ function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, 
         importSpecifiers.push(factory.createImportSpecifier(/*isTypeOnly*/ false, name === propertyName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name)));
     });
 
-    const importDecl = toConvert.parent.parent;
+    const importDecl = tryCast(toConvert.parent.parent, isImportDeclaration);
+    Debug.assert(importDecl, "Unexpected declaration");
+
     if (usedAsNamespaceOrDefault && !allowSyntheticDefaultImports) {
         // Need to leave the namespace import alone
         changes.insertNodeAfter(sourceFile, importDecl, updateImport(importDecl, /*defaultImportName*/ undefined, importSpecifiers));
@@ -209,7 +212,10 @@ function getLeftOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: P
 /** @internal */
 export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImports, shouldUseDefault = getShouldUseDefault(program, toConvert.parent)): void {
     const checker = program.getTypeChecker();
-    const importDecl = toConvert.parent.parent;
+    const importDecl = tryCast(toConvert.parent.parent, isImportDeclaration);
+    if (importDecl === undefined) {
+        Debug.assert(importDecl, "Unexpected declaration");
+    }
     const { moduleSpecifier } = importDecl;
 
     const toConvertSymbols = new Set<Symbol>();

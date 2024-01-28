@@ -11,8 +11,8 @@ import {
     AmbientModuleDeclaration,
     and,
     AnonymousType,
+    AnyImportOrJsDocImportTypeImport,
     AnyImportOrReExport,
-    AnyImportSyntax,
     append,
     appendIfUnique,
     ArrayBindingPattern,
@@ -583,6 +583,7 @@ import {
     isJSDocCallbackTag,
     isJSDocConstructSignature,
     isJSDocFunctionType,
+    isJSDocImportTypeTag,
     isJSDocIndexSignature,
     isJSDocLinkLike,
     isJSDocMemberName,
@@ -770,6 +771,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTypeTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -3942,7 +3944,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             || (n === stopAt || isFunctionLike(n) && (!getImmediatelyInvokedFunctionExpression(n) || (getFunctionFlags(n) & FunctionFlags.AsyncGenerator)) ? "quit" : false));
     }
 
-    function getAnyImportSyntax(node: Node): AnyImportSyntax | undefined {
+    function getAnyImportSyntax(node: Node): AnyImportOrJsDocImportTypeImport | undefined {
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 return node as ImportEqualsDeclaration;
@@ -4280,8 +4282,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, specifier: ImportOrExportSpecifier | BindingElement | PropertyAccessExpression, dontResolveAlias = false): Symbol | undefined {
-        const moduleSpecifier = getExternalModuleRequireArgument(node) || (node as ImportDeclaration | ExportDeclaration).moduleSpecifier!;
+    function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration | JSDocImportTypeTag, specifier: ImportOrExportSpecifier | BindingElement | PropertyAccessExpression, dontResolveAlias = false): Symbol | undefined {
+        const moduleSpecifier = getExternalModuleRequireArgument(node) || (node as ImportDeclaration | ExportDeclaration | JSDocImportTypeTag).moduleSpecifier!;
         const moduleSymbol = resolveExternalModuleName(node, moduleSpecifier)!; // TODO: GH#18217
         const name = !isPropertyAccessExpression(specifier) && specifier.propertyName || specifier.name;
         if (!isIdentifier(name)) {
@@ -5006,6 +5008,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             ? location
             : (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal ||
+                (isInJSFile(location) && isJSDocImportTypeTag(location) ? location.moduleSpecifier : undefined) ||
                 (isVariableDeclaration(location) && location.initializer && isRequireCall(location.initializer, /*requireStringLiteralLikeArgument*/ true) ? location.initializer.arguments[0] : undefined) ||
                 findAncestor(location, isImportCall)?.arguments[0] ||
                 findAncestor(location, isImportDeclaration)?.moduleSpecifier ||
@@ -9720,12 +9723,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.ImportClause: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportClause).parent.moduleSpecifier;
+                        const attributes = isImportDeclaration(node.parent) ? node.parent.attributes : undefined;
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(/*isTypeOnly*/ false, factory.createIdentifier(localName), /*namedBindings*/ undefined),
                                 specifier,
-                                (node as ImportClause).parent.attributes,
+                                attributes,
                             ),
                             ModifierFlags.None,
                         );
@@ -9734,12 +9738,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.NamespaceImport: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as NamespaceImport).parent.parent.moduleSpecifier;
+                        const attributes = isImportDeclaration(node.parent) ? node.parent.attributes : undefined;
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
                                 specifier,
-                                (node as ImportClause).parent.attributes,
+                                attributes,
                             ),
                             ModifierFlags.None,
                         );
@@ -9759,6 +9764,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     case SyntaxKind.ImportSpecifier: {
                         const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
                         const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportSpecifier).parent.parent.parent.moduleSpecifier;
+                        const attributes = isImportDeclaration(node.parent.parent.parent) ? node.parent.parent.parent.attributes : undefined;
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
@@ -9774,7 +9780,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     ]),
                                 ),
                                 specifier,
-                                (node as ImportSpecifier).parent.parent.parent.attributes,
+                                attributes,
                             ),
                             ModifierFlags.None,
                         );

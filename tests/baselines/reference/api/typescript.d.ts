@@ -4542,12 +4542,13 @@ declare namespace ts {
         JSDocPropertyTag = 355,
         JSDocThrowsTag = 356,
         JSDocSatisfiesTag = 357,
-        SyntaxList = 358,
-        NotEmittedStatement = 359,
-        PartiallyEmittedExpression = 360,
-        CommaListExpression = 361,
-        SyntheticReferenceExpression = 362,
-        Count = 363,
+        JSDocImportTypeTag = 358,
+        SyntaxList = 359,
+        NotEmittedStatement = 360,
+        PartiallyEmittedExpression = 361,
+        CommaListExpression = 362,
+        SyntheticReferenceExpression = 363,
+        Count = 364,
         FirstAssignment = 64,
         LastAssignment = 79,
         FirstCompoundAssignment = 65,
@@ -4576,9 +4577,9 @@ declare namespace ts {
         LastStatement = 259,
         FirstNode = 166,
         FirstJSDocNode = 316,
-        LastJSDocNode = 357,
+        LastJSDocNode = 358,
         FirstJSDocTagNode = 334,
-        LastJSDocTagNode = 357,
+        LastJSDocTagNode = 358,
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -6028,7 +6029,7 @@ declare namespace ts {
     type NamedExportBindings = NamespaceExport | NamedExports;
     interface ImportClause extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportClause;
-        readonly parent: ImportDeclaration;
+        readonly parent: ImportDeclaration | JSDocImportTypeTag;
         readonly isTypeOnly: boolean;
         readonly name?: Identifier;
         readonly namedBindings?: NamedImportBindings;
@@ -6383,6 +6384,12 @@ declare namespace ts {
     interface JSDocSatisfiesTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocSatisfiesTag;
         readonly typeExpression: JSDocTypeExpression;
+    }
+    interface JSDocImportTypeTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocImportTypeTag;
+        readonly parent: JSDoc;
+        readonly importClause: ImportClause;
+        readonly moduleSpecifier: Expression;
     }
     enum FlowFlags {
         Unreachable = 1,
@@ -8348,6 +8355,8 @@ declare namespace ts {
         updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
         createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
         updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
+        createJSDocImportTypeTag(tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTypeTag;
+        updateJSDocImportTypeTag(node: JSDocImportTypeTag, tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTypeTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -9575,6 +9584,7 @@ declare namespace ts {
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
     function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
+    function isJSDocImportTypeTag(node: Node): node is JSDocImportTypeTag;
     function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken;
     function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode;
     function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken;

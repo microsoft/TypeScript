@@ -91,6 +91,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTypeTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -1200,6 +1201,10 @@ export function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag {
 
 export function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag {
     return node.kind === SyntaxKind.JSDocThrowsTag;
+}
+
+export function isJSDocImportTypeTag(node: Node): node is JSDocImportTypeTag {
+    return node.kind === SyntaxKind.JSDocImportTypeTag;
 }
 
 // Synthesized list

@@ -447,6 +447,7 @@ export const enum SyntaxKind {
     JSDocPropertyTag,
     JSDocThrowsTag,
     JSDocSatisfiesTag,
+    JSDocImportTypeTag,
 
     // Synthesized list
     SyntaxList,
@@ -489,9 +490,9 @@ export const enum SyntaxKind {
     LastStatement = DebuggerStatement,
     FirstNode = QualifiedName,
     FirstJSDocNode = JSDocTypeExpression,
-    LastJSDocNode = JSDocSatisfiesTag,
+    LastJSDocNode = JSDocImportTypeTag,
     FirstJSDocTagNode = JSDocTag,
-    LastJSDocTagNode = JSDocSatisfiesTag,
+    LastJSDocTagNode = JSDocImportTypeTag,
     /** @internal */ FirstContextualKeyword = AbstractKeyword,
     /** @internal */ LastContextualKeyword = OfKeyword,
 }
@@ -1044,7 +1045,8 @@ export type ForEachChildNodes =
     | JSDocThrowsTag
     | JSDocOverrideTag
     | JSDocSatisfiesTag
-    | JSDocOverloadTag;
+    | JSDocOverloadTag
+    | JSDocImportTypeTag;
 
 /** @internal */
 export type HasChildren =
@@ -3654,7 +3656,7 @@ export type NamedExportBindings =
 // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
 export interface ImportClause extends NamedDeclaration {
     readonly kind: SyntaxKind.ImportClause;
-    readonly parent: ImportDeclaration;
+    readonly parent: ImportDeclaration | JSDocImportTypeTag;
     readonly isTypeOnly: boolean;
     readonly name?: Identifier; // Default binding
     readonly namedBindings?: NamedImportBindings;
@@ -4063,6 +4065,13 @@ export interface JSDocSatisfiesTag extends JSDocTag {
 /** @internal */
 export interface JSDocSatisfiesExpression extends ParenthesizedExpression {
     readonly _jsDocSatisfiesExpressionBrand: never;
+}
+
+export interface JSDocImportTypeTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocImportTypeTag;
+    readonly parent: JSDoc;
+    readonly importClause: ImportClause;
+    readonly moduleSpecifier: Expression;
 }
 
 // NOTE: Ensure this is up-to-date with src/debug/debug.ts
@@ -5545,6 +5554,9 @@ export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitialize
 export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
 
 /** @internal */
+export type AnyImportOrJsDocImportTypeImport = AnyImportSyntax | JSDocImportTypeTag;
+
+/** @internal */
 export type AliasDeclarationNode =
     | ImportEqualsDeclaration
     | VariableDeclarationInitializedTo<
@@ -5599,7 +5611,7 @@ export interface RequireVariableDeclarationList extends VariableDeclarationList 
 
 /** @internal */
 export type LateVisibilityPaintedStatement =
-    | AnyImportSyntax
+    | AnyImportOrJsDocImportTypeImport
     | VariableStatement
     | ClassDeclaration
     | FunctionDeclaration
@@ -8806,6 +8818,8 @@ export interface NodeFactory {
     updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
     createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
     updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
+    createJSDocImportTypeTag(tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTypeTag;
+    updateJSDocImportTypeTag(node: JSDocImportTypeTag, tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTypeTag;
     createJSDocText(text: string): JSDocText;
     updateJSDocText(node: JSDocText, text: string): JSDocText;
     createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;

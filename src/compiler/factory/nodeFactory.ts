@@ -238,6 +238,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTypeTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -882,6 +883,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateJSDocImplementsTag,
         createJSDocSeeTag,
         updateJSDocSeeTag,
+        createJSDocImportTypeTag,
+        updateJSDocImportTypeTag,
         createJSDocNameReference,
         updateJSDocNameReference,
         createJSDocMemberName,
@@ -5555,6 +5558,24 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
+    function createJSDocImportTypeTag(tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTypeTag {
+        const node = createBaseJSDocTag<JSDocImportTypeTag>(SyntaxKind.JSDocImportTypeTag, tagName ?? createIdentifier("importType"), comment);
+        node.importClause = importClause;
+        node.moduleSpecifier = moduleSpecifier;
+        node.comment = comment;
+        return node;
+    }
+
+    function updateJSDocImportTypeTag(node: JSDocImportTypeTag, tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTypeTag {
+        return node.tagName !== tagName
+                || node.comment !== comment
+                || node.importClause !== importClause
+                || node.moduleSpecifier !== moduleSpecifier
+            ? update(createJSDocImportTypeTag(tagName, importClause, moduleSpecifier, comment), node)
+            : node;
+    }
+
+    // @api
     function createJSDocText(text: string): JSDocText {
         const node = createBaseNode<JSDocText>(SyntaxKind.JSDocText);
         node.text = text;
@@ -7265,6 +7286,8 @@ function getDefaultTagNameForKind(kind: JSDocTag["kind"]): string {
             return "augments";
         case SyntaxKind.JSDocImplementsTag:
             return "implements";
+        case SyntaxKind.JSDocImportTypeTag:
+            return "importType";
         default:
             return Debug.fail(`Unsupported kind: ${Debug.formatSyntaxKind(kind)}`);
     }

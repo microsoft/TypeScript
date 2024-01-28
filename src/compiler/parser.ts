@@ -175,6 +175,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTypeTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -1125,6 +1126,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocReadonlyTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocDeprecatedTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocOverrideTag]: forEachChildInJSDocTag,
+    [SyntaxKind.JSDocImportTypeTag]: forEachChildInJSDocImportTypeTag,
     [SyntaxKind.PartiallyEmittedExpression]: forEachChildInPartiallyEmittedExpression,
 };
 
@@ -1211,6 +1213,13 @@ function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode |
 
 function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag | JSDocOverrideTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName)
+        || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+}
+
+function forEachChildInJSDocImportTypeTag<T>(node: JSDocImportTypeTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    return visitNode(cbNode, node.tagName)
+        || visitNode(cbNode, node.importClause)
+        || visitNode(cbNode, node.moduleSpecifier)
         || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
@@ -9073,6 +9082,9 @@ namespace Parser {
                     case "throws":
                         tag = parseThrowsTag(start, tagName, margin, indentText);
                         break;
+                    case "importType":
+                        tag = parseImportTypeTag(start, tagName, margin, indentText);
+                        break;
                     default:
                         tag = parseUnknownTag(start, tagName, margin, indentText);
                         break;
@@ -9443,6 +9455,31 @@ namespace Parser {
                 const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ false);
                 const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
                 return finishNode(factory.createJSDocSatisfiesTag(tagName, typeExpression, comments), start);
+            }
+
+            function parseImportTypeTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImportTypeTag {
+                const afterImportTypeTagPos = scanner.getTokenEnd();
+
+                let identifier: Identifier | undefined;
+                if (isIdentifier()) {
+                    identifier = parseIdentifier();
+                }
+
+                let importClause: ImportClause | undefined;
+                if (
+                    identifier // @importType id
+                    || token() === SyntaxKind.AsteriskToken // @importType *
+                    || token() === SyntaxKind.OpenBraceToken // @importType {
+                ) {
+                    importClause = parseImportClause(identifier, afterImportTypeTagPos, /*isTypeOnly*/ true);
+                    parseExpected(SyntaxKind.FromKeyword);
+                }
+
+                Debug.assert(importClause);
+
+                const moduleSpecifier = parseModuleSpecifier();
+                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
+                return finishNode(factory.createJSDocImportTypeTag(tagName, importClause, moduleSpecifier, comments), start);
             }
 
             function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; } {

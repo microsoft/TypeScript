@@ -195,6 +195,7 @@ import {
     isImportTypeNode,
     isIncrementalCompilation,
     isInJSFile,
+    isJSDocImportTypeTag,
     isLiteralImportTypeNode,
     isModifier,
     isModuleDeclaration,
@@ -3370,6 +3371,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             collectDynamicImportOrRequireCalls(file);
         }
 
+        if (isJavaScriptFile) {
+            collectJsDocImportTypeReferences(file);
+        }
+
         file.imports = imports || emptyArray;
         file.moduleAugmentations = moduleAugmentations || emptyArray;
         file.ambientModuleNames = ambientModules || emptyArray;
@@ -3440,6 +3445,20 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 else if (isLiteralImportTypeNode(node)) {
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                     imports = append(imports, node.argument.literal);
+                }
+            }
+        }
+
+        function collectJsDocImportTypeReferences(file: SourceFile) {
+            const r = /@importType/g;
+            while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
+                const node = getNodeAtPosition(file, r.lastIndex);
+                if (isJSDocImportTypeTag(node)) {
+                    const moduleNameExpr = getExternalModuleName(node);
+                    if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text) {
+                        setParentRecursive(node, /*incremental*/ false);
+                        imports = append(imports, moduleNameExpr);
+                    }
                 }
             }
         }

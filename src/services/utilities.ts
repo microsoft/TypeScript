@@ -257,6 +257,7 @@ import {
     isWhiteSpaceSingleLine,
     isYieldExpression,
     IterationStatement,
+    JSDocImportTypeTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkDisplayPart,
@@ -1244,7 +1245,7 @@ function getAdjustedLocationForDeclaration(node: Node, forRename: boolean) {
     }
 }
 
-function getAdjustedLocationForImportDeclaration(node: ImportDeclaration, forRename: boolean) {
+function getAdjustedLocationForImportDeclaration(node: ImportDeclaration | JSDocImportTypeTag, forRename: boolean) {
     if (node.importClause) {
         if (node.importClause.name && node.importClause.namedBindings) {
             // do not adjust if we have both a name and named bindings
