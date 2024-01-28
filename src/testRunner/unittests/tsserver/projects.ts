@@ -1115,7 +1115,6 @@ describe("unittests:: tsserver:: projects::", () => {
 
             const host = createServerHost([file1, file2, tsconfig]);
             const session = new TestSession(host);
-            const projectService = session.getProjectService();
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { preferences: { lazyConfiguredProjectsFromExternalProject } },
@@ -1139,7 +1138,7 @@ describe("unittests:: tsserver:: projects::", () => {
             if (lazyConfiguredProjectsFromExternalProject) {
                 // configured project is just created and not yet loaded
                 session.logger.info("Calling ensureInferredProjectsUpToDate_TestOnly");
-                projectService.ensureInferredProjectsUpToDate_TestOnly();
+                session.getProjectService().ensureInferredProjectsUpToDate_TestOnly();
             }
 
             // Allow allowNonTsExtensions will be set to true for deferred extensions.
@@ -1440,10 +1439,9 @@ describe("unittests:: tsserver:: projects::", () => {
         const host = createServerHost([commonFile1, commonFile2, randomFile, libFile]);
         const session = new TestSession(host);
         openFilesForSession([commonFile1], session);
-        const service = session.getProjectService();
-        const project = service.inferredProjects[0];
+        const project = session.getProjectService().inferredProjects[0];
         // Intentionally create scriptinfo and attach it to project
-        const info = service.getOrCreateScriptInfoForNormalizedPath(commonFile2.path as ts.server.NormalizedPath, /*openedByClient*/ false)!;
+        const info = session.getProjectService().getOrCreateScriptInfoForNormalizedPath(commonFile2.path as ts.server.NormalizedPath, /*openedByClient*/ false)!;
         info.attachToProject(project);
         try {
             session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({
