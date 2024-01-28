@@ -17119,17 +17119,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function removeStringLiteralsMatchedByTemplateLiterals(types: Type[]) {
-        const templates = filter(types, t => !!(t.flags & TypeFlags.TemplateLiteral) && isPatternLiteralType(t)) as TemplateLiteralType[];
+        const templates = filter(types, isPatternLiteralType) as (TemplateLiteralType | StringMappingType)[];
         if (templates.length) {
             let i = types.length;
             while (i > 0) {
                 i--;
                 const t = types[i];
-                if (t.flags & TypeFlags.StringLiteral && some(templates, template => isTypeMatchedByTemplateLiteralType(t, template))) {
+                if (t.flags & TypeFlags.StringLiteral && some(templates, template => isTypeMatchedByTemplateLiteralOrStringMapping(t, template))) {
                     orderedRemoveItemAt(types, i);
                 }
             }
         }
+    }
+
+    function isTypeMatchedByTemplateLiteralOrStringMapping(type: Type, template: TemplateLiteralType | StringMappingType) {
+        return template.flags & TypeFlags.TemplateLiteral ?
+            isTypeMatchedByTemplateLiteralType(type, template as TemplateLiteralType) :
+            isMemberOfStringMapping(type, template);
     }
 
     function removeConstrainedTypeVariables(types: Type[]) {
@@ -17246,7 +17252,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (includes & (TypeFlags.Enum | TypeFlags.Literal | TypeFlags.UniqueESSymbol | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
                 removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
             }
-            if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
+            if (includes & TypeFlags.StringLiteral && includes & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) {
                 removeStringLiteralsMatchedByTemplateLiterals(typeSet);
             }
             if (includes & TypeFlags.IncludesConstrainedTypeVariable) {
@@ -17442,7 +17448,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * Returns `true` if the intersection of the template literals and string literals is the empty set, eg `get${string}` & "setX", and should reduce to `never`
+     * Returns true if the intersection of the template literals and string literals is the empty set,
+     * for example `get${string}` & "setX", and should reduce to never.
      */
     function extractRedundantTemplateLiterals(types: Type[]): boolean {
         let i = types.length;
@@ -17450,10 +17457,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         while (i > 0) {
             i--;
             const t = types[i];
-            if (!(t.flags & TypeFlags.TemplateLiteral)) continue;
+            if (!(t.flags & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping))) continue;
             for (const t2 of literals) {
                 if (isTypeSubtypeOf(t2, t)) {
-                    // eg, ``get${T}` & "getX"` is just `"getX"`
+                    // For example, `get${T}` & "getX" is just "getX", and Lowercase<string> & "foo" is just "foo"
                     orderedRemoveItemAt(types, i);
                     break;
                 }
@@ -17563,7 +17570,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         ) {
             return neverType;
         }
-        if (includes & TypeFlags.TemplateLiteral && includes & TypeFlags.StringLiteral && extractRedundantTemplateLiterals(typeSet)) {
+        if (includes & (TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && includes & TypeFlags.StringLiteral && extractRedundantTemplateLiterals(typeSet)) {
             return neverType;
         }
         if (includes & TypeFlags.Any) {
