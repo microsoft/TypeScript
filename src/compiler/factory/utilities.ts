@@ -160,6 +160,8 @@ import {
     ReadonlyKeyword,
     RelationalOperator,
     RelationalOperatorOrHigher,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    SetAccessorDeclaration, // used in JSDoc
     setOriginalNode,
     setParent,
     setStartsOnNewLine,
