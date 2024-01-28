@@ -160,8 +160,9 @@ import {
     ReadonlyKeyword,
     RelationalOperator,
     RelationalOperatorOrHigher,
+    // Will become used when explicit return types are added in declaration file during build step.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    SetAccessorDeclaration, // used in JSDoc
+    SetAccessorDeclaration,
     setOriginalNode,
     setParent,
     setStartsOnNewLine,
