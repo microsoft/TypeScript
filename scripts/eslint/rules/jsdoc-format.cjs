@@ -1,6 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { TSESTree /* used in JSDoc */ } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
+
+/** @typedef {import("@typescript-eslint/utils").TSESTree.Comment} Comment */
+/** @typedef {import("@typescript-eslint/utils").TSESTree.SourceLocation} SourceLocation */
 
 module.exports = createRule({
     name: "jsdoc-format",
@@ -30,7 +31,7 @@ module.exports = createRule({
             return text.startsWith(jsdocStart);
         }
 
-        /** @type {(c: TSESTree.Comment, indexInComment: number) => TSESTree.SourceLocation} */
+        /** @type {(c: Comment, indexInComment: number) => SourceLocation} */
         const getAtInternalLoc = (c, indexInComment) => {
             const line = c.loc.start.line;
             return {
@@ -45,7 +46,7 @@ module.exports = createRule({
             };
         };
 
-        /** @type {(c: TSESTree.Comment) => TSESTree.SourceLocation} */
+        /** @type {(c: Comment) => SourceLocation} */
         const getJSDocStartLoc = c => {
             return {
                 start: c.loc.start,
@@ -56,7 +57,7 @@ module.exports = createRule({
             };
         };
 
-        /** @type {(node: TSESTree.Node) => void} */
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => void} */
         const checkDeclaration = node => {
             const blockComments = sourceCode.getCommentsBefore(node).filter(c => c.type === "Block");
             if (blockComments.length === 0) {

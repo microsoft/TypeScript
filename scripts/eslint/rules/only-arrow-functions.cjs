@@ -1,6 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { AST_NODE_TYPES, TSESTree /* used in JSDoc */ } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
+
+/** @typedef {import("@typescript-eslint/utils").TSESTree.FunctionDeclaration | import("@typescript-eslint/utils").TSESTree.FunctionExpression} FunctionDeclarationOrExpression */
 
 module.exports = createRule({
     name: "only-arrow-functions",
@@ -28,10 +29,10 @@ module.exports = createRule({
     }],
 
     create(context, [{ allowNamedFunctions, allowDeclarations }]) {
-        /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => boolean} */
+        /** @type {(node: FunctionDeclarationOrExpression) => boolean} */
         const isThisParameter = node => !!node.params.length && !!node.params.find(param => param.type === AST_NODE_TYPES.Identifier && param.name === "this");
 
-        /** @type {(node: TSESTree.Node) => boolean} */
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
         const isMethodType = node => {
             const types = [
                 AST_NODE_TYPES.MethodDefinition,
@@ -58,7 +59,7 @@ module.exports = createRule({
             }
         };
 
-        /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => void} */
+        /** @type {(node: FunctionDeclarationOrExpression) => void} */
         const exitFunction = node => {
             const methodUsesThis = stack.pop();
 

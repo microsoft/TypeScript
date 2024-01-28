@@ -1,7 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { AST_NODE_TYPES, /* used in JSDoc */ TSESTree, ESLintUtils } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES, ESLintUtils } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 const ts = require("typescript");
+
+/**
+ * @typedef {import("@typescript-eslint/utils").TSESTree.Node} Node
+ * @typedef {import("@typescript-eslint/utils").TSESTree.CallExpression | import("@typescript-eslint/utils").TSESTree.NewExpression} CallOrNewExpression
+ */
 
 const unset = Symbol();
 /**
@@ -43,7 +47,7 @@ module.exports = createRule({
 
         /** @type {(name: string) => boolean} */
         const isSetOrAssert = name => name.startsWith("set") || name.startsWith("assert");
-        /** @type {(node: TSESTree.Node) => boolean} */
+        /** @type {(node: Node) => boolean} */
         const isTrivia = node => {
             if (node.type === AST_NODE_TYPES.Identifier) {
                 return node.name === "undefined";
@@ -57,7 +61,7 @@ module.exports = createRule({
             return false;
         };
 
-        /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => boolean} */
+        /** @type {(node: CallOrNewExpression) => boolean} */
         const shouldIgnoreCalledExpression = node => {
             if (node.callee && node.callee.type === AST_NODE_TYPES.MemberExpression) {
                 const methodName = node.callee.property.type === AST_NODE_TYPES.Identifier
@@ -98,7 +102,7 @@ module.exports = createRule({
             return false;
         };
 
-        /** @type {(node: TSESTree.Node, i: number, getSignature: () => ts.Signature | undefined) => void} */
+        /** @type {(node: Node, i: number, getSignature: () => ts.Signature | undefined) => void} */
         const checkArg = (node, i, getSignature) => {
             if (!isTrivia(node)) {
                 return;
@@ -120,7 +124,7 @@ module.exports = createRule({
             });
 
             const comments = sourceCode.getCommentsBefore(node);
-            /** @type {TSESTree.Comment | undefined} */
+            /** @type {import("@typescript-eslint/utils").TSESTree.Comment | undefined} */
             const comment = comments[comments.length - 1];
 
             if (!comment || comment.type !== "Block") {
@@ -171,7 +175,7 @@ module.exports = createRule({
             }
         };
 
-        /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => void} */
+        /** @type {(node: CallOrNewExpression) => void} */
         const checkArgumentTrivia = node => {
             if (shouldIgnoreCalledExpression(node)) {
                 return;

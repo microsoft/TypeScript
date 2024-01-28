@@ -1,5 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { TSESTree /* used in JSDoc */ } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
 module.exports = createRule({
@@ -18,7 +16,7 @@ module.exports = createRule({
 
     create(context) {
         const IN_OPERATOR = "in";
-        /** @type {(node: TSESTree.BinaryExpression) => void} */
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.BinaryExpression) => void} */
         const checkInOperator = node => {
             if (node.operator === IN_OPERATOR) {
                 context.report({ messageId: "noInOperatorError", node });
