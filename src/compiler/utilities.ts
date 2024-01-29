@@ -94,6 +94,7 @@ import {
     Diagnostic,
     DiagnosticArguments,
     DiagnosticCollection,
+    DiagnosticCollectionCheckpoint,
     DiagnosticMessage,
     DiagnosticMessageChain,
     DiagnosticRelatedInformation,
@@ -5771,11 +5772,19 @@ export function getSemanticJsxChildren(children: readonly JsxChild[]) {
     });
 }
 
+interface DiagnosticCollectionCheckpointInternals {
+    __privateState?: void;
+    nonFileDiagnostics: SortedArray<Diagnostic>;
+    filesWithDiagnostics: SortedArray<string>;
+    fileDiagnostics: Map<string, SortedArray<DiagnosticWithLocation>>;
+    hasReadNonFileDiagnostics: boolean;
+}
+
 /** @internal */
 export function createDiagnosticCollection(): DiagnosticCollection {
     let nonFileDiagnostics = [] as Diagnostic[] as SortedArray<Diagnostic>; // See GH#19873
-    const filesWithDiagnostics = [] as string[] as SortedArray<string>;
-    const fileDiagnostics = new Map<string, SortedArray<DiagnosticWithLocation>>();
+    let filesWithDiagnostics = [] as string[] as SortedArray<string>;
+    let fileDiagnostics = new Map<string, SortedArray<DiagnosticWithLocation>>();
     let hasReadNonFileDiagnostics = false;
 
     return {
@@ -5783,7 +5792,30 @@ export function createDiagnosticCollection(): DiagnosticCollection {
         lookup,
         getGlobalDiagnostics,
         getDiagnostics,
+        checkpoint,
+        revert
     };
+
+    // TODO: Copying the state at time of checkpoint is slow to checkpoint and memory intensive (but fast to restore)
+    // - recording deltas on `add` after a checkpoint would be much better
+    function checkpoint(): DiagnosticCollectionCheckpoint {
+        const c: DiagnosticCollectionCheckpointInternals = {
+            nonFileDiagnostics: nonFileDiagnostics.slice() as SortedArray<Diagnostic>,
+            filesWithDiagnostics: filesWithDiagnostics.slice() as SortedArray<string>,
+            fileDiagnostics: new Map(map(arrayFrom(fileDiagnostics.entries()), ([k, v]) => [k, v.slice() as SortedArray<DiagnosticWithLocation>] as const)),
+            hasReadNonFileDiagnostics
+        };
+        return c as DiagnosticCollectionCheckpoint;
+    }
+
+    function revert(checkpoint: DiagnosticCollectionCheckpoint) {
+        ({
+            nonFileDiagnostics,
+            filesWithDiagnostics,
+            fileDiagnostics,
+            hasReadNonFileDiagnostics,
+        } = checkpoint as DiagnosticCollectionCheckpointInternals);
+    }
 
     function lookup(diagnostic: Diagnostic): Diagnostic | undefined {
         let diagnostics: SortedArray<Diagnostic> | undefined;

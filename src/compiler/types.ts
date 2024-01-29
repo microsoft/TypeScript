@@ -5,7 +5,6 @@ import {
     GetCanonicalFileName,
     MapLike,
     ModeAwareCache,
-    ModeAwareCacheKey,
     ModuleResolutionCache,
     MultiMap,
     NodeFactoryFlags,
@@ -15,6 +14,7 @@ import {
     Pattern,
     ProgramBuildInfo,
     SymlinkCache,
+    TransientSymbol,
     ThisContainer,
 } from "./_namespaces/ts";
 
@@ -5831,65 +5831,6 @@ export interface Symbol {
 
 // dprint-ignore
 /** @internal */
-export interface SymbolLinks {
-    _symbolLinksBrand: any;
-    immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
-    aliasTarget?: Symbol,                       // Resolved (non-alias) target of an alias
-    target?: Symbol;                            // Original version of an instantiated symbol
-    type?: Type;                                // Type of value symbol
-    writeType?: Type;                           // Type of value symbol in write contexts
-    nameType?: Type;                            // Type associated with a late-bound symbol
-    uniqueESSymbolType?: Type;                  // UniqueESSymbol type for a symbol
-    declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
-    typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
-    outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
-    instantiations?: Map<string, Type>;         // Instantiations of generic type alias (undefined if non-generic)
-    aliasSymbol?: Symbol;                       // Alias associated with generic type alias instantiation
-    aliasTypeArguments?: readonly Type[]        // Alias type arguments (if any)
-    inferredClassSymbol?: Map<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
-    mapper?: TypeMapper;                        // Type mapper for instantiation alias
-    referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
-    constEnumReferenced?: boolean;              // True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false)
-    containingType?: UnionOrIntersectionType;   // Containing union or intersection type for synthetic property
-    leftSpread?: Symbol;                        // Left source for synthetic spread property
-    rightSpread?: Symbol;                       // Right source for synthetic spread property
-    syntheticOrigin?: Symbol;                   // For a property on a mapped or spread type, points back to the original property
-    isDiscriminantProperty?: boolean;           // True if discriminant synthetic property
-    resolvedExports?: SymbolTable;              // Resolved exports of module or combined early- and late-bound static members of a class.
-    resolvedMembers?: SymbolTable;              // Combined early- and late-bound members of a symbol
-    exportsChecked?: boolean;                   // True if exports of external module have been checked
-    typeParametersChecked?: boolean;            // True if type parameters of merged class and interface declarations have been checked.
-    isDeclarationWithCollidingName?: boolean;   // True if symbol is block scoped redeclaration
-    bindingElement?: BindingElement;            // Binding element associated with property symbol
-    exportsSomeValue?: boolean;                 // True if module exports some value (not just types)
-    enumKind?: EnumKind;                        // Enum declaration classification
-    originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
-    lateSymbol?: Symbol;                        // Late-bound symbol for a computed property
-    specifierCache?: Map<ModeAwareCacheKey, string>; // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
-    extendedContainers?: Symbol[];              // Containers (other than the parent) which this symbol is aliased in
-    extendedContainersByFile?: Map<NodeId, Symbol[]>; // Containers (other than the parent) which this symbol is aliased in
-    variances?: VarianceFlags[];                // Alias symbol type argument variance cache
-    deferralConstituents?: Type[];              // Calculated list of constituents for a deferred type
-    deferralWriteConstituents?: Type[];         // Constituents of a deferred `writeType`
-    deferralParent?: Type;                      // Source union/intersection of a deferred type
-    cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
-    typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
-    typeOnlyExportStarMap?: Map<__String, ExportDeclaration & { readonly isTypeOnly: true, readonly moduleSpecifier: Expression }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
-    typeOnlyExportStarName?: __String;          // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
-    isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
-    tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
-    accessibleChainCache?: Map<string, Symbol[] | undefined>;
-    filteredIndexSymbolCache?: Map<string, Symbol> //Symbol with applicable declarations
-}
-
-/** @internal */
-export const enum EnumKind {
-    Numeric, // Numeric enum (each member has a TypeFlags.Enum type)
-    Literal, // Literal enum (each member has a TypeFlags.EnumLiteral type)
-}
-
-// dprint-ignore
-/** @internal */
 export const enum CheckFlags {
     None              = 0,
     Instantiated      = 1 << 0,         // Instantiated symbol
@@ -5916,39 +5857,6 @@ export const enum CheckFlags {
     Synthetic = SyntheticProperty | SyntheticMethod,
     Discriminant = HasNonUniformType | HasLiteralType,
     Partial = ReadPartial | WritePartial,
-}
-
-/** @internal */
-export interface TransientSymbolLinks extends SymbolLinks {
-    checkFlags: CheckFlags;
-}
-
-/** @internal */
-export interface TransientSymbol extends Symbol {
-    links: TransientSymbolLinks;
-}
-
-/** @internal */
-export interface MappedSymbolLinks extends TransientSymbolLinks {
-    mappedType: MappedType;
-    keyType: Type;
-}
-
-/** @internal */
-export interface MappedSymbol extends TransientSymbol {
-    links: MappedSymbolLinks;
-}
-
-/** @internal */
-export interface ReverseMappedSymbolLinks extends TransientSymbolLinks {
-    propertyType: Type;
-    mappedType: MappedType;
-    constraintType: IndexType;
-}
-
-/** @internal */
-export interface ReverseMappedSymbol extends TransientSymbol {
-    links: ReverseMappedSymbolLinks;
 }
 
 export const enum InternalSymbolName {
@@ -6029,52 +5937,6 @@ export const enum NodeCheckFlags {
     ContainsClassWithPrivateIdentifiers      = 1 << 20,  // Marked on all block-scoped containers containing a class with private identifiers.
     ContainsSuperPropertyInStaticInitializer = 1 << 21,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
     InCheckIdentifier                        = 1 << 22,
-}
-
-// dprint-ignore
-/** @internal */
-export interface NodeLinks {
-    flags: NodeCheckFlags;              // Set of flags specific to Node
-    resolvedType?: Type;                // Cached type of type node
-    resolvedEnumType?: Type;            // Cached constraint type from enum jsdoc tag
-    resolvedSignature?: Signature;      // Cached signature of signature node or call expression
-    resolvedSymbol?: Symbol;            // Cached name resolution result
-    resolvedIndexInfo?: IndexInfo;      // Cached indexing info resolution result
-    effectsSignature?: Signature;       // Signature with possible control flow effects
-    enumMemberValue?: string | number;  // Constant value of enum member
-    isVisible?: boolean;                // Is this node visible
-    containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
-    hasReportedStatementInAmbientContext?: boolean; // Cache boolean if we report statements in ambient context
-    jsxFlags: JsxFlags;                 // flags for knowing what kind of element/attributes we're dealing with
-    resolvedJsxElementAttributesType?: Type; // resolved element attributes type of a JSX openinglike element
-    resolvedJsxElementAllAttributesType?: Type; // resolved all element attributes type of a JSX openinglike element
-    resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
-    switchTypes?: Type[];               // Cached array of switch case expression types
-    jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
-    jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
-    contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
-    deferredNodes?: Set<Node>;          // Set of nodes whose checking has been deferred
-    capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
-    outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
-    isExhaustive?: boolean | 0;         // Is node an exhaustive switch statement (0 indicates in-process resolution)
-    skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
-    declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
-    serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
-    decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
-    spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
-    parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
-    fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
-    assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
-}
-
-/** @internal */
-export type TrackedSymbol = [symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags];
-/** @internal */
-export interface SerializedTypeEntry {
-    node: TypeNode;
-    truncating?: boolean;
-    addedLength: number;
-    trackedSymbols: readonly TrackedSymbol[] | undefined;
 }
 
 // dprint-ignore
@@ -9768,6 +9630,14 @@ export interface DiagnosticCollection {
     // Otherwise, returns all the diagnostics (global and file associated) in this collection.
     getDiagnostics(): Diagnostic[];
     getDiagnostics(fileName: string): DiagnosticWithLocation[];
+
+    checkpoint(): DiagnosticCollectionCheckpoint;
+    revert(position: DiagnosticCollectionCheckpoint): void;
+}
+
+/** @internal */
+export interface DiagnosticCollectionCheckpoint {
+    __privateState: void; // Internal state saved is private to the collection implementation
 }
 
 // SyntaxKind.SyntaxList
