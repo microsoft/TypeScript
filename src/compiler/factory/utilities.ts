@@ -160,8 +160,6 @@ import {
     ReadonlyKeyword,
     RelationalOperator,
     RelationalOperatorOrHigher,
-    // Will become used when explicit return types are added in declaration file during build step.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     SetAccessorDeclaration,
     setOriginalNode,
     setParent,
@@ -1677,7 +1675,7 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
  *
  * @internal
  */
-export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()) {
+export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()): SetAccessorDeclaration {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,
