@@ -1,7 +1,7 @@
 {
     "kind": "JSDoc",
     "pos": 0,
-    "end": 46,
+    "end": 59,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
@@ -9,7 +9,7 @@
         "0": {
             "kind": "JSDocImportTypeTag",
             "pos": 8,
-            "end": 41,
+            "end": 57,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -20,6 +20,7 @@
                 "transformFlags": 0,
                 "escapedText": "importType"
             },
+            "comment": "comment part",
             "importClause": {
                 "kind": "ImportClause",
                 "pos": 20,
@@ -54,7 +55,7 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 41,
+        "end": 57,
         "hasTrailingComma": false,
         "transformFlags": 0
     }

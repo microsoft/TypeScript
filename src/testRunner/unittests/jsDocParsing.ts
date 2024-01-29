@@ -226,7 +226,7 @@ describe("unittests:: JSDocParsing", () => {
             );
 
             parsesCorrectly(
-                "importTypeTag3",
+                "importTypeTag4",
                 `/**
   * @importType * as types from 'foo' comment part
   */`,
