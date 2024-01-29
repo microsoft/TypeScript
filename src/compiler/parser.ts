@@ -9458,7 +9458,7 @@ namespace Parser {
             }
 
             function parseImportTypeTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImportTypeTag {
-                const afterImportTypeTagPos = scanner.getTokenEnd();
+                const afterImportTypeTagPos = scanner.getTokenFullStart();
 
                 let identifier: Identifier | undefined;
                 if (isIdentifier()) {

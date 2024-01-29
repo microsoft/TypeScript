@@ -1,0 +1,76 @@
+{
+    "kind": "JSDoc",
+    "pos": 0,
+    "end": 43,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "tags": {
+        "0": {
+            "kind": "JSDocImportTypeTag",
+            "pos": 8,
+            "end": 38,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 19,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "importType"
+            },
+            "importClause": {
+                "kind": "ImportClause",
+                "pos": 20,
+                "end": 27,
+                "modifierFlagsCache": 0,
+                "transformFlags": 1,
+                "isTypeOnly": true,
+                "namedBindings": {
+                    "kind": "NamedImports",
+                    "pos": 20,
+                    "end": 27,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "elements": {
+                        "0": {
+                            "kind": "ImportSpecifier",
+                            "pos": 21,
+                            "end": 25,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "isTypeOnly": false,
+                            "name": {
+                                "kind": "Identifier",
+                                "pos": 21,
+                                "end": 25,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0,
+                                "escapedText": "foo"
+                            }
+                        },
+                        "length": 1,
+                        "pos": 21,
+                        "end": 25,
+                        "hasTrailingComma": false,
+                        "transformFlags": 0
+                    }
+                }
+            },
+            "moduleSpecifier": {
+                "kind": "StringLiteral",
+                "pos": 32,
+                "end": 38,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "text": "foo"
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 38,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}
