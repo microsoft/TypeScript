@@ -1,8 +1,6 @@
 const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
-/** @typedef {import("@typescript-eslint/utils").TSESTree.Node} Node */
-
 module.exports = createRule({
     name: "debug-assert",
     meta: {
@@ -19,9 +17,9 @@ module.exports = createRule({
     defaultOptions: [],
 
     create(context) {
-        /** @type {(node: Node) => boolean} */
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
         const isArrowFunction = node => node.type === AST_NODE_TYPES.ArrowFunctionExpression;
-        /** @type {(node: Node) => boolean} */
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
         const isStringLiteral = node => (
             (node.type === AST_NODE_TYPES.Literal && typeof node.value === "string") || node.type === AST_NODE_TYPES.TemplateLiteral
         );

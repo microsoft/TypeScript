@@ -1,8 +1,5 @@
 const { createRule } = require("./utils.cjs");
 
-/** @typedef {import("@typescript-eslint/utils").TSESTree.Comment} Comment */
-/** @typedef {import("@typescript-eslint/utils").TSESTree.SourceLocation} SourceLocation */
-
 module.exports = createRule({
     name: "jsdoc-format",
     meta: {
@@ -31,7 +28,7 @@ module.exports = createRule({
             return text.startsWith(jsdocStart);
         }
 
-        /** @type {(c: Comment, indexInComment: number) => SourceLocation} */
+        /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment, indexInComment: number) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
         const getAtInternalLoc = (c, indexInComment) => {
             const line = c.loc.start.line;
             return {
@@ -46,7 +43,7 @@ module.exports = createRule({
             };
         };
 
-        /** @type {(c: Comment) => SourceLocation} */
+        /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
         const getJSDocStartLoc = c => {
             return {
                 start: c.loc.start,

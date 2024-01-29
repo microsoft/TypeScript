@@ -3,7 +3,6 @@ const { createRule } = require("./utils.cjs");
 const ts = require("typescript");
 
 /**
- * @typedef {import("@typescript-eslint/utils").TSESTree.Node} Node
  * @typedef {import("@typescript-eslint/utils").TSESTree.CallExpression | import("@typescript-eslint/utils").TSESTree.NewExpression} CallOrNewExpression
  */
 
@@ -47,7 +46,7 @@ module.exports = createRule({
 
         /** @type {(name: string) => boolean} */
         const isSetOrAssert = name => name.startsWith("set") || name.startsWith("assert");
-        /** @type {(node: Node) => boolean} */
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
         const isTrivia = node => {
             if (node.type === AST_NODE_TYPES.Identifier) {
                 return node.name === "undefined";
@@ -102,7 +101,7 @@ module.exports = createRule({
             return false;
         };
 
-        /** @type {(node: Node, i: number, getSignature: () => ts.Signature | undefined) => void} */
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node, i: number, getSignature: () => ts.Signature | undefined) => void} */
         const checkArg = (node, i, getSignature) => {
             if (!isTrivia(node)) {
                 return;
