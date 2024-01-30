@@ -55,3 +55,14 @@ function inlined6<T extends number | string>(x: T): T extends number ? string : 
     }
     return "one";
 }
+
+type A = { kind: "a", a: number };
+type B = { kind: "b", b: string };
+type AOrB = A | B;
+
+function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B ? string : number | string {
+    if (x.kind === "b") {
+        return "some str";
+    }
+    return 0;
+}

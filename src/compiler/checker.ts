@@ -413,7 +413,6 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    ImportMetaProperty,
     ImportOrExportSpecifier,
     ImportsNotUsedAsValues,
     ImportSpecifier,
@@ -1507,7 +1506,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         | Identifier
         | PropertyAccessExpression
         | ElementAccessExpression
-        | ImportMetaProperty
         | SuperExpression
         | ThisExpression;
     type TypeParameterToReference = Map<TypeParameter, Map<Symbol, TypeParameterReference>>;
@@ -44538,20 +44536,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (node) getReferencesFromNode(node);
         }
 
-        // Based on `isMatchingReference` and `narrowType`.
+        // Collect narrowable references from the nodes associated to a flow node.
+        // A narrowable reference here means an expression whose type may be narrowed during
+        // control flow analysis, and whose unnarrowed type could be a type parameter.
         function getReferencesFromNode(node: Node, inlineLevel = 0): void {
             switch (node.kind) {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
-                    return getReferencesFromNode((node as NonNullExpression | ParenthesizedExpression).expression);
+                    return getReferencesFromNode(
+                        (node as NonNullExpression | ParenthesizedExpression).expression,
+                        inlineLevel,
+                    );
                 case SyntaxKind.BinaryExpression:
-                    getReferencesFromNode((node as BinaryExpression).left);
-                    getReferencesFromNode((node as BinaryExpression).right);
+                    getReferencesFromNode((node as BinaryExpression).left, inlineLevel);
+                    getReferencesFromNode((node as BinaryExpression).right, inlineLevel);
                     return;
                 case SyntaxKind.CallExpression:
                     let callAccess;
                     // `node` is `expr.hasOwnExpression(prop)`, so we create a synthetic `expr.prop` reference for narrowing.
-                    if (isPropertyAccessExpression(callAccess = (node as CallExpression).expression) && isIdentifier(callAccess.name) && callAccess.name.escapedText === "hasOwnProperty" && (node as CallExpression).arguments.length === 1 && isStringLiteralLike((node as CallExpression).arguments[0])) {
+                    if (
+                        isPropertyAccessExpression(callAccess = (node as CallExpression).expression)
+                        && isIdentifier(callAccess.name)
+                        && callAccess.name.escapedText === "hasOwnProperty"
+                        && (node as CallExpression).arguments.length === 1
+                        && isStringLiteralLike((node as CallExpression).arguments[0])
+                    ) {
                         const propName = (node as CallExpression).arguments[0] as StringLiteralLike;
                         const synthPropertyAccess = canUsePropertyAccess(propName.text, languageVersion) ?
                             factory.createPropertyAccessExpression(callAccess.expression, propName.text) :
@@ -44559,32 +44568,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         setParent(synthPropertyAccess, node.parent);
                         addReference(synthPropertyAccess, inlineLevel);
                     }
-                    getReferencesFromNode((node as CallExpression).expression);
-                    (node as CallExpression).arguments.forEach(getReferencesFromNode);
+                    getReferencesFromNode((node as CallExpression).expression, inlineLevel);
+                    (node as CallExpression).arguments.forEach(arg => getReferencesFromNode(arg, inlineLevel));
                     return;
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
-                    getReferencesFromNode((node as PrefixUnaryExpression | PostfixUnaryExpression).operand);
+                    getReferencesFromNode((node as PrefixUnaryExpression | PostfixUnaryExpression).operand, inlineLevel);
                     return;
                 case SyntaxKind.TypeOfExpression:
                     getReferencesFromNode((node as TypeOfExpression).expression);
-                    return;
-                case SyntaxKind.VoidExpression:
-                case SyntaxKind.AwaitExpression:
-                case SyntaxKind.YieldExpression:
-                    // We won't narrow `e` in `await e`, `void e` or `yield e`.
-                    return;
-                case SyntaxKind.BindingElement:
-                case SyntaxKind.VariableDeclaration:
-                    // >> TODO: get name of variable declaration/binding element and use that as ref?
-                    // Can we get away with skipping this?
-                    return;
-                case SyntaxKind.MetaProperty:
-                    if ((node as MetaProperty).keywordToken === SyntaxKind.ImportKeyword) {
-                        addReference(node as ImportMetaProperty, inlineLevel);
-                    }
-                    // >> TODO: I think you can never actually have `import.meta` or
-                    // `new.target` involved in narrowing, so this might be pointless
                     return;
                 case SyntaxKind.ThisKeyword:
                     addReference(node as ThisExpression, inlineLevel);
@@ -44592,16 +44584,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.Identifier:
                     addReference(node as Identifier, inlineLevel);
                     return;
-                case SyntaxKind.PrivateIdentifier:
-                    // Don't add private identifiers as a reference.
-                    // They're only a narrowable reference when used in a property access expression,
-                    // as in `this.#privateId`.
-                    return;
                 case SyntaxKind.SuperKeyword:
                     addReference(node as SuperExpression, inlineLevel);
                     return;
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
+                    getReferencesFromNode(
+                        (node as PropertyAccessExpression | ElementAccessExpression).expression,
+                        inlineLevel,
+                    );
                     addReference(node as PropertyAccessExpression | ElementAccessExpression, inlineLevel);
                     return;
             }

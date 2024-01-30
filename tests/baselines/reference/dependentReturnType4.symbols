@@ -154,3 +154,39 @@ function inlined6<T extends number | string>(x: T): T extends number ? string : 
     }
     return "one";
 }
+
+type A = { kind: "a", a: number };
+>A : Symbol(A, Decl(dependentReturnType4.ts, 51, 1))
+>kind : Symbol(kind, Decl(dependentReturnType4.ts, 53, 10))
+>a : Symbol(a, Decl(dependentReturnType4.ts, 53, 21))
+
+type B = { kind: "b", b: string };
+>B : Symbol(B, Decl(dependentReturnType4.ts, 53, 34))
+>kind : Symbol(kind, Decl(dependentReturnType4.ts, 54, 10))
+>b : Symbol(b, Decl(dependentReturnType4.ts, 54, 21))
+
+type AOrB = A | B;
+>AOrB : Symbol(AOrB, Decl(dependentReturnType4.ts, 54, 34))
+>A : Symbol(A, Decl(dependentReturnType4.ts, 51, 1))
+>B : Symbol(B, Decl(dependentReturnType4.ts, 53, 34))
+
+function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B ? string : number | string {
+>subexpression : Symbol(subexpression, Decl(dependentReturnType4.ts, 55, 18))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 57, 23))
+>AOrB : Symbol(AOrB, Decl(dependentReturnType4.ts, 54, 34))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 57, 39))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 57, 23))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 57, 23))
+>A : Symbol(A, Decl(dependentReturnType4.ts, 51, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 57, 23))
+>B : Symbol(B, Decl(dependentReturnType4.ts, 53, 34))
+
+    if (x.kind === "b") {
+>x.kind : Symbol(kind, Decl(dependentReturnType4.ts, 53, 10), Decl(dependentReturnType4.ts, 54, 10))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 57, 39))
+>kind : Symbol(kind, Decl(dependentReturnType4.ts, 53, 10), Decl(dependentReturnType4.ts, 54, 10))
+
+        return "some str";
+    }
+    return 0;
+}
