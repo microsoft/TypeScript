@@ -27482,7 +27482,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function mapTypeWithAlias(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
         return type.flags & TypeFlags.Union && aliasSymbol ?
             getUnionType(map((type as UnionType).types, mapper), UnionReduction.Literal, aliasSymbol, aliasTypeArguments) :
-            mapType(type, mapper, /*noReductions*/ undefined);
+            mapType(type, mapper);
     }
 
     function extractTypesOfKind(type: Type, kind: TypeFlags) {
@@ -30515,9 +30515,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 if (functionFlags & FunctionFlags.Async) { // Async function or AsyncGenerator function
                     // Get the awaited type without the `Awaited<T>` alias
-                    const contextualAwaitedType = getAwaitedTypeNoAlias(contextualReturnType);
-                    return contextualAwaitedType &&
-                        getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
+                    const contextualAwaitedType = mapType(contextualReturnType, getAwaitedTypeNoAlias);
+                    return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
                 }
 
                 return contextualReturnType; // Regular function or Generator function
