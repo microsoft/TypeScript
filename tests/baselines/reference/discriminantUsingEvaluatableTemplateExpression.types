@@ -40,3 +40,39 @@ foo({
   },
 });
 
+type E1 = { d: "main1-sub1"; cb: (x: string) => void };
+>E1 : { d: "main1-sub1"; cb: (x: string) => void; }
+>d : "main1-sub1"
+>cb : (x: string) => void
+>x : string
+
+type E2 = { d: "main2-sub2"; cb: (x: number) => void };
+>E2 : { d: "main2-sub2"; cb: (x: number) => void; }
+>d : "main2-sub2"
+>cb : (x: number) => void
+>x : number
+
+declare function bar(_: E1 | E2): void;
+>bar : (_: E1 | E2) => void
+>_ : E1 | E2
+
+const someCategory = "main1";
+>someCategory : "main1"
+>"main1" : "main1"
+
+const someSubcategory = "sub1";
+>someSubcategory : "sub1"
+>"sub1" : "sub1"
+
+bar({ d: `${someCategory}-${someSubcategory}`, cb: (x) => {} });
+>bar({ d: `${someCategory}-${someSubcategory}`, cb: (x) => {} }) : void
+>bar : (_: E1 | E2) => void
+>{ d: `${someCategory}-${someSubcategory}`, cb: (x) => {} } : { d: "main1-sub1"; cb: (x: string) => void; }
+>d : "main1-sub1"
+>`${someCategory}-${someSubcategory}` : "main1-sub1"
+>someCategory : "main1"
+>someSubcategory : "sub1"
+>cb : (x: string) => void
+>(x) => {} : (x: string) => void
+>x : string
+

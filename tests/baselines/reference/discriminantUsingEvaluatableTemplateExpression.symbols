@@ -37,3 +37,35 @@ foo({
   },
 });
 
+type E1 = { d: "main1-sub1"; cb: (x: string) => void };
+>E1 : Symbol(E1, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 12, 3))
+>d : Symbol(d, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 14, 11))
+>cb : Symbol(cb, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 14, 28))
+>x : Symbol(x, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 14, 34))
+
+type E2 = { d: "main2-sub2"; cb: (x: number) => void };
+>E2 : Symbol(E2, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 14, 55))
+>d : Symbol(d, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 15, 11))
+>cb : Symbol(cb, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 15, 28))
+>x : Symbol(x, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 15, 34))
+
+declare function bar(_: E1 | E2): void;
+>bar : Symbol(bar, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 15, 55))
+>_ : Symbol(_, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 17, 21))
+>E1 : Symbol(E1, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 12, 3))
+>E2 : Symbol(E2, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 14, 55))
+
+const someCategory = "main1";
+>someCategory : Symbol(someCategory, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 19, 5))
+
+const someSubcategory = "sub1";
+>someSubcategory : Symbol(someSubcategory, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 20, 5))
+
+bar({ d: `${someCategory}-${someSubcategory}`, cb: (x) => {} });
+>bar : Symbol(bar, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 15, 55))
+>d : Symbol(d, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 22, 5))
+>someCategory : Symbol(someCategory, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 19, 5))
+>someSubcategory : Symbol(someSubcategory, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 20, 5))
+>cb : Symbol(cb, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 22, 46))
+>x : Symbol(x, Decl(discriminantUsingEvaluatableTemplateExpression.ts, 22, 52))
+

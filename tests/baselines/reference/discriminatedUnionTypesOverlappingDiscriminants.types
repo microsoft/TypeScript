@@ -1,0 +1,171 @@
+//// [tests/cases/conformance/types/union/discriminatedUnionTypesOverlappingDiscriminants.ts] ////
+
+=== discriminatedUnionTypesOverlappingDiscriminants.ts ===
+// https://github.com/microsoft/TypeScript/issues/57231
+
+type Food = "apple" | "orange";
+>Food : "apple" | "orange"
+
+type Vegetable = "spinach" | "carrot";
+>Vegetable : "spinach" | "carrot"
+
+type Other = "milk" | "water";
+>Other : "milk" | "water"
+
+type Custom = "air" | "soil";
+>Custom : "air" | "soil"
+
+type Target =
+>Target : { audience: "earth"; meal: Custom | `fruit_${Food}` | `vegetable_${Vegetable}` | `other_${Other}`; } | { audience: "mars" | "jupiter"; meal: string; }
+
+  | {
+      audience: "earth";
+>audience : "earth"
+
+      meal:
+>meal : Custom | "fruit_apple" | "fruit_orange" | "vegetable_spinach" | "vegetable_carrot" | "other_milk" | "other_water"
+
+        | Custom
+        | `fruit_${Food}`
+        | `vegetable_${Vegetable}`
+        | `other_${Other}`;
+    }
+  | {
+      audience: "mars" | "jupiter";
+>audience : "mars" | "jupiter"
+
+      meal: string;
+>meal : string
+
+    };
+
+const target1: Target = {
+>target1 : Target
+>{  audience: "earth",  meal: `vegetable_carrot`,} : { audience: "earth"; meal: "vegetable_carrot"; }
+
+  audience: "earth",
+>audience : "earth"
+>"earth" : "earth"
+
+  meal: `vegetable_carrot`,
+>meal : "vegetable_carrot"
+>`vegetable_carrot` : "vegetable_carrot"
+
+};
+
+const target2: Target = {
+>target2 : Target
+>{  meal: `vegetable_carrot`,  audience: "earth",} : { meal: "vegetable_carrot"; audience: "earth"; }
+
+  meal: `vegetable_carrot`,
+>meal : "vegetable_carrot"
+>`vegetable_carrot` : "vegetable_carrot"
+
+  audience: "earth",
+>audience : "earth"
+>"earth" : "earth"
+
+};
+
+const typedVegetableWithInitializer: Vegetable = 'carrot';
+>typedVegetableWithInitializer : Vegetable
+>'carrot' : "carrot"
+
+const target3: Target = {
+>target3 : Target
+>{  audience: "earth",  meal: `vegetable_${typedVegetableWithInitializer}`,} : { audience: "earth"; meal: "vegetable_carrot"; }
+
+  audience: "earth",
+>audience : "earth"
+>"earth" : "earth"
+
+  meal: `vegetable_${typedVegetableWithInitializer}`,
+>meal : "vegetable_carrot"
+>`vegetable_${typedVegetableWithInitializer}` : "vegetable_carrot"
+>typedVegetableWithInitializer : "carrot"
+
+};
+
+const target4: Target = {
+>target4 : Target
+>{  meal: `vegetable_${typedVegetableWithInitializer}`,  audience: "earth",} : { meal: "vegetable_carrot"; audience: "earth"; }
+
+  meal: `vegetable_${typedVegetableWithInitializer}`,
+>meal : "vegetable_carrot"
+>`vegetable_${typedVegetableWithInitializer}` : "vegetable_carrot"
+>typedVegetableWithInitializer : "carrot"
+
+  audience: "earth",
+>audience : "earth"
+>"earth" : "earth"
+
+};
+
+const typedCarrotWithInitializer: "carrot" = 'carrot';
+>typedCarrotWithInitializer : "carrot"
+>'carrot' : "carrot"
+
+const target5: Target = {
+>target5 : Target
+>{  audience: "earth",  meal: `vegetable_${typedCarrotWithInitializer}`,} : { audience: "earth"; meal: "vegetable_carrot"; }
+
+  audience: "earth",
+>audience : "earth"
+>"earth" : "earth"
+
+  meal: `vegetable_${typedCarrotWithInitializer}`,
+>meal : "vegetable_carrot"
+>`vegetable_${typedCarrotWithInitializer}` : "vegetable_carrot"
+>typedCarrotWithInitializer : "carrot"
+
+};
+
+const target6: Target = {
+>target6 : Target
+>{  meal: `vegetable_${typedCarrotWithInitializer}`,  audience: "earth",} : { meal: "vegetable_carrot"; audience: "earth"; }
+
+  meal: `vegetable_${typedCarrotWithInitializer}`,
+>meal : "vegetable_carrot"
+>`vegetable_${typedCarrotWithInitializer}` : "vegetable_carrot"
+>typedCarrotWithInitializer : "carrot"
+
+  audience: "earth",
+>audience : "earth"
+>"earth" : "earth"
+
+};
+
+const carrotInitializer = 'carrot';
+>carrotInitializer : "carrot"
+>'carrot' : "carrot"
+
+const target7: Target = {
+>target7 : Target
+>{  audience: "earth",  meal: `vegetable_${carrotInitializer}`,} : { audience: "earth"; meal: "vegetable_carrot"; }
+
+  audience: "earth",
+>audience : "earth"
+>"earth" : "earth"
+
+  meal: `vegetable_${carrotInitializer}`,
+>meal : "vegetable_carrot"
+>`vegetable_${carrotInitializer}` : "vegetable_carrot"
+>carrotInitializer : "carrot"
+
+};
+
+const target8: Target = {
+>target8 : Target
+>{  meal: `vegetable_${carrotInitializer}`,  audience: "earth",} : { meal: "vegetable_carrot"; audience: "earth"; }
+
+  meal: `vegetable_${carrotInitializer}`,
+>meal : "vegetable_carrot"
+>`vegetable_${carrotInitializer}` : "vegetable_carrot"
+>carrotInitializer : "carrot"
+
+  audience: "earth",
+>audience : "earth"
+>"earth" : "earth"
+
+};
+
