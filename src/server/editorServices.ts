@@ -2287,8 +2287,7 @@ export class ProjectService {
      * otherwise just file name
      */
     private getConfigFileNameForFile(info: OpenScriptInfoOrClosedOrConfigFileInfo) {
-        if (isOpenScriptInfo(info)) {
-            Debug.assert(info.isScriptOpen());
+        if (!isAncestorConfigFileInfo(info)) {
             const result = this.configFileForOpenFiles.get(info.path);
             if (result !== undefined) return result || undefined;
         }
