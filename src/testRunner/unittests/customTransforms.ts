@@ -181,30 +181,32 @@ describe("unittests:: customTransforms", () => {
                 return (s: ts.SourceFile) => ts.visitEachChild(s, visitor, context);
 
                 function visitor(node: ts.Node): ts.Node {
-                    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier))
+                    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
                         return factory.updateImportDeclaration(
                             node,
                             node.modifiers,
                             node.importClause,
                             factory.createStringLiteral(node.moduleSpecifier.text),
-                            node.attributes
+                            node.attributes,
                         );
+                    }
 
-                    if (ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier))
+                    if (ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
                         return factory.updateExportDeclaration(
                             node,
                             node.modifiers,
                             node.isTypeOnly,
                             node.exportClause,
                             factory.createStringLiteral(node.moduleSpecifier.text),
-                            node.attributes
+                            node.attributes,
                         );
+                    }
                     return node;
                 }
-            }
-        ]
+            },
+        ],
     }, {
         target: ts.ScriptTarget.ESNext,
-        module: ts.ModuleKind.ESNext
+        module: ts.ModuleKind.ESNext,
     });
 });
