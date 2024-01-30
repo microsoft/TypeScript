@@ -25,7 +25,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /hunter2/foo.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a.ts Text-1 ""
@@ -89,6 +89,17 @@ FsWatches::
 /a.ts: *new*
   {}
 
+Projects::
+/hunter2/foo.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /hunter2/foo.csproj
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -122,6 +133,13 @@ FsWatches *deleted*::
 /a.ts:
   {}
 
+ScriptInfos::
+/a.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /hunter2/foo.csproj
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -152,6 +170,13 @@ PolledWatches::
 FsWatches::
 /a.ts: *new*
   {}
+
+ScriptInfos::
+/a.ts *changed*
+    open: false *changed*
+    version: Text-1
+    containingProjects: 1
+        /hunter2/foo.csproj
 
 Before request
 
@@ -190,6 +215,17 @@ FsWatches::
 /a.ts:
   {}
 
+Projects::
+/hunter2/foo.csproj (External) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /hunter2/foo.csproj *deleted*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -213,7 +249,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /hunter2/foo.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /hunter2/foo.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /hunter2/foo.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/hunter2/foo.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a.ts Text-1 ""
@@ -237,6 +273,17 @@ PolledWatches::
 FsWatches::
 /a.ts:
   {}
+
+Projects::
+/hunter2/foo.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /hunter2/foo.csproj *new*
 
 Before request
 
@@ -270,3 +317,10 @@ PolledWatches::
 FsWatches *deleted*::
 /a.ts:
   {}
+
+ScriptInfos::
+/a.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /hunter2/foo.csproj

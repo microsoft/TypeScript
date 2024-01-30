@@ -32,7 +32,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: externalproject
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalproject Version: 1 structureChanged: false Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: externalproject projectStateVersion: 1 projectProgramVersion: 0 structureChanged: false Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -75,3 +75,14 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After request
+
+Projects::
+externalproject (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/f1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        externalproject

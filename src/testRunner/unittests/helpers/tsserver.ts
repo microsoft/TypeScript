@@ -2,6 +2,9 @@ import {
     incrementalVerifier,
 } from "../../../harness/incrementalUtils";
 import {
+    patchServiceForStateBaseline,
+} from "../../../harness/projectServiceStateLogger";
+import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
@@ -52,9 +55,12 @@ export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
 };
 export function patchHostTimeouts(
     inputHost: TestServerHostTrackingWrittenFiles,
+    session: TestSession | undefined,
     logger: LoggerWithInMemoryLogs,
 ) {
     const host = inputHost as TestSessionAndServiceHost;
+    host.service = session?.getProjectService();
+    if (session) patchServiceForStateBaseline(session.getProjectService());
     if (host.patched) return host;
     host.patched = true;
     if (!logger.hasLevel(ts.server.LogLevel.verbose)) {
@@ -134,6 +140,7 @@ export class TestSession extends ts.server.Session {
         this.serverCancellationToken = cancellationToken as TestServerCancellationToken;
         patchHostTimeouts(
             changeToHostTrackingWrittenFiles(this.host),
+            this,
             this.logger,
         );
     }

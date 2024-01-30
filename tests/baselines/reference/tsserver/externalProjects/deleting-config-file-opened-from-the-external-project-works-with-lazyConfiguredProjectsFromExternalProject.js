@@ -88,6 +88,11 @@ FsWatches::
 /user/someuser/project/tsconfig.json: *new*
   {}
 
+Projects::
+/user/someuser/project/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -132,6 +137,11 @@ Before request
 FsWatches *deleted*::
 /user/someuser/project/tsconfig.json:
   {}
+
+Projects::
+/user/someuser/project/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 0
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -190,7 +200,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/someuser/pro
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/project/node_modules/@types 1 undefined Project: /user/someuser/project/WebApplication6.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/someuser/project/WebApplication6.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/someuser/project/WebApplication6.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/someuser/project/WebApplication6.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -214,6 +224,21 @@ FsWatches::
   {}
 /user/someuser/project/js/site.js: *new*
   {}
+
+Projects::
+/user/someuser/project/WebApplication6.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/user/someuser/project/js/site.js *new*
+    version: Text-1
+    containingProjects: 1
+        /user/someuser/project/WebApplication6.csproj
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/someuser/project/WebApplication6.csproj
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -389,3 +414,8 @@ FsWatches::
 FsWatchesRecursive::
 /user/someuser/project/js: *new*
   {}
+
+Projects::
+/user/someuser/project/WebApplication6.csproj (External) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*

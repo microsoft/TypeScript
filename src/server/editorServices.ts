@@ -1139,6 +1139,7 @@ export class ProjectService {
     private pendingPluginEnablements?: Map<Project, Promise<BeginEnablePluginResult>[]>;
     private currentPluginEnablementPromise?: Promise<void>;
 
+    /** @internal */ baseline: (titile?: string) => void = noop;
     /** @internal */ verifyDocumentRegistry = noop;
     /** @internal */ verifyProgram: (project: Project) => void = noop;
     /** @internal */ onProjectCreation: (project: Project) => void = noop;

@@ -71,7 +71,7 @@ Info seq  [hh:mm:ss:mss] Config: /a/b/tsconfig.json : {
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/f1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/f1.ts Text-1 "let x =1;"
@@ -154,7 +154,7 @@ Info seq  [hh:mm:ss:mss] Config: /a/c/tsconfig.json : {
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/c/f2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/c/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/c/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/c/f2.ts Text-1 "let y =1;"
@@ -235,6 +235,24 @@ FsWatches::
 /a/c/tsconfig.json: *new*
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/a/c/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/f1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/c/f2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/c/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -282,6 +300,17 @@ FsWatches *deleted*::
 /a/b/f1.ts:
   {}
 
+ScriptInfos::
+/a/b/f1.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/c/f2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/c/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -297,7 +326,7 @@ Info seq  [hh:mm:ss:mss] Search path: /a/d
 Info seq  [hh:mm:ss:mss] For info: /a/d/f3.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/d/f3.ts SVC-1-0 "let z =1;"
@@ -329,6 +358,31 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Projects::
+/a/b/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/a/c/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/f1.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/c/f2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/c/tsconfig.json
+/a/d/f3.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
 Before request
@@ -375,6 +429,31 @@ FsWatches *deleted*::
 /a/c/tsconfig.json:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/a/c/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/f1.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/c/f2.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/c/tsconfig.json *deleted*
+/a/d/f3.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+
 Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
 Before request
 
@@ -416,6 +495,28 @@ FsWatches::
   {}
 /a/d/f3.ts: *new*
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/f1.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/c/f2.ts
+    version: Text-1
+    containingProjects: 0
+/a/d/f3.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
 Before request
@@ -459,6 +560,19 @@ FsWatches::
 /a/d/f3.ts:
   {}
 
+ScriptInfos::
+/a/b/f1.ts *changed*
+    open: false *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/c/f2.ts
+    version: Text-1
+    containingProjects: 0
+/a/d/f3.ts
+    version: SVC-1-0
+    containingProjects: 0
+
 Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
 Before request
 
@@ -496,7 +610,7 @@ Info seq  [hh:mm:ss:mss] Config: /a/c/tsconfig.json : {
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/c/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/c/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/c/f2.ts Text-1 "let y =1;"
@@ -627,3 +741,28 @@ FsWatches *deleted*::
   {}
 /a/d/f3.ts:
   {}
+
+Projects::
+/a/c/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/a/b/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/c/f2.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /a/c/tsconfig.json *new*
+/a/b/f1.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/b/tsconfig.json *deleted*
+/a/d/f3.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0
