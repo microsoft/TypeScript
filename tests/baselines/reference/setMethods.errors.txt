@@ -1,0 +1,111 @@
+setMethods.ts(13,17): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+  Type 'undefined[]' is missing the following properties from type 'SetLike<number>': has, size
+setMethods.ts(15,17): error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+  The types returned by 'keys()[Symbol.iterator]().next(...)' are incompatible between these types.
+    Type 'IteratorResult<string, any>' is not assignable to type 'IteratorResult<number, any>'.
+      Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
+        Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
+          Type 'string' is not assignable to type 'number'.
+setMethods.ts(19,24): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(21,24): error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(25,22): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(27,22): error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(31,31): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(33,31): error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(37,22): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(39,22): error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(43,24): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(45,24): error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(49,26): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+setMethods.ts(51,26): error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+
+
+==== setMethods.ts (14 errors) ====
+    let numberSet = new Set([0, 1, 2]);
+    
+    let stringSet = new Set(["a", "b"]);
+    
+    let numberMap = new Map([[4, {}], [5, {}]]);
+    
+    let numberSetLike = {
+      size: 1,
+      *keys() { yield 3 },
+      has(x) { return x === 3 },
+    };
+    
+    numberSet.union([]);
+                    ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+!!! error TS2345:   Type 'undefined[]' is missing the following properties from type 'SetLike<number>': has, size
+    numberSet.union(new Set);
+    numberSet.union(stringSet);
+                    ~~~~~~~~~
+!!! error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+!!! error TS2345:   The types returned by 'keys()[Symbol.iterator]().next(...)' are incompatible between these types.
+!!! error TS2345:     Type 'IteratorResult<string, any>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2345:       Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, any>'.
+!!! error TS2345:         Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
+!!! error TS2345:           Type 'string' is not assignable to type 'number'.
+    numberSet.union(numberMap);
+    numberSet.union(numberSetLike);
+    
+    numberSet.intersection([]);
+                           ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.intersection(new Set);
+    numberSet.intersection(stringSet);
+                           ~~~~~~~~~
+!!! error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.intersection(numberMap);
+    numberSet.intersection(numberSetLike);
+    
+    numberSet.difference([]);
+                         ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.difference(new Set);
+    numberSet.difference(stringSet);
+                         ~~~~~~~~~
+!!! error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.difference(numberMap);
+    numberSet.difference(numberSetLike);
+    
+    numberSet.symmetricDifference([]);
+                                  ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.symmetricDifference(new Set);
+    numberSet.symmetricDifference(stringSet);
+                                  ~~~~~~~~~
+!!! error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.symmetricDifference(numberMap);
+    numberSet.symmetricDifference(numberSetLike);
+    
+    numberSet.isSubsetOf([]);
+                         ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.isSubsetOf(new Set);
+    numberSet.isSubsetOf(stringSet);
+                         ~~~~~~~~~
+!!! error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.isSubsetOf(numberMap);
+    numberSet.isSubsetOf(numberSetLike);
+    
+    numberSet.isSupersetOf([]);
+                           ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.isSupersetOf(new Set);
+    numberSet.isSupersetOf(stringSet);
+                           ~~~~~~~~~
+!!! error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.isSupersetOf(numberMap);
+    numberSet.isSupersetOf(numberSetLike);
+    
+    numberSet.isDisjointFrom([]);
+                             ~~
+!!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.isDisjointFrom(new Set);
+    numberSet.isDisjointFrom(stringSet);
+                             ~~~~~~~~~
+!!! error TS2345: Argument of type 'Set<string>' is not assignable to parameter of type 'SetLike<number>'.
+    numberSet.isDisjointFrom(numberMap);
+    numberSet.isDisjointFrom(numberSetLike);
+    
