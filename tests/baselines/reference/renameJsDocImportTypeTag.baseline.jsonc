@@ -1,0 +1,10 @@
+// === findRenameLocations ===
+// === /a.js ===
+// /**
+//  * <|@importType { /*START PREFIX*/A as [|ARENAME|] } from "./b";
+//  |>*/
+// 
+// /**
+//  * @param { [|ARENAME|]/*RENAME*/ } a
+//  */
+// function f(a) {}

@@ -4022,6 +4022,7 @@ export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyVal
     switch (node.parent.kind) {
         case SyntaxKind.ImportDeclaration:
         case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.JSDocImportTypeTag:
             return node.parent as AnyValidImportOrReExport;
         case SyntaxKind.ExternalModuleReference:
             return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
@@ -4070,7 +4071,7 @@ export function getNamespaceDeclarationNode(node: ImportDeclaration | ImportEqua
 }
 
 /** @internal */
-export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration): boolean {
+export function isDefaultImport(node: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration | JSDocImportTypeTag): boolean {
     return node.kind === SyntaxKind.ImportDeclaration && !!node.importClause && !!node.importClause.name;
 }
 

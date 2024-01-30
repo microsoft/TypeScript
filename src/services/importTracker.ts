@@ -57,6 +57,7 @@ import {
     isVariableDeclaration,
     isVariableDeclarationInitializedToBareOrAccessedRequire,
     isVariableStatement,
+    JSDocImportTypeTag,
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
@@ -138,7 +139,7 @@ interface AmbientModuleDeclaration extends ModuleDeclaration {
 }
 type SourceFileLike = SourceFile | AmbientModuleDeclaration;
 // Identifier for the case of `const x = require("y")`.
-type Importer = AnyImportOrReExport | ValidImportTypeNode | Identifier;
+type Importer = AnyImportOrReExport | ValidImportTypeNode | Identifier | JSDocImportTypeTag;
 type ImporterOrCallExpression = Importer | CallExpression;
 
 /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
@@ -215,6 +216,7 @@ function getImportersForExport(
                         break;
 
                     case SyntaxKind.ImportDeclaration:
+                    case SyntaxKind.JSDocImportTypeTag:
                         directImports.push(direct);
                         const namedBindings = direct.importClause && direct.importClause.namedBindings;
                         if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
@@ -267,7 +269,7 @@ function getImportersForExport(
         });
     }
 
-    function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
+    function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration | JSDocImportTypeTag, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
         if (exportKind === ExportKind.ExportEquals) {
             // This is a direct import, not import-as-namespace.
             if (!alreadyAddedDirect) directImports.push(importDeclaration);
