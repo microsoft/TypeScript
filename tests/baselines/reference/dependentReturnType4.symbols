@@ -190,3 +190,20 @@ function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B
     }
     return 0;
 }
+
+function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : 0 | 1 {
+>switchTrue : Symbol(switchTrue, Decl(dependentReturnType4.ts, 62, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 64, 20))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 64, 39))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 64, 20))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 64, 20))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 64, 20))
+
+    switch (true) {
+        case x:
+>x : Symbol(x, Decl(dependentReturnType4.ts, 64, 39))
+
+            return 1;
+    }
+    return 0;
+}

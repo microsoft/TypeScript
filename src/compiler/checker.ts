@@ -476,6 +476,7 @@ import {
     isCallLikeOrFunctionLikeExpression,
     isCallOrNewExpression,
     isCallSignatureDeclaration,
+    isCaseClause,
     isCatchClause,
     isCatchClauseVariableDeclaration,
     isCatchClauseVariableDeclarationOrBindingElement,
@@ -44376,7 +44377,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     ): void {
         const functionFlags = getFunctionFlags(container);
         const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
-        // let actualReturnType = unwrappedReturnType;
         if (expr) {
             const unwrappedExpr = skipParentheses(expr);
             if (isConditionalExpression(unwrappedExpr)) {
@@ -44525,6 +44525,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else if (flags & FlowFlags.SwitchClause) {
                 node = (flow as FlowSwitchClause).switchStatement.expression;
+                // We have:
+                // `switch (true) {
+                //      case expr1: ...
+                //      case expr2: ...
+                // }`
+                // so we need to also gather narrowing references from the case expressions.
+                if (skipParentheses(node).kind === SyntaxKind.TrueKeyword) {
+                    const switchStmt = node.parent as SwitchStatement;
+                    for (const clause of switchStmt.caseBlock.clauses) {
+                        if (isCaseClause(clause)) {
+                            getReferencesFromNode(clause.expression);
+                        }
+                    }
+                    
+                }
             }
             else if (flags & FlowFlags.ArrayMutation) {
                 const callNode = (flow as FlowArrayMutation).node;
@@ -44542,10 +44557,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             switch (node.kind) {
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.NonNullExpression:
-                    return getReferencesFromNode(
+                    getReferencesFromNode(
                         (node as NonNullExpression | ParenthesizedExpression).expression,
                         inlineLevel,
                     );
+                    return;
                 case SyntaxKind.BinaryExpression:
                     getReferencesFromNode((node as BinaryExpression).left, inlineLevel);
                     getReferencesFromNode((node as BinaryExpression).right, inlineLevel);

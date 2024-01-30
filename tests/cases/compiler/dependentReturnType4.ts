@@ -66,3 +66,11 @@ function subexpression<T extends AOrB>(x: T): T extends A ? number : T extends B
     }
     return 0;
 }
+
+function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : 0 | 1 {
+    switch (true) {
+        case x:
+            return 1;
+    }
+    return 0;
+}

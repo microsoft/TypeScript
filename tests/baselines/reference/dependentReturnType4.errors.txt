@@ -75,3 +75,11 @@ dependentReturnType4.ts(51,5): error TS2322: Type 'string' is not assignable to 
         }
         return 0;
     }
+    
+    function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends false ? 0 : 0 | 1 {
+        switch (true) {
+            case x:
+                return 1;
+        }
+        return 0;
+    }
