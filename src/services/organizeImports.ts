@@ -90,7 +90,7 @@ export function organizeImports(
     const shouldCombine = shouldSort; // These are currently inseparable, but I draw a distinction for clarity and in case we add modes in the future.
     const shouldRemove = mode === OrganizeImportsMode.RemoveUnused || mode === OrganizeImportsMode.All;
     // All of the old ImportDeclarations in the file, in syntactic order.
-    const topLevelImportGroupDecls = groupByNewlineContiguous(sourceFile, sourceFile.statements.filter(isImportDeclaration));
+    const topLevelImportGroupDecls = groupTopLevelDeclarations(sourceFile, sourceFile.statements.filter(isImportDeclaration));
 
     const comparer = getOrganizeImportsComparerWithDetection(preferences, shouldSort ? () => detectSortingWorker(topLevelImportGroupDecls, preferences) === SortKind.CaseInsensitive : undefined);
 
@@ -112,7 +112,7 @@ export function organizeImports(
     for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
         if (!ambientModule.body) continue;
 
-        const ambientModuleImportGroupDecls = groupByNewlineContiguous(sourceFile, ambientModule.body.statements.filter(isImportDeclaration));
+        const ambientModuleImportGroupDecls = groupTopLevelDeclarations(sourceFile, ambientModule.body.statements.filter(isImportDeclaration));
         ambientModuleImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier));
 
         // Exports are always used
@@ -175,7 +175,7 @@ export function organizeImports(
     }
 }
 
-function groupByNewlineContiguous<T extends ImportDeclaration | ExportDeclaration>(sourceFile: SourceFile, decls: T[]): T[][] {
+function groupTopLevelDeclarations<T extends ImportDeclaration | ExportDeclaration>(sourceFile: SourceFile, decls: T[]): T[][] {
     const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, sourceFile.languageVariant);
     const group: T[][] = [];
     let groupIndex = 0;
@@ -197,6 +197,10 @@ function groupByNewlineContiguous<T extends ImportDeclaration | ExportDeclaratio
 // a new group is created if an import/export includes at least two new line
 // new line from multi-line comment doesn't count
 function isNewGroup(sourceFile: SourceFile, decl: ImportDeclaration | ExportDeclaration, scanner: Scanner) {
+    if (decl.attributes) {
+        return true;
+    }
+
     const startPos = decl.getFullStart();
     const endPos = decl.getStart();
     scanner.setText(sourceFile.text, startPos, endPos - startPos);
@@ -633,7 +637,7 @@ function getModuleSpecifierExpression(declaration: AnyImportOrRequireStatement):
 /** @internal */
 export function detectSorting(sourceFile: SourceFile, preferences: UserPreferences): SortKind {
     return detectSortingWorker(
-        groupByNewlineContiguous(sourceFile, sourceFile.statements.filter(isImportDeclaration)),
+        groupTopLevelDeclarations(sourceFile, sourceFile.statements.filter(isImportDeclaration)),
         preferences,
     );
 }
@@ -909,5 +913,5 @@ function getTopLevelExportGroups(sourceFile: SourceFile) {
             i++;
         }
     }
-    return flatMap(topLevelExportGroups, exportGroupDecls => groupByNewlineContiguous(sourceFile, exportGroupDecls));
+    return flatMap(topLevelExportGroups, exportGroupDecls => groupTopLevelDeclarations(sourceFile, exportGroupDecls));
 }
