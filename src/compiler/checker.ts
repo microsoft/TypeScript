@@ -14914,6 +14914,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (type.flags & TypeFlags.Object) {
             const resolved = resolveStructuredTypeMembers(type as ObjectType);
             const symbol = resolved.members.get(name);
+            if (symbol && !includeTypeOnlyMembers && type.symbol?.flags & SymbolFlags.ValueModule && getSymbolLinks(type.symbol).typeOnlyExportStarMap?.has(name)) {
+                // If this is the type of a module, `resolved.members.get(name)` might have effectively skipped over
+                // an `export type * from './foo'`, leaving `symbolIsValue` unable to see that the symbol is being
+                // viewed through a type-only export.
+                return undefined;
+            }
             if (symbol && symbolIsValue(symbol, includeTypeOnlyMembers)) {
                 return symbol;
             }
