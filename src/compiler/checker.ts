@@ -45495,7 +45495,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (isConstantVariable(symbol)) {
                             const declaration = symbol.valueDeclaration;
                             if (declaration && isVariableDeclaration(declaration) && declaration.initializer && (!location || declaration !== location && isBlockScopedNameDeclaredBeforeUse(declaration, location))) {
-                                return evaluate(declaration.initializer, declaration);
+                                if (!declaration.type) {
+                                    return evaluate(declaration.initializer, declaration);
+                                }
+                                const declaredType = getTypeOfSymbol(symbol);
+                                const type = declaredType.flags & TypeFlags.Union ?
+                                    getAssignmentReducedType(declaredType as UnionType, getInitialType(declaration)) :
+                                    declaredType;
+                                if (type.flags & TypeFlags.StringOrNumberLiteral) {
+                                    return (type as StringLiteralType | NumberLiteralType).value;
+                                }
                             }
                         }
                     }
