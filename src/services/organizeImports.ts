@@ -59,6 +59,7 @@ import {
     Scanner,
     setEmitFlags,
     some,
+    sort,
     SortKind,
     SourceFile,
     stableSort,
@@ -324,7 +325,11 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
 
     const importGroupsByAttributes = groupBy(importGroup, decl => {
         if (decl.attributes) {
-            return decl.attributes.getFullText();
+            let attrs = decl.attributes.token + " ";
+            for (const x of sort(decl.attributes.elements)) {
+               attrs += x.name + ":" + x.value.getText() + " ";
+            }
+            return attrs;
         }
         return "";
     });
