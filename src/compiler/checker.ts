@@ -20093,7 +20093,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * This is similar to `instantiateType`, but with behavior specific to narrowing a return type based on control flow narrowing of expressions that have type parameter types.
+     * This is similar to `instantiateType`, but with behavior specific to narrowing
+     * a type based on control flow narrowing of expressions that have type parameter types.
      */
     function instantiateNarrowType(type: Type, narrowMapper: TypeMapper, mapper: TypeMapper | undefined): Type {
         if (!couldContainTypeVariables(type)) {
@@ -20116,7 +20117,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * @param narrowMapper special mapper that has mappings originating from type parameter narrowing, and should only be considered in some places
+     * @param narrowMapper special mapper that has mappings originating from type parameter narrowing,
+     * and should only be used for instantiation in some places.
      * @param mapper the usual mapper that should be used for all instantiations
      */
     function instantiateNarrowTypeWorker(
@@ -44538,10 +44540,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             getReferencesFromNode(clause.expression);
                         }
                     }
-                    
                 }
             }
             else if (flags & FlowFlags.ArrayMutation) {
+                // `node` is either `arr.push(expr2)` (or other array method calls),
+                // or `arr[expr2] = expr3`, and in both we might narrow `arr`.
                 const callNode = (flow as FlowArrayMutation).node;
                 node = callNode.kind === SyntaxKind.CallExpression ?
                     (callNode.expression as PropertyAccessExpression).expression :
