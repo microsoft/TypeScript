@@ -327,7 +327,7 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
         if (decl.attributes) {
             let attrs = decl.attributes.token + " ";
             for (const x of sort(decl.attributes.elements)) {
-               attrs += x.name + ":" + x.value.getText() + " ";
+                attrs += x.name + ":" + x.value.getText() + " ";
             }
             return attrs;
         }
