@@ -329,7 +329,7 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
         return "";
     });
     const coalescedImports: ImportDeclaration[] = [];
-    for (const attribute in importGroupsByAttributes){
+    for (const attribute in importGroupsByAttributes) {
         const importGroupSameAttrs = importGroupsByAttributes[attribute] as ImportDeclaration[];
         const { importWithoutClause, typeOnlyImports, regularImports } = getCategorizedImports(importGroupSameAttrs);
 
