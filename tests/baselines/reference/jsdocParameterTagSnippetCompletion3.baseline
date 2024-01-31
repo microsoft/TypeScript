@@ -40,7 +40,7 @@
 // | host
 // | ignore
 // | implements
-// | importType
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -132,7 +132,7 @@
 // | host
 // | ignore
 // | implements
-// | importType
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -225,7 +225,7 @@
 // | host
 // | ignore
 // | implements
-// | importType
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -321,7 +321,7 @@
 // | host
 // | ignore
 // | implements
-// | importType
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -417,7 +417,7 @@
 // | host
 // | ignore
 // | implements
-// | importType
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -511,7 +511,7 @@
 // | host
 // | ignore
 // | implements
-// | importType
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -1046,13 +1046,13 @@
           "documentation": []
         },
         {
-          "name": "importType",
+          "name": "import",
           "kind": "",
           "kindModifiers": "",
           "sortText": "11",
           "displayParts": [
             {
-              "text": "importType",
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -2165,13 +2165,13 @@
           "documentation": []
         },
         {
-          "name": "importType",
+          "name": "import",
           "kind": "",
           "kindModifiers": "",
           "sortText": "11",
           "displayParts": [
             {
-              "text": "importType",
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -3284,13 +3284,13 @@
           "documentation": []
         },
         {
-          "name": "importType",
+          "name": "import",
           "kind": "",
           "kindModifiers": "",
           "sortText": "11",
           "displayParts": [
             {
-              "text": "importType",
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -4403,13 +4403,13 @@
           "documentation": []
         },
         {
-          "name": "importType",
+          "name": "import",
           "kind": "",
           "kindModifiers": "",
           "sortText": "11",
           "displayParts": [
             {
-              "text": "importType",
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -5522,13 +5522,13 @@
           "documentation": []
         },
         {
-          "name": "importType",
+          "name": "import",
           "kind": "",
           "kindModifiers": "",
           "sortText": "11",
           "displayParts": [
             {
-              "text": "importType",
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -6641,13 +6641,13 @@
           "documentation": []
         },
         {
-          "name": "importType",
+          "name": "import",
           "kind": "",
           "kindModifiers": "",
           "sortText": "11",
           "displayParts": [
             {
-              "text": "importType",
+              "text": "import",
               "kind": "text"
             }
           ],

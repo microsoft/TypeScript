@@ -238,7 +238,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
-    JSDocImportTypeTag,
+    JSDocImportTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -883,8 +883,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateJSDocImplementsTag,
         createJSDocSeeTag,
         updateJSDocSeeTag,
-        createJSDocImportTypeTag,
-        updateJSDocImportTypeTag,
+        createJSDocImportTag,
+        updateJSDocImportTag,
         createJSDocNameReference,
         updateJSDocNameReference,
         createJSDocMemberName,
@@ -5558,20 +5558,20 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocImportTypeTag(tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTypeTag {
-        const node = createBaseJSDocTag<JSDocImportTypeTag>(SyntaxKind.JSDocImportTypeTag, tagName ?? createIdentifier("importType"), comment);
+    function createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTag {
+        const node = createBaseJSDocTag<JSDocImportTag>(SyntaxKind.JSDocImportTag, tagName ?? createIdentifier("import"), comment);
         node.importClause = importClause;
         node.moduleSpecifier = moduleSpecifier;
         node.comment = comment;
         return node;
     }
 
-    function updateJSDocImportTypeTag(node: JSDocImportTypeTag, tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTypeTag {
+    function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag {
         return node.tagName !== tagName
                 || node.comment !== comment
                 || node.importClause !== importClause
                 || node.moduleSpecifier !== moduleSpecifier
-            ? update(createJSDocImportTypeTag(tagName, importClause, moduleSpecifier, comment), node)
+            ? update(createJSDocImportTag(tagName, importClause, moduleSpecifier, comment), node)
             : node;
     }
 
@@ -7286,8 +7286,8 @@ function getDefaultTagNameForKind(kind: JSDocTag["kind"]): string {
             return "augments";
         case SyntaxKind.JSDocImplementsTag:
             return "implements";
-        case SyntaxKind.JSDocImportTypeTag:
-            return "importType";
+        case SyntaxKind.JSDocImportTag:
+            return "import";
         default:
             return Debug.fail(`Unsupported kind: ${Debug.formatSyntaxKind(kind)}`);
     }

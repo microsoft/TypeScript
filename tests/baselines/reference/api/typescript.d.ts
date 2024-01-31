@@ -4542,7 +4542,7 @@ declare namespace ts {
         JSDocPropertyTag = 355,
         JSDocThrowsTag = 356,
         JSDocSatisfiesTag = 357,
-        JSDocImportTypeTag = 358,
+        JSDocImportTag = 358,
         SyntaxList = 359,
         NotEmittedStatement = 360,
         PartiallyEmittedExpression = 361,
@@ -6029,7 +6029,7 @@ declare namespace ts {
     type NamedExportBindings = NamespaceExport | NamedExports;
     interface ImportClause extends NamedDeclaration {
         readonly kind: SyntaxKind.ImportClause;
-        readonly parent: ImportDeclaration | JSDocImportTypeTag;
+        readonly parent: ImportDeclaration | JSDocImportTag;
         readonly isTypeOnly: boolean;
         readonly name?: Identifier;
         readonly namedBindings?: NamedImportBindings;
@@ -6385,8 +6385,8 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocSatisfiesTag;
         readonly typeExpression: JSDocTypeExpression;
     }
-    interface JSDocImportTypeTag extends JSDocTag {
-        readonly kind: SyntaxKind.JSDocImportTypeTag;
+    interface JSDocImportTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocImportTag;
         readonly parent: JSDoc;
         readonly importClause: ImportClause;
         readonly moduleSpecifier: Expression;
@@ -8355,8 +8355,8 @@ declare namespace ts {
         updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
         createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
         updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
-        createJSDocImportTypeTag(tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTypeTag;
-        updateJSDocImportTypeTag(node: JSDocImportTypeTag, tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTypeTag;
+        createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTag;
+        updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -9584,7 +9584,7 @@ declare namespace ts {
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
     function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag;
     function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
-    function isJSDocImportTypeTag(node: Node): node is JSDocImportTypeTag;
+    function isJSDocImportTag(node: Node): node is JSDocImportTag;
     function isQuestionOrExclamationToken(node: Node): node is QuestionToken | ExclamationToken;
     function isIdentifierOrThisTypeNode(node: Node): node is Identifier | ThisTypeNode;
     function isReadonlyKeywordOrPlusOrMinusToken(node: Node): node is ReadonlyKeyword | PlusToken | MinusToken;

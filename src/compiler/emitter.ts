@@ -266,7 +266,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
-    JSDocImportTypeTag,
+    JSDocImportTag,
     JSDocNameReference,
     JSDocNonNullableType,
     JSDocNullableType,
@@ -2205,8 +2205,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return emitJSDocTypedefTag(node as JSDocTypedefTag);
                 case SyntaxKind.JSDocSeeTag:
                     return emitJSDocSeeTag(node as JSDocSeeTag);
-                case SyntaxKind.JSDocImportTypeTag:
-                    return emitJSDocImportTypeTag(node as JSDocImportTypeTag);
+                case SyntaxKind.JSDocImportTag:
+                    return emitJSDocImportTag(node as JSDocImportTag);
                 // SyntaxKind.JSDocPropertyTag (see JSDocParameterTag, above)
 
                 // Transformation nodes
@@ -4455,7 +4455,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitJSDocComment(tag.comment);
     }
 
-    function emitJSDocImportTypeTag(tag: JSDocImportTypeTag) {
+    function emitJSDocImportTag(tag: JSDocImportTag) {
         emitJSDocTagName(tag.tagName);
 
         writeSpace();

@@ -205,30 +205,30 @@ describe("unittests:: JSDocParsing", () => {
             );
 
             parsesCorrectly(
-                "importTypeTag1",
+                "importTag1",
                 `/**
-  * @importType foo from 'foo'
+  * @import foo from 'foo'
   */`,
             );
 
             parsesCorrectly(
-                "importTypeTag2",
+                "importTag2",
                 `/**
-  * @importType { foo } from 'foo'
+  * @import { foo } from 'foo'
   */`,
             );
 
             parsesCorrectly(
-                "importTypeTag3",
+                "importTag3",
                 `/**
-  * @importType * as types from 'foo'
+  * @import * as types from 'foo'
   */`,
             );
 
             parsesCorrectly(
-                "importTypeTag4",
+                "importTag4",
                 `/**
-  * @importType * as types from 'foo' comment part
+  * @import * as types from 'foo' comment part
   */`,
             );
 

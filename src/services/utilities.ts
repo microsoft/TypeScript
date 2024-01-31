@@ -187,7 +187,7 @@ import {
     isInternalModuleImportEqualsDeclaration,
     isJSDoc,
     isJSDocCommentContainingNode,
-    isJSDocImportTypeTag,
+    isJSDocImportTag,
     isJSDocLink,
     isJSDocLinkCode,
     isJSDocLinkLike,
@@ -258,7 +258,7 @@ import {
     isWhiteSpaceSingleLine,
     isYieldExpression,
     IterationStatement,
-    JSDocImportTypeTag,
+    JSDocImportTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkDisplayPart,
@@ -1246,7 +1246,7 @@ function getAdjustedLocationForDeclaration(node: Node, forRename: boolean) {
     }
 }
 
-function getAdjustedLocationForImportDeclaration(node: ImportDeclaration | JSDocImportTypeTag, forRename: boolean) {
+function getAdjustedLocationForImportDeclaration(node: ImportDeclaration | JSDocImportTag, forRename: boolean) {
     if (node.importClause) {
         if (node.importClause.name && node.importClause.namedBindings) {
             // do not adjust if we have both a name and named bindings
@@ -2575,7 +2575,7 @@ export function isModuleSpecifierLike(node: Node): node is StringLiteralLike {
     return isStringLiteralLike(node) && (
         isExternalModuleReference(node.parent) ||
         isImportDeclaration(node.parent) ||
-        isJSDocImportTypeTag(node.parent) ||
+        isJSDocImportTag(node.parent) ||
         isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) && node.parent.arguments[0] === node ||
         isImportCall(node.parent) && node.parent.arguments[0] === node
     );

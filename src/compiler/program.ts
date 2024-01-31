@@ -195,7 +195,7 @@ import {
     isImportTypeNode,
     isIncrementalCompilation,
     isInJSFile,
-    isJSDocImportTypeTag,
+    isJSDocImportTag,
     isLiteralImportTypeNode,
     isModifier,
     isModuleDeclaration,
@@ -3450,10 +3450,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         function collectJsDocImportTypeReferences(file: SourceFile) {
-            const r = /@importType/g;
+            const r = /@import/g;
             while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                 const node = getNodeAtPosition(file, r.lastIndex);
-                if (isJSDocImportTypeTag(node)) {
+                if (isJSDocImportTag(node)) {
                     const moduleNameExpr = getExternalModuleName(node);
                     if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text) {
                         setParentRecursive(node, /*incremental*/ false);
