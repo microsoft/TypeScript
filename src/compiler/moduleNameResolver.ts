@@ -2090,7 +2090,6 @@ function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidat
 /**
  * This function is only ever called with paths written in package.json files - never
  * module specifiers written in source files - and so it always allows the
-
  * candidate to end with a TS extension (but will also try substituting a JS extension for a TS extension).
  */
 function loadFileNameFromPackageJsonField(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
@@ -2459,15 +2458,9 @@ function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: st
     }
 
     const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
-        const fromFile = tryFile(candidate, onlyRecordFailures, state);
+        const fromFile = loadFileNameFromPackageJsonField(extensions, candidate, onlyRecordFailures, state);
         if (fromFile) {
-            const resolved = resolvedIfExtensionMatches(extensions, fromFile);
-            if (resolved) {
-                return noPackageId(resolved);
-            }
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.File_0_has_an_unsupported_extension_so_skipping_it, fromFile);
-            }
+            return noPackageId(fromFile);
         }
 
         // Even if extensions is DtsOnly, we can still look up a .ts file as a result of package.json "types"
@@ -2512,12 +2505,6 @@ function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: st
     if (!(state.features & NodeResolutionFeatures.EsmMode)) {
         return loadModuleFromFile(extensions, indexPath, onlyRecordFailuresForIndex, state);
     }
-}
-
-/** Resolve from an arbitrarily specified file. Return `undefined` if it has an unsupported extension. */
-function resolvedIfExtensionMatches(extensions: Extensions, path: string, resolvedUsingTsExtension?: boolean): PathAndExtension | undefined {
-    const ext = tryGetExtensionFromPath(path);
-    return ext !== undefined && extensionIsOk(extensions, ext) ? { path, ext, resolvedUsingTsExtension } : undefined;
 }
 
 /** True if `extension` is one of the supported `extensions`. */
