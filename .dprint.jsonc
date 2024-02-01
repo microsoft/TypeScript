@@ -56,8 +56,8 @@
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     "plugins": [
-        "https://plugins.dprint.dev/typescript-0.88.8.wasm",
+        "https://plugins.dprint.dev/typescript-0.88.9.wasm",
         "https://plugins.dprint.dev/json-0.19.1.wasm",
-        "https://plugins.dprint.dev/prettier-0.32.1.json@19aa403ef0862ba8c41164e3dc6f84c0b7a66c2b11e42726b23dd25e6302ada9"
+        "https://plugins.dprint.dev/prettier-0.35.0.json@0df49c4d878bb1051af2fa1d1f69ba6400f4b78633f49baa1f38954a6fd32b40"
     ]
 }

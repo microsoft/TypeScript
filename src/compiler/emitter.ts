@@ -3068,7 +3068,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             // If the number will be printed verbatim and it doesn't already contain a dot or an exponent indicator, add one
             // if the expression doesn't have any comments that will be emitted.
             return !(expression.numericLiteralFlags & TokenFlags.WithSpecifier)
-                && !text.includes(tokenToString(SyntaxKind.DotToken)!)
+                && !text.includes(tokenToString(SyntaxKind.DotToken))
                 && !text.includes(String.fromCharCode(CharacterCodes.E))
                 && !text.includes(String.fromCharCode(CharacterCodes.e));
         }
@@ -4131,6 +4131,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeSpace();
         nextPos = emitTokenWithComment(SyntaxKind.AsKeyword, nextPos, writeKeyword, node);
         writeSpace();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         nextPos = emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
         writeSpace();
         emit(node.name);

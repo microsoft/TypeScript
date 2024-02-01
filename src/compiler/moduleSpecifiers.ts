@@ -385,7 +385,7 @@ function computeModuleSpecifiers(
                 if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
                 // If the candidate import mode doesn't match the mode we're generating for, don't consider it
                 // TODO: maybe useful to keep around as an alternative option for certain contexts where the mode is overridable
-                if (importingSourceFile.impliedNodeFormat && importingSourceFile.impliedNodeFormat !== getModeForResolutionAtIndex(importingSourceFile, reason.index)) return undefined;
+                if (importingSourceFile.impliedNodeFormat && importingSourceFile.impliedNodeFormat !== getModeForResolutionAtIndex(importingSourceFile, reason.index, compilerOptions)) return undefined;
                 const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
                 // If the preference is for non relative and the module specifier is relative, ignore it
                 return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier) ?
@@ -437,7 +437,16 @@ function computeModuleSpecifiers(
                 redirectPathsSpecifiers = append(redirectPathsSpecifiers, local);
             }
             else if (pathIsBareSpecifier(local)) {
-                pathsSpecifiers = append(pathsSpecifiers, local);
+                if (pathContainsNodeModules(local)) {
+                    // We could be in this branch due to inappropriate use of `baseUrl`, not intentional `paths`
+                    // usage. It's impossible to reason about where to prioritize baseUrl-generated module
+                    // specifiers, but if they contain `/node_modules/`, they're going to trigger a portability
+                    // error, so *at least* don't prioritize those.
+                    relativeSpecifiers = append(relativeSpecifiers, local);
+                }
+                else {
+                    pathsSpecifiers = append(pathsSpecifiers, local);
+                }
             }
             else if (forAutoImport || !importedFileIsInNodeModules || modulePath.isInNodeModules) {
                 // Why this extra conditional, not just an `else`? If some path to the file contained
