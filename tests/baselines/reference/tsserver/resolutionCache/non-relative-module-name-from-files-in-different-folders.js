@@ -308,23 +308,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/product/src/file1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/product/src/feature/file2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/product/test/file4.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/product/test/src/file3.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/product/node_modules/module1/index.ts *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -332,7 +316,23 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts *new*
+/user/username/projects/myproject/product/node_modules/module1/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/product/src/feature/file2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/product/src/file1.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/product/test/file4.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/product/test/src/file3.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -372,13 +372,25 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/product/src/file1.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/node_modules/module2/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/product/node_modules/module1/index.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/product/src/feature/file2.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/product/src/file1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/product/test/file4.ts *changed*
@@ -389,18 +401,6 @@ ScriptInfos::
 /user/username/projects/myproject/product/test/src/file3.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/product/node_modules/module1/index.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/node_modules/module2/index.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
@@ -463,13 +463,25 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/product/src/file1.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/node_modules/module2/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/product/node_modules/module1/index.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/product/src/feature/file2.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/product/src/file1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/product/test/file4.ts *changed*
@@ -480,17 +492,5 @@ ScriptInfos::
 /user/username/projects/myproject/product/test/src/file3.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/product/node_modules/module1/index.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/node_modules/module2/index.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json

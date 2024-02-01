@@ -203,12 +203,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/c/f.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/c/tsconfig.json
 /a/b/app.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/c/tsconfig.json
+/a/c/f.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/c/tsconfig.json
 
@@ -408,24 +408,24 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/a/c/tsconfig.json (Configured)
+/a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/b/tsconfig.json (Configured) *new*
+/a/c/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/c/f.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /a/c/tsconfig.json
 /a/b/app.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /a/c/tsconfig.json
         /a/b/tsconfig.json *new*
+/a/c/f.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json
 
 Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
@@ -477,16 +477,16 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/c/f.ts *changed*
-    open: false *changed*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/c/tsconfig.json
 /a/b/app.ts (Open)
     version: Text-1
     containingProjects: 2
         /a/c/tsconfig.json
         /a/b/tsconfig.json
+/a/c/f.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json
 
 Configured project: /a/c/tsconfig.json hasOpenRef:: false isClosed: false
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
@@ -538,16 +538,16 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/c/f.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/c/tsconfig.json
 /a/b/app.ts *changed*
     open: false *changed*
     version: Text-1
     containingProjects: 2
         /a/c/tsconfig.json
         /a/b/tsconfig.json
+/a/c/f.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json
 
 Configured project: /a/c/tsconfig.json hasOpenRef:: false isClosed: false
 Configured project: /a/b/tsconfig.json hasOpenRef:: false isClosed: false
@@ -617,23 +617,23 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/a/c/tsconfig.json (Configured)
+/a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/b/tsconfig.json (Configured) *deleted*
+/a/c/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/c/f.ts (Open) *changed*
-    open: true *changed*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/c/tsconfig.json
 /a/b/app.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /a/c/tsconfig.json
         /a/b/tsconfig.json *deleted*
+/a/c/f.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json
 
 Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false

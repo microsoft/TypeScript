@@ -267,6 +267,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/compositea/tsconfig.json
 /user/username/projects/myproject/compositea/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -276,10 +280,6 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/compositea/tsconfig.json
 /user/username/projects/myproject/dist/compositeb/b.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/compositea/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/compositea/tsconfig.json
@@ -513,6 +513,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/myproject/compositea/tsconfig.json
+        /user/username/projects/myproject/compositec/tsconfig.json *new*
 /user/username/projects/myproject/compositea/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -521,23 +526,18 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/compositea/tsconfig.json
-/user/username/projects/myproject/dist/compositeb/b.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/compositea/tsconfig.json
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /user/username/projects/myproject/compositea/tsconfig.json
-        /user/username/projects/myproject/compositec/tsconfig.json *new*
-/user/username/projects/myproject/compositec/c.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/compositec/tsconfig.json
 /user/username/projects/myproject/compositeb/b.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/compositec/tsconfig.json
+/user/username/projects/myproject/compositec/c.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/compositec/tsconfig.json
+/user/username/projects/myproject/dist/compositeb/b.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/compositea/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/compositea/a2.ts 1:: WatchInfo: /user/username/projects/myproject/compositea/a2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/compositea/tsconfig.json
@@ -561,6 +561,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/compositea/tsconfig.json
+        /user/username/projects/myproject/compositec/tsconfig.json
 /user/username/projects/myproject/compositea/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -570,23 +575,18 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /user/username/projects/myproject/compositea/tsconfig.json
-/user/username/projects/myproject/dist/compositeb/b.d.ts
+/user/username/projects/myproject/compositeb/b.ts
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/compositea/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 2
-        /user/username/projects/myproject/compositea/tsconfig.json
         /user/username/projects/myproject/compositec/tsconfig.json
 /user/username/projects/myproject/compositec/c.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/compositec/tsconfig.json
-/user/username/projects/myproject/compositeb/b.ts
+/user/username/projects/myproject/dist/compositeb/b.d.ts
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/compositec/tsconfig.json
+        /user/username/projects/myproject/compositea/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/compositea/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/compositea/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms

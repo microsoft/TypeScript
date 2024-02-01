@@ -86,12 +86,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/commonFile1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/commonFile1.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -154,15 +154,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/commonFile1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
+/user/username/projects/myproject/commonFile1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/myproject/commonFile2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -217,15 +217,15 @@ Timeout callback:: count: 2
 4: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 0
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/user/username/projects/myproject/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/myproject/tsconfig.json
@@ -387,27 +387,27 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/commonFile1.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 1 *changed*
-        /user/username/projects/myproject/tsconfig.json *new*
-        /dev/null/inferredProject1* *deleted*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/tsconfig.json *new*
         /dev/null/inferredProject2*
+        /dev/null/inferredProject1* *deleted*
+/user/username/projects/myproject/commonFile1.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/tsconfig.json *new*
         /dev/null/inferredProject1* *deleted*
 /user/username/projects/myproject/commonFile2.ts (Open)
     version: SVC-1-0
@@ -457,14 +457,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/commonFile1.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/tsconfig.json *deleted*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /dev/null/inferredProject2*
+        /user/username/projects/myproject/tsconfig.json *deleted*
+/user/username/projects/myproject/commonFile1.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
         /user/username/projects/myproject/tsconfig.json *deleted*
 /user/username/projects/myproject/commonFile2.ts (Open)
     version: SVC-1-0
@@ -539,14 +539,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/commonFile1.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject2*
+        /dev/null/inferredProject1* *new*
+/user/username/projects/myproject/commonFile1.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 1 *changed*
         /dev/null/inferredProject1* *new*
 /user/username/projects/myproject/commonFile2.ts (Open)
     version: SVC-1-0

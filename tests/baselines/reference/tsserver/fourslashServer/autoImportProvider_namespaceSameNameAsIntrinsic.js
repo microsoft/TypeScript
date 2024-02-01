@@ -85,10 +85,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/fp-ts/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -99,6 +95,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/node_modules/fp-ts/package.json (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -238,22 +238,22 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/fp-ts/package.json (Open)
+/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /tsconfig.json
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -269,10 +269,6 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /tsconfig.json *new*
-/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
 /node_modules/fp-ts/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -281,6 +277,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/fp-ts/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {

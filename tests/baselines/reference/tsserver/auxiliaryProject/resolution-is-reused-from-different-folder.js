@@ -171,8 +171,8 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/users/projects/myproject/some/index.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/users/projects/myproject/folder/random.ts *new*
@@ -187,8 +187,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/users/projects/myproject/some/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -299,20 +299,19 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/auxiliaryProject1* (Auxiliary) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
-/dev/null/auxiliaryProject1* (Auxiliary) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/user/users/projects/myproject/some/index.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 2 *changed*
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
         /dev/null/inferredProject1*
-        /dev/null/auxiliaryProject1* *new*
 /user/users/projects/myproject/folder/random.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -326,10 +325,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /user/users/projects/myproject/node_modules/yargs/callback.js *new*
     version: Text-1
     containingProjects: 1
@@ -338,3 +333,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/auxiliaryProject1*
+/user/users/projects/myproject/some/index.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/auxiliaryProject1* *new*

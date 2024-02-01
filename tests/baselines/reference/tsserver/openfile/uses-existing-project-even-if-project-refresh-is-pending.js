@@ -170,12 +170,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/someuser/projects/myproject/src/a.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/someuser/projects/myproject/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/someuser/projects/myproject/tsconfig.json
+/user/someuser/projects/myproject/src/a.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/someuser/projects/myproject/tsconfig.json
 
@@ -247,12 +247,12 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/someuser/projects/myproject/src/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/someuser/projects/myproject/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /user/someuser/projects/myproject/tsconfig.json
+/user/someuser/projects/myproject/src/a.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/someuser/projects/myproject/tsconfig.json
 /user/someuser/projects/myproject/src/b.ts (Open) *new*

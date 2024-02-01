@@ -103,11 +103,11 @@ project (External) *new*
     projectProgramVersion: 0
 
 ScriptInfos::
-/a/b/f1.js *new*
+/a/b/constructor.js *new*
     version: Text-1
     containingProjects: 1
         project
-/a/b/constructor.js *new*
+/a/b/f1.js *new*
     version: Text-1
     containingProjects: 1
         project

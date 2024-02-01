@@ -96,12 +96,12 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/b/commonFile2.ts *new*
     version: Text-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 

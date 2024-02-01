@@ -238,16 +238,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/usage/usage.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/usage/tsconfig.json
 /user/username/projects/myproject/dependency/fns.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/usage/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/usage/usage.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/usage/tsconfig.json
 

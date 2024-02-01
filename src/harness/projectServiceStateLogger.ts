@@ -1,5 +1,6 @@
 import {
     arrayFrom,
+    compareStringsCaseSensitive,
     Debug,
     noop,
 } from "./_namespaces/ts";
@@ -37,6 +38,8 @@ enum Diff {
     Deleted = " *deleted*",
 }
 
+type StateItemLog = [string, string[], string[]?];
+
 export function patchServiceForStateBaseline(service: ProjectService) {
     if (!service.logger.isTestLogger || !service.logger.hasLevel(LogLevel.verbose)) return;
     if (service.baseline !== noop) return; // Already patched
@@ -60,10 +63,15 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         }
     };
 
-    function sendLogsToLogger(title: string, logs: string[][] | undefined) {
+    function sendLogsToLogger(title: string, logs: StateItemLog[] | undefined) {
         if (!logs) return;
         logger.log(title);
-        logs.forEach(l => l.forEach(s => logger.log(s)));
+        logs.sort((a, b) => compareStringsCaseSensitive(a[0], b[0]))
+            .forEach(([title, propertyLogs, additionalPropertyLogs]) => {
+                logger.log(title);
+                propertyLogs.forEach(s => logger.log(s));
+                additionalPropertyLogs?.forEach(s => logger.log(s));
+            });
         logger.log("");
     }
 
@@ -73,43 +81,76 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         return baselineState(
             [service.externalProjects, service.configuredProjects, service.inferredProjects, autoImportProviderProjects, auxiliaryProjects],
             projects,
-            printProjectWorker,
+            (logs, project, data) => {
+                if (project.autoImportProviderHost) autoImportProviderProjects.push(project.autoImportProviderHost);
+                if (project.noDtsResolutionProject) auxiliaryProjects.push(project.noDtsResolutionProject);
+                let projectDiff = newOrDeleted(project, projects, data);
+                const projectPropertyLogs = [] as string[];
+                allPropertiesOfProjectData.forEach(key => {
+                    let value: Project[typeof key] | string = project[key];
+                    if (key === "autoImportProviderHost" || key === "noDtsResolutionProject") {
+                        if (project[key]) value = (project[key] as Project).projectName;
+                        else if (project[key] === undefined && data?.[key] === undefined) return;
+                    }
+                    projectDiff = printProperty(PrintPropertyWhen.Always, data, key, project[key], projectDiff, projectPropertyLogs, value);
+                });
+                logs.push([`${project.projectName} (${ProjectKind[project.projectKind]})${projectDiff}`, projectPropertyLogs]);
+                return projectDiff;
+            },
             project => ({
                 projectStateVersion: project.projectStateVersion,
                 projectProgramVersion: project.projectProgramVersion,
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,
             }),
-            printProject,
         );
-
-        function printProject(logs: string[][], project: Project, data: ProjectData | undefined) {
-            if (project.autoImportProviderHost) autoImportProviderProjects.push(project.autoImportProviderHost);
-            if (project.noDtsResolutionProject) auxiliaryProjects.push(project.noDtsResolutionProject);
-            return printProjectWorker(logs, project, data);
-        }
-
-        function printProjectWorker(logs: string[][], project: Project, data: ProjectData | undefined) {
-            let projectDiff = newOrDeleted(project, projects, data);
-            const projectPropertyLogs = [] as string[];
-            allPropertiesOfProjectData.forEach(key => {
-                let value: Project[typeof key] | string = project[key];
-                if (key === "autoImportProviderHost" || key === "noDtsResolutionProject") {
-                    if (project[key]) value = (project[key] as Project).projectName;
-                    else if (project[key] === undefined && data?.[key] === undefined) return;
-                }
-                projectDiff = printProperty(projectDiff, projectPropertyLogs, data, key, project[key], value, PrintPropertyWhen.Always);
-            });
-            logs.push([`${project.projectName} (${ProjectKind[project.projectKind]})${projectDiff}`], projectPropertyLogs);
-            return projectDiff;
-        }
     }
 
     function baselineScriptInfos() {
         return baselineState(
             [service.filenameToScriptInfo],
             scriptInfos,
-            printScriptInfoWorker,
+            (logs, info, data) => {
+                let infoDiff = newOrDeleted(info, scriptInfos, data);
+                const infoPropertyLogs = [] as string[];
+                infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", info.isScriptOpen(), infoDiff, infoPropertyLogs);
+                infoDiff = printProperty(PrintPropertyWhen.Always, data, "version", info.textStorage.getVersion(), infoDiff, infoPropertyLogs);
+                infoDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "pendingReloadFromDisk", info.textStorage.pendingReloadFromDisk, infoDiff, infoPropertyLogs);
+                const containingProjectsLogs = [] as string[];
+                let containingProjectsDiff = Diff.None;
+                info.containingProjects.forEach(project =>
+                    containingProjectsDiff = printPropertyWorker(
+                        PrintPropertyWhen.Always,
+                        `    ${project.projectName}`,
+                        containingProjectsLogs,
+                        containingProjectsDiff,
+                        !!data && !data.containingProjects.has(project),
+                        Diff.New,
+                        project,
+                    )
+                );
+                const infoProjects = new Set(info.containingProjects);
+                data?.containingProjects.forEach(project => {
+                    if (infoProjects.has(project)) return;
+                    containingProjectsDiff = Diff.Change;
+                    containingProjectsLogs.push(`        ${project.projectName}${Diff.Deleted}`);
+                });
+                infoDiff = printPropertyWorker(
+                    PrintPropertyWhen.Always,
+                    `containingProjects: ${info.containingProjects.length}`,
+                    infoPropertyLogs,
+                    infoDiff,
+                    !!containingProjectsDiff,
+                    Diff.Change,
+                    info.containingProjects,
+                );
+                logs.push([
+                    `${info.fileName}${info.isScriptOpen() ? " (Open)" : ""}${infoDiff}`,
+                    infoPropertyLogs,
+                    containingProjectsLogs,
+                ]);
+                return infoDiff;
+            },
             info => ({
                 open: info.isScriptOpen(),
                 version: info.textStorage.getVersion(),
@@ -117,75 +158,15 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 containingProjects: new Set(info.containingProjects),
             }),
         );
-
-        function printScriptInfoWorker(logs: string[][], info: ScriptInfo, data: ScriptInfoData | undefined) {
-            let infoDiff = newOrDeleted(info, scriptInfos, data);
-            const infoPropertyLogs = [] as string[];
-
-            infoDiff = printInfoProperty("open", info.isScriptOpen(), PrintPropertyWhen.Changed);
-            infoDiff = printInfoProperty("version", info.textStorage.getVersion(), PrintPropertyWhen.Always);
-            infoDiff = printInfoProperty("pendingReloadFromDisk", info.textStorage.pendingReloadFromDisk, PrintPropertyWhen.TruthyOrChangedOrNew);
-            const containingProjectsLogs = [] as string[];
-            let containingProjectsDiff = Diff.None;
-            info.containingProjects.forEach(project =>
-                containingProjectsDiff = printPropertyWorker(
-                    containingProjectsDiff,
-                    containingProjectsLogs,
-                    !!data && !data.containingProjects.has(project),
-                    Diff.New,
-                    project,
-                    `    ${project.projectName}`,
-                    PrintPropertyWhen.Always,
-                )
-            );
-            const infoProjects = new Set(info.containingProjects);
-            data?.containingProjects.forEach(project => {
-                if (infoProjects.has(project)) return;
-                containingProjectsDiff = Diff.Change;
-                containingProjectsLogs.push(`        ${project.projectName}${Diff.Deleted}`);
-            });
-            infoDiff = printPropertyWorker(
-                infoDiff,
-                infoPropertyLogs,
-                !!containingProjectsDiff,
-                Diff.Change,
-                info.containingProjects,
-                `containingProjects: ${info.containingProjects.length}`,
-                PrintPropertyWhen.Always,
-            );
-            logs.push(
-                [`${info.fileName}${info.isScriptOpen() ? " (Open)" : ""}${infoDiff}`],
-                infoPropertyLogs,
-                containingProjectsLogs,
-            );
-            return infoDiff;
-
-            function printInfoProperty<Key extends keyof ScriptInfoData>(
-                key: Key,
-                value: ScriptInfoData[Key],
-                printWhen: PrintPropertyWhen,
-            ) {
-                return printProperty(
-                    infoDiff,
-                    infoPropertyLogs,
-                    data,
-                    key,
-                    value,
-                    value,
-                    printWhen,
-                );
-            }
-        }
     }
 
     function baselineState<T, Data>(
         currentCaches: (T[] | Map<any, T>)[],
         dataMap: Map<T, Data>,
-        printWorker: (logs: string[][], current: T, data: Data | undefined) => Diff,
+        printWorker: (logs: StateItemLog[], current: T, data: Data | undefined) => Diff,
         toData: (current: T) => Data,
-        printCurrentWorker?: (logs: string[][], current: T, data: Data | undefined) => Diff,
     ) {
-        const logs = [] as string[][];
+        const logs = [] as StateItemLog[];
         let hasChange = false;
         const currentSet = new Set<T>();
         currentCaches.forEach(currentCache => currentCache.forEach(printCurrent));
@@ -203,7 +184,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         function printCurrent(current: T) {
             if (!current) return;
             currentSet.add(current);
-            if ((printCurrentWorker || printWorker)(logs, current, dataMap.get(current))) {
+            if (printWorker(logs, current, dataMap.get(current))) {
                 hasChange = true;
                 dataMap.set(current, toData(current));
             }
@@ -220,33 +201,33 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         Changed,
     }
     function printProperty<Data, Key extends keyof Data & string>(
-        dataDiff: Diff,
-        propertyLogs: string[],
+        printWhen: PrintPropertyWhen,
         data: Data | undefined,
         key: Key,
         value: Data[Key],
-        stringValue: Data[Key] | string,
-        printWhen: PrintPropertyWhen,
+        dataDiff: Diff,
+        propertyLogs: string[],
+        stringValue?: Data[Key] | string,
     ) {
         return printPropertyWorker(
-            dataDiff,
+            printWhen,
+            `${key}: ${stringValue === undefined ? value : stringValue}`,
             propertyLogs,
+            dataDiff,
             !!data && data[key] !== value,
             Diff.Change,
             value,
-            `${key}: ${stringValue}`,
-            printWhen,
         );
     }
 
     function printPropertyWorker(
-        dataDiff: Diff,
+        printWhen: PrintPropertyWhen,
+        stringValue: string,
         propertyLogs: string[],
+        dataDiff: Diff,
         propertyChanged: boolean,
         propertyChangeDiff: Diff.Change | Diff.New,
         value: any,
-        stringValue: string,
-        printWhen: PrintPropertyWhen,
     ) {
         const propertyDiff = propertyChanged ? propertyChangeDiff : Diff.None;
         const result = !dataDiff && propertyDiff ? propertyChangeDiff : dataDiff;

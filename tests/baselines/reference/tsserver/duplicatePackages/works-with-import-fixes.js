@@ -242,19 +242,19 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/user.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
-/b/user.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
 /a/node_modules/foo/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/a/user.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json
 /b/node_modules/foo/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/b/user.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
@@ -313,20 +313,20 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/user.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
-/b/user.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
 /a/node_modules/foo/index.d.ts
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/a/user.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json
 /b/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/b/user.ts (Open) *changed*
+    open: true *changed*
     version: Text-1
     containingProjects: 1
         /tsconfig.json

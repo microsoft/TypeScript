@@ -418,23 +418,23 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
+/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json
 /node_modules/@angular/forms/forms.d.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /tsconfig.json *new*
-/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
 
 Default Project for /node_modules/@angular/forms/forms.d.ts:: /tsconfig.json
 After getAutoImportProvider

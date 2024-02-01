@@ -184,14 +184,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/index.ts *new*
     version: Text-1
     containingProjects: 1
         /a/tsconfig.json
+/a/package.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -383,23 +383,27 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/inferredProject1* (Inferred)
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+/dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/package.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /a/tsconfig.json
         /dev/null/autoImportProviderProject1* *new*
+/a/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/c/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /c/tsconfig.json
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
@@ -418,10 +422,6 @@ ScriptInfos::
         /a/tsconfig.json
         /dev/null/inferredProject1*
         /c/tsconfig.json *new*
-/c/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /c/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -584,30 +584,42 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /c/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/b/tsconfig.json (Configured) *new*
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
     projectStateVersion: 1
     projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/a/package.json (Open)
-    version: SVC-1-0
+/a/index.d.ts *new*
+    version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /b/tsconfig.json
 /a/index.ts
     version: Text-1
     containingProjects: 2
         /a/tsconfig.json
         /dev/null/autoImportProviderProject1*
+/a/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /b/tsconfig.json
+/c/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /c/tsconfig.json
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 4 *changed*
@@ -629,18 +641,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /c/tsconfig.json
         /b/tsconfig.json *new*
-/c/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /c/tsconfig.json
-/b/b.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /b/tsconfig.json
-/a/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -745,15 +745,30 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/a/package.json (Open)
-    version: SVC-1-0
+/a/index.d.ts
+    version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /b/tsconfig.json
+/a/index.d.ts.map *new*
+    version: Text-1
+    containingProjects: 0
 /a/index.ts
     version: Text-1
     containingProjects: 2
         /a/tsconfig.json
         /dev/null/autoImportProviderProject1*
+/a/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /b/tsconfig.json
+/c/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /c/tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 4
@@ -775,18 +790,3 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /c/tsconfig.json
         /b/tsconfig.json
-/c/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /c/tsconfig.json
-/b/b.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /b/tsconfig.json
-/a/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /b/tsconfig.json
-/a/index.d.ts.map *new*
-    version: Text-1
-    containingProjects: 0

@@ -243,16 +243,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/projects/project2/class2.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 
@@ -416,31 +416,31 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/projects/project2/tsconfig.json (Configured)
+/user/username/projects/myproject/projects/project1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/projects/project1/tsconfig.json (Configured) *new*
+/user/username/projects/myproject/projects/project2/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
-/user/username/projects/myproject/projects/project1/class1.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/projects/project2/tsconfig.json
         /user/username/projects/myproject/projects/project1/tsconfig.json *new*
+/user/username/projects/myproject/projects/project1/class1.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -462,10 +462,10 @@ Timeout callback:: count: 3
 4: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
+/user/username/projects/myproject/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
-/user/username/projects/myproject/projects/project1/tsconfig.json (Configured) *changed*
+/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
 
@@ -576,27 +576,23 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
+/user/username/projects/myproject/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
-/user/username/projects/myproject/projects/project1/tsconfig.json (Configured) *changed*
+/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
-/user/username/projects/myproject/projects/project1/class1.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/projects/project2/tsconfig.json
         /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project1/class1.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -605,6 +601,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
@@ -660,11 +660,11 @@ Timeout callback:: count: 2
 6: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3 *changed*
-    projectProgramVersion: 2
 /user/username/projects/myproject/projects/project1/tsconfig.json (Configured)
     projectStateVersion: 2
+    projectProgramVersion: 2
+/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
     projectProgramVersion: 2
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -766,37 +766,37 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3
-    projectProgramVersion: 3 *changed*
 /user/username/projects/myproject/projects/project1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
+/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
-/user/username/projects/myproject/projects/project1/class1.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/projects/project2/tsconfig.json
         /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project1/class1.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project1/class3.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class3.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project1/tsconfig.json
-/user/username/projects/myproject/projects/project1/class3.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 
@@ -865,39 +865,39 @@ Timeout callback:: count: 2
 8: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
-    projectStateVersion: 4 *changed*
-    projectProgramVersion: 3
 /user/username/projects/myproject/projects/project1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
+/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 3
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
-/user/username/projects/myproject/projects/project1/class1.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/projects/project2/tsconfig.json
         /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project1/class1.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.ts (Open)
     version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project1/tsconfig.json
-/user/username/projects/myproject/projects/project1/class3.ts
-    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project1/tsconfig.json
 /user/username/projects/myproject/projects/project1/class3.d.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
         /user/username/projects/myproject/projects/project2/tsconfig.json *deleted*
+/user/username/projects/myproject/projects/project1/class3.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -995,12 +995,12 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
-    projectStateVersion: 4
-    projectProgramVersion: 4 *changed*
 /user/username/projects/myproject/projects/project1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
+/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 4 *changed*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
@@ -1056,12 +1056,12 @@ Timeout callback:: count: 2
 10: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
-    projectStateVersion: 5 *changed*
-    projectProgramVersion: 4
 /user/username/projects/myproject/projects/project1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
+/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5 *changed*
+    projectProgramVersion: 4
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -1162,36 +1162,36 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
-    projectStateVersion: 5
-    projectProgramVersion: 5 *changed*
 /user/username/projects/myproject/projects/project1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
+/user/username/projects/myproject/projects/project2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 5 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
-/user/username/projects/myproject/projects/project1/class1.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/projects/project2/tsconfig.json
         /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project1/class1.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project1/tsconfig.json
+/user/username/projects/myproject/projects/project1/class3.d.ts *new*
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class3.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project1/tsconfig.json
-/user/username/projects/myproject/projects/project1/class3.d.ts *new*
-    version: Text-2
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json

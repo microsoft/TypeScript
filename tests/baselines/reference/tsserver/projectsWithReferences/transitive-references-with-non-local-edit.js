@@ -318,11 +318,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/c/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/b/index.ts *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
@@ -330,11 +326,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/refs/a.d.ts *new*
+/user/username/projects/myproject/b/index.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
-/a/lib/lib.d.ts *new*
+/user/username/projects/myproject/c/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/refs/a.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
@@ -361,8 +361,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/c/index.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/a/index.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
 /user/username/projects/myproject/b/index.ts *changed*
@@ -370,15 +374,11 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/a/index.ts
-    version: Text-1
+/user/username/projects/myproject/c/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
 /user/username/projects/myproject/refs/a.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/c/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
@@ -427,8 +427,12 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
-/user/username/projects/myproject/c/index.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/a/index.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
 /user/username/projects/myproject/b/index.ts *changed*
@@ -436,15 +440,11 @@ ScriptInfos::
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/a/index.ts
-    version: Text-1
+/user/username/projects/myproject/c/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
 /user/username/projects/myproject/refs/a.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/c/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json

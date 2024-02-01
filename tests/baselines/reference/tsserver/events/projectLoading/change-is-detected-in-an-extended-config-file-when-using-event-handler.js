@@ -177,12 +177,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/b/b.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/b/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/b/tsconfig.json
+/user/username/projects/b/b.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/b/tsconfig.json
 

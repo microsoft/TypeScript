@@ -238,16 +238,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/b/b.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/b/tsconfig.json
 /user/username/projects/a/a.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/b/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/b/b.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/b/tsconfig.json
 
@@ -439,25 +439,25 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/b/tsconfig.json (Configured)
+/user/username/projects/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/a/tsconfig.json (Configured) *new*
+/user/username/projects/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/b/b.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/b/tsconfig.json
-/user/username/projects/a/a.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /user/username/projects/b/tsconfig.json
-        /user/username/projects/a/tsconfig.json *new*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/b/tsconfig.json
         /user/username/projects/a/tsconfig.json *new*
+/user/username/projects/a/a.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/b/tsconfig.json
+        /user/username/projects/a/tsconfig.json *new*
+/user/username/projects/b/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/b/tsconfig.json

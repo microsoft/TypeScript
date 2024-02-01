@@ -93,12 +93,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/a/b/main.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/a/b/main.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -177,12 +177,12 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/a/b/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/a/b/main.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/username/projects/myproject/a/c/main.ts (Open) *new*
@@ -274,12 +274,12 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/a/b/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/a/b/main.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/username/projects/myproject/a/c/main.ts (Open)
@@ -351,12 +351,12 @@ Timeout callback:: count: 2
 4: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/a/b/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 0
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 3
     projectProgramVersion: 3
+/user/username/projects/myproject/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/myproject/a/b/tsconfig.json
@@ -632,23 +632,23 @@ FsWatches::
   {}
 
 Projects::
-/user/username/projects/myproject/a/b/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 4 *changed*
+/user/username/projects/myproject/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/myproject/a/b/main.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
         /user/username/projects/myproject/a/b/tsconfig.json *new*
         /dev/null/inferredProject1* *deleted*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /user/username/projects/myproject/a/c/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1

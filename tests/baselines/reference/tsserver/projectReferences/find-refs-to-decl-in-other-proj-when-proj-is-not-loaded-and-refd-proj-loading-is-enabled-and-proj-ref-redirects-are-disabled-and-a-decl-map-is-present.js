@@ -590,6 +590,14 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/a/tsconfig.json
+/user/username/projects/myproject/b/helper.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/b/tsconfig.json
+/user/username/projects/myproject/b/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/b/tsconfig.json
 /user/username/projects/myproject/b/lib/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -597,11 +605,3 @@ ScriptInfos::
 /user/username/projects/myproject/b/lib/index.d.ts.map *new*
     version: Text-1
     containingProjects: 0
-/user/username/projects/myproject/b/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/b/tsconfig.json
-/user/username/projects/myproject/b/helper.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/b/tsconfig.json

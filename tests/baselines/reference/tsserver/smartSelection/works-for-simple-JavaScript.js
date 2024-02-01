@@ -64,12 +64,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/file.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/file.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 

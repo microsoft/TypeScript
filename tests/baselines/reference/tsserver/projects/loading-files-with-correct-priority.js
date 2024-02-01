@@ -386,14 +386,14 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/a/main.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/tsconfig.json
 /a/main.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
+/a/main.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -659,15 +659,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/main.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/tsconfig.json
 /a/main.js *changed*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
+/a/main.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json
 
 Before request
 
@@ -869,25 +869,25 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject2* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/main.js (Open) *new*
+/a/main.js *deleted*
     version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*
+    containingProjects: 0
 /a/main.ts *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /a/tsconfig.json *deleted*
-/a/main.js *deleted*
+/main.js (Open) *new*
     version: SVC-1-0
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject2*

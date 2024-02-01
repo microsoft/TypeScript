@@ -200,15 +200,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json
 /users/username/projects/a/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /users/username/projects/a/tsconfig.json
 /users/username/projects/a/c/fc.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/a/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /users/username/projects/a/tsconfig.json
@@ -391,6 +391,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /users/username/projects/a/tsconfig.json
+        /users/username/projects/b/tsconfig.json *new*
 /users/username/projects/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -399,11 +404,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /users/username/projects/a/tsconfig.json
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /users/username/projects/a/tsconfig.json
-        /users/username/projects/b/tsconfig.json *new*
 /users/username/projects/b/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -478,6 +478,11 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /users/username/projects/a/tsconfig.json
+        /users/username/projects/b/tsconfig.json
 /users/username/projects/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -487,11 +492,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /users/username/projects/a/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 2
-        /users/username/projects/a/tsconfig.json
-        /users/username/projects/b/tsconfig.json
 /users/username/projects/b/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -566,6 +566,11 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /users/username/projects/a/tsconfig.json
+        /users/username/projects/b/tsconfig.json
 /users/username/projects/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -574,11 +579,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /users/username/projects/a/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 2
-        /users/username/projects/a/tsconfig.json
-        /users/username/projects/b/tsconfig.json
 /users/username/projects/b/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1

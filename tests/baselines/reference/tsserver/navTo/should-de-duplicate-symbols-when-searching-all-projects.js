@@ -495,12 +495,12 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
 /a/index.ts (Open) *changed*

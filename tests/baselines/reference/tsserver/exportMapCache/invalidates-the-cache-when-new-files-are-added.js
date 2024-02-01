@@ -254,13 +254,13 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /a.ts (Open) *new*
@@ -447,13 +447,13 @@ Timeout callback:: count: 2
 4: *ensureProjectForOpenFiles* *new*
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 Info seq  [hh:mm:ss:mss] Running: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/a2.ts 500 undefined WatchType: Closed Script info
@@ -551,13 +551,13 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 
 ScriptInfos::
 /a.ts (Open)

@@ -164,10 +164,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -178,6 +174,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -369,19 +369,14 @@ watchedDirectoriesRecursive *deleted*::
   {}
 
 Projects::
-/tests/cases/fourslash/server/buttonClass/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/tests/cases/fourslash/server/buttonClass/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 1 *changed*
-        /tests/cases/fourslash/server/buttonClass/tsconfig.json *new*
-        /dev/null/inferredProject1* *deleted*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
@@ -394,6 +389,11 @@ ScriptInfos::
         /dev/null/inferredProject1* *deleted*
 /lib.decorators.legacy.d.ts *changed*
     version: Text-1
+    containingProjects: 1 *changed*
+        /tests/cases/fourslash/server/buttonClass/tsconfig.json *new*
+        /dev/null/inferredProject1* *deleted*
+/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open) *changed*
+    version: SVC-1-0
     containingProjects: 1 *changed*
         /tests/cases/fourslash/server/buttonClass/tsconfig.json *new*
         /dev/null/inferredProject1* *deleted*
@@ -488,10 +488,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /tests/cases/fourslash/server/buttonClass/tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -504,7 +500,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json
-/tests/cases/fourslash/server/buttonClass/Source.ts (Open)
+/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json
@@ -514,6 +510,10 @@ ScriptInfos::
 /tests/cases/fourslash/server/BaseClass/Source.ts *new*
     version: Text-1
     containingProjects: 0
+/tests/cases/fourslash/server/buttonClass/Source.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /tests/cases/fourslash/server/buttonClass/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {

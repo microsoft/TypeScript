@@ -208,16 +208,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/client/linktofolder2/module2.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/client/folder1/module1.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/client/linktofolder2/module2.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
@@ -324,16 +324,16 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/client/linktofolder2/module2.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/client/folder1/module1.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
+/user/username/projects/myproject/client/linktofolder2/module2.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/client/linktofolder2/module3.ts *new*

@@ -365,11 +365,11 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/a/b/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /a/b/proj1 (External) *deleted*
     projectStateVersion: 2
+    projectProgramVersion: 1
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::

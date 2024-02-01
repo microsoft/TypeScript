@@ -561,15 +561,15 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
 /user/username/projects/container/compositeExec/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/container/compositeExec/tsconfig.json
 /user/username/projects/container/lib/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/container/compositeExec/tsconfig.json
@@ -1007,34 +1007,34 @@ Projects::
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/container/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-/user/username/projects/container/lib/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /user/username/projects/container/exec/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+/user/username/projects/container/lib/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/container/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-/user/username/projects/container/compositeExec/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
-/user/username/projects/container/lib/index.ts *changed*
-    version: Text-1
-    containingProjects: 3 *changed*
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /user/username/projects/container/lib/tsconfig.json *new*
-        /user/username/projects/container/exec/tsconfig.json *new*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
         /user/username/projects/container/compositeExec/tsconfig.json
         /user/username/projects/container/lib/tsconfig.json *new*
         /user/username/projects/container/exec/tsconfig.json *new*
+/user/username/projects/container/compositeExec/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
 /user/username/projects/container/exec/index.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json *new*
+        /user/username/projects/container/exec/tsconfig.json *new*

@@ -489,16 +489,16 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/user/username/projects/project/src/common/input/keyboard.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json
 /user/username/projects/project/src/common/input/keyboard.test.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/project/src/common/input/keyboard.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json
 
@@ -713,27 +713,27 @@ Projects::
     projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-/user/username/projects/project/src/common/input/keyboard.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 2 *changed*
-        /user/username/projects/project/src/common/tsconfig.json
-        /user/username/projects/project/src/tsconfig.json *new*
-/user/username/projects/project/src/common/input/keyboard.test.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /user/username/projects/project/src/common/tsconfig.json
-        /user/username/projects/project/src/tsconfig.json *new*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/project/src/common/tsconfig.json
         /user/username/projects/project/src/tsconfig.json *new*
-/user/username/projects/project/src/terminal.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/project/src/tsconfig.json
 /user/username/projects/project/out/input/keyboard.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/src/tsconfig.json
+/user/username/projects/project/src/common/input/keyboard.test.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/project/src/common/tsconfig.json
+        /user/username/projects/project/src/tsconfig.json *new*
+/user/username/projects/project/src/common/input/keyboard.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 2 *changed*
+        /user/username/projects/project/src/common/tsconfig.json
+        /user/username/projects/project/src/tsconfig.json *new*
+/user/username/projects/project/src/terminal.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/project/src/tsconfig.json
 
@@ -895,24 +895,10 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/project/src/common/input/keyboard.ts (Open)
-    version: SVC-1-0
-    containingProjects: 2
-        /user/username/projects/project/src/common/tsconfig.json
-        /user/username/projects/project/src/tsconfig.json
-/user/username/projects/project/src/common/input/keyboard.test.ts
-    version: Text-1
-    containingProjects: 2
-        /user/username/projects/project/src/common/tsconfig.json
-        /user/username/projects/project/src/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/project/src/common/tsconfig.json
-        /user/username/projects/project/src/tsconfig.json
-/user/username/projects/project/src/terminal.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
         /user/username/projects/project/src/tsconfig.json
 /user/username/projects/project/out/input/keyboard.d.ts
     version: Text-1
@@ -921,3 +907,17 @@ ScriptInfos::
 /user/username/projects/project/out/input/keyboard.d.ts.map *new*
     version: Text-1
     containingProjects: 0
+/user/username/projects/project/src/common/input/keyboard.test.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/project/src/common/tsconfig.json
+        /user/username/projects/project/src/tsconfig.json
+/user/username/projects/project/src/common/input/keyboard.ts (Open)
+    version: SVC-1-0
+    containingProjects: 2
+        /user/username/projects/project/src/common/tsconfig.json
+        /user/username/projects/project/src/tsconfig.json
+/user/username/projects/project/src/terminal.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/project/src/tsconfig.json

@@ -295,15 +295,15 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/solution/api/tsconfig.json
 /user/username/projects/solution/api/src/server.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/solution/api/tsconfig.json
 /user/username/projects/solution/shared/src/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/solution/api/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/solution/api/tsconfig.json
@@ -728,34 +728,34 @@ Projects::
 /user/username/projects/solution/api/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/solution/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-/user/username/projects/solution/shared/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /user/username/projects/solution/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+/user/username/projects/solution/shared/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/solution/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-/user/username/projects/solution/api/src/server.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/solution/api/tsconfig.json
-/user/username/projects/solution/shared/src/index.ts *changed*
-    version: Text-1
-    containingProjects: 3 *changed*
-        /user/username/projects/solution/api/tsconfig.json
-        /user/username/projects/solution/shared/tsconfig.json *new*
-        /user/username/projects/solution/app/tsconfig.json *new*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
         /user/username/projects/solution/api/tsconfig.json
         /user/username/projects/solution/shared/tsconfig.json *new*
         /user/username/projects/solution/app/tsconfig.json *new*
+/user/username/projects/solution/api/src/server.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/solution/api/tsconfig.json
 /user/username/projects/solution/app/src/app.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/solution/app/tsconfig.json
+/user/username/projects/solution/shared/src/index.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /user/username/projects/solution/api/tsconfig.json
+        /user/username/projects/solution/shared/tsconfig.json *new*
+        /user/username/projects/solution/app/tsconfig.json *new*

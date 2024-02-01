@@ -454,9 +454,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/cache/node_modules/@types/node/index.d.ts *new*
-    version: Text-1
-    containingProjects: 0
 /a/cache/node_modules/@types/commander/index.d.ts *new*
     version: Text-1
     containingProjects: 0
@@ -464,3 +461,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
+/a/cache/node_modules/@types/node/index.d.ts *new*
+    version: Text-1
+    containingProjects: 0

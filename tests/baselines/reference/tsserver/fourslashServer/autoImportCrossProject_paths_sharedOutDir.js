@@ -102,10 +102,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.base.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -116,6 +112,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tsconfig.base.json (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -302,18 +302,14 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/packages/app/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
+/packages/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.base.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -345,6 +341,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /packages/app/tsconfig.json
+/tsconfig.base.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -500,18 +500,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
-/packages/app/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/packages/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.base.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -543,6 +539,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /packages/app/tsconfig.json
+/tsconfig.base.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -560,10 +560,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.base.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -595,3 +591,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /packages/app/tsconfig.json
+/tsconfig.base.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*

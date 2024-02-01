@@ -73,12 +73,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-untitled:/Users/matb/projects/san/^newFile.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+untitled:/Users/matb/projects/san/^newFile.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 

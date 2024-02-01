@@ -978,13 +978,13 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured)
+/a2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a2/tsconfig.json (Configured) *new*
+/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -993,6 +993,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/tsconfig.json
+/a2/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a2/tsconfig.json
 /b/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -1022,10 +1026,6 @@ ScriptInfos::
         /a/tsconfig.json
         /c/tsconfig.json *new*
         /a2/tsconfig.json *new*
-/a2/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /a2/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1217,6 +1217,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/tsconfig.json
+/a2/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /a2/tsconfig.json
 /b/index.ts
     version: Text-1
     containingProjects: 2
@@ -1245,11 +1250,6 @@ ScriptInfos::
     containingProjects: 3
         /a/tsconfig.json
         /c/tsconfig.json
-        /a2/tsconfig.json
-/a2/index.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
         /a2/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1930,16 +1930,16 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured)
+/a2/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /c/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/a2/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/b/tsconfig.json (Configured) *new*
+/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -1948,6 +1948,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/tsconfig.json
+/a2/index.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /a2/tsconfig.json
 /b/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -1955,6 +1959,10 @@ ScriptInfos::
         /a/tsconfig.json
         /a2/tsconfig.json
         /b/tsconfig.json *new*
+/b/other.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /b/tsconfig.json
 /c/index.ts
     version: Text-1
     containingProjects: 3
@@ -1982,14 +1990,6 @@ ScriptInfos::
         /c/tsconfig.json
         /a2/tsconfig.json
         /b/tsconfig.json *new*
-/a2/index.ts (Open)
-    version: Text-1
-    containingProjects: 1
-        /a2/tsconfig.json
-/b/other.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2434,11 +2434,19 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/tsconfig.json
+/a2/index.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /a2/tsconfig.json
 /b/index.ts (Open)
     version: Text-1
     containingProjects: 3
         /a/tsconfig.json
         /a2/tsconfig.json
+        /b/tsconfig.json
+/b/other.ts
+    version: Text-1
+    containingProjects: 1
         /b/tsconfig.json
 /c/index.ts (Open) *changed*
     open: true *changed*
@@ -2467,14 +2475,6 @@ ScriptInfos::
         /a/tsconfig.json
         /c/tsconfig.json
         /a2/tsconfig.json
-        /b/tsconfig.json
-/a2/index.ts (Open)
-    version: Text-1
-    containingProjects: 1
-        /a2/tsconfig.json
-/b/other.ts
-    version: Text-1
-    containingProjects: 1
         /b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:

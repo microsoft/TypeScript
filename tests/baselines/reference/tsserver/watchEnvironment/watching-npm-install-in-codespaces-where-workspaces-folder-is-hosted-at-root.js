@@ -187,16 +187,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/workspaces/somerepo/src/main.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /workspaces/somerepo/src/tsconfig.json
 /workspaces/somerepo/node_modules/@types/random-seed/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /workspaces/somerepo/src/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/workspaces/somerepo/src/main.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /workspaces/somerepo/src/tsconfig.json
 
@@ -348,10 +348,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/workspaces/somerepo/src/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /workspaces/somerepo/src/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -360,6 +356,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /workspaces/somerepo/src/tsconfig.json *deleted*
+/workspaces/somerepo/src/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -676,16 +676,16 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/workspaces/somerepo/src/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /workspaces/somerepo/src/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /workspaces/somerepo/src/tsconfig.json
 /workspaces/somerepo/node_modules/@types/random-seed/index.d.ts *new*
     version: Text-2
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json
+/workspaces/somerepo/src/main.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /workspaces/somerepo/src/tsconfig.json
 

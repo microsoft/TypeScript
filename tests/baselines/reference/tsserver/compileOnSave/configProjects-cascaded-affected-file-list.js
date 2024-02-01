@@ -193,10 +193,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -207,6 +203,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/lib/lib.d.ts *new*
@@ -262,10 +262,6 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -277,6 +273,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/lib/lib.d.ts
@@ -341,10 +341,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open) *changed*
-    version: SVC-1-1 *changed*
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts (Open)
     version: Text-1
     containingProjects: 1
@@ -355,6 +351,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
         /a/b/tsconfig.json
 /a/lib/lib.d.ts
@@ -385,10 +385,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open)
-    version: SVC-1-1
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
@@ -399,6 +395,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open)
+    version: SVC-1-1
     containingProjects: 1
         /a/b/tsconfig.json
 /a/lib/lib.d.ts

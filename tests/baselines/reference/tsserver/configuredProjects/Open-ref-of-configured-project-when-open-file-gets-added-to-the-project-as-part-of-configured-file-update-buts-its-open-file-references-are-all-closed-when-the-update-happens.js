@@ -206,12 +206,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/src/file1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file3.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/file1.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -339,12 +339,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/src/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/file1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/src/file2.ts (Open) *new*
@@ -402,13 +402,13 @@ FsWatches *deleted*::
   {}
 
 ScriptInfos::
-/a/b/src/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file3.ts (Open) *changed*
     open: true *changed*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/file1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/src/file2.ts (Open)
@@ -461,13 +461,13 @@ FsWatches::
   {}
 
 ScriptInfos::
+/a/b/file3.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
 /a/b/src/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
-/a/b/file3.ts (Open)
-    version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/src/file2.ts (Open)
@@ -519,13 +519,13 @@ FsWatches::
   {}
 
 ScriptInfos::
-/a/b/src/file1.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file3.ts *changed*
     open: false *changed*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/file1.ts
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/src/file2.ts (Open)
@@ -619,12 +619,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/src/file1.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/file1.ts
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/src/file2.ts (Open)
@@ -839,12 +839,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/src/file1.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/file1.ts
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/src/file2.ts (Open) *changed*

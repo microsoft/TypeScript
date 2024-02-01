@@ -188,15 +188,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/Logger.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/another.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -338,16 +338,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/Logger.ts *changed*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/another.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -418,16 +418,16 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/Logger.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/another.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -483,16 +483,16 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/Logger.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/another.ts (Open) *changed*
     open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -538,16 +538,16 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/Logger.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/another.ts (Open) *changed*
     version: SVC-2-1 *changed*
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 

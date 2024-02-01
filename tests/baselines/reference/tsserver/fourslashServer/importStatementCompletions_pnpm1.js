@@ -156,27 +156,14 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/project/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/project/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/project/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /project/tsconfig.json
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /project/tsconfig.json
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -191,6 +178,19 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
@@ -240,20 +240,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/project/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/project/index.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /project/tsconfig.json
-/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /project/tsconfig.json
-        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -268,6 +254,20 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
+/project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/project/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:

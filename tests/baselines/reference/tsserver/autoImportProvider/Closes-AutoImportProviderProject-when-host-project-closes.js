@@ -221,13 +221,13 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /index.ts (Open) *new*
@@ -395,22 +395,26 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
-/dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: undefined *changed*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+/index.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /tsconfig.json *deleted*
 /node_modules/@angular/forms/forms.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
@@ -420,7 +424,3 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/index.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0 *changed*
-        /tsconfig.json *deleted*

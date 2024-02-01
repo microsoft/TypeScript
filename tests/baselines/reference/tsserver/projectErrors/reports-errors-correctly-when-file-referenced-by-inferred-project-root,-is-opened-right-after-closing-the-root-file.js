@@ -91,12 +91,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/user/username/projects/myproject/src/client/app.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/src/client/app.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -478,20 +478,20 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/src/client/app.js (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/user/username/projects/myproject/test/backend/index.js (Open) *new*
+/user/username/projects/myproject/src/client/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/username/projects/myproject/src/server/utilities.js *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/test/backend/index.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -714,11 +714,15 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/myproject/src/client/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/lib/lib.d.ts
+/user/username/projects/myproject/src/server/utilities.js
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -727,10 +731,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/user/username/projects/myproject/src/server/utilities.js
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 
 Before request
 
@@ -1043,12 +1043,12 @@ Projects::
     projectProgramVersion: 4 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/src/client/app.js (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/src/client/app.js (Open)
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/username/projects/myproject/src/server/utilities.js (Open) *changed*

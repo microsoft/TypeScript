@@ -218,12 +218,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/src/app.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /src/tsconfig.json
 /compiler/lib.es5.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /src/tsconfig.json
+/src/app.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /src/tsconfig.json
 
@@ -414,15 +414,15 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/src/app.ts (Open)
-    version: SVC-1-0
+/compiler/lib.es2015.promise.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /src/tsconfig.json
 /compiler/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /src/tsconfig.json
-/compiler/lib.es2015.promise.d.ts *new*
-    version: Text-1
+/src/app.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /src/tsconfig.json

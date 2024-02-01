@@ -254,13 +254,13 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /a.ts (Open) *new*
@@ -463,13 +463,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /a.ts (Open)

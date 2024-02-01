@@ -182,12 +182,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/src/main.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/src/main.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
@@ -902,16 +902,16 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/src/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/node_modules/@angular/core/index.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/src/main.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 

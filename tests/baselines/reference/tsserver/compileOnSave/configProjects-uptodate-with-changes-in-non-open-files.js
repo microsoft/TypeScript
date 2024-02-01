@@ -203,10 +203,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -217,6 +213,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/moduleFile2.ts *new*
@@ -276,10 +276,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -291,6 +287,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/moduleFile2.ts
@@ -323,10 +323,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open) *changed*
-    version: SVC-1-1 *changed*
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts
     version: Text-1
     pendingReloadFromDisk: true
@@ -338,6 +334,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/moduleFile2.ts
@@ -395,10 +395,6 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open)
-    version: SVC-1-1
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
@@ -410,6 +406,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open)
+    version: SVC-1-1
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/moduleFile2.ts

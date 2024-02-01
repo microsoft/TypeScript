@@ -321,16 +321,16 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/user/username/projects/solution/b/index.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/solution/b/tsconfig.json
 /user/username/projects/solution/a/index.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/solution/b/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/solution/b/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/solution/b/tsconfig.json
 
@@ -984,13 +984,10 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/solution/b/tsconfig.json (Configured)
+/user/username/projects/solution/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/solution/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-/user/username/projects/solution/a/tsconfig.json (Configured) *new*
+/user/username/projects/solution/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/solution/c/tsconfig.json (Configured) *new*
@@ -999,12 +996,16 @@ Projects::
 /user/username/projects/solution/d/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+/user/username/projects/solution/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-/user/username/projects/solution/b/index.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 3 *changed*
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 4 *changed*
         /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/a/tsconfig.json *new*
         /user/username/projects/solution/c/tsconfig.json *new*
         /user/username/projects/solution/d/tsconfig.json *new*
 /user/username/projects/solution/a/index.ts *changed*
@@ -1014,11 +1015,10 @@ ScriptInfos::
         /user/username/projects/solution/a/tsconfig.json *new*
         /user/username/projects/solution/c/tsconfig.json *new*
         /user/username/projects/solution/d/tsconfig.json *new*
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 4 *changed*
+/user/username/projects/solution/b/index.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 3 *changed*
         /user/username/projects/solution/b/tsconfig.json
-        /user/username/projects/solution/a/tsconfig.json *new*
         /user/username/projects/solution/c/tsconfig.json *new*
         /user/username/projects/solution/d/tsconfig.json *new*
 /user/username/projects/solution/c/index.ts *new*

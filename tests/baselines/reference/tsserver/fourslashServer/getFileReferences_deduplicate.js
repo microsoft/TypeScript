@@ -368,30 +368,21 @@ watchedFiles::
   {"pollingInterval":500}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /tsconfig.build.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.test.json (Configured) *new*
+/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/tsconfig.test.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /index.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /tsconfig.build.json
-        /tsconfig.test.json
-/util.ts *new*
     version: Text-1
     containingProjects: 2
         /tsconfig.build.json
@@ -417,6 +408,15 @@ ScriptInfos::
 /test.ts *new*
     version: Text-1
     containingProjects: 1
+        /tsconfig.test.json
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/util.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.build.json
         /tsconfig.test.json
 
 Info seq  [hh:mm:ss:mss] request:

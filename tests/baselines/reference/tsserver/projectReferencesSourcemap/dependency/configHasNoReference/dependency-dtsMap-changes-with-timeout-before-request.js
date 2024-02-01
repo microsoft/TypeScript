@@ -386,12 +386,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 
@@ -563,15 +563,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json *new*
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/random.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -671,18 +671,10 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/dependency/tsconfig.json
-        /user/username/projects/myproject/random/tsconfig.json
-/user/username/projects/myproject/random/random.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts *new*
     version: Text-1
@@ -690,6 +682,14 @@ ScriptInfos::
 /user/username/projects/myproject/decls/FnS.d.ts.map *new*
     version: Text-1
     containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 1:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
@@ -724,18 +724,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/dependency/tsconfig.json
-        /user/username/projects/myproject/random/tsconfig.json
-/user/username/projects/myproject/random/random.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
@@ -744,6 +736,14 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
@@ -857,18 +857,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/dependency/tsconfig.json
-        /user/username/projects/myproject/random/tsconfig.json
-/user/username/projects/myproject/random/random.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
@@ -877,6 +869,14 @@ ScriptInfos::
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
     containingProjects: 0
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/random/random.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/random/tsconfig.json
 
 Before request
 

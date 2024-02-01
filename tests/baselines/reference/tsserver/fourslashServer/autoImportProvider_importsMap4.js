@@ -182,18 +182,14 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -217,6 +213,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {

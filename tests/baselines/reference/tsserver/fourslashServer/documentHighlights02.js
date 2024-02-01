@@ -100,10 +100,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/tests/cases/fourslash/server/a.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -114,6 +110,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tests/cases/fourslash/server/a.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -245,19 +245,14 @@ watchedDirectoriesRecursive *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject2* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/tests/cases/fourslash/server/a.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
-        /dev/null/inferredProject1* *deleted*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
@@ -270,6 +265,11 @@ ScriptInfos::
         /dev/null/inferredProject1* *deleted*
 /lib.decorators.legacy.d.ts *changed*
     version: Text-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject1* *deleted*
+/tests/cases/fourslash/server/a.ts (Open) *changed*
+    version: SVC-1-0
     containingProjects: 1 *changed*
         /dev/null/inferredProject2* *new*
         /dev/null/inferredProject1* *deleted*

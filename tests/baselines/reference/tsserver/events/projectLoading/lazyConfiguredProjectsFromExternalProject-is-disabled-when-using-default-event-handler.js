@@ -240,11 +240,11 @@ Projects::
     projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-/user/username/projects/a/a.ts *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/a/tsconfig.json
-/a/lib/lib.d.ts *new*
+/user/username/projects/a/a.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/a/tsconfig.json

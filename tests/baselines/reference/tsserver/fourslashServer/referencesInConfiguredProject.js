@@ -126,14 +126,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/referencesForGlobals_1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
-/referencesForGlobals_2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -143,6 +135,14 @@ ScriptInfos::
     containingProjects: 1
         /tsconfig.json
 /lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/referencesForGlobals_1.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json
+/referencesForGlobals_2.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
@@ -184,15 +184,6 @@ watchedFiles *deleted*::
   {"pollingInterval":500}
 
 ScriptInfos::
-/referencesForGlobals_1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
-/referencesForGlobals_2.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -202,6 +193,15 @@ ScriptInfos::
     containingProjects: 1
         /tsconfig.json
 /lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/referencesForGlobals_1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json
+/referencesForGlobals_2.ts (Open) *changed*
+    open: true *changed*
     version: Text-1
     containingProjects: 1
         /tsconfig.json

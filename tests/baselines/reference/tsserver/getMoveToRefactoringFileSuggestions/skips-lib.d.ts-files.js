@@ -222,20 +222,20 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/file1.d.ts (Open) *new*
-    version: SVC-1-0
+/a/file3.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /tsconfig.json
 /a/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/a/file3.d.ts *new*
+/a/lib.es6.d.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/a/lib.es6.d.ts *new*
-    version: Text-1
+/file1.d.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /tsconfig.json
 

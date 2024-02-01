@@ -454,13 +454,13 @@ PendingInstalls callback:: count: 1
 ] *new*
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1 *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1* *changed*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /app.js (Open)
@@ -503,13 +503,13 @@ Timeout callback:: count: 2
 12: *ensureProjectForOpenFiles* *new*
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/zkat__cacache@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/tmp/node_modules/@types/zkat__cacache/index.d.ts"]
@@ -728,13 +728,13 @@ Timeout callback:: count: 2
 16: *ensureProjectForOpenFiles* *new*
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 2 *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 
 ScriptInfos::
 /app.js (Open)

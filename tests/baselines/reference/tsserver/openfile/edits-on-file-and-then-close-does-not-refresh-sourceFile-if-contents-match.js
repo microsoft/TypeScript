@@ -169,15 +169,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
 /project/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /project/tsconfig.json
 /project/b.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /project/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /project/tsconfig.json
@@ -226,16 +226,16 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
 /project/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /project/tsconfig.json
 /project/b.ts (Open) *changed*
     open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /project/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /project/tsconfig.json
@@ -277,15 +277,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
 /project/a.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
         /project/tsconfig.json
 /project/b.ts (Open)
-    version: Text-1
-    containingProjects: 1
-        /project/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /project/tsconfig.json
@@ -336,16 +336,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
 /project/a.ts (Open)
     version: SVC-1-1
     containingProjects: 1
         /project/tsconfig.json
 /project/b.ts (Open) *changed*
     version: SVC-2-1 *changed*
-    containingProjects: 1
-        /project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /project/tsconfig.json
 
@@ -404,6 +404,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
 /project/a.ts (Open)
     version: SVC-1-1
     containingProjects: 1
@@ -412,10 +416,6 @@ ScriptInfos::
     open: false *changed*
     version: SVC-2-1
     pendingReloadFromDisk: true *changed*
-    containingProjects: 1
-        /project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /project/tsconfig.json
 
@@ -484,6 +484,10 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /project/tsconfig.json
 /project/a.ts (Open)
     version: SVC-1-1
     containingProjects: 1
@@ -491,9 +495,5 @@ ScriptInfos::
 /project/b.ts *changed*
     version: Text-3 *changed*
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1
-        /project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /project/tsconfig.json

@@ -252,15 +252,15 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/solution/compiler/tsconfig.json
 /user/username/projects/solution/compiler/program.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/solution/compiler/tsconfig.json
 /user/username/projects/solution/compiler/types.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/solution/compiler/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/solution/compiler/tsconfig.json
@@ -653,25 +653,25 @@ Projects::
 /user/username/projects/solution/compiler/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/solution/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
 /user/username/projects/solution/services/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+/user/username/projects/solution/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/solution/compiler/tsconfig.json
+        /user/username/projects/solution/services/tsconfig.json *new*
 /user/username/projects/solution/compiler/program.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
         /user/username/projects/solution/compiler/tsconfig.json
         /user/username/projects/solution/services/tsconfig.json *new*
 /user/username/projects/solution/compiler/types.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /user/username/projects/solution/compiler/tsconfig.json
-        /user/username/projects/solution/services/tsconfig.json *new*
-/a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/solution/compiler/tsconfig.json

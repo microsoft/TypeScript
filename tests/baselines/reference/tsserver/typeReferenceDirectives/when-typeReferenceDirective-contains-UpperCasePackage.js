@@ -229,11 +229,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/test/test.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/test/tsconfig.json
-/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/test/tsconfig.json
@@ -241,8 +237,12 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/test/tsconfig.json
-/a/lib/lib.d.ts *new*
+/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/test/tsconfig.json
+/user/username/projects/myproject/test/test.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/test/tsconfig.json
 
@@ -272,11 +272,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/test/test.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/test/tsconfig.json
-/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts
+/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/test/tsconfig.json
@@ -285,8 +281,12 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /user/username/projects/myproject/test/tsconfig.json
-/a/lib/lib.d.ts
+/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/test/tsconfig.json
+/user/username/projects/myproject/test/test.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/test/tsconfig.json
 
@@ -333,11 +333,7 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
-/user/username/projects/myproject/test/test.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/test/tsconfig.json
-/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts
+/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/test/tsconfig.json
@@ -346,7 +342,11 @@ ScriptInfos::
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /user/username/projects/myproject/test/tsconfig.json
-/a/lib/lib.d.ts
+/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/test/tsconfig.json
+/user/username/projects/myproject/test/test.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/test/tsconfig.json

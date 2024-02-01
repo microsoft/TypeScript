@@ -180,15 +180,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/sub/a.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
@@ -244,16 +244,16 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/sub/a.ts (Open) *changed*
     open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
@@ -318,12 +318,12 @@ Timeout callback:: count: 2
 6: *ensureProjectForOpenFiles* *new*
 
 ScriptInfos::
-/users/username/projects/project/b.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
+/users/username/projects/project/b.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/sub/a.ts *deleted*
@@ -384,15 +384,15 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/users/username/projects/project/b.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
+/users/username/projects/project/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
@@ -474,10 +474,6 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
-/users/username/projects/project/b.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -487,6 +483,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0 *changed*
         /users/username/projects/project/tsconfig.json *deleted*
+/users/username/projects/project/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 
 Before request
 
@@ -603,23 +603,23 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/users/username/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3
-    projectProgramVersion: 3 *changed*
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+/users/username/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/users/username/projects/project/b.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /users/username/projects/project/tsconfig.json
         /dev/null/inferredProject1* *new*
+/users/username/projects/project/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/sub/a.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
@@ -697,12 +697,12 @@ Timeout callback:: count: 2
 14: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/users/username/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 4 *changed*
-    projectProgramVersion: 3
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/users/username/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 3
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -799,23 +799,23 @@ Immedidate callback:: count: 1
 1: semanticCheck *new*
 
 Projects::
-/users/username/projects/project/tsconfig.json (Configured) *changed*
-    projectStateVersion: 4
-    projectProgramVersion: 4 *changed*
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/users/username/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 4 *changed*
 
 ScriptInfos::
-/users/username/projects/project/b.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /users/username/projects/project/tsconfig.json
         /dev/null/inferredProject1*
+/users/username/projects/project/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/sub/a.ts (Open) *changed*
     version: SVC-2-0
     containingProjects: 1 *changed*

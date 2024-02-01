@@ -205,12 +205,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/src/app.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/lib/module2.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -254,13 +254,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
 /a/b/src/app.ts *changed*
     open: false *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
-/a/b/lib/module2.ts
-    version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -311,13 +311,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
 /a/b/src/app.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
-/a/b/lib/module2.ts
-    version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -361,13 +361,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
 /a/b/src/app.ts *changed*
     open: false *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
-/a/b/lib/module2.ts
-    version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -418,13 +418,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
 /a/b/src/app.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
-/a/b/lib/module2.ts
-    version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -468,13 +468,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/b/lib/module2.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
 /a/b/src/app.ts *changed*
     open: false *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
-/a/b/lib/module2.ts
-    version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -525,13 +525,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/b/src/app.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/lib/module2.ts (Open) *changed*
     open: true *changed*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -575,13 +575,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/b/src/app.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/lib/module2.ts *changed*
     open: false *changed*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -632,13 +632,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/b/src/app.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/lib/module2.ts (Open) *changed*
     open: true *changed*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -682,13 +682,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/b/src/app.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/lib/module2.ts *changed*
     open: false *changed*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -739,13 +739,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/b/src/app.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/lib/module2.ts (Open) *changed*
     open: true *changed*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -789,12 +789,12 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/b/src/app.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/lib/module2.ts *changed*
     open: false *changed*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/src/app.ts
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json

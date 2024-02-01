@@ -299,10 +299,10 @@ Projects::
 /a/app.ts.csproj (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
-/c/app.ts.csproj (External) *new*
+/b/app.ts.csproj (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/b/app.ts.csproj (External) *deleted*
+/c/app.ts.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 

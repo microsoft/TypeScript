@@ -231,16 +231,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/foo/index.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.es2017.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/foo/tsconfig.json
 /user/username/projects/myproject/bar/index.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/foo/tsconfig.json
-/a/lib/lib.es2017.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/foo/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/foo/tsconfig.json
 
@@ -432,33 +432,33 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/foo/tsconfig.json (Configured)
+/user/username/projects/myproject/bar/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/bar/tsconfig.json (Configured) *new*
+/user/username/projects/myproject/foo/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/foo/index.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.dom.d.ts *new*
+    version: Text-1
     containingProjects: 1
+        /user/username/projects/myproject/bar/tsconfig.json
+/a/lib/lib.es2017.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
         /user/username/projects/myproject/foo/tsconfig.json
+        /user/username/projects/myproject/bar/tsconfig.json *new*
 /user/username/projects/myproject/bar/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/foo/tsconfig.json
         /user/username/projects/myproject/bar/tsconfig.json *new*
-/a/lib/lib.es2017.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /user/username/projects/myproject/foo/tsconfig.json
-        /user/username/projects/myproject/bar/tsconfig.json *new*
-/a/lib/lib.dom.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/foo/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/bar/tsconfig.json
+        /user/username/projects/myproject/foo/tsconfig.json
 
 Before request
 

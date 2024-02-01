@@ -202,12 +202,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/users/username/projects/project/A/a.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/A/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/A/tsconfig.json
+/users/username/projects/project/A/a.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/A/tsconfig.json
 
@@ -400,15 +400,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/users/username/projects/project/A/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/A/tsconfig.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /users/username/projects/project/A/tsconfig.json
         /users/username/projects/project/B/tsconfig.json *new*
+/users/username/projects/project/A/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/project/A/tsconfig.json
 /users/username/projects/project/B/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -810,15 +810,15 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/users/username/projects/project/A/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/A/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /users/username/projects/project/A/tsconfig.json
         /users/username/projects/project/B/tsconfig.json
+/users/username/projects/project/A/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/project/A/tsconfig.json
 /users/username/projects/project/B/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1

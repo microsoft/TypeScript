@@ -87,10 +87,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/@angular/forms/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -101,6 +97,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/node_modules/@angular/forms/package.json (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -235,22 +235,22 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/@angular/forms/package.json (Open)
+/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /tsconfig.json
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -266,14 +266,14 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /tsconfig.json *new*
-/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
 /node_modules/@angular/forms/forms.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/@angular/forms/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -496,22 +496,22 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/@angular/forms/package.json (Open)
-    version: SVC-1-0
+/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -527,14 +527,14 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /tsconfig.json
-/index.ts (Open) *changed*
-    version: SVC-1-1 *changed*
-    containingProjects: 1
-        /tsconfig.json
 /node_modules/@angular/forms/forms.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/@angular/forms/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -552,10 +552,10 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/node_modules/@angular/forms/package.json (Open)
-    version: SVC-1-0
+/index.ts (Open) *changed*
+    version: SVC-1-2 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -571,11 +571,11 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /tsconfig.json
-/index.ts (Open) *changed*
-    version: SVC-1-2 *changed*
-    containingProjects: 1
-        /tsconfig.json
 /node_modules/@angular/forms/forms.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/@angular/forms/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*

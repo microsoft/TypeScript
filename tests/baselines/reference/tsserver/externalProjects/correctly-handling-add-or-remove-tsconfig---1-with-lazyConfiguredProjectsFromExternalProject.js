@@ -275,12 +275,12 @@ FsWatches::
   {}
 
 Projects::
-/a/b/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 0
 /a/b/proj1 (External) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
 
 ScriptInfos::
 /a/b/app.ts (Open) *changed*

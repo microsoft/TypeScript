@@ -302,19 +302,19 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/user/username/projects/myproject/app/src/program/index.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/app/src/program/tsconfig.json
 /user/username/projects/myproject/app/src/program/bar.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/app/src/program/tsconfig.json
-/user/username/projects/myproject/shared/src/library/index.ts *new*
-    version: Text-1
+/user/username/projects/myproject/app/src/program/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/app/src/program/tsconfig.json
-/a/lib/lib.d.ts *new*
+/user/username/projects/myproject/shared/src/library/index.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/app/src/program/tsconfig.json

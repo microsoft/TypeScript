@@ -178,15 +178,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/file2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -306,6 +306,10 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -314,10 +318,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /user/username/projects/myproject/tsconfig.json *deleted*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
 
 Containing projects for /user/username/projects/myproject/src/file2.ts:: 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
@@ -328,6 +328,10 @@ export let y = 10;export let z = 10;
 
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -336,10 +340,6 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     containingProjects: 0
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
 
 After running Timeout callback:: count: 0
 

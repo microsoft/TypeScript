@@ -71,12 +71,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-untitled:^Untitled-1 (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+untitled:^Untitled-1 (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -441,11 +441,11 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
+    projectProgramVersion: 1
+/user/username/projects/myproject/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::

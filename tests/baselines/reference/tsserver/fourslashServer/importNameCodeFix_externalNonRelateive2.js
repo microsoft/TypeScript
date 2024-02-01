@@ -209,10 +209,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/apps/app1/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts *new*
     version: Text-1
     containingProjects: 1
@@ -225,14 +221,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts *new*
-    version: Text-1
+/apps/app1/tsconfig.json (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -248,6 +240,14 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -346,10 +346,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/apps/app1/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts
     version: Text-1
     containingProjects: 1
@@ -363,14 +359,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts
-    version: Text-1
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts
-    version: Text-1
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -386,6 +378,14 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -570,10 +570,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/apps/app1/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts
     version: Text-1
     containingProjects: 1
@@ -586,14 +582,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts
-    version: Text-1
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts
-    version: Text-1
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -609,6 +601,14 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -626,10 +626,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/apps/app1/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts
     version: Text-1
     containingProjects: 1
@@ -642,14 +638,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts
-    version: Text-1
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts
-    version: Text-1
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -665,6 +657,14 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -735,10 +735,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/apps/app1/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -752,14 +748,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts
-    version: Text-1
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts
-    version: Text-1
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -775,6 +767,14 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -959,10 +959,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/apps/app1/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
@@ -975,14 +971,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts
-    version: Text-1
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts
-    version: Text-1
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -998,6 +990,14 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1015,10 +1015,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/apps/app1/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts (Open) *changed*
     version: SVC-2-2 *changed*
     containingProjects: 1
@@ -1031,14 +1027,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts
-    version: Text-1
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts
-    version: Text-1
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -1054,6 +1046,14 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1124,10 +1124,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/apps/app1/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts (Open)
     version: SVC-2-2
     containingProjects: 1
@@ -1140,15 +1136,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts
-    version: Text-1
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -1164,6 +1155,15 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1348,10 +1348,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/apps/app1/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts (Open)
     version: SVC-2-2
     containingProjects: 1
@@ -1364,14 +1360,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts
-    version: Text-1
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts (Open) *changed*
-    version: SVC-2-1 *changed*
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -1387,6 +1379,14 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1404,10 +1404,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/apps/app1/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /apps/app1/src/app.ts (Open)
     version: SVC-2-2
     containingProjects: 1
@@ -1420,14 +1416,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /apps/app1/tsconfig.json
-/shared/constants.ts
-    version: Text-1
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /apps/app1/tsconfig.json
-/shared/data.ts (Open) *changed*
-    version: SVC-2-2 *changed*
-    containingProjects: 1
-        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -1443,3 +1435,11 @@ ScriptInfos::
     containingProjects: 2
         /apps/app1/tsconfig.json
         /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts (Open) *changed*
+    version: SVC-2-2 *changed*
+    containingProjects: 1
+        /apps/app1/tsconfig.json

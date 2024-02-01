@@ -215,14 +215,14 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/a/b/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/b/file1.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2*
+/a/b/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'

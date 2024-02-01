@@ -468,19 +468,19 @@ FsWatches *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
 /a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-/a/lib/lib.d.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/b/main.ts *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /a/b/tsconfig.json *deleted*
+/a/lib/lib.d.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*

@@ -262,10 +262,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/src/ts.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
 /src/dts.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -280,6 +276,10 @@ ScriptInfos::
         /tsconfig.json
 /src/moo.ts *new*
     version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/ts.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /tsconfig.json
 /src/tsx.tsx *new*

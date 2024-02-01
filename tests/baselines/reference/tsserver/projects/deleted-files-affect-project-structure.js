@@ -172,14 +172,14 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/c/f3.ts (Open)
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/b/f2.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
+/a/c/f3.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*

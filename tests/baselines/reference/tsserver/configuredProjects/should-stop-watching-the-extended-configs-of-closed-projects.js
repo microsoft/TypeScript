@@ -952,10 +952,10 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/dummy/tsconfig.json (Configured)
+/user/username/projects/myproject/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/b/tsconfig.json (Configured) *deleted*
+/user/username/projects/myproject/dummy/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -964,15 +964,15 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/a/tsconfig.json
+/user/username/projects/myproject/b/b.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/b/tsconfig.json *deleted*
 /user/username/projects/myproject/dummy/dummy.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/dummy/tsconfig.json
-/user/username/projects/myproject/b/b.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/b/tsconfig.json *deleted*
 
 Before request
 
@@ -1186,20 +1186,20 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/dummy/tsconfig.json (Configured)
+/user/username/projects/myproject/a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/a/tsconfig.json (Configured) *deleted*
+/user/username/projects/myproject/dummy/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
+/user/username/projects/myproject/a/a.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/a/tsconfig.json *deleted*
 /user/username/projects/myproject/dummy/dummy.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/dummy/tsconfig.json
-/user/username/projects/myproject/a/a.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/a/tsconfig.json *deleted*

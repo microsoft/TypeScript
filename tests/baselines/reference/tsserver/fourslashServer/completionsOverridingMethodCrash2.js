@@ -175,18 +175,14 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /classes.ts *new*
     version: Text-1
     containingProjects: 1
@@ -205,6 +201,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 /utils.ts *new*
     version: Text-1
@@ -258,10 +258,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /classes.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -281,6 +277,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 /utils.ts
     version: Text-1
@@ -489,10 +489,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /classes.ts (Open)
     version: Text-1
     containingProjects: 1
@@ -511,6 +507,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 /utils.ts (Open) *changed*
     open: true *changed*
@@ -558,18 +558,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
-/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /classes.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
@@ -588,6 +584,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 /utils.ts (Open)
     version: Text-1

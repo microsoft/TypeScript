@@ -205,19 +205,19 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/a.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/a.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/b.vue *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts *new*
+/user/username/projects/myproject/d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -326,23 +326,23 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/a.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/d.ts
-    version: Text-1
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/b.vue
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
+/user/username/projects/myproject/c.vue *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/c.vue *new*
+/user/username/projects/myproject/d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -368,25 +368,25 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
-/user/username/projects/myproject/a.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/d.ts *changed*
-    version: Text-1
-    pendingReloadFromDisk: true *changed*
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/b.vue
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
+/user/username/projects/myproject/c.vue
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/c.vue
+/user/username/projects/myproject/d.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
@@ -435,24 +435,24 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
-/user/username/projects/myproject/a.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/d.ts *changed*
-    version: Text-2 *changed*
-    pendingReloadFromDisk: false *changed*
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/b.vue
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
+/user/username/projects/myproject/c.vue
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/c.vue
-    version: Text-1
+/user/username/projects/myproject/d.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json

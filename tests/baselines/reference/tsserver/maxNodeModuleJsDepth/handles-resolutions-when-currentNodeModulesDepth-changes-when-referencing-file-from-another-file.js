@@ -106,6 +106,10 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/project1/src/file1.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -119,10 +123,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/username/projects/project1/src/node_modules/path/index.js *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*

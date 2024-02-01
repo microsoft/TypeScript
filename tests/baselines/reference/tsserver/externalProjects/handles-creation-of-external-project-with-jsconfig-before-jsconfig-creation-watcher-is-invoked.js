@@ -261,20 +261,20 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+/user/username/projects/myproject/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/javascript.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/javascript.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -433,12 +433,12 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+/user/username/projects/myproject/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 Before request
 //// [/user/username/projects/myproject/jsconfig.json]
@@ -677,26 +677,26 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured)
-    projectStateVersion: 1
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
     projectProgramVersion: 1
 /user/username/projects/myproject/jsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 2 *changed*
+/user/username/projects/myproject/tsconfig.json (Configured)
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/javascript.js (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 1 *changed*
-        /user/username/projects/myproject/jsconfig.json *new*
-        /dev/null/inferredProject1* *deleted*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /user/username/projects/myproject/jsconfig.json *new*
+/user/username/projects/myproject/javascript.js (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/jsconfig.json *new*
+        /dev/null/inferredProject1* *deleted*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false

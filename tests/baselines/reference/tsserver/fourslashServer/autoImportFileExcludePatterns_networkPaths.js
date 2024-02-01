@@ -193,6 +193,9 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -200,11 +203,20 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+//tsclient/project/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2*
+//tsclient/project/node_modules/aws-sdk/clients/s3.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+//tsclient/project/node_modules/aws-sdk/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 //tsclient/project/node_modules/aws-sdk/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -224,18 +236,6 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
-//tsclient/project/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*
-//tsclient/project/node_modules/aws-sdk/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-//tsclient/project/node_modules/aws-sdk/clients/s3.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {

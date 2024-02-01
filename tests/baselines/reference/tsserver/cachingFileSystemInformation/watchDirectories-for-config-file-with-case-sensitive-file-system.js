@@ -309,12 +309,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /Users/someuser/work/applications/frontend/tsconfig.json
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts *new*
     version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
+/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
 /a/lib/lib.es2016.full.d.ts *new*
@@ -421,19 +421,19 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /Users/someuser/work/applications/frontend/tsconfig.json
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
+/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
 /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
+/a/lib/lib.es2016.full.d.ts
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
@@ -510,20 +510,20 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /Users/someuser/work/applications/frontend/tsconfig.json
 /Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
+/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json
 /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts (Open) *changed*
     open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /Users/someuser/work/applications/frontend/tsconfig.json
+/a/lib/lib.es2016.full.d.ts
     version: Text-1
     containingProjects: 1
         /Users/someuser/work/applications/frontend/tsconfig.json

@@ -330,8 +330,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/sample1/tests/index.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/sample1/tests/tsconfig.json
+/user/username/projects/sample1/core/anotherModule.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 /user/username/projects/sample1/core/index.ts *new*
@@ -342,12 +346,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
-/user/username/projects/sample1/core/anotherModule.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/sample1/tests/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/sample1/tests/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 
@@ -378,8 +378,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/sample1/tests/index.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/sample1/tests/tsconfig.json
+/user/username/projects/sample1/core/anotherModule.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 /user/username/projects/sample1/core/index.ts
@@ -391,12 +395,8 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
-/user/username/projects/sample1/core/anotherModule.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/sample1/tests/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
+/user/username/projects/sample1/tests/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 
@@ -444,8 +444,12 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
-/user/username/projects/sample1/tests/index.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/sample1/tests/tsconfig.json
+/user/username/projects/sample1/core/anotherModule.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 /user/username/projects/sample1/core/index.ts
@@ -457,12 +461,8 @@ ScriptInfos::
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
-/user/username/projects/sample1/core/anotherModule.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/sample1/tests/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
+/user/username/projects/sample1/tests/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 
@@ -493,8 +493,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/sample1/tests/index.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/sample1/tests/tsconfig.json
+/user/username/projects/sample1/core/anotherModule.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 /user/username/projects/sample1/core/index.ts
@@ -506,12 +510,8 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
-/user/username/projects/sample1/core/anotherModule.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/sample1/tests/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
+/user/username/projects/sample1/tests/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 
@@ -559,8 +559,12 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
-/user/username/projects/sample1/tests/index.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/sample1/tests/tsconfig.json
+/user/username/projects/sample1/core/anotherModule.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 /user/username/projects/sample1/core/index.ts
@@ -572,12 +576,8 @@ ScriptInfos::
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
-/user/username/projects/sample1/core/anotherModule.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/sample1/tests/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
+/user/username/projects/sample1/tests/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/sample1/tests/tsconfig.json
 

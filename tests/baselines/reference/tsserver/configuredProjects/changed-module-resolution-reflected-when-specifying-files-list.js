@@ -186,16 +186,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/users/username/projects/project/file1.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/file2.ts *new*
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/users/username/projects/project/file1.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 
@@ -307,16 +307,16 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/users/username/projects/project/file1.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/file2.ts *changed*
     version: Text-1
     containingProjects: 0 *changed*
         /users/username/projects/project/tsconfig.json *deleted*
-/a/lib/lib.d.ts
-    version: Text-1
+/users/username/projects/project/file1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file2.ts *new*
@@ -373,12 +373,15 @@ FsWatches *deleted*::
   {}
 
 ScriptInfos::
-/users/username/projects/project/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
+/users/username/projects/file2.ts *deleted*
+    version: Text-1
+    containingProjects: 0
+/users/username/projects/project/file1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file2.ts (Open) *changed*
@@ -386,6 +389,3 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
-/users/username/projects/file2.ts *deleted*
-    version: Text-1
-    containingProjects: 0

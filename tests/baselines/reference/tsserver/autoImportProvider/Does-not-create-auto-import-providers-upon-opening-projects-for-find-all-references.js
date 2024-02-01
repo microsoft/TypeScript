@@ -251,6 +251,9 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /packages/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -258,19 +261,16 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/packages/b/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /packages/b/tsconfig.json
 /node_modules/@angular/forms/forms.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/packages/b/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /packages/b/tsconfig.json
 
 Before request
 
@@ -638,6 +638,12 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /packages/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -645,20 +651,8 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
-/packages/a/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/packages/b/index.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 3 *changed*
-        /packages/b/tsconfig.json
-        /tsconfig.json *new*
-        /packages/a/tsconfig.json *new*
 /node_modules/@angular/forms/forms.d.ts
     version: Text-1
     containingProjects: 1
@@ -668,5 +662,11 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /packages/a/tsconfig.json
+/packages/b/index.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 3 *changed*
+        /packages/b/tsconfig.json
+        /tsconfig.json *new*
+        /packages/a/tsconfig.json *new*
 
 After getAutoImportProvider

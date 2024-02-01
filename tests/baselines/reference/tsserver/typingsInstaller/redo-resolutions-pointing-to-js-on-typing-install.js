@@ -512,10 +512,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
+/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts *new*
+    version: Text-1
+    containingProjects: 0
 /user/username/projects/node_modules/commander/index.js *changed*
     version: Text-1
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts *new*
-    version: Text-1
-    containingProjects: 0

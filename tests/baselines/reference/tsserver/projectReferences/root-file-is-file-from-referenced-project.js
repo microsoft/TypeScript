@@ -489,16 +489,16 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/user/username/projects/project/src/common/input/keyboard.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json
 /user/username/projects/project/src/common/input/keyboard.test.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/project/src/common/input/keyboard.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json
 
@@ -709,8 +709,8 @@ Projects::
     projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-/user/username/projects/project/src/common/input/keyboard.ts (Open) *changed*
-    version: SVC-1-0
+/a/lib/lib.d.ts *changed*
+    version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/project/src/common/tsconfig.json
         /user/username/projects/project/src/tsconfig.json *new*
@@ -719,8 +719,8 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /user/username/projects/project/src/common/tsconfig.json
         /user/username/projects/project/src/tsconfig.json *new*
-/a/lib/lib.d.ts *changed*
-    version: Text-1
+/user/username/projects/project/src/common/input/keyboard.ts (Open) *changed*
+    version: SVC-1-0
     containingProjects: 2 *changed*
         /user/username/projects/project/src/common/tsconfig.json
         /user/username/projects/project/src/tsconfig.json *new*

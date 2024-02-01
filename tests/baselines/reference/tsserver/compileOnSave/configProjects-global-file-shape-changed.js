@@ -203,16 +203,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/globalFile3.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts *new*
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/file1Consumer2.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/globalFile3.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/moduleFile1.ts *new*
@@ -256,16 +256,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/globalFile3.ts (Open) *changed*
-    version: SVC-1-1 *changed*
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/file1Consumer2.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/globalFile3.ts (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/moduleFile1.ts

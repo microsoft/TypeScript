@@ -115,10 +115,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-c:/project/node_modules/aws-sdk/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -129,6 +125,10 @@ c:/project/node_modules/aws-sdk/package.json (Open) *new*
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+c:/project/node_modules/aws-sdk/package.json (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -246,6 +246,9 @@ c:/project/node_modules/node_modules/@types:
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -253,15 +256,8 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-c:/project/node_modules/aws-sdk/package.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -281,14 +277,18 @@ c:/project/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2*
-c:/project/node_modules/aws-sdk/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 c:/project/node_modules/aws-sdk/clients/s3.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+c:/project/node_modules/aws-sdk/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+c:/project/node_modules/aws-sdk/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {

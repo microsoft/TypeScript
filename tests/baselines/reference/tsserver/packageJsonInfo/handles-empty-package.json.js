@@ -139,12 +139,12 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /tsconfig.json (Open) *new*
@@ -214,12 +214,12 @@ Timeout callback:: count: 2
 8: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 0
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -355,12 +355,12 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured)
-    projectStateVersion: 2
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
 
 getPackageJsonsVisibleToFile:: /src/whatever/blah.ts undefined
 

@@ -370,11 +370,11 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/a/file1.ts (Open)
+/A/file2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/A/file2.ts (Open) *new*
+/a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -541,11 +541,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
+/A/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/A/file2.ts (Open)
+/a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -717,22 +717,22 @@ PolledWatches::
   {"pollingInterval":500}
 
 Projects::
-/dev/null/inferredProject3* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 2
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
+/A/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/A/file2.ts (Open)
+/a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -805,27 +805,27 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject3* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /a/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/A/file2.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /b/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -895,16 +895,16 @@ FsWatches::
   {}
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts *changed*
     open: false *changed*
     version: SVC-1-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 /b/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -974,22 +974,22 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject3* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 3
     projectProgramVersion: 2
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
+/A/file2.ts
     version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
-/A/file2.ts
+/a/file1.ts
     version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
@@ -1064,22 +1064,22 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject3* (Inferred) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 3
     projectProgramVersion: 2
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
+/A/file2.ts
     version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
-/A/file2.ts
+/a/file1.ts
     version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
@@ -1308,16 +1308,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/A/file2.ts *deleted*
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 /a/file1.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     pendingReloadFromDisk: false *changed*
     containingProjects: 1 *changed*
         /dev/null/inferredProject1* *new*
-/A/file2.ts *deleted*
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /b/file2.ts *deleted*
     version: SVC-1-0
     pendingReloadFromDisk: true
@@ -1487,14 +1487,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /A/file2.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
         /dev/null/inferredProject4*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before request
 
@@ -1669,14 +1669,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /A/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
         /dev/null/inferredProject4*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /b/file2.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
@@ -1853,9 +1853,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 Projects::
-/dev/null/inferredProject6* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 3
     projectProgramVersion: 3
@@ -1865,16 +1862,19 @@ Projects::
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject6* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /A/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
         /dev/null/inferredProject4*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /b/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
@@ -1952,9 +1952,6 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject6* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
@@ -1964,18 +1961,21 @@ Projects::
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject6* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject4*
 /a/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/A/file2.ts (Open)
-    version: SVC-2-0
-    containingProjects: 1
-        /dev/null/inferredProject4*
 /b/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
@@ -2053,9 +2053,6 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject6* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 4
     projectProgramVersion: 3
@@ -2065,18 +2062,21 @@ Projects::
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject6* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts *changed*
     open: false *changed*
     version: SVC-2-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 0 *changed*
         /dev/null/inferredProject4* *deleted*
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 /b/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
@@ -2154,9 +2154,6 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject6* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 4
     projectProgramVersion: 3
@@ -2166,14 +2163,17 @@ Projects::
 /dev/null/inferredProject5* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/dev/null/inferredProject6* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts
     version: SVC-2-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
 /b/file2.ts *changed*
@@ -2255,9 +2255,6 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject6* (Inferred) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 4
     projectProgramVersion: 3
@@ -2267,14 +2264,17 @@ Projects::
 /dev/null/inferredProject5* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+/dev/null/inferredProject6* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts
     version: SVC-2-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
 /b/file2.ts
@@ -2550,16 +2550,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/A/file2.ts *deleted*
+    version: SVC-2-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 /a/file1.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     pendingReloadFromDisk: false *changed*
     containingProjects: 1 *changed*
         /dev/null/inferredProject1* *new*
-/A/file2.ts *deleted*
-    version: SVC-2-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /b/file2.ts *deleted*
     version: SVC-2-0
     pendingReloadFromDisk: true
@@ -2703,12 +2703,12 @@ Projects::
     projectProgramVersion: 4 *changed*
 
 ScriptInfos::
-/a/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /A/file2.ts (Open) *new*
     version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/a/file1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -2874,12 +2874,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /A/file2.ts (Open)
     version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/a/file1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 /b/file2.ts (Open) *new*
@@ -3050,23 +3050,23 @@ PolledWatches::
   {"pollingInterval":500}
 
 Projects::
-/dev/null/inferredProject8* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 5
     projectProgramVersion: 4
 /dev/null/inferredProject7* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject8* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /A/file2.ts (Open)
     version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/a/file1.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 /b/file2.ts (Open)
@@ -3138,27 +3138,27 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject8* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 6 *changed*
     projectProgramVersion: 4
 /dev/null/inferredProject7* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject8* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /a/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/A/file2.ts (Open)
-    version: SVC-3-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /b/file2.ts (Open)
     version: SVC-3-0
     containingProjects: 1
@@ -3228,16 +3228,16 @@ FsWatches::
   {}
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts *changed*
     open: false *changed*
     version: SVC-3-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 /b/file2.ts (Open)
     version: SVC-3-0
     containingProjects: 1
@@ -3307,23 +3307,23 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject8* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 6
     projectProgramVersion: 4
 /dev/null/inferredProject7* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/dev/null/inferredProject8* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts
     version: SVC-3-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
 /b/file2.ts *changed*
@@ -3397,23 +3397,23 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject8* (Inferred) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 6
     projectProgramVersion: 4
 /dev/null/inferredProject7* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+/dev/null/inferredProject8* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts
     version: SVC-3-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
 /b/file2.ts
@@ -3641,16 +3641,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/A/file2.ts *deleted*
+    version: SVC-3-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 /a/file1.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     pendingReloadFromDisk: false *changed*
     containingProjects: 1 *changed*
         /dev/null/inferredProject1* *new*
-/A/file2.ts *deleted*
-    version: SVC-3-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /b/file2.ts *deleted*
     version: SVC-3-0
     pendingReloadFromDisk: true
@@ -3820,14 +3820,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /A/file2.ts (Open) *new*
     version: SVC-4-0
     containingProjects: 1
         /dev/null/inferredProject9*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before request
 
@@ -3996,22 +3996,22 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 6
     projectProgramVersion: 5
-/dev/null/inferredProject9* (Inferred)
+/dev/null/inferredProject10* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject10* (Inferred) *new*
+/dev/null/inferredProject9* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /A/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
         /dev/null/inferredProject9*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /b/file2.ts (Open) *new*
     version: SVC-4-0
     containingProjects: 1
@@ -4190,28 +4190,28 @@ PolledWatches::
   {"pollingInterval":500}
 
 Projects::
-/dev/null/inferredProject11* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 6
     projectProgramVersion: 5
-/dev/null/inferredProject9* (Inferred)
+/dev/null/inferredProject10* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject10* (Inferred)
+/dev/null/inferredProject11* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject9* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /A/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
         /dev/null/inferredProject9*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /b/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
@@ -4291,30 +4291,30 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject11* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 7 *changed*
     projectProgramVersion: 5
-/dev/null/inferredProject9* (Inferred)
+/dev/null/inferredProject10* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject10* (Inferred)
+/dev/null/inferredProject11* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject9* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject9*
 /a/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/A/file2.ts (Open)
-    version: SVC-4-0
-    containingProjects: 1
-        /dev/null/inferredProject9*
 /b/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
@@ -4394,30 +4394,30 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject11* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 7
     projectProgramVersion: 5
-/dev/null/inferredProject9* (Inferred) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject10* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject11* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject9* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts *changed*
     open: false *changed*
     version: SVC-4-0
     pendingReloadFromDisk: true *changed*
     containingProjects: 0 *changed*
         /dev/null/inferredProject9* *deleted*
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 /b/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
@@ -4497,26 +4497,26 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject11* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 7
     projectProgramVersion: 5
-/dev/null/inferredProject9* (Inferred)
-    projectStateVersion: 2
-    projectProgramVersion: 1
 /dev/null/inferredProject10* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/dev/null/inferredProject11* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject9* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts
     version: SVC-4-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
 /b/file2.ts *changed*
@@ -4600,26 +4600,26 @@ FsWatches::
   {}
 
 Projects::
-/dev/null/inferredProject11* (Inferred) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 7
     projectProgramVersion: 5
-/dev/null/inferredProject9* (Inferred)
+/dev/null/inferredProject10* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
-/dev/null/inferredProject10* (Inferred)
+/dev/null/inferredProject11* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/dev/null/inferredProject9* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/file1.ts
-    version: SVC-1-0
-    pendingReloadFromDisk: true
-    containingProjects: 0
 /A/file2.ts
     version: SVC-4-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
     pendingReloadFromDisk: true
     containingProjects: 0
 /b/file2.ts

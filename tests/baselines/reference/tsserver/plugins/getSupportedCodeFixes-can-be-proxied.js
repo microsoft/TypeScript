@@ -204,15 +204,15 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /tsconfig.json
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
 /b.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
 /c.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
@@ -267,16 +267,16 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /tsconfig.json
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
 /b.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
 /c.ts
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /tsconfig.json
@@ -331,16 +331,16 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /tsconfig.json
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
 /b.ts (Open)
     version: Text-1
     containingProjects: 1
         /tsconfig.json
 /c.ts (Open) *changed*
     open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /tsconfig.json

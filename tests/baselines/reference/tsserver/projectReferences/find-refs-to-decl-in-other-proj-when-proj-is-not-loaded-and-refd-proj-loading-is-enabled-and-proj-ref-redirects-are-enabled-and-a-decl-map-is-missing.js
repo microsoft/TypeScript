@@ -572,12 +572,12 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/a/tsconfig.json
+/user/username/projects/myproject/b/helper.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/b/tsconfig.json
 /user/username/projects/myproject/b/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/a/tsconfig.json
         /user/username/projects/myproject/b/tsconfig.json *new*
-/user/username/projects/myproject/b/helper.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/b/tsconfig.json

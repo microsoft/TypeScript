@@ -191,12 +191,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/users/username/projects/project/a.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
+/users/username/projects/project/a.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 
@@ -298,12 +298,12 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/users/username/projects/project/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
+/users/username/projects/project/a.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/b.ts *new*
@@ -334,12 +334,12 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
-/users/username/projects/project/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
+/users/username/projects/project/a.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/b.ts *changed*
@@ -406,12 +406,12 @@ Timeout callback:: count: 1
 Immedidate callback:: count: 0
 
 ScriptInfos::
-/users/username/projects/project/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
+/users/username/projects/project/a.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/b.ts *changed*

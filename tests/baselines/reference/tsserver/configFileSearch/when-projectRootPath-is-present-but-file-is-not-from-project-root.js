@@ -93,12 +93,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 

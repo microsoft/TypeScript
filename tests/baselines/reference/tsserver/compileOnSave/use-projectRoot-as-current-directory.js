@@ -118,11 +118,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/root/TypeScriptProject3/TypeScriptProject3/Foo.ts *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj
-/a/lib/lib.d.ts *new*
+/root/TypeScriptProject3/TypeScriptProject3/Foo.ts *new*
     version: Text-1
     containingProjects: 1
         /root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj

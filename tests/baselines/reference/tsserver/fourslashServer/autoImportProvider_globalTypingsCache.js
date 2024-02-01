@@ -141,12 +141,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 /lib.d.ts *new*
@@ -319,27 +319,27 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /Library/Caches/typescript/node_modules/@types/react-router-dom/index.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/autoImportProviderProject1* *new*
+/Library/Caches/typescript/node_modules/@types/react-router-dom/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*

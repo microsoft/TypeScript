@@ -167,10 +167,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/source.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -181,6 +177,10 @@ ScriptInfos::
         /tsconfig.json
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/source.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /tsconfig.json
 /target.ts *new*

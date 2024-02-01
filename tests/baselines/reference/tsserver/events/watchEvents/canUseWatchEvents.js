@@ -243,15 +243,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/b.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -388,15 +388,15 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/b.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
@@ -447,6 +447,10 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -454,10 +458,6 @@ ScriptInfos::
 /user/username/projects/myproject/b.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/c.ts
@@ -511,6 +511,10 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -518,10 +522,6 @@ ScriptInfos::
 /user/username/projects/myproject/b.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/c.ts
@@ -589,6 +589,10 @@ Custom WatchedDirectoriesRecursive::
   {"id":6,"path":"/user/username/projects/node_modules/@types","recursive":true}
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -596,10 +600,6 @@ ScriptInfos::
 /user/username/projects/myproject/b.ts (Open) *changed*
     open: true *changed*
     version: Text-2
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/c.ts
@@ -662,6 +662,10 @@ Custom WatchedDirectoriesRecursive::
   {"id":6,"path":"/user/username/projects/node_modules/@types","recursive":true}
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -669,10 +673,6 @@ ScriptInfos::
 /user/username/projects/myproject/b.ts *changed*
     open: false *changed*
     version: Text-2
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/c.ts

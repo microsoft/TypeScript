@@ -127,11 +127,11 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-^/inmemory/model/6 (Open)
+^/inmemory/model/4 (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-^/inmemory/model/4 (Open) *new*
+^/inmemory/model/6 (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -166,15 +166,15 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
-^/inmemory/model/6 (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 ^/inmemory/model/4 *deleted*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
+^/inmemory/model/6 (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before request
 
@@ -250,11 +250,11 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-^/inmemory/model/6 (Open) *changed*
-    version: SVC-1-1 *changed*
-    containingProjects: 1
-        /dev/null/inferredProject1*
 ^/inmemory/model/4 (Open) *new*
     version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+^/inmemory/model/6 (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
         /dev/null/inferredProject1*

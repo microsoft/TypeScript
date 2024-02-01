@@ -79,10 +79,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/scriptThing.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -93,6 +89,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/scriptThing.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -160,19 +160,14 @@ Info seq  [hh:mm:ss:mss] 	FileName: /moduleThing.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 After Request
 Projects::
-/dev/null/inferredProject2* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/scriptThing.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
-        /dev/null/inferredProject1* *deleted*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
@@ -192,6 +187,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2*
+/scriptThing.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject1* *deleted*
 
 Info seq  [hh:mm:ss:mss] request:
     {

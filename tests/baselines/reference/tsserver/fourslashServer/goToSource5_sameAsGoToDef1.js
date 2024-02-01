@@ -160,11 +160,11 @@ Info seq  [hh:mm:ss:mss] 	FileName: /b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 After Request
 Projects::
-/dev/null/inferredProject2* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
@@ -173,6 +173,10 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /dev/null/inferredProject2* *new*
         /dev/null/inferredProject1* *deleted*
+/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
@@ -188,10 +192,6 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /dev/null/inferredProject2* *new*
         /dev/null/inferredProject1* *deleted*
-/b.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*
 
 Info seq  [hh:mm:ss:mss] request:
     {

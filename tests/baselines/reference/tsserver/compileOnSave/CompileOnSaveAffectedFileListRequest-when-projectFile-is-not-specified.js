@@ -204,15 +204,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json
 /user/username/projects/myproject/app1/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/app1/tsconfig.json
 /user/username/projects/myproject/core/core.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/app1/tsconfig.json
@@ -386,24 +386,24 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/app1/app.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
-/user/username/projects/myproject/core/core.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /user/username/projects/myproject/app1/tsconfig.json
-        /user/username/projects/myproject/app2/tsconfig.json *new*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/app1/tsconfig.json
         /user/username/projects/myproject/app2/tsconfig.json *new*
+/user/username/projects/myproject/app1/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json
 /user/username/projects/myproject/app2/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/core/core.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json *new*
 
 Before request
 
@@ -463,24 +463,24 @@ FsWatches *deleted*::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/app1/app.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
-/user/username/projects/myproject/core/core.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 2
-        /user/username/projects/myproject/app1/tsconfig.json
-        /user/username/projects/myproject/app2/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/app1/tsconfig.json
         /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/app1/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json
 /user/username/projects/myproject/app2/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
+        /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/core/core.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/app1/tsconfig.json
         /user/username/projects/myproject/app2/tsconfig.json
 
 Before request
@@ -514,23 +514,23 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/app1/app.ts (Open) *changed*
-    version: SVC-1-1 *changed*
-    containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
-/user/username/projects/myproject/core/core.ts (Open)
-    version: Text-1
-    containingProjects: 2
-        /user/username/projects/myproject/app1/tsconfig.json
-        /user/username/projects/myproject/app2/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/app1/tsconfig.json
         /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/app1/app.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json
 /user/username/projects/myproject/app2/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
+        /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/core/core.ts (Open)
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/app1/tsconfig.json
         /user/username/projects/myproject/app2/tsconfig.json
 
 Before request
@@ -564,23 +564,23 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/app1/app.ts (Open)
-    version: SVC-1-1
-    containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
-/user/username/projects/myproject/core/core.ts (Open)
-    version: Text-1
-    containingProjects: 2
-        /user/username/projects/myproject/app1/tsconfig.json
-        /user/username/projects/myproject/app2/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/app1/tsconfig.json
         /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/app1/app.ts (Open)
+    version: SVC-1-1
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json
 /user/username/projects/myproject/app2/app.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
+        /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/core/core.ts (Open)
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/app1/tsconfig.json
         /user/username/projects/myproject/app2/tsconfig.json
 
 Project1 is dirty: true

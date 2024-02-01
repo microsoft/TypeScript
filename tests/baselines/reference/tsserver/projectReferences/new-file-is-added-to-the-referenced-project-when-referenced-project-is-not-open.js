@@ -240,16 +240,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/projects/project2/class2.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 
@@ -360,20 +360,20 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
-/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class3.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
-/user/username/projects/myproject/projects/project1/class3.ts *new*
-    version: Text-1
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 

@@ -423,16 +423,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/main/main.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/main/main.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 
@@ -612,19 +612,19 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/main/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
-/user/username/projects/myproject/dependency/FnS.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/main/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json *new*
+/user/username/projects/myproject/dependency/FnS.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/main/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/random/random.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -712,20 +712,20 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/main/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
-/user/username/projects/myproject/dependency/FnS.ts *changed*
-    version: Text-1
-    pendingReloadFromDisk: true *changed*
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/main/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/main/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -786,20 +786,20 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
-/user/username/projects/myproject/main/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
-/user/username/projects/myproject/dependency/FnS.ts *changed*
-    version: Text-2 *changed*
-    pendingReloadFromDisk: false *changed*
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/main/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/main/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1

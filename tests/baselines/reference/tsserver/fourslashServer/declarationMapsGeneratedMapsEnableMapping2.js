@@ -212,18 +212,14 @@ watchedFiles::
   {"pollingInterval":2000}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -242,6 +238,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
@@ -285,10 +285,6 @@ watchedFiles *deleted*::
   {"pollingInterval":500}
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -308,6 +304,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
@@ -432,21 +432,21 @@ watchedFiles::
   {"pollingInterval":2000}
 
 Projects::
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
+/dist/index.d.ts *new*
+    version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
 /index.ts (Open)
     version: Text-1
     containingProjects: 1
@@ -473,10 +473,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2*
-/dist/index.d.ts *new*
-    version: Text-1
+/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -535,10 +535,13 @@ watchedFiles::
   {"pollingInterval":2000}
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
+/dist/index.d.ts
+    version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/dist/index.d.ts.map *new*
+    version: Text-1
+    containingProjects: 0
 /index.ts (Open)
     version: Text-1
     containingProjects: 1
@@ -565,13 +568,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2*
-/dist/index.d.ts
-    version: Text-1
+/tsconfig.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
-/dist/index.d.ts.map *new*
-    version: Text-1
-    containingProjects: 0
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {

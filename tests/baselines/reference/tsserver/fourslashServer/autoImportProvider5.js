@@ -104,19 +104,15 @@ watchedFiles::
   {"pollingInterval":250}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -137,6 +133,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/package.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -207,6 +207,12 @@ Info seq  [hh:mm:ss:mss] 	FileName: /index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 After Request
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -215,18 +221,12 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/package.json (Open)
+/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -252,10 +252,10 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/autoImportProviderProject1*
         /dev/null/autoImportProviderProject2* *new*
-/index.ts (Open) *new*
+/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -455,6 +455,12 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/autoImportProviderProject2* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -463,18 +469,12 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/autoImportProviderProject2* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/package.json (Open)
-    version: SVC-1-0
+/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -500,10 +500,10 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/autoImportProviderProject1*
         /dev/null/autoImportProviderProject2*
-/index.ts (Open) *changed*
-    version: SVC-1-1 *changed*
+/package.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -521,10 +521,10 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/package.json (Open)
-    version: SVC-1-0
+/index.ts (Open) *changed*
+    version: SVC-1-2 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -550,10 +550,10 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/autoImportProviderProject1*
         /dev/null/autoImportProviderProject2*
-/index.ts (Open) *changed*
-    version: SVC-1-2 *changed*
+/package.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -571,10 +571,10 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/package.json (Open)
-    version: SVC-1-0
+/index.ts (Open) *changed*
+    version: SVC-1-3 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -600,10 +600,10 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/autoImportProviderProject1*
         /dev/null/autoImportProviderProject2*
-/index.ts (Open) *changed*
-    version: SVC-1-3 *changed*
+/package.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -621,10 +621,10 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/package.json (Open)
-    version: SVC-1-0
+/index.ts (Open) *changed*
+    version: SVC-1-4 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -650,7 +650,7 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/autoImportProviderProject1*
         /dev/null/autoImportProviderProject2*
-/index.ts (Open) *changed*
-    version: SVC-1-4 *changed*
+/package.json (Open)
+    version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject1*

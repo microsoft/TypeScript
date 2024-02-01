@@ -131,7 +131,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/file.ts *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/myproject.njsproj
@@ -139,7 +139,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/myproject.njsproj
-/a/lib/lib.d.ts *new*
+/user/username/projects/myproject/file.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/myproject.njsproj

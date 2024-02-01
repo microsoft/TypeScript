@@ -260,11 +260,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
-/a/lib/lib.d.ts
+/a/b/commonFile2.ts *new*
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
-/a/b/commonFile2.ts *new*
+/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json

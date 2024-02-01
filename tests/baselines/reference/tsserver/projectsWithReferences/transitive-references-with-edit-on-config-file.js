@@ -318,11 +318,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/c/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/b/index.ts *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
@@ -330,11 +326,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/refs/a.d.ts *new*
+/user/username/projects/myproject/b/index.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
-/a/lib/lib.d.ts *new*
+/user/username/projects/myproject/c/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/refs/a.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
@@ -544,11 +544,7 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/c/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/b/index.ts
+/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
@@ -556,18 +552,22 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/refs/a.d.ts *changed*
+/user/username/projects/myproject/b/index.ts
     version: Text-1
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/c/tsconfig.json *deleted*
-/a/lib/lib.d.ts
-    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/c/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
 /user/username/projects/myproject/nrefs/a.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/refs/a.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/c/tsconfig.json *deleted*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/c/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/c/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig.json
@@ -763,11 +763,7 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/c/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/b/index.ts
+/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
@@ -775,15 +771,19 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
-/user/username/projects/myproject/refs/a.d.ts *changed*
+/user/username/projects/myproject/b/index.ts
     version: Text-1
-    containingProjects: 1 *changed*
-        /user/username/projects/myproject/c/tsconfig.json *new*
-/a/lib/lib.d.ts
-    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/c/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/c/tsconfig.json
 /user/username/projects/myproject/nrefs/a.d.ts *changed*
     version: Text-1
     containingProjects: 0 *changed*
         /user/username/projects/myproject/c/tsconfig.json *deleted*
+/user/username/projects/myproject/refs/a.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/c/tsconfig.json *new*

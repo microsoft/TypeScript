@@ -77,12 +77,12 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/user/username/projects/myproject/a.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/a.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -115,15 +115,15 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/myproject/a.ts *changed*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 
 Before request
 
@@ -174,13 +174,13 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
+/user/username/projects/myproject/a.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0
 /user/username/projects/myproject/c.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/user/username/projects/myproject/a.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0
 
 Before request
 
@@ -235,11 +235,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/user/username/projects/myproject/c.ts (Open)
+/user/username/projects/myproject/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/user/username/projects/myproject/b.ts (Open) *new*
+/user/username/projects/myproject/c.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*

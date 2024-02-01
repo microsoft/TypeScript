@@ -143,10 +143,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -157,6 +153,10 @@ c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json (Ope
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -280,6 +280,9 @@ c:/project/node_modules/node_modules/@types:
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -287,15 +290,8 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -319,6 +315,10 @@ c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 c:/project/node_modules/@remix-run/server-runtime/index.d.ts *new*
     version: Text-1
     containingProjects: 1

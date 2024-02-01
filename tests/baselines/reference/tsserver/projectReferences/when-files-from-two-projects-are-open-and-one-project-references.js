@@ -613,12 +613,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/main/src/file1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/main/src/file1.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/main/tsconfig.json
 
@@ -815,18 +815,14 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/main/tsconfig.json (Configured)
+/user/username/projects/myproject/core/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/core/tsconfig.json (Configured) *new*
+/user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/main/src/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -836,6 +832,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/core/tsconfig.json
+/user/username/projects/myproject/main/src/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 
 Before request
 
@@ -1484,16 +1484,16 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/main/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /user/username/projects/myproject/core/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/indirect/tsconfig.json (Configured) *new*
+/user/username/projects/myproject/coreRef1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/coreRef1/tsconfig.json (Configured) *new*
+/user/username/projects/myproject/coreRef3/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/indirect/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json (Configured) *new*
@@ -1502,18 +1502,14 @@ Projects::
 /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/refToCoreRef3/tsconfig.json (Configured) *new*
+/user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/coreRef3/tsconfig.json (Configured) *new*
+/user/username/projects/myproject/refToCoreRef3/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/main/src/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 8 *changed*
@@ -1529,14 +1525,18 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/core/tsconfig.json
-/user/username/projects/myproject/indirect/src/file1.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/indirect/tsconfig.json
 /user/username/projects/myproject/coreRef1/src/file1.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/coreRef1/tsconfig.json
+/user/username/projects/myproject/coreRef3/src/file1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/coreRef3/tsconfig.json
+/user/username/projects/myproject/indirect/src/file1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/indirect/tsconfig.json
 /user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -1545,11 +1545,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json
+/user/username/projects/myproject/main/src/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/refToCoreRef3/src/file1.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/refToCoreRef3/tsconfig.json
-/user/username/projects/myproject/coreRef3/src/file1.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/coreRef3/tsconfig.json

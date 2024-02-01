@@ -134,12 +134,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/user/username/projects/project/app.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/project/tsconfig.json
+/user/username/projects/project/app.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
 
@@ -612,16 +612,16 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/projects/project/app.js (Open)
-    version: SVC-1-0
+/a/data/node_modules/@types/jquery/index.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
-/a/data/node_modules/@types/jquery/index.d.ts *new*
-    version: Text-1
+/user/username/projects/project/app.js (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
 
@@ -673,17 +673,17 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/project/app.js *changed*
-    open: false *changed*
-    version: SVC-1-0
+/a/data/node_modules/@types/jquery/index.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
-/a/data/node_modules/@types/jquery/index.d.ts
-    version: Text-1
+/user/username/projects/project/app.js *changed*
+    open: false *changed*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
 
@@ -982,28 +982,28 @@ PendingInstalls callback:: count: 1
 ] *new*
 
 Projects::
-/user/username/projects/project2/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /user/username/projects/project/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
+/user/username/projects/project2/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
+/a/data/node_modules/@types/jquery/index.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /user/username/projects/project/tsconfig.json *deleted*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /user/username/projects/project2/tsconfig.json *new*
         /user/username/projects/project/tsconfig.json *deleted*
-/user/username/projects/project2/app.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/project2/tsconfig.json
 /user/username/projects/project/app.js *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /user/username/projects/project/tsconfig.json *deleted*
-/a/data/node_modules/@types/jquery/index.d.ts *deleted*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /user/username/projects/project/tsconfig.json *deleted*
+/user/username/projects/project2/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/project2/tsconfig.json

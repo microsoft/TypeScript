@@ -259,15 +259,19 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+/node_modules/mobx/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /src/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -288,10 +292,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/mobx/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -353,6 +353,10 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/node_modules/mobx/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /src/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -374,10 +378,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/mobx/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -439,6 +439,10 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/node_modules/mobx/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /src/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -460,10 +464,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/mobx/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 
 Before request
 

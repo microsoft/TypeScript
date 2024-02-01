@@ -476,8 +476,20 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open) *new*
-    version: SVC-1-0
+/home/src/lib/lib.dom.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.es5.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/core.d.ts *new*
@@ -492,27 +504,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts *new*
-    version: Text-1
+/home/src/projects/project1/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/typeroot1/sometype/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.scripthost.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts *new*
+/home/src/projects/project1/utils.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
@@ -649,8 +649,24 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
+/home/src/lib/lib.dom.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/core.d.ts
@@ -665,31 +681,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.scripthost.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts *changed*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /home/src/projects/project1/tsconfig.json *deleted*
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
+/home/src/projects/project1/utils.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
@@ -715,8 +715,23 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/core.d.ts
@@ -732,30 +747,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.scripthost.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts
-    version: Text-1
-    containingProjects: 0
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/projects/project1/utils.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
@@ -813,8 +813,23 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/core.d.ts
@@ -830,30 +845,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.scripthost.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts
-    version: Text-1
-    containingProjects: 0
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+/home/src/projects/project1/utils.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
@@ -918,27 +918,10 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/file.ts
-    version: Text-2
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/file2.ts
+/home/src/lib/lib.dom.d.ts
     version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/typeroot1/sometype/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
@@ -946,13 +929,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts
+/home/src/lib/lib.webworker.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts
-    version: Text-1
-    containingProjects: 0
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -961,6 +941,26 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
@@ -1067,10 +1067,25 @@ Projects::
     projectProgramVersion: 3
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1
@@ -1079,33 +1094,18 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts
+/home/src/projects/project1/utils.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.scripthost.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts
-    version: Text-1
-    containingProjects: 0
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *deleted*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /home/src/projects/project1/tsconfig.json *deleted*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
@@ -1220,8 +1220,20 @@ Projects::
     projectProgramVersion: 4 *changed*
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
+/home/src/lib/lib.dom.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /home/src/projects/project1/tsconfig.json *new*
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
@@ -1232,30 +1244,18 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts
+/home/src/projects/project1/utils.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.scripthost.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts *changed*
-    version: Text-1
-    containingProjects: 1 *changed*
-        /home/src/projects/project1/tsconfig.json *new*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
@@ -1651,8 +1651,24 @@ Projects::
     projectProgramVersion: 6 *changed*
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
+/home/src/lib/lib.dom.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
+    version: Text-2
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
@@ -1663,32 +1679,16 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts
+/home/src/projects/project1/utils.d.ts
     version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.scripthost.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts *changed*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /home/src/projects/project1/tsconfig.json *deleted*
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
-    version: Text-2
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 
@@ -1854,8 +1854,27 @@ Projects::
     projectProgramVersion: 7 *changed*
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
@@ -1866,34 +1885,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts *changed*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /home/src/projects/project1/tsconfig.json *deleted*
-/home/src/lib/lib.scripthost.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts
-    version: Text-1
-    containingProjects: 0
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
-    version: Text-2
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *new*
+/home/src/projects/project1/utils.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
@@ -1922,38 +1922,18 @@ Projects::
     projectProgramVersion: 7
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/file.ts
-    version: Text-2
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/file2.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/typeroot1/sometype/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts
+/home/src/lib/lib.dom.d.ts
     version: Text-1
     containingProjects: 0
-/home/src/lib/lib.scripthost.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
 /home/src/lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts
     version: Text-1
     containingProjects: 0
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
@@ -1964,6 +1944,26 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /home/src/projects/project1/tsconfig.json *deleted*
+/home/src/projects/project1/file.ts
+    version: Text-2
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/file2.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/typeroot1/sometype/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/projects/project1/utils.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
@@ -2078,8 +2078,23 @@ Projects::
     projectProgramVersion: 8 *changed*
 
 ScriptInfos::
-/home/src/projects/project1/index.ts (Open)
-    version: SVC-1-0
+/home/src/lib/lib.dom.d.ts
+    version: Text-1
+    containingProjects: 0
+/home/src/lib/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.scripthost.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
+/home/src/lib/lib.webworker.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /home/src/projects/project1/tsconfig.json *new*
+/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+    version: Text-2
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
@@ -2090,30 +2105,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/projects/project1/utils.d.ts
-    version: Text-1
+/home/src/projects/project1/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.webworker.d.ts *changed*
+/home/src/projects/project1/utils.d.ts
     version: Text-1
-    containingProjects: 1 *changed*
-        /home/src/projects/project1/tsconfig.json *new*
-/home/src/lib/lib.scripthost.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.es5.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
-/home/src/lib/lib.dom.d.ts
-    version: Text-1
-    containingProjects: 0
-/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
-    version: Text-2
     containingProjects: 1
         /home/src/projects/project1/tsconfig.json

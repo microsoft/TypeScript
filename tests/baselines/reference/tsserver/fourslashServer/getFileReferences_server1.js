@@ -177,17 +177,28 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/project/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/project/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /project/tsconfig.json
         /dev/null/inferredProject1*
 /project/a.ts *new*
     version: Text-1
@@ -205,20 +216,9 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /project/tsconfig.json
-/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /project/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /project/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts *new*
-    version: Text-1
-    containingProjects: 2
-        /project/tsconfig.json
+/project/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:

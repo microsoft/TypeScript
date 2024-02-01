@@ -181,16 +181,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/src/file2.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/file1.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/src/file2.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
@@ -244,8 +244,8 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/src/file2.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/file1.ts (Open) *changed*
@@ -253,8 +253,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
+/user/username/projects/myproject/src/file2.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
@@ -307,18 +307,18 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/src/file2.ts *changed*
-    open: false *changed*
-    version: SVC-1-0
-    pendingReloadFromDisk: true *changed*
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/file1.ts (Open)
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
+/user/username/projects/myproject/src/file2.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
@@ -365,16 +365,16 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 ScriptInfos::
-/user/username/projects/myproject/src/file2.ts *changed*
-    version: Text-2 *changed*
-    pendingReloadFromDisk: false *changed*
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/file1.ts (Open)
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
+/user/username/projects/myproject/src/file2.ts *changed*
+    version: Text-2 *changed*
+    pendingReloadFromDisk: false *changed*
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json

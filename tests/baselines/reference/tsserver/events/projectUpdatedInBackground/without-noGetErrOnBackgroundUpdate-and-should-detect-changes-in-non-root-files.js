@@ -390,15 +390,15 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/moduleFile1.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
@@ -426,6 +426,10 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -433,10 +437,6 @@ ScriptInfos::
 /users/username/projects/project/moduleFile1.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 
@@ -498,6 +498,10 @@ Timeout callback:: count: 1
 Immedidate callback:: count: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -505,9 +509,5 @@ ScriptInfos::
 /users/username/projects/project/moduleFile1.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json

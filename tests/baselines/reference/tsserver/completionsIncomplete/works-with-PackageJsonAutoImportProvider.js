@@ -1602,13 +1602,13 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /index.ts (Open) *new*
@@ -2015,47 +2015,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/dep-a/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_0.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_1.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_3.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_4.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_5.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_6.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_7.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_8.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_9.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -2099,6 +2063,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_20.ts *new*
     version: Text-1
     containingProjects: 1
@@ -2136,6 +2104,10 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_29.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_3.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -2179,6 +2151,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_4.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_40.ts *new*
     version: Text-1
     containingProjects: 1
@@ -2219,6 +2195,30 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_5.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_6.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_7.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_8.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_9.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -2256,13 +2256,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -2669,47 +2669,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/dep-a/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_0.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_1.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_2.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_3.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_4.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_5.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_6.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_7.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_8.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_9.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -2753,6 +2717,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_2.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_20.ts
     version: Text-1
     containingProjects: 1
@@ -2790,6 +2758,10 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_29.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_3.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -2833,6 +2805,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_4.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_40.ts
     version: Text-1
     containingProjects: 1
@@ -2870,6 +2846,30 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_49.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_5.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_6.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_7.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_8.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_9.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/index.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -6231,13 +6231,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -6644,47 +6644,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/dep-a/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_0.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_1.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_2.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_3.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_4.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_5.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_6.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_7.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_8.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/node_modules/dep-a/file_9.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -6728,6 +6692,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_2.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_20.ts
     version: Text-1
     containingProjects: 1
@@ -6765,6 +6733,10 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_29.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_3.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
@@ -6808,6 +6780,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_4.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_40.ts
     version: Text-1
     containingProjects: 1
@@ -6845,6 +6821,30 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
 /node_modules/dep-a/file_49.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_5.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_6.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_7.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_8.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_9.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/index.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*

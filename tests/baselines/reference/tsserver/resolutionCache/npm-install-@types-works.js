@@ -334,11 +334,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/lib/lib.d.ts
+/a/b/projects/temp/node_modules/@types/pad/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/b/projects/temp/node_modules/@types/pad/index.d.ts *new*
+/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*

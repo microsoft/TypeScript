@@ -206,12 +206,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/referenceFile1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/moduleFile1.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/referenceFile1.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 
@@ -253,14 +253,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/referenceFile1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/moduleFile1.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
         /a/b/tsconfig.json *deleted*
+/a/b/referenceFile1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {

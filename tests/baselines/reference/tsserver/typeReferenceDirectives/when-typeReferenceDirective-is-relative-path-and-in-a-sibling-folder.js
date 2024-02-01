@@ -195,15 +195,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/background/tsconfig.json
 /user/username/projects/myproject/background/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/background/tsconfig.json
 /user/username/projects/myproject/typedefs/filesystem.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/background/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/background/tsconfig.json

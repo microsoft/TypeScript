@@ -200,6 +200,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json
 /user/username/projects/myproject/playground/tests.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -209,10 +213,6 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/playground/tsconfig.json
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/playground/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/playground/tsconfig.json
@@ -265,6 +265,10 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/playground/tsconfig.json
 /user/username/projects/myproject/playground/tests.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -275,10 +279,6 @@ ScriptInfos::
     containingProjects: 1
         /user/username/projects/myproject/playground/tsconfig.json
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/playground/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/playground/tsconfig.json
@@ -476,6 +476,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json *new*
+        /user/username/projects/myproject/playground/tsconfig.json *deleted*
+/user/username/projects/myproject/playground/tests.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/playground/tsconfig.json *deleted*
 /user/username/projects/myproject/playground/tsconfig-json/src/src.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
@@ -484,15 +493,6 @@ ScriptInfos::
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts (Open) *changed*
     open: true *changed*
     version: Text-1
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/playground/tsconfig.json *deleted*
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 1 *changed*
-        /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json *new*
-        /user/username/projects/myproject/playground/tsconfig.json *deleted*
-/user/username/projects/myproject/playground/tests.ts *deleted*
-    version: SVC-1-0
     containingProjects: 0 *changed*
         /user/username/projects/myproject/playground/tsconfig.json *deleted*
 
@@ -638,14 +638,19 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json (Configured)
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/user/username/projects/myproject/playground/tsconfig-json/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json
+        /dev/null/inferredProject1* *new*
 /user/username/projects/myproject/playground/tsconfig-json/src/src.ts
     version: Text-1
     containingProjects: 1
@@ -653,9 +658,4 @@ ScriptInfos::
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json
         /dev/null/inferredProject1* *new*

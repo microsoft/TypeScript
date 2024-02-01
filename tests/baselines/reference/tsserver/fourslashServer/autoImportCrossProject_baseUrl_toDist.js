@@ -182,14 +182,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/common/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /common/src/MyModule.ts *new*
     version: Text-1
     containingProjects: 1
         /common/tsconfig.json
+/common/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -345,23 +345,23 @@ Projects::
 /common/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/web/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
+/web/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/common/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /common/src/MyModule.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /common/tsconfig.json
         /web/tsconfig.json *new*
+/common/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*

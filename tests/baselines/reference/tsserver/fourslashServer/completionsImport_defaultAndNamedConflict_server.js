@@ -162,18 +162,14 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -182,6 +178,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -226,10 +226,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -239,6 +235,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1050,18 +1050,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
-/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /index.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
@@ -1070,3 +1066,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*

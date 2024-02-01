@@ -225,12 +225,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/project/a/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /project/a/tsconfig.json
 /project/a/foo.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /project/a/tsconfig.json
+/project/a/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /project/a/tsconfig.json
 /project/shared.ts *new*
@@ -451,27 +451,27 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/project/a/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /project/a/tsconfig.json
 /project/a/foo.d.ts
     version: Text-1
     containingProjects: 1
         /project/a/tsconfig.json
+/project/a/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /project/a/tsconfig.json
+/project/b/foo.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /project/b/tsconfig.json
+/project/b/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /project/b/tsconfig.json
 /project/shared.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /project/a/tsconfig.json
         /project/b/tsconfig.json *new*
-/project/b/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /project/b/tsconfig.json
-/project/b/foo.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /project/b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /project/a/tsconfig.json:: 0
 Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /project/b/tsconfig.json:: 1

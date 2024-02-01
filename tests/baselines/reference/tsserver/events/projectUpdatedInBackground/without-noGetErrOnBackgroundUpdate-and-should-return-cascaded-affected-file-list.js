@@ -478,6 +478,10 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-1
     containingProjects: 1
@@ -499,10 +503,6 @@ ScriptInfos::
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/moduleFile2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
@@ -530,6 +530,10 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-1
     containingProjects: 1
@@ -552,10 +556,6 @@ ScriptInfos::
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/moduleFile2.ts
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
@@ -622,6 +622,10 @@ Timeout callback:: count: 1
 Immedidate callback:: count: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-1
     containingProjects: 1
@@ -644,10 +648,6 @@ ScriptInfos::
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/moduleFile2.ts
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
@@ -680,6 +680,10 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1Consumer1.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
@@ -704,10 +708,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/project/moduleFile1.ts 1:: WatchInfo: /users/username/projects/project/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
@@ -727,6 +727,10 @@ Timeout callback:: count: 3
 25: *ensureProjectForOpenFiles* *new*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-2
     containingProjects: 1
@@ -749,10 +753,6 @@ ScriptInfos::
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/moduleFile2.ts
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
@@ -807,6 +807,10 @@ Timeout callback:: count: 1
 26: checkOne *new*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-2
     containingProjects: 1
@@ -829,10 +833,6 @@ ScriptInfos::
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/moduleFile2.ts
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json

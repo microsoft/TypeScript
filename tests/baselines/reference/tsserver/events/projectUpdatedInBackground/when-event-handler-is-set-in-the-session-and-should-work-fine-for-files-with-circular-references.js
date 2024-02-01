@@ -347,15 +347,15 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /users/username/projects/project/tsconfig.json
 /users/username/projects/project/file2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/project/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /users/username/projects/project/tsconfig.json

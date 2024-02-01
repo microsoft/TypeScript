@@ -299,11 +299,11 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::

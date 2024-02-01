@@ -518,19 +518,19 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/projects/project/index.mts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/foo2/index.d.ts *new*
-    version: Text-1
+/home/src/projects/project/index.mts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/a/lib/lib.d.ts *new*
+/home/src/projects/project/node_modules/foo2/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
@@ -2188,11 +2188,15 @@ Projects::
     projectProgramVersion: 6 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
 /home/src/projects/project/index.mts (Open)
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
@@ -2200,11 +2204,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/@types/bar/index.d.ts *new*
+/home/src/projects/project/node_modules/foo2/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
@@ -2542,11 +2542,15 @@ Projects::
     projectProgramVersion: 7 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
 /home/src/projects/project/index.mts (Open)
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
@@ -2554,15 +2558,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/tsconfig.json
 /home/src/projects/project/node_modules/foo/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
@@ -2928,11 +2928,15 @@ Projects::
     projectProgramVersion: 8 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
 /home/src/projects/project/index.mts (Open)
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/foo2/index.d.ts
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
@@ -2940,15 +2944,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /home/src/projects/project/tsconfig.json *deleted*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/@types/bar/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/tsconfig.json
 /home/src/projects/project/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
@@ -3272,29 +3272,29 @@ Projects::
     projectProgramVersion: 9 *changed*
 
 ScriptInfos::
-/home/src/projects/project/index.mts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/foo2/index.d.ts *changed*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /home/src/projects/project/tsconfig.json *deleted*
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts
-    version: Text-1
-    containingProjects: 0
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+    version: Text-1
+    containingProjects: 0
 /home/src/projects/project/node_modules/foo/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /home/src/projects/project/tsconfig.json *deleted*
 
 Before running Immedidate callback:: count: 1
 17: semanticCheck
@@ -3435,26 +3435,26 @@ Timeout callback:: count: 1
 34: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
-/home/src/projects/project/index.mts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/foo2/index.d.ts
-    version: Text-1
-    containingProjects: 0
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0
 /home/src/projects/project/node_modules/foo/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts *deleted*
+/home/src/projects/project/node_modules/foo2/index.d.ts
     version: Text-1
     containingProjects: 0
 
@@ -3798,12 +3798,12 @@ Timeout callback:: count: 1
 38: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
-/home/src/projects/project/index.mts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /home/src/projects/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
 /home/src/projects/project/node_modules/@types/bar/index.d.ts

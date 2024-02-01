@@ -73,12 +73,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-c:/myprojects/project/x.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 c:/a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+c:/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -291,12 +291,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-//vda1cs4850/myprojects/project/x.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 //vda1cs4850/a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+//vda1cs4850/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -517,12 +517,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-//vda1cs4850/c$/myprojects/project/x.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 //vda1cs4850/a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+//vda1cs4850/c$/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -751,12 +751,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-c:/users/username/myprojects/project/x.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 c:/a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+c:/users/username/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -985,12 +985,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-//vda1cs4850/c$/users/username/myprojects/project/x.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 //vda1cs4850/a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+//vda1cs4850/c$/users/username/myprojects/project/x.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 

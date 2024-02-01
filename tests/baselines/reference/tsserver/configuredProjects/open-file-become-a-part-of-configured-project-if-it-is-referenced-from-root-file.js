@@ -265,15 +265,15 @@ Timeout callback:: count: 2
 4: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/user/username/projects/myproject/a/c/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 0
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/user/username/projects/myproject/a/c/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/myproject/a/c/tsconfig.json
@@ -544,15 +544,15 @@ FsWatches::
   {}
 
 Projects::
-/user/username/projects/myproject/a/c/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
+/user/username/projects/myproject/a/c/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
 /user/username/projects/myproject/a/b/f1.ts (Open) *changed*
@@ -560,15 +560,15 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /user/username/projects/myproject/a/c/tsconfig.json *new*
         /dev/null/inferredProject1* *deleted*
+/user/username/projects/myproject/a/c/f2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/a/c/tsconfig.json
 /user/username/projects/myproject/a/c/f3.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
         /user/username/projects/myproject/a/c/tsconfig.json *new*
         /dev/null/inferredProject2* *deleted*
-/user/username/projects/myproject/a/c/f2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/a/c/tsconfig.json
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
 Inferred project: /dev/null/inferredProject2* isOrphan:: true isClosed: false

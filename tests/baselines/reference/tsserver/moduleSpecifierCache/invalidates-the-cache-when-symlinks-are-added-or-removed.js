@@ -259,15 +259,19 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+/node_modules/mobx/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /src/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -288,10 +292,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/mobx/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -353,6 +353,10 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/node_modules/mobx/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /src/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -374,10 +378,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/mobx/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -439,6 +439,10 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/node_modules/mobx/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /src/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -460,10 +464,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/mobx/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -1001,15 +1001,19 @@ Timeout callback:: count: 2
 6: *ensureProjectForOpenFiles* *new*
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+/node_modules/mobx/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /src/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1018,6 +1022,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/src/b-link.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /tsconfig.json *deleted*
 /src/b.ts (Open)
     version: Text-1
     containingProjects: 1
@@ -1026,14 +1034,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/node_modules/mobx/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/src/b-link.ts *deleted*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /tsconfig.json *deleted*
 
 Info seq  [hh:mm:ss:mss] Running: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
@@ -1110,12 +1110,12 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache count: 0

@@ -100,16 +100,16 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/a/jsFile.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/jsconfig.json
 /a/dTsFile1.d.ts *new*
     version: Text-1
     containingProjects: 1
         /a/jsconfig.json
 /a/dTsFile2.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/jsconfig.json
+/a/jsFile.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/jsconfig.json
 

@@ -244,12 +244,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/rootfolder/otherfolder/a/b/app.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+/user/username/rootfolder/otherfolder/a/b/app.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 
@@ -2272,12 +2272,12 @@ Projects::
     projectProgramVersion: 4 *changed*
 
 ScriptInfos::
-/user/username/rootfolder/otherfolder/a/b/app.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+/user/username/rootfolder/otherfolder/a/b/app.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/rootfolder/otherfolder/a/b/tsconfig.json
 /user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/index.d.ts *new*

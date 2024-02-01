@@ -95,12 +95,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/file.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/file.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -228,12 +228,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/file.ts (Open) *changed*
-    version: SVC-1-1 *changed*
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/file.ts (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -383,12 +383,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/file.ts (Open) *changed*
-    version: SVC-1-2 *changed*
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/file.ts (Open) *changed*
+    version: SVC-1-2 *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 

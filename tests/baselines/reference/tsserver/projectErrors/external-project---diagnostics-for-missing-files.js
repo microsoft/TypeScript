@@ -181,14 +181,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /a/b/test.csproj
 /a/b/app.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
         /a/b/test.csproj *deleted*
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/test.csproj
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -244,11 +244,11 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/a/lib/lib.d.ts
+/a/b/applib.ts *new*
     version: Text-1
     containingProjects: 1
         /a/b/test.csproj
-/a/b/applib.ts *new*
+/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /a/b/test.csproj
@@ -329,15 +329,15 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/a/lib/lib.d.ts
-    version: Text-1
+/a/b/app.ts *new*
+    version: Text-2
     containingProjects: 1
         /a/b/test.csproj
 /a/b/applib.ts
     version: Text-1
     containingProjects: 1
         /a/b/test.csproj
-/a/b/app.ts *new*
-    version: Text-2
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /a/b/test.csproj

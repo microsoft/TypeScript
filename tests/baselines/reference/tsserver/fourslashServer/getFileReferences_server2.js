@@ -417,7 +417,10 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/client/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /packages/server/tsconfig.json (Configured) *new*
@@ -426,32 +429,11 @@ Projects::
 /packages/shared/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/packages/client/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/packages/server/index.js *new*
-    version: Text-1
-    containingProjects: 1
-        /packages/server/tsconfig.json
-/packages/server/router.js *new*
-    version: Text-1
-    containingProjects: 1
-        /packages/server/tsconfig.json
-/packages/shared/src/referenced.ts *new*
-    version: Text-1
-    containingProjects: 3
-        /packages/server/tsconfig.json
-        /packages/shared/tsconfig.json
-        /packages/client/tsconfig.json
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 4
@@ -477,6 +459,24 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /packages/client/tsconfig.json
+/packages/server/index.js *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/server/tsconfig.json
+/packages/server/router.js *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/server/tsconfig.json
+/packages/shared/src/referenced.ts *new*
+    version: Text-1
+    containingProjects: 3
+        /packages/server/tsconfig.json
+        /packages/shared/tsconfig.json
+        /packages/client/tsconfig.json
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {

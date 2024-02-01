@@ -212,14 +212,14 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/test.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/b/app.ts *new*
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
+/a/b/test.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -270,15 +270,15 @@ FsWatches *deleted*::
   {}
 
 ScriptInfos::
-/a/b/test.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/b/app.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
+/a/b/test.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -389,21 +389,21 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/test.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/b/app.ts (Open)
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
+/a/b/test.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/a/b/test2.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
         /a/b/tsconfig.json
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
-/a/b/test2.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*

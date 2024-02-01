@@ -211,12 +211,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/runtime/a.d.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/tsconfig.json
 /a/b.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/a/runtime/a.d.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/tsconfig.json
 
@@ -268,13 +268,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/a/runtime/a.d.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /a/tsconfig.json
 /a/b.ts (Open) *changed*
     open: true *changed*
     version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/a/runtime/a.d.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /a/tsconfig.json
 

@@ -311,22 +311,22 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject1* (Inferred) *new*
+/a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/tsconfig.json (Configured) *deleted*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/b.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/a.ts *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /a/tsconfig.json *deleted*
+/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before request
 
@@ -481,11 +481,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/b.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/a.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
         /a/tsconfig.json
+/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*

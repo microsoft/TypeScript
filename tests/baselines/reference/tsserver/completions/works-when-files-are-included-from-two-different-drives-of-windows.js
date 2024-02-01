@@ -193,15 +193,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-e:/myproject/src/app.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-e:/myproject/node_modules/@types/react/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-e:/myproject/node_modules/@types/prop-types/index.d.ts *new*
+c:/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -213,8 +205,16 @@ c:/typescript/node_modules/@types/react/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-c:/a/lib/lib.d.ts *new*
+e:/myproject/node_modules/@types/prop-types/index.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+e:/myproject/node_modules/@types/react/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+e:/myproject/src/app.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 

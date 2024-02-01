@@ -220,8 +220,8 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/mocks/cssMock.js (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js *new*
@@ -232,8 +232,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/mocks/cssMock.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
@@ -283,9 +283,8 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/mocks/cssMock.js *changed*
-    open: false *changed*
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js
@@ -296,8 +295,9 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
+/user/username/projects/myproject/mocks/cssMock.js *changed*
+    open: false *changed*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
 
@@ -530,17 +530,23 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/user/username/projects/myproject/apps/editor/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+/user/username/projects/myproject/apps/editor/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /user/username/projects/myproject/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/myproject/apps/editor/tsconfig.json *new*
+        /dev/null/inferredProject1* *new*
+        /user/username/projects/myproject/tsconfig.json *deleted*
 /user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -551,12 +557,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1 *changed*
         /user/username/projects/myproject/apps/editor/tsconfig.json *new*
-        /user/username/projects/myproject/tsconfig.json *deleted*
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /user/username/projects/myproject/apps/editor/tsconfig.json *new*
-        /dev/null/inferredProject1* *new*
         /user/username/projects/myproject/tsconfig.json *deleted*
 /user/username/projects/myproject/mocks/cssMock.js *deleted*
     version: SVC-1-0
@@ -749,9 +749,9 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/apps/editor/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+/user/username/projects/myproject/apps/editor/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1

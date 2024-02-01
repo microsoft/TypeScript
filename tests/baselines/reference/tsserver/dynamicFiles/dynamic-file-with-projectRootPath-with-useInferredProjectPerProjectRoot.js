@@ -70,12 +70,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -430,15 +430,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1

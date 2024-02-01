@@ -384,12 +384,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 
@@ -561,15 +561,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json *new*
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/random.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -975,15 +975,15 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/random.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -1054,15 +1054,15 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/random.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
@@ -1127,16 +1127,16 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts *changed*
-    open: false *changed*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1200,15 +1200,15 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/dependency/FnS.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/random/tsconfig.json
+/user/username/projects/myproject/dependency/FnS.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/random.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -1303,10 +1303,10 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/user/username/projects/myproject/random/tsconfig.json (Configured)
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/dependency/tsconfig.json (Configured) *deleted*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -1316,12 +1316,12 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /user/username/projects/myproject/random/tsconfig.json
         /user/username/projects/myproject/dependency/tsconfig.json *deleted*
+/user/username/projects/myproject/dependency/FnS.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/dependency/tsconfig.json *deleted*
 /user/username/projects/myproject/random/random.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/random/tsconfig.json
-/user/username/projects/myproject/dependency/FnS.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/dependency/tsconfig.json *deleted*

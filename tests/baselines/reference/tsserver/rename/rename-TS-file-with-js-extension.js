@@ -114,11 +114,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/dev/null/inferredProject2* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::

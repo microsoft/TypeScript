@@ -703,13 +703,13 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /c/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 

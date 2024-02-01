@@ -153,22 +153,14 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/lib/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/lib/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/lib/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/lib/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /lib/tsconfig.json
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -183,6 +175,14 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /lib/tsconfig.json
+        /dev/null/inferredProject1*
+/lib/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /lib/tsconfig.json
+/lib/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
@@ -230,15 +230,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/lib/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/lib/index.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /lib/tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -253,6 +244,15 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /lib/tsconfig.json
+        /dev/null/inferredProject1*
+/lib/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /lib/tsconfig.json
+/lib/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
@@ -370,26 +370,17 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /lib/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 /src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/lib/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/lib/index.ts (Open) *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /lib/tsconfig.json
-        /src/tsconfig.json *new*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
@@ -408,6 +399,15 @@ ScriptInfos::
         /lib/tsconfig.json
         /dev/null/inferredProject1*
         /src/tsconfig.json *new*
+/lib/index.ts (Open) *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /lib/tsconfig.json
+        /src/tsconfig.json *new*
+/lib/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1

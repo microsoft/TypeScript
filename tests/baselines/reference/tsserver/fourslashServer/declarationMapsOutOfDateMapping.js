@@ -98,10 +98,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/a/dist/index.d.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -112,6 +108,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/node_modules/a/dist/index.d.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -193,19 +193,18 @@ watchedDirectoriesRecursive *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject2* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/a/dist/index.d.ts (Open) *changed*
+/index.ts (Open) *new*
     version: SVC-1-0
-    containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
-        /dev/null/inferredProject1* *deleted*
+    containingProjects: 1
+        /dev/null/inferredProject2*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
@@ -221,10 +220,11 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /dev/null/inferredProject2* *new*
         /dev/null/inferredProject1* *deleted*
-/index.ts (Open) *new*
+/node_modules/a/dist/index.d.ts (Open) *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject1* *deleted*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -282,7 +282,7 @@ watchedFiles::
   {"pollingInterval":500}
 
 ScriptInfos::
-/node_modules/a/dist/index.d.ts (Open)
+/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2*
@@ -298,7 +298,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject2*
-/index.ts (Open)
+/node_modules/a/dist/index.d.ts (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2*

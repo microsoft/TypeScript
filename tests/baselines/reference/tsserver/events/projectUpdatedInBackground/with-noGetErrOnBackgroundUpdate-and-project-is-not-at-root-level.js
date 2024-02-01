@@ -198,15 +198,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 /user/username/rootfolder/otherfolder/a/b/project/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 /user/username/rootfolder/otherfolder/a/b/project/file3.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
@@ -232,6 +232,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 /user/username/rootfolder/otherfolder/a/b/project/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -239,10 +243,6 @@ ScriptInfos::
 /user/username/rootfolder/otherfolder/a/b/project/file3.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
-    containingProjects: 1
-        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 
@@ -288,6 +288,10 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 /user/username/rootfolder/otherfolder/a/b/project/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -295,10 +299,6 @@ ScriptInfos::
 /user/username/rootfolder/otherfolder/a/b/project/file3.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1
-        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 
@@ -458,19 +458,19 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/user/username/rootfolder/otherfolder/a/b/project/file1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
-/user/username/rootfolder/otherfolder/a/b/project/file3.ts
-    version: Text-2
-    containingProjects: 1
-        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 /user/username/rootfolder/otherfolder/a/b/node_modules/file2.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+/user/username/rootfolder/otherfolder/a/b/project/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+/user/username/rootfolder/otherfolder/a/b/project/file3.ts
+    version: Text-2
     containingProjects: 1
         /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json

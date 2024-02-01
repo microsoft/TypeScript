@@ -340,24 +340,24 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured) *new*
+/user/username/projects/myproject/tsconfig-src.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/tsconfig-src.json (Configured) *new*
+/user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/src/main.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/src/helpers/functions.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/src/main.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json
 
@@ -497,25 +497,17 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured)
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/myproject/tsconfig-src.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/src/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
-/user/username/projects/myproject/src/helpers/functions.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -525,6 +517,14 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
+/user/username/projects/myproject/src/helpers/functions.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
+/user/username/projects/myproject/src/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
 
 Before request
 
@@ -582,15 +582,6 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/src/main.ts *changed*
-    open: false *changed*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
-/user/username/projects/myproject/src/helpers/functions.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -600,6 +591,15 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
+/user/username/projects/myproject/src/helpers/functions.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
+/user/username/projects/myproject/src/main.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
 
 Before request
 
@@ -657,25 +657,17 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured)
-    projectStateVersion: 1
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
     projectProgramVersion: 1
 /user/username/projects/myproject/tsconfig-src.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 2 *changed*
+/user/username/projects/myproject/tsconfig.json (Configured)
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/src/main.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
-/user/username/projects/myproject/src/helpers/functions.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -686,6 +678,14 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
+/user/username/projects/myproject/src/helpers/functions.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
+/user/username/projects/myproject/src/main.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
 
 Before request
 
@@ -785,10 +785,10 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
-/user/username/projects/myproject/tsconfig.json (Configured) *deleted*
+/user/username/projects/myproject/tsconfig-src.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/tsconfig-src.json (Configured) *deleted*
+/user/username/projects/myproject/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -803,12 +803,12 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1 *changed*
         /dev/null/inferredProject1* *new*
-/user/username/projects/myproject/src/main.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/tsconfig-src.json *deleted*
 /user/username/projects/myproject/src/helpers/functions.ts *deleted*
     version: Text-1
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/tsconfig-src.json *deleted*
+/user/username/projects/myproject/src/main.ts *deleted*
+    version: SVC-1-0
     containingProjects: 0 *changed*
         /user/username/projects/myproject/tsconfig-src.json *deleted*
 
@@ -981,14 +981,14 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 2
     projectProgramVersion: 1
 /user/username/projects/myproject/tsconfig-src.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 2
+/user/username/projects/myproject/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
@@ -1001,12 +1001,12 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/user/username/projects/myproject/src/main.ts (Open) *new*
-    version: SVC-2-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/src/helpers/functions.ts *new*
     version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
+/user/username/projects/myproject/src/main.ts (Open) *new*
+    version: SVC-2-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json
 
@@ -1066,14 +1066,14 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured)
-    projectStateVersion: 1
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3 *changed*
     projectProgramVersion: 1
 /user/username/projects/myproject/tsconfig-src.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 3 *changed*
+/user/username/projects/myproject/tsconfig.json (Configured)
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
@@ -1087,12 +1087,12 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/user/username/projects/myproject/src/main.ts (Open)
-    version: SVC-2-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/src/helpers/functions.ts
     version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
+/user/username/projects/myproject/src/main.ts (Open)
+    version: SVC-2-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json
 
@@ -1171,12 +1171,12 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1 *changed*
         /dev/null/inferredProject1* *new*
-/user/username/projects/myproject/src/main.ts (Open)
-    version: SVC-2-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/src/helpers/functions.ts
     version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
+/user/username/projects/myproject/src/main.ts (Open)
+    version: SVC-2-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json
 
@@ -1383,14 +1383,14 @@ After request
 Timeout callback:: count: 0
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 4 *changed*
     projectProgramVersion: 2 *changed*
 /user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 4 *changed*
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
 
 Before request
@@ -1522,12 +1522,12 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/user/username/projects/myproject/src/main.ts (Open)
-    version: SVC-2-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/src/helpers/functions.ts
     version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
+/user/username/projects/myproject/src/main.ts (Open)
+    version: SVC-2-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts *new*
@@ -1606,13 +1606,13 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
+/user/username/projects/myproject/src/helpers/functions.ts
+    version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/src/main.ts *changed*
     open: false *changed*
     version: SVC-2-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
-/user/username/projects/myproject/src/helpers/functions.ts
-    version: Text-2
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts
@@ -1682,14 +1682,14 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured)
-    projectStateVersion: 2
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 5 *changed*
     projectProgramVersion: 2
 /user/username/projects/myproject/tsconfig-src.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 5 *changed*
+/user/username/projects/myproject/tsconfig.json (Configured)
+    projectStateVersion: 2
     projectProgramVersion: 2
 
 ScriptInfos::
@@ -1703,12 +1703,12 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/user/username/projects/myproject/src/main.ts
-    version: SVC-2-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/src/helpers/functions.ts
     version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
+/user/username/projects/myproject/src/main.ts
+    version: SVC-2-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts
@@ -1953,16 +1953,16 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/user/username/projects/myproject/indirect3/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 5
     projectProgramVersion: 2
-/user/username/projects/myproject/tsconfig.json (Configured) *deleted*
+/user/username/projects/myproject/indirect3/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/tsconfig-src.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
-/user/username/projects/myproject/tsconfig-src.json (Configured) *deleted*
+/user/username/projects/myproject/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
 
@@ -1973,8 +1973,19 @@ ScriptInfos::
         /user/username/projects/myproject/indirect3/tsconfig.json *new*
         /dev/null/inferredProject1* *deleted*
         /user/username/projects/myproject/tsconfig-src.json *deleted*
+/dummy/dummy.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0
+/user/username/projects/myproject/indirect3/main.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/indirect3/tsconfig.json
 /user/username/projects/myproject/src/helpers/functions.ts *changed*
     version: Text-2
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/tsconfig-src.json *deleted*
+/user/username/projects/myproject/src/main.ts *deleted*
+    version: SVC-2-0
     containingProjects: 0 *changed*
         /user/username/projects/myproject/tsconfig-src.json *deleted*
 /user/username/projects/myproject/target/src/helpers/functions.d.ts *changed*
@@ -1984,21 +1995,10 @@ ScriptInfos::
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     version: Text-1
     containingProjects: 0
-/user/username/projects/myproject/indirect3/main.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/indirect3/tsconfig.json
 /user/username/projects/myproject/target/src/main.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/indirect3/tsconfig.json
-/dummy/dummy.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0
-/user/username/projects/myproject/src/main.ts *deleted*
-    version: SVC-2-0
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/tsconfig-src.json *deleted*
 
 Before request
 
@@ -2284,10 +2284,10 @@ Projects::
 /user/username/projects/myproject/indirect3/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/tsconfig.json (Configured) *new*
+/user/username/projects/myproject/tsconfig-src.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/tsconfig-src.json (Configured) *new*
+/user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -2297,10 +2297,18 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /user/username/projects/myproject/indirect3/tsconfig.json
         /user/username/projects/myproject/tsconfig-src.json *new*
+/user/username/projects/myproject/indirect3/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/indirect3/tsconfig.json
 /user/username/projects/myproject/src/helpers/functions.ts *changed*
     version: Text-2
     containingProjects: 1 *changed*
         /user/username/projects/myproject/tsconfig-src.json *new*
+/user/username/projects/myproject/src/main.ts *new*
+    version: Text-3
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig-src.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts
     version: Text-1
     containingProjects: 1
@@ -2308,10 +2316,6 @@ ScriptInfos::
 /user/username/projects/myproject/target/src/helpers/functions.d.ts.map
     version: Text-1
     containingProjects: 0
-/user/username/projects/myproject/indirect3/main.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/indirect3/tsconfig.json
 /user/username/projects/myproject/target/src/main.d.ts
     version: Text-1
     containingProjects: 1
@@ -2319,7 +2323,3 @@ ScriptInfos::
 /user/username/projects/myproject/target/src/main.d.ts.map *new*
     version: Text-1
     containingProjects: 0
-/user/username/projects/myproject/src/main.ts *new*
-    version: Text-3
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig-src.json

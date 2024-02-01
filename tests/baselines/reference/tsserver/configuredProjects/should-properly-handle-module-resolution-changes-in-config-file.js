@@ -657,11 +657,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject2*
-/a/module1.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
+/a/module1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json

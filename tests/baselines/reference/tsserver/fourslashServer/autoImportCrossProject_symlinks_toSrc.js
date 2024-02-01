@@ -298,25 +298,17 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /packages/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /packages/dep/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/packages/app/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/packages/app/src/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /packages/app/tsconfig.json
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 3
@@ -335,6 +327,14 @@ ScriptInfos::
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
         /dev/null/inferredProject1*
+/packages/app/package.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/packages/app/src/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/app/tsconfig.json
 /packages/dep/src/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -405,15 +405,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/packages/app/package.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/packages/app/src/index.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /packages/app/tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 3
@@ -432,6 +423,15 @@ ScriptInfos::
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
         /dev/null/inferredProject1*
+/packages/app/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/packages/app/src/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /packages/app/tsconfig.json
 /packages/dep/src/index.ts
     version: Text-1
     containingProjects: 1
@@ -634,6 +634,12 @@ watchedDirectoriesRecursive::
   {} *new*
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -641,22 +647,8 @@ Projects::
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/packages/app/package.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/packages/app/src/index.ts (Open)
-    version: Text-1
-    containingProjects: 1
-        /packages/app/tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 3
@@ -675,6 +667,14 @@ ScriptInfos::
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
         /dev/null/inferredProject1*
+/packages/app/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/packages/app/src/index.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /packages/app/tsconfig.json
 /packages/dep/src/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -702,6 +702,12 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
@@ -709,22 +715,8 @@ Projects::
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/packages/app/package.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/packages/app/src/index.ts (Open) *changed*
-    version: SVC-2-1 *changed*
-    containingProjects: 1
-        /packages/app/tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 3
@@ -743,6 +735,14 @@ ScriptInfos::
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
         /dev/null/inferredProject1*
+/packages/app/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/packages/app/src/index.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /packages/app/tsconfig.json
 /packages/dep/src/index.ts
     version: Text-1
     containingProjects: 2
@@ -770,14 +770,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/packages/app/package.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/packages/app/src/index.ts (Open) *changed*
-    version: SVC-2-2 *changed*
-    containingProjects: 1
-        /packages/app/tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 3
@@ -796,6 +788,14 @@ ScriptInfos::
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
         /dev/null/inferredProject1*
+/packages/app/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/packages/app/src/index.ts (Open) *changed*
+    version: SVC-2-2 *changed*
+    containingProjects: 1
+        /packages/app/tsconfig.json
 /packages/dep/src/index.ts
     version: Text-1
     containingProjects: 2

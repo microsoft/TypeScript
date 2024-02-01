@@ -183,15 +183,15 @@ c:/myfolder/allproject/project/tsconfig.json (Configured) *new*
     projectProgramVersion: 1
 
 ScriptInfos::
+c:/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        c:/myfolder/allproject/project/tsconfig.json
 c:/myfolder/allproject/project/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         c:/myfolder/allproject/project/tsconfig.json
 c:/myfolder/allproject/project/file2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        c:/myfolder/allproject/project/tsconfig.json
-c:/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         c:/myfolder/allproject/project/tsconfig.json

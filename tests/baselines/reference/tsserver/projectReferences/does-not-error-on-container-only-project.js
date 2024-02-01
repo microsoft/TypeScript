@@ -859,26 +859,26 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/container/compositeExec/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
-/user/username/projects/container/lib/index.ts *new*
-    version: Text-1
-    containingProjects: 3
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /user/username/projects/container/exec/tsconfig.json
-        /user/username/projects/container/lib/tsconfig.json
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 3
         /user/username/projects/container/compositeExec/tsconfig.json
         /user/username/projects/container/exec/tsconfig.json
         /user/username/projects/container/lib/tsconfig.json
+/user/username/projects/container/compositeExec/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
 /user/username/projects/container/exec/index.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts *new*
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json
 
 Before request
 

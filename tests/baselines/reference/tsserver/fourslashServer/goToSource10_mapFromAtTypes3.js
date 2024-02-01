@@ -138,14 +138,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/lodash/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/node_modules/@types/lodash/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -156,6 +148,14 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/node_modules/@types/lodash/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/node_modules/lodash/package.json (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -231,15 +231,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/lodash/package.json (Open)
+/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
-/node_modules/@types/lodash/index.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -255,10 +250,15 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
-/index.ts (Open) *new*
+/node_modules/@types/lodash/index.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/node_modules/lodash/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -356,6 +356,9 @@ watchedFiles::
   {"pollingInterval":500}
 
 Projects::
+/dev/null/auxiliaryProject1* (Auxiliary) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -363,20 +366,13 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
-/dev/null/auxiliaryProject1* (Auxiliary) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/lodash/package.json (Open)
+/index.ts (Open) *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/node_modules/@types/lodash/index.d.ts
-    version: Text-1
-    containingProjects: 2
-        /dev/null/inferredProject1*
+    containingProjects: 2 *changed*
         /dev/null/inferredProject2*
+        /dev/null/auxiliaryProject1* *new*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -392,12 +388,16 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /dev/null/inferredProject2*
-/index.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 2 *changed*
+/node_modules/@types/lodash/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
         /dev/null/inferredProject2*
-        /dev/null/auxiliaryProject1* *new*
 /node_modules/lodash/lodash.js *new*
     version: Text-1
     containingProjects: 1
         /dev/null/auxiliaryProject1*
+/node_modules/lodash/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*

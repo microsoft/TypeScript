@@ -116,16 +116,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/user.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/bin/a.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 /b/bin/b.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/user.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -195,21 +195,21 @@ FsWatches::
   {}
 
 ScriptInfos::
-/user/user.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/bin/a.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/b/bin/b.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map *new*
     version: Text-1
     containingProjects: 0
+/b/bin/b.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/user.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before request
 
@@ -282,27 +282,27 @@ FsWatches::
   {}
 
 ScriptInfos::
-/user/user.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/bin/a.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/b/bin/b.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map
     version: Text-1
     containingProjects: 0
-/b/bin/b.d.ts.map *new*
-    version: Text-1
-    containingProjects: 0
 /b/b.ts *new*
     version: Text-1
     containingProjects: 0
+/b/bin/b.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts.map *new*
+    version: Text-1
+    containingProjects: 0
+/user/user.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before request
 
@@ -351,28 +351,28 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/user.ts *changed*
-    open: false *changed*
-    version: SVC-1-0
-    containingProjects: 0 *changed*
-        /dev/null/inferredProject1* *deleted*
 /a/bin/a.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/b/bin/b.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map
     version: Text-1
     containingProjects: 0
-/b/bin/b.d.ts.map
-    version: Text-1
-    containingProjects: 0
 /b/b.ts
     version: Text-1
     containingProjects: 0
+/b/bin/b.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/b/bin/b.d.ts.map
+    version: Text-1
+    containingProjects: 0
+/user/user.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
 
 Before request
 
@@ -454,35 +454,35 @@ FsWatches *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject2* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
-/dummy/dummy.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*
-/user/user.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0
 /a/bin/a.d.ts *deleted*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /dev/null/inferredProject1* *deleted*
-/b/bin/b.d.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 /a/bin/a.d.ts.map *deleted*
     version: Text-1
     containingProjects: 0
+/b/b.ts *deleted*
+    version: Text-1
+    containingProjects: 0
+/b/bin/b.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
 /b/bin/b.d.ts.map *deleted*
     version: Text-1
     containingProjects: 0
-/b/b.ts *deleted*
-    version: Text-1
+/dummy/dummy.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/user/user.ts *deleted*
+    version: SVC-1-0
     containingProjects: 0

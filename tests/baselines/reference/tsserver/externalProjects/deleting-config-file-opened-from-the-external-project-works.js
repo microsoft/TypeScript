@@ -343,11 +343,11 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/user/someuser/project/js/site.js *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/someuser/project/WebApplication6.csproj
-/a/lib/lib.d.ts *new*
+/user/someuser/project/js/site.js *new*
     version: Text-1
     containingProjects: 1
         /user/someuser/project/WebApplication6.csproj

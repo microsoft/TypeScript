@@ -207,12 +207,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/user.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/tsconfig.json
 /a/old.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/a/user.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/tsconfig.json
 
@@ -417,15 +417,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/user.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /a/tsconfig.json
 /a/old.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /a/tsconfig.json
         /b/tsconfig.json *new*
+/a/user.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json
 /b/user.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1

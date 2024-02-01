@@ -214,15 +214,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
@@ -360,12 +360,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts *deleted*

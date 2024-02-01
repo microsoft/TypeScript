@@ -98,10 +98,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/left-pad/package.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -112,6 +108,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/node_modules/left-pad/package.json (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -232,18 +232,18 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
+/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/left-pad/package.json (Open)
+/index.mts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /tsconfig.json
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -259,14 +259,14 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /tsconfig.json *new*
-/index.mts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json
 /node_modules/left-pad/index.d.ts *new*
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/node_modules/left-pad/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -347,22 +347,23 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
+/dev/null/auxiliaryProject1* (Auxiliary) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/dev/null/auxiliaryProject1* (Auxiliary) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/node_modules/left-pad/package.json (Open)
+/index.mts (Open) *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
+    containingProjects: 2 *changed*
+        /tsconfig.json
+        /dev/null/auxiliaryProject1* *new*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -378,11 +379,6 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /tsconfig.json
-/index.mts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 2 *changed*
-        /tsconfig.json
-        /dev/null/auxiliaryProject1* *new*
 /node_modules/left-pad/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -391,3 +387,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/auxiliaryProject1*
+/node_modules/left-pad/package.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*

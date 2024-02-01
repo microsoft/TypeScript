@@ -433,10 +433,10 @@ Projects::
 /a/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
+/a/c/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/c/tsconfig.json (Configured) *deleted*
+/dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -743,10 +743,10 @@ FsWatches *deleted*::
   {}
 
 Projects::
-/a/c/tsconfig.json (Configured) *new*
+/a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/b/tsconfig.json (Configured) *deleted*
+/a/c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
@@ -754,15 +754,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/b/f1.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/b/tsconfig.json *deleted*
 /a/c/f2.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /a/c/tsconfig.json *new*
-/a/b/f1.ts *deleted*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /a/b/tsconfig.json *deleted*
 /a/d/f3.ts *deleted*
     version: SVC-1-0
     containingProjects: 0

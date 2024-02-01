@@ -187,16 +187,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/username/project/src/index.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /a/username/project/tsconfig.json
 /a/username/project/src/file1.ts *new*
     version: Text-1
     containingProjects: 1
         /a/username/project/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/a/username/project/src/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/username/project/tsconfig.json
 
@@ -338,20 +338,20 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/a/username/project/src/index.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /a/username/project/tsconfig.json
 /a/username/project/src/file1.ts
     version: Text-1
     containingProjects: 1
         /a/username/project/tsconfig.json
-/a/lib/lib.d.ts
+/a/username/project/src/file2.ts *new*
     version: Text-1
     containingProjects: 1
         /a/username/project/tsconfig.json
-/a/username/project/src/file2.ts *new*
-    version: Text-1
+/a/username/project/src/index.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /a/username/project/tsconfig.json
 

@@ -175,11 +175,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/src/main.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/project.csproj
-/user/username/projects/myproject/node_modules/bar/index.d.ts *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.csproj
@@ -187,7 +183,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.csproj
-/a/lib/lib.d.ts *new*
+/user/username/projects/myproject/node_modules/bar/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.csproj
+/user/username/projects/myproject/src/main.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.csproj
@@ -234,12 +234,7 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/username/projects/myproject/src/main.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/project.csproj
-/user/username/projects/myproject/node_modules/bar/index.d.ts
+/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.csproj
@@ -247,7 +242,12 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.csproj
-/a/lib/lib.d.ts
+/user/username/projects/myproject/node_modules/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.csproj
+/user/username/projects/myproject/src/main.ts (Open) *changed*
+    open: true *changed*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.csproj

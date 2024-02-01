@@ -230,15 +230,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.es2016.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/src/tsconfig.json
 /user/username/projects/myproject/src/fileA.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/src/tsconfig.json
 /user/username/projects/myproject/src/fileB.mts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/src/tsconfig.json
-/a/lib/lib.es2016.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/src/tsconfig.json

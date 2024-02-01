@@ -181,22 +181,22 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/jsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/jsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/jsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a.js *new*
     version: Text-1
     containingProjects: 1
         /jsconfig.json
+/jsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -267,15 +267,15 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/jsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a.js (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
         /jsconfig.json
+/jsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2

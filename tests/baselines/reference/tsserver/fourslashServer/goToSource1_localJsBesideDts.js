@@ -161,10 +161,18 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
 /a.js (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -180,14 +188,6 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
-/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*
-/a.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject2*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -248,6 +248,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 Projects::
+/dev/null/auxiliaryProject1* (Auxiliary) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -255,15 +258,21 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
-/dev/null/auxiliaryProject1* (Auxiliary) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+/a.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
 /a.js (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
+        /dev/null/auxiliaryProject1* *new*
+/index.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject2*
         /dev/null/auxiliaryProject1* *new*
 /lib.d.ts
     version: Text-1
@@ -279,15 +288,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /dev/null/inferredProject1*
-        /dev/null/inferredProject2*
-/index.ts (Open) *changed*
-    version: SVC-1-0
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject2*
-        /dev/null/auxiliaryProject1* *new*
-/a.d.ts
-    version: Text-1
-    containingProjects: 1
         /dev/null/inferredProject2*
 
 Info seq  [hh:mm:ss:mss] request:

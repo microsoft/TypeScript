@@ -409,12 +409,12 @@ Timeout callback:: count: 1
 5: *ensureProjectForOpenFiles* *new*
 
 Projects::
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 2
-    projectProgramVersion: 2
 /a/b/projects/project/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 2
 
 ScriptInfos::
 /a/b/projects/project/src/index.ts (Open) *changed*

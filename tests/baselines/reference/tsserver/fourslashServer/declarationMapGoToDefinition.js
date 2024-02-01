@@ -131,10 +131,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/tests/cases/fourslash/server/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -145,6 +141,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tests/cases/fourslash/server/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -248,10 +248,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/tests/cases/fourslash/server/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -267,12 +263,16 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
-/tests/cases/fourslash/server/mymodule.ts (Open) *new*
+/tests/cases/fourslash/server/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject1*
 /tests/cases/fourslash/server/indexdef.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/tests/cases/fourslash/server/mymodule.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2*
 
@@ -365,10 +365,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/tests/cases/fourslash/server/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -384,10 +380,10 @@ ScriptInfos::
     containingProjects: 2
         /dev/null/inferredProject1*
         /dev/null/inferredProject2*
-/tests/cases/fourslash/server/mymodule.ts (Open)
+/tests/cases/fourslash/server/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject1*
 /tests/cases/fourslash/server/indexdef.d.ts
     version: Text-1
     containingProjects: 1
@@ -395,3 +391,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/indexdef.d.ts.map *new*
     version: Text-1
     containingProjects: 0
+/tests/cases/fourslash/server/mymodule.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2*

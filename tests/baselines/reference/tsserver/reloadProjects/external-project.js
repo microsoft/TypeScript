@@ -165,15 +165,15 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
 /user/username/projects/myproject/file1.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
 /user/username/projects/myproject/file2.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/project.sln
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
@@ -218,16 +218,16 @@ FsWatches *deleted*::
   {}
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
 /user/username/projects/myproject/file1.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
 /user/username/projects/myproject/file2.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/project.sln
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
@@ -331,15 +331,15 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
 /user/username/projects/myproject/file1.ts (Open)
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
 /user/username/projects/myproject/file2.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/project.sln
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
@@ -444,16 +444,16 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln
 /user/username/projects/myproject/file1.ts (Open)
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
 /user/username/projects/myproject/file2.ts *changed*
     version: Text-2 *changed*
-    containingProjects: 1
-        /user/username/projects/myproject/project.sln
-/a/lib/lib.d.ts
-    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
 /user/username/projects/myproject/node_modules/module1/index.d.ts
@@ -560,15 +560,11 @@ Projects::
     projectProgramVersion: 4 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/file1.ts (Open)
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/project.sln
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
-/user/username/projects/myproject/node_modules/module1/index.d.ts
+/user/username/projects/myproject/file1.ts (Open)
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/project.sln
@@ -576,3 +572,7 @@ ScriptInfos::
     version: Text-2
     containingProjects: 0 *changed*
         /user/username/projects/myproject/project.sln *deleted*
+/user/username/projects/myproject/node_modules/module1/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/project.sln

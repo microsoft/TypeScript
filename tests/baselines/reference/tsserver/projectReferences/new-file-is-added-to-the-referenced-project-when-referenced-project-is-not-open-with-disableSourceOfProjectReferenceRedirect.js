@@ -243,16 +243,16 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/projects/project2/class2.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 
@@ -492,20 +492,20 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
-/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class3.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
-/user/username/projects/myproject/projects/project1/class3.d.ts *new*
-    version: Text-1
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 
@@ -575,15 +575,11 @@ Projects::
     projectProgramVersion: 3
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
-/user/username/projects/myproject/projects/project1/class1.d.ts
+/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
-/a/lib/lib.d.ts
+/user/username/projects/myproject/projects/project1/class1.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -591,6 +587,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /user/username/projects/myproject/projects/project2/tsconfig.json *deleted*
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -816,19 +816,19 @@ Projects::
     projectProgramVersion: 5 *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/projects/project2/class2.ts (Open)
-    version: SVC-1-0
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class1.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class3.d.ts *new*
     version: Text-2
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
+/user/username/projects/myproject/projects/project2/class2.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/projects/project2/tsconfig.json

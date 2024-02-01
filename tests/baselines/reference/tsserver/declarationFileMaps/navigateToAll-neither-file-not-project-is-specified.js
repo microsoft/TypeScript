@@ -563,22 +563,22 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/b/tsconfig.json (Configured) *new*
+/a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/tsconfig.json (Configured) *deleted*
+/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/b/b.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /b/tsconfig.json
 /a/a.ts *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /a/tsconfig.json *deleted*
+/b/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /b/tsconfig.json
 
 ts.getFileEmitOutput: /b/b.ts: {
   "outputFiles": [
@@ -876,6 +876,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/a.ts *new*
+    version: Text-2
+    containingProjects: 1
+        /user/tsconfig.json
 /b/b.ts *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
@@ -883,10 +887,6 @@ ScriptInfos::
         /user/tsconfig.json *new*
 /user/user.ts (Open) *new*
     version: SVC-1-0
-    containingProjects: 1
-        /user/tsconfig.json
-/a/a.ts *new*
-    version: Text-2
     containingProjects: 1
         /user/tsconfig.json
 

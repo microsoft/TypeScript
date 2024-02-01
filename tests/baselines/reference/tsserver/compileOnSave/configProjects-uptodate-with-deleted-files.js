@@ -203,10 +203,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -217,6 +213,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts *new*
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/moduleFile2.ts *new*
@@ -285,10 +285,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open) *changed*
-    version: SVC-1-1 *changed*
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts
     version: Text-1
     containingProjects: 1
@@ -299,6 +295,10 @@ ScriptInfos::
         /a/b/tsconfig.json
 /a/b/globalFile3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/moduleFile2.ts
@@ -347,16 +347,20 @@ Timeout callback:: count: 2
 4: *ensureProjectForOpenFiles* *new*
 
 ScriptInfos::
-/a/b/moduleFile1.ts (Open)
-    version: SVC-1-1
-    containingProjects: 1
-        /a/b/tsconfig.json
 /a/b/file1Consumer1.ts
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
+/a/b/file1Consumer2.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/b/tsconfig.json *deleted*
 /a/b/globalFile3.ts
     version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/moduleFile1.ts (Open)
+    version: SVC-1-1
     containingProjects: 1
         /a/b/tsconfig.json
 /a/b/moduleFile2.ts
@@ -367,10 +371,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /a/b/tsconfig.json
-/a/b/file1Consumer2.ts *deleted*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /a/b/tsconfig.json *deleted*
 
 Info seq  [hh:mm:ss:mss] request:
     {

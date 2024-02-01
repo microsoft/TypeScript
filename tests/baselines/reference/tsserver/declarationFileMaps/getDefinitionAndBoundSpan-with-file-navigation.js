@@ -563,22 +563,22 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/b/tsconfig.json (Configured) *new*
+/a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/tsconfig.json (Configured) *deleted*
+/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/b/b.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /b/tsconfig.json
 /a/a.ts *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /a/tsconfig.json *deleted*
+/b/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /b/tsconfig.json
 
 ts.getFileEmitOutput: /b/b.ts: {
   "outputFiles": [
@@ -909,12 +909,12 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/user.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/tsconfig.json
 /a/a.ts *new*
     version: Text-2
+    containingProjects: 1
+        /user/tsconfig.json
+/user/user.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /user/tsconfig.json
 
@@ -1022,13 +1022,13 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
+/a/a.ts
+    version: Text-2
+    containingProjects: 1
+        /user/tsconfig.json
 /user/user.ts *changed*
     open: false *changed*
     version: SVC-1-0
-    containingProjects: 1
-        /user/tsconfig.json
-/a/a.ts
-    version: Text-2
     containingProjects: 1
         /user/tsconfig.json
 
@@ -1185,27 +1185,27 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /b/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
 /user/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/tsconfig.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
-/user/user.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /user/tsconfig.json
 /a/a.ts (Open) *changed*
     open: true *changed*
     version: Text-2
     containingProjects: 2 *changed*
         /user/tsconfig.json
         /a/tsconfig.json *new*
+/user/user.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /user/tsconfig.json
 
 Before request
 
@@ -1263,16 +1263,16 @@ FsWatchesRecursive::
   {}
 
 ScriptInfos::
-/user/user.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /user/tsconfig.json
 /a/a.ts *changed*
     open: false *changed*
     version: Text-2
     containingProjects: 2
         /user/tsconfig.json
         /a/tsconfig.json
+/user/user.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /user/tsconfig.json
 
 Before request
 
@@ -1384,20 +1384,25 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject1* (Inferred) *new*
+/a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
 /b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
-/user/tsconfig.json (Configured) *deleted*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/tsconfig.json (Configured) *deleted*
+/user/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/a.ts *deleted*
+    version: Text-2
+    containingProjects: 0 *changed*
+        /user/tsconfig.json *deleted*
+        /a/tsconfig.json *deleted*
 /dummy/dummy.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -1406,8 +1411,3 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 0 *changed*
         /user/tsconfig.json *deleted*
-/a/a.ts *deleted*
-    version: Text-2
-    containingProjects: 0 *changed*
-        /user/tsconfig.json *deleted*
-        /a/tsconfig.json *deleted*

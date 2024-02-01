@@ -122,13 +122,13 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 Projects::
+/dev/null/auxiliaryProject1* (Auxiliary) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
-/dev/null/auxiliaryProject1* (Auxiliary) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /index.js (Open) *changed*

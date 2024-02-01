@@ -153,13 +153,13 @@ c:/temp/replay/axios-src/node_modules: *new*
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *new*
@@ -207,13 +207,13 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
@@ -384,14 +384,14 @@ c:/temp/replay/axios-src/node_modules:
   {}
 
 Projects::
-/dev/null/inferredProject2* (Inferred) *new*
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
     autoImportProviderHost: undefined *changed*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
+/dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -401,11 +401,6 @@ c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
     containingProjects: 1 *changed*
         /dev/null/inferredProject2* *new*
         /dev/null/inferredProject1* *deleted*
-c:/temp/replay/axios-src/node_modules/follow-redirects/index.js *changed*
-    version: Text-1
-    containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
-        /dev/null/autoImportProviderProject1* *deleted*
 c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -414,6 +409,11 @@ c:/temp/replay/axios-src/lib/core/settle.js *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject2*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject2* *new*
+        /dev/null/autoImportProviderProject1* *deleted*
 
 Before request
 
@@ -495,6 +495,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
+/dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject2* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -502,9 +505,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
-/dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
@@ -512,23 +512,23 @@ c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
     containingProjects: 2 *changed*
         /dev/null/inferredProject2*
         /dev/null/inferredProject3* *new*
-c:/temp/replay/axios-src/node_modules/follow-redirects/index.js *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject2*
-        /dev/null/autoImportProviderProject2* *new*
 c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open)
     version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*
-c:/temp/replay/axios-src/lib/core/settle.js
-    version: Text-1
     containingProjects: 1
         /dev/null/inferredProject2*
 c:/temp/replay/axios-src/lib/core/mergeConfig.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject3*
+c:/temp/replay/axios-src/lib/core/settle.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject2*
+        /dev/null/autoImportProviderProject2* *new*
 
 Before request
 
@@ -624,6 +624,9 @@ c:/temp/replay/axios-src/node_modules:
   {}
 
 Projects::
+/dev/null/autoImportProviderProject2* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
@@ -631,9 +634,6 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject2*
-/dev/null/autoImportProviderProject2* (AutoImportProvider)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js *changed*
@@ -643,23 +643,23 @@ c:/temp/replay/axios-src/lib/core/AxiosHeaders.js *changed*
     containingProjects: 2
         /dev/null/inferredProject2*
         /dev/null/inferredProject3*
-c:/temp/replay/axios-src/node_modules/follow-redirects/index.js
-    version: Text-1
-    containingProjects: 2
-        /dev/null/inferredProject2*
-        /dev/null/autoImportProviderProject2*
 c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open)
     version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*
-c:/temp/replay/axios-src/lib/core/settle.js
-    version: Text-1
     containingProjects: 1
         /dev/null/inferredProject2*
 c:/temp/replay/axios-src/lib/core/mergeConfig.js (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject3*
+c:/temp/replay/axios-src/lib/core/settle.js
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject2*
+        /dev/null/autoImportProviderProject2*
 
 Before request
 
@@ -777,21 +777,21 @@ c:/temp/replay/axios-src/lib/core/AxiosHeaders.js *changed*
     containingProjects: 2
         /dev/null/inferredProject2*
         /dev/null/inferredProject3*
-c:/temp/replay/axios-src/node_modules/follow-redirects/index.js
-    version: Text-1
-    containingProjects: 2
-        /dev/null/inferredProject2*
-        /dev/null/autoImportProviderProject2*
 c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open)
     version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject2*
-c:/temp/replay/axios-src/lib/core/settle.js (Open) *changed*
-    open: true *changed*
-    version: Text-1
     containingProjects: 1
         /dev/null/inferredProject2*
 c:/temp/replay/axios-src/lib/core/mergeConfig.js (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject3*
+c:/temp/replay/axios-src/lib/core/settle.js (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+c:/temp/replay/axios-src/node_modules/follow-redirects/index.js
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject2*
+        /dev/null/autoImportProviderProject2*

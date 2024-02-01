@@ -665,8 +665,8 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/projects/project/packages/package-b/src/index.ts (Open) *new*
-    version: SVC-1-0
+/a/lib/lib.es2021.d.ts *new*
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts *new*
@@ -677,8 +677,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
-/a/lib/lib.es2021.d.ts *new*
-    version: Text-1
+/home/src/projects/project/packages/package-b/src/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 
@@ -806,8 +806,8 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/projects/project/packages/package-b/src/index.ts (Open) *changed*
-    version: SVC-1-1 *changed*
+/a/lib/lib.es2021.d.ts
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts
@@ -818,8 +818,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
-/a/lib/lib.es2021.d.ts
-    version: Text-1
+/home/src/projects/project/packages/package-b/src/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 
@@ -984,8 +984,8 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
-/home/src/projects/project/packages/package-b/src/index.ts (Open)
-    version: SVC-1-1
+/a/lib/lib.es2021.d.ts
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts *changed*
@@ -996,8 +996,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /home/src/projects/project/packages/package-b/tsconfig.json *deleted*
-/a/lib/lib.es2021.d.ts
-    version: Text-1
+/home/src/projects/project/packages/package-b/src/index.ts (Open)
+    version: SVC-1-1
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 
@@ -1098,8 +1098,8 @@ Projects::
     projectProgramVersion: 2
 
 ScriptInfos::
-/home/src/projects/project/packages/package-b/src/index.ts (Open) *changed*
-    version: SVC-1-2 *changed*
+/a/lib/lib.es2021.d.ts
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts
@@ -1108,8 +1108,8 @@ ScriptInfos::
 /home/src/projects/project/packages/package-a/src/subfolder/index.ts
     version: Text-1
     containingProjects: 0
-/a/lib/lib.es2021.d.ts
-    version: Text-1
+/home/src/projects/project/packages/package-b/src/index.ts (Open) *changed*
+    version: SVC-1-2 *changed*
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 
@@ -1278,8 +1278,8 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
-/home/src/projects/project/packages/package-b/src/index.ts (Open)
-    version: SVC-1-2
+/a/lib/lib.es2021.d.ts
+    version: Text-1
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 /home/src/projects/project/packages/package-a/src/index.ts *changed*
@@ -1290,8 +1290,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1 *changed*
         /home/src/projects/project/packages/package-b/tsconfig.json *new*
-/a/lib/lib.es2021.d.ts
-    version: Text-1
+/home/src/projects/project/packages/package-b/src/index.ts (Open)
+    version: SVC-1-2
     containingProjects: 1
         /home/src/projects/project/packages/package-b/tsconfig.json
 

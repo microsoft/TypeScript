@@ -254,13 +254,13 @@ FsWatchesRecursive::
   {}
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /a.ts (Open) *new*
@@ -435,13 +435,13 @@ Before running Timeout callback:: count: 0
 
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 /tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 
 After running Timeout callback:: count: 0
 
@@ -456,13 +456,13 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 After getPackageJsonAutoImportProvider
 
 Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: undefined *changed*
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
-    projectStateVersion: 2
-    projectProgramVersion: 2 *changed*
 
 ScriptInfos::
 /a.ts (Open)

@@ -142,14 +142,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/tests/cases/fourslash/server/a.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tests/cases/fourslash/server/tsconfig.json
-/tests/cases/fourslash/server/b.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tests/cases/fourslash/server/tsconfig.json
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -159,6 +151,14 @@ ScriptInfos::
     containingProjects: 1
         /tests/cases/fourslash/server/tsconfig.json
 /lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tests/cases/fourslash/server/tsconfig.json
+/tests/cases/fourslash/server/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tests/cases/fourslash/server/tsconfig.json
+/tests/cases/fourslash/server/b.ts *new*
     version: Text-1
     containingProjects: 1
         /tests/cases/fourslash/server/tsconfig.json

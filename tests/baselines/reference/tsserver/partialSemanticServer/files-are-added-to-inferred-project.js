@@ -77,12 +77,12 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/user/username/projects/myproject/a.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/a.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -175,12 +175,12 @@ Projects::
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-/user/username/projects/myproject/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/a.ts (Open)
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/username/projects/myproject/b.ts (Open) *new*

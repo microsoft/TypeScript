@@ -62,12 +62,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 

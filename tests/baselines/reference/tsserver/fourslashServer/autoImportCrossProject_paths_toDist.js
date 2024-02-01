@@ -340,17 +340,35 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /packages/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /packages/dep/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
 /packages/app/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -377,24 +395,6 @@ ScriptInfos::
     containingProjects: 2
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
-/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.d.ts *new*
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts *new*
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -462,6 +462,24 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -489,24 +507,6 @@ ScriptInfos::
     containingProjects: 2
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
-/lib.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -662,17 +662,35 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -699,6 +717,23 @@ ScriptInfos::
     containingProjects: 2
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 8,
+      "type": "request",
+      "arguments": {
+        "file": "/packages/app/src/index.ts",
+        "line": 1,
+        "offset": 1,
+        "endLine": 3,
+        "endOffset": 1,
+        "insertString": ""
+      },
+      "command": "change"
+    }
+After Request
+ScriptInfos::
 /lib.d.ts
     version: Text-1
     containingProjects: 3
@@ -717,23 +752,6 @@ ScriptInfos::
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "seq": 8,
-      "type": "request",
-      "arguments": {
-        "file": "/packages/app/src/index.ts",
-        "line": 1,
-        "offset": 1,
-        "endLine": 3,
-        "endOffset": 1,
-        "insertString": ""
-      },
-      "command": "change"
-    }
-After Request
-ScriptInfos::
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -760,24 +778,6 @@ ScriptInfos::
     containingProjects: 2
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
-/lib.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -859,6 +859,24 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -886,24 +904,6 @@ ScriptInfos::
     containingProjects: 2
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
-/lib.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1059,17 +1059,35 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /packages/app/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /packages/app/tsconfig.json
+        /packages/dep/tsconfig.json
+        /dev/null/inferredProject1*
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1096,6 +1114,23 @@ ScriptInfos::
     containingProjects: 2
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 16,
+      "type": "request",
+      "arguments": {
+        "file": "/packages/app/src/utils.ts",
+        "line": 1,
+        "offset": 1,
+        "endLine": 3,
+        "endOffset": 1,
+        "insertString": ""
+      },
+      "command": "change"
+    }
+After Request
+ScriptInfos::
 /lib.d.ts
     version: Text-1
     containingProjects: 3
@@ -1114,23 +1149,6 @@ ScriptInfos::
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
         /dev/null/inferredProject1*
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "seq": 16,
-      "type": "request",
-      "arguments": {
-        "file": "/packages/app/src/utils.ts",
-        "line": 1,
-        "offset": 1,
-        "endLine": 3,
-        "endOffset": 1,
-        "insertString": ""
-      },
-      "command": "change"
-    }
-After Request
-ScriptInfos::
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1157,21 +1175,3 @@ ScriptInfos::
     containingProjects: 2
         /packages/app/tsconfig.json
         /packages/dep/tsconfig.json
-/lib.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
-    version: Text-1
-    containingProjects: 3
-        /packages/app/tsconfig.json
-        /packages/dep/tsconfig.json
-        /dev/null/inferredProject1*

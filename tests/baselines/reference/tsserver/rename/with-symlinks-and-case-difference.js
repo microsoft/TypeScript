@@ -241,12 +241,12 @@ c:/temp/test/tsconfig.json (Configured) *new*
     projectProgramVersion: 0
 
 ScriptInfos::
-c:/temp/test/project1/index.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        c:/temp/test/project1/tsconfig.json
 C:/a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        c:/temp/test/project1/tsconfig.json
+c:/temp/test/project1/index.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         c:/temp/test/project1/tsconfig.json
 
@@ -597,21 +597,21 @@ Projects::
 c:/temp/test/project1/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-c:/temp/test/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
 c:/temp/test/project2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+c:/temp/test/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-c:/temp/test/project1/index.ts (Open) *changed*
-    version: SVC-1-0
+C:/a/lib/lib.d.ts *changed*
+    version: Text-1
     containingProjects: 2 *changed*
         c:/temp/test/project1/tsconfig.json
         c:/temp/test/project2/tsconfig.json *new*
-C:/a/lib/lib.d.ts *changed*
-    version: Text-1
+c:/temp/test/project1/index.ts (Open) *changed*
+    version: SVC-1-0
     containingProjects: 2 *changed*
         c:/temp/test/project1/tsconfig.json
         c:/temp/test/project2/tsconfig.json *new*

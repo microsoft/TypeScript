@@ -350,10 +350,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/tsconfig.json (Configured)
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 

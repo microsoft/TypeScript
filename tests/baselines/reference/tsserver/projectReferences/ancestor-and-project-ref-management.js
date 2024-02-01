@@ -564,15 +564,15 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
 /user/username/projects/container/compositeExec/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/container/compositeExec/tsconfig.json
 /user/username/projects/container/lib/index.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/container/compositeExec/tsconfig.json
@@ -660,17 +660,22 @@ FsWatches::
   {}
 
 Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/container/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 0
-/dev/null/inferredProject1* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /dev/null/inferredProject1* *new*
 /user/username/projects/container/compositeExec/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -679,11 +684,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/container/compositeExec/tsconfig.json
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /dev/null/inferredProject1* *new*
 /user/username/projects/temp/temp.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -1125,33 +1125,23 @@ FsWatches::
   {}
 
 Projects::
-/user/username/projects/container/compositeExec/tsconfig.json (Configured)
+/dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/container/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1 *changed*
-/user/username/projects/container/lib/tsconfig.json (Configured) *new*
+/user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/container/exec/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
+/user/username/projects/container/lib/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+/user/username/projects/container/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 ScriptInfos::
-/user/username/projects/container/compositeExec/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
-/user/username/projects/container/lib/index.ts *changed*
-    version: Text-1
-    containingProjects: 3 *changed*
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /user/username/projects/container/lib/tsconfig.json *new*
-        /user/username/projects/container/exec/tsconfig.json *new*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 4 *changed*
@@ -1159,14 +1149,24 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /user/username/projects/container/lib/tsconfig.json *new*
         /user/username/projects/container/exec/tsconfig.json *new*
-/user/username/projects/temp/temp.ts (Open)
+/user/username/projects/container/compositeExec/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /user/username/projects/container/compositeExec/tsconfig.json
 /user/username/projects/container/exec/index.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json *new*
+        /user/username/projects/container/exec/tsconfig.json *new*
+/user/username/projects/temp/temp.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before request
 
@@ -1250,33 +1250,23 @@ FsWatches::
   {}
 
 Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/user/username/projects/container/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/user/username/projects/container/lib/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/container/exec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 2 *changed*
+/user/username/projects/container/lib/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/container/tsconfig.json (Configured)
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/container/compositeExec/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
-/user/username/projects/container/lib/index.ts
-    version: Text-1
-    containingProjects: 3
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /user/username/projects/container/lib/tsconfig.json
-        /user/username/projects/container/exec/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 4
@@ -1284,15 +1274,25 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/compositeExec/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
+/user/username/projects/container/exec/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
 /user/username/projects/temp/temp.ts *changed*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/user/username/projects/container/exec/index.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/container/exec/tsconfig.json
 
 Before request
 
@@ -1383,16 +1383,6 @@ FsWatches *deleted*::
   {}
 
 ScriptInfos::
-/user/username/projects/container/compositeExec/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
-/user/username/projects/container/lib/index.ts
-    version: Text-1
-    containingProjects: 3
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /user/username/projects/container/lib/tsconfig.json
-        /user/username/projects/container/exec/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 4
@@ -1400,15 +1390,25 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/compositeExec/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
+/user/username/projects/container/exec/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
 /user/username/projects/temp/temp.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
         /dev/null/inferredProject1* *new*
-/user/username/projects/container/exec/index.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/container/exec/tsconfig.json
 
 Before request
 
@@ -1488,17 +1488,6 @@ FsWatches::
   {}
 
 ScriptInfos::
-/user/username/projects/container/compositeExec/index.ts *changed*
-    open: false *changed*
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
-/user/username/projects/container/lib/index.ts
-    version: Text-1
-    containingProjects: 3
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /user/username/projects/container/lib/tsconfig.json
-        /user/username/projects/container/exec/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 4
@@ -1506,14 +1495,25 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/exec/tsconfig.json
-/user/username/projects/temp/temp.ts (Open)
+/user/username/projects/container/compositeExec/index.ts *changed*
+    open: false *changed*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /user/username/projects/container/compositeExec/tsconfig.json
 /user/username/projects/container/exec/index.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/temp/temp.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before request
 
@@ -1597,33 +1597,23 @@ FsWatches::
   {}
 
 Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/user/username/projects/container/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/user/username/projects/container/lib/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/container/exec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *changed*
-    projectStateVersion: 3 *changed*
+/user/username/projects/container/lib/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/container/tsconfig.json (Configured)
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/user/username/projects/container/compositeExec/index.ts
-    version: SVC-1-0
-    containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
-/user/username/projects/container/lib/index.ts
-    version: Text-1
-    containingProjects: 3
-        /user/username/projects/container/compositeExec/tsconfig.json
-        /user/username/projects/container/lib/tsconfig.json
-        /user/username/projects/container/exec/tsconfig.json
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 4
@@ -1631,15 +1621,25 @@ ScriptInfos::
         /dev/null/inferredProject1*
         /user/username/projects/container/lib/tsconfig.json
         /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/compositeExec/index.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
+/user/username/projects/container/exec/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
 /user/username/projects/temp/temp.ts *changed*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
-/user/username/projects/container/exec/index.ts
-    version: Text-1
-    containingProjects: 1
-        /user/username/projects/container/exec/tsconfig.json
 
 Before request
 
@@ -1803,13 +1803,13 @@ Projects::
 /user/username/projects/container/compositeExec/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/container/tsconfig.json (Configured) *deleted*
+/user/username/projects/container/exec/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/container/lib/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/container/exec/tsconfig.json (Configured) *deleted*
+/user/username/projects/container/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -1821,22 +1821,22 @@ ScriptInfos::
         /user/username/projects/container/compositeExec/tsconfig.json *deleted*
         /user/username/projects/container/lib/tsconfig.json *deleted*
         /user/username/projects/container/exec/tsconfig.json *deleted*
-/user/username/projects/temp/temp.ts (Open) *changed*
-    open: true *changed*
-    version: SVC-1-0
-    containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
 /user/username/projects/container/compositeExec/index.ts *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /user/username/projects/container/compositeExec/tsconfig.json *deleted*
+/user/username/projects/container/exec/index.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /user/username/projects/container/exec/tsconfig.json *deleted*
 /user/username/projects/container/lib/index.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
         /user/username/projects/container/compositeExec/tsconfig.json *deleted*
         /user/username/projects/container/lib/tsconfig.json *deleted*
         /user/username/projects/container/exec/tsconfig.json *deleted*
-/user/username/projects/container/exec/index.ts *deleted*
-    version: Text-1
-    containingProjects: 0 *changed*
-        /user/username/projects/container/exec/tsconfig.json *deleted*
+/user/username/projects/temp/temp.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject1* *new*

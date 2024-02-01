@@ -135,12 +135,12 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/file2.js (Open) *new*
     version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/a/lib/lib.d.ts
+    version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -186,14 +186,14 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/file2.js *changed*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 maxNodeModuleJsDepth: undefined

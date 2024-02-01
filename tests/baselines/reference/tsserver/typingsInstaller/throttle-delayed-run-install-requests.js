@@ -1064,14 +1064,6 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /a/app/test1.csproj
-/a/data/node_modules/@types/jquery/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /a/app/test1.csproj
-/a/data/node_modules/@types/lodash/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /a/app/test1.csproj
 /a/data/node_modules/@types/grunt/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -1080,3 +1072,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /a/app/test2.csproj
+/a/data/node_modules/@types/jquery/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test1.csproj
+/a/data/node_modules/@types/lodash/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test1.csproj

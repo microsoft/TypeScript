@@ -110,11 +110,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/b/jquery.js *new*
+/a/b/file2.ts *new*
     version: Text-1
     containingProjects: 1
         /a/app/test.csproj
-/a/b/file2.ts *new*
+/a/b/jquery.js *new*
     version: Text-1
     containingProjects: 1
         /a/app/test.csproj

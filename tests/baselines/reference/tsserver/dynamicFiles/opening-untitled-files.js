@@ -68,12 +68,12 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-untitled:^Untitled-1 (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+untitled:^Untitled-1 (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -380,18 +380,14 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
+/user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-untitled:^Untitled-1 (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -401,6 +397,10 @@ untitled:^Untitled-1 (Open)
     version: SVC-1-0
     containingProjects: 1
         /user/username/projects/myproject/tsconfig.json
+untitled:^Untitled-1 (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Before request
 
@@ -431,11 +431,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/user/username/projects/myproject/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/user/username/projects/myproject/tsconfig.json (Configured)
+    projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::

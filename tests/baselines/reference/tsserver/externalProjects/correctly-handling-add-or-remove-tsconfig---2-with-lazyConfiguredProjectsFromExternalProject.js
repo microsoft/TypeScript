@@ -638,10 +638,10 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/a/b/d/tsconfig.json (Configured)
+/a/b/c/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/b/c/tsconfig.json (Configured) *deleted*
+/a/b/d/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
 
@@ -737,10 +737,10 @@ FsWatchesRecursive *deleted*::
   {}
 
 Projects::
-/a/b/proj1 (External) *new*
+/a/b/d/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/a/b/d/tsconfig.json (Configured) *deleted*
+/a/b/proj1 (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 

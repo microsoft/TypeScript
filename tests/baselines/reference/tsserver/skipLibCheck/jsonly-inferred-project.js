@@ -665,12 +665,12 @@ FsWatches *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject2* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /a/b/file1.js (Open) *changed*

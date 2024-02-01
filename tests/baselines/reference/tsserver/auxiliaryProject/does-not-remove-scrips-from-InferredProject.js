@@ -140,13 +140,13 @@ FsWatches::
   {}
 
 Projects::
+/dev/null/auxiliaryProject1* (Auxiliary) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
     noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
-/dev/null/auxiliaryProject1* (Auxiliary) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /a.ts (Open) *changed*
@@ -204,6 +204,9 @@ FsWatches *deleted*::
   {}
 
 Projects::
+/dev/null/auxiliaryProject1* (Auxiliary)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -211,9 +214,6 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
-/dev/null/auxiliaryProject1* (Auxiliary)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 
 ScriptInfos::
 /a.ts (Open)
@@ -381,6 +381,9 @@ FsWatches::
   {}
 
 Projects::
+/dev/null/auxiliaryProject1* (Auxiliary)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -388,6 +391,3 @@ Projects::
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
-/dev/null/auxiliaryProject1* (Auxiliary)
-    projectStateVersion: 1
-    projectProgramVersion: 1

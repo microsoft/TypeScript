@@ -151,18 +151,14 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/tsconfig.json (Configured) *new*
+/dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred) *new*
+/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -181,6 +177,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
@@ -228,10 +228,6 @@ watchedDirectoriesRecursive::
   {}
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     open: true *changed*
     version: Text-1
@@ -251,6 +247,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1005,18 +1005,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
-/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
@@ -1035,6 +1031,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1781,18 +1781,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
-/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-2 *changed*
     containingProjects: 1
@@ -1812,6 +1808,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1829,10 +1829,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-3 *changed*
     containingProjects: 1
@@ -1852,6 +1848,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1869,10 +1869,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-4 *changed*
     containingProjects: 1
@@ -1892,6 +1888,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1909,10 +1909,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-5 *changed*
     containingProjects: 1
@@ -1932,6 +1928,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1949,10 +1949,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-6 *changed*
     containingProjects: 1
@@ -1972,6 +1968,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1989,10 +1989,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-7 *changed*
     containingProjects: 1
@@ -2012,6 +2008,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2029,10 +2029,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-8 *changed*
     containingProjects: 1
@@ -2052,6 +2048,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2069,10 +2069,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-9 *changed*
     containingProjects: 1
@@ -2092,6 +2088,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2109,10 +2109,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-10 *changed*
     containingProjects: 1
@@ -2132,6 +2128,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2149,10 +2149,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-11 *changed*
     containingProjects: 1
@@ -2172,6 +2168,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2189,10 +2189,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-12 *changed*
     containingProjects: 1
@@ -2212,6 +2208,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2229,10 +2229,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-13 *changed*
     containingProjects: 1
@@ -2252,6 +2248,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2269,10 +2269,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-14 *changed*
     containingProjects: 1
@@ -2292,6 +2288,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2309,10 +2309,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-15 *changed*
     containingProjects: 1
@@ -2332,6 +2328,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2349,10 +2349,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-16 *changed*
     containingProjects: 1
@@ -2372,6 +2368,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2389,10 +2389,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-17 *changed*
     containingProjects: 1
@@ -2412,6 +2408,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2429,10 +2429,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-18 *changed*
     containingProjects: 1
@@ -2452,6 +2448,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2469,10 +2469,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-19 *changed*
     containingProjects: 1
@@ -2492,6 +2488,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2509,10 +2509,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-20 *changed*
     containingProjects: 1
@@ -2532,6 +2528,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2549,10 +2549,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-21 *changed*
     containingProjects: 1
@@ -2572,6 +2568,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2589,10 +2589,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-22 *changed*
     containingProjects: 1
@@ -2612,6 +2608,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2629,10 +2629,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-23 *changed*
     containingProjects: 1
@@ -2652,6 +2648,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2669,10 +2669,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-24 *changed*
     containingProjects: 1
@@ -2692,6 +2688,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2709,10 +2709,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-25 *changed*
     containingProjects: 1
@@ -2732,6 +2728,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2749,10 +2749,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-26 *changed*
     containingProjects: 1
@@ -2772,6 +2768,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2789,10 +2789,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-27 *changed*
     containingProjects: 1
@@ -2812,6 +2808,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2829,10 +2829,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-28 *changed*
     containingProjects: 1
@@ -2852,6 +2848,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2869,10 +2869,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-29 *changed*
     containingProjects: 1
@@ -2892,6 +2888,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2909,10 +2909,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-30 *changed*
     containingProjects: 1
@@ -2932,6 +2928,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2949,10 +2949,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-31 *changed*
     containingProjects: 1
@@ -2972,6 +2968,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -2989,10 +2989,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-32 *changed*
     containingProjects: 1
@@ -3012,6 +3008,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3029,10 +3029,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-33 *changed*
     containingProjects: 1
@@ -3052,6 +3048,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3069,10 +3069,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-34 *changed*
     containingProjects: 1
@@ -3092,6 +3088,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3109,10 +3109,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-35 *changed*
     containingProjects: 1
@@ -3132,6 +3128,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3149,10 +3149,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-36 *changed*
     containingProjects: 1
@@ -3172,6 +3168,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3189,10 +3189,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-37 *changed*
     containingProjects: 1
@@ -3212,6 +3208,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3229,10 +3229,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-38 *changed*
     containingProjects: 1
@@ -3252,6 +3248,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3269,10 +3269,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-39 *changed*
     containingProjects: 1
@@ -3292,6 +3288,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3309,10 +3309,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-40 *changed*
     containingProjects: 1
@@ -3332,6 +3328,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3349,10 +3349,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-41 *changed*
     containingProjects: 1
@@ -3372,6 +3368,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3389,10 +3389,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-42 *changed*
     containingProjects: 1
@@ -3412,6 +3408,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3429,10 +3429,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-43 *changed*
     containingProjects: 1
@@ -3452,6 +3448,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3469,10 +3469,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-44 *changed*
     containingProjects: 1
@@ -3492,6 +3488,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3509,10 +3509,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-45 *changed*
     containingProjects: 1
@@ -3532,6 +3528,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3549,10 +3549,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-46 *changed*
     containingProjects: 1
@@ -3572,6 +3568,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3589,10 +3589,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-47 *changed*
     containingProjects: 1
@@ -3612,6 +3608,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3629,10 +3629,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-48 *changed*
     containingProjects: 1
@@ -3652,6 +3648,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3669,10 +3669,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-49 *changed*
     containingProjects: 1
@@ -3692,6 +3688,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3709,10 +3709,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-50 *changed*
     containingProjects: 1
@@ -3732,6 +3728,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3749,10 +3749,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-51 *changed*
     containingProjects: 1
@@ -3772,6 +3768,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3789,10 +3789,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-52 *changed*
     containingProjects: 1
@@ -3812,6 +3808,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3829,10 +3829,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-53 *changed*
     containingProjects: 1
@@ -3852,6 +3848,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3869,10 +3869,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-54 *changed*
     containingProjects: 1
@@ -3892,6 +3888,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3909,10 +3909,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-55 *changed*
     containingProjects: 1
@@ -3932,6 +3928,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3949,10 +3949,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-56 *changed*
     containingProjects: 1
@@ -3972,6 +3968,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -3989,10 +3989,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-57 *changed*
     containingProjects: 1
@@ -4012,6 +4008,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -4029,10 +4029,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-58 *changed*
     containingProjects: 1
@@ -4052,6 +4048,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -4069,10 +4069,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-59 *changed*
     containingProjects: 1
@@ -4092,6 +4088,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -4109,10 +4109,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-60 *changed*
     containingProjects: 1
@@ -4131,6 +4127,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
@@ -4919,18 +4919,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
-/tsconfig.json (Configured) *changed*
-    projectStateVersion: 4 *changed*
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 1
 
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-61 *changed*
     containingProjects: 1
@@ -4950,6 +4946,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -4967,10 +4967,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-62 *changed*
     containingProjects: 1
@@ -4990,6 +4986,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5007,10 +5007,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-63 *changed*
     containingProjects: 1
@@ -5030,6 +5026,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5047,10 +5047,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-64 *changed*
     containingProjects: 1
@@ -5070,6 +5066,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5087,10 +5087,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-65 *changed*
     containingProjects: 1
@@ -5110,6 +5106,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5127,10 +5127,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-66 *changed*
     containingProjects: 1
@@ -5150,6 +5146,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5167,10 +5167,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-67 *changed*
     containingProjects: 1
@@ -5190,6 +5186,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5207,10 +5207,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-68 *changed*
     containingProjects: 1
@@ -5230,6 +5226,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5247,10 +5247,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-69 *changed*
     containingProjects: 1
@@ -5270,6 +5266,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5287,10 +5287,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-70 *changed*
     containingProjects: 1
@@ -5310,6 +5306,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5327,10 +5327,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-71 *changed*
     containingProjects: 1
@@ -5350,6 +5346,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5367,10 +5367,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-72 *changed*
     containingProjects: 1
@@ -5390,6 +5386,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5407,10 +5407,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-73 *changed*
     containingProjects: 1
@@ -5430,6 +5426,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5447,10 +5447,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-74 *changed*
     containingProjects: 1
@@ -5470,6 +5466,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5487,10 +5487,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-75 *changed*
     containingProjects: 1
@@ -5510,6 +5506,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5527,10 +5527,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-76 *changed*
     containingProjects: 1
@@ -5550,6 +5546,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5567,10 +5567,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-77 *changed*
     containingProjects: 1
@@ -5590,6 +5586,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5607,10 +5607,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-78 *changed*
     containingProjects: 1
@@ -5630,6 +5626,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5647,10 +5647,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-79 *changed*
     containingProjects: 1
@@ -5670,6 +5666,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5687,10 +5687,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-80 *changed*
     containingProjects: 1
@@ -5710,6 +5706,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5727,10 +5727,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-81 *changed*
     containingProjects: 1
@@ -5750,6 +5746,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5767,10 +5767,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-82 *changed*
     containingProjects: 1
@@ -5790,6 +5786,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5807,10 +5807,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-83 *changed*
     containingProjects: 1
@@ -5830,6 +5826,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5847,10 +5847,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-84 *changed*
     containingProjects: 1
@@ -5870,6 +5866,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5887,10 +5887,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-85 *changed*
     containingProjects: 1
@@ -5910,6 +5906,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5927,10 +5927,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-86 *changed*
     containingProjects: 1
@@ -5950,6 +5946,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -5967,10 +5967,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-87 *changed*
     containingProjects: 1
@@ -5990,6 +5986,10 @@ ScriptInfos::
     containingProjects: 2
         /tsconfig.json
         /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -6007,10 +6007,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tsconfig.json (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /ambient.d.ts (Open) *changed*
     version: SVC-2-88 *changed*
     containingProjects: 1
@@ -6029,6 +6025,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
         /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:

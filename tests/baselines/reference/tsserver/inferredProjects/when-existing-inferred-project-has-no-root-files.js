@@ -136,6 +136,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/myproject/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -149,10 +153,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/username/projects/myproject/node_modules/module3/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -218,6 +218,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/myproject/app.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -232,10 +236,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/username/projects/myproject/node_modules/module3/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -337,6 +337,10 @@ Projects::
     projectProgramVersion: 2 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /user/username/projects/myproject/app.ts
     version: SVC-1-0
     containingProjects: 0
@@ -350,10 +354,6 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1*
 /user/username/projects/myproject/node_modules/module3/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -526,6 +526,13 @@ Projects::
     projectProgramVersion: 3 *changed*
 
 ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/user/username/projects/myproject/app.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0
 /user/username/projects/myproject/module.d.ts (Open)
     version: Text-1
     containingProjects: 1
@@ -538,10 +545,3 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
-/user/username/projects/myproject/app.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0

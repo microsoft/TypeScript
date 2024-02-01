@@ -94,11 +94,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/d.ts (Open) *new*
-    version: SVC-1-0
+/a.ts *new*
+    version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/c.ts *new*
+/a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -106,12 +106,12 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/a.ts *new*
+/c.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/a/lib/lib.d.ts *new*
-    version: Text-1
+/d.ts (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 

@@ -105,10 +105,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -119,6 +115,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts *new*
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *new*
+    version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -182,10 +182,6 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *changed*
-    version: SVC-1-1 *changed*
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -196,6 +192,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *changed*
+    version: SVC-1-1 *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -215,10 +215,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *changed*
-    version: SVC-1-2 *changed*
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -229,6 +225,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *changed*
+    version: SVC-1-2 *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -269,10 +269,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *changed*
-    version: SVC-1-3 *changed*
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -283,6 +279,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *changed*
+    version: SVC-1-3 *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 
@@ -323,10 +323,6 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 ScriptInfos::
-/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *changed*
-    version: SVC-1-4 *changed*
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -337,6 +333,10 @@ ScriptInfos::
         /dev/null/inferredProject1*
 /lib.decorators.legacy.d.ts
     version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tests/cases/fourslash/server/jsDocTypedef_form2.js (Open) *changed*
+    version: SVC-1-4 *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 

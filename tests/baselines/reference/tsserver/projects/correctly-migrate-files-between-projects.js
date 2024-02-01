@@ -200,17 +200,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/dev/null/inferredProject3* (Inferred) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
 /dev/null/inferredProject2* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
+/a/b/f1.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject3*
 /a/c/f2.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
@@ -221,10 +225,6 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /dev/null/inferredProject3* *new*
         /dev/null/inferredProject2* *deleted*
-/a/b/f1.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject3*
 
 Inferred project: /dev/null/inferredProject3* isOrphan:: false isClosed: false
 Before request
@@ -306,6 +306,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/b/f1.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject3* *deleted*
 /a/c/f2.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
@@ -316,11 +321,6 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject5* *new*
         /dev/null/inferredProject3*
-/a/b/f1.ts *changed*
-    open: false *changed*
-    version: SVC-1-0
-    containingProjects: 0 *changed*
-        /dev/null/inferredProject3* *deleted*
 
 Inferred project: /dev/null/inferredProject3* isOrphan:: true isClosed: false
 Inferred project: /dev/null/inferredProject4* isOrphan:: false isClosed: false
@@ -380,6 +380,9 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/b/f1.ts
+    version: SVC-1-0
+    containingProjects: 0
 /a/c/f2.ts (Open)
     version: SVC-1-0
     containingProjects: 2
@@ -391,9 +394,6 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /dev/null/inferredProject3*
         /dev/null/inferredProject5* *deleted*
-/a/b/f1.ts
-    version: SVC-1-0
-    containingProjects: 0
 
 Inferred project: /dev/null/inferredProject3* isOrphan:: true isClosed: false
 Inferred project: /dev/null/inferredProject4* isOrphan:: false isClosed: false
@@ -462,17 +462,20 @@ FsWatches *deleted*::
   {}
 
 Projects::
-/dev/null/inferredProject5* (Inferred)
-    projectStateVersion: 2
-    projectProgramVersion: 1
-/dev/null/inferredProject4* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
 /dev/null/inferredProject3* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+/dev/null/inferredProject4* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject5* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
 
 ScriptInfos::
+/a/b/f1.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0
 /a/c/f2.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
@@ -484,9 +487,6 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /dev/null/inferredProject5* *new*
         /dev/null/inferredProject3* *deleted*
-/a/b/f1.ts *deleted*
-    version: SVC-1-0
-    containingProjects: 0
 
 Inferred project: /dev/null/inferredProject5* isOrphan:: false isClosed: false
 Inferred project: /dev/null/inferredProject4* isOrphan:: false isClosed: false
