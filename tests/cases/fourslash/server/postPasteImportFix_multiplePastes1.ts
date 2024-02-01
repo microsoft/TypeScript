@@ -22,25 +22,31 @@ format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.postPasteImportFix({
     targetFile: "file2.ts", 
     pastes: [{
-        text: `const g = p + q;\n`,
+        text: `const g = p + q;
+function e();
+const f = r + s;\n`,
         range: { pos: 13, end: 26 },
     },
     {
-        text: `function e();
-const f = r + s;`,
+        text: `const g = p + q;
+function e();
+const f = r + s;\n`,
         range: { pos: 39, end: 51 },
     
     }],
     newFileContents: {
         "/file2.ts":
 `import { p, q } from "./file1";
-
 import { r, s } from "./file3";
 
 const a = 1;
 const g = p + q;
-const c = 3;
 function e();
-const f = r + s;`
+const f = r + s;
+const c = 3;
+const g = p + q;
+function e();
+const f = r + s;
+`
     }
 });

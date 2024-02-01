@@ -17,16 +17,15 @@ export function postPastImportFixProvider(
     copyLocation?: CopyRange): PostPasteImportFixes {
 
     let changes: FileTextChanges[] = [];
-    changes = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => pastes.forEach(({text, range}) => 
-        { postPasteFixes(targetFile, host, text, range, preferences, formatContext, cancellationToken, changeTracker, originalFile, copyLocation)}));
+    changes = textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => postPasteFixes(targetFile, host, pastes, preferences, formatContext, cancellationToken, changeTracker, originalFile, copyLocation));
+
     return { edits: changes }; 
 }
 
 function postPasteFixes (
     targetFile: SourceFile, 
     host: LanguageServiceHost,
-    pastedText: string,
-    pastedRange: TextRange,
+    pastes: Array<{text: string; range: TextRange}>,
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
@@ -34,7 +33,7 @@ function postPasteFixes (
     originalFile?: SourceFile,
     copyLocation?: CopyRange) {
 
-    const updatedTargetFile = host.updateTargetFile?.(targetFile.fileName, targetFile.getText(), targetFile.getText().slice(0, pastedRange.pos) + pastedText + targetFile.getText().slice(0, pastedRange.end));
+    const updatedTargetFile = host.updateTargetFile?.(targetFile.fileName, targetFile.getText(), targetFile.getText().slice(0, pastes[0].range.pos) + pastes[0].text + targetFile.getText().slice(0, pastes[0].range.end));
     let statements: Statement[] = [];
     Debug.assert(updatedTargetFile && updatedTargetFile.updatedFile && updatedTargetFile.originalProgram && updatedTargetFile.updatedProgram);
     
@@ -48,7 +47,7 @@ function postPasteFixes (
             insertImports(changes, targetFile, imports, /*blankLineBetween*/ true, preferences);
         }
         importAdder.writeFixes(changes, getQuotePreference(originalFile, preferences));
-        changes.replaceRangeWithText(targetFile, pastedRange, pastedText);
+        //changes.replaceRangeWithText(targetFile, pastedRange, pastedText);
         host.revertUpdatedFile?.(targetFile.fileName, updatedTargetFile.updatedFile.text, targetFile.text); 
     }
     else {
@@ -73,10 +72,13 @@ function postPasteFixes (
                 node.forEachChild(cb);
             }
         });
-        changes.replaceRangeWithText(targetFile, pastedRange, pastedText);
+        //changes.replaceRangeWithText(targetFile, pastedRange, pastedText);
         importAdder.writeFixes(changes, getQuotePreference(targetFile, preferences));
         host.revertUpdatedFile?.(targetFile.fileName, updatedTargetFile.updatedFile.text, targetFile.text);
     }
+    pastes.forEach(({ text, range}) => {
+        changes.replaceRangeWithText(targetFile, range, text);
+    });
 }
 
 function getImportsFromKnownOriginalFile(

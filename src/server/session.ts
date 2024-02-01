@@ -2799,22 +2799,11 @@ export class Session<TMessage = string> implements EventSender {
 
     private getPostPasteImportFixes(args: protocol.GetPostPasteImportFixesRequestArgs): protocol.PostPasteImportAction | undefined {
         const { file, project } = this.getFileAndProject(args);
-        //const pastes: Array<{text: string; range: TextRange}> = arrayFrom(args.pastes).map(paste => ({text: paste.text, range: this.getRange(paste.range, project.getScriptInfoForNormalizedPath(file)!)}));
-        //const textRange = this.getRange(args.pastes[0].range, project.getScriptInfoForNormalizedPath(file)!);
         const result = project.getLanguageService().getPostPasteImportFixes(args.targetFile, arrayFrom(args.pastes).map(paste => ({text: paste.text, range: this.getRange(paste.range, project.getScriptInfoForNormalizedPath(file)!)})), this.getPreferences(file), this.getFormatOptions(file), args.originalFile, args.copyRange);
-        // const seenFiles = new Set<string>();
-        // const textChanges: FileTextChanges[] = [];
-        // for (const textChange of projectTextChanges) {
-        //     if (!seenFiles.has(textChange.fileName)) {
-        //         textChanges.push(textChange);
-        //     }
-        // }
         if (result === undefined) {
             return undefined;
         }
-        //const allResults = result.map(postPasteAction => this.mapPostPasteAction(postPasteAction));
         const allResults = this.mapPostPasteAction(result);
-
         return allResults;
     }
 
