@@ -1681,27 +1681,6 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig-src.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig-src.json 2:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] `remove Project::
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts
-	/user/username/projects/myproject/src/helpers/functions.ts
-	/user/username/projects/myproject/src/main.ts
-
-
-	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
-	src/helpers/functions.ts
-	  Imported via 'helpers/functions' from file 'src/main.ts'
-	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
-	src/main.ts
-	  Matched by include pattern './src/**/*' in 'tsconfig-src.json'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig-src.json 2:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
@@ -1720,44 +1699,16 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     isOrphan: true
-/user/username/projects/myproject/tsconfig-src.json (Configured) *deleted*
+/user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
-    isClosed: true *changed*
+    isOrphan: true *changed*
     noOpenRef: true
+    deferredClose: true *changed*
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
-
-ScriptInfos::
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
-        /user/username/projects/myproject/tsconfig.json
-        /user/username/projects/myproject/tsconfig-src.json *deleted*
-/dummy/dummy.ts
-    version: SVC-1-0
-    containingProjects: 0
-/user/username/projects/myproject/indirect1/main.ts
-    version: Text-2
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/own/main.ts
-    version: Text-2
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/src/helpers/functions.ts *changed*
-    version: Text-2
-    containingProjects: 1 *changed*
-        /user/username/projects/myproject/tsconfig.json
-        /user/username/projects/myproject/tsconfig-src.json *deleted*
-/user/username/projects/myproject/src/main.ts (Open) *changed*
-    version: SVC-2-0
-    containingProjects: 1 *changed*
-        /user/username/projects/myproject/tsconfig.json *default*
-        /user/username/projects/myproject/tsconfig-src.json *deleted*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -1811,13 +1762,17 @@ Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.jso
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 4 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -1831,13 +1786,17 @@ Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.jso
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/main.ts
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1898,6 +1857,12 @@ Projects::
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
     isOrphan: true
+/user/username/projects/myproject/tsconfig-src.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isOrphan: true
+    noOpenRef: true
+    deferredClose: true
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
@@ -1906,8 +1871,9 @@ Projects::
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
     version: Text-1
-    containingProjects: 1 *changed*
+    containingProjects: 2 *changed*
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1* *deleted*
 /dummy/dummy.ts
     version: SVC-1-0
@@ -1922,20 +1888,24 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/helpers/functions.ts *changed*
     version: Text-2
-    containingProjects: 0 *changed*
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json *deleted*
 /user/username/projects/myproject/src/main.ts (Open)
     version: SVC-2-0
-    containingProjects: 1
+    containingProjects: 2
         /user/username/projects/myproject/tsconfig.json *default*
+        /user/username/projects/myproject/tsconfig-src.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig-src.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig-src.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Before running Timeout callback:: count: 2
+Before running Timeout callback:: count: 3
 4: /user/username/projects/myproject/tsconfig.json
-5: *ensureProjectForOpenFiles*
+5: /user/username/projects/myproject/tsconfig-src.json
+6: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/tsconfig-src.json]
 {
   "compilerOptions": {
@@ -1949,15 +1919,23 @@ Before running Timeout callback:: count: 2
 }
 
 
-Timeout callback:: count: 2
+Timeout callback:: count: 3
 4: /user/username/projects/myproject/tsconfig.json *new*
-5: *ensureProjectForOpenFiles* *new*
+5: /user/username/projects/myproject/tsconfig-src.json *new*
+6: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 4
     projectProgramVersion: 2
     isOrphan: true
+/user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: false *changed*
+    noOpenRef: true
+    deferredClose: undefined *changed*
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
@@ -2009,31 +1987,74 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/tsconfig-src.json",
+        "reason": "Change in config file detected"
+      }
+    }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Same program as before
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/myproject/tsconfig-src.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/tsconfig-src.json",
+        "configFile": "/user/username/projects/myproject/tsconfig-src.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/main.ts
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -2093,6 +2114,11 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 2
     isOrphan: true
+/user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+    noOpenRef: true
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
@@ -2101,8 +2127,9 @@ Projects::
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
-    containingProjects: 1
+    containingProjects: 2
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
 /dummy/dummy.ts
     version: SVC-1-0
     containingProjects: 0
@@ -2116,12 +2143,14 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/helpers/functions.ts *changed*
     version: Text-2
-    containingProjects: 1 *changed*
+    containingProjects: 2 *changed*
+        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json *new*
 /user/username/projects/myproject/src/main.ts (Open)
     version: SVC-2-0
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json *default*
+    containingProjects: 2
+        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig-src.json 2:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
@@ -2131,14 +2160,20 @@ Before request
 //// [/user/username/projects/myproject/tsconfig-src.json] deleted
 
 Timeout callback:: count: 2
-6: /user/username/projects/myproject/tsconfig.json *new*
-7: *ensureProjectForOpenFiles* *new*
+7: /user/username/projects/myproject/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 4
     projectProgramVersion: 2
     isOrphan: true
+/user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    isOrphan: true *changed*
+    noOpenRef: true
+    deferredClose: true *changed*
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
@@ -2174,13 +2209,17 @@ Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.jso
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
@@ -2226,6 +2265,12 @@ Projects::
     projectStateVersion: 5 *changed*
     projectProgramVersion: 3 *changed*
     isOrphan: false *changed*
+/user/username/projects/myproject/tsconfig-src.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    isOrphan: true
+    noOpenRef: true
+    deferredClose: true
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 4
     projectProgramVersion: 3
@@ -2234,8 +2279,9 @@ Projects::
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
     version: Text-1
-    containingProjects: 2 *changed*
+    containingProjects: 3 *changed*
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1* *new*
 /dummy/dummy.ts (Open) *changed*
     open: true *changed*
@@ -2252,20 +2298,24 @@ ScriptInfos::
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/helpers/functions.ts
     version: Text-2
-    containingProjects: 1
+    containingProjects: 2
+        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
 /user/username/projects/myproject/src/main.ts (Open)
     version: SVC-2-0
-    containingProjects: 1
+    containingProjects: 2
         /user/username/projects/myproject/tsconfig.json *default*
+        /user/username/projects/myproject/tsconfig-src.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig-src.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig-src.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Before running Timeout callback:: count: 2
-8: /user/username/projects/myproject/tsconfig.json
-9: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 3
+9: /user/username/projects/myproject/tsconfig.json
+10: /user/username/projects/myproject/tsconfig-src.json
+11: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/tsconfig-src.json]
 {
   "compilerOptions": {
@@ -2279,11 +2329,28 @@ Before running Timeout callback:: count: 2
 }
 
 
-Timeout callback:: count: 2
-6: /user/username/projects/myproject/tsconfig.json *deleted*
-7: *ensureProjectForOpenFiles* *deleted*
-8: /user/username/projects/myproject/tsconfig.json *new*
-9: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 3
+7: /user/username/projects/myproject/tsconfig.json *deleted*
+8: *ensureProjectForOpenFiles* *deleted*
+9: /user/username/projects/myproject/tsconfig.json *new*
+10: /user/username/projects/myproject/tsconfig-src.json *new*
+11: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 5
+    projectProgramVersion: 3
+/user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: false *changed*
+    noOpenRef: true
+    deferredClose: undefined *changed*
+/user/username/projects/myproject/tsconfig.json (Configured)
+    projectStateVersion: 4
+    projectProgramVersion: 3
+    dirty: true
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
@@ -2309,10 +2376,49 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/user/username/projects/myproject/own/main.ts Text-2 "import { bar } from 'main';\nbar;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/myproject/tsconfig-src.json",
+        "reason": "Change in config file detected"
+      }
+    }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Same program as before
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/myproject/tsconfig-src.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/tsconfig-src.json",
+        "configFile": "/user/username/projects/myproject/tsconfig-src.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -2321,7 +2427,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
@@ -2329,13 +2435,17 @@ Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.jso
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (3)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] got projects updated in background /user/username/projects/myproject/src/main.ts,/dummy/dummy.ts
@@ -2357,6 +2467,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 5
     projectProgramVersion: 3
+/user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+    noOpenRef: true
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
@@ -2372,12 +2487,14 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] reload projects.
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig-src.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
@@ -2510,7 +2627,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/tsconfig-src.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -2527,7 +2647,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig-src.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-src.json projectStateVersion: 4 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-src.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -2581,7 +2701,7 @@ Info seq  [hh:mm:ss:mss] 	Files (0) NoProgram
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig-src.json,/user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -2613,7 +2733,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig-src.json,/user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] After reloading projects..
@@ -2631,7 +2751,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-src.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig-src.json,/user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
@@ -2640,83 +2760,19 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500} *new*
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500} *new*
-
-PolledWatches *deleted*::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/indirect1/main.ts:
-  {}
-/user/username/projects/myproject/own/main.ts:
-  {}
-/user/username/projects/myproject/src/helpers/functions.ts:
-  {}
-/user/username/projects/myproject/tsconfig-indirect1.json:
-  {}
-/user/username/projects/myproject/tsconfig-indirect2.json:
-  {}
-/user/username/projects/myproject/tsconfig-src.json:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/src:
-  {}
-
 Timeout callback:: count: 0
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 6 *changed*
     projectProgramVersion: 4 *changed*
-/user/username/projects/myproject/tsconfig-src.json (Configured) *new*
-    projectStateVersion: 1
-    projectProgramVersion: 1
+/user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 2 *changed*
     noOpenRef: true
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 5 *changed*
-
-ScriptInfos::
-/a/lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 3 *changed*
-        /user/username/projects/myproject/tsconfig.json
-        /user/username/projects/myproject/tsconfig-src.json *new*
-        /dev/null/inferredProject1*
-/dummy/dummy.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /dev/null/inferredProject1* *default*
-/user/username/projects/myproject/indirect1/main.ts
-    version: Text-2
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/own/main.ts
-    version: Text-2
-    containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
-/user/username/projects/myproject/src/helpers/functions.ts *changed*
-    version: Text-2
-    containingProjects: 2 *changed*
-        /user/username/projects/myproject/tsconfig.json
-        /user/username/projects/myproject/tsconfig-src.json *new*
-/user/username/projects/myproject/src/main.ts (Open) *changed*
-    version: SVC-2-0
-    containingProjects: 2 *changed*
-        /user/username/projects/myproject/tsconfig.json
-        /user/username/projects/myproject/tsconfig-src.json *default* *new*
 
 Before request
 
@@ -3141,8 +3197,8 @@ Projects::
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-src.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1
+    projectStateVersion: 4
+    projectProgramVersion: 2
     noOpenRef: true
     documentPositionMappers: 1 *changed*
         /user/username/projects/myproject/target/src/helpers/functions.d.ts: DocumentPositionMapper1 *new*
@@ -3183,15 +3239,15 @@ ScriptInfos::
 /user/username/projects/myproject/src/helpers/functions.ts *changed*
     version: Text-2
     containingProjects: 4 *changed*
-        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-indirect1.json *new*
         /user/username/projects/myproject/tsconfig-indirect2.json *new*
 /user/username/projects/myproject/src/main.ts (Open) *changed*
     version: SVC-2-0
     containingProjects: 4 *changed*
-        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-src.json *default*
+        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-indirect1.json *new*
         /user/username/projects/myproject/tsconfig-indirect2.json *new*
 /user/username/projects/myproject/target/src/helpers/functions.d.ts *new*
@@ -3308,8 +3364,8 @@ Projects::
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-src.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
+    projectStateVersion: 4
+    projectProgramVersion: 2
     noOpenRef: true
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 5
@@ -3349,16 +3405,16 @@ ScriptInfos::
 /user/username/projects/myproject/src/helpers/functions.ts
     version: Text-2
     containingProjects: 4
-        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/src/main.ts *changed*
     open: false *changed*
     version: SVC-2-0
     containingProjects: 4
-        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts
@@ -3474,8 +3530,8 @@ Projects::
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-src.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
+    projectStateVersion: 4
+    projectProgramVersion: 2
     noOpenRef: true
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -3516,15 +3572,15 @@ ScriptInfos::
 /user/username/projects/myproject/src/helpers/functions.ts
     version: Text-2
     containingProjects: 4
-        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/src/main.ts
     version: SVC-2-0
     containingProjects: 4
-        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig.json
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/target/src/helpers/functions.d.ts
@@ -3879,8 +3935,8 @@ Projects::
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-src.json (Configured) *deleted*
-    projectStateVersion: 1
-    projectProgramVersion: 1
+    projectStateVersion: 4
+    projectProgramVersion: 2
     isClosed: true *changed*
     noOpenRef: true
     documentPositionMappers: 0 *changed*
@@ -3928,15 +3984,15 @@ ScriptInfos::
 /user/username/projects/myproject/src/helpers/functions.ts *changed*
     version: Text-2
     containingProjects: 0 *changed*
-        /user/username/projects/myproject/tsconfig.json *deleted*
         /user/username/projects/myproject/tsconfig-src.json *deleted*
+        /user/username/projects/myproject/tsconfig.json *deleted*
         /user/username/projects/myproject/tsconfig-indirect1.json *deleted*
         /user/username/projects/myproject/tsconfig-indirect2.json *deleted*
 /user/username/projects/myproject/src/main.ts *deleted*
     version: SVC-2-0
     containingProjects: 0 *changed*
-        /user/username/projects/myproject/tsconfig.json *deleted*
         /user/username/projects/myproject/tsconfig-src.json *deleted*
+        /user/username/projects/myproject/tsconfig.json *deleted*
         /user/username/projects/myproject/tsconfig-indirect1.json *deleted*
         /user/username/projects/myproject/tsconfig-indirect2.json *deleted*
 /user/username/projects/myproject/target/src/helpers/functions.d.ts *changed*

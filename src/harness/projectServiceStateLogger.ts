@@ -13,6 +13,7 @@ import {
 import {
     AutoImportProviderProject,
     AuxiliaryProject,
+    ConfiguredProject,
     isBackgroundProject,
     isConfiguredProject,
     LogLevel,
@@ -32,6 +33,7 @@ interface ProjectData {
     isClosed: ReturnType<Project["isClosed"]>;
     isOrphan: ReturnType<Project["isOrphan"]>;
     noOpenRef: boolean;
+    deferredClose: ConfiguredProject["deferredClose"];
     documentPositionMappers: SourceMapper["documentPositionMappers"];
     autoImportProviderHost: Project["autoImportProviderHost"];
     noDtsResolutionProject: Project["noDtsResolutionProject"];
@@ -116,6 +118,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", isConfiguredProject(project) && !project.hasOpenRef(), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "deferredClose", isConfiguredProject(project) && project.deferredClose, projectDiff, projectPropertyLogs);
                 projectDiff = printMapPropertyValue(
                     PrintPropertyWhen.Changed,
                     data?.documentPositionMappers,
@@ -146,6 +149,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 isClosed: project.isClosed(),
                 isOrphan: !isBackgroundProject(project) && project.isOrphan(),
                 noOpenRef: isConfiguredProject(project) && !project.hasOpenRef(),
+                deferredClose: isConfiguredProject(project) && project.deferredClose,
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,
                 originalConfiguredProjects: project.originalConfiguredProjects && new Set(project.originalConfiguredProjects),

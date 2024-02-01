@@ -44,6 +44,7 @@ import {
     isConfiguredProject,
     isExternalProject,
     isInferredProject,
+    isProjectDeferredClose,
     maxFileSize,
     NormalizedPath,
     Project,
@@ -567,7 +568,10 @@ export class ScriptInfo {
             case 0:
                 return Errors.ThrowNoProject();
             case 1:
-                return ensurePrimaryProjectKind(this.containingProjects[0]);
+                return ensurePrimaryProjectKind(
+                    !isProjectDeferredClose(this.containingProjects[0]) ?
+                        this.containingProjects[0] : undefined,
+                );
             default:
                 // If this file belongs to multiple projects, below is the order in which default project is used
                 // - for open script info, its default configured project during opening is default if info is part of it
@@ -583,6 +587,7 @@ export class ScriptInfo {
                 for (let index = 0; index < this.containingProjects.length; index++) {
                     const project = this.containingProjects[index];
                     if (isConfiguredProject(project)) {
+                        if (project.deferredClose) continue;
                         if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
                             // If we havent found default configuredProject and
                             // its not the last one, find it and use that one if there
