@@ -224,18 +224,18 @@ declare namespace Intl {
     };
 
     interface NumberFormatOptionsStyleRegistry {
-        unit: any;
+        unit: never;
     }
 
     interface NumberFormatOptionsCurrencyDisplayRegistry {
-        narrowSymbol: any;
+        narrowSymbol: never;
     }
 
     interface NumberFormatOptionsSignDisplayRegistry {
-        auto: any;
-        never: any;
-        always: any;
-        exceptZero: any;
+        auto: never;
+        never: never;
+        always: never;
+        exceptZero: never;
     }
 
     type NumberFormatOptionsSignDisplay = keyof NumberFormatOptionsSignDisplayRegistry;
@@ -260,12 +260,12 @@ declare namespace Intl {
     }
 
     interface NumberFormatPartTypeRegistry {
-        compact: any;
-        exponentInteger: any;
-        exponentMinusSign: any;
-        exponentSeparator: any;
-        unit: any;
-        unknown: any;
+        compact: never;
+        exponentInteger: never;
+        exponentMinusSign: never;
+        exponentSeparator: never;
+        unit: never;
+        unknown: never;
     }
 
     interface DateTimeFormatOptions {

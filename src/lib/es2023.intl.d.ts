@@ -1,12 +1,12 @@
 declare namespace Intl {
     interface NumberFormatOptionsUseGroupingRegistry {
-        min2: any;
-        auto: any;
-        always: any;
+        min2: never;
+        auto: never;
+        always: never;
     }
 
     interface NumberFormatOptionsSignDisplayRegistry {
-        negative: any;
+        negative: never;
     }
 
     interface NumberFormatOptions {

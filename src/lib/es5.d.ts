@@ -4410,17 +4410,17 @@ declare namespace Intl {
     var Collator: CollatorConstructor;
 
     interface NumberFormatOptionsStyleRegistry {
-        decimal: any;
-        percent: any;
-        currency: any;
+        decimal: never;
+        percent: never;
+        currency: never;
     }
 
     type NumberFormatOptionsStyle = keyof NumberFormatOptionsStyleRegistry;
 
     interface NumberFormatOptionsCurrencyDisplayRegistry {
-        code: any;
-        symbol: any;
-        name: any;
+        code: never;
+        symbol: never;
+        name: never;
     }
 
     type NumberFormatOptionsCurrencyDisplay = keyof NumberFormatOptionsCurrencyDisplayRegistry;

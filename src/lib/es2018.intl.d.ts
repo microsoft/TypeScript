@@ -38,18 +38,18 @@ declare namespace Intl {
     const PluralRules: PluralRulesConstructor;
 
     interface NumberFormatPartTypeRegistry {
-        literal: any;
-        nan: any;
-        infinity: any;
-        percent: any;
-        integer: any;
-        group: any;
-        decimal: any;
-        fraction: any;
-        plusSign: any;
-        minusSign: any;
-        percentSign: any;
-        currency: any;
+        literal: never;
+        nan: never;
+        infinity: never;
+        percent: never;
+        integer: never;
+        group: never;
+        decimal: never;
+        fraction: never;
+        plusSign: never;
+        minusSign: never;
+        percentSign: never;
+        currency: never;
     }
 
     type NumberFormatPartTypes = keyof NumberFormatPartTypeRegistry;
