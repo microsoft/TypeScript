@@ -716,9 +716,6 @@ export const enum OrganizeImportsMode {
 }
 
 export interface PostPasteImportFixes {
-    // targetFile: string, 
-    // targetFileText: string,
-    // pastes: Array<{text: string; range: TextSpan}>
     edits: readonly FileTextChanges[];
 } 
 

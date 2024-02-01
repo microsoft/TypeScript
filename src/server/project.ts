@@ -1,6 +1,6 @@
 import { info } from "console";
 import { FormatContext } from "../services/_namespaces/ts.formatting";
-import { FixInfo, ImportFixWithModuleSpecifier, getFixesInfoForNonUMDImport, sortFixInfo } from "../services/codefixes/importFixes";
+import { FixInfo, ImportFixWithModuleSpecifier, sortFixInfo } from "../services/codefixes/importFixes";
 import * as ts from "./_namespaces/ts";
 import {
     addRange,
@@ -315,63 +315,6 @@ const enum TypingWatcherType {
 
 type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
 
-//=========================
-//type ImportFixWithModuleSpecifier = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport;
-const enum ImportFixKind {
-    UseNamespace,
-    JsdocTypeImport,
-    AddToExisting,
-    AddNew,
-    PromoteTypeOnly,
-}
-const enum AddAsTypeOnly {
-    Allowed = 1 << 0,
-    Required = 1 << 1,
-    NotAllowed = 1 << 2,
-}
-// interface FixInfo {
-//     readonly fix: ImportFix;
-//     readonly symbolName: string;
-//     readonly errorIdentifierText: string | undefined;
-//     readonly isJsxNamespaceFix?: boolean;
-// }
-type ImportFix = FixUseNamespaceImport | FixAddJsdocTypeImport | FixAddToExistingImport | FixAddNewImport | FixPromoteTypeOnlyImport;
-interface ImportFixBase {
-    readonly isReExport?: boolean;
-    readonly exportInfo?: SymbolExportInfo;
-    readonly moduleSpecifier: string;
-}
-interface Qualification {
-    readonly usagePosition: number;
-    readonly namespacePrefix: string;
-}
-interface FixUseNamespaceImport extends ImportFixBase, Qualification {
-    readonly kind: ImportFixKind.UseNamespace;
-}
-interface FixAddJsdocTypeImport extends ImportFixBase {
-    readonly kind: ImportFixKind.JsdocTypeImport;
-    readonly usagePosition: number;
-    readonly isReExport: boolean;
-    readonly exportInfo: SymbolExportInfo;
-}
-interface FixAddToExistingImport extends ImportFixBase {
-    readonly kind: ImportFixKind.AddToExisting;
-    readonly importClauseOrBindingPattern: ImportClause | ts.ObjectBindingPattern;
-    readonly importKind: ts.ImportKind.Default | ts.ImportKind.Named;
-    readonly addAsTypeOnly: AddAsTypeOnly;
-}
-interface FixAddNewImport extends ImportFixBase {
-    readonly kind: ImportFixKind.AddNew;
-    readonly importKind: ts.ImportKind;
-    readonly addAsTypeOnly: AddAsTypeOnly;
-    readonly useRequire: boolean;
-    readonly qualification?: Qualification;
-}
-interface FixPromoteTypeOnlyImport {
-    readonly kind: ImportFixKind.PromoteTypeOnly;
-    readonly typeOnlyAliasDeclaration: ts.TypeOnlyAliasDeclaration;
-}
-//=========================
 export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
     private rootFiles: ScriptInfo[] = [];
     private rootFilesMap = new Map<string, ProjectRootFile>();

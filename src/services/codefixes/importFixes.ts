@@ -1183,7 +1183,7 @@ function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOp
     }
 }
 
-export function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] | undefined {
+function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier; })[] | undefined {
     const checker = program.getTypeChecker();
     const compilerOptions = program.getCompilerOptions();
     return flatMap(getSymbolNamesToImport(sourceFile, checker, symbolToken, compilerOptions), symbolName => {
@@ -1212,7 +1212,7 @@ function getTypeOnlyPromotionFix(sourceFile: SourceFile, symbolToken: Identifier
     return { kind: ImportFixKind.PromoteTypeOnly, typeOnlyAliasDeclaration };
 }
 
-export function getSymbolNamesToImport(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string[] {
+function getSymbolNamesToImport(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string[] {
     const parent = symbolToken.parent;
     if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && jsxModeNeedsExplicitImport(compilerOptions.jsx)) {
         const jsxNamespace = checker.getJsxNamespace(sourceFile);
@@ -1231,7 +1231,7 @@ function needsJsxNamespaceFix(jsxNamespace: string, symbolToken: Identifier, che
 }
 
 // Returns a map from an exported symbol's ID to a list of every way it's (re-)exported.
-export function getExportInfos(
+function getExportInfos(
     symbolName: string,
     isJsxTagName: boolean,
     currentTokenMeaning: SemanticMeaning,
@@ -1323,7 +1323,7 @@ function codeActionForFix(
     });
     return createCodeFixAction(importFixName, changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
 }
-export function codeActionForFixWorker(
+function codeActionForFixWorker(
     changes: textChanges.ChangeTracker,
     sourceFile: SourceFile,
     symbolName: string,
