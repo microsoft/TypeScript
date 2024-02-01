@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/mergedInstantiationAssignment.ts] ////
+
+=== mergedInstantiationAssignment.ts ===
+// https://github.com/microsoft/TypeScript/issues/56320
+
+class GenericObject<T = number> {
+>GenericObject : Symbol(GenericObject, Decl(mergedInstantiationAssignment.ts, 0, 0))
+>T : Symbol(T, Decl(mergedInstantiationAssignment.ts, 2, 20))
+
+  set x(x: T) {}
+>x : Symbol(GenericObject.x, Decl(mergedInstantiationAssignment.ts, 2, 33))
+>x : Symbol(x, Decl(mergedInstantiationAssignment.ts, 3, 8))
+>T : Symbol(T, Decl(mergedInstantiationAssignment.ts, 2, 20))
+}
+
+const v1 = new GenericObject() as GenericObject &
+>v1 : Symbol(v1, Decl(mergedInstantiationAssignment.ts, 6, 5))
+>GenericObject : Symbol(GenericObject, Decl(mergedInstantiationAssignment.ts, 0, 0))
+>GenericObject : Symbol(GenericObject, Decl(mergedInstantiationAssignment.ts, 0, 0))
+
+  ({ a?: string } | { b?: number });
+>a : Symbol(a, Decl(mergedInstantiationAssignment.ts, 7, 4))
+>b : Symbol(b, Decl(mergedInstantiationAssignment.ts, 7, 21))
+
+v1.x = 432;
+>v1.x : Symbol(GenericObject.x, Decl(mergedInstantiationAssignment.ts, 2, 33))
+>v1 : Symbol(v1, Decl(mergedInstantiationAssignment.ts, 6, 5))
+>x : Symbol(GenericObject.x, Decl(mergedInstantiationAssignment.ts, 2, 33))
+
+class GenericObjectWithoutSetter<T = number> {
+>GenericObjectWithoutSetter : Symbol(GenericObjectWithoutSetter, Decl(mergedInstantiationAssignment.ts, 8, 11))
+>T : Symbol(T, Decl(mergedInstantiationAssignment.ts, 10, 33))
+
+  declare x: T;
+>x : Symbol(GenericObjectWithoutSetter.x, Decl(mergedInstantiationAssignment.ts, 10, 46))
+>T : Symbol(T, Decl(mergedInstantiationAssignment.ts, 10, 33))
+}
+
+const v2 = new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &
+>v2 : Symbol(v2, Decl(mergedInstantiationAssignment.ts, 14, 5))
+>GenericObjectWithoutSetter : Symbol(GenericObjectWithoutSetter, Decl(mergedInstantiationAssignment.ts, 8, 11))
+>GenericObjectWithoutSetter : Symbol(GenericObjectWithoutSetter, Decl(mergedInstantiationAssignment.ts, 8, 11))
+
+  ({ a?: string } | { b?: number });
+>a : Symbol(a, Decl(mergedInstantiationAssignment.ts, 15, 4))
+>b : Symbol(b, Decl(mergedInstantiationAssignment.ts, 15, 21))
+
+v2.x = 42;
+>v2.x : Symbol(GenericObjectWithoutSetter.x, Decl(mergedInstantiationAssignment.ts, 10, 46))
+>v2 : Symbol(v2, Decl(mergedInstantiationAssignment.ts, 14, 5))
+>x : Symbol(GenericObjectWithoutSetter.x, Decl(mergedInstantiationAssignment.ts, 10, 46))
+
+class NormalObject {
+>NormalObject : Symbol(NormalObject, Decl(mergedInstantiationAssignment.ts, 16, 10))
+
+  set x(x: number) {}
+>x : Symbol(NormalObject.x, Decl(mergedInstantiationAssignment.ts, 18, 20))
+>x : Symbol(x, Decl(mergedInstantiationAssignment.ts, 19, 8))
+}
+
+const v3 = new NormalObject() as NormalObject &
+>v3 : Symbol(v3, Decl(mergedInstantiationAssignment.ts, 22, 5))
+>NormalObject : Symbol(NormalObject, Decl(mergedInstantiationAssignment.ts, 16, 10))
+>NormalObject : Symbol(NormalObject, Decl(mergedInstantiationAssignment.ts, 16, 10))
+
+  ({ a?: string } | { b?: number });
+>a : Symbol(a, Decl(mergedInstantiationAssignment.ts, 23, 4))
+>b : Symbol(b, Decl(mergedInstantiationAssignment.ts, 23, 21))
+
+v3.x = 42;
+>v3.x : Symbol(NormalObject.x, Decl(mergedInstantiationAssignment.ts, 18, 20))
+>v3 : Symbol(v3, Decl(mergedInstantiationAssignment.ts, 22, 5))
+>x : Symbol(NormalObject.x, Decl(mergedInstantiationAssignment.ts, 18, 20))
+

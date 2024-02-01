@@ -2448,7 +2448,13 @@ export class TestState {
         const annotations = this.annotateContentWithTooltips(
             result,
             "completions",
-            item => item.optionalReplacementSpan,
+            item => {
+                if (item.optionalReplacementSpan) {
+                    const { start, length } = item.optionalReplacementSpan;
+                    return start && length === 0 ? { start, length: 1 } : item.optionalReplacementSpan;
+                }
+                return undefined;
+            },
             item =>
                 item.entries?.flatMap(
                     entry =>
@@ -3521,10 +3527,12 @@ export class TestState {
             actualTextArray.push(text);
 
             // Undo changes to perform next fix
-            const span = change.textChanges[0].span;
-            const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
-            const insertedText = change.textChanges[0].newText;
-            this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
+            for (const textChange of change.textChanges) {
+                const span = textChange.span;
+                const deletedText = originalContent.slice(span.start, span.start + textChange.span.length);
+                const insertedText = textChange.newText;
+                this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
+            }
         }
         if (expectedTextArray.length !== actualTextArray.length) {
             this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}:\n\n${actualTextArray.join("\n\n" + "-".repeat(20) + "\n\n")}`);
