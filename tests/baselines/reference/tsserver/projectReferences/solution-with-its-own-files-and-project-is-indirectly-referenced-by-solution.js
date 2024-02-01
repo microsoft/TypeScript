@@ -2307,8 +2307,8 @@ ScriptInfos::
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 5 *changed*
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig-indirect1.json *new*
         /user/username/projects/myproject/tsconfig-indirect2.json *new*
@@ -2470,8 +2470,8 @@ ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 5
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
@@ -2636,8 +2636,8 @@ ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 5
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig-indirect1.json
         /user/username/projects/myproject/tsconfig-indirect2.json
@@ -3044,8 +3044,8 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1 *changed*
         /user/username/projects/myproject/indirect3/tsconfig.json *new*
-        /user/username/projects/myproject/tsconfig-src.json *deleted*
         /user/username/projects/myproject/tsconfig.json *deleted*
+        /user/username/projects/myproject/tsconfig-src.json *deleted*
         /dev/null/inferredProject1* *deleted*
         /user/username/projects/myproject/tsconfig-indirect1.json *deleted*
         /user/username/projects/myproject/tsconfig-indirect2.json *deleted*

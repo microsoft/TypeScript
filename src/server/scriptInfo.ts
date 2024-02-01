@@ -25,6 +25,7 @@ import {
     IScriptSnapshot,
     isString,
     LineInfo,
+    orderedRemoveItem,
     Path,
     ScriptKind,
     ScriptSnapshot,
@@ -32,7 +33,6 @@ import {
     SourceFile,
     SourceFileLike,
     TextSpan,
-    unorderedRemoveItem,
 } from "./_namespaces/ts";
 import {
     AbsolutePositionAndLineText,
@@ -536,7 +536,8 @@ export class ScriptInfo {
                 }
                 break;
             default:
-                if (unorderedRemoveItem(this.containingProjects, project)) {
+                // We use first configured project as default so we shouldnt change the order of the containing projects
+                if (orderedRemoveItem(this.containingProjects, project)) {
                     project.onFileAddedOrRemoved(this.isSymlink());
                 }
                 break;

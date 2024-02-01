@@ -85,6 +85,7 @@ import {
     normalizeSlashes,
     optionDeclarations,
     optionsForWatch,
+    orderedRemoveItem,
     PackageJsonAutoImportPreference,
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
@@ -1882,7 +1883,7 @@ export class ProjectService {
         project.addRoot(info);
         if (info.containingProjects[0] !== project) {
             // Ensure this is first project, we could be in this scenario because info could be part of orphan project
-            info.detachFromProject(project);
+            orderedRemoveItem(info.containingProjects, project);
             info.containingProjects.unshift(project);
         }
         project.updateGraph();

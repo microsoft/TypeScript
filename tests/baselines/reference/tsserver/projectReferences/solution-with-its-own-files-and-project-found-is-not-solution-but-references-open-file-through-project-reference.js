@@ -1793,8 +1793,8 @@ ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 3
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
 /dummy/dummy.ts (Open)
     version: SVC-1-0
@@ -1907,8 +1907,8 @@ ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 3
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
 /dummy/dummy.ts (Open)
     version: SVC-1-0
@@ -2024,8 +2024,8 @@ ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 3
-        /user/username/projects/myproject/tsconfig-src.json
         /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig-src.json
         /dev/null/inferredProject1*
 /dummy/dummy.ts *changed*
     open: false *changed*
