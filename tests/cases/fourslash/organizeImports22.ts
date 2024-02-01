@@ -16,7 +16,7 @@ verify.organizeImports(
 } from 'a';
 import { abc, Abc, bc, Bc } from 'b';
 console.log(abc, Abc, bc, Bc, I, R, M);`);
-
+ 
 // organize already-organized imports to make sure output is stable
 verify.organizeImports(
 `import {

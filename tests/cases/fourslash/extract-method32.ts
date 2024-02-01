@@ -21,7 +21,7 @@ edit.applyRefactor({
   actionName: "function_scope_1",
   actionDescription: "Extract to function in module scope",
   newContent:
-`import { a, A } from "./a";
+`import { A, a } from "./a";
 
 function foo() {
     const arg = a;
