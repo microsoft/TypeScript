@@ -44443,7 +44443,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 setParent(narrowReference, narrowPosition.parent);
                 setNodeFlags(narrowReference, narrowReference.flags | NodeFlags.Synthesized);
                 narrowReference.flowNode = narrowFlowNode;
-                const exprType = getTypeOfExpression(narrowReference);
+                const initialType = getNarrowableTypeForReference(tp, narrowReference);
+                const flowType = getFlowTypeOfReference(narrowReference, initialType);
+                const exprType = getTypeFromFlowType(flowType);
                 // Don't narrow the return type if narrowing didn't produce a narrower type for the expression.
                 if (isTypeAny(exprType) || isErrorType(exprType) || exprType === tp || exprType === mapType(tp, getBaseConstraintOrType)) {
                     return undefined;

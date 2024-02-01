@@ -74,3 +74,13 @@ function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends fal
     }
     return 0;
 }
+
+// Don't raise errors when getting the narrowed type of synthesized nodes
+type Ret<T extends string | number> = T extends string ? 1 : T extends number ? 2 : 1 | 2;
+function f<T extends string | number>(x: T): Ret<T> {
+    let y!: T;
+    if (typeof y === "string") {
+        return 1;
+    }
+    return 2;
+}

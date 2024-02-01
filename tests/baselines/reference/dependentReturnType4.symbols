@@ -207,3 +207,30 @@ function switchTrue<T extends boolean>(x: T): T extends true ? 1 : T extends fal
     }
     return 0;
 }
+
+// Don't raise errors when getting the narrowed type of synthesized nodes
+type Ret<T extends string | number> = T extends string ? 1 : T extends number ? 2 : 1 | 2;
+>Ret : Symbol(Ret, Decl(dependentReturnType4.ts, 70, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 73, 9))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 73, 9))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 73, 9))
+
+function f<T extends string | number>(x: T): Ret<T> {
+>f : Symbol(f, Decl(dependentReturnType4.ts, 73, 90))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 74, 11))
+>x : Symbol(x, Decl(dependentReturnType4.ts, 74, 38))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 74, 11))
+>Ret : Symbol(Ret, Decl(dependentReturnType4.ts, 70, 1))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 74, 11))
+
+    let y!: T;
+>y : Symbol(y, Decl(dependentReturnType4.ts, 75, 7))
+>T : Symbol(T, Decl(dependentReturnType4.ts, 74, 11))
+
+    if (typeof y === "string") {
+>y : Symbol(y, Decl(dependentReturnType4.ts, 75, 7))
+
+        return 1;
+    }
+    return 2;
+}
