@@ -204,18 +204,7 @@ before waitForPendingPlugins
 
 fulfill import plugin-a
 fulfill import plugin-a
-Info seq  [hh:mm:ss:mss] got projects updated in background /random/foo2.ts
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectsUpdatedInBackground",
-      "body": {
-        "openFiles": [
-          "/random/foo2.ts"
-        ]
-      }
-    }
+Info seq  [hh:mm:ss:mss] Cancelling plugin enabling for /dev/null/inferredProject1* as it is closed
 after waitForPendingPlugins for closed foo.ts
 
 Info seq  [hh:mm:ss:mss] Plugin validation succeeded
