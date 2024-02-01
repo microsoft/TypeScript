@@ -180,7 +180,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /c/index.ts 500 undefi
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -265,6 +265,40 @@ watchedFiles::
 /tsconfig.settings.json: *new*
   {"pollingInterval":2000}
 
+Projects::
+/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+/b/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/c/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -302,7 +336,7 @@ Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  ]
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
@@ -440,6 +474,14 @@ watchedFiles::
 /tsconfig.settings.json:
   {"pollingInterval":2000}
 
+Projects::
+/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -466,7 +508,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -512,7 +554,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /c/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -656,6 +698,55 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+Projects::
+/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/c/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+/b/index.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /a/tsconfig.json
+        /b/tsconfig.json *new*
+/c/index.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /a/tsconfig.json
+        /c/tsconfig.json *new*
+/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /a/tsconfig.json
+        /b/tsconfig.json *new*
+        /c/tsconfig.json *new*
+/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /a/tsconfig.json
+        /b/tsconfig.json *new*
+        /c/tsconfig.json *new*
+/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /a/tsconfig.json
+        /b/tsconfig.json *new*
+        /c/tsconfig.json *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 3,
@@ -836,6 +927,41 @@ watchedFiles::
 watchedFiles *deleted*::
 /b/index.ts:
   {"pollingInterval":500}
+
+ScriptInfos::
+/a/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+/b/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 2
+        /a/tsconfig.json
+        /b/tsconfig.json *default*
+/c/index.ts
+    version: Text-1
+    containingProjects: 2
+        /a/tsconfig.json
+        /c/tsconfig.json
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /a/tsconfig.json
+        /b/tsconfig.json
+        /c/tsconfig.json
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /a/tsconfig.json
+        /b/tsconfig.json
+        /c/tsconfig.json
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /a/tsconfig.json
+        /b/tsconfig.json
+        /c/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1308,6 +1434,41 @@ watchedFiles::
 watchedFiles *deleted*::
 /c/index.ts:
   {"pollingInterval":500}
+
+ScriptInfos::
+/a/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+/b/index.ts (Open)
+    version: Text-1
+    containingProjects: 2
+        /a/tsconfig.json
+        /b/tsconfig.json *default*
+/c/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 2
+        /a/tsconfig.json
+        /c/tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 3
+        /a/tsconfig.json
+        /b/tsconfig.json
+        /c/tsconfig.json
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 3
+        /a/tsconfig.json
+        /b/tsconfig.json
+        /c/tsconfig.json
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 3
+        /a/tsconfig.json
+        /b/tsconfig.json
+        /c/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {

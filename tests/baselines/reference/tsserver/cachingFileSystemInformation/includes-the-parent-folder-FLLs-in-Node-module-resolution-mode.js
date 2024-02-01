@@ -75,7 +75,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/proj/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/proj/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/proj/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -202,6 +202,25 @@ FsWatchesRecursive::
 /users/username/projects/proj/foo: *new*
   {}
 
+Projects::
+/users/username/projects/proj/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/proj/tsconfig.json
+/users/username/projects/proj/foo/boo/app.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/proj/tsconfig.json *default*
+/users/username/projects/proj/foo/boo/moo/app.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/proj/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /users/username/projects/proj/foo/boo/app.ts:: 1
 Info seq  [hh:mm:ss:mss] foo/boo/app.ts(1,24): error TS2307: Cannot find module 'debug' or its corresponding type declarations.
 
@@ -264,6 +283,11 @@ Timeout callback:: count: 2
 5: /users/username/projects/proj/tsconfig.json *new*
 6: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/users/username/projects/proj/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
 Before running Timeout callback:: count: 2
 5: /users/username/projects/proj/tsconfig.json
 6: *ensureProjectForOpenFiles*
@@ -274,7 +298,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/proj/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /users/username/projects/proj/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/proj/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/proj/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/proj/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -348,6 +372,29 @@ FsWatchesRecursive::
   {}
 /users/username/projects/proj/node_modules:
   {}
+
+Projects::
+/users/username/projects/proj/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/proj/tsconfig.json
+/users/username/projects/proj/foo/boo/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/proj/tsconfig.json *default*
+/users/username/projects/proj/foo/boo/moo/app.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/proj/tsconfig.json
+/users/username/projects/proj/node_modules/debug/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/proj/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /users/username/projects/proj/foo/boo/app.ts:: 0
 Info seq  [hh:mm:ss:mss] getSemanticDiagnostics:: /users/username/projects/proj/foo/boo/moo/app.ts:: 0

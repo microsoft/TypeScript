@@ -57,7 +57,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefi
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/app.ts Text-1 "let x = 1;"
@@ -107,6 +107,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -123,6 +128,21 @@ FsWatches::
   {}
 /a/b/lib.ts: *new*
   {}
+
+Projects::
+/a/b/proj1 (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/proj1
+/a/b/lib.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/proj1
 
 Before request
 
@@ -161,6 +181,17 @@ FsWatches *deleted*::
 /a/b/app.ts:
   {}
 
+ScriptInfos::
+/a/b/app.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/proj1 *default*
+/a/b/lib.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/proj1
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/lib.ts 2:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/proj1
@@ -183,6 +214,21 @@ FsWatches *deleted*::
 Timeout callback:: count: 2
 1: /a/b/proj1 *new*
 2: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/a/b/proj1 (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /a/b/proj1 *default*
+/a/b/lib.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/b/proj1 *deleted*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -218,6 +264,13 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -232,6 +285,20 @@ PolledWatches *deleted*::
 FsWatches::
 /a/b/tsconfig.json: *new*
   {}
+
+Projects::
+/a/b/proj1 (External) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/app.ts (Open) *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/b/proj1 *deleted*
 
 Info seq  [hh:mm:ss:mss] Loading configured project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -256,7 +323,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined 
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/app.ts Text-1 "let x = 1;"
@@ -421,6 +488,11 @@ Timeout callback:: count: 2
 1: /a/b/proj1
 3: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/a/b/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "openExternalProject",
@@ -442,7 +514,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/lib.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/proj1
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/proj1 WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj1 Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/proj1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/app.ts Text-1 "let x = 1;"
@@ -455,6 +527,13 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/b/proj1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/app.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/proj1
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -469,3 +548,18 @@ PolledWatches::
 FsWatches::
 /a/b/lib.ts: *new*
   {}
+
+Projects::
+/a/b/proj1 (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts (Open) *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /a/b/proj1 *default* *new*
+/a/b/lib.ts *new*
+    version: Text-2
+    containingProjects: 1
+        /a/b/proj1

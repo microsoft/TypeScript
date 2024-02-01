@@ -27,7 +27,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/node_modules/fooo/index.d.ts Text-1 "export var x: string;"
@@ -49,6 +49,21 @@ PolledWatches::
 FsWatchesRecursive::
 /a/b/node_modules: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/b/node_modules/fooo/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 TI:: [hh:mm:ss:mss] Global cache location '/tmp', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
@@ -184,6 +199,11 @@ PendingInstalls callback:: count: 1
   "@types/foo@ts5.4"
 ] *new*
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Info seq  [hh:mm:ss:mss] Resolution from : /a/b/app.js for "fooo" goes to: {
   "resolvedFileName": "/a/b/node_modules/fooo/index.d.ts",
   "extension": ".d.ts",
@@ -298,13 +318,18 @@ Timeout callback:: count: 2
 1: /dev/null/inferredProject1* *new*
 2: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 	/tmp/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
@@ -426,8 +451,38 @@ Timeout callback:: count: 2
 3: /dev/null/inferredProject1* *new*
 4: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/a/b/app.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/b/node_modules/fooo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tmp/node_modules/foo/a/a.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tmp/node_modules/foo/a/b.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tmp/node_modules/foo/a/c.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tmp/node_modules/foo/index.d.ts *new*
+    version: Text-1
+    containingProjects: 0
+
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/tmp/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
@@ -544,6 +599,11 @@ Info seq  [hh:mm:ss:mss] Resolution from : /a/b/app.js for "fooo" goes to: {
 }
 Before request
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "applyChangedToOpenFiles",
@@ -573,13 +633,43 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 3
+
+ScriptInfos::
+/a/b/app.js (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/b/node_modules/fooo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tmp/node_modules/foo/a/a.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tmp/node_modules/foo/a/b.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tmp/node_modules/foo/a/c.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/tmp/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 0
+
 Before running Timeout callback:: count: 2
 3: /dev/null/inferredProject1*
 4: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/tmp/node_modules/foo/a/a.d.ts Text-1 "export function a (): void;"
@@ -716,3 +806,8 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 4 *changed*

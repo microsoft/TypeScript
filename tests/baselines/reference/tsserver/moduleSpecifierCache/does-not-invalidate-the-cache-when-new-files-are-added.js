@@ -73,7 +73,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/b.ts 500 undefine
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/src/a.ts SVC-1-0 "export const foo = 0;"
@@ -100,7 +100,7 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 depe
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/node_modules/mobx/index.d.ts Text-1 "export declare function observable(): unknown;"
@@ -258,6 +258,41 @@ FsWatchesRecursive::
 /src: *new*
   {}
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/node_modules/mobx/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/src/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/src/ambient.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/b-link.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/b.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/c.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -317,6 +352,33 @@ FsWatchesRecursive::
 /src:
   {}
 
+ScriptInfos::
+/node_modules/mobx/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/src/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/src/ambient.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/b-link.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/b.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json *default*
+/src/c.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -375,6 +437,33 @@ FsWatchesRecursive::
   {}
 /src:
   {}
+
+ScriptInfos::
+/node_modules/mobx/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/src/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/src/ambient.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/b-link.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/b.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json *default*
+/src/c.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json *default*
 
 Before request
 
@@ -882,10 +971,19 @@ Timeout callback:: count: 2
 1: /tsconfig.json *new*
 2: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
 Info seq  [hh:mm:ss:mss] Running: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/a2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 	/src/a.ts SVC-1-0 "export const foo = 0;"
@@ -984,5 +1082,44 @@ FsWatchesRecursive::
   {}
 /src:
   {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/node_modules/mobx/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/src/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/src/a2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/ambient.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/b-link.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/src/b.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json *default*
+/src/c.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] importability: false

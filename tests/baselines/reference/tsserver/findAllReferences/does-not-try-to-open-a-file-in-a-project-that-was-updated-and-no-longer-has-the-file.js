@@ -133,7 +133,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /pa
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/loading-indicator.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
@@ -310,6 +310,25 @@ FsWatchesRecursive::
 /packages/core/src: *new*
   {}
 
+Projects::
+/packages/babel-loader/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/packages/babel-loader/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json *default*
+/packages/core/src/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json
+/packages/core/src/loading-indicator.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -342,7 +361,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/core/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/core/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/core/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/core/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
@@ -525,6 +544,31 @@ FsWatchesRecursive::
 /packages/core/src:
   {}
 
+Projects::
+/packages/babel-loader/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/core/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/packages/babel-loader/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json *default*
+/packages/core/src/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /packages/babel-loader/tsconfig.json
+        /packages/core/tsconfig.json *default* *new*
+/packages/core/src/loading-indicator.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /packages/babel-loader/tsconfig.json
+        /packages/core/tsconfig.json *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -560,6 +604,30 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/packages/babel-loader/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/packages/core/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/packages/babel-loader/src/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json *default*
+/packages/core/src/index.ts (Open)
+    version: Text-1
+    containingProjects: 2
+        /packages/babel-loader/tsconfig.json
+        /packages/core/tsconfig.json *default*
+/packages/core/src/loading-indicator.ts
+    version: Text-1
+    containingProjects: 2
+        /packages/babel-loader/tsconfig.json
+        /packages/core/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -575,7 +643,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /packages/core/src/index.ts position 92 in project /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/babel-loader/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/packages/babel-loader/src/index.ts SVC-1-1 "\nimport type { Foo } from// comment \"../../core/src/index.js\";\n"
@@ -684,3 +752,27 @@ FsWatchesRecursive::
   {}
 /packages/core/src:
   {}
+
+Projects::
+/packages/babel-loader/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+/packages/core/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/packages/babel-loader/src/index.ts (Open)
+    version: SVC-1-1
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json *default*
+/packages/core/src/index.ts (Open) *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /packages/core/tsconfig.json *default*
+        /packages/babel-loader/tsconfig.json *deleted*
+/packages/core/src/loading-indicator.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /packages/core/tsconfig.json
+        /packages/babel-loader/tsconfig.json *deleted*

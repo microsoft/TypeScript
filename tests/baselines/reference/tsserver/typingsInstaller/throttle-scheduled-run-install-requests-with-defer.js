@@ -67,7 +67,7 @@ Info seq  [hh:mm:ss:mss] Excluded '/a/b/commander.js' because it matched command
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test1.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test1.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test1.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test1.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app/test1.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/file3.d.ts Text-1 ""
@@ -146,6 +146,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/app/test1.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -163,6 +168,17 @@ FsWatches::
 
 Timeout callback:: count: 1
 1: /a/app/test1.csproj::discover *new*
+
+Projects::
+/a/app/test1.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/file3.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test1.csproj
 
 Before request
 
@@ -192,7 +208,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test2.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test2.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test2.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test2.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app/test2.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/file3.d.ts Text-1 ""
@@ -267,12 +283,36 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/app/test1.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/app/test2.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
       "responseRequired": true
     }
 After request
+
+Projects::
+/a/app/test1.csproj (External)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/a/app/test2.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/file3.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /a/app/test1.csproj
+        /a/app/test2.csproj *new*
 
 Before running Timeout callback:: count: 1
 1: /a/app/test1.csproj::discover
@@ -698,6 +738,14 @@ Timeout callback:: count: 2
 2: /a/app/test2.csproj::discover *new*
 3: /a/app/test1.csproj *new*
 
+Projects::
+/a/app/test1.csproj (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/a/app/test2.csproj (External)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 Before running Timeout callback:: count: 2
 2: /a/app/test2.csproj::discover
 3: /a/app/test1.csproj
@@ -964,3 +1012,11 @@ After running PendingInstalls callback:: count: 0
 Timeout callback:: count: 2
 3: /a/app/test1.csproj
 4: /a/app/test2.csproj *new*
+
+Projects::
+/a/app/test1.csproj (External)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/a/app/test2.csproj (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
