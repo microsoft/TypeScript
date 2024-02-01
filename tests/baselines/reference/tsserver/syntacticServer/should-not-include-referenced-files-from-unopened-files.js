@@ -68,7 +68,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open) *new*
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -108,11 +108,11 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/b.ts (Open) *new*
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 0 structureChanged: false Elapsed:: *ms
@@ -150,7 +150,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/b.ts *changed*
     open: false *changed*
     version: Text-0

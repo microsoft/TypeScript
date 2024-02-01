@@ -295,7 +295,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/file2.ts
     version: Text-1
     containingProjects: 1
@@ -456,7 +456,7 @@ ScriptInfos::
 /user/username/projects/myproject/file1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/file2.ts
     version: Text-1
     containingProjects: 1
@@ -618,7 +618,7 @@ ScriptInfos::
 /user/username/projects/myproject/file1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/file2.ts *changed*
     version: Text-2 *changed*
     containingProjects: 1
@@ -781,7 +781,7 @@ ScriptInfos::
 /user/username/projects/myproject/file1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/file2.ts *deleted*
     version: Text-2
     containingProjects: 0 *changed*

@@ -95,7 +95,7 @@ ScriptInfos::
 /User/userName/Projects/İ/foo.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1

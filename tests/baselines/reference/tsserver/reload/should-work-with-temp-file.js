@@ -57,7 +57,7 @@ ScriptInfos::
 /a/b/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -100,7 +100,7 @@ ScriptInfos::
 /a/b/app.ts (Open) *changed*
     version: Text-2 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Content of /a/b/app.ts:: const y = 42
 Before request
@@ -109,7 +109,7 @@ ScriptInfos::
 /a/b/app.ts (Open) *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -144,6 +144,6 @@ ScriptInfos::
 /a/b/app.ts (Open) *changed*
     version: Text-3 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Content of /a/b/app.ts:: let x = 1

@@ -138,7 +138,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /hunter2/foo.csproj
+        /hunter2/foo.csproj *default*
 
 Before request
 
@@ -323,4 +323,4 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /hunter2/foo.csproj
+        /hunter2/foo.csproj *default*

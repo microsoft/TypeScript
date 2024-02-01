@@ -237,7 +237,7 @@ ScriptInfos::
 /a/b/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/main2.ts *new*
     version: Text-1
     containingProjects: 1
@@ -341,6 +341,6 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false

@@ -209,7 +209,7 @@ ScriptInfos::
 /main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /mod.ts *new*
     version: Text-1
     containingProjects: 1
@@ -264,12 +264,12 @@ ScriptInfos::
 /main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /mod.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 
 Before request
 

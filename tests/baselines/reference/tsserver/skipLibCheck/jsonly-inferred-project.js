@@ -62,7 +62,7 @@ ScriptInfos::
 /a/b/file1.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/file2.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -257,12 +257,12 @@ ScriptInfos::
 /a/b/file1.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/file2.d.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -426,7 +426,7 @@ ScriptInfos::
 /a/b/file2.d.ts (Open)
     version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -677,11 +677,11 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
 /a/b/file2.d.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
         /dev/null/inferredProject1* *deleted*
 
 Before request

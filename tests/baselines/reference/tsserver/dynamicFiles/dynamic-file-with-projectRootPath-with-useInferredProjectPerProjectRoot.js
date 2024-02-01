@@ -77,7 +77,7 @@ ScriptInfos::
 ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -438,8 +438,8 @@ ScriptInfos::
 ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 ^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*

@@ -249,7 +249,7 @@ ScriptInfos::
 /a/user.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /b/node_modules/foo/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -320,7 +320,7 @@ ScriptInfos::
 /a/user.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /b/node_modules/foo/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -329,7 +329,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 
 Before request
 

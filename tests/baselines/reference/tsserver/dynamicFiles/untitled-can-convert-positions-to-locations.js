@@ -194,7 +194,7 @@ ScriptInfos::
 /proj/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /proj/tsconfig.json
+        /proj/tsconfig.json *default*
 
 Before request
 
@@ -270,11 +270,11 @@ ScriptInfos::
 /proj/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /proj/tsconfig.json
+        /proj/tsconfig.json *default*
 untitled:^Untitled-1 (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 /proj/untitled:^untitled-1 isDynamic:: true
 Before request

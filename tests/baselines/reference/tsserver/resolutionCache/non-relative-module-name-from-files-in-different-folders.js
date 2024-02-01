@@ -327,7 +327,7 @@ ScriptInfos::
 /user/username/projects/myproject/product/src/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/product/test/file4.ts *new*
     version: Text-1
     containingProjects: 1
@@ -392,7 +392,7 @@ ScriptInfos::
 /user/username/projects/myproject/product/src/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/product/test/file4.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -483,7 +483,7 @@ ScriptInfos::
 /user/username/projects/myproject/product/src/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/product/test/file4.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*

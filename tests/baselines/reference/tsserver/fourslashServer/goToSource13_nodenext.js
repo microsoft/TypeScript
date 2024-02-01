@@ -113,7 +113,7 @@ ScriptInfos::
 /node_modules/left-pad/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -243,7 +243,7 @@ ScriptInfos::
 /index.mts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -266,7 +266,7 @@ ScriptInfos::
 /node_modules/left-pad/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -362,7 +362,7 @@ ScriptInfos::
 /index.mts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /tsconfig.json
+        /tsconfig.json *default*
         /dev/null/auxiliaryProject1* *new*
 /lib.d.ts
     version: Text-1
@@ -390,4 +390,4 @@ ScriptInfos::
 /node_modules/left-pad/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

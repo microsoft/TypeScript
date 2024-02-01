@@ -156,7 +156,7 @@ ScriptInfos::
 /user/username/projects/myproject/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/file2.ts *new*
     version: Text-1
     containingProjects: 1
@@ -271,7 +271,7 @@ ScriptInfos::
 /user/username/projects/myproject/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/file2.ts
     version: Text-1
     containingProjects: 1
@@ -387,7 +387,7 @@ ScriptInfos::
 /user/username/projects/myproject/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/file2.ts *changed*
     version: Text-2 *changed*
     containingProjects: 1
@@ -506,7 +506,7 @@ ScriptInfos::
 /user/username/projects/myproject/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/file2.ts *deleted*
     version: Text-2
     containingProjects: 0 *changed*

@@ -199,7 +199,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/foo.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/tsconfig.json Detected excluded file: /user/username/projects/myproject/src/sub/fooBar.ts
@@ -332,11 +332,11 @@ ScriptInfos::
 /user/username/projects/myproject/src/foo.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/src/sub/fooBar.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 

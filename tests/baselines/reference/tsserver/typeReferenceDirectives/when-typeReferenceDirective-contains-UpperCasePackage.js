@@ -244,7 +244,7 @@ ScriptInfos::
 /user/username/projects/myproject/test/test.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/test/tsconfig.json
+        /user/username/projects/myproject/test/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/lib/@app/lib/index.d.ts 1:: WatchInfo: /user/username/projects/myproject/lib/@app/lib/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/test/tsconfig.json
@@ -288,7 +288,7 @@ ScriptInfos::
 /user/username/projects/myproject/test/test.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/test/tsconfig.json
+        /user/username/projects/myproject/test/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json
@@ -349,4 +349,4 @@ ScriptInfos::
 /user/username/projects/myproject/test/test.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/test/tsconfig.json
+        /user/username/projects/myproject/test/tsconfig.json *default*

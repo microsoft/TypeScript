@@ -237,7 +237,7 @@ ScriptInfos::
 /a/b/projects/myproject/bar/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/projects/myproject/tsconfig.json
+        /a/b/projects/myproject/tsconfig.json *default*
 /a/b/projects/myproject/foo/foo.ts *new*
     version: Text-1
     containingProjects: 1
@@ -388,7 +388,7 @@ ScriptInfos::
 /a/b/projects/myproject/bar/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/projects/myproject/tsconfig.json
+        /a/b/projects/myproject/tsconfig.json *default*
 /a/b/projects/myproject/foo/foo.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
@@ -468,7 +468,7 @@ ScriptInfos::
 /a/b/projects/myproject/bar/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/projects/myproject/tsconfig.json
+        /a/b/projects/myproject/tsconfig.json *default*
 /a/b/projects/myproject/foo2/foo.ts *new*
     version: Text-1
     containingProjects: 1

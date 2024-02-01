@@ -261,7 +261,7 @@ ScriptInfos::
 /packages/a/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /packages/a/tsconfig.json
+        /packages/a/tsconfig.json *default*
 /packages/a/node_modules/b/index.ts *new*
     version: Text-1
     containingProjects: 1

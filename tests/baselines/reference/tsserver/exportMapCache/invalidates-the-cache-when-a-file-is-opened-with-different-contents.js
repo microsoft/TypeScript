@@ -215,7 +215,7 @@ ScriptInfos::
 /classes.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /utils.ts *new*
     version: Text-1
     containingProjects: 1
@@ -452,12 +452,12 @@ ScriptInfos::
 /classes.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /utils.ts (Open) *changed*
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 
 Before request
 
@@ -503,11 +503,11 @@ ScriptInfos::
 /classes.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /utils.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 
 Before running Timeout callback:: count: 0
 

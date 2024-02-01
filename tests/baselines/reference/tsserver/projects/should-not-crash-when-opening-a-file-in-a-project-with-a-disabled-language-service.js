@@ -166,4 +166,4 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        proj1
+        proj1 *default*

@@ -224,7 +224,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -354,7 +354,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/utils.ts
     version: Text-1
     containingProjects: 1
@@ -362,7 +362,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -577,7 +577,7 @@ ScriptInfos::
 /apps/app1/src/index.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/utils.ts
     version: Text-1
     containingProjects: 1
@@ -585,7 +585,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -633,7 +633,7 @@ ScriptInfos::
 /apps/app1/src/index.ts (Open) *changed*
     version: SVC-2-2 *changed*
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/utils.ts
     version: Text-1
     containingProjects: 1
@@ -641,7 +641,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -739,11 +739,11 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/index.ts (Open)
     version: SVC-2-2
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/utils.ts
     version: Text-1
     containingProjects: 1
@@ -751,7 +751,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -962,11 +962,11 @@ ScriptInfos::
 /apps/app1/src/app.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/index.ts (Open)
     version: SVC-2-2
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/utils.ts
     version: Text-1
     containingProjects: 1
@@ -974,7 +974,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -1018,11 +1018,11 @@ ScriptInfos::
 /apps/app1/src/app.ts (Open) *changed*
     version: SVC-2-2 *changed*
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/index.ts (Open)
     version: SVC-2-2
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/utils.ts
     version: Text-1
     containingProjects: 1
@@ -1030,7 +1030,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -1127,11 +1127,11 @@ ScriptInfos::
 /apps/app1/src/app.ts (Open)
     version: SVC-2-2
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/index.ts (Open)
     version: SVC-2-2
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/utils.ts
     version: Text-1
     containingProjects: 1
@@ -1139,7 +1139,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -1163,7 +1163,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1351,11 +1351,11 @@ ScriptInfos::
 /apps/app1/src/app.ts (Open)
     version: SVC-2-2
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/index.ts (Open)
     version: SVC-2-2
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/utils.ts
     version: Text-1
     containingProjects: 1
@@ -1363,7 +1363,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -1386,7 +1386,7 @@ ScriptInfos::
 /shared/data.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1407,11 +1407,11 @@ ScriptInfos::
 /apps/app1/src/app.ts (Open)
     version: SVC-2-2
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/index.ts (Open)
     version: SVC-2-2
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*
 /apps/app1/src/utils.ts
     version: Text-1
     containingProjects: 1
@@ -1419,7 +1419,7 @@ ScriptInfos::
 /apps/app1/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 2
@@ -1442,4 +1442,4 @@ ScriptInfos::
 /shared/data.ts (Open) *changed*
     version: SVC-2-2 *changed*
     containingProjects: 1
-        /apps/app1/tsconfig.json
+        /apps/app1/tsconfig.json *default*

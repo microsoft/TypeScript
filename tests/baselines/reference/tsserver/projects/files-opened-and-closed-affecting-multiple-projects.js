@@ -184,7 +184,7 @@ ScriptInfos::
 /a/b/projects/config/file.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/projects/config/tsconfig.json
+        /a/b/projects/config/tsconfig.json *default*
 /a/b/projects/files/file1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -247,12 +247,12 @@ ScriptInfos::
 /a/b/projects/config/file.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/projects/config/tsconfig.json
+        /a/b/projects/config/tsconfig.json *default*
 /a/b/projects/files/file1.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/projects/config/tsconfig.json
+        /a/b/projects/config/tsconfig.json *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -310,7 +310,7 @@ ScriptInfos::
 /a/b/projects/files/file1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/projects/config/tsconfig.json
+        /a/b/projects/config/tsconfig.json *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -436,7 +436,7 @@ ScriptInfos::
 /a/b/projects/files/file2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
@@ -520,11 +520,11 @@ ScriptInfos::
 /a/b/projects/files/file1.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
 /a/b/projects/files/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*

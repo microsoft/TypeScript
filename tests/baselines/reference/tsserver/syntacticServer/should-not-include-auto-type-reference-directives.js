@@ -71,4 +71,4 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open) *new*
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

@@ -113,7 +113,7 @@ ScriptInfos::
 /user/username/projects/project1/src/file1.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/project1/src/node_modules/glob/index.js *new*
     version: Text-1
     containingProjects: 1

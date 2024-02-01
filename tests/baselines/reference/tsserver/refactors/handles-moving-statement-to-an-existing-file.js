@@ -199,7 +199,7 @@ ScriptInfos::
 /Foo/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /Foo/tsconfig.json
+        /Foo/tsconfig.json *default*
 /Foo/b.ts *new*
     version: Text-1
     containingProjects: 1

@@ -113,15 +113,17 @@ export function patchServiceForStateBaseline(service: ProjectService) {
             (logs, info, data) => {
                 let infoDiff = newOrDeleted(info, scriptInfos, data);
                 const infoPropertyLogs = [] as string[];
-                infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", info.isScriptOpen(), infoDiff, infoPropertyLogs);
+                const isOpen = info.isScriptOpen();
+                infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", isOpen, infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.Always, data, "version", info.textStorage.getVersion(), infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "pendingReloadFromDisk", info.textStorage.pendingReloadFromDisk, infoDiff, infoPropertyLogs);
                 const containingProjectsLogs = [] as string[];
                 let containingProjectsDiff = Diff.None;
+                const defaultProject = isOpen && info.containingProjects.length ? info.getDefaultProject() : undefined;
                 info.containingProjects.forEach(project =>
                     containingProjectsDiff = printPropertyWorker(
                         PrintPropertyWhen.Always,
-                        `    ${project.projectName}`,
+                        `    ${project.projectName}${defaultProject === project ? " *default*" : ""}`,
                         containingProjectsLogs,
                         containingProjectsDiff,
                         !!data && !data.containingProjects.has(project),
@@ -145,7 +147,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                     info.containingProjects,
                 );
                 logs.push([
-                    `${info.fileName}${info.isScriptOpen() ? " (Open)" : ""}${infoDiff}`,
+                    `${info.fileName}${isOpen ? " (Open)" : ""}${infoDiff}`,
                     infoPropertyLogs,
                     containingProjectsLogs,
                 ]);

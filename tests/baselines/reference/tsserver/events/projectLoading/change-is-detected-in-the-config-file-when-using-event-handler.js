@@ -173,7 +173,7 @@ ScriptInfos::
 /user/username/projects/a/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/a/tsconfig.json
+        /user/username/projects/a/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/a/tsconfig.json 1:: WatchInfo: /user/username/projects/a/tsconfig.json 2000 undefined Project: /user/username/projects/a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/a/tsconfig.json

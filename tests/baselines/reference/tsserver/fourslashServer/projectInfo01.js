@@ -118,7 +118,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -302,12 +302,12 @@ ScriptInfos::
 /tests/cases/fourslash/server/a.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
         /dev/null/inferredProject1* *deleted*
 /tests/cases/fourslash/server/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -485,17 +485,17 @@ ScriptInfos::
 /tests/cases/fourslash/server/a.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject3* *new*
+        /dev/null/inferredProject3* *default* *new*
         /dev/null/inferredProject2* *deleted*
 /tests/cases/fourslash/server/b.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject3* *new*
+        /dev/null/inferredProject3* *default* *new*
         /dev/null/inferredProject2* *deleted*
 /tests/cases/fourslash/server/c.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -637,19 +637,19 @@ ScriptInfos::
 /tests/cases/fourslash/server/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 /tests/cases/fourslash/server/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 /tests/cases/fourslash/server/c.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 /tests/cases/fourslash/server/d.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject4*
+        /dev/null/inferredProject4* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

@@ -285,7 +285,7 @@ ScriptInfos::
 /a/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 ts.getFileEmitOutput: /a/a.ts: {
   "outputFiles": [
@@ -578,7 +578,7 @@ ScriptInfos::
 /b/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /b/tsconfig.json
+        /b/tsconfig.json *default*
 
 ts.getFileEmitOutput: /b/b.ts: {
   "outputFiles": [
@@ -916,7 +916,7 @@ ScriptInfos::
 /user/user.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/tsconfig.json
+        /user/tsconfig.json *default*
 
 Before request
 
@@ -1201,7 +1201,7 @@ ScriptInfos::
     version: Text-2
     containingProjects: 2 *changed*
         /user/tsconfig.json
-        /a/tsconfig.json *new*
+        /a/tsconfig.json *default* *new*
 /user/user.ts
     version: SVC-1-0
     containingProjects: 1
@@ -1406,7 +1406,7 @@ ScriptInfos::
 /dummy/dummy.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*

@@ -148,7 +148,7 @@ ScriptInfos::
 /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -339,7 +339,7 @@ ScriptInfos::
 /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -358,7 +358,7 @@ ScriptInfos::
 /project/index.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

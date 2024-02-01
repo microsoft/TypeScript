@@ -94,7 +94,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/b/f1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -192,11 +192,11 @@ ScriptInfos::
 /user/username/projects/myproject/a/b/f1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/a/c/f3.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/a/c/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/a/c/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/a/c
@@ -558,7 +558,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/b/f1.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /user/username/projects/myproject/a/c/tsconfig.json *new*
+        /user/username/projects/myproject/a/c/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 /user/username/projects/myproject/a/c/f2.ts *new*
     version: Text-1
@@ -567,7 +567,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/c/f3.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /user/username/projects/myproject/a/c/tsconfig.json *new*
+        /user/username/projects/myproject/a/c/tsconfig.json *default* *new*
         /dev/null/inferredProject2* *deleted*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false

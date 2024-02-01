@@ -207,7 +207,7 @@ ScriptInfos::
 /users/username/projects/a/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/a/tsconfig.json
+        /users/username/projects/a/tsconfig.json *default*
 /users/username/projects/a/c/fc.ts *new*
     version: Text-1
     containingProjects: 1
@@ -399,7 +399,7 @@ ScriptInfos::
 /users/username/projects/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/a/tsconfig.json
+        /users/username/projects/a/tsconfig.json *default*
 /users/username/projects/a/c/fc.ts
     version: Text-1
     containingProjects: 1
@@ -407,7 +407,7 @@ ScriptInfos::
 /users/username/projects/b/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/b/tsconfig.json
+        /users/username/projects/b/tsconfig.json *default*
 /users/username/projects/b/c/fc.ts *new*
     version: Text-1
     containingProjects: 1
@@ -486,16 +486,16 @@ ScriptInfos::
 /users/username/projects/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/a/tsconfig.json
+        /users/username/projects/a/tsconfig.json *default*
 /users/username/projects/a/c/fc.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /users/username/projects/a/tsconfig.json
+        /users/username/projects/a/tsconfig.json *default*
 /users/username/projects/b/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/b/tsconfig.json
+        /users/username/projects/b/tsconfig.json *default*
 /users/username/projects/b/c/fc.ts
     version: Text-1
     containingProjects: 1
@@ -574,20 +574,20 @@ ScriptInfos::
 /users/username/projects/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/a/tsconfig.json
+        /users/username/projects/a/tsconfig.json *default*
 /users/username/projects/a/c/fc.ts (Open)
     version: Text-1
     containingProjects: 1
-        /users/username/projects/a/tsconfig.json
+        /users/username/projects/a/tsconfig.json *default*
 /users/username/projects/b/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/b/tsconfig.json
+        /users/username/projects/b/tsconfig.json *default*
 /users/username/projects/b/c/fc.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /users/username/projects/b/tsconfig.json
+        /users/username/projects/b/tsconfig.json *default*
 
 Before request
 

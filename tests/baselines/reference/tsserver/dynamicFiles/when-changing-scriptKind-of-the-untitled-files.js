@@ -84,7 +84,7 @@ ScriptInfos::
 untitled:^Untitled-1 (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -175,4 +175,4 @@ ScriptInfos::
 untitled:^Untitled-1 (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

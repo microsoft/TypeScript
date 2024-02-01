@@ -51,7 +51,7 @@ ScriptInfos::
 /a/b/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -468,7 +468,7 @@ ScriptInfos::
 /a/b/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/data/node_modules/@types/jquery/index.d.ts *new*
     version: Text-1
     containingProjects: 1

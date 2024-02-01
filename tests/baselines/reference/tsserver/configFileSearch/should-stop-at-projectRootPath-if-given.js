@@ -58,7 +58,7 @@ ScriptInfos::
 /a/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -311,4 +311,4 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /tsconfig.json *new*
+        /tsconfig.json *default* *new*

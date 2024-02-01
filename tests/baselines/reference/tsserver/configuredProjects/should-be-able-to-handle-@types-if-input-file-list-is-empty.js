@@ -189,7 +189,7 @@ ScriptInfos::
 /a/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/node_modules/@types/typings/index.d.ts *new*
     version: Text-1
     containingProjects: 1

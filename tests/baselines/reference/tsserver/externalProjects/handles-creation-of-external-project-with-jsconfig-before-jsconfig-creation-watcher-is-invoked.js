@@ -276,7 +276,7 @@ ScriptInfos::
 /user/username/projects/myproject/javascript.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -696,7 +696,7 @@ ScriptInfos::
 /user/username/projects/myproject/javascript.js (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /user/username/projects/myproject/jsconfig.json *new*
+        /user/username/projects/myproject/jsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false

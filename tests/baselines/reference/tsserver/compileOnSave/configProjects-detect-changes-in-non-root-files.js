@@ -172,7 +172,7 @@ ScriptInfos::
 /a/b/moduleFile1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -222,11 +222,11 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/moduleFile1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -291,11 +291,11 @@ ScriptInfos::
 /a/b/file1Consumer1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/moduleFile1.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -369,11 +369,11 @@ ScriptInfos::
 /a/b/file1Consumer1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/moduleFile1.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1

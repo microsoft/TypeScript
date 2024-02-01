@@ -242,7 +242,7 @@ ScriptInfos::
 /user/username/projects/myproject/foo/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/foo/tsconfig.json
+        /user/username/projects/myproject/foo/tsconfig.json *default*
 
 Before request
 
@@ -454,11 +454,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/foo/tsconfig.json
-        /user/username/projects/myproject/bar/tsconfig.json *new*
+        /user/username/projects/myproject/bar/tsconfig.json *default* *new*
 /user/username/projects/myproject/foo/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/foo/tsconfig.json
+        /user/username/projects/myproject/foo/tsconfig.json *default*
 
 Before request
 

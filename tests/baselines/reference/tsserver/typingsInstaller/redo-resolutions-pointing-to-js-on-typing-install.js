@@ -90,7 +90,7 @@ ScriptInfos::
 /user/username/projects/a/b/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/node_modules/commander/index.js *new*
     version: Text-1
     containingProjects: 1
@@ -511,7 +511,7 @@ ScriptInfos::
 /user/username/projects/a/b/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/a/cache/node_modules/@types/commander/index.d.ts *new*
     version: Text-1
     containingProjects: 0

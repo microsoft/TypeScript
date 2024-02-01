@@ -55,7 +55,7 @@ ScriptInfos::
 /a/b/file1.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/node_modules/test/index.js *new*
     version: Text-1
     containingProjects: 1

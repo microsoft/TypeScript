@@ -108,7 +108,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -146,7 +146,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -179,7 +179,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -233,7 +233,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-3 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -266,7 +266,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-4 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -320,7 +320,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-5 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -374,7 +374,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-6 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -428,7 +428,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-7 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -461,7 +461,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-8 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -515,7 +515,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-9 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -548,7 +548,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-10 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -602,7 +602,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-11 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -656,7 +656,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-12 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -710,7 +710,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-13 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -743,7 +743,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-14 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -797,7 +797,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-15 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -830,7 +830,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-16 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -884,7 +884,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-17 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -938,7 +938,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-18 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -992,7 +992,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-19 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1046,7 +1046,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-20 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1079,7 +1079,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-21 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1133,7 +1133,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-22 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1166,7 +1166,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/tsxIncrementalServer.ts (Open) *changed*
     version: SVC-1-23 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

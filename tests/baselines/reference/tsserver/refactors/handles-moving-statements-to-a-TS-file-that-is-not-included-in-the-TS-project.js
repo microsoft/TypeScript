@@ -196,7 +196,7 @@ ScriptInfos::
 /Bar/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /Bar/tsconfig.json
+        /Bar/tsconfig.json *default*
 
 Before request
 

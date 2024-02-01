@@ -221,7 +221,7 @@ ScriptInfos::
 /Users/username/dev/project/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /Users/username/dev/project/tsconfig.json
+        /Users/username/dev/project/tsconfig.json *default*
 /Users/username/dev/project/types/file2/index.d.ts *new*
     version: Text-1
     containingProjects: 1

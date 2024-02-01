@@ -65,7 +65,7 @@ ScriptInfos::
 /a/b/f1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/f2.ts *new*
     version: Text-1
     containingProjects: 1
@@ -112,12 +112,12 @@ ScriptInfos::
 /a/b/f1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/f2.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -159,11 +159,11 @@ ScriptInfos::
 /a/b/f1.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/f2.ts (Open)
     version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms

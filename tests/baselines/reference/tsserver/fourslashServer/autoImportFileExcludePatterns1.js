@@ -102,7 +102,7 @@ ScriptInfos::
 /project/node_modules/aws-sdk/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -223,7 +223,7 @@ ScriptInfos::
 /project/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /project/node_modules/aws-sdk/clients/s3.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -235,7 +235,7 @@ ScriptInfos::
 /project/node_modules/aws-sdk/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

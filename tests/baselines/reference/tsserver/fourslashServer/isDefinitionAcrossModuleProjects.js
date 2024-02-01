@@ -320,7 +320,7 @@ ScriptInfos::
 /a/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /b/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -992,7 +992,7 @@ ScriptInfos::
 /a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a2/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -1216,12 +1216,12 @@ ScriptInfos::
 /a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a2/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a2/tsconfig.json
+        /a2/tsconfig.json *default*
 /b/index.ts
     version: Text-1
     containingProjects: 2
@@ -1947,18 +1947,18 @@ ScriptInfos::
 /a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a2/index.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a2/tsconfig.json
+        /a2/tsconfig.json *default*
 /b/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 3 *changed*
         /a/tsconfig.json
         /a2/tsconfig.json
-        /b/tsconfig.json *new*
+        /b/tsconfig.json *default* *new*
 /b/other.ts *new*
     version: Text-1
     containingProjects: 1
@@ -2433,17 +2433,17 @@ ScriptInfos::
 /a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a2/index.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a2/tsconfig.json
+        /a2/tsconfig.json *default*
 /b/index.ts (Open)
     version: Text-1
     containingProjects: 3
         /a/tsconfig.json
         /a2/tsconfig.json
-        /b/tsconfig.json
+        /b/tsconfig.json *default*
 /b/other.ts
     version: Text-1
     containingProjects: 1
@@ -2453,7 +2453,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 3
         /a/tsconfig.json
-        /c/tsconfig.json
+        /c/tsconfig.json *default*
         /a2/tsconfig.json
 /lib.d.ts
     version: Text-1

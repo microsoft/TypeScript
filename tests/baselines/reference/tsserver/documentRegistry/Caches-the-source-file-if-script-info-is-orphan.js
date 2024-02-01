@@ -187,7 +187,7 @@ ScriptInfos::
 /user/username/projects/myproject/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/module1.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -233,7 +233,7 @@ ScriptInfos::
 /user/username/projects/myproject/index.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/module1.d.ts
     version: Text-1
     containingProjects: 1
@@ -272,7 +272,7 @@ ScriptInfos::
 /user/username/projects/myproject/index.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/module1.d.ts *changed*
     version: Text-1
     containingProjects: 0 *changed*
@@ -311,7 +311,7 @@ ScriptInfos::
 /user/username/projects/myproject/index.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/module1.d.ts
     version: Text-1
     containingProjects: 0

@@ -127,7 +127,7 @@ ScriptInfos::
 /user/user.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -209,7 +209,7 @@ ScriptInfos::
 /user/user.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -302,7 +302,7 @@ ScriptInfos::
 /user/user.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -482,7 +482,7 @@ ScriptInfos::
 /dummy/dummy.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0

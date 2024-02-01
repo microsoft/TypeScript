@@ -75,7 +75,7 @@ ScriptInfos::
 ^memfs:/foo.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 External files before plugin is loaded: 
 Info seq  [hh:mm:ss:mss] Plugin validation succeeded

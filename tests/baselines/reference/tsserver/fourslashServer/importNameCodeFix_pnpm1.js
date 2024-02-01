@@ -191,7 +191,7 @@ ScriptInfos::
 /project/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -259,7 +259,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
@@ -268,7 +268,7 @@ ScriptInfos::
 /project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -471,7 +471,7 @@ ScriptInfos::
 /project/index.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
@@ -480,7 +480,7 @@ ScriptInfos::
 /project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -516,7 +516,7 @@ ScriptInfos::
 /project/index.ts (Open) *changed*
     version: SVC-2-2 *changed*
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/node_modules/.pnpm/@types+react@17.0.7/node_modules/@types/react/index.d.ts
     version: Text-1
     containingProjects: 2
@@ -525,4 +525,4 @@ ScriptInfos::
 /project/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

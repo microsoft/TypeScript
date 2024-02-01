@@ -68,7 +68,7 @@ ScriptInfos::
 /a/b/f1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/f2.ts *new*
     version: Text-1
     containingProjects: 1
@@ -130,7 +130,7 @@ ScriptInfos::
 /a/b/f1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/f2.ts
     version: Text-1
     containingProjects: 1
@@ -138,7 +138,7 @@ ScriptInfos::
 /a/c/f3.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/f2.ts 1:: WatchInfo: /a/b/f2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
@@ -167,7 +167,7 @@ ScriptInfos::
 /a/b/f1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/f2.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -176,7 +176,7 @@ ScriptInfos::
 /a/c/f3.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -261,7 +261,7 @@ ScriptInfos::
 /a/b/f1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/f2.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
@@ -270,7 +270,7 @@ ScriptInfos::
 /a/c/f3.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*
         /dev/null/inferredProject2* *deleted*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false

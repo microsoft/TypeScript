@@ -332,7 +332,7 @@ ScriptInfos::
 /user/username/projects/solution/b/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json *default*
 
 Before request
 
@@ -1018,7 +1018,7 @@ ScriptInfos::
 /user/username/projects/solution/b/index.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 3 *changed*
-        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json *default*
         /user/username/projects/solution/c/tsconfig.json *new*
         /user/username/projects/solution/d/tsconfig.json *new*
 /user/username/projects/solution/c/index.ts *new*

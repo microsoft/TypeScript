@@ -104,7 +104,7 @@ ScriptInfos::
 /app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /jsconfig.json
+        /jsconfig.json *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/tmp', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
@@ -466,7 +466,7 @@ ScriptInfos::
 /app.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /jsconfig.json
+        /jsconfig.json *default*
 /node_modules/@zkat/cacache/index.js *new*
     version: Text-1
     containingProjects: 1
@@ -740,7 +740,7 @@ ScriptInfos::
 /app.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /jsconfig.json
+        /jsconfig.json *default*
 /node_modules/@zkat/cacache/index.js
     version: Text-1
     containingProjects: 1

@@ -211,7 +211,7 @@ ScriptInfos::
 /user/username/projects/myproject/app1/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app1/tsconfig.json *default*
 /user/username/projects/myproject/core/core.ts *new*
     version: Text-1
     containingProjects: 1
@@ -394,11 +394,11 @@ ScriptInfos::
 /user/username/projects/myproject/app1/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app1/tsconfig.json *default*
 /user/username/projects/myproject/app2/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/app2/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json *default*
 /user/username/projects/myproject/core/core.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -471,16 +471,16 @@ ScriptInfos::
 /user/username/projects/myproject/app1/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app1/tsconfig.json *default*
 /user/username/projects/myproject/app2/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/app2/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json *default*
 /user/username/projects/myproject/core/core.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2
-        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app1/tsconfig.json *default*
         /user/username/projects/myproject/app2/tsconfig.json
 
 Before request
@@ -522,15 +522,15 @@ ScriptInfos::
 /user/username/projects/myproject/app1/app.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app1/tsconfig.json *default*
 /user/username/projects/myproject/app2/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/app2/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json *default*
 /user/username/projects/myproject/core/core.ts (Open)
     version: Text-1
     containingProjects: 2
-        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app1/tsconfig.json *default*
         /user/username/projects/myproject/app2/tsconfig.json
 
 Before request
@@ -572,15 +572,15 @@ ScriptInfos::
 /user/username/projects/myproject/app1/app.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app1/tsconfig.json *default*
 /user/username/projects/myproject/app2/app.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /user/username/projects/myproject/app2/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json *default*
 /user/username/projects/myproject/core/core.ts (Open)
     version: Text-1
     containingProjects: 2
-        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app1/tsconfig.json *default*
         /user/username/projects/myproject/app2/tsconfig.json
 
 Project1 is dirty: true

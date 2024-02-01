@@ -207,7 +207,7 @@ ScriptInfos::
 /user/username/projects/myproject/playground/tests.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/playground/tsconfig.json
+        /user/username/projects/myproject/playground/tsconfig.json *default*
 /user/username/projects/myproject/playground/tsconfig-json/src/src.ts *new*
     version: Text-1
     containingProjects: 1
@@ -650,4 +650,4 @@ ScriptInfos::
 /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*

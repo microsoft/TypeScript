@@ -266,7 +266,7 @@ ScriptInfos::
 /file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /file2.tsx *new*
     version: Text-1
     containingProjects: 1

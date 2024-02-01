@@ -207,7 +207,7 @@ ScriptInfos::
 /users/username/projects/project/referenceFile1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/lib/lib.d.ts 0:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Missing file
@@ -356,4 +356,4 @@ ScriptInfos::
 /users/username/projects/project/referenceFile1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*

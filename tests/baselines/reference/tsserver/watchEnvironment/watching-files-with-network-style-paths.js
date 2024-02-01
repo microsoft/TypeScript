@@ -80,7 +80,7 @@ c:/a/lib/lib.d.ts *new*
 c:/myprojects/project/x.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
@@ -298,7 +298,7 @@ ScriptInfos::
 //vda1cs4850/myprojects/project/x.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
@@ -524,7 +524,7 @@ ScriptInfos::
 //vda1cs4850/c$/myprojects/project/x.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
@@ -758,7 +758,7 @@ c:/a/lib/lib.d.ts *new*
 c:/users/username/myprojects/project/x.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
@@ -992,7 +992,7 @@ ScriptInfos::
 //vda1cs4850/c$/users/username/myprojects/project/x.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'

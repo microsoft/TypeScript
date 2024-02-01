@@ -194,7 +194,7 @@ ScriptInfos::
 /home/src/projects/project/src/file.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/tsconfig.json *default*
 
 Before request
 

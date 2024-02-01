@@ -181,7 +181,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/proj1
+        /a/b/proj1 *default*
 /a/b/lib.ts
     version: Text-1
     containingProjects: 1
@@ -219,7 +219,7 @@ ScriptInfos::
 /a/b/app.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/proj1
+        /a/b/proj1 *default*
 /a/b/lib.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
@@ -376,7 +376,7 @@ ScriptInfos::
 /a/b/app.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /a/b/tsconfig.json *new*
+        /a/b/tsconfig.json *default* *new*
         /a/b/proj1 *deleted*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/tsconfig.json 2:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
@@ -488,7 +488,7 @@ ScriptInfos::
 /a/b/app.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /a/b/proj1 *new*
+        /a/b/proj1 *default* *new*
 /a/b/lib.ts *new*
     version: Text-2
     containingProjects: 1

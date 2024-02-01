@@ -405,7 +405,7 @@ ScriptInfos::
 /user/username/projects/myproject/main/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 
 Before request
 
@@ -591,11 +591,11 @@ ScriptInfos::
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -702,11 +702,11 @@ ScriptInfos::
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
@@ -785,11 +785,11 @@ ScriptInfos::
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1152,7 +1152,7 @@ ScriptInfos::
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -1243,12 +1243,12 @@ ScriptInfos::
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -1321,7 +1321,7 @@ ScriptInfos::
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -1506,4 +1506,4 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*

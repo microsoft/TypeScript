@@ -571,7 +571,7 @@ ScriptInfos::
 /user/username/projects/container/compositeExec/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
 /user/username/projects/container/lib/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -679,7 +679,7 @@ ScriptInfos::
 /user/username/projects/container/compositeExec/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
 /user/username/projects/container/lib/index.ts
     version: Text-1
     containingProjects: 1
@@ -687,7 +687,7 @@ ScriptInfos::
 /user/username/projects/temp/temp.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -1152,7 +1152,7 @@ ScriptInfos::
 /user/username/projects/container/compositeExec/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
 /user/username/projects/container/exec/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -1166,7 +1166,7 @@ ScriptInfos::
 /user/username/projects/temp/temp.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -1277,7 +1277,7 @@ ScriptInfos::
 /user/username/projects/container/compositeExec/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
 /user/username/projects/container/exec/index.ts
     version: Text-1
     containingProjects: 1
@@ -1393,7 +1393,7 @@ ScriptInfos::
 /user/username/projects/container/compositeExec/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
 /user/username/projects/container/exec/index.ts
     version: Text-1
     containingProjects: 1
@@ -1408,7 +1408,7 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*
 
 Before request
 
@@ -1513,7 +1513,7 @@ ScriptInfos::
 /user/username/projects/temp/temp.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -1839,4 +1839,4 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*

@@ -316,7 +316,7 @@ ScriptInfos::
 /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /Users/someuser/work/applications/frontend/tsconfig.json
+        /Users/someuser/work/applications/frontend/tsconfig.json *default*
 /a/lib/lib.es2016.full.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -428,7 +428,7 @@ ScriptInfos::
 /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /Users/someuser/work/applications/frontend/tsconfig.json
+        /Users/someuser/work/applications/frontend/tsconfig.json *default*
 /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts *new*
     version: Text-1
     containingProjects: 1
@@ -517,12 +517,12 @@ ScriptInfos::
 /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /Users/someuser/work/applications/frontend/tsconfig.json
+        /Users/someuser/work/applications/frontend/tsconfig.json *default*
 /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /Users/someuser/work/applications/frontend/tsconfig.json
+        /Users/someuser/work/applications/frontend/tsconfig.json *default*
 /a/lib/lib.es2016.full.d.ts
     version: Text-1
     containingProjects: 1

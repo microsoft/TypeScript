@@ -146,7 +146,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -266,7 +266,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /tests/cases/fourslash/server/indexdef.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -274,7 +274,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/mymodule.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -383,7 +383,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /tests/cases/fourslash/server/indexdef.d.ts
     version: Text-1
     containingProjects: 1
@@ -394,4 +394,4 @@ ScriptInfos::
 /tests/cases/fourslash/server/mymodule.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*

@@ -206,4 +206,4 @@ ScriptInfos::
 C:/a/f1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        C:/a/tsconfig.json
+        C:/a/tsconfig.json *default*

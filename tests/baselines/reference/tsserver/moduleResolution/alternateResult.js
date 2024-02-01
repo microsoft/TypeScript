@@ -525,7 +525,7 @@ ScriptInfos::
 /home/src/projects/project/index.mts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/tsconfig.json *default*
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -2195,7 +2195,7 @@ ScriptInfos::
 /home/src/projects/project/index.mts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/tsconfig.json *default*
 /home/src/projects/project/node_modules/@types/bar/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -2549,7 +2549,7 @@ ScriptInfos::
 /home/src/projects/project/index.mts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/tsconfig.json *default*
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -2935,7 +2935,7 @@ ScriptInfos::
 /home/src/projects/project/index.mts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/tsconfig.json *default*
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -3279,7 +3279,7 @@ ScriptInfos::
 /home/src/projects/project/index.mts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/tsconfig.json *default*
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -3442,7 +3442,7 @@ ScriptInfos::
 /home/src/projects/project/index.mts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/tsconfig.json *default*
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -3805,7 +3805,7 @@ ScriptInfos::
 /home/src/projects/project/index.mts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project/tsconfig.json
+        /home/src/projects/project/tsconfig.json *default*
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
     version: Text-1
     containingProjects: 1

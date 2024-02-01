@@ -247,7 +247,7 @@ ScriptInfos::
 /a/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 Before request
 
@@ -389,7 +389,7 @@ ScriptInfos::
 /a/main.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/main.ts
     version: SVC-1-0
     containingProjects: 1
@@ -890,4 +890,4 @@ ScriptInfos::
 /main.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*

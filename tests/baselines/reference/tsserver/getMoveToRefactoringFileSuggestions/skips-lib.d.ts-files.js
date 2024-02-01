@@ -237,7 +237,7 @@ ScriptInfos::
 /file1.d.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 
 Before request
 

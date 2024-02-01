@@ -198,7 +198,7 @@ ScriptInfos::
 /workspaces/somerepo/src/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /workspaces/somerepo/src/tsconfig.json
+        /workspaces/somerepo/src/tsconfig.json *default*
 
 Before request
 
@@ -359,7 +359,7 @@ ScriptInfos::
 /workspaces/somerepo/src/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /workspaces/somerepo/src/tsconfig.json
+        /workspaces/somerepo/src/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -687,7 +687,7 @@ ScriptInfos::
 /workspaces/somerepo/src/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /workspaces/somerepo/src/tsconfig.json
+        /workspaces/somerepo/src/tsconfig.json *default*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck

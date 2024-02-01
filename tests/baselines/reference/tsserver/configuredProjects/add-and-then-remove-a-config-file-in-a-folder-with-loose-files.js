@@ -93,7 +93,7 @@ ScriptInfos::
 /user/username/projects/myproject/commonFile1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -162,11 +162,11 @@ ScriptInfos::
 /user/username/projects/myproject/commonFile1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/commonFile2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
@@ -407,12 +407,12 @@ ScriptInfos::
 /user/username/projects/myproject/commonFile1.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /user/username/projects/myproject/tsconfig.json *new*
+        /user/username/projects/myproject/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 /user/username/projects/myproject/commonFile2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] `remove Project::
@@ -469,7 +469,7 @@ ScriptInfos::
 /user/username/projects/myproject/commonFile2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Host is moving to new time
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
@@ -547,8 +547,8 @@ ScriptInfos::
 /user/username/projects/myproject/commonFile1.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*
 /user/username/projects/myproject/commonFile2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*

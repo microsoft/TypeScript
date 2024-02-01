@@ -196,7 +196,7 @@ ScriptInfos::
 /a/b/f1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
@@ -376,7 +376,7 @@ ScriptInfos::
 /a/b/f1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/f2.ts *new*
     version: Text-1
     containingProjects: 1

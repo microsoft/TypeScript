@@ -182,7 +182,7 @@ ScriptInfos::
 /user/username/projects/a/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/a/tsconfig.json
+        /user/username/projects/a/tsconfig.json *default*
 
 Before request
 
@@ -356,8 +356,8 @@ ScriptInfos::
 /user/username/projects/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/a/tsconfig.json
+        /user/username/projects/a/tsconfig.json *default*
 /user/username/projects/b/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/b/tsconfig.json
+        /user/username/projects/b/tsconfig.json *default*

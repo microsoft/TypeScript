@@ -233,7 +233,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 
 Before request
 
@@ -447,11 +447,11 @@ ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 /user/username/projects/myproject/b/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/b/tsconfig.json
+        /user/username/projects/myproject/b/tsconfig.json *default*
 
 Before request
 
@@ -683,15 +683,15 @@ ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 /user/username/projects/myproject/b/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/b/tsconfig.json
+        /user/username/projects/myproject/b/tsconfig.json *default*
 /user/username/projects/myproject/dummy/dummy.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dummy/tsconfig.json
+        /user/username/projects/myproject/dummy/tsconfig.json *default*
 
 Before request
 
@@ -764,7 +764,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 /user/username/projects/myproject/b/b.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -773,7 +773,7 @@ ScriptInfos::
 /user/username/projects/myproject/dummy/dummy.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dummy/tsconfig.json
+        /user/username/projects/myproject/dummy/tsconfig.json *default*
 
 Before request
 
@@ -846,7 +846,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 /user/username/projects/myproject/b/b.ts
     version: SVC-1-0
     containingProjects: 1
@@ -963,7 +963,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 /user/username/projects/myproject/b/b.ts *deleted*
     version: SVC-1-0
     containingProjects: 0 *changed*
@@ -972,7 +972,7 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dummy/tsconfig.json
+        /user/username/projects/myproject/dummy/tsconfig.json *default*
 
 Before request
 
@@ -1038,7 +1038,7 @@ ScriptInfos::
 /user/username/projects/myproject/dummy/dummy.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dummy/tsconfig.json
+        /user/username/projects/myproject/dummy/tsconfig.json *default*
 
 Before request
 
@@ -1202,4 +1202,4 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dummy/tsconfig.json
+        /user/username/projects/myproject/dummy/tsconfig.json *default*

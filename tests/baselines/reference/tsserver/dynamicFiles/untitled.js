@@ -80,6 +80,6 @@ ScriptInfos::
 untitled:/Users/matb/projects/san/^newFile.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 /untitled:/users/matb/projects/san/^newfile.ts isDynamic:: true

@@ -298,7 +298,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 /user/username/projects/myproject/b/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -524,11 +524,11 @@ ScriptInfos::
 /user/username/projects/myproject/a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 /user/username/projects/myproject/b/helper.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/b/tsconfig.json
+        /user/username/projects/myproject/b/tsconfig.json *default*
 /user/username/projects/myproject/b/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*

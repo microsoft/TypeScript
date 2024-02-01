@@ -188,7 +188,7 @@ ScriptInfos::
 /Foo/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /Foo/tsconfig.json
+        /Foo/tsconfig.json *default*
 
 Before request
 

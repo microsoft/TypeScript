@@ -181,7 +181,7 @@ ScriptInfos::
 /Volumes/git/projects/project/foo.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /Volumes/git/projects/project/tsconfig.json
+        /Volumes/git/projects/project/tsconfig.json *default*
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -290,7 +290,7 @@ ScriptInfos::
 /Volumes/git/projects/project/foo.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /Volumes/git/projects/project/tsconfig.json
+        /Volumes/git/projects/project/tsconfig.json *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1

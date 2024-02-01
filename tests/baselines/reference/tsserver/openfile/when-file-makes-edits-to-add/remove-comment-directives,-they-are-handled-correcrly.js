@@ -102,7 +102,7 @@ ScriptInfos::
 /user/username/projects/myproject/file.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -235,7 +235,7 @@ ScriptInfos::
 /user/username/projects/myproject/file.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -390,7 +390,7 @@ ScriptInfos::
 /user/username/projects/myproject/file.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 

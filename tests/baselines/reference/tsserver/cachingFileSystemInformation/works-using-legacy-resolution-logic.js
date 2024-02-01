@@ -81,7 +81,7 @@ ScriptInfos::
 /c/d/f0.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /c/f1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -292,7 +292,7 @@ ScriptInfos::
 /c/d/f0.ts (Open) *changed*
     version: SVC-1-3 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /c/f1.ts
     version: Text-1
     containingProjects: 1

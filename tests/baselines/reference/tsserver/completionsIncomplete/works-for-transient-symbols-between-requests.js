@@ -1241,7 +1241,7 @@ ScriptInfos::
 /index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib/a_0.ts *new*
     version: Text-1
     containingProjects: 1
@@ -1691,7 +1691,7 @@ ScriptInfos::
 /index.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib/a_0.ts
     version: Text-1
     containingProjects: 1
@@ -4732,7 +4732,7 @@ ScriptInfos::
 /index.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib/a_0.ts
     version: Text-1
     containingProjects: 1

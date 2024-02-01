@@ -254,7 +254,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project2/class2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*
 
 Before request
 
@@ -436,11 +436,11 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project1/class1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project1/tsconfig.json
+        /user/username/projects/myproject/projects/project1/tsconfig.json *default*
 /user/username/projects/myproject/projects/project2/class2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -596,7 +596,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project1/class1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project1/tsconfig.json
+        /user/username/projects/myproject/projects/project1/tsconfig.json *default*
 /user/username/projects/myproject/projects/project1/class3.ts *new*
     version: Text-1
     containingProjects: 1
@@ -604,7 +604,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project2/class2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
@@ -786,7 +786,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project1/class1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project1/tsconfig.json
+        /user/username/projects/myproject/projects/project1/tsconfig.json *default*
 /user/username/projects/myproject/projects/project1/class3.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -798,7 +798,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project2/class2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp
@@ -885,7 +885,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project1/class1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project1/tsconfig.json
+        /user/username/projects/myproject/projects/project1/tsconfig.json *default*
 /user/username/projects/myproject/projects/project1/class3.d.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
@@ -897,7 +897,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project2/class2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -1182,7 +1182,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project1/class1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project1/tsconfig.json
+        /user/username/projects/myproject/projects/project1/tsconfig.json *default*
 /user/username/projects/myproject/projects/project1/class3.d.ts *new*
     version: Text-2
     containingProjects: 1
@@ -1194,4 +1194,4 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project2/class2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*

@@ -230,4 +230,4 @@ ScriptInfos::
 /user/username/projects/myproject/src/server/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

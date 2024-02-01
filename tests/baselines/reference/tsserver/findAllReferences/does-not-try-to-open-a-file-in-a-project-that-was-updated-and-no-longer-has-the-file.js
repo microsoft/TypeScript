@@ -319,7 +319,7 @@ ScriptInfos::
 /packages/babel-loader/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json
+        /packages/babel-loader/tsconfig.json *default*
 /packages/core/src/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -556,13 +556,13 @@ ScriptInfos::
 /packages/babel-loader/src/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json
+        /packages/babel-loader/tsconfig.json *default*
 /packages/core/src/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /packages/babel-loader/tsconfig.json
-        /packages/core/tsconfig.json *new*
+        /packages/core/tsconfig.json *default* *new*
 /packages/core/src/loading-indicator.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -616,12 +616,12 @@ ScriptInfos::
 /packages/babel-loader/src/index.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json
+        /packages/babel-loader/tsconfig.json *default*
 /packages/core/src/index.ts (Open)
     version: Text-1
     containingProjects: 2
         /packages/babel-loader/tsconfig.json
-        /packages/core/tsconfig.json
+        /packages/core/tsconfig.json *default*
 /packages/core/src/loading-indicator.ts
     version: Text-1
     containingProjects: 2
@@ -765,11 +765,11 @@ ScriptInfos::
 /packages/babel-loader/src/index.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json
+        /packages/babel-loader/tsconfig.json *default*
 /packages/core/src/index.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /packages/core/tsconfig.json
+        /packages/core/tsconfig.json *default*
         /packages/babel-loader/tsconfig.json *deleted*
 /packages/core/src/loading-indicator.ts *changed*
     version: Text-1

@@ -205,7 +205,7 @@ ScriptInfos::
 /a/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/jsconfig.json
+        /a/jsconfig.json *default*
 /a/extremlylarge.d.ts *new*
     version: Text-1
     containingProjects: 1

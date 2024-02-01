@@ -293,7 +293,7 @@ ScriptInfos::
 /index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /node_modules/@types/node/index.d.ts *new*
     version: Text-1
     containingProjects: 2

@@ -207,7 +207,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/file.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/src/large.ts *new*
     version: Text-1
     containingProjects: 1

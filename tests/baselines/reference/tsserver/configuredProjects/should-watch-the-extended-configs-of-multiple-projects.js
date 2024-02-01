@@ -227,7 +227,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 
 Before request
 
@@ -441,11 +441,11 @@ ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/a/tsconfig.json
+        /user/username/projects/myproject/a/tsconfig.json *default*
 /user/username/projects/myproject/b/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/b/tsconfig.json
+        /user/username/projects/myproject/b/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/extended/alpha.tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/extended/alpha.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Extended config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/a/tsconfig.json

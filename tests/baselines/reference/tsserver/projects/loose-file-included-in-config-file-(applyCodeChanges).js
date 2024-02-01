@@ -53,4 +53,4 @@ ScriptInfos::
 /a/b/f1.ts (Open) *new*
     version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

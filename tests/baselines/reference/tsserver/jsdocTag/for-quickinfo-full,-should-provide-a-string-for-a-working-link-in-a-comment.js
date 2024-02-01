@@ -244,7 +244,7 @@ ScriptInfos::
 /a/someFile1.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 Before request
 

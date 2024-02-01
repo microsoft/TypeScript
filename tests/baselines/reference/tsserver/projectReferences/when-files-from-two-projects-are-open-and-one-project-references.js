@@ -620,7 +620,7 @@ ScriptInfos::
 /user/username/projects/myproject/main/src/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 
 Before request
 
@@ -831,11 +831,11 @@ ScriptInfos::
 /user/username/projects/myproject/core/src/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/core/tsconfig.json
+        /user/username/projects/myproject/core/tsconfig.json *default*
 /user/username/projects/myproject/main/src/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 
 Before request
 
@@ -1524,7 +1524,7 @@ ScriptInfos::
 /user/username/projects/myproject/core/src/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/core/tsconfig.json
+        /user/username/projects/myproject/core/tsconfig.json *default*
 /user/username/projects/myproject/coreRef1/src/file1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -1548,7 +1548,7 @@ ScriptInfos::
 /user/username/projects/myproject/main/src/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/refToCoreRef3/src/file1.ts *new*
     version: Text-1
     containingProjects: 1

@@ -191,7 +191,7 @@ ScriptInfos::
 /a/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -399,11 +399,11 @@ ScriptInfos::
 /a/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /c/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /c/tsconfig.json
+        /c/tsconfig.json *default*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
@@ -611,15 +611,15 @@ ScriptInfos::
 /a/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /b/tsconfig.json
+        /b/tsconfig.json *default*
 /c/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /c/tsconfig.json
+        /c/tsconfig.json *default*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 4 *changed*
@@ -760,15 +760,15 @@ ScriptInfos::
 /a/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /b/tsconfig.json
+        /b/tsconfig.json *default*
 /c/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /c/tsconfig.json
+        /c/tsconfig.json *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 4

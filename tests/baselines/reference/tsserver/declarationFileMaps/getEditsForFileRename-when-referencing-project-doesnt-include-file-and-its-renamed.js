@@ -231,7 +231,7 @@ ScriptInfos::
 /a/src/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 Before request
 
@@ -447,11 +447,11 @@ ScriptInfos::
 /a/src/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /b/src/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /b/tsconfig.json
+        /b/tsconfig.json *default*
 
 Before request
 

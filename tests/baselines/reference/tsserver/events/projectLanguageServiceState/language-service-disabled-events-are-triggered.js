@@ -229,7 +229,7 @@ ScriptInfos::
 /a/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/jsconfig.json
+        /a/jsconfig.json *default*
 /a/largefile.js *new*
     version: Text-1
     containingProjects: 1
@@ -328,7 +328,7 @@ ScriptInfos::
 /a/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/jsconfig.json
+        /a/jsconfig.json *default*
 /a/largefile.js *changed*
     version: Text-1
     containingProjects: 0 *changed*

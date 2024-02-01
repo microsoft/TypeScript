@@ -233,7 +233,7 @@ ScriptInfos::
 /index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /node_modules/@angular/forms/forms.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -423,4 +423,4 @@ ScriptInfos::
 /random/random.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

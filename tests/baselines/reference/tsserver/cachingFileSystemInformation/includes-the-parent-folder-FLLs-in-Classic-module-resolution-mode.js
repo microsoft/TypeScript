@@ -215,7 +215,7 @@ ScriptInfos::
 /users/username/projects/proj/foo/boo/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/proj/tsconfig.json
+        /users/username/projects/proj/tsconfig.json *default*
 /users/username/projects/proj/foo/boo/moo/app.ts *new*
     version: Text-1
     containingProjects: 1
@@ -386,7 +386,7 @@ ScriptInfos::
 /users/username/projects/proj/foo/boo/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/proj/tsconfig.json
+        /users/username/projects/proj/tsconfig.json *default*
 /users/username/projects/proj/foo/boo/moo/app.ts
     version: Text-1
     containingProjects: 1

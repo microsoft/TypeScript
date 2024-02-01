@@ -88,7 +88,7 @@ ScriptInfos::
 /app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /jsconfig.json
+        /jsconfig.json *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/tmp', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
@@ -677,7 +677,7 @@ ScriptInfos::
 /app.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /jsconfig.json
+        /jsconfig.json *default*
 /tmp/node_modules/@types/jquery/index.d.ts *new*
     version: Text-1
     containingProjects: 1

@@ -62,7 +62,7 @@ ScriptInfos::
 /a/b/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -448,7 +448,7 @@ ScriptInfos::
 /a/b/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -492,7 +492,7 @@ ScriptInfos::
 /a/b/app.js (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -659,7 +659,7 @@ ScriptInfos::
 /a/b/app.js (Open)
     version: SVC-1-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -709,7 +709,7 @@ ScriptInfos::
 /a/b/app.js (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1

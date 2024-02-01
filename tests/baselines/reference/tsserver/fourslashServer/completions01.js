@@ -110,7 +110,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -148,7 +148,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -181,7 +181,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -429,7 +429,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *changed*
     version: SVC-1-3 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -462,7 +462,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *changed*
     version: SVC-1-4 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -528,7 +528,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *changed*
     version: SVC-1-5 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -561,7 +561,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *changed*
     version: SVC-1-6 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -615,7 +615,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *changed*
     version: SVC-1-7 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -669,7 +669,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *changed*
     version: SVC-1-8 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -702,7 +702,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/completions01.ts (Open) *changed*
     version: SVC-1-9 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

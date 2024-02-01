@@ -97,7 +97,7 @@ ScriptInfos::
 /a/b/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/jsconfig.json
+        /a/b/jsconfig.json *default*
 /a/typings/node_modules/@types/bar/index.d.ts *new*
     version: Text-1
     containingProjects: 1

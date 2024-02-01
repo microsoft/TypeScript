@@ -195,7 +195,7 @@ ScriptInfos::
 /user/username/projects/myproject/Logger.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/another.ts *new*
     version: Text-1
     containingProjects: 1
@@ -426,7 +426,7 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/another.ts
     version: Text-1
     containingProjects: 1
@@ -490,12 +490,12 @@ ScriptInfos::
 /user/username/projects/myproject/Logger.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/another.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Before request
 
@@ -545,11 +545,11 @@ ScriptInfos::
 /user/username/projects/myproject/Logger.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/another.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Before request
 

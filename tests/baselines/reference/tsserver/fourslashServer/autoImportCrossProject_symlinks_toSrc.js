@@ -330,7 +330,7 @@ ScriptInfos::
 /packages/app/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /packages/app/src/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -426,12 +426,12 @@ ScriptInfos::
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /packages/app/src/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /packages/app/tsconfig.json
+        /packages/app/tsconfig.json *default*
 /packages/dep/src/index.ts
     version: Text-1
     containingProjects: 1
@@ -670,11 +670,11 @@ ScriptInfos::
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /packages/app/src/index.ts (Open)
     version: Text-1
     containingProjects: 1
-        /packages/app/tsconfig.json
+        /packages/app/tsconfig.json *default*
 /packages/dep/src/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -738,11 +738,11 @@ ScriptInfos::
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /packages/app/src/index.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
-        /packages/app/tsconfig.json
+        /packages/app/tsconfig.json *default*
 /packages/dep/src/index.ts
     version: Text-1
     containingProjects: 2
@@ -791,11 +791,11 @@ ScriptInfos::
 /packages/app/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /packages/app/src/index.ts (Open) *changed*
     version: SVC-2-2 *changed*
     containingProjects: 1
-        /packages/app/tsconfig.json
+        /packages/app/tsconfig.json *default*
 /packages/dep/src/index.ts
     version: Text-1
     containingProjects: 2

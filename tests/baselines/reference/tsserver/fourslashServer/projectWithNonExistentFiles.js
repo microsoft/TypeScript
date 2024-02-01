@@ -185,7 +185,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tests/cases/fourslash/server/tsconfig.json
+        /tests/cases/fourslash/server/tsconfig.json *default*
 /tests/cases/fourslash/server/b.ts *new*
     version: Text-1
     containingProjects: 1

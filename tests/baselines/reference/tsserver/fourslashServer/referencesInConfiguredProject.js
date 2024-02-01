@@ -141,7 +141,7 @@ ScriptInfos::
 /referencesForGlobals_1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /referencesForGlobals_2.ts *new*
     version: Text-1
     containingProjects: 1
@@ -199,12 +199,12 @@ ScriptInfos::
 /referencesForGlobals_1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /referencesForGlobals_2.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

@@ -90,7 +90,7 @@ ScriptInfos::
 /referencesForGlobals_1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -182,12 +182,12 @@ ScriptInfos::
 /referencesForGlobals_1.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
         /dev/null/inferredProject1* *deleted*
 /referencesForGlobals_2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

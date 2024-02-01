@@ -213,7 +213,7 @@ ScriptInfos::
 /a/b/src/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 
 Before request
 
@@ -346,11 +346,11 @@ ScriptInfos::
 /a/b/src/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/src/file2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -406,15 +406,15 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/src/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/src/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
@@ -464,7 +464,7 @@ ScriptInfos::
 /a/b/file3.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/src/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -473,7 +473,7 @@ ScriptInfos::
 /a/b/src/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -531,7 +531,7 @@ ScriptInfos::
 /a/b/src/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Configured project: /a/b/tsconfig.json hasOpenRef:: false isClosed: false
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
@@ -630,11 +630,11 @@ ScriptInfos::
 /a/b/src/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/file4.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before running Timeout callback:: count: 2
@@ -850,12 +850,12 @@ ScriptInfos::
 /a/b/src/file2.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /a/b/tsconfig.json *new*
+        /a/b/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 /a/file4.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false

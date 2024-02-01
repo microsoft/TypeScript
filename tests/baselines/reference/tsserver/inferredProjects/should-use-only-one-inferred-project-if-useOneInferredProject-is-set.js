@@ -100,7 +100,7 @@ ScriptInfos::
 /user/username/projects/myproject/a/b/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -184,11 +184,11 @@ ScriptInfos::
 /user/username/projects/myproject/a/b/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/a/c/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -281,15 +281,15 @@ ScriptInfos::
 /user/username/projects/myproject/a/b/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/a/c/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/a/d/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/a/b/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/a/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/a/b
@@ -647,13 +647,13 @@ ScriptInfos::
 /user/username/projects/myproject/a/b/main.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /user/username/projects/myproject/a/b/tsconfig.json *new*
+        /user/username/projects/myproject/a/b/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 /user/username/projects/myproject/a/c/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/a/d/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

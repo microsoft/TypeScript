@@ -183,7 +183,7 @@ ScriptInfos::
 /a/b/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/commonFile1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -301,7 +301,7 @@ ScriptInfos::
 /a/b/app.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/commonFile1.ts
     version: Text-1
     containingProjects: 1
@@ -399,7 +399,7 @@ ScriptInfos::
 /a/b/app.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/commonFile1.ts
     version: Text-1
     containingProjects: 1

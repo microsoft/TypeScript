@@ -136,4 +136,4 @@ ScriptInfos::
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
-        ^ScriptDocument1 file1.ts
+        ^ScriptDocument1 file1.ts *default*

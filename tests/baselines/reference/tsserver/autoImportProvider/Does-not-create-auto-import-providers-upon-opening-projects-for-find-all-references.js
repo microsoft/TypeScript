@@ -270,7 +270,7 @@ ScriptInfos::
 /packages/b/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /packages/b/tsconfig.json
+        /packages/b/tsconfig.json *default*
 
 Before request
 
@@ -665,7 +665,7 @@ ScriptInfos::
 /packages/b/index.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 3 *changed*
-        /packages/b/tsconfig.json
+        /packages/b/tsconfig.json *default*
         /tsconfig.json *new*
         /packages/a/tsconfig.json *new*
 

@@ -68,7 +68,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open) *new*
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -136,11 +136,11 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/b.ts (Open) *new*
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -224,15 +224,15 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/b.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/c.ts (Open) *new*
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -276,19 +276,19 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/b.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/c.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/node_modules/something/index.d.ts (Open) *new*
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -327,11 +327,11 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/b.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/c.ts *changed*
     open: false *changed*
     version: Text-0
@@ -341,7 +341,7 @@ ScriptInfos::
 /user/username/projects/myproject/node_modules/something/index.d.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -373,7 +373,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/b.ts *changed*
     open: false *changed*
     version: Text-0
@@ -387,4 +387,4 @@ ScriptInfos::
 /user/username/projects/myproject/node_modules/something/index.d.ts (Open)
     version: Text-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

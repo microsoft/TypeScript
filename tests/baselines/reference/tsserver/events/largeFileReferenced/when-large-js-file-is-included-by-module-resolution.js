@@ -129,7 +129,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/file.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/src/large.js *new*
     version: Text-1
     containingProjects: 1

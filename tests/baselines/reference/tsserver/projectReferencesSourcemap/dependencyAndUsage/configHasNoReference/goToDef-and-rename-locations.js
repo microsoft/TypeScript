@@ -405,7 +405,7 @@ ScriptInfos::
 /user/username/projects/myproject/main/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 
 Before request
 
@@ -600,11 +600,11 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 
 Before request
 
@@ -806,15 +806,15 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -922,15 +922,15 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -1720,11 +1720,11 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -1827,16 +1827,16 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/main/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/main/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -1928,7 +1928,7 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/main/main.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -1937,7 +1937,7 @@ ScriptInfos::
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -2038,7 +2038,7 @@ ScriptInfos::
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -2306,4 +2306,4 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*

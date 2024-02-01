@@ -76,7 +76,7 @@ ScriptInfos::
 /a/b/commonFile1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -221,7 +221,7 @@ ScriptInfos::
 /a/b/commonFile1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/commonFile2.ts *new*
     version: Text-1
     containingProjects: 1

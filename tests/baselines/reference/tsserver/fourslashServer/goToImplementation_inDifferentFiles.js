@@ -91,7 +91,7 @@ ScriptInfos::
 /bar.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /foo.ts *new*
     version: Text-1
     containingProjects: 1
@@ -147,12 +147,12 @@ ScriptInfos::
 /bar.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /foo.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 1

@@ -305,7 +305,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/c/f2.ts
     version: Text-1
     containingProjects: 1
@@ -374,7 +374,7 @@ ScriptInfos::
 /a/b/f1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/c/f2.ts
     version: Text-1
     containingProjects: 1
@@ -382,7 +382,7 @@ ScriptInfos::
 /a/d/f3.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
 Before request
@@ -444,7 +444,7 @@ ScriptInfos::
 /a/b/f1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/c/f2.ts *changed*
     version: Text-1
     containingProjects: 0 *changed*
@@ -452,7 +452,7 @@ ScriptInfos::
 /a/d/f3.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
 Before request
@@ -508,7 +508,7 @@ ScriptInfos::
 /a/b/f1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/c/f2.ts
     version: Text-1
     containingProjects: 0
@@ -762,7 +762,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /a/c/tsconfig.json *new*
+        /a/c/tsconfig.json *default* *new*
 /a/d/f3.ts *deleted*
     version: SVC-1-0
     containingProjects: 0

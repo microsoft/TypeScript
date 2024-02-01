@@ -212,7 +212,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.vue *new*
     version: Text-1
     containingProjects: 1
@@ -333,7 +333,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.vue
     version: Text-1
     containingProjects: 1
@@ -375,7 +375,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.vue
     version: Text-1
     containingProjects: 1
@@ -442,7 +442,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.vue
     version: Text-1
     containingProjects: 1

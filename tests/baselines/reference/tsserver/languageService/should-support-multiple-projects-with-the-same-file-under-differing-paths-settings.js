@@ -232,7 +232,7 @@ ScriptInfos::
 /project/a/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /project/a/tsconfig.json
+        /project/a/tsconfig.json *default*
 /project/shared.ts *new*
     version: Text-1
     containingProjects: 1
@@ -458,7 +458,7 @@ ScriptInfos::
 /project/a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /project/a/tsconfig.json
+        /project/a/tsconfig.json *default*
 /project/b/foo.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -466,7 +466,7 @@ ScriptInfos::
 /project/b/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /project/b/tsconfig.json
+        /project/b/tsconfig.json *default*
 /project/shared.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*

@@ -147,7 +147,7 @@ ScriptInfos::
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
-        /a/b/proj.csproj
+        /a/b/proj.csproj *default*
 
 Before request
 
@@ -316,7 +316,7 @@ ScriptInfos::
     version: SVC-3-0 *changed*
     pendingReloadFromDisk: false *changed*
     containingProjects: 1
-        /a/b/proj.csproj
+        /a/b/proj.csproj *default*
 
 Before request
 

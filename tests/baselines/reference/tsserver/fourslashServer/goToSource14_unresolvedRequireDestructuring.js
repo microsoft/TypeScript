@@ -72,7 +72,7 @@ ScriptInfos::
 /index.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -134,7 +134,7 @@ ScriptInfos::
 /index.js (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
         /dev/null/auxiliaryProject1* *new*
 /lib.d.ts
     version: Text-1

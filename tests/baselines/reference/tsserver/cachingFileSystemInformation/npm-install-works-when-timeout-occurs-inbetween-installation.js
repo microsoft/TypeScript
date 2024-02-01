@@ -251,7 +251,7 @@ ScriptInfos::
 /user/username/rootfolder/otherfolder/a/b/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+        /user/username/rootfolder/otherfolder/a/b/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/rootfolder/otherfolder/a/b/node_modules :: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/rootfolder/otherfolder/a/b/tsconfig.jsonFailedLookupInvalidation
@@ -2279,7 +2279,7 @@ ScriptInfos::
 /user/username/rootfolder/otherfolder/a/b/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/rootfolder/otherfolder/a/b/tsconfig.json
+        /user/username/rootfolder/otherfolder/a/b/tsconfig.json *default*
 /user/username/rootfolder/otherfolder/a/b/node_modules/@types/lodash/index.d.ts *new*
     version: Text-1
     containingProjects: 1

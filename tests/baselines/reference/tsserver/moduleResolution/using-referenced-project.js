@@ -472,7 +472,7 @@ ScriptInfos::
 /home/src/projects/project/packages/package-b/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
 
 Before request
 
@@ -613,7 +613,7 @@ ScriptInfos::
 /home/src/projects/project/packages/package-b/src/index.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
 
 Before request
 
@@ -791,7 +791,7 @@ ScriptInfos::
 /home/src/projects/project/packages/package-b/src/index.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -903,7 +903,7 @@ ScriptInfos::
 /home/src/projects/project/packages/package-b/src/index.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
 
 Before request
 
@@ -1085,7 +1085,7 @@ ScriptInfos::
 /home/src/projects/project/packages/package-b/src/index.ts (Open)
     version: SVC-1-2
     containingProjects: 1
-        /home/src/projects/project/packages/package-b/tsconfig.json
+        /home/src/projects/project/packages/package-b/tsconfig.json *default*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck

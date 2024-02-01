@@ -213,4 +213,4 @@ ScriptInfos::
 /users/user/projects/myproject/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/user/projects/myproject/src/tsconfig.json
+        /users/user/projects/myproject/src/tsconfig.json *default*

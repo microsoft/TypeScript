@@ -210,7 +210,7 @@ ScriptInfos::
 /a/c/f.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/c/tsconfig.json
+        /a/c/tsconfig.json *default*
 
 Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
@@ -421,11 +421,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2 *changed*
         /a/c/tsconfig.json
-        /a/b/tsconfig.json *new*
+        /a/b/tsconfig.json *default* *new*
 /a/c/f.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/c/tsconfig.json
+        /a/c/tsconfig.json *default*
 
 Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
@@ -481,7 +481,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /a/c/tsconfig.json
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/c/f.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -634,6 +634,6 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /a/c/tsconfig.json
+        /a/c/tsconfig.json *default*
 
 Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false

@@ -412,7 +412,7 @@ ScriptInfos::
 /tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /util.ts *new*
     version: Text-1
     containingProjects: 2

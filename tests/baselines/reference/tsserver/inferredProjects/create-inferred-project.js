@@ -106,7 +106,7 @@ ScriptInfos::
 /user/username/projects/myproject/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/module.d.ts *new*
     version: Text-1
     containingProjects: 1

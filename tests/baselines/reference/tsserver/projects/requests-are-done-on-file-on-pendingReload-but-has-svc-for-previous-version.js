@@ -192,7 +192,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/file2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Before request
 
@@ -252,11 +252,11 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/src/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Before request
 
@@ -314,7 +314,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/file1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/src/file2.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -372,7 +372,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/file1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/src/file2.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*

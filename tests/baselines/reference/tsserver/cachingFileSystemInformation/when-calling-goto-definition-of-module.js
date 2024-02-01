@@ -274,7 +274,7 @@ ScriptInfos::
 /a/b/controllers/vessels/client.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/models/vessel.ts *new*
     version: Text-1
     containingProjects: 1
@@ -371,12 +371,12 @@ ScriptInfos::
 /a/b/controllers/vessels/client.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/models/vessel.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/utils/db.ts
     version: Text-1
     containingProjects: 1

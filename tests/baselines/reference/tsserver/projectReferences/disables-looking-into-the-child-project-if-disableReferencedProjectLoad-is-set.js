@@ -314,7 +314,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] getDefaultProject for /user/username/projects/myproject/src/main.ts: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: undefined
@@ -432,11 +432,11 @@ ScriptInfos::
 /dummy/dummy.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /user/username/projects/myproject/src/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -520,7 +520,7 @@ ScriptInfos::
 /dummy/dummy.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /user/username/projects/myproject/src/main.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -697,7 +697,7 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
 /user/username/projects/myproject/src/main.ts *deleted*
     version: SVC-1-0
     containingProjects: 0
@@ -889,11 +889,11 @@ ScriptInfos::
 /dummy/dummy.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /user/username/projects/myproject/src/main.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 
 Before request
 

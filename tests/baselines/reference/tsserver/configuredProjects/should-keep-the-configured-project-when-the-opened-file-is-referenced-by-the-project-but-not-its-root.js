@@ -223,7 +223,7 @@ ScriptInfos::
 /a/b/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/obj-a.ts *new*
     version: Text-1
     containingProjects: 1
@@ -325,4 +325,4 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*

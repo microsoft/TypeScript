@@ -399,7 +399,7 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 
 Before request
 
@@ -577,11 +577,11 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 
@@ -691,11 +691,11 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts.map 1:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
@@ -745,11 +745,11 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
@@ -878,11 +878,11 @@ ScriptInfos::
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/dependency/tsconfig.json *default*
 /user/username/projects/myproject/random/random.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/random/tsconfig.json
+        /user/username/projects/myproject/random/tsconfig.json *default*
 
 Before request
 

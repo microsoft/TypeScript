@@ -413,7 +413,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect1.json *default*
 
 Info seq  [hh:mm:ss:mss] getDefaultProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig-indirect1.json
 Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: undefined
@@ -487,7 +487,7 @@ ScriptInfos::
 /dummy/dummy.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/indirect1/main.ts
     version: Text-1
     containingProjects: 1
@@ -499,7 +499,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect1.json *default*
 
 Before request
 
@@ -569,7 +569,7 @@ ScriptInfos::
 /dummy/dummy.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/indirect1/main.ts
     version: Text-1
     containingProjects: 1
@@ -801,7 +801,7 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*
 /user/username/projects/myproject/indirect1/main.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
@@ -1029,7 +1029,7 @@ ScriptInfos::
 /dummy/dummy.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/username/projects/myproject/indirect1/main.ts *new*
     version: Text-2
     containingProjects: 1
@@ -1041,7 +1041,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/main.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect1.json *default*
 
 Before request
 

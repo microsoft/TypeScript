@@ -189,7 +189,7 @@ ScriptInfos::
 /common/tsconfig.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 2
@@ -361,7 +361,7 @@ ScriptInfos::
 /common/tsconfig.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 3 *changed*
@@ -383,7 +383,7 @@ ScriptInfos::
 /web/src/Helper.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /web/tsconfig.json
+        /web/tsconfig.json *default*
 /web/src/MyApp.ts *new*
     version: Text-1
     containingProjects: 1

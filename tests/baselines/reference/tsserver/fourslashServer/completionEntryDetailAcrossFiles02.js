@@ -118,7 +118,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/a.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -984,12 +984,12 @@ ScriptInfos::
 /tests/cases/fourslash/server/a.js (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
         /dev/null/inferredProject1* *deleted*
 /tests/cases/fourslash/server/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

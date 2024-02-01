@@ -181,7 +181,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/proj1
+        /a/b/proj1 *default*
 /a/b/lib.ts
     version: Text-1
     containingProjects: 1
@@ -219,7 +219,7 @@ ScriptInfos::
 /a/b/app.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/proj1
+        /a/b/proj1 *default*
 /a/b/lib.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
@@ -539,7 +539,7 @@ ScriptInfos::
 /a/b/app.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /a/b/proj1 *new*
+        /a/b/proj1 *default* *new*
 /a/b/lib.ts *new*
     version: Text-2
     containingProjects: 1

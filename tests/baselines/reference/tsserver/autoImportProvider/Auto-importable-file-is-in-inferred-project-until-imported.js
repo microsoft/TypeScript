@@ -59,7 +59,7 @@ ScriptInfos::
 /node_modules/@angular/forms/forms.d.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -429,12 +429,12 @@ ScriptInfos::
 /index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /node_modules/@angular/forms/forms.d.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
-        /tsconfig.json *new*
+        /tsconfig.json *default* *new*
 
 Default Project for /node_modules/@angular/forms/forms.d.ts:: /tsconfig.json
 After getAutoImportProvider

@@ -141,7 +141,7 @@ ScriptInfos::
 /index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1

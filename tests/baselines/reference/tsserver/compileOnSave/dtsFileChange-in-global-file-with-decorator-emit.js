@@ -219,7 +219,7 @@ ScriptInfos::
 /a/runtime/a.d.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 Before request
 
@@ -271,11 +271,11 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a/runtime/a.d.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 Before request
 

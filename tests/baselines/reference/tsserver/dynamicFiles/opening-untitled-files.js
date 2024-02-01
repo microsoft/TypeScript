@@ -75,7 +75,7 @@ ScriptInfos::
 untitled:^Untitled-1 (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -396,11 +396,11 @@ ScriptInfos::
 /user/username/projects/myproject/Untitled-1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 untitled:^Untitled-1 (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -447,7 +447,7 @@ ScriptInfos::
 /user/username/projects/myproject/Untitled-1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 untitled:^Untitled-1 *deleted*
     open: false *changed*
     version: SVC-1-0
@@ -594,10 +594,10 @@ ScriptInfos::
 /user/username/projects/myproject/Untitled-1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 untitled:^Untitled-1 (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 /user/username/projects/myproject/untitled:^Untitled-1 isDynamic:: true

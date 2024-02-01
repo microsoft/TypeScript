@@ -248,7 +248,7 @@ ScriptInfos::
 /packages/babel-loader/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /packages/babel-loader/tsconfig.json
+        /packages/babel-loader/tsconfig.json *default*
 
 Before request
 

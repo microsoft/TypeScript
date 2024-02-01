@@ -500,7 +500,7 @@ ScriptInfos::
 /user/username/projects/project/src/common/input/keyboard.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/project/src/common/tsconfig.json
+        /user/username/projects/project/src/common/tsconfig.json *default*
 
 Before request
 
@@ -722,12 +722,12 @@ ScriptInfos::
 /user/username/projects/project/src/common/input/keyboard.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /user/username/projects/project/src/common/tsconfig.json
+        /user/username/projects/project/src/common/tsconfig.json *default*
         /user/username/projects/project/src/tsconfig.json *new*
 /user/username/projects/project/src/terminal.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/project/src/tsconfig.json
+        /user/username/projects/project/src/tsconfig.json *default*
 
 Before request
 

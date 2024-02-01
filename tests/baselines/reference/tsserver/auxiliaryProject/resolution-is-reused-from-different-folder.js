@@ -190,7 +190,7 @@ ScriptInfos::
 /user/users/projects/myproject/some/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -336,5 +336,5 @@ ScriptInfos::
 /user/users/projects/myproject/some/index.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
         /dev/null/auxiliaryProject1* *new*

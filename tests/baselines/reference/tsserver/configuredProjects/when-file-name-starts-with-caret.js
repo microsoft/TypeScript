@@ -190,4 +190,4 @@ ScriptInfos::
 /user/username/projects/myproject/file.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*

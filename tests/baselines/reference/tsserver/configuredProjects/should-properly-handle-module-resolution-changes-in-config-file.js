@@ -214,7 +214,7 @@ ScriptInfos::
 /a/b/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/node_modules/module1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -266,12 +266,12 @@ ScriptInfos::
 /a/b/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/node_modules/module1.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 
 Before request
 
@@ -331,15 +331,15 @@ ScriptInfos::
 /a/b/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/node_modules/module1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/module1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
@@ -571,16 +571,16 @@ ScriptInfos::
 /a/b/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/node_modules/module1.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
         /a/b/tsconfig.json *deleted*
 /a/module1.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /a/b/tsconfig.json *new*
+        /a/b/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
@@ -652,16 +652,16 @@ ScriptInfos::
 /a/b/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 /a/b/node_modules/module1.ts (Open)
     version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /a/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/module1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*

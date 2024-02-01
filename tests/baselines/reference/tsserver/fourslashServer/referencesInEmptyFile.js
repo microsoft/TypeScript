@@ -108,7 +108,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/referencesInEmptyFile.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

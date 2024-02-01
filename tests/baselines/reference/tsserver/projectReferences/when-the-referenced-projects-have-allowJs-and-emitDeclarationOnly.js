@@ -294,7 +294,7 @@ ScriptInfos::
 /user/username/projects/myproject/packages/consumer/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/packages/consumer/tsconfig.json
+        /user/username/projects/myproject/packages/consumer/tsconfig.json *default*
 /user/username/projects/myproject/packages/emit-composite/src/index.js *new*
     version: Text-1
     containingProjects: 1

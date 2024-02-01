@@ -333,7 +333,7 @@ ScriptInfos::
 /users/username/projects/app/appB.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/app/tsconfig.json
+        /users/username/projects/app/tsconfig.json *default*
 /users/username/projects/common/moduleB.ts *new*
     version: Text-1
     containingProjects: 1

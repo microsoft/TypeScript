@@ -68,7 +68,7 @@ ScriptInfos::
 /a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -152,7 +152,7 @@ ScriptInfos::
 /a.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
         /dev/null/auxiliaryProject1* *new*
 /b.d.ts
     version: Text-1
@@ -219,7 +219,7 @@ ScriptInfos::
 /a.ts (Open)
     version: SVC-1-0
     containingProjects: 2
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
         /dev/null/auxiliaryProject1*
 /b.d.ts
     version: Text-1
@@ -229,7 +229,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 2 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
         /dev/null/auxiliaryProject1*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json

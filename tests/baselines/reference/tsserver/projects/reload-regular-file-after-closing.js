@@ -170,7 +170,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /a/b/project
+        /a/b/project *default*
 /a/b/lib.ts
     version: Text-1
     containingProjects: 1
@@ -234,12 +234,12 @@ ScriptInfos::
 /a/b/app.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/project
+        /a/b/project *default*
 /a/b/lib.ts (Open) *changed*
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
-        /a/b/project
+        /a/b/project *default*
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -324,7 +324,7 @@ ScriptInfos::
 /a/b/app.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/project
+        /a/b/project *default*
 /a/b/lib.ts *changed*
     open: false *changed*
     version: SVC-2-0
@@ -388,7 +388,7 @@ ScriptInfos::
 /a/b/app.ts (Open)
     version: Text-1
     containingProjects: 1
-        /a/b/project
+        /a/b/project *default*
 /a/b/lib.ts *changed*
     version: Text-3 *changed*
     pendingReloadFromDisk: false *changed*

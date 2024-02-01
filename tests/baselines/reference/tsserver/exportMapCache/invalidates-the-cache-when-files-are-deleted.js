@@ -266,7 +266,7 @@ ScriptInfos::
 /a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /ambient.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -345,7 +345,7 @@ ScriptInfos::
 /a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /ambient.d.ts
     version: Text-1
     containingProjects: 1
@@ -354,7 +354,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib/foo/constants.d.ts
     version: Text-1
     containingProjects: 1
@@ -491,7 +491,7 @@ ScriptInfos::
 /b.ts (Open)
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib/foo/constants.d.ts
     version: Text-1
     containingProjects: 1
@@ -564,7 +564,7 @@ ScriptInfos::
 /b.ts (Open)
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib/foo/constants.d.ts
     version: Text-1
     containingProjects: 1

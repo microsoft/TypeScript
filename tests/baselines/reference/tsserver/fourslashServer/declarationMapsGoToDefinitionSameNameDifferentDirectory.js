@@ -179,7 +179,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/BaseClass/Source.d.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -395,12 +395,12 @@ ScriptInfos::
 /tests/cases/fourslash/server/BaseClass/Source.d.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /tests/cases/fourslash/server/buttonClass/tsconfig.json *new*
+        /tests/cases/fourslash/server/buttonClass/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 /tests/cases/fourslash/server/buttonClass/Source.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tests/cases/fourslash/server/buttonClass/tsconfig.json
+        /tests/cases/fourslash/server/buttonClass/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -503,7 +503,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/BaseClass/Source.d.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /tests/cases/fourslash/server/buttonClass/tsconfig.json
+        /tests/cases/fourslash/server/buttonClass/tsconfig.json *default*
 /tests/cases/fourslash/server/BaseClass/Source.d.ts.map *new*
     version: Text-1
     containingProjects: 0
@@ -513,7 +513,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/buttonClass/Source.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /tests/cases/fourslash/server/buttonClass/tsconfig.json
+        /tests/cases/fourslash/server/buttonClass/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

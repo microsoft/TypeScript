@@ -154,7 +154,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        externalproject
+        externalproject *default*
 /a/b/f2.ts
     version: Text-1
     containingProjects: 1

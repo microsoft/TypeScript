@@ -98,7 +98,7 @@ ScriptInfos::
 /a/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -373,11 +373,11 @@ ScriptInfos::
 /A/file2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -544,15 +544,15 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/file2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Before request
 
@@ -731,19 +731,19 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /c/file3.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 
 Before request
 
@@ -819,7 +819,7 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -829,11 +829,11 @@ ScriptInfos::
 /b/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /c/file3.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 
 Before request
 
@@ -908,11 +908,11 @@ ScriptInfos::
 /b/file2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /c/file3.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 
 Before request
 
@@ -1002,7 +1002,7 @@ ScriptInfos::
 /c/file3.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 
 Before request
 
@@ -1317,7 +1317,7 @@ ScriptInfos::
     version: SVC-1-0
     pendingReloadFromDisk: false *changed*
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*
 /b/file2.ts *deleted*
     version: SVC-1-0
     pendingReloadFromDisk: true
@@ -1490,11 +1490,11 @@ ScriptInfos::
 /A/file2.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject4*
+        /dev/null/inferredProject4* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -1672,15 +1672,15 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject4*
+        /dev/null/inferredProject4* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/file2.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject5*
+        /dev/null/inferredProject5* *default*
 
 Before request
 
@@ -1870,19 +1870,19 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject4*
+        /dev/null/inferredProject4* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject5*
+        /dev/null/inferredProject5* *default*
 /c/file3.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject6*
+        /dev/null/inferredProject6* *default*
 
 Before request
 
@@ -1969,7 +1969,7 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject4*
+        /dev/null/inferredProject4* *default*
 /a/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -1979,11 +1979,11 @@ ScriptInfos::
 /b/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject5*
+        /dev/null/inferredProject5* *default*
 /c/file3.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject6*
+        /dev/null/inferredProject6* *default*
 
 Before request
 
@@ -2080,11 +2080,11 @@ ScriptInfos::
 /b/file2.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject5*
+        /dev/null/inferredProject5* *default*
 /c/file3.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject6*
+        /dev/null/inferredProject6* *default*
 
 Before request
 
@@ -2185,7 +2185,7 @@ ScriptInfos::
 /c/file3.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject6*
+        /dev/null/inferredProject6* *default*
 
 Before request
 
@@ -2559,7 +2559,7 @@ ScriptInfos::
     version: SVC-1-0
     pendingReloadFromDisk: false *changed*
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*
 /b/file2.ts *deleted*
     version: SVC-2-0
     pendingReloadFromDisk: true
@@ -2706,11 +2706,11 @@ ScriptInfos::
 /A/file2.ts (Open) *new*
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -2877,15 +2877,15 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/file2.ts (Open) *new*
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject7*
+        /dev/null/inferredProject7* *default*
 
 Before request
 
@@ -3064,19 +3064,19 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/file2.ts (Open)
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject7*
+        /dev/null/inferredProject7* *default*
 /c/file3.ts (Open) *new*
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject8*
+        /dev/null/inferredProject8* *default*
 
 Before request
 
@@ -3152,7 +3152,7 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -3162,11 +3162,11 @@ ScriptInfos::
 /b/file2.ts (Open)
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject7*
+        /dev/null/inferredProject7* *default*
 /c/file3.ts (Open)
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject8*
+        /dev/null/inferredProject8* *default*
 
 Before request
 
@@ -3241,11 +3241,11 @@ ScriptInfos::
 /b/file2.ts (Open)
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject7*
+        /dev/null/inferredProject7* *default*
 /c/file3.ts (Open)
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject8*
+        /dev/null/inferredProject8* *default*
 
 Before request
 
@@ -3335,7 +3335,7 @@ ScriptInfos::
 /c/file3.ts (Open)
     version: SVC-3-0
     containingProjects: 1
-        /dev/null/inferredProject8*
+        /dev/null/inferredProject8* *default*
 
 Before request
 
@@ -3650,7 +3650,7 @@ ScriptInfos::
     version: SVC-1-0
     pendingReloadFromDisk: false *changed*
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*
 /b/file2.ts *deleted*
     version: SVC-3-0
     pendingReloadFromDisk: true
@@ -3823,11 +3823,11 @@ ScriptInfos::
 /A/file2.ts (Open) *new*
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject9*
+        /dev/null/inferredProject9* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -4007,15 +4007,15 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject9*
+        /dev/null/inferredProject9* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/file2.ts (Open) *new*
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject10*
+        /dev/null/inferredProject10* *default*
 
 Before request
 
@@ -4207,19 +4207,19 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject9*
+        /dev/null/inferredProject9* *default*
 /a/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /b/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject10*
+        /dev/null/inferredProject10* *default*
 /c/file3.ts (Open) *new*
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject11*
+        /dev/null/inferredProject11* *default*
 
 Before request
 
@@ -4308,7 +4308,7 @@ ScriptInfos::
 /A/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject9*
+        /dev/null/inferredProject9* *default*
 /a/file1.ts *changed*
     open: false *changed*
     version: SVC-1-0
@@ -4318,11 +4318,11 @@ ScriptInfos::
 /b/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject10*
+        /dev/null/inferredProject10* *default*
 /c/file3.ts (Open)
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject11*
+        /dev/null/inferredProject11* *default*
 
 Before request
 
@@ -4421,11 +4421,11 @@ ScriptInfos::
 /b/file2.ts (Open)
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject10*
+        /dev/null/inferredProject10* *default*
 /c/file3.ts (Open)
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject11*
+        /dev/null/inferredProject11* *default*
 
 Before request
 
@@ -4528,7 +4528,7 @@ ScriptInfos::
 /c/file3.ts (Open)
     version: SVC-4-0
     containingProjects: 1
-        /dev/null/inferredProject11*
+        /dev/null/inferredProject11* *default*
 
 Before request
 

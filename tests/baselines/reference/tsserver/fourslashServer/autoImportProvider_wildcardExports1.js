@@ -131,7 +131,7 @@ ScriptInfos::
 /node_modules/pkg/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -336,7 +336,7 @@ ScriptInfos::
 /main.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /node_modules/pkg/a/a1.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -364,7 +364,7 @@ ScriptInfos::
 /node_modules/pkg/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

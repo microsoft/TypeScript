@@ -202,7 +202,7 @@ ScriptInfos::
 /users/username/projects/project/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/a.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory

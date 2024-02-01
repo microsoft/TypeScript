@@ -251,7 +251,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project2/class2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*
 
 Before request
 
@@ -434,11 +434,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/myproject/projects/project2/tsconfig.json
-        /user/username/projects/myproject/projects/project1/tsconfig.json *new*
+        /user/username/projects/myproject/projects/project1/tsconfig.json *default* *new*
 /user/username/projects/myproject/projects/project2/class2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -597,7 +597,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 2
         /user/username/projects/myproject/projects/project2/tsconfig.json
-        /user/username/projects/myproject/projects/project1/tsconfig.json
+        /user/username/projects/myproject/projects/project1/tsconfig.json *default*
 /user/username/projects/myproject/projects/project1/class3.ts *new*
     version: Text-1
     containingProjects: 2
@@ -606,7 +606,7 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project2/class2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/projects/project2/tsconfig.json
+        /user/username/projects/myproject/projects/project2/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp

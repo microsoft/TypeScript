@@ -219,7 +219,7 @@ ScriptInfos::
 /user/username/projects/myproject/client/linktofolder2/module2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/folder2/module3.ts :: WatchInfo: /user/username/projects/myproject/folder2 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
@@ -335,7 +335,7 @@ ScriptInfos::
 /user/username/projects/myproject/client/linktofolder2/module2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/client/linktofolder2/module3.ts *new*
     version: Text-1
     containingProjects: 1

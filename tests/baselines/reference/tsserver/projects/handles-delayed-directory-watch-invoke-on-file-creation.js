@@ -187,7 +187,7 @@ ScriptInfos::
 /users/username/projects/project/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/sub/a.ts *new*
     version: Text-1
     containingProjects: 1
@@ -251,12 +251,12 @@ ScriptInfos::
 /users/username/projects/project/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/sub/a.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 
 Before running Timeout callback:: count: 0
 
@@ -325,7 +325,7 @@ ScriptInfos::
 /users/username/projects/project/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/sub/a.ts *deleted*
     open: false *changed*
     version: Text-1
@@ -391,11 +391,11 @@ ScriptInfos::
 /users/username/projects/project/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 
 Before running Timeout callback:: count: 2
 5: /users/username/projects/project/tsconfig.json
@@ -486,7 +486,7 @@ ScriptInfos::
 /users/username/projects/project/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 
 Before request
 
@@ -619,11 +619,11 @@ ScriptInfos::
 /users/username/projects/project/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/sub/a.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before running Timeout callback:: count: 2
 7: /users/username/projects/project/tsconfig.json
@@ -815,11 +815,11 @@ ScriptInfos::
 /users/username/projects/project/b.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/sub/a.ts (Open) *changed*
     version: SVC-2-0
     containingProjects: 1 *changed*
-        /users/username/projects/project/tsconfig.json *new*
+        /users/username/projects/project/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 
 Before running Immedidate callback:: count: 1

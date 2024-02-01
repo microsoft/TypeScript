@@ -180,7 +180,7 @@ ScriptInfos::
 /a/b/projects/project/src/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/projects/project/src/tsconfig.json
+        /a/b/projects/project/src/tsconfig.json *default*
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -332,7 +332,7 @@ ScriptInfos::
 /a/b/projects/project/src/file1.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*

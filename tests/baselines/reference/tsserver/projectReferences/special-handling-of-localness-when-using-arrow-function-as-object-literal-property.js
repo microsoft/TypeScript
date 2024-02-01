@@ -301,7 +301,7 @@ ScriptInfos::
 /user/username/projects/solution/api/src/server.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/solution/api/tsconfig.json
+        /user/username/projects/solution/api/tsconfig.json *default*
 /user/username/projects/solution/shared/src/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -508,7 +508,7 @@ ScriptInfos::
 /user/username/projects/solution/api/src/server.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/solution/api/tsconfig.json
+        /user/username/projects/solution/api/tsconfig.json *default*
 /user/username/projects/solution/shared/src/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*

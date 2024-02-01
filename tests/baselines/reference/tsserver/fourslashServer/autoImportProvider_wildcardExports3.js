@@ -130,7 +130,7 @@ ScriptInfos::
 /project/packages/ui/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -304,11 +304,11 @@ ScriptInfos::
 /project/apps/web/app/index.tsx (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /project/apps/web/tsconfig.json
+        /project/apps/web/tsconfig.json *default*
 /project/packages/ui/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /project/packages/ui/src/Card.tsx *new*
     version: Text-1
     containingProjects: 1

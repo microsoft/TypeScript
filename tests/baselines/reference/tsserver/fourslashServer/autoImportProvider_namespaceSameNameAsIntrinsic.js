@@ -100,7 +100,7 @@ ScriptInfos::
 /node_modules/fp-ts/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -253,7 +253,7 @@ ScriptInfos::
 /index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -280,7 +280,7 @@ ScriptInfos::
 /node_modules/fp-ts/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

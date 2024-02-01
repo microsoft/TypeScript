@@ -62,7 +62,7 @@ ScriptInfos::
 /a/c/f2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
 Before request
@@ -121,11 +121,11 @@ ScriptInfos::
 /a/c/f2.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/d/f3.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 
 Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
 Inferred project: /dev/null/inferredProject2* isOrphan:: false isClosed: false
@@ -214,16 +214,16 @@ ScriptInfos::
 /a/b/f1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 /a/c/f2.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject3* *new*
+        /dev/null/inferredProject3* *default* *new*
         /dev/null/inferredProject1* *deleted*
 /a/d/f3.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject3* *new*
+        /dev/null/inferredProject3* *default* *new*
         /dev/null/inferredProject2* *deleted*
 
 Inferred project: /dev/null/inferredProject3* isOrphan:: false isClosed: false
@@ -314,12 +314,12 @@ ScriptInfos::
 /a/c/f2.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /dev/null/inferredProject4* *new*
+        /dev/null/inferredProject4* *default* *new*
         /dev/null/inferredProject3*
 /a/d/f3.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /dev/null/inferredProject5* *new*
+        /dev/null/inferredProject5* *default* *new*
         /dev/null/inferredProject3*
 
 Inferred project: /dev/null/inferredProject3* isOrphan:: true isClosed: false
@@ -386,7 +386,7 @@ ScriptInfos::
 /a/c/f2.ts (Open)
     version: SVC-1-0
     containingProjects: 2
-        /dev/null/inferredProject4*
+        /dev/null/inferredProject4* *default*
         /dev/null/inferredProject3*
 /a/d/f3.ts *changed*
     open: false *changed*
@@ -479,13 +479,13 @@ ScriptInfos::
 /a/c/f2.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject4*
+        /dev/null/inferredProject4* *default*
         /dev/null/inferredProject3* *deleted*
 /a/d/f3.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject5* *new*
+        /dev/null/inferredProject5* *default* *new*
         /dev/null/inferredProject3* *deleted*
 
 Inferred project: /dev/null/inferredProject5* isOrphan:: false isClosed: false

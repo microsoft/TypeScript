@@ -185,7 +185,7 @@ ScriptInfos::
 /a/b/project/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/project/tsconfig.json
+        /a/b/project/tsconfig.json *default*
 /a/b/project/file3.ts *new*
     version: Text-1
     containingProjects: 1
@@ -219,7 +219,7 @@ ScriptInfos::
 /a/b/project/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/project/tsconfig.json
+        /a/b/project/tsconfig.json *default*
 /a/b/project/file3.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -279,7 +279,7 @@ ScriptInfos::
 /a/b/project/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/b/project/tsconfig.json
+        /a/b/project/tsconfig.json *default*
 /a/b/project/file3.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*

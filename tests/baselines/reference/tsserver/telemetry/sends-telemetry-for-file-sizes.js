@@ -99,7 +99,7 @@ ScriptInfos::
 /a.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /jsconfig.json
+        /jsconfig.json *default*
 /b.ts *new*
     version: Text-1
     containingProjects: 1

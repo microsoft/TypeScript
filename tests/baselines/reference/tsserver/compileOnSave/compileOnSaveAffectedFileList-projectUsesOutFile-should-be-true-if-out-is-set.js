@@ -226,7 +226,7 @@ ScriptInfos::
 /a/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a/b.ts *new*
     version: Text-1
     containingProjects: 1

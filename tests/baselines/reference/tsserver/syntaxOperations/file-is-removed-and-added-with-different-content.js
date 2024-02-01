@@ -177,7 +177,7 @@ ScriptInfos::
 /user/username/projects/myproject/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/unitTest1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
@@ -299,7 +299,7 @@ ScriptInfos::
 /user/username/projects/myproject/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/unitTest1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -367,12 +367,12 @@ ScriptInfos::
 /user/username/projects/myproject/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/unitTest1.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Before request
 
@@ -535,7 +535,7 @@ ScriptInfos::
 /user/username/projects/myproject/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/unitTest1.ts *deleted*
     open: false *changed*
     version: Text-1
@@ -741,7 +741,7 @@ ScriptInfos::
 /user/username/projects/myproject/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/unitTest1.ts *new*
     version: Text-2
     containingProjects: 1
@@ -809,12 +809,12 @@ ScriptInfos::
 /user/username/projects/myproject/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/unitTest1.ts (Open) *changed*
     open: true *changed*
     version: Text-2
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Before request
 

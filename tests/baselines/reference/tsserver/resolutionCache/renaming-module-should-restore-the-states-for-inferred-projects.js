@@ -79,7 +79,7 @@ ScriptInfos::
 /users/username/projects/project/file1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /users/username/projects/project/moduleFile.ts *new*
     version: Text-1
     containingProjects: 1
@@ -145,7 +145,7 @@ ScriptInfos::
 /users/username/projects/project/file1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /users/username/projects/project/moduleFile.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*
@@ -309,7 +309,7 @@ ScriptInfos::
 /users/username/projects/project/file1.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before running Timeout callback:: count: 2
 5: /dev/null/inferredProject1*
@@ -399,7 +399,7 @@ ScriptInfos::
 /users/username/projects/project/file1.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /users/username/projects/project/moduleFile.ts *new*
     version: Text-2
     containingProjects: 1

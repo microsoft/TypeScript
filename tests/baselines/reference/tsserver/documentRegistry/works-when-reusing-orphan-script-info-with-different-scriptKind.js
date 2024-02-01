@@ -74,7 +74,7 @@ ScriptInfos::
 ^/inmemory/model/6 (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -130,11 +130,11 @@ ScriptInfos::
 ^/inmemory/model/4 (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 ^/inmemory/model/6 (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -174,7 +174,7 @@ ScriptInfos::
 ^/inmemory/model/6 (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -253,8 +253,8 @@ ScriptInfos::
 ^/inmemory/model/4 (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 ^/inmemory/model/6 (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

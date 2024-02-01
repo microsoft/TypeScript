@@ -75,7 +75,7 @@ ScriptInfos::
 ^memfs:/foo.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 This should be false because 'executeCommand' should have already triggered plugin enablement asynchronously and there are no plugin enablements currently being processed
 hasNewPluginEnablementRequests:: false

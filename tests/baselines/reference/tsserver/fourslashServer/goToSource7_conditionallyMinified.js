@@ -109,7 +109,7 @@ ScriptInfos::
 /node_modules/react/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -168,7 +168,7 @@ ScriptInfos::
 /index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /lib.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -187,7 +187,7 @@ ScriptInfos::
 /node_modules/react/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -305,7 +305,7 @@ ScriptInfos::
 /index.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
         /dev/null/auxiliaryProject1* *new*
 /lib.d.ts
     version: Text-1
@@ -337,4 +337,4 @@ ScriptInfos::
 /node_modules/react/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

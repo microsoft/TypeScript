@@ -97,7 +97,7 @@ ScriptInfos::
 /a/b/projects/temp/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -333,7 +333,7 @@ ScriptInfos::
 /a/b/projects/temp/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/b/projects/temp/node_modules/@types/pad/index.d.ts *new*
     version: Text-1
     containingProjects: 1

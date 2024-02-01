@@ -248,7 +248,7 @@ C:/a/lib/lib.d.ts *new*
 c:/temp/test/project1/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        c:/temp/test/project1/tsconfig.json
+        c:/temp/test/project1/tsconfig.json *default*
 
 Before request
 
@@ -613,7 +613,7 @@ C:/a/lib/lib.d.ts *changed*
 c:/temp/test/project1/index.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        c:/temp/test/project1/tsconfig.json
+        c:/temp/test/project1/tsconfig.json *default*
         c:/temp/test/project2/tsconfig.json *new*
 c:/temp/test/project2/index.ts *new*
     version: Text-1

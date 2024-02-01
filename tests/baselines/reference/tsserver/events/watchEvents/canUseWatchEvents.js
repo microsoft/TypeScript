@@ -250,7 +250,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.ts *new*
     version: Text-1
     containingProjects: 1
@@ -395,7 +395,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.ts
     version: Text-1
     containingProjects: 1
@@ -454,7 +454,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
@@ -518,7 +518,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
@@ -596,12 +596,12 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.ts (Open) *changed*
     open: true *changed*
     version: Text-2
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/c.ts
     version: Text-1
     containingProjects: 1
@@ -669,7 +669,7 @@ ScriptInfos::
 /user/username/projects/myproject/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/b.ts *changed*
     open: false *changed*
     version: Text-2

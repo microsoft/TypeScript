@@ -225,7 +225,7 @@ ScriptInfos::
 /src/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /src/tsconfig.json
+        /src/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /src/tsconfig.json 1:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /src/tsconfig.json
@@ -425,4 +425,4 @@ ScriptInfos::
 /src/app.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /src/tsconfig.json
+        /src/tsconfig.json *default*

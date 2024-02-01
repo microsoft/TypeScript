@@ -147,4 +147,4 @@ ScriptInfos::
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
-        externalProject
+        externalProject *default*

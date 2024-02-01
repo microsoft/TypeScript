@@ -111,7 +111,7 @@ ScriptInfos::
 /user/username/projects/san2/x.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/users/username/Library/Caches/typescript/2.7', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/users/username/Library/Caches/typescript/2.7'

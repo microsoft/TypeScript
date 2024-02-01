@@ -158,7 +158,7 @@ ScriptInfos::
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -310,7 +310,7 @@ ScriptInfos::
 c:/project/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -318,7 +318,7 @@ c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/index.d.ts *new*
 c:/project/node_modules/.store/aws-sdk-virtual-adfe098/package/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 c:/project/node_modules/@remix-run/server-runtime/index.d.ts *new*
     version: Text-1
     containingProjects: 1

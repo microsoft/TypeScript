@@ -203,7 +203,7 @@ ScriptInfos::
 /user/username/projects/myproject/jsFile1.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -643,7 +643,7 @@ ScriptInfos::
 /user/username/projects/myproject/jsFile2.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -829,11 +829,11 @@ ScriptInfos::
 /user/username/projects/myproject/jsFile1.js (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /user/username/projects/myproject/jsFile2.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -932,7 +932,7 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 2 *changed*
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
         /dev/null/inferredProject1*
         /user/username/projects/myproject/tsconfig.json *deleted*
 /user/username/projects/myproject/app.ts *deleted*
@@ -942,8 +942,8 @@ ScriptInfos::
 /user/username/projects/myproject/jsFile1.js (Open)
     version: SVC-2-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /user/username/projects/myproject/jsFile2.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*

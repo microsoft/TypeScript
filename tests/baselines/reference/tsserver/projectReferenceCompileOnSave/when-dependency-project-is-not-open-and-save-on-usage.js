@@ -244,7 +244,7 @@ ScriptInfos::
 /user/username/projects/myproject/usage/usage.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/usage/tsconfig.json
+        /user/username/projects/myproject/usage/tsconfig.json *default*
 
 Before request
 

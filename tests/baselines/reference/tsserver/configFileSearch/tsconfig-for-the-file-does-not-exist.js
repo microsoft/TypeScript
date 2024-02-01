@@ -97,7 +97,7 @@ ScriptInfos::
 /a/b/projects/project/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/lib/lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -348,7 +348,7 @@ ScriptInfos::
 /a/b/projects/project/src/index.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /a/b/projects/project/tsconfig.json *new*
+        /a/b/projects/project/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 /a/lib/lib.d.ts *changed*
     version: Text-1
@@ -505,7 +505,7 @@ ScriptInfos::
 /a/b/projects/project/src/index.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /dev/null/inferredProject1* *new*
+        /dev/null/inferredProject1* *default* *new*
 /a/lib/lib.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*

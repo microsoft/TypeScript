@@ -88,7 +88,7 @@ ScriptInfos::
 /a/b/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /a/cache/node_modules/@types/lib/index.d.ts *new*
     version: Text-1
     containingProjects: 1

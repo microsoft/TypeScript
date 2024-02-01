@@ -229,7 +229,7 @@ ScriptInfos::
 /project/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts *new*
     version: Text-1
     containingProjects: 1
@@ -296,12 +296,12 @@ ScriptInfos::
 /project/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/c.ts
     version: Text-1
     containingProjects: 1
@@ -364,16 +364,16 @@ ScriptInfos::
 /project/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts (Open)
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/c.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/d.ts
     version: Text-1
     containingProjects: 1
@@ -432,20 +432,20 @@ ScriptInfos::
 /project/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts (Open)
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/c.ts (Open)
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/d.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 
 Before request
 

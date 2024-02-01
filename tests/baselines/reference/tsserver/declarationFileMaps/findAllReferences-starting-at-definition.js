@@ -270,7 +270,7 @@ ScriptInfos::
 /a/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 ts.getFileEmitOutput: /a/a.ts: {
   "outputFiles": [
@@ -563,7 +563,7 @@ ScriptInfos::
 /b/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /b/tsconfig.json
+        /b/tsconfig.json *default*
 
 ts.getFileEmitOutput: /b/b.ts: {
   "outputFiles": [
@@ -761,7 +761,7 @@ ScriptInfos::
 /user/user.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -929,7 +929,7 @@ ScriptInfos::
 /a/a.ts (Open) *new*
     version: SVC-2-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a/bin/a.d.ts
     version: Text-1
     containingProjects: 1
@@ -941,7 +941,7 @@ ScriptInfos::
 /user/user.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -1034,7 +1034,7 @@ ScriptInfos::
 /a/a.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a/bin/a.d.ts
     version: Text-1
     containingProjects: 1
@@ -1049,7 +1049,7 @@ ScriptInfos::
 /user/user.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -1112,7 +1112,7 @@ ScriptInfos::
 /a/a.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a/bin/a.d.ts
     version: Text-1
     containingProjects: 1
@@ -1230,7 +1230,7 @@ ScriptInfos::
 /a/a.ts (Open)
     version: SVC-2-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a/bin/a.d.ts *changed*
     version: Text-1
     containingProjects: 0 *changed*
@@ -1245,7 +1245,7 @@ ScriptInfos::
 /dummy/dummy.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 /user/user.ts *deleted*
     version: SVC-1-0
     containingProjects: 0

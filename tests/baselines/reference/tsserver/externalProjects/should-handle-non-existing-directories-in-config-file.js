@@ -204,7 +204,7 @@ ScriptInfos::
 /a/src/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 Configured project: /a/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
@@ -304,6 +304,6 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 Configured project: /a/tsconfig.json hasOpenRef:: true isClosed: false

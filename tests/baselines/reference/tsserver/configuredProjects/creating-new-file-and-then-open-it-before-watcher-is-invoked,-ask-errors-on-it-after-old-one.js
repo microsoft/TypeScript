@@ -196,7 +196,7 @@ ScriptInfos::
 /user/username/projects/myproject/src/foo.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 
 Before request
 
@@ -323,11 +323,11 @@ ScriptInfos::
 /user/username/projects/myproject/src/foo.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/src/sub/fooBar.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/tsconfig.json
@@ -475,11 +475,11 @@ ScriptInfos::
 /user/username/projects/myproject/src/foo.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/tsconfig.json
+        /user/username/projects/myproject/tsconfig.json *default*
 /user/username/projects/myproject/src/sub/fooBar.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
-        /user/username/projects/myproject/tsconfig.json *new*
+        /user/username/projects/myproject/tsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
 
 Before running Immedidate callback:: count: 1

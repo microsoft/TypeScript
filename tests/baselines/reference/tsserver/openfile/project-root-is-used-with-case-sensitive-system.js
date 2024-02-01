@@ -201,7 +201,7 @@ ScriptInfos::
 /a/b/src/app.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 
 Before request
 
@@ -296,7 +296,7 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 
 Before request
 
@@ -391,7 +391,7 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /a/b/tsconfig.json
+        /a/b/tsconfig.json *default*
 
 Before request
 
@@ -657,7 +657,7 @@ ScriptInfos::
 /a/B/lib/module2.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a/b/src/app.ts *changed*
     version: SVC-1-0
     containingProjects: 1 *changed*
@@ -765,7 +765,7 @@ ScriptInfos::
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /a/b/src/app.ts
     version: SVC-1-0
     containingProjects: 1

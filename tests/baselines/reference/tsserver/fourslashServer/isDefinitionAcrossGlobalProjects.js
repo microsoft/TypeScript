@@ -277,7 +277,7 @@ ScriptInfos::
 /a/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /b/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -717,7 +717,7 @@ ScriptInfos::
 /a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /b/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -932,13 +932,13 @@ ScriptInfos::
 /a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /b/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2
         /a/tsconfig.json
-        /b/tsconfig.json
+        /b/tsconfig.json *default*
 /c/index.ts
     version: Text-1
     containingProjects: 2
@@ -1439,18 +1439,18 @@ ScriptInfos::
 /a/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 /b/index.ts (Open)
     version: Text-1
     containingProjects: 2
         /a/tsconfig.json
-        /b/tsconfig.json
+        /b/tsconfig.json *default*
 /c/index.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2
         /a/tsconfig.json
-        /c/tsconfig.json
+        /c/tsconfig.json *default*
 /lib.d.ts
     version: Text-1
     containingProjects: 3

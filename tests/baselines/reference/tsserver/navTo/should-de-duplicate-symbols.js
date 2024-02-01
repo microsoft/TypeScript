@@ -217,7 +217,7 @@ ScriptInfos::
 /a/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
 
 Before request
 
@@ -434,12 +434,12 @@ ScriptInfos::
 /a/index.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /a/tsconfig.json
+        /a/tsconfig.json *default*
         /b/tsconfig.json *new*
 /b/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /b/tsconfig.json
+        /b/tsconfig.json *default*
 
 Before request
 

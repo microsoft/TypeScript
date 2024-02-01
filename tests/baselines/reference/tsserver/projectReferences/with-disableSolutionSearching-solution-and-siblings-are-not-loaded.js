@@ -247,7 +247,7 @@ ScriptInfos::
 /user/username/projects/solution/compiler/program.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/solution/compiler/tsconfig.json
+        /user/username/projects/solution/compiler/tsconfig.json *default*
 /user/username/projects/solution/compiler/types.ts *new*
     version: Text-1
     containingProjects: 1

@@ -177,7 +177,7 @@ ScriptInfos::
 /user/someuser/projects/myproject/src/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/someuser/projects/myproject/tsconfig.json
+        /user/someuser/projects/myproject/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/someuser/projects/myproject/src/b.ts :: WatchInfo: /user/someuser/projects/myproject 1 undefined Config: /user/someuser/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /user/someuser/projects/myproject/tsconfig.json
@@ -254,8 +254,8 @@ ScriptInfos::
 /user/someuser/projects/myproject/src/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/someuser/projects/myproject/tsconfig.json
+        /user/someuser/projects/myproject/tsconfig.json *default*
 /user/someuser/projects/myproject/src/b.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/someuser/projects/myproject/tsconfig.json
+        /user/someuser/projects/myproject/tsconfig.json *default*

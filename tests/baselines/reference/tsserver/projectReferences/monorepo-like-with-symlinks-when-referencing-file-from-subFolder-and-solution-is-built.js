@@ -465,7 +465,7 @@ ScriptInfos::
 /user/username/projects/myproject/packages/A/src/test.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/packages/A/tsconfig.json
+        /user/username/projects/myproject/packages/A/tsconfig.json *default*
 /user/username/projects/myproject/packages/B/src/bar/foo.ts *new*
     version: Text-1
     containingProjects: 1
@@ -606,7 +606,7 @@ ScriptInfos::
 /user/username/projects/myproject/packages/A/src/test.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /user/username/projects/myproject/packages/A/tsconfig.json
+        /user/username/projects/myproject/packages/A/tsconfig.json *default*
 /user/username/projects/myproject/packages/B/src/bar/foo.ts
     version: Text-1
     containingProjects: 1

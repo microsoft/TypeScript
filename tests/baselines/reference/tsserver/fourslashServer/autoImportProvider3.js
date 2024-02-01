@@ -108,7 +108,7 @@ ScriptInfos::
 /node_modules/common-dependency/package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -349,7 +349,7 @@ ScriptInfos::
 /node_modules/common-dependency/package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /node_modules/package-dependency/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -357,7 +357,7 @@ ScriptInfos::
 /packages/a/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /packages/a/tsconfig.json
+        /packages/a/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

@@ -290,4 +290,4 @@ ScriptInfos::
 /packages/app/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /packages/app/tsconfig.json
+        /packages/app/tsconfig.json *default*

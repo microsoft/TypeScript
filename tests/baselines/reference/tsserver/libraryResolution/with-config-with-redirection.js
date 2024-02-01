@@ -492,7 +492,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -557,7 +557,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -743,7 +743,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -806,7 +806,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -901,7 +901,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -996,7 +996,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1242,7 +1242,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1504,7 +1504,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1744,7 +1744,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1805,7 +1805,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1984,7 +1984,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -2151,7 +2151,7 @@ ScriptInfos::
 /home/src/projects/project1/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /home/src/projects/project1/tsconfig.json
+        /home/src/projects/project1/tsconfig.json *default*
 /home/src/projects/project1/typeroot1/sometype/index.d.ts
     version: Text-1
     containingProjects: 1

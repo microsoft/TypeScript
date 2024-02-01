@@ -224,7 +224,7 @@ ScriptInfos::
 /user/username/projects/myproject/bar/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/bar/tsconfig.json
+        /user/username/projects/myproject/bar/tsconfig.json *default*
 /user/username/projects/myproject/foo/lib/index.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -640,7 +640,7 @@ ScriptInfos::
 /user/username/projects/myproject/bar/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/bar/tsconfig.json
+        /user/username/projects/myproject/bar/tsconfig.json *default*
 /user/username/projects/myproject/foo/lib/index.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -649,7 +649,7 @@ ScriptInfos::
 /user/username/projects/myproject/foobar/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/foobar/tsconfig.json
+        /user/username/projects/myproject/foobar/tsconfig.json *default*
 
 Before request
 
@@ -848,11 +848,11 @@ ScriptInfos::
 /user/username/projects/myproject/bar/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/bar/tsconfig.json
+        /user/username/projects/myproject/bar/tsconfig.json *default*
 /user/username/projects/myproject/foo/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/foo/tsconfig.json
+        /user/username/projects/myproject/foo/tsconfig.json *default*
 /user/username/projects/myproject/foo/lib/index.d.ts
     version: Text-1
     containingProjects: 2
@@ -861,7 +861,7 @@ ScriptInfos::
 /user/username/projects/myproject/foobar/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/foobar/tsconfig.json
+        /user/username/projects/myproject/foobar/tsconfig.json *default*
 
 Before request
 
@@ -948,21 +948,21 @@ ScriptInfos::
 /user/username/projects/myproject/bar/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/bar/tsconfig.json
+        /user/username/projects/myproject/bar/tsconfig.json *default*
 /user/username/projects/myproject/foo/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/foo/tsconfig.json
+        /user/username/projects/myproject/foo/tsconfig.json *default*
 /user/username/projects/myproject/foo/lib/index.d.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 2
-        /user/username/projects/myproject/bar/tsconfig.json
+        /user/username/projects/myproject/bar/tsconfig.json *default*
         /user/username/projects/myproject/foobar/tsconfig.json
 /user/username/projects/myproject/foobar/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/myproject/foobar/tsconfig.json
+        /user/username/projects/myproject/foobar/tsconfig.json *default*
 
 Before request
 

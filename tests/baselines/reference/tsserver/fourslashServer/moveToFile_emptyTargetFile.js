@@ -182,7 +182,7 @@ ScriptInfos::
 /source.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /target.ts *new*
     version: Text-1
     containingProjects: 1

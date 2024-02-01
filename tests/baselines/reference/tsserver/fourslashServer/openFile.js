@@ -161,7 +161,7 @@ ScriptInfos::
 /tests/cases/fourslash/server/test1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tests/cases/fourslash/server/tsconfig.json
+        /tests/cases/fourslash/server/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -243,11 +243,11 @@ ScriptInfos::
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1
-        /tests/cases/fourslash/server/tsconfig.json
+        /tests/cases/fourslash/server/tsconfig.json *default*
 /tests/cases/fourslash/server/test1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /tests/cases/fourslash/server/tsconfig.json
+        /tests/cases/fourslash/server/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

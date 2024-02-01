@@ -203,7 +203,7 @@ ScriptInfos::
 /index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Before running Timeout callback:: count: 1
@@ -313,7 +313,7 @@ ScriptInfos::
 /index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /tsconfig.json
+        /tsconfig.json *default*
 /node_modules/@angular/forms/forms.d.ts *new*
     version: Text-1
     containingProjects: 1

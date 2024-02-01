@@ -148,7 +148,7 @@ ScriptInfos::
 /user/users/projects/myproject/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -276,7 +276,7 @@ ScriptInfos::
 /user/users/projects/myproject/index.ts (Open) *changed*
     version: SVC-1-0
     containingProjects: 2 *changed*
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
         /dev/null/auxiliaryProject1* *new*
 /user/users/projects/myproject/node_modules/@types/yargs/callback.d.ts
     version: Text-1

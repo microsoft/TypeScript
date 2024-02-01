@@ -165,7 +165,7 @@ ScriptInfos::
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 c:/temp/replay/axios-src/node_modules/follow-redirects/index.js *new*
     version: Text-1
     containingProjects: 1
@@ -219,7 +219,7 @@ ScriptInfos::
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 c:/temp/replay/axios-src/node_modules/follow-redirects/index.js
     version: Text-1
     containingProjects: 1
@@ -399,12 +399,12 @@ ScriptInfos::
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
     version: SVC-1-1
     containingProjects: 1 *changed*
-        /dev/null/inferredProject2* *new*
+        /dev/null/inferredProject2* *default* *new*
         /dev/null/inferredProject1* *deleted*
 c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 c:/temp/replay/axios-src/lib/core/settle.js *new*
     version: Text-1
     containingProjects: 1
@@ -510,16 +510,16 @@ ScriptInfos::
 c:/temp/replay/axios-src/lib/core/AxiosHeaders.js (Open) *changed*
     version: SVC-1-1
     containingProjects: 2 *changed*
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
         /dev/null/inferredProject3* *new*
 c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 c:/temp/replay/axios-src/lib/core/mergeConfig.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 c:/temp/replay/axios-src/lib/core/settle.js
     version: Text-1
     containingProjects: 1
@@ -646,11 +646,11 @@ c:/temp/replay/axios-src/lib/core/AxiosHeaders.js *changed*
 c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 c:/temp/replay/axios-src/lib/core/mergeConfig.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 c:/temp/replay/axios-src/lib/core/settle.js
     version: Text-1
     containingProjects: 1
@@ -780,16 +780,16 @@ c:/temp/replay/axios-src/lib/core/AxiosHeaders.js *changed*
 c:/temp/replay/axios-src/lib/core/dispatchRequest.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 c:/temp/replay/axios-src/lib/core/mergeConfig.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject3*
+        /dev/null/inferredProject3* *default*
 c:/temp/replay/axios-src/lib/core/settle.js (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /dev/null/inferredProject2*
+        /dev/null/inferredProject2* *default*
 c:/temp/replay/axios-src/node_modules/follow-redirects/index.js
     version: Text-1
     containingProjects: 2

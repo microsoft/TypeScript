@@ -250,4 +250,4 @@ ScriptInfos::
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /user/username/projects/myproject/project.csproj
+        /user/username/projects/myproject/project.csproj *default*

@@ -142,7 +142,7 @@ ScriptInfos::
 /package.json (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -333,7 +333,7 @@ ScriptInfos::
 /package.json (Open)
     version: SVC-1-0
     containingProjects: 1
-        /dev/null/inferredProject1*
+        /dev/null/inferredProject1* *default*
 /packages/utils/src/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -341,7 +341,7 @@ ScriptInfos::
 /packages/web/src/index.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /packages/web/tsconfig.json
+        /packages/web/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

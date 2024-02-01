@@ -210,7 +210,7 @@ ScriptInfos::
 /users/username/projects/project/file1Consumer1.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/moduleFile1.ts :: WatchInfo: /users/username/projects/project 0 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
@@ -354,7 +354,7 @@ ScriptInfos::
 /users/username/projects/project/file1Consumer1.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 
 Before running Timeout callback:: count: 2
 18: /users/username/projects/project/tsconfig.json
@@ -481,7 +481,7 @@ ScriptInfos::
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/file1Consumer1Consumer1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -531,7 +531,7 @@ ScriptInfos::
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/file1Consumer1Consumer1.ts
     version: Text-1
     containingProjects: 1
@@ -607,7 +607,7 @@ ScriptInfos::
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/file1Consumer1Consumer1.ts
     version: Text-1
     containingProjects: 1
@@ -665,7 +665,7 @@ ScriptInfos::
 /users/username/projects/project/file1Consumer1.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/file1Consumer1Consumer1.ts
     version: Text-1
     containingProjects: 1
@@ -710,7 +710,7 @@ ScriptInfos::
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-2
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/file1Consumer1Consumer1.ts
     version: Text-1
     containingProjects: 1
@@ -786,7 +786,7 @@ ScriptInfos::
 /users/username/projects/project/file1Consumer1.ts (Open)
     version: SVC-1-2
     containingProjects: 1
-        /users/username/projects/project/tsconfig.json
+        /users/username/projects/project/tsconfig.json *default*
 /users/username/projects/project/file1Consumer1Consumer1.ts
     version: Text-1
     containingProjects: 1

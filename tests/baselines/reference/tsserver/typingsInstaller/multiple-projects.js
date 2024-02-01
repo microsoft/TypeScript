@@ -141,7 +141,7 @@ ScriptInfos::
 /user/username/projects/project/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/project/tsconfig.json
+        /user/username/projects/project/tsconfig.json *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -623,7 +623,7 @@ ScriptInfos::
 /user/username/projects/project/app.js (Open)
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/project/tsconfig.json
+        /user/username/projects/project/tsconfig.json *default*
 
 Before request
 
@@ -1006,4 +1006,4 @@ ScriptInfos::
 /user/username/projects/project2/app.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /user/username/projects/project2/tsconfig.json
+        /user/username/projects/project2/tsconfig.json *default*

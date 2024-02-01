@@ -224,7 +224,7 @@ ScriptInfos::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+        /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *default*
 
 Before request
 
@@ -509,7 +509,7 @@ ScriptInfos::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+        /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json *default*
 /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts *new*
     version: Text-1
     containingProjects: 1

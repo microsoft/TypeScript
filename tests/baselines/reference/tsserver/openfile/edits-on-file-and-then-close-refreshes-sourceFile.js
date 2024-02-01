@@ -176,7 +176,7 @@ ScriptInfos::
 /project/a.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts *new*
     version: Text-1
     containingProjects: 1
@@ -233,12 +233,12 @@ ScriptInfos::
 /project/a.ts (Open)
     version: SVC-1-0
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts (Open) *changed*
     open: true *changed*
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 
 Before request
 
@@ -284,11 +284,11 @@ ScriptInfos::
 /project/a.ts (Open) *changed*
     version: SVC-1-1 *changed*
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts (Open)
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -343,11 +343,11 @@ ScriptInfos::
 /project/a.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts (Open) *changed*
     version: SVC-2-1 *changed*
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -408,7 +408,7 @@ ScriptInfos::
 /project/a.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts *changed*
     open: false *changed*
     version: SVC-2-1
@@ -453,7 +453,7 @@ ScriptInfos::
 /project/a.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts *changed*
     version: Text-3 *changed*
     pendingReloadFromDisk: true
@@ -509,7 +509,7 @@ ScriptInfos::
 /project/a.ts (Open)
     version: SVC-1-1
     containingProjects: 1
-        /project/tsconfig.json
+        /project/tsconfig.json *default*
 /project/b.ts *changed*
     version: Text-4 *changed*
     pendingReloadFromDisk: false *changed*
