@@ -32,6 +32,7 @@ import {
     DocumentRegistry,
     DocumentRegistryBucketKeyWithMode,
     emptyOptions,
+    ensurePathIsNonModuleName,
     ensureTrailingDirectorySeparator,
     ExtendedConfigCacheEntry,
     FileExtensionInfo,
@@ -4487,8 +4488,18 @@ export class ProjectService {
         }
 
         this.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
-        if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
-            this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
+        if (!pluginConfigEntry.name) {
+            this.logger.info(`Skipped loading plugin ${JSON.stringify(pluginConfigEntry)} because plugin name was not specified`);
+            return;
+        }
+
+        const parsedPackageName = parsePackageName(pluginConfigEntry.name);
+        if (
+            !parsedPackageName.packageName ||
+            normalizePath(parsedPackageName.rest) !== parsedPackageName.rest ||
+            ensurePathIsNonModuleName(parsedPackageName.rest) === parsedPackageName.rest
+        ) {
+            this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name} because only package name is allowed plugin name`);
             return;
         }
 
