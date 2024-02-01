@@ -2099,10 +2099,10 @@ export function createLanguageService(
         formatOptions: FormatCodeSettings,
         originalFile?: string,
         copyLocation?: CopyRange
-        ): PostPasteImportFixes[]{
+        ): PostPasteImportFixes{
         synchronizeHostData();
         const originalSourceFile = originalFile ? getValidSourceFile(originalFile) : undefined;
-        const edits = postPasteImportFixes.postPastImportFixProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host), originalSourceFile, copyLocation);
+        const edits = postPasteImportFixes.postPastImportFixProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host),cancellationToken, originalSourceFile, copyLocation);
         return edits;
     }
 

@@ -212,6 +212,7 @@ export interface ImportAdder {
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
     addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) => void;
     writeFixes: (changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) => void;
+    addImportsForUnknownSymbols: (context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) => void;
 }
 
 /** @internal */
@@ -236,8 +237,14 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
     type NewImportsKey = `${0 | 1}|${string}`;
     /** Use `getNewImportEntry` for access */
     const newImports = new Map<NewImportsKey, Mutable<ImportsCollection & { useRequire: boolean; }>>();
-    return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes };
+    return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes, addImportsForUnknownSymbols };
 
+    function addImportsForUnknownSymbols(context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) {
+        const info = getFixInfosWithoutDiagnostic(context, symbolToken, useAutoImportProvider);
+        if (!info || !info.length) return;
+        addImport(first(info));
+    }
+    
     function addImportFromDiagnostic(diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) {
         const info = getFixInfos(context, diagnostic.code, diagnostic.start, useAutoImportProvider);
         if (!info || !info.length) return;
@@ -1008,6 +1015,12 @@ export function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModul
         compareBooleans(!!a.isJsxNamespaceFix, !!b.isJsxNamespaceFix) ||
         compareValues(a.fix.kind, b.fix.kind) ||
         compareModuleSpecifiers(a.fix, b.fix, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
+}
+
+function getFixInfosWithoutDiagnostic(context: CodeFixContextBase, symbolToken: Identifier,  useAutoImportProvider: boolean): readonly FixInfo[] | undefined {
+    const info = getFixesInfoForNonUMDImport(context, symbolToken, useAutoImportProvider);
+    const packageJsonImportFilter = createPackageJsonImportFilter(context.sourceFile, context.preferences, context.host);
+    return info && sortFixInfo(info, context.sourceFile, context.program, packageJsonImportFilter, context.host);
 }
 
 function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): ImportFixWithModuleSpecifier | undefined {

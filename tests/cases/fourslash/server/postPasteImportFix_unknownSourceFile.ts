@@ -7,7 +7,9 @@
 //// export interface Test4 {}
 
 // @Filename: /file2.ts
-//// /*a*/const a = 10;/*b*/
+//// /*a*/const a = 10;
+//// /*b*/const b = 10;
+//// const c = 10;
 
 // @Filename: /tsconfig.json
 ////{ "files": ["file1.ts", "file2.ts"] }
@@ -17,25 +19,25 @@ format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.postPasteImportFix({
     targetFile: "file2.ts", 
     pastes: [{
-        text: `const a = 10;
-        interface Testing {
+        text: `interface Testing {
             test1: Test1;
             test2: Test2;
             test3: Test3;
             test4: Test4;
         }`,
-        range: { pos: 0, end: 12 },
+        range: { pos: 14, end: 27 },
     }],
     newFileContents: {
         "/file2.ts":
-`import { Test1, Test2, Test3, Test4 } from './file1'
+`import { Test1, Test2, Test3, Test4 } from "./file1";
 
 const a = 10;
 interface Testing {
-    test1: Test1;
-    test2: Test2;
-    test3: Test3;
-    test4: Test4;
-}`
+            test1: Test1;
+            test2: Test2;
+            test3: Test3;
+            test4: Test4;
+        }
+const c = 10;`
     }
 });

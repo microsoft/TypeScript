@@ -622,7 +622,7 @@ export class Verify extends VerifyNegatable {
     }
 
     public postPasteImportFix(options: PostPasteImportFixOptions): void {
-        this.state.getPostPasteImportFixes(options);
+        this.state.verifyPostPasteImportFixes(options);
     }
 }
 

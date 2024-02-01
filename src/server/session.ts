@@ -2797,10 +2797,11 @@ export class Session<TMessage = string> implements EventSender {
         return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
-    private getPostPasteImportFixes(args: protocol.GetPostPasteImportFixesRequestArgs): protocol.PostPasteImportAction[] {
+    private getPostPasteImportFixes(args: protocol.GetPostPasteImportFixesRequestArgs): protocol.PostPasteImportAction | undefined {
         const { file, project } = this.getFileAndProject(args);
-        const textRange = this.getRange(args.pastes[0].range, project.getScriptInfoForNormalizedPath(file)!);
-        const result = project.getLanguageService().getPostPasteImportFixes(args.targetFile, [{text: args.pastes[0].text, range: textRange}], this.getPreferences(file), this.getFormatOptions(file), args.originalFile, args.copyRange);
+        //const pastes: Array<{text: string; range: TextRange}> = arrayFrom(args.pastes).map(paste => ({text: paste.text, range: this.getRange(paste.range, project.getScriptInfoForNormalizedPath(file)!)}));
+        //const textRange = this.getRange(args.pastes[0].range, project.getScriptInfoForNormalizedPath(file)!);
+        const result = project.getLanguageService().getPostPasteImportFixes(args.targetFile, arrayFrom(args.pastes).map(paste => ({text: paste.text, range: this.getRange(paste.range, project.getScriptInfoForNormalizedPath(file)!)})), this.getPreferences(file), this.getFormatOptions(file), args.originalFile, args.copyRange);
         // const seenFiles = new Set<string>();
         // const textChanges: FileTextChanges[] = [];
         // for (const textChange of projectTextChanges) {
@@ -2809,9 +2810,10 @@ export class Session<TMessage = string> implements EventSender {
         //     }
         // }
         if (result === undefined) {
-            return [];
+            return undefined;
         }
-        const allResults = result.map(postPasteAction => this.mapPostPasteAction(postPasteAction));
+        //const allResults = result.map(postPasteAction => this.mapPostPasteAction(postPasteAction));
+        const allResults = this.mapPostPasteAction(result);
 
         return allResults;
     }
@@ -2948,8 +2950,8 @@ export class Session<TMessage = string> implements EventSender {
         return { fixName, description, changes: this.mapTextChangesToCodeEdits(changes), commands, fixId, fixAllDescription };
     }
 
-    private mapPostPasteAction({ changes }: PostPasteImportFixes): protocol.PostPasteImportAction {
-        return { edits: this.mapTextChangesToCodeEdits(changes)};
+    private mapPostPasteAction({ edits }: PostPasteImportFixes): protocol.PostPasteImportAction {
+        return { edits: this.mapTextChangesToCodeEdits(edits)};
     }
 
     private mapTextChangesToCodeEdits(textChanges: readonly FileTextChanges[]): protocol.FileCodeEdits[] {

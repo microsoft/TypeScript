@@ -433,10 +433,8 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     /** @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
-    /** @internal */ getFakeSourceFile(rootFile: string, formatContext: FormatContext,  updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: Program | undefined): FixInfo[];
-    /** @internal */ updateTargetFile(rootFile: string, targetFileText: string, pastedText: string): {updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: Program | undefined};
-    /** @internal */ revertUpdatedFile(rootFile: string, updatedText: string, originalText: string): void;
-//needs to be changed to optional
+    /** @internal */ updateTargetFile?(rootFile: string, targetFileText: string, pastedText: string): { updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: Program | undefined };
+    /** @internal */ revertUpdatedFile?(rootFile: string, updatedText: string, originalText: string): void;
     jsDocParsingMode?: JSDocParsingMode | undefined;
 }
 
@@ -689,7 +687,7 @@ export interface LanguageService {
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
     dispose(): void;
-    getPostPasteImportFixes (targetFile: string, pastes: Array<{text: string; range: TextRange}>, preferences: UserPreferences, formatOptions: FormatCodeSettings, originalFile: string | undefined, copyLocation: CopyRange | undefined): PostPasteImportFixes[];
+    getPostPasteImportFixes (targetFile: string, pastes: Array<{text: string; range: TextRange}>, preferences: UserPreferences, formatOptions: FormatCodeSettings, originalFile: string | undefined, copyLocation: CopyRange | undefined): PostPasteImportFixes;
 }
 
 export interface CopyRange {
@@ -721,7 +719,7 @@ export interface PostPasteImportFixes {
     // targetFile: string, 
     // targetFileText: string,
     // pastes: Array<{text: string; range: TextSpan}>
-    changes: FileTextChanges[];
+    edits: readonly FileTextChanges[];
 } 
 
 export interface OrganizeImportsArgs extends CombinedCodeFixScope {
