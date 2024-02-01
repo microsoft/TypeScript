@@ -326,13 +326,15 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
     const importGroupsByAttributes = groupBy(importGroup, decl => {
         if (decl.attributes) {
             let attrs = decl.attributes.token + " ";
-            for (const x of sort(decl.attributes.elements)) {
-                attrs += x.name + ":" + x.value.getText() + " ";
+            for (const x of sort(decl.attributes.elements, (x, y) => compareStringsCaseSensitive(x.name.text, y.name.text))) {
+                attrs += x.name.text + ":";
+                attrs += isStringLiteralLike(x.value) ? `"${x.value.text}"` : x.value.getText() + " ";
             }
             return attrs;
         }
         return "";
     });
+
     const coalescedImports: ImportDeclaration[] = [];
     for (const attribute in importGroupsByAttributes) {
         const importGroupSameAttrs = importGroupsByAttributes[attribute] as ImportDeclaration[];
