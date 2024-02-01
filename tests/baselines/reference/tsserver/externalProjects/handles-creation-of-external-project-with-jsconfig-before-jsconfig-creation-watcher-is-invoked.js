@@ -119,6 +119,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -172,6 +177,11 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -638,6 +648,21 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/javascript.js ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/jsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,

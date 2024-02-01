@@ -58,6 +58,8 @@ Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] After reloading projects..
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] Host file extension mappings updated
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -98,6 +100,11 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (0) InitialLoadPending
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,

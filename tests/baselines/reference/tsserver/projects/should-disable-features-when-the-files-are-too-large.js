@@ -205,6 +205,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -394,6 +399,15 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project 'proj2' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -505,6 +519,19 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'proj1' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project 'proj2' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project 'proj3' (External)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,

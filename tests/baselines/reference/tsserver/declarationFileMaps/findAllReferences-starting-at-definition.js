@@ -857,10 +857,6 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Finding references to /a/a.ts position 16 in project /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finding references to /a/bin/a.d.ts position 24 in project /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/a.ts :: Config file name: /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {

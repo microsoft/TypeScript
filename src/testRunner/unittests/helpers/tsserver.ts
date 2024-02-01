@@ -495,5 +495,10 @@ export function logInferredProjectsOrphanStatus(session: TestSession) {
 }
 
 export function logConfiguredProjectsHasOpenRefStatus(session: TestSession) {
-    session.getProjectService().configuredProjects.forEach(configuredProject => session.logger.log(`Configured project: ${configuredProject.projectName} hasOpenRef:: ${configuredProject.hasOpenRef()} isClosed: ${configuredProject.isClosed()}`));
+    const toRemoveConfiguredProjects = session.getProjectService().getOrphanConfiguredProjects(
+        /*toRetainConfiguredProjects*/ undefined,
+        /*openFilesWithRetainedConfiguredProject*/ undefined,
+        /*externalProjectsRetainingConfiguredProjects*/ undefined,
+    );
+    session.getProjectService().configuredProjects.forEach(configuredProject => session.logger.log(`Configured project: ${configuredProject.projectName} hasOpenRef:: ${!toRemoveConfiguredProjects.has(configuredProject)} isClosed: ${configuredProject.isClosed()}`));
 }

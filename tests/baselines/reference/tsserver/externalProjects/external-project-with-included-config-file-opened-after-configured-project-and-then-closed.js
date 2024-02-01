@@ -175,6 +175,13 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -193,6 +200,13 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,

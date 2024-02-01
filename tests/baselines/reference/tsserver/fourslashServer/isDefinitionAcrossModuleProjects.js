@@ -1804,15 +1804,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /b/index.ts position 42 in project /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /b/index.ts position 42 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /b/index.ts position 42 in project /a2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/index.d.ts 2000 undefined Project: /b/tsconfig.json WatchType: Missing generated file
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -1942,19 +1934,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /b/index.ts position 70 in project /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /b/index.ts position 70 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /b/index.ts position 70 in project /a2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -2033,19 +2013,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /b/index.ts position 78 in project /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /b/index.ts position 78 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /b/index.ts position 78 in project /a2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -2242,15 +2210,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 42 in project /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 42 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 42 in project /a2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /c/index.d.ts 2000 undefined Project: /c/tsconfig.json WatchType: Missing generated file
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -2380,19 +2340,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 70 in project /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 70 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 70 in project /a2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -2671,19 +2619,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 78 in project /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 78 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 78 in project /a2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,

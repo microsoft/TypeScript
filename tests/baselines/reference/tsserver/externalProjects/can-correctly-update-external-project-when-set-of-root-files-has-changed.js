@@ -73,6 +73,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'project' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -123,6 +128,11 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project 'project' (External)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,

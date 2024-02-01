@@ -96,6 +96,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -261,6 +266,11 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
+Info seq  [hh:mm:ss:mss] Project '/a/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -322,6 +332,11 @@ Info seq  [hh:mm:ss:mss] 	Files (0)
 
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/proj.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,

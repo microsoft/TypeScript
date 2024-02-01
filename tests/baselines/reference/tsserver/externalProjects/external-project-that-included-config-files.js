@@ -214,6 +214,15 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/a/c/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -354,6 +363,19 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/c/tsconfig.json 2000 undefined Project: /a/c/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/c/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /a/d/f3.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,

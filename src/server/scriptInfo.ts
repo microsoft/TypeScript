@@ -38,7 +38,6 @@ import {
     AbsolutePositionAndLineText,
     ConfiguredProject,
     Errors,
-    ExternalProject,
     InferredProject,
     isBackgroundProject,
     isConfiguredProject,
@@ -566,15 +565,14 @@ export class ScriptInfo {
             case 0:
                 return Errors.ThrowNoProject();
             case 1:
-                return ensurePrimaryProjectKind(this.containingProjects[0]);
+                return isBackgroundProject(this.containingProjects[0]) ? Errors.ThrowNoProject() : this.containingProjects[0];
             default:
                 // If this file belongs to multiple projects, below is the order in which default project is used
+                // - first external project
                 // - for open script info, its default configured project during opening is default if info is part of it
                 // - first configured project of which script info is not a source of project reference redirect
                 // - first configured project
-                // - first external project
                 // - first inferred project
-                let firstExternalProject: ExternalProject | undefined;
                 let firstConfiguredProject: ConfiguredProject | undefined;
                 let firstInferredProject: InferredProject | undefined;
                 let firstNonSourceOfProjectReferenceRedirect: ConfiguredProject | undefined;
@@ -596,20 +594,17 @@ export class ScriptInfo {
                         }
                         if (!firstConfiguredProject) firstConfiguredProject = project;
                     }
-                    else if (!firstExternalProject && isExternalProject(project)) {
-                        firstExternalProject = project;
+                    else if (isExternalProject(project)) {
+                        return project;
                     }
                     else if (!firstInferredProject && isInferredProject(project)) {
                         firstInferredProject = project;
                     }
                 }
-                return ensurePrimaryProjectKind(
-                    defaultConfiguredProject ||
-                        firstNonSourceOfProjectReferenceRedirect ||
-                        firstConfiguredProject ||
-                        firstExternalProject ||
-                        firstInferredProject,
-                );
+                return (defaultConfiguredProject ||
+                    firstNonSourceOfProjectReferenceRedirect ||
+                    firstConfiguredProject ||
+                    firstInferredProject) ?? Errors.ThrowNoProject();
         }
     }
 
@@ -722,18 +717,6 @@ export class ScriptInfo {
             this.sourceMapFilePath = undefined;
         }
     }
-}
-
-/**
- * Throws an error if `project` is an AutoImportProvider or AuxiliaryProject,
- * which are used in the background by other Projects and should never be
- * reported as the default project for a ScriptInfo.
- */
-function ensurePrimaryProjectKind(project: Project | undefined) {
-    if (!project || isBackgroundProject(project)) {
-        return Errors.ThrowNoProject();
-    }
-    return project;
 }
 
 function failIfInvalidPosition(position: number) {

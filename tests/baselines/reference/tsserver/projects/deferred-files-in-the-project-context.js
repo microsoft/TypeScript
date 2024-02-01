@@ -58,6 +58,8 @@ Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] After reloading projects..
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] Host file extension mappings updated
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -180,6 +182,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,

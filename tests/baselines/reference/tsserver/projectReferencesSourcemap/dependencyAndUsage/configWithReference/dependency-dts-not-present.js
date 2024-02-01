@@ -1016,8 +1016,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 9,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 2000 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Missing generated file
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -1149,8 +1147,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 10,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1247,8 +1243,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 11,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1345,8 +1339,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 12,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1443,8 +1435,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 13,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/dependency
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {

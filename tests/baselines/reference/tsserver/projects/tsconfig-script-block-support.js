@@ -223,7 +223,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/a/b/tsconfig.json",
-        "reason": "User requested reload projects"
+        "reason": "User requested reload projects: Creating possible configured project for /a/b/f1.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /a/b/tsconfig.json : {
@@ -325,6 +325,14 @@ Info seq  [hh:mm:ss:mss] Open files:
 Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /a/b/f1.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] After reloading projects..
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 

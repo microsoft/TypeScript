@@ -1689,4 +1689,169 @@ const b: B = new B();`,
         }
         /* eslint-enable local/argument-trivia */
     });
+
+    it("when file is not in the first project found but is contained by project from solution sheetal", () => {
+        const appDemo: File = {
+            path: "/home/src/projects/project/app/Component-demos.ts",
+            content: dedent`
+                import * as helpers from 'demos/helpers';
+
+                export const demo = () => {
+                    helpers;
+                }
+            `,
+        };
+        const app: File = {
+            path: "/home/src/projects/project/app/Component.ts",
+            content: dedent`
+                export const Component = () => {}
+            `,
+        };
+        const appConfig: File = {
+            path: "/home/src/projects/project/app/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    outDir: "../app-dist/",
+                },
+                include: ["**/*"],
+                exclude: ["**/*-demos.*"],
+            }),
+        };
+        const demoHelpers: File = {
+            path: "/home/src/projects/project/demos/helpers.ts",
+            content: dedent`
+                export const foo = 1;
+            `,
+        };
+        const demoConfig: File = {
+            path: "/home/src/projects/project/demos/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    rootDir: "../",
+                    outDir: "../demos-dist/",
+                    paths: {
+                        "demos/*": ["./*"],
+                    },
+                },
+                include: [
+                    "**/*",
+                    "../app/**/*-demos.*",
+                ],
+            }),
+        };
+        const solutionConfig: File = {
+            path: "/home/src/projects/project/tsconfig.json",
+            content: jsonToReadableText({
+                compilerOptions: {
+                    outDir: "./dist/",
+                },
+                references: [
+                    { path: "./demos/tsconfig.json" },
+                    { path: "./app/tsconfig.json" },
+                ],
+            }),
+        };
+        const randomTs: File = {
+            path: "/home/src/projects/random/random.ts",
+            content: "export let a = 10;",
+        };
+        const randomConfig: File = {
+            path: "/home/src/projects/random/tsconfig.json",
+            content: "{ }",
+        };
+        const host = createServerHost([appDemo, app, appConfig, demoHelpers, demoConfig, solutionConfig, randomTs, randomConfig, libFile]);
+        const session = new TestSession(host);
+        openFilesForSession([appDemo], session);
+        verifyGetErrRequest({
+            files: [appDemo],
+            session,
+        });
+        verifyProjectManagement(); // Should not remove projects for file
+
+        closeFilesForSession([appDemo], session);
+        verifyProjectManagement(); // Should remove projects for file
+
+        openFilesForSession([appDemo], session);
+
+        // Changes to app Config
+        verifyAppConfigNotComposite(/*projManagementBeforeRevert*/ false);
+        verifyAppConfigNotComposite(/*projManagementBeforeRevert*/ true);
+
+        // Changes to solution Config
+        verifySolutionConfigNotComposite(/*projManagementBeforeRevert*/ false);
+        verifySolutionConfigNotComposite(/*projManagementBeforeRevert*/ true);
+        verifySolutionConfigDelete(/*projManagementBeforeRevert*/ false);
+        verifySolutionConfigDelete(/*projManagementBeforeRevert*/ true);
+
+        // Demo config
+        verfiyDemoConfigChange(/*projManagementBeforeRevert*/ false);
+        verfiyDemoConfigChange(/*projManagementBeforeRevert*/ true);
+
+        session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({
+            command: ts.server.protocol.CommandTypes.ReloadProjects,
+        });
+
+        baselineTsserverLogs("projectReferences", "when file is not in the first project found but is contained by project from solution", session);
+
+        function printDefaultProject() {
+            const info = session.getProjectService().getScriptInfo(appDemo.path);
+            session.logger.startGroup();
+            session.logger.info(`getDefaultProject: ${session.getProjectService().tryGetDefaultProjectForFile(appDemo.path as ts.server.NormalizedPath)?.projectName}`);
+            session.logger.info(`findDefaultConfiguredProject: ${info && session.getProjectService().findDefaultConfiguredProject(info)?.projectName}`);
+            session.logger.endGroup();
+        }
+
+        function verifyProjectManagement() {
+            printDefaultProject();
+            openFilesForSession([randomTs], session); // Verify Project management
+            closeFilesForSession([randomTs], session);
+            printDefaultProject();
+        }
+
+        function verifyAppConfigNotComposite(projManagementBeforeRevert: boolean) {
+            // Not composite
+            verifyConfigChange(appConfig, appConfig.content.replace(`"composite": true,`, ""), projManagementBeforeRevert);
+        }
+
+        function verifySolutionConfigNotComposite(projManagementBeforeRevert: boolean) {
+            // Not referencing demos
+            verifyConfigChange(
+                solutionConfig,
+                jsonToReadableText({
+                    compilerOptions: {
+                        outDir: "./dist/",
+                    },
+                    references: [
+                        { path: "./app/tsconfig.json" },
+                    ],
+                }),
+                projManagementBeforeRevert,
+            );
+        }
+
+        function verifySolutionConfigDelete(projManagementBeforeRevert: boolean) {
+            // Delete solution file
+            verifyConfigChange(solutionConfig, /*change*/ undefined, projManagementBeforeRevert);
+        }
+
+        function verfiyDemoConfigChange(projManagementBeforeRevert: boolean) {
+            // Make some errors in demo::
+            verifyConfigChange(demoConfig, demoConfig.content.replace(`"../app/**/*-demos.*"`, ""), projManagementBeforeRevert);
+        }
+
+        function verifyConfigChange(config: File, change: string | undefined, projManagementBeforeRevert: boolean) {
+            if (change !== undefined) host.writeFile(config.path, change);
+            else host.deleteFile(config.path);
+            host.runQueuedTimeoutCallbacks();
+            if (projManagementBeforeRevert) verifyProjectManagement();
+            else printDefaultProject();
+            // Revert
+            host.writeFile(config.path, config.content);
+            host.runQueuedTimeoutCallbacks();
+            if (!projManagementBeforeRevert) verifyProjectManagement();
+            else printDefaultProject();
+        }
+    });
 });

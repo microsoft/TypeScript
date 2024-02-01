@@ -427,7 +427,7 @@ FsWatchesRecursive::
   {}
 
 Info seq  [hh:mm:ss:mss] getDefaultProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: undefined
+Info seq  [hh:mm:ss:mss] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: /user/username/projects/myproject/tsconfig.json
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -975,7 +975,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/user/username/projects/myproject/tsconfig.json",
-        "reason": "User requested reload projects"
+        "reason": "User requested reload projects: Creating possible configured project for /user/username/projects/myproject/src/main.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/tsconfig.json : {
@@ -1083,7 +1083,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/user/username/projects/myproject/tsconfig-indirect1.json",
-        "reason": "User requested reload projects"
+        "reason": "User requested reload projects: Creating possible configured project for /user/username/projects/myproject/src/main.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig-indirect1.json
@@ -1163,6 +1163,24 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (5)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig-indirect1.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
+Info seq  [hh:mm:ss:mss] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/tsconfig.json,/user/username/projects/myproject/tsconfig-indirect1.json
+Info seq  [hh:mm:ss:mss] After reloading projects..
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 

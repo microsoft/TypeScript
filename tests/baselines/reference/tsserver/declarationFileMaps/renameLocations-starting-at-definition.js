@@ -855,8 +855,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
