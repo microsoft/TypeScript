@@ -105,7 +105,7 @@ Info seq  [hh:mm:ss:mss] Skipped loading plugin ../myPlugin because only package
 Info seq  [hh:mm:ss:mss] Enabling plugin myPlugin/../malicious from candidate paths: /a/lib/tsc.js/../../..
 Info seq  [hh:mm:ss:mss] Skipped loading plugin myPlugin/../malicious because only package name is allowed plugin name
 Info seq  [hh:mm:ss:mss] Enabling plugin undefined from candidate paths: /a/lib/tsc.js/../../..
-Info seq  [hh:mm:ss:mss] Skipped loading plugin {"transform":"some-transform"} because only package name is allowed plugin name
+Info seq  [hh:mm:ss:mss] Skipped loading plugin {"transform":"some-transform"} because plugin name was not specified
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
