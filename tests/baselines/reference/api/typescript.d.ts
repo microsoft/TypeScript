@@ -3118,7 +3118,7 @@ declare namespace ts {
             /**
              * Open files: with value being project root path, and key being Path of the file that is open
              */
-            readonly openFiles: Map<string, NormalizedPath | undefined>;
+            readonly openFiles: Map<Path, NormalizedPath | undefined>;
             /**
              * Map of open files that are opened without complete path but have projectRoot as current directory
              */
@@ -3187,6 +3187,13 @@ declare namespace ts {
             private delayUpdateSourceInfoProjects;
             private delayUpdateProjectsOfScriptInfoPath;
             private handleDeletedFile;
+            /**
+             * This function goes through all the openFiles and tries to file the config file for them.
+             * If the config file is found and it refers to existing project, it schedules the reload it for reload
+             * If there is no existing project it just opens the configured project for the config file
+             * shouldReloadProjectFor provides a way to filter out files to reload configured project for
+             */
+            private delayReloadConfiguredProjectsForFile;
             private removeProject;
             private assignOrphanScriptInfosToInferredProject;
             /**
@@ -3268,9 +3275,7 @@ declare namespace ts {
             /**
              * This function goes through all the openFiles and tries to file the config file for them.
              * If the config file is found and it refers to existing project, it reloads it either immediately
-             * or schedules it for reload depending on delayReload option
              * If there is no existing project it just opens the configured project for the config file
-             * reloadForInfo provides a way to filter out files to reload configured project for
              */
             private reloadConfiguredProjectForFiles;
             /**
