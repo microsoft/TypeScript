@@ -4450,8 +4450,8 @@ declare namespace Intl {
         currency?: string;
         currencyDisplay?: NumberFormatOptionsCurrencyDisplay;
         minimumIntegerDigits: number;
-        minimumFractionDigits: number;
-        maximumFractionDigits: number;
+        minimumFractionDigits?: number;
+        maximumFractionDigits?: number;
         minimumSignificantDigits?: number;
         maximumSignificantDigits?: number;
         useGrouping: ResolvedNumberFormatOptionsUseGrouping;
