@@ -1,0 +1,94 @@
+//// [tests/cases/compiler/typeGuardNarrowsIndexedAccessOfAnyProperty.ts] ////
+
+=== typeGuardNarrowsIndexedAccessOfAnyProperty.ts ===
+namespace Problem1 {
+>Problem1 : typeof Problem1
+
+  declare const obj: { [key: string]: string | undefined };
+>obj : { [key: string]: string | undefined; }
+>key : string
+
+  declare let key: "a";
+>key : "a"
+
+  if (obj[key]) { obj[key].toUpperCase() } // should Ok
+>obj[key] : string | undefined
+>obj : { [key: string]: string | undefined; }
+>key : "a"
+>obj[key].toUpperCase() : string
+>obj[key].toUpperCase : () => string
+>obj[key] : string
+>obj : { [key: string]: string | undefined; }
+>key : "a"
+>toUpperCase : () => string
+}
+
+namespace Problem2 {
+>Problem2 : typeof Problem2
+
+  declare const obj: { [key: string]: string | undefined };
+>obj : { [key: string]: string | undefined; }
+>key : string
+
+  declare const key: string;
+>key : string
+
+  if (obj[key]) { obj[key].toUpperCase() } // should Ok
+>obj[key] : string | undefined
+>obj : { [key: string]: string | undefined; }
+>key : string
+>obj[key].toUpperCase() : string
+>obj[key].toUpperCase : () => string
+>obj[key] : string
+>obj : { [key: string]: string | undefined; }
+>key : string
+>toUpperCase : () => string
+}
+
+namespace Problem3 {
+>Problem3 : typeof Problem3
+
+  declare const obj: { a?: string, b?: string };
+>obj : { a?: string | undefined; b?: string | undefined; }
+>a : string | undefined
+>b : string | undefined
+
+  declare const key: "a" | "b";
+>key : "a" | "b"
+
+  if (obj[key]) { obj[key].toUpperCase() } // should Ok
+>obj[key] : string | undefined
+>obj : { a?: string | undefined; b?: string | undefined; }
+>key : "a" | "b"
+>obj[key].toUpperCase() : string
+>obj[key].toUpperCase : () => string
+>obj[key] : string
+>obj : { a?: string | undefined; b?: string | undefined; }
+>key : "a" | "b"
+>toUpperCase : () => string
+}
+
+namespace Problem4 {
+>Problem4 : typeof Problem4
+
+  function f<K extends string>(obj: { [P in K]?: string }, k: K) {
+>f : <K extends string>(obj: { [P in K]?: string | undefined; }, k: K) => void
+>obj : { [P in K]?: string | undefined; }
+>k : K
+
+    const key: K = k;
+>key : K
+>k : K
+
+    if (obj[key]) { obj[key].toUpperCase() } // should Ok
+>obj[key] : { [P in K]?: string | undefined; }[K]
+>obj : { [P in K]?: string | undefined; }
+>key : K
+>obj[key].toUpperCase() : string
+>obj[key].toUpperCase : () => string
+>obj[key] : string
+>obj : { [P in K]?: string | undefined; }
+>key : K
+>toUpperCase : () => string
+  }
+}

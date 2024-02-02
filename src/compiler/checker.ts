@@ -26474,6 +26474,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const key = getFlowCacheKey((node as AccessExpression).expression, declaredType, initialType, flowContainer);
                     return key && key + "." + propName;
                 }
+                else if (isElementAccessExpression(node) && isIdentifier(node.argumentExpression) && isConstantReference(node.argumentExpression)) {
+                    const propertySymbol = getResolvedSymbol(node.argumentExpression);
+                    const key = getFlowCacheKey((node as AccessExpression).expression, declaredType, initialType, flowContainer);
+                    return key && key + "." + getSymbolId(propertySymbol);
+                }
                 break;
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
@@ -26519,8 +26524,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ElementAccessExpression:
                 const sourcePropertyName = getAccessedPropertyName(source as AccessExpression);
                 const targetPropertyName = isAccessExpression(target) ? getAccessedPropertyName(target) : undefined;
-                return sourcePropertyName !== undefined && targetPropertyName !== undefined && targetPropertyName === sourcePropertyName &&
-                    isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
+                if (sourcePropertyName !== undefined || targetPropertyName !== undefined) {
+                    return sourcePropertyName !== undefined && targetPropertyName !== undefined && targetPropertyName === sourcePropertyName &&
+                        isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
+                }
+                else {
+                    if (
+                        isElementAccessExpression(source) && isElementAccessExpression(target)
+                        && isConstantReference(source.argumentExpression) && isConstantReference(target.argumentExpression)
+                    ) {
+                        return isMatchingReference(source.expression, target.expression) &&
+                            isMatchingReference(source.argumentExpression, target.argumentExpression);
+                    }
+                    return false;
+                }
             case SyntaxKind.QualifiedName:
                 return isAccessExpression(target) &&
                     (source as QualifiedName).right.escapedText === getAccessedPropertyName(target) &&
