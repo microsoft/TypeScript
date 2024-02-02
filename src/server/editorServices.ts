@@ -1066,7 +1066,7 @@ export class ProjectService {
     /**
      * Open files: with value being project root path, and key being Path of the file that is open
      */
-    readonly openFiles: Map<string, NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
+    readonly openFiles: Map<Path, NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
     /** @internal */
     readonly configFileForOpenFiles = new Map<Path, NormalizedPath | false>();
     /**
@@ -1377,7 +1377,7 @@ export class ProjectService {
         const event: ProjectsUpdatedInBackgroundEvent = {
             eventName: ProjectsUpdatedInBackgroundEvent,
             data: {
-                openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName),
+                openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path)!.fileName),
             },
         };
         this.eventHandler(event);
@@ -1810,16 +1810,52 @@ export class ProjectService {
         // Otherwise, we scheduled the update on configured project graph,
         // we would need to schedule the project reload for only the root of inferred projects
         // Get open files to reload projects for
-        this.reloadConfiguredProjectForFiles(
-            configFileExistenceInfo.openFilesImpactedByConfigFile,
-            /*clearSemanticCache*/ false,
-            /*delayReload*/ true,
+        this.delayReloadConfiguredProjectsForFile(
+            configFileExistenceInfo,
             eventKind !== FileWatcherEventKind.Deleted ?
                 identity : // Reload open files if they are root of inferred project
                 returnTrue, // Reload all the open files impacted by config file
             "Change in config file detected",
         );
         this.delayEnsureProjectForOpenFiles();
+    }
+
+    /**
+     * This function goes through all the openFiles and tries to file the config file for them.
+     * If the config file is found and it refers to existing project, it schedules the reload it for reload
+     * If there is no existing project it just opens the configured project for the config file
+     * shouldReloadProjectFor provides a way to filter out files to reload configured project for
+     */
+    private delayReloadConfiguredProjectsForFile(
+        configFileExistenceInfo: ConfigFileExistenceInfo,
+        shouldReloadProjectFor: (infoIsRootOfInferredProject: boolean) => boolean,
+        reason: string,
+    ) {
+        const updatedProjects = new Set<ConfiguredProject>();
+        // try to reload config file for all open files
+        configFileExistenceInfo.openFilesImpactedByConfigFile?.forEach((infoIsRootOfInferredProject, path) => {
+            // Invalidate default config file name for open file
+            this.configFileForOpenFiles.delete(path);
+            // Filter out the files that need to be ignored
+            if (!shouldReloadProjectFor(infoIsRootOfInferredProject)) {
+                return;
+            }
+            const info = this.getScriptInfoForPath(path)!;
+            Debug.assert(info.isScriptOpen());
+            // This tries to search for a tsconfig.json for the given file. If we found it,
+            // we first detect if there is already a configured project created for it: if so,
+            // we re- read the tsconfig file content and update the project only if we havent already done so
+            // otherwise we create a new one.
+            const configFileName = this.getConfigFileNameForFile(info);
+            if (configFileName) {
+                const project = this.findConfiguredProjectByProjectName(configFileName) || this.createConfiguredProject(configFileName);
+                if (tryAddToSet(updatedProjects, project)) {
+                    project.pendingUpdateLevel = ProgramUpdateLevel.Full;
+                    project.pendingUpdateReason = reason;
+                    this.delayUpdateProjectGraph(project);
+                }
+            }
+        });
     }
 
     private removeProject(project: Project) {
@@ -1930,7 +1966,7 @@ export class ProjectService {
     private assignOrphanScriptInfosToInferredProject() {
         // collect orphaned files and assign them to inferred project just like we treat open of a file
         this.openFiles.forEach((projectRootPath, path) => {
-            const info = this.getScriptInfoForPath(path as Path)!;
+            const info = this.getScriptInfoForPath(path)!;
             // collect all orphaned script infos from open files
             if (info.isOrphan()) {
                 this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
@@ -2332,7 +2368,7 @@ export class ProjectService {
 
         this.logger.info("Open files: ");
         this.openFiles.forEach((projectRootPath, path) => {
-            const info = this.getScriptInfoForPath(path as Path)!;
+            const info = this.getScriptInfoForPath(path)!;
             this.logger.info(`\tFileName: ${info.fileName} ProjectRootPath: ${projectRootPath}`);
             this.logger.info(`\t\tProjects: ${info.containingProjects.map(p => p.getProjectName())}`);
         });
@@ -3530,7 +3566,7 @@ export class ProjectService {
         });
 
         // Reload Projects
-        this.reloadConfiguredProjectForFiles(this.openFiles as Map<Path, NormalizedPath | undefined>, /*clearSemanticCache*/ true, /*delayReload*/ false, returnTrue, "User requested reload projects");
+        this.reloadConfiguredProjectForFiles("User requested reload projects");
         this.externalProjects.forEach(project => {
             this.clearSemanticCache(project);
             project.updateGraph();
@@ -3545,26 +3581,19 @@ export class ProjectService {
     /**
      * This function goes through all the openFiles and tries to file the config file for them.
      * If the config file is found and it refers to existing project, it reloads it either immediately
-     * or schedules it for reload depending on delayReload option
      * If there is no existing project it just opens the configured project for the config file
-     * reloadForInfo provides a way to filter out files to reload configured project for
      */
-    private reloadConfiguredProjectForFiles<T>(openFiles: Map<Path, T> | undefined, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
-        const updatedProjects = new Map<string, true>();
+    private reloadConfiguredProjectForFiles(reason: string) {
+        const updatedProjects = new Set<ConfiguredProject>();
         const reloadChildProject = (child: ConfiguredProject) => {
-            if (!updatedProjects.has(child.canonicalConfigFilePath)) {
-                updatedProjects.set(child.canonicalConfigFilePath, true);
-                this.reloadConfiguredProject(child, reason, /*isInitialLoad*/ false, clearSemanticCache);
+            if (tryAddToSet(updatedProjects, child)) {
+                this.reloadConfiguredProject(child, reason, /*isInitialLoad*/ false, /*clearSemanticCache*/ true);
             }
         };
         // try to reload config file for all open files
-        openFiles?.forEach((openFileValue, path) => {
+        this.openFiles?.forEach((_projectRoot, path) => {
             // Invalidate default config file name for open file
             this.configFileForOpenFiles.delete(path);
-            // Filter out the files that need to be ignored
-            if (!shouldReloadProjectFor(openFileValue)) {
-                return;
-            }
 
             const info = this.getScriptInfoForPath(path)!; // TODO: GH#18217
             Debug.assert(info.isScriptOpen());
@@ -3575,37 +3604,28 @@ export class ProjectService {
             const configFileName = this.getConfigFileNameForFile(info);
             if (configFileName) {
                 const project = this.findConfiguredProjectByProjectName(configFileName) || this.createConfiguredProject(configFileName);
-                if (!updatedProjects.has(project.canonicalConfigFilePath)) {
-                    updatedProjects.set(project.canonicalConfigFilePath, true);
-                    if (delayReload) {
-                        project.pendingUpdateLevel = ProgramUpdateLevel.Full;
-                        project.pendingUpdateReason = reason;
-                        if (clearSemanticCache) this.clearSemanticCache(project);
-                        this.delayUpdateProjectGraph(project);
-                    }
-                    else {
-                        // reload from the disk
-                        this.reloadConfiguredProject(project, reason, /*isInitialLoad*/ false, clearSemanticCache);
-                        // If this project does not contain this file directly, reload the project till the reloaded project contains the script info directly
-                        if (!projectContainsInfoDirectly(project, info)) {
-                            const referencedProject = forEachResolvedProjectReferenceProject(
+                if (tryAddToSet(updatedProjects, project)) {
+                    // reload from the disk
+                    this.reloadConfiguredProject(project, reason, /*isInitialLoad*/ false, /*clearSemanticCache*/ true);
+                    // If this project does not contain this file directly, reload the project till the reloaded project contains the script info directly
+                    if (!projectContainsInfoDirectly(project, info)) {
+                        const referencedProject = forEachResolvedProjectReferenceProject(
+                            project,
+                            info.path,
+                            child => {
+                                reloadChildProject(child);
+                                return projectContainsInfoDirectly(child, info);
+                            },
+                            ProjectReferenceProjectLoadKind.FindCreate,
+                        );
+                        if (referencedProject) {
+                            // Reload the project's tree that is already present
+                            forEachResolvedProjectReferenceProject(
                                 project,
-                                info.path,
-                                child => {
-                                    reloadChildProject(child);
-                                    return projectContainsInfoDirectly(child, info);
-                                },
-                                ProjectReferenceProjectLoadKind.FindCreate,
+                                /*fileName*/ undefined,
+                                reloadChildProject,
+                                ProjectReferenceProjectLoadKind.Find,
                             );
-                            if (referencedProject) {
-                                // Reload the project's tree that is already present
-                                forEachResolvedProjectReferenceProject(
-                                    project,
-                                    /*fileName*/ undefined,
-                                    reloadChildProject,
-                                    ProjectReferenceProjectLoadKind.Find,
-                                );
-                            }
                         }
                     }
                 }
@@ -3656,7 +3676,7 @@ export class ProjectService {
         this.printProjects();
 
         this.openFiles.forEach((projectRootPath, path) => {
-            const info = this.getScriptInfoForPath(path as Path)!;
+            const info = this.getScriptInfoForPath(path)!;
             // collect all orphaned script infos from open files
             if (info.isOrphan()) {
                 this.assignOrphanScriptInfoToInferredProject(info, projectRootPath);
