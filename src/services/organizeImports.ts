@@ -943,14 +943,15 @@ function getTopLevelExportGroups(sourceFile: SourceFile) {
     return flatMap(topLevelExportGroups, exportGroupDecls => groupByNewlineContiguous(sourceFile, exportGroupDecls));
 }
 
-function getDetectionByDiff(importDeclsByGroup: ImportDeclaration[][], preferences: UserPreferences) {
+/** @internal */
+export function getDetectionByDiff(importDeclsByGroup: ImportDeclaration[][], preferences: UserPreferences) {
     // attempts to detect an independent sortkind for each of module specifiers, named imports, and named type imports
     // comparers should be ordered by default priority (case-insensitive first)
     const comparer: {
-        moduleSpecifierComparer?: Comparer<string>;
+        moduleSpecifierComparer: Comparer<string>;
         namedImportComparer?: Comparer<string>;
         typeOrder?: "first" | "last" | "inline";
-    } = {};
+    } = { moduleSpecifierComparer: getOrganizeImportsComparer(preferences, typeof preferences.organizeImportsIgnoreCase === "boolean" ? preferences.organizeImportsIgnoreCase : true) };
 
     let comparers: Comparer<string>[];
     if (typeof preferences.organizeImportsIgnoreCase === "boolean") {

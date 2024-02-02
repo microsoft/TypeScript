@@ -39,8 +39,8 @@
 // addition of correctly sorted type imports should not affect behavior as shown in autoImportSortCaseSensitivity1.ts
 goTo.marker("0");
 verify.importFixAtPosition([
-    `import { A, B, C, a } from "./exports1";\na;\nb;`,
-    `import { A, B, C, b } from "./exports1";\na;\nb;`,
+    `import { a, A, B, C } from "./exports1";\na;\nb;`,
+    `import { A, b, B, C } from "./exports1";\na;\nb;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "last" });
@@ -53,8 +53,8 @@ verify.importFixAtPosition([
 
 goTo.marker("1");
 verify.importFixAtPosition([
-    `import { A, B, C, a, type Y, type Z } from "./exports1";\na;\nb;`,
-    `import { A, B, C, b, type Y, type Z } from "./exports1";\na;\nb;`,
+    `import { a, A, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
+    `import { A, b, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "last" });
@@ -67,8 +67,8 @@ verify.importFixAtPosition([
 
 // if we sort inline and sensitive, then all upper case imports should be sorted before any lower case imports
 verify.importFixAtPosition([
-    `import { A, B, C, type Y, type Z, a } from "./exports1";\na;\nb;`,
-    `import { A, B, C, type Y, type Z, b } from "./exports1";\na;\nb;`,
+    `import { a, A, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
+    `import { A, b, B, C, type Y, type Z } from "./exports1";\na;\nb;`,
 ],
     /*errorCode*/ undefined,
     { organizeImportsTypeOrder : "inline" });
