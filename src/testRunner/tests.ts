@@ -134,6 +134,7 @@ import "./unittests/tscWatch/projectsWithReferences";
 import "./unittests/tscWatch/resolutionCache";
 import "./unittests/tscWatch/resolveJsonModuleWithIncremental";
 import "./unittests/tscWatch/sourceOfProjectReferenceRedirect";
+import "./unittests/tscWatch/symlinks";
 import "./unittests/tscWatch/watchApi";
 import "./unittests/tscWatch/watchEnvironment";
 import "./unittests/tsserver/applyChangesToOpenFiles";

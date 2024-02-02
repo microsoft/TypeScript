@@ -21,6 +21,9 @@ import * as a from "a"
   "compilerOptions": {
     "extendedDiagnostics": true,
     "traceResolution": true
+  },
+  "watchOptions": {
+    "synchronousWatchDirectory": true
   }
 }
 
@@ -40,12 +43,12 @@ Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /home/user/projects/myproject CaseSensitiveFileNames: false
-FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/tsconfig.json 2000 undefined Config file
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/tsconfig.json 2000 {"synchronousWatchDirectory":true} Config file
 Synchronizing program
 CreatingProgramWith::
   roots: ["/home/user/projects/myproject/src/file.ts"]
   options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
-FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 {"synchronousWatchDirectory":true} Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -60,20 +63,22 @@ File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/user/projects/myproject/node_modules/a/index.d.ts', result '/home/user/projects/myproject/node_modules/reala/index.d.ts'.
 ======== Module name 'a' was successfully resolved to '/home/user/projects/myproject/node_modules/reala/index.d.ts'. ========
-FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 undefined Type roots
+FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
+FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"synchronousWatchDirectory":true} Source file
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js :: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js :: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 
 
 //// [/home/user/projects/myproject/src/file.js] Inode:: 22
@@ -112,9 +117,6 @@ FsWatches::
 /home/user/projects/myproject/tsconfig.json: *new*
   {"inode":10}
 
-Timeout callback:: count: 1
-1: timerToUpdateChildWatches *new*
-
 Program root files: [
   "/home/user/projects/myproject/src/file.ts"
 ]
@@ -148,10 +150,16 @@ Input::
 //// [/home/user/projects/myproject/node_modules/reala/index.d.ts] deleted
 
 Output::
-FileWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 2:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
+FileWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 2:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 Scheduling update
-Elapsed:: *ms FileWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 2:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
+Elapsed:: *ms FileWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 2:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 sysLog:: /home/user/projects/myproject/node_modules/reala/index.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
+Scheduling update
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 
 
 PolledWatches::
@@ -189,23 +197,23 @@ FsWatches *deleted*::
   {"inode":13}
 
 Timeout callback:: count: 2
-1: timerToUpdateChildWatches *deleted*
-2: timerToUpdateProgram *new*
-3: timerToUpdateChildWatches *new*
+2: timerToInvalidateFailedLookupResolutions *new*
+3: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 2
-2: timerToUpdateProgram
-3: timerToUpdateChildWatches
+2: timerToInvalidateFailedLookupResolutions
+3: timerToUpdateProgram
 
-After running Timeout callback:: count: 2
+After running Timeout callback:: count: 0
 Output::
+Reloading new file names and options
 Synchronizing program
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/home/user/projects/myproject/src/file.ts"]
   options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
-FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 undefined Source file
+FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -236,8 +244,8 @@ Directory '/home/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 [96msrc/file.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
 
 [7m1[0m import * as a from "a"
@@ -245,20 +253,6 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_mod
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-sysLog:: onTimerToUpdateChildWatches:: 2
-sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 0:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 0:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-Project: /home/user/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /home/user/projects/myproject/src/file.js
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 1:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-Scheduling update
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 1:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
-sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
 //// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 22
@@ -297,10 +291,6 @@ FsWatches::
 /home/user/projects/myproject/tsconfig.json:
   {"inode":10}
 
-Timeout callback:: count: 2
-4: timerToInvalidateFailedLookupResolutions *new*
-5: timerToUpdateProgram *new*
-
 
 Program root files: [
   "/home/user/projects/myproject/src/file.ts"
@@ -328,16 +318,9 @@ Change:: timeouts if any
 
 Input::
 
-Before running Timeout callback:: count: 2
-4: timerToInvalidateFailedLookupResolutions
-5: timerToUpdateProgram
+Before running Timeout callback:: count: 0
 
 After running Timeout callback:: count: 0
-Output::
-Reloading new file names and options
-Synchronizing program
-
-
 
 
 exitCode:: ExitStatus.undefined
