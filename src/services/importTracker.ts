@@ -1,5 +1,6 @@
 import {
     __String,
+    AnyImportOrJsDocImport,
     AnyImportOrReExport,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -269,7 +270,7 @@ function getImportersForExport(
         });
     }
 
-    function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration | JSDocImportTag, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
+    function handleNamespaceImport(importDeclaration: AnyImportOrJsDocImport, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
         if (exportKind === ExportKind.ExportEquals) {
             // This is a direct import, not import-as-namespace.
             if (!alreadyAddedDirect) directImports.push(importDeclaration);
