@@ -3190,7 +3190,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(response);
         },
         [protocol.CommandTypes.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-            this.projectService.openExternalProject(request.arguments);
+            this.projectService.openExternalProject(request.arguments, /*print*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
@@ -3200,7 +3200,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(/*response*/ true);
         },
         [protocol.CommandTypes.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
-            this.projectService.closeExternalProject(request.arguments.projectFileName);
+            this.projectService.closeExternalProject(request.arguments.projectFileName, /*print*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },

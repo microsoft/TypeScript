@@ -105,9 +105,14 @@
                 }
             }
         ],
-
-        // Todo: For each of these, investigate whether we want to enable them ✨
-        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                // Ignore: (solely underscores | starting with exactly one underscore)
+                "argsIgnorePattern": "^(_+$|_[^_])",
+                "varsIgnorePattern": "^(_+$|_[^_])"
+            }
+        ],
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
         "@typescript-eslint/prefer-optional-chain": "off",

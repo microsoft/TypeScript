@@ -51,7 +51,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/notexistingfol
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/notexistingfolder 0 undefined Config: /a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/src/app.ts SVC-1-0 "let x = 1;"
@@ -195,6 +195,17 @@ FsWatchesRecursive::
 /a/src: *new*
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/src/app.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+
 Configured project: /a/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
@@ -234,6 +245,13 @@ FsWatches::
 FsWatchesRecursive::
 /a/src:
   {}
+
+ScriptInfos::
+/a/src/app.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json
 
 Configured project: /a/tsconfig.json hasOpenRef:: false isClosed: false
 Before request
@@ -280,5 +298,12 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /a/src:
   {}
+
+ScriptInfos::
+/a/src/app.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
 
 Configured project: /a/tsconfig.json hasOpenRef:: true isClosed: false

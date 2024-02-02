@@ -127,7 +127,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Co
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/a.ts SVC-1-0 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
@@ -276,6 +276,17 @@ FsWatchesRecursive::
 /a: *new*
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json *default*
+
 ts.getFileEmitOutput: /a/a.ts: {
   "outputFiles": [
     {
@@ -329,6 +340,13 @@ FsWatchesRecursive::
 /a:
   {}
 
+ScriptInfos::
+/a/a.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -370,7 +388,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Co
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/b/b.ts SVC-1-0 "export function fnB() {}"
@@ -544,6 +562,24 @@ FsWatchesRecursive *deleted*::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/a.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /a/tsconfig.json *deleted*
+/b/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /b/tsconfig.json *default*
+
 ts.getFileEmitOutput: /b/b.ts: {
   "outputFiles": [
     {
@@ -597,6 +633,13 @@ FsWatchesRecursive::
 /b:
   {}
 
+ScriptInfos::
+/b/b.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /b/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /b/b.ts 2:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /b/tsconfig.json
@@ -625,6 +668,17 @@ FsWatchesRecursive::
 
 Timeout callback:: count: 1
 2: /b/tsconfig.json *new*
+
+Projects::
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/b/b.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /b/tsconfig.json *deleted*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -687,7 +741,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Co
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/a.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/a.ts Text-2 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
@@ -846,6 +900,24 @@ FsWatchesRecursive::
 /user: *new*
   {}
 
+Projects::
+/b/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/user/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/a.ts *new*
+    version: Text-2
+    containingProjects: 1
+        /user/tsconfig.json
+/user/user.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -949,6 +1021,17 @@ FsWatchesRecursive::
 /user:
   {}
 
+ScriptInfos::
+/a/a.ts
+    version: Text-2
+    containingProjects: 1
+        /user/tsconfig.json
+/user/user.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -976,7 +1059,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/a.ts Text-2 "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};"
@@ -1101,6 +1184,29 @@ FsWatchesRecursive::
 /user:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/b/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/user/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/a.ts (Open) *changed*
+    open: true *changed*
+    version: Text-2
+    containingProjects: 2 *changed*
+        /user/tsconfig.json
+        /a/tsconfig.json *default* *new*
+/user/user.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /user/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1156,6 +1262,18 @@ FsWatchesRecursive::
 /user:
   {}
 
+ScriptInfos::
+/a/a.ts *changed*
+    open: false *changed*
+    version: Text-2
+    containingProjects: 2
+        /user/tsconfig.json
+        /a/tsconfig.json
+/user/user.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /user/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1171,7 +1289,7 @@ Info seq  [hh:mm:ss:mss] Search path: /dummy
 Info seq  [hh:mm:ss:mss] For info: /dummy/dummy.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/dummy/dummy.ts SVC-1-0 "let a = 10;"
@@ -1264,3 +1382,32 @@ FsWatchesRecursive *deleted*::
   {}
 /user:
   {}
+
+Projects::
+/a/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/b/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/a.ts *deleted*
+    version: Text-2
+    containingProjects: 0 *changed*
+        /user/tsconfig.json *deleted*
+        /a/tsconfig.json *deleted*
+/dummy/dummy.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/user/user.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /user/tsconfig.json *deleted*

@@ -90,7 +90,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -198,6 +198,25 @@ FsWatches::
 /user/username/projects/myproject/core/core.ts: *new*
   {}
 
+Projects::
+/user/username/projects/myproject/app1/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json
+/user/username/projects/myproject/app1/app.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json *default*
+/user/username/projects/myproject/core/core.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -240,7 +259,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -358,6 +377,34 @@ FsWatches::
 /user/username/projects/myproject/core/core.ts:
   {}
 
+Projects::
+/user/username/projects/myproject/app1/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/app2/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json *new*
+/user/username/projects/myproject/app1/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json *default*
+/user/username/projects/myproject/app2/app.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/app2/tsconfig.json *default*
+/user/username/projects/myproject/core/core.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -415,6 +462,27 @@ FsWatches *deleted*::
 /user/username/projects/myproject/core/core.ts:
   {}
 
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/app1/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json *default*
+/user/username/projects/myproject/app2/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/app2/tsconfig.json *default*
+/user/username/projects/myproject/core/core.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/app1/tsconfig.json *default*
+        /user/username/projects/myproject/app2/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -436,6 +504,34 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Projects::
+/user/username/projects/myproject/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/user/username/projects/myproject/app2/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/app1/app.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json *default*
+/user/username/projects/myproject/app2/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/app2/tsconfig.json *default*
+/user/username/projects/myproject/core/core.ts (Open)
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/app1/tsconfig.json *default*
+        /user/username/projects/myproject/app2/tsconfig.json
 
 Before request
 
@@ -459,6 +555,34 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/user/username/projects/myproject/app1/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/user/username/projects/myproject/app2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/app1/tsconfig.json
+        /user/username/projects/myproject/app2/tsconfig.json
+/user/username/projects/myproject/app1/app.ts (Open)
+    version: SVC-1-1
+    containingProjects: 1
+        /user/username/projects/myproject/app1/tsconfig.json *default*
+/user/username/projects/myproject/app2/app.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/app2/tsconfig.json *default*
+/user/username/projects/myproject/core/core.ts (Open)
+    version: Text-1
+    containingProjects: 2
+        /user/username/projects/myproject/app1/tsconfig.json *default*
+        /user/username/projects/myproject/app2/tsconfig.json
+
 Project1 is dirty: true
 Project2 is dirty: true
 Before request
@@ -473,7 +597,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -482,7 +606,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/app2/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/app2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"

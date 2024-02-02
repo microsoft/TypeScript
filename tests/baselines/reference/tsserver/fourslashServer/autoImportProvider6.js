@@ -236,7 +236,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es2019.symbol.d.t
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.es5.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/react/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (38)
 	/lib.es5.d.ts Text-1 lib.d.ts-Text
@@ -423,7 +423,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -544,6 +544,176 @@ watchedDirectoriesRecursive::
 : *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.es2015.collection.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.core.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.generator.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.iterable.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.promise.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.proxy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.reflect.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.symbol.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.symbol.wellknown.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2016.array.include.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2016.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2016.intl.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.date.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.intl.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.object.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.sharedmemory.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.string.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.typedarrays.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.asyncgenerator.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.asynciterable.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.intl.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.promise.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.regexp.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.array.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.intl.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.object.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.string.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.symbol.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es5.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/node_modules/@types/react/index.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -657,6 +827,169 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 :
   {}
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/lib.es2015.collection.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.core.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.generator.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.iterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.promise.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.proxy.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.reflect.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.symbol.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2015.symbol.wellknown.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2016.array.include.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2016.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2016.intl.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.date.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.intl.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.object.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.sharedmemory.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.string.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2017.typedarrays.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.asyncgenerator.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.asynciterable.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.intl.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.promise.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2018.regexp.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.array.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.intl.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.object.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.string.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es2019.symbol.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/node_modules/@types/react/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /tsconfig.json
+        /dev/null/inferredProject1*
+/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {

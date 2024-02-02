@@ -75,7 +75,7 @@ Info seq  [hh:mm:ss:mss] Excluded '/a/b/commander.js' because it matched command
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/file3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test.csproj
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/app/test.csproj WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app/test.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/file3.d.ts Text-1 ""
@@ -94,6 +94,17 @@ PolledWatches::
 FsWatches::
 /a/b/file3.d.ts: *new*
   {}
+
+Projects::
+/a/app/test.csproj (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/file3.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -307,6 +318,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '/a/app/test.csproj' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -340,6 +356,11 @@ PendingInstalls callback:: count: 1
   "@types/commander@ts5.4",
   "@types/express@ts5.4"
 ] *new*
+
+Projects::
+/a/app/test.csproj (External) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 Before running PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
@@ -476,12 +497,17 @@ After running PendingInstalls callback:: count: 0
 Timeout callback:: count: 1
 1: /a/app/test.csproj *new*
 
+Projects::
+/a/app/test.csproj (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
 Before running Timeout callback:: count: 1
 1: /a/app/test.csproj
 
 Info seq  [hh:mm:ss:mss] Running: /a/app/test.csproj
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/app/test.csproj
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/app/test.csproj projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/app/test.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 	/a/b/file3.d.ts Text-1 ""
@@ -631,3 +657,34 @@ Info seq  [hh:mm:ss:mss] event:
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 After running Timeout callback:: count: 0
+
+Projects::
+/a/app/test.csproj (External) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/a/b/file3.d.ts
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
+/a/data/node_modules/@types/commander/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
+/a/data/node_modules/@types/express/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
+/a/data/node_modules/@types/jquery/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
+/a/data/node_modules/@types/lodash/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj
+/a/data/node_modules/@types/moment/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/app/test.csproj

@@ -80,7 +80,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 5
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@types/node/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
@@ -125,7 +125,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -180,6 +180,44 @@ watchedDirectoriesRecursive::
 : *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.js *new*
+    version: Text-1
+    containingProjects: 1
+        /jsconfig.json
+/jsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /jsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /jsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /jsconfig.json
+        /dev/null/inferredProject1*
+/node_modules/@types/node/index.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /jsconfig.json
+        /dev/null/inferredProject1*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -227,6 +265,37 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 :
   {}
+
+ScriptInfos::
+/a.js (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /jsconfig.json *default*
+/jsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /jsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /jsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /jsconfig.json
+        /dev/null/inferredProject1*
+/node_modules/@types/node/index.d.ts
+    version: Text-1
+    containingProjects: 2
+        /jsconfig.json
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {

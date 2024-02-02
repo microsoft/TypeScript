@@ -1675,7 +1675,7 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
  *
  * @internal
  */
-export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()) {
+export function createAccessorPropertySetRedirector(factory: NodeFactory, node: PropertyDeclaration, modifiers: readonly Modifier[] | undefined, name: PropertyName, receiver: Expression = factory.createThis()): SetAccessorDeclaration {
     return factory.createSetAccessorDeclaration(
         modifiers,
         name,

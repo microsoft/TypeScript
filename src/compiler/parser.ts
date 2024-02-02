@@ -85,7 +85,6 @@ import {
     Extension,
     ExternalModuleReference,
     fileExtensionIs,
-    fileExtensionIsOneOf,
     findIndex,
     firstOrUndefined,
     forEach,
@@ -99,6 +98,7 @@ import {
     FunctionOrConstructorTypeNode,
     FunctionTypeNode,
     GetAccessorDeclaration,
+    getAnyExtensionFromPath,
     getBaseFileName,
     getBinaryOperatorPrecedence,
     getFullWidth,
@@ -10433,7 +10433,22 @@ namespace IncrementalParser {
 
 /** @internal */
 export function isDeclarationFileName(fileName: string): boolean {
-    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions) || (fileExtensionIs(fileName, Extension.Ts) && getBaseFileName(fileName).includes(".d."));
+    return getDeclarationFileExtension(fileName) !== undefined;
+}
+
+/** @internal */
+export function getDeclarationFileExtension(fileName: string): string | undefined {
+    const standardExtension = getAnyExtensionFromPath(fileName, supportedDeclarationExtensions, /*ignoreCase*/ false);
+    if (standardExtension) {
+        return standardExtension;
+    }
+    if (fileExtensionIs(fileName, Extension.Ts)) {
+        const index = getBaseFileName(fileName).lastIndexOf(".d.");
+        if (index >= 0) {
+            return fileName.substring(index);
+        }
+    }
+    return undefined;
 }
 
 function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {

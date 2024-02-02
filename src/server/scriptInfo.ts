@@ -93,7 +93,7 @@ export class TextStorage {
     /**
      * True when reloading contents of file from the disk is pending
      */
-    private pendingReloadFromDisk = false;
+    pendingReloadFromDisk = false;
 
     constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: number) {
         this.version = initialVersion || 0;

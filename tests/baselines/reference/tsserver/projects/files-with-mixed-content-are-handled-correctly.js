@@ -24,7 +24,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: projectFileName
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: projectFileName WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: projectFileName Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: projectFileName projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'projectFileName' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/f1.html Text-1 ""
@@ -39,6 +39,17 @@ TI:: Creating typing installer
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+
+Projects::
+projectFileName (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/b/f1.html *new*
+    version: Text-1
+    containingProjects: 1
+        projectFileName
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -178,6 +189,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project 'projectFileName' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -193,6 +209,11 @@ PolledWatches::
 /node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+projectFileName (External) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Info seq  [hh:mm:ss:mss] Text of/a/b/f1.html: 
 Before request
 
@@ -207,7 +228,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: projectFileName
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: projectFileName Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: projectFileName projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'projectFileName' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/f1.html SVC-2-0 "var x = 1;"
@@ -225,6 +246,18 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Projects::
+projectFileName (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/f1.html (Open) *changed*
+    open: true *changed*
+    version: SVC-2-0 *changed*
+    containingProjects: 1
+        projectFileName *default*
 
 Before request
 
@@ -281,5 +314,18 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": false
     }
 After request
+
+Projects::
+projectFileName (External) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/f1.html *changed*
+    open: false *changed*
+    version: SVC-2-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 1
+        projectFileName
 
 Info seq  [hh:mm:ss:mss] Text of/a/b/f1.html: 

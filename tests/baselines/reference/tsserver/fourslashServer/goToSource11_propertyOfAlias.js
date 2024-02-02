@@ -35,7 +35,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -70,6 +70,29 @@ watchedFiles::
 /lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -83,7 +106,7 @@ Info seq  [hh:mm:ss:mss] Search path: /
 Info seq  [hh:mm:ss:mss] For info: /b.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -129,6 +152,43 @@ watchedFiles::
 /lib.decorators.legacy.d.ts:
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/a.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2* *new*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,
@@ -141,7 +201,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "findSourceDefinition"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/auxiliaryProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/auxiliaryProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/auxiliaryProject1*' (Auxiliary)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a.js SVC-1-0 "export const a = { a: 'a' };"
@@ -186,3 +246,46 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+Projects::
+/dev/null/auxiliaryProject1* (Auxiliary) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noDtsResolutionProject: /dev/null/auxiliaryProject1* *changed*
+
+ScriptInfos::
+/a.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject2*
+/a.js (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject1* *default*
+        /dev/null/auxiliaryProject1* *new*
+/b.ts (Open) *changed*
+    version: SVC-1-0
+    containingProjects: 2 *changed*
+        /dev/null/inferredProject2* *default*
+        /dev/null/auxiliaryProject1* *new*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /dev/null/inferredProject1*
+        /dev/null/inferredProject2*

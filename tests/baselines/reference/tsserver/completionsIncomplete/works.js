@@ -1325,7 +1325,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_98.ts 500 undef
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (251)
 	/index.ts SVC-1-0 ""
@@ -2719,6 +2719,1017 @@ FsWatchesRecursive::
 /: *new*
   {}
 
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_100.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_101.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_102.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_103.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_104.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_105.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_106.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_107.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_108.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_109.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_110.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_111.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_112.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_113.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_114.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_115.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_116.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_117.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_118.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_119.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_120.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_121.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_122.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_123.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_124.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_125.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_126.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_127.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_128.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_129.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_130.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_131.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_132.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_133.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_134.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_135.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_136.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_137.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_138.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_139.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_140.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_141.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_142.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_143.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_144.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_145.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_146.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_147.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_148.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_149.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_150.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_151.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_152.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_153.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_154.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_155.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_156.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_157.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_158.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_159.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_160.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_161.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_162.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_163.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_164.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_165.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_166.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_167.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_168.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_169.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_170.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_171.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_172.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_173.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_174.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_175.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_176.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_177.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_178.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_179.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_180.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_181.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_182.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_183.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_184.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_185.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_186.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_187.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_188.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_189.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_190.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_191.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_192.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_193.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_194.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_195.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_196.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_197.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_198.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_199.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_200.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_201.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_202.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_203.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_204.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_205.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_206.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_207.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_208.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_209.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_210.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_211.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_212.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_213.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_214.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_215.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_216.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_217.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_218.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_219.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_220.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_221.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_222.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_223.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_224.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_225.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_226.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_227.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_228.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_229.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_230.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_231.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_232.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_233.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_234.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_235.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_236.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_237.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_238.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_239.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_240.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_241.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_242.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_243.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_244.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_245.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_246.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_247.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_248.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_249.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -2754,6 +3765,1017 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_100.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_101.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_102.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_103.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_104.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_105.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_106.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_107.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_108.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_109.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_110.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_111.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_112.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_113.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_114.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_115.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_116.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_117.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_118.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_119.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_120.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_121.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_122.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_123.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_124.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_125.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_126.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_127.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_128.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_129.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_130.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_131.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_132.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_133.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_134.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_135.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_136.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_137.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_138.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_139.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_140.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_141.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_142.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_143.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_144.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_145.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_146.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_147.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_148.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_149.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_150.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_151.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_152.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_153.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_154.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_155.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_156.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_157.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_158.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_159.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_160.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_161.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_162.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_163.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_164.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_165.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_166.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_167.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_168.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_169.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_170.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_171.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_172.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_173.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_174.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_175.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_176.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_177.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_178.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_179.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_180.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_181.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_182.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_183.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_184.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_185.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_186.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_187.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_188.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_189.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_190.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_191.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_192.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_193.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_194.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_195.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_196.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_197.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_198.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_199.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_200.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_201.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_202.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_203.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_204.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_205.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_206.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_207.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_208.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_209.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_210.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_211.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_212.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_213.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_214.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_215.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_216.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_217.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_218.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_219.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_220.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_221.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_222.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_223.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_224.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_225.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_226.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_227.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_228.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_229.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_230.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_231.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_232.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_233.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_234.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_235.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_236.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_237.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_238.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_239.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_240.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_241.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_242.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_243.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_244.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_245.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_246.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_247.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_248.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_249.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -2768,7 +4790,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (251)
 	/index.ts SVC-1-1 "a"
@@ -7440,6 +9462,1017 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-2 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_100.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_101.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_102.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_103.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_104.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_105.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_106.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_107.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_108.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_109.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_110.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_111.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_112.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_113.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_114.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_115.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_116.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_117.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_118.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_119.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_120.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_121.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_122.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_123.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_124.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_125.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_126.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_127.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_128.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_129.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_130.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_131.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_132.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_133.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_134.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_135.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_136.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_137.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_138.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_139.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_140.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_141.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_142.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_143.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_144.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_145.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_146.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_147.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_148.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_149.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_150.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_151.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_152.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_153.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_154.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_155.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_156.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_157.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_158.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_159.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_160.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_161.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_162.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_163.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_164.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_165.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_166.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_167.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_168.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_169.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_170.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_171.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_172.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_173.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_174.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_175.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_176.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_177.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_178.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_179.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_180.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_181.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_182.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_183.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_184.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_185.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_186.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_187.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_188.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_189.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_190.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_191.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_192.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_193.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_194.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_195.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_196.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_197.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_198.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_199.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_200.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_201.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_202.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_203.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_204.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_205.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_206.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_207.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_208.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_209.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_210.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_211.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_212.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_213.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_214.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_215.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_216.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_217.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_218.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_219.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_220.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_221.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_222.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_223.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_224.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_225.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_226.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_227.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_228.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_229.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_230.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_231.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_232.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_233.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_234.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_235.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_236.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_237.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_238.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_239.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_240.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_241.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_242.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_243.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_244.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_245.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_246.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_247.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_248.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_249.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -7455,7 +10488,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (251)
 	/index.ts SVC-1-2 "aa"
@@ -12821,6 +15854,1017 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-3 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_100.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_101.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_102.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_103.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_104.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_105.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_106.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_107.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_108.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_109.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_110.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_111.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_112.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_113.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_114.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_115.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_116.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_117.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_118.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_119.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_120.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_121.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_122.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_123.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_124.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_125.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_126.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_127.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_128.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_129.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_130.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_131.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_132.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_133.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_134.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_135.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_136.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_137.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_138.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_139.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_140.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_141.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_142.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_143.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_144.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_145.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_146.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_147.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_148.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_149.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_150.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_151.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_152.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_153.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_154.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_155.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_156.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_157.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_158.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_159.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_160.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_161.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_162.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_163.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_164.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_165.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_166.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_167.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_168.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_169.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_170.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_171.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_172.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_173.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_174.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_175.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_176.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_177.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_178.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_179.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_180.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_181.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_182.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_183.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_184.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_185.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_186.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_187.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_188.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_189.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_190.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_191.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_192.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_193.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_194.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_195.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_196.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_197.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_198.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_199.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_200.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_201.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_202.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_203.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_204.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_205.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_206.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_207.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_208.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_209.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_210.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_211.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_212.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_213.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_214.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_215.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_216.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_217.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_218.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_219.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_220.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_221.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_222.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_223.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_224.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_225.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_226.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_227.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_228.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_229.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_230.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_231.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_232.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_233.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_234.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_235.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_236.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_237.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_238.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_239.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_240.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_241.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_242.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_243.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_244.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_245.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_246.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_247.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_248.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_249.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -12836,7 +16880,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 4 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 4 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (251)
 	/index.ts SVC-1-3 "aa_"
