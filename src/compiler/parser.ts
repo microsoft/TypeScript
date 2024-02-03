@@ -3884,7 +3884,7 @@ namespace Parser {
     }
 
     function parseJSDocType(): TypeNode {
-        scanner.setInJSDocType(true);
+        scanner.setSkipJsDocLeadingAsterisks(true);
         const pos = getNodePos();
         if (parseOptional(SyntaxKind.ModuleKeyword)) {
             // TODO(rbuckton): We never set the type for a JSDocNamepathType. What should we put here?
@@ -3902,13 +3902,13 @@ namespace Parser {
                 }
             }
 
-            scanner.setInJSDocType(false);
+            scanner.setSkipJsDocLeadingAsterisks(false);
             return finishNode(moduleTag, pos);
         }
 
         const hasDotDotDot = parseOptional(SyntaxKind.DotDotDotToken);
         let type = parseTypeOrTypePredicate();
-        scanner.setInJSDocType(false);
+        scanner.setSkipJsDocLeadingAsterisks(false);
         if (hasDotDotDot) {
             type = finishNode(factory.createJSDocVariadicType(type), pos);
         }
@@ -9471,7 +9471,7 @@ namespace Parser {
                     || token() === SyntaxKind.AsteriskToken // @import *
                     || token() === SyntaxKind.OpenBraceToken // @import {
                 ) {
-                    importClause = parseImportClause(identifier, afterImportTypeTagPos, /*isTypeOnly*/ true);
+                    importClause = parseJsDocImportClause(identifier, afterImportTypeTagPos);
                     parseExpected(SyntaxKind.FromKeyword);
                 }
 
@@ -9482,13 +9482,31 @@ namespace Parser {
                 return finishNode(factory.createJSDocImportTag(tagName, importClause, moduleSpecifier, comments), start);
             }
 
+            function parseJsDocImportClause(identifier: Identifier | undefined, pos: number) {
+                let namedBindings: NamespaceImport | NamedImports | undefined;
+                if (
+                    !identifier ||
+                    parseOptional(SyntaxKind.CommaToken)
+                ) {
+                    if (token() === SyntaxKind.AsteriskToken) {
+                        namedBindings = parseNamespaceImport();
+                    }
+                    else {
+                        scanner.setSkipJsDocLeadingAsterisks(true);
+                        namedBindings = parseNamedImportsOrExports(SyntaxKind.NamedImports);
+                        scanner.setSkipJsDocLeadingAsterisks(false);
+                    }
+                }
+                return finishNode(factory.createImportClause(/*isTypeOnly*/ true, identifier, namedBindings), pos);
+            }
+
             function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; } {
                 const usedBrace = parseOptional(SyntaxKind.OpenBraceToken);
                 const pos = getNodePos();
                 const expression = parsePropertyAccessEntityNameExpression();
-                scanner.setInJSDocType(true);
+                scanner.setSkipJsDocLeadingAsterisks(true);
                 const typeArguments = tryParseTypeArguments();
-                scanner.setInJSDocType(false);
+                scanner.setSkipJsDocLeadingAsterisks(false);
                 const node = factory.createExpressionWithTypeArguments(expression, typeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; };
                 const res = finishNode(node, pos);
                 if (usedBrace) {

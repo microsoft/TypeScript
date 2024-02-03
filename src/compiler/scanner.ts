@@ -103,7 +103,7 @@ export interface Scanner {
     setTextPos(textPos: number): void;
     resetTokenState(pos: number): void;
     /** @internal */
-    setInJSDocType(inType: boolean): void;
+    setSkipJsDocLeadingAsterisks(skip: boolean): void;
     // Invokes the provided callback then unconditionally restores the scanner to the state it
     // was in immediately prior to invoking the callback.  The result of invoking the callback
     // is returned from this function.
@@ -1005,7 +1005,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     var tokenFlags: TokenFlags;
 
     var commentDirectives: CommentDirective[] | undefined;
-    var inJSDocType = 0;
+    var skipJsDocLeadingAsterisks = 0;
 
     var scriptKind = ScriptKind.Unknown;
     var jsDocParsingMode = JSDocParsingMode.ParseAll;
@@ -1059,7 +1059,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         setOnError,
         resetTokenState,
         setTextPos: resetTokenState,
-        setInJSDocType,
+        setSkipJsDocLeadingAsterisks,
         tryScan,
         lookAhead,
         scanRange,
@@ -1919,7 +1919,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
                     }
                     pos++;
-                    if (inJSDocType && !asteriskSeen && (tokenFlags & TokenFlags.PrecedingLineBreak)) {
+                    if (skipJsDocLeadingAsterisks && !asteriskSeen && (tokenFlags & TokenFlags.PrecedingLineBreak)) {
                         // decoration at the start of a JSDoc comment line
                         asteriskSeen = true;
                         continue;
@@ -2831,8 +2831,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         tokenFlags = TokenFlags.None;
     }
 
-    function setInJSDocType(inType: boolean) {
-        inJSDocType += inType ? 1 : -1;
+    function setSkipJsDocLeadingAsterisks(skip: boolean) {
+        skipJsDocLeadingAsterisks += skip ? 1 : -1;
     }
 }
 
