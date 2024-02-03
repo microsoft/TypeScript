@@ -1043,40 +1043,6 @@ export * from "lib";
         }
     });
 
-    describe("helper functions", () => {
-        it("Detection-1", () => {
-            const originalImports = ["abc", "Abc", "abC"];
-            const test2 = ["abc", "Abc", "abC", "b"];
-            const test3 = ["abc", "Abc", "abC", "c"];
-            const test4 = ["abc", "Abc", "abC", "b", "d", "e"];
-            const test5 = ["abc", "b", "Abc", "abC", "d", "e"];
-
-            assert.equal(ts.getDiffNum(originalImports, originalImports), 0);
-            assert.equal(ts.getDiffNum(originalImports, test2), 1);
-            assert.equal(ts.getDiffNum(test2, test3), 1);
-            assert.equal(ts.getDiffNum(originalImports, test4), 3);
-            assert.equal(ts.getDiffNum(originalImports, test5), 3);
-            assert.equal(ts.getDiffNum(test4, test5), 2);
-        });
-
-        it("mergededuplicates", () => {
-            const test = [1, 2, 3, 4];
-            const test2 = [1, 2, 3, 4, 5];
-            const test3 = [6, 7, 8, 9, 10];
-            const test4 = [1, 3, 4, 5, 8, 9];
-            const test5 = [1, 2, 4, 6, 7, 8, 9];
-            function comparer(x: number, y: number) {
-                if (x > y) return ts.Comparison.GreaterThan;
-                if (x < y) return ts.Comparison.LessThan;
-                return ts.Comparison.EqualTo;
-            }
-            assert.sameOrderedMembers(ts.mergeAndDeduplicateSorted(test, test2, comparer) as any as number[], test2);
-            assert.sameOrderedMembers(ts.mergeAndDeduplicateSorted(test2, test2, comparer) as any as number[], test2);
-            assert.sameOrderedMembers(ts.mergeAndDeduplicateSorted(test2, test3, comparer) as any as number[], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-            assert.sameOrderedMembers(ts.mergeAndDeduplicateSorted(test4, test5, comparer) as any as number[], [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-        });
-    });
-
     function parseImports(...importStrings: string[]): readonly ts.ImportDeclaration[] {
         const sourceFile = ts.createSourceFile("a.ts", importStrings.join("\n"), ts.ScriptTarget.ES2015, /*setParentNodes*/ true, ts.ScriptKind.TS);
         const imports = ts.filter(sourceFile.statements, ts.isImportDeclaration);
