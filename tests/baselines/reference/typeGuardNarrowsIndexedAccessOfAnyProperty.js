@@ -26,6 +26,38 @@ namespace Problem4 {
   }
 }
 
+namespace Problem5 {
+  declare const obj: { [key: string]: string | undefined };
+  declare const key: string;
+  if (obj[key]) {
+    while(!!true) {
+      obj[key].toUpperCase() // should Ok
+    }
+  } 
+}
+
+namespace Problem6 {
+  declare const obj: { [key: string]: string | undefined };
+  declare const key: string;
+  while(!!true) {
+    if (obj[key]) {
+      obj[key].toUpperCase() // should Ok
+    } 
+  }
+}
+
+namespace Problem7 {
+  declare const obj: { [key: string]: string | undefined };
+  declare const key: string;
+  if (obj[key]) {
+    while(!!true) {
+      obj[key].toUpperCase() // should error
+      obj[key] = undefined
+    }
+  } 
+}
+
+
 //// [typeGuardNarrowsIndexedAccessOfAnyProperty.js]
 "use strict";
 var Problem1;
@@ -55,3 +87,28 @@ var Problem4;
         } // should Ok
     }
 })(Problem4 || (Problem4 = {}));
+var Problem5;
+(function (Problem5) {
+    if (obj[key]) {
+        while (!!true) {
+            obj[key].toUpperCase(); // should Ok
+        }
+    }
+})(Problem5 || (Problem5 = {}));
+var Problem6;
+(function (Problem6) {
+    while (!!true) {
+        if (obj[key]) {
+            obj[key].toUpperCase(); // should Ok
+        }
+    }
+})(Problem6 || (Problem6 = {}));
+var Problem7;
+(function (Problem7) {
+    if (obj[key]) {
+        while (!!true) {
+            obj[key].toUpperCase(); // should error
+            obj[key] = undefined;
+        }
+    }
+})(Problem7 || (Problem7 = {}));

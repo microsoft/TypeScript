@@ -92,3 +92,104 @@ namespace Problem4 {
 >toUpperCase : () => string
   }
 }
+
+namespace Problem5 {
+>Problem5 : typeof Problem5
+
+  declare const obj: { [key: string]: string | undefined };
+>obj : { [key: string]: string | undefined; }
+>key : string
+
+  declare const key: string;
+>key : string
+
+  if (obj[key]) {
+>obj[key] : string | undefined
+>obj : { [key: string]: string | undefined; }
+>key : string
+
+    while(!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+      obj[key].toUpperCase() // should Ok
+>obj[key].toUpperCase() : string
+>obj[key].toUpperCase : () => string
+>obj[key] : string
+>obj : { [key: string]: string | undefined; }
+>key : string
+>toUpperCase : () => string
+    }
+  } 
+}
+
+namespace Problem6 {
+>Problem6 : typeof Problem6
+
+  declare const obj: { [key: string]: string | undefined };
+>obj : { [key: string]: string | undefined; }
+>key : string
+
+  declare const key: string;
+>key : string
+
+  while(!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+    if (obj[key]) {
+>obj[key] : string | undefined
+>obj : { [key: string]: string | undefined; }
+>key : string
+
+      obj[key].toUpperCase() // should Ok
+>obj[key].toUpperCase() : string
+>obj[key].toUpperCase : () => string
+>obj[key] : string
+>obj : { [key: string]: string | undefined; }
+>key : string
+>toUpperCase : () => string
+    } 
+  }
+}
+
+namespace Problem7 {
+>Problem7 : typeof Problem7
+
+  declare const obj: { [key: string]: string | undefined };
+>obj : { [key: string]: string | undefined; }
+>key : string
+
+  declare const key: string;
+>key : string
+
+  if (obj[key]) {
+>obj[key] : string | undefined
+>obj : { [key: string]: string | undefined; }
+>key : string
+
+    while(!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+      obj[key].toUpperCase() // should error
+>obj[key].toUpperCase() : string
+>obj[key].toUpperCase : () => string
+>obj[key] : string | undefined
+>obj : { [key: string]: string | undefined; }
+>key : string
+>toUpperCase : () => string
+
+      obj[key] = undefined
+>obj[key] = undefined : undefined
+>obj[key] : string | undefined
+>obj : { [key: string]: string | undefined; }
+>key : string
+>undefined : undefined
+    }
+  } 
+}
+

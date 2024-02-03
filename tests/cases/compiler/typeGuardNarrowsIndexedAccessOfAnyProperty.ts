@@ -23,3 +23,34 @@ namespace Problem4 {
     if (obj[key]) { obj[key].toUpperCase() } // should Ok
   }
 }
+
+namespace Problem5 {
+  declare const obj: { [key: string]: string | undefined };
+  declare const key: string;
+  if (obj[key]) {
+    while(!!true) {
+      obj[key].toUpperCase() // should Ok
+    }
+  } 
+}
+
+namespace Problem6 {
+  declare const obj: { [key: string]: string | undefined };
+  declare const key: string;
+  while(!!true) {
+    if (obj[key]) {
+      obj[key].toUpperCase() // should Ok
+    } 
+  }
+}
+
+namespace Problem7 {
+  declare const obj: { [key: string]: string | undefined };
+  declare const key: string;
+  if (obj[key]) {
+    while(!!true) {
+      obj[key].toUpperCase() // should error
+      obj[key] = undefined
+    }
+  } 
+}

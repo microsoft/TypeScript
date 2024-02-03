@@ -85,3 +85,81 @@ namespace Problem4 {
 >toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
   }
 }
+
+namespace Problem5 {
+>Problem5 : Symbol(Problem5, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 23, 1))
+
+  declare const obj: { [key: string]: string | undefined };
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 26, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 26, 24))
+
+  declare const key: string;
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 27, 15))
+
+  if (obj[key]) {
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 26, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 27, 15))
+
+    while(!!true) {
+      obj[key].toUpperCase() // should Ok
+>obj[key].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 26, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 27, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+  } 
+}
+
+namespace Problem6 {
+>Problem6 : Symbol(Problem6, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 33, 1))
+
+  declare const obj: { [key: string]: string | undefined };
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 36, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 36, 24))
+
+  declare const key: string;
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 37, 15))
+
+  while(!!true) {
+    if (obj[key]) {
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 36, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 37, 15))
+
+      obj[key].toUpperCase() // should Ok
+>obj[key].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 36, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 37, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    } 
+  }
+}
+
+namespace Problem7 {
+>Problem7 : Symbol(Problem7, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 43, 1))
+
+  declare const obj: { [key: string]: string | undefined };
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 46, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 46, 24))
+
+  declare const key: string;
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 47, 15))
+
+  if (obj[key]) {
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 46, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 47, 15))
+
+    while(!!true) {
+      obj[key].toUpperCase() // should error
+>obj[key].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 46, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 47, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+
+      obj[key] = undefined
+>obj : Symbol(obj, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 46, 15))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfAnyProperty.ts, 47, 15))
+>undefined : Symbol(undefined)
+    }
+  } 
+}
+
