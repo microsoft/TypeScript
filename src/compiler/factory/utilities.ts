@@ -650,7 +650,7 @@ export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All):
         case SyntaxKind.NonNullExpression:
             return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
         case SyntaxKind.SatisfiesExpression:
-            return (kinds & OuterExpressionKinds.ConformanceExpressions) !== 0;
+            return (kinds & OuterExpressionKinds.SatisfiesExpressions) !== 0;
         case SyntaxKind.PartiallyEmittedExpression:
             return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
     }

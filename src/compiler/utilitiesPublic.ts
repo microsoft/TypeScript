@@ -37,7 +37,6 @@ import {
     CompilerOptions,
     concatenate,
     ConciseBody,
-    ConformanceExpression,
     ConstructorDeclaration,
     ConstructorTypeNode,
     contains,
@@ -2087,11 +2086,6 @@ export function isAssertionExpression(node: Node): node is AssertionExpression {
     const kind = node.kind;
     return kind === SyntaxKind.TypeAssertionExpression
         || kind === SyntaxKind.AsExpression;
-}
-
-export function isConformanceExpression(node: Node): node is ConformanceExpression {
-    const kind = node.kind;
-    return kind === SyntaxKind.SatisfiesExpression;
 }
 
 /** @internal */

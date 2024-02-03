@@ -3108,8 +3108,6 @@ export type AssertionExpression =
     | TypeAssertion
     | AsExpression;
 
-export type ConformanceExpression = SatisfiesExpression;
-
 export interface NonNullExpression extends LeftHandSideExpression {
     readonly kind: SyntaxKind.NonNullExpression;
     readonly expression: Expression;
@@ -8237,11 +8235,11 @@ export const enum OuterExpressionKinds {
     Parentheses = 1 << 0,
     TypeAssertions = 1 << 1,
     NonNullAssertions = 1 << 2,
-    ConformanceExpressions = 1 << 3,
+    SatisfiesExpressions = 1 << 3,
     PartiallyEmittedExpressions = 1 << 4,
 
     Assertions = TypeAssertions | NonNullAssertions,
-    All = Parentheses | Assertions | ConformanceExpressions | PartiallyEmittedExpressions,
+    All = Parentheses | Assertions | SatisfiesExpressions | PartiallyEmittedExpressions,
 
     ExcludeJSDocTypeAssertion = 1 << 5,
 }

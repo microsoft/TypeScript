@@ -84,7 +84,6 @@ import {
     isClassElement,
     isClassLike,
     isComputedPropertyName,
-    isConformanceExpression,
     isDecorator,
     isElementAccessExpression,
     isEntityName,
@@ -121,6 +120,7 @@ import {
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyName,
+    isSatisfiesExpression,
     isShorthandPropertyAssignment,
     isSimpleInlineableExpression,
     isSourceFile,
@@ -1697,9 +1697,9 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function visitParenthesizedExpression(node: ParenthesizedExpression): Expression {
-        const kinds = OuterExpressionKinds.Assertions | OuterExpressionKinds.ConformanceExpressions;
+        const kinds = OuterExpressionKinds.Assertions | OuterExpressionKinds.SatisfiesExpressions;
         const innerExpression = skipOuterExpressions(node.expression, ~kinds);
-        if (isAssertionExpression(innerExpression) || isConformanceExpression(innerExpression)) {
+        if (isAssertionExpression(innerExpression) || isSatisfiesExpression(innerExpression)) {
             // Make sure we consider all nested cast expressions, e.g.:
             // (<any><number><any>-A).x;
             const expression = visitNode(node.expression, visitor, isExpression);
