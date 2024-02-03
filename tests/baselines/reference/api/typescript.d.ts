@@ -5670,7 +5670,6 @@ declare namespace ts {
         readonly type: TypeNode;
     }
     type AssertionExpression = TypeAssertion | AsExpression;
-    type ConformanceExpression = SatisfiesExpression;
     interface NonNullExpression extends LeftHandSideExpression {
         readonly kind: SyntaxKind.NonNullExpression;
         readonly expression: Expression;
@@ -9209,7 +9208,6 @@ declare namespace ts {
      */
     function isExpression(node: Node): node is Expression;
     function isAssertionExpression(node: Node): node is AssertionExpression;
-    function isConformanceExpression(node: Node): node is ConformanceExpression;
     function isIterationStatement(node: Node, lookInLabeledStatements: false): node is IterationStatement;
     function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement | LabeledStatement;
     function isConciseBody(node: Node): node is ConciseBody;
