@@ -16049,8 +16049,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // mapped type, and the instantiation occurs in a context where resolving type arguments might cause a
             // circular reference, we create a deferred type alias instantiation. This acts as a proxy for the
             // actual instantiation, which is obtained using getResolvedType.
-            if (getObjectFlags(type) & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped) && node.kind === SyntaxKind.TypeReference &&
-                isDeferredTypeReferenceNode(node as TypeReferenceNode, length(node.typeArguments) !== typeParameters.length)) {
+            if (
+                getObjectFlags(type) & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped) && node.kind === SyntaxKind.TypeReference &&
+                isDeferredTypeReferenceNode(node as TypeReferenceNode, length(node.typeArguments) !== typeParameters.length)
+            ) {
                 return createDeferredTypeAliasInstantiation(symbol, node, newAliasSymbol, aliasTypeArguments);
             }
             return getTypeAliasInstantiation(symbol, typeArgumentsFromTypeReferenceNode(node), newAliasSymbol, aliasTypeArguments);
@@ -16723,8 +16725,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isDeferredTypeReferenceNode(node: TypeReferenceNode | ArrayTypeNode | TupleTypeNode, hasDefaultTypeArguments?: boolean) {
         return isResolvedByTypeAlias(node) && (
             node.kind === SyntaxKind.ArrayType ? mayResolveTypeAlias(node.elementType) :
-            node.kind === SyntaxKind.TupleType ? some(node.elements, mayResolveTypeAlias) :
-            hasDefaultTypeArguments || some(node.typeArguments, mayResolveTypeAlias)
+                node.kind === SyntaxKind.TupleType ? some(node.elements, mayResolveTypeAlias) :
+                hasDefaultTypeArguments || some(node.typeArguments, mayResolveTypeAlias)
         );
     }
 

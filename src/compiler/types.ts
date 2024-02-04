@@ -6547,9 +6547,9 @@ export interface MappedType extends AnonymousType {
 
 /** @internal */
 export interface TypeAliasInstantiationType extends AnonymousType {
-    typeAlias: Symbol;  // Type alias symbol
-    node: NodeWithTypeArguments;  // Type alias instantiation node
-    resolvedType?: ObjectType;  // Resolved type alias instantiation
+    typeAlias: Symbol; // Type alias symbol
+    node: NodeWithTypeArguments; // Type alias instantiation node
+    resolvedType?: ObjectType; // Resolved type alias instantiation
 }
 
 export interface EvolvingArrayType extends ObjectType {
