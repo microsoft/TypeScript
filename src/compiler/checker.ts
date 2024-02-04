@@ -45016,9 +45016,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // NOTE: assignability is checked in checkClassDeclaration
         const baseProperties = getPropertiesOfType(baseType);
-        let inheritedAbstractMemberNotImplementedError: Diagnostic | undefined;
-        basePropertyCheck:
-        for (const baseProperty of baseProperties) {
+
+        interface MemberInfo {
+            missedProperties: string[];
+            baseTypeName: string;
+            typeName: string;
+        }
+        const notImplementedInfo = new Map<ClassLikeDeclaration, MemberInfo>();
+
+        basePropertyCheck: for (const baseProperty of baseProperties) {
             const base = getTargetSymbol(baseProperty);
 
             if (base.flags & SymbolFlags.Prototype) {
@@ -45055,38 +45061,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             continue basePropertyCheck;
                         }
                     }
-
-                    if (!inheritedAbstractMemberNotImplementedError) {
-                        inheritedAbstractMemberNotImplementedError = error(
-                            derivedClassDecl,
-                            Diagnostics.Non_abstract_class_0_does_not_implement_all_abstract_members_of_1,
-                            typeToString(type),
-                            typeToString(baseType),
-                        );
-                    }
-                    if (derivedClassDecl.kind === SyntaxKind.ClassExpression) {
-                        addRelatedInfo(
-                            inheritedAbstractMemberNotImplementedError,
-                            createDiagnosticForNode(
-                                baseProperty.valueDeclaration ?? (baseProperty.declarations && first(baseProperty.declarations)) ?? derivedClassDecl,
-                                Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1,
-                                symbolToString(baseProperty),
-                                typeToString(baseType),
-                            ),
-                        );
-                    }
-                    else {
-                        addRelatedInfo(
-                            inheritedAbstractMemberNotImplementedError,
-                            createDiagnosticForNode(
-                                baseProperty.valueDeclaration ?? (baseProperty.declarations && first(baseProperty.declarations)) ?? derivedClassDecl,
-                                Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2,
-                                typeToString(type),
-                                symbolToString(baseProperty),
-                                typeToString(baseType),
-                            ),
-                        );
-                    }
+                    const baseTypeName = typeToString(baseType);
+                    const typeName = typeToString(type);
+                    const basePropertyName = symbolToString(baseProperty);
+                    const missedProperties = append(notImplementedInfo.get(derivedClassDecl)?.missedProperties, basePropertyName);
+                    notImplementedInfo.set(derivedClassDecl, { baseTypeName, typeName, missedProperties });
                 }
             }
             else {
@@ -45168,6 +45147,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+            }
+        }
+
+        for (const [errorNode, memberInfo] of notImplementedInfo) {
+            const missedProperties = map(memberInfo.missedProperties, prop => `'${prop}'`).join(", ");
+            if (isClassExpression(errorNode)) {
+                error(errorNode, length(memberInfo.missedProperties) > 1 ? Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_members_0_from_class_1 : Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1, missedProperties, memberInfo.baseTypeName);
+            }
+            else {
+                error(errorNode, length(memberInfo.missedProperties) > 1 ? Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_members_1_from_class_2 : Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2, memberInfo.typeName, missedProperties, memberInfo.baseTypeName);
             }
         }
     }

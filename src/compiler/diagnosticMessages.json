@@ -2496,7 +2496,7 @@
         "category": "Error",
         "code": 2514
     },
-    "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
+    "Non-abstract class '{0}' does not implement inherited abstract member {1} from class '{2}'.": {
         "category": "Error",
         "code": 2515
     },
@@ -2946,9 +2946,17 @@
         "category": "Error",
         "code": 2652
     },
-    "Non-abstract class expression does not implement inherited abstract member '{0}' from class '{1}'.": {
+    "Non-abstract class expression does not implement inherited abstract member {0} from class '{1}'.": {
         "category": "Error",
         "code": 2653
+    },
+    "Non-abstract class '{0}' does not implement inherited abstract members {1} from class '{2}'.": {
+        "category": "Error",
+        "code": 2654
+    },
+    "Non-abstract class expression does not implement inherited abstract members {0} from class '{1}'.": {
+        "category": "Error",
+        "code": 2655
     },
     "JSX expressions must have one parent element.": {
         "category": "Error",
@@ -7972,10 +7980,6 @@
     "Compiler option '{0}' cannot be given an empty string.": {
         "category": "Error",
         "code": 18051
-    },
-    "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
-        "category": "Error",
-        "code": 18052
     },
     "Its type '{0}' is not a valid JSX element type.": {
         "category": "Error",
