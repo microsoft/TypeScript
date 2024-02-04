@@ -103,7 +103,7 @@ interface BigInt {
 }
 
 interface BigIntConstructor {
-    (value: bigint | boolean | number | string): bigint;
+    (value: bigint | BigInt | boolean | Boolean | number | Number | string | String): bigint;
     readonly prototype: BigInt;
 
     /**
