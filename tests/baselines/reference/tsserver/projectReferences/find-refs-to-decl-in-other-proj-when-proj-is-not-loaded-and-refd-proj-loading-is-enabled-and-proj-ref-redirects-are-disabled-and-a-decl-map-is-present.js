@@ -126,7 +126,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/user/username/projects/myproject/b/lib/index.d.ts Text-1 "export declare class B {\n    M(): void;\n}\n//# sourceMappingURL=index.d.ts.map"
@@ -289,6 +289,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b: *new*
   {}
 
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/user/username/projects/myproject/a/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/a/tsconfig.json *default*
+/user/username/projects/myproject/b/lib/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/a/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -329,7 +344,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/user/username/projects/myproject/b/index.ts Text-1 "export class B {\n    M() {}\n}"
@@ -561,3 +576,32 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/b:
   {}
+
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/user/username/projects/myproject/a/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/a/tsconfig.json *default*
+/user/username/projects/myproject/b/helper.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/b/tsconfig.json
+/user/username/projects/myproject/b/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/b/tsconfig.json
+/user/username/projects/myproject/b/lib/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/a/tsconfig.json
+/user/username/projects/myproject/b/lib/index.d.ts.map *new*
+    version: Text-1
+    containingProjects: 0

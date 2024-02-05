@@ -176,7 +176,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -311,6 +311,33 @@ FsWatchesRecursive::
 /user/username/projects/myproject/refs: *new*
   {}
 
+Projects::
+/user/username/projects/myproject/c/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/a/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/b/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/c/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json *default*
+/user/username/projects/myproject/refs/a.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/nrefs :: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/nrefs :: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
@@ -348,6 +375,11 @@ Timeout callback:: count: 3
 1: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation *new*
 2: /user/username/projects/myproject/c/tsconfig.json *new*
 3: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
@@ -389,7 +421,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/nrefs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/refs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/refs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -504,6 +536,37 @@ FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/refs:
   {}
 
+Projects::
+/user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/a/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/b/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/c/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json *default*
+/user/username/projects/myproject/nrefs/a.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/refs/a.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/c/tsconfig.json *deleted*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/c/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/c/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -532,6 +595,11 @@ Before running Timeout callback:: count: 2
 Timeout callback:: count: 2
 4: /user/username/projects/myproject/c/tsconfig.json *new*
 5: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/c/tsconfig.json
@@ -571,7 +639,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/nrefs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/nrefs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -685,3 +753,34 @@ FsWatchesRecursive::
 FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/nrefs:
   {}
+
+Projects::
+/user/username/projects/myproject/c/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/a/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/b/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json
+/user/username/projects/myproject/c/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/c/tsconfig.json *default*
+/user/username/projects/myproject/nrefs/a.d.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /user/username/projects/myproject/c/tsconfig.json *deleted*
+/user/username/projects/myproject/refs/a.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /user/username/projects/myproject/c/tsconfig.json *new*

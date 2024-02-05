@@ -61,7 +61,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/myp
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/myproject/node_modules/@types 1 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/projects/node_modules/@types 1 undefined Project: /a/b/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/projects/myproject/bar/app.ts SVC-1-0 "class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }"
@@ -228,6 +228,21 @@ FsWatchesRecursive::
 /a/b/projects/myproject: *new*
   {}
 
+Projects::
+/a/b/projects/myproject/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/projects/myproject/bar/app.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/projects/myproject/tsconfig.json *default*
+/a/b/projects/myproject/foo/foo.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/projects/myproject/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -364,10 +379,25 @@ Timeout callback:: count: 2
 10: /a/b/projects/myproject/tsconfig.json *new*
 11: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/a/b/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/projects/myproject/bar/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/projects/myproject/tsconfig.json *default*
+/a/b/projects/myproject/foo/foo.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/b/projects/myproject/tsconfig.json *deleted*
+
 Info seq  [hh:mm:ss:mss] Running: /a/b/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/myproject/foo2/foo.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/projects/myproject/bar/app.ts SVC-1-0 "class Bar implements foo.Foo { getFoo() { return ''; } get2() { return 1; } }"
@@ -428,6 +458,21 @@ FsWatches::
 FsWatchesRecursive::
 /a/b/projects/myproject:
   {}
+
+Projects::
+/a/b/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/a/b/projects/myproject/bar/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/projects/myproject/tsconfig.json *default*
+/a/b/projects/myproject/foo2/foo.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/projects/myproject/tsconfig.json
 
 Before running Timeout callback:: count: 0
 

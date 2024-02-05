@@ -88,7 +88,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /common/tsconfig.j
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /common/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /common/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/common/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -128,7 +128,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -174,6 +174,39 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /common/src: *new*
   {}
+
+Projects::
+/common/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/common/src/MyModule.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /common/tsconfig.json
+/common/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /common/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /common/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /common/tsconfig.json
+        /dev/null/inferredProject1*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -228,7 +261,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /web/src/MyApp.ts 500 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /web/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /common/dist/src 1 undefined Project: /web/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /common/dist/src 1 undefined Project: /web/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /web/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /web/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/web/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -314,6 +347,54 @@ watchedDirectoriesRecursive::
   {}
 /web/src: *new*
   {}
+
+Projects::
+/common/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/web/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/common/src/MyModule.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /common/tsconfig.json
+        /web/tsconfig.json *new*
+/common/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /common/tsconfig.json
+        /dev/null/inferredProject1*
+        /web/tsconfig.json *new*
+/lib.decorators.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /common/tsconfig.json
+        /dev/null/inferredProject1*
+        /web/tsconfig.json *new*
+/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /common/tsconfig.json
+        /dev/null/inferredProject1*
+        /web/tsconfig.json *new*
+/web/src/Helper.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /web/tsconfig.json *default*
+/web/src/MyApp.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /web/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {

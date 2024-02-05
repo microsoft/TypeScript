@@ -70,7 +70,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somer
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/src/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules/@types 1 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/workspaces/somerepo/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -180,6 +180,25 @@ FsWatches::
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json: *new*
   {"inode":4}
+
+Projects::
+/workspaces/somerepo/src/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json
+/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json
+/workspaces/somerepo/src/main.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json *default*
 
 Before request
 
@@ -323,6 +342,25 @@ Timeout callback:: count: 4
 15: timerToUpdateChildWatches *new*
 16: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
 
+Projects::
+/workspaces/somerepo/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json
+/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /workspaces/somerepo/src/tsconfig.json *deleted*
+/workspaces/somerepo/src/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "geterr",
@@ -357,7 +395,7 @@ Before running Timeout callback:: count: 5
 
 Invoking Timeout callback:: timeoutId:: 17:: checkOne
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/workspaces/somerepo/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -390,6 +428,11 @@ Timeout callback:: count: 3
 
 Immedidate callback:: count: 1
 3: semanticCheck *new*
+
+Projects::
+/workspaces/somerepo/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -511,6 +554,11 @@ Timeout callback:: count: 3
 25: *ensureProjectForOpenFiles* *new*
 26: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
 
+Projects::
+/workspaces/somerepo/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+
 Before request
 //// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 16
 export function randomSeed(): string;
@@ -583,7 +631,7 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earli
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /workspaces/somerepo/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /workspaces/somerepo/src/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/workspaces/somerepo/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -621,6 +669,25 @@ Timeout callback:: count: 3
 
 Immedidate callback:: count: 1
 5: semanticCheck *new*
+
+Projects::
+/workspaces/somerepo/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json
+/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts *new*
+    version: Text-2
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json
+/workspaces/somerepo/src/main.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json *default*
 
 Before running Immedidate callback:: count: 1
 5: semanticCheck
@@ -710,3 +777,8 @@ Timeout callback:: count: 3
 36: /workspaces/somerepo/src/tsconfig.json *new*
 37: *ensureProjectForOpenFiles* *new*
 38: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation *new*
+
+Projects::
+/workspaces/somerepo/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 3

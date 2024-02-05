@@ -4723,10 +4723,6 @@
         "category": "Message",
         "code": 6080
     },
-    "File '{0}' has an unsupported extension, so skipping it.": {
-        "category": "Message",
-        "code": 6081
-    },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
         "code": 6082

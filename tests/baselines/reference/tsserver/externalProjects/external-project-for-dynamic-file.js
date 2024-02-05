@@ -19,7 +19,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: ^ScriptDocument1 file1.ts
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: ^ScriptDocument1 file1.ts WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: ^ScriptDocument1 file1.ts Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: ^ScriptDocument1 file1.ts projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '^ScriptDocument1 file1.ts' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	^ScriptDocument1 file1.ts Text-1 ""
@@ -66,6 +66,11 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] Project '^ScriptDocument1 file1.ts' (External)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": true,
@@ -76,6 +81,17 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+
+Projects::
+^ScriptDocument1 file1.ts (External) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+^ScriptDocument1 file1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        ^ScriptDocument1 file1.ts
 
 /^scriptdocument1 file1.ts isDynamic:: true
 Before request
@@ -95,7 +111,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: ^ScriptDocument1 file1.ts
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: ^ScriptDocument1 file1.ts Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: ^ScriptDocument1 file1.ts projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '^ScriptDocument1 file1.ts' (External)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	^ScriptDocument1 file1.ts SVC-2-0 "let x =1;"
@@ -114,3 +130,15 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+^ScriptDocument1 file1.ts (External) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+
+ScriptInfos::
+^ScriptDocument1 file1.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-2-0 *changed*
+    containingProjects: 1
+        ^ScriptDocument1 file1.ts *default*

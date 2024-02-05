@@ -50,7 +50,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/c/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/c/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/app.ts Text-1 "let x = 1;"
@@ -197,6 +197,21 @@ FsWatchesRecursive::
 /a/c: *new*
   {}
 
+Projects::
+/a/c/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/c/tsconfig.json
+/a/c/f.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json *default*
+
 Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
@@ -236,7 +251,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined 
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/b/app.ts Text-1 "let x = 1;"
@@ -392,6 +407,26 @@ FsWatchesRecursive::
 /a/c:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/a/c/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /a/c/tsconfig.json
+        /a/b/tsconfig.json *default* *new*
+/a/c/f.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json *default*
+
 Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
@@ -441,6 +476,18 @@ FsWatchesRecursive::
 /a/c:
   {}
 
+ScriptInfos::
+/a/b/app.ts (Open)
+    version: Text-1
+    containingProjects: 2
+        /a/c/tsconfig.json
+        /a/b/tsconfig.json *default*
+/a/c/f.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json
+
 Configured project: /a/c/tsconfig.json hasOpenRef:: false isClosed: false
 Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
@@ -489,6 +536,18 @@ FsWatchesRecursive::
   {}
 /a/c:
   {}
+
+ScriptInfos::
+/a/b/app.ts *changed*
+    open: false *changed*
+    version: Text-1
+    containingProjects: 2
+        /a/c/tsconfig.json
+        /a/b/tsconfig.json
+/a/c/f.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json
 
 Configured project: /a/c/tsconfig.json hasOpenRef:: false isClosed: false
 Configured project: /a/b/tsconfig.json hasOpenRef:: false isClosed: false
@@ -556,5 +615,25 @@ FsWatchesRecursive::
 FsWatchesRecursive *deleted*::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/a/c/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/app.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /a/c/tsconfig.json
+        /a/b/tsconfig.json *deleted*
+/a/c/f.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/c/tsconfig.json *default*
 
 Configured project: /a/c/tsconfig.json hasOpenRef:: true isClosed: false
