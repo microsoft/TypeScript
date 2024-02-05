@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/referenceSatisfiesExpression.ts] ////
+
+=== referenceSatisfiesExpression.ts ===
+let a = 10;
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+// called in checkPrefixUnaryExpression
+--(a satisfies number);
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+++(a satisfies number);
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+// called in checkPostfixUnaryExpression
+(a satisfies number)++;
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+(a satisfies number)--;
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 0, 3))
+
+// called in checkAssignmentOperatorWorker
+let b: number;
+>b : Symbol(b, Decl(referenceSatisfiesExpression.ts, 11, 3))
+
+(b satisfies number) = 10;
+>b : Symbol(b, Decl(referenceSatisfiesExpression.ts, 11, 3))
+
+// called in checkReferenceAssignment called in checkDestructuringAssignment
+let c: number;
+>c : Symbol(c, Decl(referenceSatisfiesExpression.ts, 15, 3))
+
+[(c satisfies number)] = [10];
+>c : Symbol(c, Decl(referenceSatisfiesExpression.ts, 15, 3))
+
+let d: number, e = 1;
+>d : Symbol(d, Decl(referenceSatisfiesExpression.ts, 18, 3))
+>e : Symbol(e, Decl(referenceSatisfiesExpression.ts, 18, 14))
+
+({ d: (e satisfies number) } = { d: 10 });
+>d : Symbol(d, Decl(referenceSatisfiesExpression.ts, 19, 2))
+>e : Symbol(e, Decl(referenceSatisfiesExpression.ts, 18, 14))
+>d : Symbol(d, Decl(referenceSatisfiesExpression.ts, 19, 32))
+
+// called in checkForInStatement
+let x: string = "hello"
+>x : Symbol(x, Decl(referenceSatisfiesExpression.ts, 22, 3))
+
+for ((x satisfies string) in { a: 10 }) {
+>x : Symbol(x, Decl(referenceSatisfiesExpression.ts, 22, 3))
+>a : Symbol(a, Decl(referenceSatisfiesExpression.ts, 23, 30))
+
+  console.log(x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(referenceSatisfiesExpression.ts, 22, 3))
+}
+
+// called in checkForOfStatement
+let g = 1
+>g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 28, 3))
+
+for ((g satisfies number) of [10]) {
+>g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 28, 3))
+
+  console.log(g)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>g : Symbol(g, Decl(referenceSatisfiesExpression.ts, 28, 3))
+}
+
