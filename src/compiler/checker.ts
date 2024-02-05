@@ -48312,28 +48312,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isTypeOnly = !!rootValueSymbol?.declarations?.every(isTypeOnlyImportOrExportDeclaration);
         }
         const valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, location);
-        const resolvedSymbol = valueSymbol && valueSymbol.flags & SymbolFlags.Alias ? resolveAlias(valueSymbol) : valueSymbol;
+        const resolvedValueSymbol = valueSymbol && valueSymbol.flags & SymbolFlags.Alias ? resolveAlias(valueSymbol) : valueSymbol;
         isTypeOnly ||= !!(valueSymbol && getTypeOnlyAliasDeclaration(valueSymbol, SymbolFlags.Value));
 
         // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
-        const typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
-        if (resolvedSymbol && resolvedSymbol === typeSymbol) {
+        const typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, location);
+        const resolvedTypeSymbol = typeSymbol && typeSymbol.flags & SymbolFlags.Alias ? resolveAlias(typeSymbol) : typeSymbol;
+
+        // In case the value symbol can't be resolved (e.g. because of missing declarations), use type symbol for reachability check.
+        if (!valueSymbol) {
+            isTypeOnly ||= !!(typeSymbol && getTypeOnlyAliasDeclaration(typeSymbol, SymbolFlags.Type));
+        }
+
+        if (resolvedValueSymbol && resolvedValueSymbol === resolvedTypeSymbol) {
             const globalPromiseSymbol = getGlobalPromiseConstructorSymbol(/*reportErrors*/ false);
-            if (globalPromiseSymbol && resolvedSymbol === globalPromiseSymbol) {
+            if (globalPromiseSymbol && resolvedValueSymbol === globalPromiseSymbol) {
                 return TypeReferenceSerializationKind.Promise;
             }
 
-            const constructorType = getTypeOfSymbol(resolvedSymbol);
+            const constructorType = getTypeOfSymbol(resolvedValueSymbol);
             if (constructorType && isConstructorType(constructorType)) {
                 return isTypeOnly ? TypeReferenceSerializationKind.TypeWithCallSignature : TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue;
             }
         }
 
         // We might not be able to resolve type symbol so use unknown type in that case (eg error case)
-        if (!typeSymbol) {
+        if (!resolvedTypeSymbol) {
             return isTypeOnly ? TypeReferenceSerializationKind.ObjectType : TypeReferenceSerializationKind.Unknown;
         }
-        const type = getDeclaredTypeOfSymbol(typeSymbol);
+        const type = getDeclaredTypeOfSymbol(resolvedTypeSymbol);
         if (isErrorType(type)) {
             return isTypeOnly ? TypeReferenceSerializationKind.ObjectType : TypeReferenceSerializationKind.Unknown;
         }
