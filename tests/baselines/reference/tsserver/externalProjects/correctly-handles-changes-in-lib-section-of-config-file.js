@@ -66,7 +66,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined 
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /compiler/lib.es5.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /src/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/compiler/lib.es5.d.ts Text-1 "declare const eval: any"
@@ -212,6 +212,21 @@ FsWatchesRecursive::
 /src: *new*
   {}
 
+Projects::
+/src/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/compiler/lib.es5.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /src/tsconfig.json
+/src/app.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /src/tsconfig.json *default*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /src/tsconfig.json 1:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -237,6 +252,11 @@ Before running Timeout callback:: count: 2
 Timeout callback:: count: 2
 1: /src/tsconfig.json *new*
 2: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
 
 Info seq  [hh:mm:ss:mss] Running: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /src/tsconfig.json
@@ -268,7 +288,7 @@ Info seq  [hh:mm:ss:mss] Config: /src/tsconfig.json : {
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /compiler/lib.es2015.promise.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /src/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /src/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/compiler/lib.es5.d.ts Text-1 "declare const eval: any"
@@ -387,3 +407,22 @@ FsWatches::
 FsWatchesRecursive::
 /src:
   {}
+
+Projects::
+/src/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/compiler/lib.es2015.promise.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /src/tsconfig.json
+/compiler/lib.es5.d.ts
+    version: Text-1
+    containingProjects: 1
+        /src/tsconfig.json
+/src/app.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /src/tsconfig.json *default*

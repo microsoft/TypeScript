@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - uses: microsoft/RichCodeNavIndexer@e444937494b8941cc2bcccf2bcf2cd595d402f6b # v0.1
+      - uses: microsoft/RichCodeNavIndexer@c8b97bc908f7bc0151fe4872aa029e99b2a0b96b # v0.1
         with:
           languages: typescript
           repo-token: ${{ secrets.GITHUB_TOKEN }}

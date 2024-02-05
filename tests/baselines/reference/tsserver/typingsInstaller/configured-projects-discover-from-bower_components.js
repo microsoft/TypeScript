@@ -56,7 +56,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo:  1 undefined Conf
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /jsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/app.js SVC-1-0 ""
@@ -79,6 +79,17 @@ FsWatches::
 FsWatchesRecursive::
 /: *new*
   {}
+
+Projects::
+/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /jsconfig.json *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/tmp', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/tmp'
@@ -148,6 +159,11 @@ FsWatchesRecursive::
 Timeout callback:: count: 2
 5: /jsconfig.json *new*
 6: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 0
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -280,7 +296,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -375,6 +391,11 @@ PendingInstalls callback:: count: 1
   "@types/jquery@ts5.4"
 ] *new*
 
+Projects::
+/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1 *changed*
+
 Before running PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
   "@types/jquery@tsFakeMajor.Minor"
@@ -404,6 +425,11 @@ Timeout callback:: count: 2
 6: *ensureProjectForOpenFiles* *deleted*
 11: /jsconfig.json *new*
 12: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/jsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/tmp/node_modules/@types/jquery/index.d.ts"]
@@ -498,7 +524,7 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/app.js SVC-1-0 ""
@@ -638,3 +664,18 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/jsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/app.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /jsconfig.json *default*
+/tmp/node_modules/@types/jquery/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /jsconfig.json

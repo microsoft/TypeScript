@@ -91,7 +91,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /apps/app1/tsconfi
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -143,7 +143,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -199,6 +199,55 @@ watchedDirectoriesRecursive::
   {}
 /shared: *new*
   {}
+
+Projects::
+/apps/app1/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/apps/app1/src/app.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/src/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/src/utils.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -295,6 +344,48 @@ watchedDirectoriesRecursive::
   {}
 /shared:
   {}
+
+ScriptInfos::
+/apps/app1/src/app.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/src/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/utils.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -469,6 +560,56 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+Projects::
+/apps/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/apps/app1/src/app.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/src/index.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/utils.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 10,
@@ -483,6 +624,48 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+ScriptInfos::
+/apps/app1/src/app.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/src/index.ts (Open) *changed*
+    version: SVC-2-2 *changed*
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/utils.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 11,
@@ -496,7 +679,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /apps/app1/src/app.ts 
 Info seq  [hh:mm:ss:mss] Search path: /apps/app1/src
 Info seq  [hh:mm:ss:mss] For info: /apps/app1/src/app.ts :: Config file name: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /apps/app1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -550,6 +733,48 @@ watchedDirectoriesRecursive::
   {}
 /shared:
   {}
+
+ScriptInfos::
+/apps/app1/src/app.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/index.ts (Open)
+    version: SVC-2-2
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/utils.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -724,6 +949,56 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+Projects::
+/apps/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/apps/app1/src/app.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/index.ts (Open)
+    version: SVC-2-2
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/utils.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 19,
@@ -738,6 +1013,48 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+ScriptInfos::
+/apps/app1/src/app.ts (Open) *changed*
+    version: SVC-2-2 *changed*
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/index.ts (Open)
+    version: SVC-2-2
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/utils.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 20,
@@ -751,7 +1068,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /shared/data.ts 500 un
 Info seq  [hh:mm:ss:mss] Search path: /shared
 Info seq  [hh:mm:ss:mss] For info: /shared/data.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /apps/app1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
 	/lib.d.ts Text-1 lib.d.ts-Text
@@ -805,6 +1122,48 @@ watchedDirectoriesRecursive::
   {}
 /shared:
   {}
+
+ScriptInfos::
+/apps/app1/src/app.ts (Open)
+    version: SVC-2-2
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/index.ts (Open)
+    version: SVC-2-2
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/utils.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -979,6 +1338,56 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+Projects::
+/apps/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/apps/app1/src/app.ts (Open)
+    version: SVC-2-2
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/index.ts (Open)
+    version: SVC-2-2
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/utils.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 28,
@@ -993,3 +1402,44 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "change"
     }
+After Request
+ScriptInfos::
+/apps/app1/src/app.ts (Open)
+    version: SVC-2-2
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/index.ts (Open)
+    version: SVC-2-2
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
+/apps/app1/src/utils.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/apps/app1/tsconfig.json (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 2
+        /apps/app1/tsconfig.json
+        /dev/null/inferredProject1*
+/shared/constants.ts
+    version: Text-1
+    containingProjects: 1
+        /apps/app1/tsconfig.json
+/shared/data.ts (Open) *changed*
+    version: SVC-2-2 *changed*
+    containingProjects: 1
+        /apps/app1/tsconfig.json *default*
