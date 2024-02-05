@@ -1,64 +1,66 @@
 //// [tests/cases/compiler/referenceSatisfiesExpression.ts] ////
 
 //// [referenceSatisfiesExpression.ts]
-let a = 10;
+// checkReferenceExpression -> skip OuterExpressionKinds.SatisfiesExpressions
 
-// called in checkPrefixUnaryExpression
+let a = 10;
+// checkPrefixUnaryExpression
 --(a satisfies number);
 ++(a satisfies number);
 
-// called in checkPostfixUnaryExpression
+// checkPostfixUnaryExpression
 (a satisfies number)++;
 (a satisfies number)--;
 
-// called in checkAssignmentOperatorWorker
+// checkAssignmentOperatorWorker
 let b: number;
 (b satisfies number) = 10;
 
-// called in checkReferenceAssignment called in checkDestructuringAssignment
+// checkReferenceAssignment
 let c: number;
 [(c satisfies number)] = [10];
 
 let d: number, e = 1;
 ({ d: (e satisfies number) } = { d: 10 });
 
-// called in checkForInStatement
-let x: string = "hello"
-for ((x satisfies string) in { a: 10 }) {
-  console.log(x)
-}
-
-// called in checkForOfStatement
+// checkForOfStatement
 let g = 1
 for ((g satisfies number) of [10]) {
   console.log(g)
 }
 
+// checkForInStatement
+let x: string = "hello"
+for ((x satisfies string) in { a: 10 }) {
+  console.log(x)
+}
+
 
 //// [referenceSatisfiesExpression.js]
+// checkReferenceExpression -> skip OuterExpressionKinds.SatisfiesExpressions
 var a = 10;
-// called in checkPrefixUnaryExpression
+// checkPrefixUnaryExpression
 --a;
 ++a;
-// called in checkPostfixUnaryExpression
+// checkPostfixUnaryExpression
 a++;
 a--;
-// called in checkAssignmentOperatorWorker
+// checkAssignmentOperatorWorker
 var b;
 b = 10;
-// called in checkReferenceAssignment called in checkDestructuringAssignment
+// checkReferenceAssignment
 var c;
 c = [10][0];
 var d, e = 1;
 (e = { d: 10 }.d);
-// called in checkForInStatement
-var x = "hello";
-for (x in { a: 10 }) {
-    console.log(x);
-}
-// called in checkForOfStatement
+// checkForOfStatement
 var g = 1;
 for (var _i = 0, _a = [10]; _i < _a.length; _i++) {
     g = _a[_i];
     console.log(g);
+}
+// checkForInStatement
+var x = "hello";
+for (x in { a: 10 }) {
+    console.log(x);
 }

@@ -1,11 +1,13 @@
 //// [tests/cases/compiler/referenceSatisfiesExpression.ts] ////
 
 === referenceSatisfiesExpression.ts ===
+// checkReferenceExpression -> skip OuterExpressionKinds.SatisfiesExpressions
+
 let a = 10;
 >a : number
 >10 : 10
 
-// called in checkPrefixUnaryExpression
+// checkPrefixUnaryExpression
 --(a satisfies number);
 >--(a satisfies number) : number
 >(a satisfies number) : number
@@ -18,7 +20,7 @@ let a = 10;
 >a satisfies number : number
 >a : number
 
-// called in checkPostfixUnaryExpression
+// checkPostfixUnaryExpression
 (a satisfies number)++;
 >(a satisfies number)++ : number
 >(a satisfies number) : number
@@ -31,7 +33,7 @@ let a = 10;
 >a satisfies number : number
 >a : number
 
-// called in checkAssignmentOperatorWorker
+// checkAssignmentOperatorWorker
 let b: number;
 >b : number
 
@@ -42,7 +44,7 @@ let b: number;
 >b : number
 >10 : 10
 
-// called in checkReferenceAssignment called in checkDestructuringAssignment
+// checkReferenceAssignment
 let c: number;
 >c : number
 
@@ -72,7 +74,27 @@ let d: number, e = 1;
 >d : number
 >10 : 10
 
-// called in checkForInStatement
+// checkForOfStatement
+let g = 1
+>g : number
+>1 : 1
+
+for ((g satisfies number) of [10]) {
+>(g satisfies number) : number
+>g satisfies number : number
+>g : number
+>[10] : number[]
+>10 : 10
+
+  console.log(g)
+>console.log(g) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>g : number
+}
+
+// checkForInStatement
 let x: string = "hello"
 >x : string
 >"hello" : "hello"
@@ -91,25 +113,5 @@ for ((x satisfies string) in { a: 10 }) {
 >console : Console
 >log : (...data: any[]) => void
 >x : string
-}
-
-// called in checkForOfStatement
-let g = 1
->g : number
->1 : 1
-
-for ((g satisfies number) of [10]) {
->(g satisfies number) : number
->g satisfies number : number
->g : number
->[10] : number[]
->10 : 10
-
-  console.log(g)
->console.log(g) : void
->console.log : (...data: any[]) => void
->console : Console
->log : (...data: any[]) => void
->g : number
 }
 
