@@ -1,13 +1,10 @@
 //// [tests/cases/compiler/referenceSatisfiesExpression.ts] ////
 
 === referenceSatisfiesExpression.ts ===
-// checkReferenceExpression -> skip OuterExpressionKinds.SatisfiesExpressions
-
 let a = 10;
 >a : number
 >10 : 10
 
-// checkPrefixUnaryExpression
 --(a satisfies number);
 >--(a satisfies number) : number
 >(a satisfies number) : number
@@ -20,7 +17,6 @@ let a = 10;
 >a satisfies number : number
 >a : number
 
-// checkPostfixUnaryExpression
 (a satisfies number)++;
 >(a satisfies number)++ : number
 >(a satisfies number) : number
@@ -33,7 +29,6 @@ let a = 10;
 >a satisfies number : number
 >a : number
 
-// checkAssignmentOperatorWorker
 let b: number;
 >b : number
 
@@ -44,7 +39,6 @@ let b: number;
 >b : number
 >10 : 10
 
-// checkReferenceAssignment
 let c: number;
 >c : number
 
@@ -74,7 +68,6 @@ let d: number, e = 1;
 >d : number
 >10 : 10
 
-// checkForOfStatement
 let g = 1
 >g : number
 >1 : 1
@@ -94,7 +87,6 @@ for ((g satisfies number) of [10]) {
 >g : number
 }
 
-// checkForInStatement
 let x: string = "hello"
 >x : string
 >"hello" : "hello"
