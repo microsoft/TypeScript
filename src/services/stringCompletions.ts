@@ -55,7 +55,6 @@ import {
     getEffectiveTypeRoots,
     getEmitModuleResolutionKind,
     getLeadingCommentRanges,
-    getModuleSpecifierEndingPreference,
     getOwnKeys,
     getPackageJsonTypesVersionsPaths,
     getPathComponents,

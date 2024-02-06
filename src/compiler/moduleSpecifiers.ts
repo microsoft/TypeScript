@@ -127,8 +127,8 @@ const enum RelativePreference {
     ExternalNonRelative,
 }
 
-// Processed preferences
-interface Preferences {
+/** @internal */
+export interface ModuleSpecifierPreferences {
     readonly relativePreference: RelativePreference;
     /**
      * @param syntaxImpliedNodeFormat Used when the import syntax implies ESM or CJS irrespective of the mode of the file.
@@ -142,8 +142,8 @@ export function getModuleSpecifierPreferences(
     compilerOptions: CompilerOptions,
     importingSourceFile: SourceFile,
     oldImportSpecifier?: string,
-): Preferences {
-    const preferredEnding = getPreferredEnding();
+): ModuleSpecifierPreferences {
+    const filePreferredEnding = getPreferredEnding();
     return {
         relativePreference: oldImportSpecifier !== undefined ? (isExternalModuleNameRelative(oldImportSpecifier) ?
             RelativePreference.Relative :
@@ -153,6 +153,7 @@ export function getModuleSpecifierPreferences(
             importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
             RelativePreference.Shortest,
         getAllowedEndingsInPreferredOrder: syntaxImpliedNodeFormat => {
+            const preferredEnding = syntaxImpliedNodeFormat !== importingSourceFile.impliedNodeFormat ? getPreferredEnding(syntaxImpliedNodeFormat) : filePreferredEnding;
             if ((syntaxImpliedNodeFormat ?? importingSourceFile.impliedNodeFormat) === ModuleKind.ESNext) {
                 if (shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName)) {
                     return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension];
@@ -186,14 +187,14 @@ export function getModuleSpecifierPreferences(
         },
     };
 
-    function getPreferredEnding(): ModuleSpecifierEnding {
+    function getPreferredEnding(resolutionMode?: ResolutionMode): ModuleSpecifierEnding {
         if (oldImportSpecifier !== undefined) {
             if (hasJSFileExtension(oldImportSpecifier)) return ModuleSpecifierEnding.JsExtension;
             if (endsWith(oldImportSpecifier, "/index")) return ModuleSpecifierEnding.Index;
         }
         return getModuleSpecifierEndingPreference(
             importModuleSpecifierEnding,
-            importingSourceFile.impliedNodeFormat,
+            resolutionMode ?? importingSourceFile.impliedNodeFormat,
             compilerOptions,
             importingSourceFile,
         );
@@ -257,7 +258,7 @@ function getModuleSpecifierWorker(
     importingSourceFileName: string,
     toFileName: string,
     host: ModuleSpecifierResolutionHost,
-    preferences: Preferences,
+    preferences: ModuleSpecifierPreferences,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
 ): string {
@@ -489,9 +490,9 @@ function getInfo(importingSourceFileName: string, host: ModuleSpecifierResolutio
     };
 }
 
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: Preferences): string;
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: Preferences, pathsOnly?: boolean): string | undefined;
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { getAllowedEndingsInPreferredOrder: getAllowedEndingsInPrefererredOrder, relativePreference }: Preferences, pathsOnly?: boolean): string | undefined {
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: ModuleSpecifierPreferences): string;
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: ModuleSpecifierPreferences, pathsOnly?: boolean): string | undefined;
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { getAllowedEndingsInPreferredOrder: getAllowedEndingsInPrefererredOrder, relativePreference }: ModuleSpecifierPreferences, pathsOnly?: boolean): string | undefined {
     const { baseUrl, paths, rootDirs } = compilerOptions;
     if (pathsOnly && !paths) {
         return undefined;
