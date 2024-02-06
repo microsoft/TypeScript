@@ -120,7 +120,8 @@ import {
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 
-const enum RelativePreference {
+/** @internal */
+export const enum RelativePreference {
     Relative,
     NonRelative,
     Shortest,
