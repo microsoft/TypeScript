@@ -9628,7 +9628,11 @@ export function getModuleSpecifierEndingPreference(preference: UserPreferences["
             emptyArray;
         for (const specifier of specifiers) {
             if (pathIsRelative(specifier.text)) {
-                if (resolutionMode === ModuleKind.CommonJS && getModeForUsageLocation(sourceFile, specifier, compilerOptions) === ModuleKind.ESNext) {
+                if (
+                    moduleResolutionIsNodeNext &&
+                    resolutionMode === ModuleKind.CommonJS &&
+                    getModeForUsageLocation(sourceFile, specifier, compilerOptions) === ModuleKind.ESNext
+                ) {
                     // We're trying to decide a preference for a CommonJS module specifier, but looking at an ESM import.
                     continue;
                 }
