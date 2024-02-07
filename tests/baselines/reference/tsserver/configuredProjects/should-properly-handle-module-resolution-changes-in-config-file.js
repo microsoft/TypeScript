@@ -12,11 +12,13 @@ export interface T {}
 
 //// [/a/b/tsconfig.json]
 {
-                    "compilerOptions": {
-                        "moduleResolution": "node"
-                    },
-                    "files": ["/a/b/file1.ts"]
-                }
+  "compilerOptions": {
+    "moduleResolution": "node10"
+  },
+  "files": [
+    "/a/b/file1.ts"
+  ]
+}
 
 //// [/a/file1.ts]
 export interface T {}
@@ -350,11 +352,13 @@ Before running Timeout callback:: count: 2
 2: *ensureProjectForOpenFiles*
 //// [/a/b/tsconfig.json]
 {
-                "compilerOptions": {
-                    "moduleResolution": "classic"
-                },
-                "files": ["/a/b/file1.ts"]
-            }
+  "compilerOptions": {
+    "moduleResolution": "classic"
+  },
+  "files": [
+    "/a/b/file1.ts"
+  ]
+}
 
 
 Timeout callback:: count: 2
