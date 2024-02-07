@@ -16,6 +16,6 @@
 verify.quickInfoAt("",
 `function myMixin<T extends new (...args: any[]) => any>(cls: T): {
     new (...args: any[]): (Anonymous class);
-    prototype: myMixin<any>.(Anonymous class);
+    prototype: (Anonymous class);
 } & T`,
 "Doc");

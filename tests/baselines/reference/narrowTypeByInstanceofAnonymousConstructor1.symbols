@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/narrowTypeByInstanceofAnonymousConstructor1.ts] ////
+
+=== narrowTypeByInstanceofAnonymousConstructor1.ts ===
+// https://github.com/microsoft/TypeScript/issues/57317
+
+function MakeClass<T>(someStuff: T) {
+>MakeClass : Symbol(MakeClass, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 0, 0))
+>T : Symbol(T, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 2, 19))
+>someStuff : Symbol(someStuff, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 2, 22))
+>T : Symbol(T, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 2, 19))
+
+  return class {
+    someStuff = someStuff;
+>someStuff : Symbol((Anonymous class).someStuff, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 3, 16))
+>someStuff : Symbol(someStuff, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 2, 22))
+
+  };
+}
+
+const MadeClassNumber = MakeClass(123);
+>MadeClassNumber : Symbol(MadeClassNumber, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 8, 5))
+>MakeClass : Symbol(MakeClass, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 0, 0))
+
+declare const someInstance: unknown;
+>someInstance : Symbol(someInstance, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 10, 13))
+
+if (someInstance instanceof MadeClassNumber) {
+>someInstance : Symbol(someInstance, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 10, 13))
+>MadeClassNumber : Symbol(MadeClassNumber, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 8, 5))
+
+  someInstance.someStuff;
+>someInstance.someStuff : Symbol((Anonymous class).someStuff, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 3, 16))
+>someInstance : Symbol(someInstance, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 10, 13))
+>someStuff : Symbol((Anonymous class).someStuff, Decl(narrowTypeByInstanceofAnonymousConstructor1.ts, 3, 16))
+}
+
