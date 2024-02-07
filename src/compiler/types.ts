@@ -967,6 +967,7 @@ export interface FlowContainer extends Node {
 
 /** @internal */
 export type HasFlowNode =
+    | Expression
     | Identifier
     | ThisExpression
     | SuperExpression
@@ -2364,7 +2365,7 @@ export interface TemplateLiteralTypeSpan extends TypeNode {
 // checker actually thinks you have something of the right type.  Note: the brands are
 // never actually given values.  At runtime they have zero cost.
 
-export interface Expression extends Node {
+export interface Expression extends FlowContainer, Node {
     _expressionBrand: any;
 }
 
@@ -6080,6 +6081,7 @@ export interface NodeLinks {
     decoratorSignature?: Signature;     // Signature for decorator as if invoked by the runtime.
     spreadIndices?: { first: number | undefined, last: number | undefined }; // Indices of first and last spread elements in array literal
     parameterInitializerContainsUndefined?: boolean; // True if this is a parameter declaration whose type annotation contains "undefined".
+    contextualReturnType?: Type;        // If the node is a return statement's expression, then this is the contextual return type.
     fakeScopeForSignatureDeclaration?: "params" | "typeParams"; // If present, this is a fake scope injected into an enclosing declaration chain.
     assertionExpressionType?: Type;     // Cached type of the expression of a type assertion
 }
@@ -6635,6 +6637,8 @@ export interface TypeParameter extends InstantiableType {
     isThisType?: boolean;
     /** @internal */
     resolvedDefaultType?: Type;
+    /** @internal */
+    exprName?: EntityName | null;
 }
 
 /** @internal */

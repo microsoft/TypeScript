@@ -764,6 +764,7 @@ IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
     public override kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
+    declare _flowContainerBrand: any;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
