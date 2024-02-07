@@ -461,7 +461,6 @@ export function createImportSpecifierResolver(importingFile: SourceFile, program
 const enum ImportFixKind {
     UseNamespace,
     JsdocTypeImport,
-    JSDocImport,
     AddToExisting,
     AddNew,
     PromoteTypeOnly,
