@@ -72,7 +72,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-^memfs:/foo.ts (Open) *new*
+^memfs:/foo.ts (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -103,13 +103,15 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-^memfs:/foo.ts *deleted*
+^memfs:/foo.ts (Dynamic) *deleted*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*

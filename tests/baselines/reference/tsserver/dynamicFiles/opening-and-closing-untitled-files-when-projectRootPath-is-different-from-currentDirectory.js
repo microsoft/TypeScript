@@ -75,7 +75,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-untitled:^Untitled-1 (Open) *new*
+untitled:^Untitled-1 (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -223,7 +223,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
 
-/user/username/projects/myproject/untitled:^Untitled-1 isDynamic:: true
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -250,13 +249,15 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-untitled:^Untitled-1 *deleted*
+untitled:^Untitled-1 (Dynamic) *deleted*
     open: false *changed*
     version: SVC-1-0
     containingProjects: 0 *changed*
@@ -444,6 +445,9 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

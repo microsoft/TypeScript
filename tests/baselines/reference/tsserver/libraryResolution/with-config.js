@@ -545,6 +545,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 3: /home/src/projects/project1/tsconfig.json
@@ -647,6 +648,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts *changed*
@@ -713,6 +715,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -811,6 +814,12 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: false *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -916,6 +925,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -1040,6 +1050,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
@@ -1065,6 +1076,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 3
+    dirty: true *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -1218,6 +1230,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 5
     projectProgramVersion: 4 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts *changed*
@@ -1289,6 +1302,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 6 *changed*
     projectProgramVersion: 4
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project1/tsconfig.json
@@ -1441,6 +1455,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 6
     projectProgramVersion: 5 *changed*
+    dirty: false *changed*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
@@ -1481,6 +1496,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 7 *changed*
     projectProgramVersion: 5
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
@@ -1649,6 +1665,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 7
     projectProgramVersion: 6 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts *changed*
@@ -1755,6 +1772,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 8 *changed*
     projectProgramVersion: 6
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 22: /home/src/projects/project1/tsconfig.json
@@ -1852,6 +1870,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 8
     projectProgramVersion: 7 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -1920,6 +1939,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 9 *changed*
     projectProgramVersion: 7
+    dirty: true *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -2076,6 +2096,7 @@ Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 9
     projectProgramVersion: 8 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts

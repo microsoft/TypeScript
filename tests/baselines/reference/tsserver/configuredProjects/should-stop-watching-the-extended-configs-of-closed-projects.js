@@ -760,6 +760,18 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dummy:
   {}
 
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/user/username/projects/myproject/dummy/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
     version: SVC-1-0
@@ -841,6 +853,19 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/dummy:
   {}
+
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/b/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -955,9 +980,12 @@ Projects::
 /user/username/projects/myproject/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/dummy/tsconfig.json (Configured)
+    isClosed: true *changed*
+    noOpenRef: true
+/user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts (Open)
@@ -1029,6 +1057,15 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dummy:
   {}
 
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+/user/username/projects/myproject/dummy/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts *changed*
     open: false *changed*
@@ -1094,6 +1131,16 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/dummy:
   {}
+
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts
@@ -1189,9 +1236,12 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/myproject/dummy/tsconfig.json (Configured)
+    isClosed: true *changed*
+    noOpenRef: true
+/user/username/projects/myproject/dummy/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /user/username/projects/myproject/a/a.ts *deleted*

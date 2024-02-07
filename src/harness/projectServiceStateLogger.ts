@@ -8,6 +8,8 @@ import {
 import {
     AutoImportProviderProject,
     AuxiliaryProject,
+    isBackgroundProject,
+    isConfiguredProject,
     LogLevel,
     Project,
     ProjectKind,
@@ -21,6 +23,10 @@ import {
 interface ProjectData {
     projectStateVersion: Project["projectStateVersion"];
     projectProgramVersion: Project["projectProgramVersion"];
+    dirty: Project["dirty"];
+    isClosed: boolean;
+    isOrphan: boolean;
+    noOpenRef: boolean;
     autoImportProviderHost: Project["autoImportProviderHost"];
     noDtsResolutionProject: Project["noDtsResolutionProject"];
     originalConfiguredProjects: Project["originalConfiguredProjects"];
@@ -83,6 +89,10 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 const projectPropertyLogs = [] as string[];
                 projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectStateVersion", project.projectStateVersion, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.Always, data, "projectProgramVersion", project.projectProgramVersion, projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", isConfiguredProject(project) && !project.hasOpenRef(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "autoImportProviderHost", project.autoImportProviderHost, projectDiff, projectPropertyLogs, project.autoImportProviderHost ? project.autoImportProviderHost.projectName : project.autoImportProviderHost);
                 projectDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "noDtsResolutionProject", project.noDtsResolutionProject, projectDiff, projectPropertyLogs, project.noDtsResolutionProject ? project.noDtsResolutionProject.projectName : project.noDtsResolutionProject);
                 return printSetPropertyAndCreateStatementLog(
@@ -100,6 +110,10 @@ export function patchServiceForStateBaseline(service: ProjectService) {
             project => ({
                 projectStateVersion: project.projectStateVersion,
                 projectProgramVersion: project.projectProgramVersion,
+                dirty: project.dirty,
+                isClosed: project.isClosed(),
+                isOrphan: !isBackgroundProject(project) && project.isOrphan(),
+                noOpenRef: isConfiguredProject(project) && !project.hasOpenRef(),
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,
                 originalConfiguredProjects: project.originalConfiguredProjects && new Set(project.originalConfiguredProjects),
@@ -127,7 +141,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 }
                 return printSetPropertyAndCreateStatementLog(
                     logs,
-                    `${info.fileName}${isOpen ? " (Open)" : ""}`,
+                    `${info.fileName}${info.isDynamic ? " (Dynamic)" : ""}${isOpen ? " (Open)" : ""}`,
                     PrintPropertyWhen.Always,
                     "containingProjects",
                     infoPropertyLogs,

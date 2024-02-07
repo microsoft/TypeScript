@@ -556,6 +556,7 @@ Projects::
 /user/username/projects/myproject/compositea/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /user/username/projects/myproject/compositec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1

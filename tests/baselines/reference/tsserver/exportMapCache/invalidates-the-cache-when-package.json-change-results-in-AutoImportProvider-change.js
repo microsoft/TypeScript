@@ -438,6 +438,7 @@ Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -459,6 +460,8 @@ Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    isClosed: true *changed*
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1

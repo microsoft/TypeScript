@@ -501,6 +501,7 @@ Projects::
 /a/app/test.csproj (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 1
 1: /a/app/test.csproj
@@ -662,6 +663,7 @@ Projects::
 /a/app/test.csproj (External) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/file3.d.ts

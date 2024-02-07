@@ -264,6 +264,12 @@ FsWatchesRecursive::
 /user/username/projects/myproject/playground:
   {}
 
+Projects::
+/user/username/projects/myproject/playground/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -471,9 +477,12 @@ Projects::
 /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /user/username/projects/myproject/playground/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -644,6 +653,7 @@ Projects::
 /user/username/projects/myproject/playground/tsconfig-json/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

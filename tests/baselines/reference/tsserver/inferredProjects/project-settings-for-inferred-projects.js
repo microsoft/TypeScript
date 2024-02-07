@@ -153,9 +153,11 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 3
 1: /dev/null/inferredProject1*
@@ -242,9 +244,12 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/b/app.ts (Open)
@@ -256,6 +261,3 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /dev/null/inferredProject1* *default* *new*
         /dev/null/inferredProject2* *deleted*
-
-Inferred project: /dev/null/inferredProject1* isOrphan:: false isClosed: false
-Inferred project: /dev/null/inferredProject2* isOrphan:: true isClosed: false

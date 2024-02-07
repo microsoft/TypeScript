@@ -3,7 +3,6 @@ import {
     jsonToReadableText,
 } from "../helpers";
 import {
-    appendAllScriptInfos,
     baselineTsserverLogs,
     closeFilesForSession,
     openExternalProjectForSession,
@@ -241,7 +240,6 @@ describe("unittests:: tsserver:: projectErrors:: are reported as appropriate", (
                     projectRootPath: useProjectRoot ? folderPath : undefined,
                 },
             });
-            appendAllScriptInfos(session);
 
             // Since this is not js project so no typings are queued
             verifyGetErrRequest({ session, files: [untitledFile] });

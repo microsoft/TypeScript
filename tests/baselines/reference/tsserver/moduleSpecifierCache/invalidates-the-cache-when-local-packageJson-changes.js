@@ -967,6 +967,7 @@ Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1

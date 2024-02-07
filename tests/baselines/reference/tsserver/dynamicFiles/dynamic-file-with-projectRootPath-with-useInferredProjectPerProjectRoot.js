@@ -74,7 +74,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open) *new*
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -233,7 +233,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
 
-/user/username/projects/myproject/^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js isDynamic:: true
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -435,11 +434,11 @@ ScriptInfos::
     containingProjects: 2 *changed*
         /dev/null/inferredProject1*
         /dev/null/inferredProject2* *new*
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Open)
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js (Dynamic) (Open)
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js (Open) *new*
+^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#2.js (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject2* *default*

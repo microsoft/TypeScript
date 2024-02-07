@@ -256,6 +256,7 @@ Projects::
 /user/someuser/project/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 Info seq  [hh:mm:ss:mss] request:
     {

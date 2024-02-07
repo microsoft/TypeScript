@@ -57,7 +57,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-^/untitled/ts-nul-authority/Untitled-1 (Open) *new*
+^/untitled/ts-nul-authority/Untitled-1 (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*

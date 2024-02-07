@@ -97,6 +97,7 @@ Projects::
 /user/someuser/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 Before request
 
@@ -147,6 +148,8 @@ Projects::
 /user/someuser/project/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    isClosed: true *changed*
 
 Info seq  [hh:mm:ss:mss] request:
     {

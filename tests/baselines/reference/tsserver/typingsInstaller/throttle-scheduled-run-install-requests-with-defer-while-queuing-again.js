@@ -840,6 +840,7 @@ Projects::
 /a/app/test1.csproj (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /a/app/test2.csproj (External)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1120,9 +1121,11 @@ Projects::
 /a/app/test1.csproj (External)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 /a/app/test2.csproj (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /a/app/test3.csproj (External)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1413,9 +1416,12 @@ Projects::
 /a/app/test1.csproj (External)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 /a/app/test2.csproj (External)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 /a/app/test3.csproj (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
