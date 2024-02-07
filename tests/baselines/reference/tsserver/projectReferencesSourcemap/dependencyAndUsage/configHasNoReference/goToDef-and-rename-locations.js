@@ -1238,6 +1238,19 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 1 *changed*
+        /user/username/projects/myproject/dependency/tsconfig.json *new*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -2276,6 +2289,8 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 1
+        /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1

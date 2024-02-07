@@ -1015,6 +1015,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/myproject/dependency/tsconfig.json *new*
+        /user/username/projects/myproject/main/tsconfig.json *new*
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1070,6 +1084,9 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1

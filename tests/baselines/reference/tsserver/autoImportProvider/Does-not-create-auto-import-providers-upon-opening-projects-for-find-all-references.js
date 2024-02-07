@@ -644,6 +644,10 @@ Projects::
 /packages/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /packages/b/tsconfig.json
+        /tsconfig.json
+        /packages/a/tsconfig.json
 /packages/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -651,6 +655,10 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    originalConfiguredProjects: 3 *changed*
+        /packages/b/tsconfig.json *new*
+        /tsconfig.json *new*
+        /packages/a/tsconfig.json *new*
 
 ScriptInfos::
 /node_modules/@angular/forms/forms.d.ts

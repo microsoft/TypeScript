@@ -656,6 +656,9 @@ Projects::
 /user/username/projects/solution/services/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/solution/compiler/tsconfig.json
+        /user/username/projects/solution/services/tsconfig.json
 /user/username/projects/solution/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
