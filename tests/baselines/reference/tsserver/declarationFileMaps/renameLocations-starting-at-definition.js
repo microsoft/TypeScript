@@ -1042,6 +1042,16 @@ FsWatchesRecursive::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 1 *changed*
+        /a/tsconfig.json *new*
+
 ScriptInfos::
 /a/a.ts (Open)
     version: SVC-2-0
@@ -1119,6 +1129,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 
 ScriptInfos::
 /a/a.ts (Open)
@@ -1234,6 +1246,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

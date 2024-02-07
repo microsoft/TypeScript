@@ -572,9 +572,12 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/a/tsconfig.json (Configured)
+/user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/myproject/b/tsconfig.json *new*
+        /user/username/projects/myproject/a/tsconfig.json *new*
 /user/username/projects/myproject/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

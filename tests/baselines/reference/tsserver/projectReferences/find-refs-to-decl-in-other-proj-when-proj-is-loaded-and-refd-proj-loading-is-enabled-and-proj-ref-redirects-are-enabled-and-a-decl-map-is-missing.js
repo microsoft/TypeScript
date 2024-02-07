@@ -669,3 +669,14 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/myproject/b/tsconfig.json *new*
+        /user/username/projects/myproject/a/tsconfig.json *new*
+/user/username/projects/myproject/b/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
