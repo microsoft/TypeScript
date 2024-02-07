@@ -1,4 +1,7 @@
 import {
+    getModuleSpecifierPreferences,
+} from "../compiler/moduleSpecifiers";
+import {
     addToSeen,
     altDirectorySeparator,
     arrayFrom,
@@ -52,7 +55,6 @@ import {
     getEffectiveTypeRoots,
     getEmitModuleResolutionKind,
     getLeadingCommentRanges,
-    getModuleSpecifierEndingPreference,
     getOwnKeys,
     getPackageJsonTypesVersionsPaths,
     getPathComponents,
@@ -744,7 +746,7 @@ function getCompletionEntriesForDirectoryFragment(
                 continue;
             }
 
-            const { name, extension } = getFilenameWithExtensionOption(getBaseFileName(filePath), host.getCompilationSettings(), extensionOptions);
+            const { name, extension } = getFilenameWithExtensionOption(getBaseFileName(filePath), host.getCompilationSettings(), extensionOptions, /*isExportsWildcard*/ false);
             result.add(nameAndKind(name, ScriptElementKind.scriptElement, extension));
         }
     }
@@ -764,7 +766,7 @@ function getCompletionEntriesForDirectoryFragment(
     return result;
 }
 
-function getFilenameWithExtensionOption(name: string, compilerOptions: CompilerOptions, extensionOptions: ExtensionOptions): { name: string; extension: Extension | undefined; } {
+function getFilenameWithExtensionOption(name: string, compilerOptions: CompilerOptions, extensionOptions: ExtensionOptions, isExportsWildcard: boolean): { name: string; extension: Extension | undefined; } {
     const nonJsResult = moduleSpecifiers.tryGetRealFileNameForNonJsDeclarationFileName(name);
     if (nonJsResult) {
         return { name: nonJsResult, extension: tryGetExtensionFromPath(nonJsResult) };
@@ -773,8 +775,19 @@ function getFilenameWithExtensionOption(name: string, compilerOptions: CompilerO
         return { name, extension: tryGetExtensionFromPath(name) };
     }
 
-    const endingPreference = getModuleSpecifierEndingPreference(extensionOptions.endingPreference, extensionOptions.resolutionMode, compilerOptions, extensionOptions.importingSourceFile);
-    if (endingPreference === ModuleSpecifierEnding.TsExtension) {
+    let allowedEndings = getModuleSpecifierPreferences(
+        { importModuleSpecifierEnding: extensionOptions.endingPreference },
+        compilerOptions,
+        extensionOptions.importingSourceFile,
+    ).getAllowedEndingsInPreferredOrder(extensionOptions.resolutionMode);
+
+    if (isExportsWildcard) {
+        // If we're completing `import {} from "foo/|"` and subpaths are available via `"exports": { "./*": "./src/*" }`,
+        // the completion must be a (potentially extension-swapped) file name. Dropping extensions and index files is not allowed.
+        allowedEndings = allowedEndings.filter(e => e !== ModuleSpecifierEnding.Minimal && e !== ModuleSpecifierEnding.Index);
+    }
+
+    if (allowedEndings[0] === ModuleSpecifierEnding.TsExtension) {
         if (fileExtensionIsOneOf(name, supportedTSImplementationExtensions)) {
             return { name, extension: tryGetExtensionFromPath(name) };
         }
@@ -785,7 +798,8 @@ function getFilenameWithExtensionOption(name: string, compilerOptions: CompilerO
     }
 
     if (
-        (endingPreference === ModuleSpecifierEnding.Minimal || endingPreference === ModuleSpecifierEnding.Index) &&
+        !isExportsWildcard &&
+        (allowedEndings[0] === ModuleSpecifierEnding.Minimal || allowedEndings[0] === ModuleSpecifierEnding.Index) &&
         fileExtensionIsOneOf(name, [Extension.Js, Extension.Jsx, Extension.Ts, Extension.Tsx, Extension.Dts])
     ) {
         return { name: removeFileExtension(name), extension: tryGetExtensionFromPath(name) };
@@ -814,12 +828,13 @@ function addCompletionEntriesFromPaths(
         const lengthB = typeof patternB === "object" ? patternB.prefix.length : b.length;
         return compareValues(lengthB, lengthA);
     };
-    return addCompletionEntriesFromPathsOrExports(result, fragment, baseDirectory, extensionOptions, host, getOwnKeys(paths), getPatternsForKey, comparePaths);
+    return addCompletionEntriesFromPathsOrExports(result, /*isExports*/ false, fragment, baseDirectory, extensionOptions, host, getOwnKeys(paths), getPatternsForKey, comparePaths);
 }
 
 /** @returns whether `fragment` was a match for any `paths` (which should indicate whether any other path completions should be offered) */
 function addCompletionEntriesFromPathsOrExports(
     result: NameAndKindSet,
+    isExports: boolean,
     fragment: string,
     baseDirectory: string,
     extensionOptions: ExtensionOptions,
@@ -857,7 +872,7 @@ function addCompletionEntriesFromPathsOrExports(
             if (typeof pathPattern === "string" || matchedPath === undefined || comparePaths(key, matchedPath) !== Comparison.GreaterThan) {
                 pathResults.push({
                     matchedPattern: isMatch,
-                    results: getCompletionsForPathMapping(keyWithoutLeadingDotSlash, patterns, fragment, baseDirectory, extensionOptions, host)
+                    results: getCompletionsForPathMapping(keyWithoutLeadingDotSlash, patterns, fragment, baseDirectory, extensionOptions, isExports && isMatch, host)
                         .map(({ name, kind, extension }) => nameAndKind(name, kind, extension)),
                 });
             }
@@ -956,6 +971,7 @@ function getCompletionEntriesForNonRelativeModules(
                             const conditions = getConditions(compilerOptions, mode);
                             addCompletionEntriesFromPathsOrExports(
                                 result,
+                                /*isExports*/ true,
                                 fragmentSubpath,
                                 packageDirectory,
                                 extensionOptions,
@@ -1001,6 +1017,7 @@ function getCompletionsForPathMapping(
     fragment: string,
     packageDirectory: string,
     extensionOptions: ExtensionOptions,
+    isExportsWildcard: boolean,
     host: LanguageServiceHost,
 ): readonly NameAndKind[] {
     if (!endsWith(path, "*")) {
@@ -1012,9 +1029,9 @@ function getCompletionsForPathMapping(
     const remainingFragment = tryRemovePrefix(fragment, pathPrefix);
     if (remainingFragment === undefined) {
         const starIsFullPathComponent = path[path.length - 2] === "/";
-        return starIsFullPathComponent ? justPathMappingName(pathPrefix, ScriptElementKind.directory) : flatMap(patterns, pattern => getModulesForPathsPattern("", packageDirectory, pattern, extensionOptions, host)?.map(({ name, ...rest }) => ({ name: pathPrefix + name, ...rest })));
+        return starIsFullPathComponent ? justPathMappingName(pathPrefix, ScriptElementKind.directory) : flatMap(patterns, pattern => getModulesForPathsPattern("", packageDirectory, pattern, extensionOptions, isExportsWildcard, host)?.map(({ name, ...rest }) => ({ name: pathPrefix + name, ...rest })));
     }
-    return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, host));
+    return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, isExportsWildcard, host));
 
     function justPathMappingName(name: string, kind: ScriptElementKind.directory | ScriptElementKind.scriptElement): readonly NameAndKind[] {
         return startsWith(name, fragment) ? [{ name: removeTrailingDirectorySeparator(name), kind, extension: undefined }] : emptyArray;
@@ -1026,6 +1043,7 @@ function getModulesForPathsPattern(
     packageDirectory: string,
     pattern: string,
     extensionOptions: ExtensionOptions,
+    isExportsWildcard: boolean,
     host: LanguageServiceHost,
 ): readonly NameAndKind[] | undefined {
     if (!host.readDirectory) {
@@ -1074,7 +1092,7 @@ function getModulesForPathsPattern(
             if (containsSlash(trimmedWithPattern)) {
                 return directoryResult(getPathComponents(removeLeadingDirectorySeparator(trimmedWithPattern))[1]);
             }
-            const { name, extension } = getFilenameWithExtensionOption(trimmedWithPattern, host.getCompilationSettings(), extensionOptions);
+            const { name, extension } = getFilenameWithExtensionOption(trimmedWithPattern, host.getCompilationSettings(), extensionOptions, isExportsWildcard);
             return nameAndKind(name, ScriptElementKind.scriptElement, extension);
         }
     });

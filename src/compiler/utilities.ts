@@ -187,6 +187,7 @@ import {
     getLineAndCharacterOfPosition,
     getLinesBetweenPositions,
     getLineStarts,
+    getModeForUsageLocation,
     getNameOfDeclaration,
     getNormalizedAbsolutePath,
     getNormalizedPathComponents,
@@ -9590,7 +9591,8 @@ export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (
 /** @internal */
 export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile): ModuleSpecifierEnding {
     const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
-    if (preference === "js" || resolutionMode === ModuleKind.ESNext && ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext) {
+    const moduleResolutionIsNodeNext = ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext;
+    if (preference === "js" || resolutionMode === ModuleKind.ESNext && moduleResolutionIsNodeNext) {
         // Extensions are explicitly requested or required. Now choose between .js and .ts.
         if (!shouldAllowImportingTsExtension(compilerOptions)) {
             return ModuleSpecifierEnding.JsExtension;
@@ -9621,19 +9623,27 @@ export function getModuleSpecifierEndingPreference(preference: UserPreferences["
 
     function inferPreference() {
         let usesJsExtensions = false;
-        const specifiers = sourceFile.imports.length ? sourceFile.imports.map(i => i.text) :
-            isSourceFileJS(sourceFile) ? getRequiresAtTopOfFile(sourceFile).map(r => r.arguments[0].text) :
+        const specifiers = sourceFile.imports.length ? sourceFile.imports :
+            isSourceFileJS(sourceFile) ? getRequiresAtTopOfFile(sourceFile).map(r => r.arguments[0]) :
             emptyArray;
         for (const specifier of specifiers) {
-            if (pathIsRelative(specifier)) {
-                if (fileExtensionIsOneOf(specifier, extensionsNotSupportingExtensionlessResolution)) {
+            if (pathIsRelative(specifier.text)) {
+                if (
+                    moduleResolutionIsNodeNext &&
+                    resolutionMode === ModuleKind.CommonJS &&
+                    getModeForUsageLocation(sourceFile, specifier, compilerOptions) === ModuleKind.ESNext
+                ) {
+                    // We're trying to decide a preference for a CommonJS module specifier, but looking at an ESM import.
+                    continue;
+                }
+                if (fileExtensionIsOneOf(specifier.text, extensionsNotSupportingExtensionlessResolution)) {
                     // These extensions are not optional, so do not indicate a preference.
                     continue;
                 }
-                if (hasTSFileExtension(specifier)) {
+                if (hasTSFileExtension(specifier.text)) {
                     return ModuleSpecifierEnding.TsExtension;
                 }
-                if (hasJSFileExtension(specifier)) {
+                if (hasJSFileExtension(specifier.text)) {
                     usesJsExtensions = true;
                 }
             }
