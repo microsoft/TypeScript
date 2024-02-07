@@ -264,6 +264,12 @@ FsWatches::
 /a/b/tsconfig.json:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/b/main.ts *changed*
     open: false *changed*
@@ -315,6 +321,12 @@ FsWatches::
 FsWatches *deleted*::
 /a/b/obj-a.ts:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/b/main.ts

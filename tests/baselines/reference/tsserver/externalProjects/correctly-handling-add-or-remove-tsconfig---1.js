@@ -219,6 +219,7 @@ Projects::
 /a/b/proj1 (External) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/b/app.ts (Open)
@@ -380,6 +381,8 @@ Projects::
 /a/b/proj1 (External) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -435,6 +438,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 ScriptInfos::
 /a/b/app.ts (Open) *changed*

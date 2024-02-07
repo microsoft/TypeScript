@@ -473,9 +473,11 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/a/tsconfig.json
@@ -729,6 +731,16 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/extended/bravo.tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/extended/bravo.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/b/tsconfig.json WatchType: Extended config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -756,6 +768,7 @@ Projects::
 /user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
@@ -895,6 +908,15 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/b/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -919,6 +941,7 @@ Projects::
 /user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
@@ -1099,6 +1122,15 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b: *new*
   {}
 
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/extended/alpha.tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/extended/alpha.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Extended config file
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/b/tsconfig.json
@@ -1121,9 +1153,11 @@ Projects::
 /user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/a/tsconfig.json
@@ -1354,3 +1388,13 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
+
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+/user/username/projects/myproject/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 1
+    dirty: false *changed*

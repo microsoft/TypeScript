@@ -2369,6 +2369,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -6227,6 +6228,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -6266,6 +6273,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -7032,6 +7040,12 @@ Info seq  [hh:mm:ss:mss] 	Files (151)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Before request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "updateOpen",
@@ -7069,6 +7083,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /index.ts (Open) *changed*
@@ -11274,3 +11289,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 4
+    projectProgramVersion: 1
+    dirty: false *changed*

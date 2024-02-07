@@ -320,6 +320,7 @@ Projects::
 /b/app.ts.csproj (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 /c/app.ts.csproj (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -395,9 +396,11 @@ Projects::
 /a/app.ts.csproj (External) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    isClosed: true *changed*
 /c/app.ts.csproj (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 ScriptInfos::
 /a/app.ts *changed*

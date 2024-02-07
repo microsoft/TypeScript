@@ -286,6 +286,16 @@ FsWatchesRecursive::
 /node_modules:
   {}
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
 ScriptInfos::
 /index.ts *changed*
     open: false *changed*
@@ -398,6 +408,7 @@ Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 /dev/null/autoImportProviderProject2* (AutoImportProvider) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -408,6 +419,8 @@ Projects::
 /tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::

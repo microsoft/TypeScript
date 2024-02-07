@@ -206,7 +206,6 @@ ScriptInfos::
     containingProjects: 1
         /a/tsconfig.json *default*
 
-Configured project: /a/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -246,6 +245,12 @@ FsWatchesRecursive::
 /a/src:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/src/app.ts *changed*
     open: false *changed*
@@ -253,7 +258,6 @@ ScriptInfos::
     containingProjects: 1
         /a/tsconfig.json
 
-Configured project: /a/tsconfig.json hasOpenRef:: false isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -299,11 +303,15 @@ FsWatchesRecursive::
 /a/src:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /a/src/app.ts (Open) *changed*
     open: true *changed*
     version: SVC-1-0
     containingProjects: 1
         /a/tsconfig.json *default*
-
-Configured project: /a/tsconfig.json hasOpenRef:: true isClosed: false

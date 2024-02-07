@@ -133,6 +133,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -215,6 +216,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

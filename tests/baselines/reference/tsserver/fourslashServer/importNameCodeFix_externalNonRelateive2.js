@@ -204,6 +204,7 @@ Projects::
 /apps/app1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -344,6 +345,15 @@ watchedDirectoriesRecursive::
   {}
 /shared:
   {}
+
+Projects::
+/apps/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /apps/app1/src/app.ts
@@ -565,6 +575,7 @@ Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -733,6 +744,15 @@ watchedDirectoriesRecursive::
   {}
 /shared:
   {}
+
+Projects::
+/apps/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /apps/app1/src/app.ts (Open) *changed*
@@ -954,6 +974,7 @@ Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1122,6 +1143,15 @@ watchedDirectoriesRecursive::
   {}
 /shared:
   {}
+
+Projects::
+/apps/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /apps/app1/src/app.ts (Open)
@@ -1343,6 +1373,7 @@ Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1

@@ -274,6 +274,7 @@ Projects::
 /user/username/projects/myproject/a/c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/myproject/a/c/tsconfig.json
@@ -547,12 +548,15 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
+    isOrphan: true *changed*
 /dev/null/inferredProject2* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 2 *changed*
+    isOrphan: true *changed*
 /user/username/projects/myproject/a/c/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /user/username/projects/myproject/a/b/f1.ts (Open) *changed*
@@ -569,6 +573,3 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /user/username/projects/myproject/a/c/tsconfig.json *default* *new*
         /dev/null/inferredProject2* *deleted*
-
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-Inferred project: /dev/null/inferredProject2* isOrphan:: true isClosed: false

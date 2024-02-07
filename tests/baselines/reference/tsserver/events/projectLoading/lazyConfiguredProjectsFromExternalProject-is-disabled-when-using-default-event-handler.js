@@ -88,6 +88,7 @@ Projects::
 /user/username/projects/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 Before request
 
@@ -243,6 +244,7 @@ Projects::
 /user/username/projects/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*

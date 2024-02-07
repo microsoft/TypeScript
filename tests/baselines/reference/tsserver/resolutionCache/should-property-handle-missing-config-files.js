@@ -259,6 +259,7 @@ Projects::
 project1 (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*

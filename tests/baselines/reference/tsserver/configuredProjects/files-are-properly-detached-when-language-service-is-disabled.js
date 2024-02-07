@@ -247,7 +247,6 @@ ScriptInfos::
     containingProjects: 1
         /a/tsconfig.json
 
-Configured project: /a/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -289,6 +288,8 @@ Projects::
 /a/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/app.js *changed*
@@ -305,10 +306,6 @@ ScriptInfos::
     containingProjects: 1
         /a/tsconfig.json
 
-Configured project: /a/tsconfig.json hasOpenRef:: false isClosed: false
-Containing projects for /a/app.js:: /a/tsconfig.json
-Containing projects for /a/largefile.js:: /a/tsconfig.json
-Containing projects for /a/lib.js:: /a/tsconfig.json
 Before request
 //// [/aa.js]
 var x = 1
@@ -343,6 +340,8 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -528,6 +527,9 @@ Projects::
 /a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*

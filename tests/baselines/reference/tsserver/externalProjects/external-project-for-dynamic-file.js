@@ -88,12 +88,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-^ScriptDocument1 file1.ts *new*
+^ScriptDocument1 file1.ts (Dynamic) *new*
     version: Text-1
     containingProjects: 1
         ^ScriptDocument1 file1.ts
 
-/^scriptdocument1 file1.ts isDynamic:: true
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -137,7 +136,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-^ScriptDocument1 file1.ts (Open) *changed*
+^ScriptDocument1 file1.ts (Dynamic) (Open) *changed*
     open: true *changed*
     version: SVC-2-0 *changed*
     containingProjects: 1

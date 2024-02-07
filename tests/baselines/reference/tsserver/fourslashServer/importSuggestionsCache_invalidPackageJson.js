@@ -187,6 +187,7 @@ Projects::
 /jsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /a.js *new*
@@ -265,6 +266,15 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 :
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/jsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a.js (Open) *changed*

@@ -261,6 +261,8 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 /node_modules/@angular/forms/forms.d.ts *new*
@@ -644,6 +646,7 @@ Projects::
 /packages/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
     originalConfiguredProjects: 3
         /packages/b/tsconfig.json
         /tsconfig.json
@@ -655,6 +658,8 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: true
     originalConfiguredProjects: 3 *changed*
         /packages/b/tsconfig.json *new*
         /tsconfig.json *new*

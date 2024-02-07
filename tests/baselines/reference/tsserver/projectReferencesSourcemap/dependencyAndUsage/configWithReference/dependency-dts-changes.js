@@ -1081,9 +1081,11 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
     originalConfiguredProjects: 2
         /user/username/projects/myproject/dependency/tsconfig.json
         /user/username/projects/myproject/main/tsconfig.json
@@ -1171,6 +1173,22 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 Before request
 
@@ -1480,6 +1498,21 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/user/username/projects/myproject/main/tsconfig.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/dependency/tsconfig.json
+        /user/username/projects/myproject/main/tsconfig.json
+/user/username/projects/myproject/random/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /a/lib/lib.d.ts

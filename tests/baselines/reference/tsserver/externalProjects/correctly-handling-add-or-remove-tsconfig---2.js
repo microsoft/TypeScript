@@ -404,6 +404,7 @@ Projects::
 /a/b/proj1 (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -503,6 +504,8 @@ Projects::
 /a/b/c/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 /a/b/d/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -607,6 +610,8 @@ Projects::
 /a/b/d/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 /a/b/proj1 (External) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -804,6 +809,7 @@ Projects::
 /a/b/proj1 (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -902,9 +908,13 @@ Projects::
 /a/b/c/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 /a/b/d/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/app.ts

@@ -358,6 +358,7 @@ Projects::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -465,6 +466,7 @@ Projects::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 Before running Timeout callback:: count: 0
 

@@ -214,6 +214,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/tsconfig.json
@@ -304,6 +305,7 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -319,7 +321,6 @@ ScriptInfos::
     containingProjects: 0 *changed*
         /user/username/projects/myproject/tsconfig.json *deleted*
 
-Containing projects for /user/username/projects/myproject/src/file2.ts:: 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 0
@@ -342,5 +343,3 @@ ScriptInfos::
     containingProjects: 0
 
 After running Timeout callback:: count: 0
-
-Containing projects for /user/username/projects/myproject/src/file2.ts:: 
