@@ -182,14 +182,16 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /a/b/app.ts *new*
 
 ScriptInfos::
 /a/b/app.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /a/b/test.csproj *deleted*
+    containingProjects: 1
+        /a/b/test.csproj
 /a/lib/lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -246,13 +248,16 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /a/b/app.ts
 
 ScriptInfos::
 /a/b/app.ts
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /a/b/test.csproj
 /a/b/applib.ts *new*
     version: Text-1
     containingProjects: 1
@@ -263,6 +268,7 @@ ScriptInfos::
         /a/b/test.csproj
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/app.ts 0:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/test.csproj, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/app.ts 0:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/app.ts 0:: WatchInfo: /a/b/app.ts 500 undefined Project: /a/b/test.csproj WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined Project: /a/b/test.csproj WatchType: Missing file
@@ -275,20 +281,23 @@ Before request
 
 Timeout callback:: count: 1
 2: /a/b/test.csproj *deleted*
-3: /a/b/test.csproj *new*
+4: /a/b/test.csproj *new*
 
 Projects::
 /a/b/test.csproj (External) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    deferredDeletedInfos: 1
+        /a/b/app.ts
 
 ScriptInfos::
 /a/b/app.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
-    containingProjects: 0
+    containingProjects: 1
+        /a/b/test.csproj
 /a/b/applib.ts
     version: Text-1
     containingProjects: 1
@@ -336,13 +345,15 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 0 *changed*
+        /a/b/app.ts *deleted*
 
 ScriptInfos::
 /a/b/app.ts *changed*
     version: Text-1
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1 *changed*
-        /a/b/test.csproj *new*
+    containingProjects: 1
+        /a/b/test.csproj
 /a/b/applib.ts
     version: Text-1
     containingProjects: 1

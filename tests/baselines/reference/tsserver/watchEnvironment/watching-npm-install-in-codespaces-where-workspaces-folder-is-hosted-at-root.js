@@ -352,6 +352,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /workspaces/somerepo/node_modules/@types/random-seed/index.d.ts *new*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -362,8 +364,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /workspaces/somerepo/src/tsconfig.json *deleted*
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json
 /workspaces/somerepo/src/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -442,6 +444,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /workspaces/somerepo/node_modules/@types/random-seed/index.d.ts
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
@@ -574,6 +578,8 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    deferredDeletedInfos: 1
+        /workspaces/somerepo/node_modules/@types/random-seed/index.d.ts
 
 Before request
 //// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 16
@@ -689,6 +695,8 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 0 *changed*
+        /workspaces/somerepo/node_modules/@types/random-seed/index.d.ts *deleted*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -699,8 +707,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: false *changed*
     deferredDelete: undefined *changed*
-    containingProjects: 1 *changed*
-        /workspaces/somerepo/src/tsconfig.json *new*
+    containingProjects: 1
+        /workspaces/somerepo/src/tsconfig.json
 /workspaces/somerepo/src/main.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -800,3 +808,4 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
     dirty: true *changed*
+    deferredDeletedInfos: 0

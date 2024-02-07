@@ -504,7 +504,8 @@ export class ScriptInfo {
     attachToProject(project: Project): boolean {
         const isNew = !this.isAttached(project);
         if (isNew) {
-            this.containingProjects.push(project);
+            if (!project.deferredDeletedInfos?.has(this)) this.containingProjects.push(project);
+            else project.deferredDeletedInfos.delete(this);
             if (!project.getCompilerOptions().preserveSymlinks) {
                 this.ensureRealPath();
             }
@@ -514,6 +515,7 @@ export class ScriptInfo {
     }
 
     isAttached(project: Project) {
+        if (this.deferredDelete || project.deferredDeletedInfos?.has(this)) return false;
         // unrolled for common cases
         switch (this.containingProjects.length) {
             case 0:
@@ -576,6 +578,7 @@ export class ScriptInfo {
     }
 
     getDefaultProject() {
+        if (this.deferredDelete) Errors.ThrowNoProject();
         switch (this.containingProjects.length) {
             case 0:
                 return Errors.ThrowNoProject();

@@ -266,6 +266,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /users/username/projects/project/moduleFile.ts *new*
 
 ScriptInfos::
 /users/username/projects/project/file1.ts (Open)
@@ -276,8 +278,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /users/username/projects/project/tsconfig.json *deleted*
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/project/moduleFile1.ts 500 undefined WatchType: Closed Script info
@@ -359,6 +361,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /users/username/projects/project/moduleFile.ts
 
 ScriptInfos::
 /users/username/projects/project/file1.ts (Open)
@@ -369,7 +373,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/moduleFile1.ts *new*
     version: Text-1
     containingProjects: 1
@@ -419,6 +424,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.js
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/moduleFile1.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/project/moduleFile.ts 0:: WatchInfo: /users/username/projects/project/moduleFile.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /users/username/projects/project/moduleFile.ts 0:: WatchInfo: /users/username/projects/project/moduleFile.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/moduleFile.ts :: WatchInfo: /users/username/projects/project 0 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
@@ -428,24 +435,27 @@ Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.js
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/moduleFile.ts :: WatchInfo: /users/username/projects/project 1 undefined Config: /users/username/projects/project/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 3
-12: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
-13: /users/username/projects/project/tsconfig.json
-14: *ensureProjectForOpenFiles*
+14: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
+15: /users/username/projects/project/tsconfig.json
+16: *ensureProjectForOpenFiles*
 //// [/users/username/projects/project/moduleFile.ts]
 export function bar() { };
 
 //// [/users/username/projects/project/moduleFile1.ts] deleted
 
 Timeout callback:: count: 3
-12: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
-13: /users/username/projects/project/tsconfig.json *new*
-14: *ensureProjectForOpenFiles* *new*
+14: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+15: /users/username/projects/project/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /users/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    deferredDeletedInfos: 2 *changed*
+        /users/username/projects/project/moduleFile.ts
+        /users/username/projects/project/moduleFile1.ts *new*
 
 ScriptInfos::
 /users/username/projects/project/file1.ts (Open)
@@ -456,13 +466,14 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
-    containingProjects: 0
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/moduleFile1.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /users/username/projects/project/tsconfig.json *deleted*
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json, Cancelled earlier one
@@ -470,10 +481,10 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earli
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-13: /users/username/projects/project/tsconfig.json *deleted*
-14: *ensureProjectForOpenFiles* *deleted*
-15: /users/username/projects/project/tsconfig.json *new*
-16: *ensureProjectForOpenFiles* *new*
+15: /users/username/projects/project/tsconfig.json *deleted*
+16: *ensureProjectForOpenFiles* *deleted*
+17: /users/username/projects/project/tsconfig.json *new*
+18: *ensureProjectForOpenFiles* *new*
 
 Before request
 
@@ -545,6 +556,9 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1 *changed*
+        /users/username/projects/project/moduleFile1.ts
+        /users/username/projects/project/moduleFile.ts *deleted*
 
 ScriptInfos::
 /users/username/projects/project/file1.ts (Open)
@@ -554,10 +568,11 @@ ScriptInfos::
 /users/username/projects/project/moduleFile.ts *changed*
     version: Text-1
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1 *changed*
-        /users/username/projects/project/tsconfig.json *new*
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/moduleFile1.ts
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json

@@ -843,6 +843,8 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /user/username/projects/myproject/projects/project1/class3.d.ts *new*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -862,8 +864,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/projects/project2/tsconfig.json *deleted*
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class3.ts
     version: Text-1
     containingProjects: 1
@@ -944,27 +946,31 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /user/username/projects/myproject/projects/project1/class3.d.ts
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 2
-9: /user/username/projects/myproject/projects/project2/tsconfig.json
-10: *ensureProjectForOpenFiles*
+11: /user/username/projects/myproject/projects/project2/tsconfig.json
+12: *ensureProjectForOpenFiles*
 //// [/user/username/projects/myproject/projects/project1/class3.d.ts]
 declare class class3 {}
 
 
 Timeout callback:: count: 2
-9: /user/username/projects/myproject/projects/project2/tsconfig.json *new*
-10: *ensureProjectForOpenFiles* *new*
+11: /user/username/projects/myproject/projects/project2/tsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/projects/project1/tsconfig.json (Configured)
@@ -974,6 +980,8 @@ Projects::
     projectStateVersion: 5 *changed*
     projectProgramVersion: 4
     dirty: true *changed*
+    deferredDeletedInfos: 1
+        /user/username/projects/myproject/projects/project1/class3.d.ts
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -993,7 +1001,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
-    containingProjects: 0
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class3.ts
     version: Text-1
     containingProjects: 1
@@ -1076,6 +1085,8 @@ Projects::
     projectStateVersion: 5
     projectProgramVersion: 5 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 0 *changed*
+        /user/username/projects/myproject/projects/project1/class3.d.ts *deleted*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1094,8 +1105,8 @@ ScriptInfos::
 /user/username/projects/myproject/projects/project1/class3.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1 *changed*
-        /user/username/projects/myproject/projects/project2/tsconfig.json *new*
+    containingProjects: 1
+        /user/username/projects/myproject/projects/project2/tsconfig.json
 /user/username/projects/myproject/projects/project1/class3.ts
     version: Text-1
     containingProjects: 1

@@ -510,6 +510,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
 
+    /** @internal */
+    deferredDeletedInfos: Set<ScriptInfo> | undefined;
+
     readonly jsDocParsingMode: JSDocParsingMode | undefined;
 
     /** @internal */
@@ -999,6 +1002,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /** @internal */
     cleanupProgram() {
+        this.deferredDeletedInfos?.forEach(info => info.detachFromProject(this));
+        this.deferredDeletedInfos = undefined;
         if (this.program) {
             // Root files are always attached to the project irrespective of program
             for (const f of this.program.getSourceFiles()) {
@@ -1630,6 +1635,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.resolutionCache.updateTypeRootsWatch();
             }
         }
+
+        this.deferredDeletedInfos?.forEach(info => {
+            if (!info.deferredDelete) {
+                info.detachFromProject(this);
+                this.deferredDeletedInfos!.delete(info);
+            }
+        });
 
         this.projectService.verifyProgram(this);
         if (this.exportMapCache && !this.exportMapCache.isEmpty()) {

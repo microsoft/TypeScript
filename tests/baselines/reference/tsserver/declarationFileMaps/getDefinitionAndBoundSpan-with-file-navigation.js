@@ -672,14 +672,16 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     noOpenRef: true
+    deferredDeletedInfos: 1 *changed*
+        /b/b.ts *new*
 
 ScriptInfos::
 /b/b.ts *changed*
     version: SVC-1-0
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /b/tsconfig.json *deleted*
+    containingProjects: 1
+        /b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -907,11 +909,13 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/b/tsconfig.json (Configured)
+/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: true
     noOpenRef: true
+    deferredDeletedInfos: 0 *changed*
+        /b/b.ts *deleted*
 /user/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -925,7 +929,8 @@ ScriptInfos::
     version: SVC-1-0
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /b/tsconfig.json
 /user/user.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -1040,6 +1045,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     noOpenRef: true
+    deferredDeletedInfos: 0
 /user/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1217,6 +1223,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     noOpenRef: true
+    deferredDeletedInfos: 0
 /user/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1299,6 +1306,7 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     noOpenRef: true
+    deferredDeletedInfos: 0
 /user/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1

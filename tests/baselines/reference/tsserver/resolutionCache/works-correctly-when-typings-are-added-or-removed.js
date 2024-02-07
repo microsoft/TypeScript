@@ -256,6 +256,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /users/username/projects/project/node_modules/@types/lib1/index.d.ts *new*
 
 ScriptInfos::
 /users/username/projects/project/app.ts (Open)
@@ -266,8 +268,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /users/username/projects/project/tsconfig.json *deleted*
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
@@ -340,6 +342,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /users/username/projects/project/node_modules/@types/lib1/index.d.ts
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/@types/lib2 :: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /users/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/project/tsconfig.json
@@ -385,6 +389,8 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    deferredDeletedInfos: 1
+        /users/username/projects/project/node_modules/@types/lib1/index.d.ts
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /users/username/projects/project/tsconfig.json
@@ -440,6 +446,8 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /users/username/projects/project/node_modules/@types/lib1/index.d.ts
 
 ScriptInfos::
 /users/username/projects/project/app.ts (Open)
@@ -450,7 +458,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /users/username/projects/project/tsconfig.json
 /users/username/projects/project/node_modules/@types/lib2/index.d.ts *new*
     version: Text-1
     containingProjects: 1

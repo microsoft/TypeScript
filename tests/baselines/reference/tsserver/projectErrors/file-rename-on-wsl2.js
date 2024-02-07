@@ -235,6 +235,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /home/username/project/src/b.ts *new*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -249,8 +251,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /home/username/project/tsconfig.json *deleted*
+    containingProjects: 1
+        /home/username/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -383,6 +385,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 0 *changed*
+        /home/username/project/src/b.ts *deleted*
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -398,7 +402,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/username/project/tsconfig.json
 /home/username/project/src/c.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -477,6 +482,7 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    deferredDeletedInfos: 0
 
 Before running Timeout callback:: count: 2
 7: /home/username/project/tsconfig.json
@@ -597,6 +603,7 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 0
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -668,6 +675,7 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
     dirty: true *changed*
+    deferredDeletedInfos: 0
 
 ScriptInfos::
 /a/lib/lib.d.ts

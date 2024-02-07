@@ -363,6 +363,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /a/b/projects/myproject/foo/foo.ts *new*
 
 ScriptInfos::
 /a/b/projects/myproject/bar/app.ts (Open)
@@ -373,8 +375,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /a/b/projects/myproject/tsconfig.json *deleted*
+    containingProjects: 1
+        /a/b/projects/myproject/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/projects/myproject/foo2/foo.ts 500 undefined WatchType: Closed Script info
@@ -448,6 +450,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /a/b/projects/myproject/foo/foo.ts
 
 ScriptInfos::
 /a/b/projects/myproject/bar/app.ts (Open)
@@ -458,7 +462,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /a/b/projects/myproject/tsconfig.json
 /a/b/projects/myproject/foo2/foo.ts *new*
     version: Text-1
     containingProjects: 1

@@ -902,6 +902,8 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /home/src/projects/project/packages/package1/dist/index.d.ts *new*
 
 ScriptInfos::
 /a/lib/lib.es2016.full.d.ts
@@ -912,8 +914,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /home/src/projects/project/packages/package2/tsconfig.json *deleted*
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json
 /home/src/projects/project/packages/package2/src/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1093,6 +1095,8 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /home/src/projects/project/packages/package1/dist/index.d.ts
 
 Before running Timeout callback:: count: 1
 16: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
@@ -1111,6 +1115,8 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
     dirty: true *changed*
+    deferredDeletedInfos: 1
+        /home/src/projects/project/packages/package1/dist/index.d.ts
 
 Before running Timeout callback:: count: 2
 17: /home/src/projects/project/packages/package2/tsconfig.json
@@ -1230,6 +1236,8 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /home/src/projects/project/packages/package1/dist/index.d.ts
 
 Before request
 
@@ -1358,11 +1366,17 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
-Before running Timeout callback:: count: 1
+Before running Timeout callback:: count: 3
 21: timerToUpdateChildWatches
+24: /home/src/projects/project/packages/package2/tsconfig.json
+25: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 25
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -1418,8 +1432,18 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 
-Timeout callback:: count: 1
+Timeout callback:: count: 3
 21: timerToUpdateChildWatches *new*
+24: /home/src/projects/project/packages/package2/tsconfig.json *new*
+25: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5 *changed*
+    projectProgramVersion: 4
+    dirty: true *changed*
+    deferredDeletedInfos: 1
+        /home/src/projects/project/packages/package1/dist/index.d.ts
 
 ScriptInfos::
 /a/lib/lib.es2016.full.d.ts
@@ -1430,7 +1454,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json
 /home/src/projects/project/packages/package2/src/index.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1442,76 +1467,8 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/s
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1 :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1 :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-After running Timeout callback:: count: 1
-
-PolledWatches::
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
-/home/src/projects/project/node_modules:
-  {"inode":16}
-/home/src/projects/project/node_modules/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1/dist: *new*
-  {"inode":24}
-/home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":26}
-/home/src/projects/project/packages/package1/package.json:
-  {"inode":7}
-/home/src/projects/project/packages/package1/src:
-  {"inode":9}
-/home/src/projects/project/packages/package2:
-  {"inode":11}
-/home/src/projects/project/packages/package2/package.json:
-  {"inode":12}
-/home/src/projects/project/packages/package2/src:
-  {"inode":14}
-/home/src/projects/project/packages/package2/tsconfig.json:
-  {"inode":13}
-
-Timeout callback:: count: 1
-23: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
-
-Before running Timeout callback:: count: 1
-23: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
-
-Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
-After running Timeout callback:: count: 2
-
-Timeout callback:: count: 2
-24: /home/src/projects/project/packages/package2/tsconfig.json *new*
-25: *ensureProjectForOpenFiles* *new*
-
-Projects::
-/home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
-    projectStateVersion: 5 *changed*
-    projectProgramVersion: 4
-    dirty: true *changed*
-
-Before running Timeout callback:: count: 2
-24: /home/src/projects/project/packages/package2/tsconfig.json
-25: *ensureProjectForOpenFiles*
-
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] ======== Resolving module 'package1' from '/home/src/projects/project/packages/package2/src/index.ts'. ========
 Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'.
@@ -1553,6 +1510,82 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+After running Timeout callback:: count: 1
+
+PolledWatches::
+/home/src/projects/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/node_modules:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/node_modules/@types:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/package2/node_modules:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/package2/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/home/src/projects/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.es2016.full.d.ts:
+  {"inode":20}
+/home/src/projects/project/node_modules:
+  {"inode":16}
+/home/src/projects/project/node_modules/package1:
+  {"inode":6}
+/home/src/projects/project/packages/package1:
+  {"inode":6}
+/home/src/projects/project/packages/package1/dist: *new*
+  {"inode":24}
+/home/src/projects/project/packages/package1/dist/index.d.ts:
+  {"inode":26}
+/home/src/projects/project/packages/package1/package.json:
+  {"inode":7}
+/home/src/projects/project/packages/package1/src:
+  {"inode":9}
+/home/src/projects/project/packages/package2:
+  {"inode":11}
+/home/src/projects/project/packages/package2/package.json:
+  {"inode":12}
+/home/src/projects/project/packages/package2/src:
+  {"inode":14}
+/home/src/projects/project/packages/package2/tsconfig.json:
+  {"inode":13}
+
+Timeout callback:: count: 1
+25: *ensureProjectForOpenFiles* *deleted*
+28: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 5 *changed*
+    dirty: false *changed*
+    deferredDeletedInfos: 0 *changed*
+        /home/src/projects/project/packages/package1/dist/index.d.ts *deleted*
+
+ScriptInfos::
+/a/lib/lib.es2016.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json
+/home/src/projects/project/packages/package1/dist/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json
+/home/src/projects/project/packages/package2/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/packages/package2/tsconfig.json *default*
+
+Before running Timeout callback:: count: 1
+28: *ensureProjectForOpenFiles*
+
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
@@ -1584,70 +1617,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
-  {"pollingInterval":500}
+Before running Timeout callback:: count: 0
 
-PolledWatches *deleted*::
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.es2016.full.d.ts:
-  {"inode":20}
-/home/src/projects/project/node_modules:
-  {"inode":16}
-/home/src/projects/project/node_modules/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1/dist:
-  {"inode":24}
-/home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":26}
-/home/src/projects/project/packages/package1/package.json:
-  {"inode":7}
-/home/src/projects/project/packages/package1/src:
-  {"inode":9}
-/home/src/projects/project/packages/package2:
-  {"inode":11}
-/home/src/projects/project/packages/package2/package.json:
-  {"inode":12}
-/home/src/projects/project/packages/package2/src:
-  {"inode":14}
-/home/src/projects/project/packages/package2/tsconfig.json:
-  {"inode":13}
-
-Projects::
-/home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
-    projectStateVersion: 5
-    projectProgramVersion: 5 *changed*
-    dirty: false *changed*
-
-ScriptInfos::
-/a/lib/lib.es2016.full.d.ts
-    version: Text-1
-    containingProjects: 1
-        /home/src/projects/project/packages/package2/tsconfig.json
-/home/src/projects/project/packages/package1/dist/index.d.ts *changed*
-    version: Text-1
-    pendingReloadFromDisk: false *changed*
-    containingProjects: 1 *changed*
-        /home/src/projects/project/packages/package2/tsconfig.json *new*
-/home/src/projects/project/packages/package2/src/index.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /home/src/projects/project/packages/package2/tsconfig.json *default*
+After running Timeout callback:: count: 0
 
 Before request
 
@@ -1670,10 +1642,10 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 1
-26: checkOne *new*
+29: checkOne *new*
 
 Before running Timeout callback:: count: 1
-26: checkOne
+29: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {

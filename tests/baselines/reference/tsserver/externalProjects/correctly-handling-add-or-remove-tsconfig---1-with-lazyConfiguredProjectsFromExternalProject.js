@@ -211,6 +211,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /a/b/lib.ts *new*
 
 ScriptInfos::
 /a/b/app.ts (Open)
@@ -221,8 +223,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /a/b/proj1 *deleted*
+    containingProjects: 1
+        /a/b/proj1
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -288,6 +290,8 @@ Projects::
     projectProgramVersion: 1
     dirty: true
     isClosed: true *changed*
+    deferredDeletedInfos: 0 *changed*
+        /a/b/lib.ts *deleted*
 /a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -298,11 +302,12 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /a/b/proj1 *deleted*
-/a/b/lib.ts
+/a/b/lib.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 0 *changed*
+        /a/b/proj1 *deleted*
 
 Info seq  [hh:mm:ss:mss] Loading configured project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:

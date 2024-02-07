@@ -326,6 +326,14 @@ Timeout callback:: count: 2
 3: /a/b/tsconfig.json *new*
 4: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    deferredDeletedInfos: 1 *changed*
+        /a/b/file1Consumer2.ts *new*
+
 ScriptInfos::
 /a/b/file1Consumer1.ts
     version: Text-1
@@ -335,8 +343,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /a/b/tsconfig.json *deleted*
+    containingProjects: 1
+        /a/b/tsconfig.json
 /a/b/globalFile3.ts
     version: Text-1
     containingProjects: 1
@@ -409,3 +417,5 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /a/b/file1Consumer2.ts

@@ -526,6 +526,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /a.ts *new*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
@@ -533,8 +535,8 @@ ScriptInfos::
     version: SVC-1-0
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /tsconfig.json *deleted*
+    containingProjects: 1
+        /tsconfig.json
 /ambient.d.ts
     version: Text-1
     containingProjects: 1
@@ -622,4 +624,6 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /a.ts
     autoImportProviderHost: /dev/null/autoImportProviderProject1*

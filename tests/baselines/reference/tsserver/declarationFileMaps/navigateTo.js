@@ -657,14 +657,16 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     noOpenRef: true
+    deferredDeletedInfos: 1 *changed*
+        /b/b.ts *new*
 
 ScriptInfos::
 /b/b.ts *changed*
     version: SVC-1-0
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /b/tsconfig.json *deleted*
+    containingProjects: 1
+        /b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -752,6 +754,8 @@ Projects::
     dirty: true
     isClosed: true *changed*
     noOpenRef: true
+    deferredDeletedInfos: 0 *changed*
+        /b/b.ts *deleted*
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -765,7 +769,8 @@ ScriptInfos::
     version: SVC-1-0
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 0 *changed*
+        /b/tsconfig.json *deleted*
 /b/bin/b.d.ts *new*
     version: Text-1
     containingProjects: 1

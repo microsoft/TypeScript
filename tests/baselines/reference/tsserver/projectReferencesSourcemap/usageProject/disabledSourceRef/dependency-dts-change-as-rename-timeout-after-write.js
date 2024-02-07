@@ -783,6 +783,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts *new*
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -805,8 +807,8 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/main/tsconfig.json *deleted*
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
     version: Text-1
     containingProjects: 0
@@ -820,14 +822,16 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 3
-1: /user/username/projects/myproject/main/tsconfig.json
-2: *ensureProjectForOpenFiles*
-4: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation
+4: /user/username/projects/myproject/main/tsconfig.json
+5: *ensureProjectForOpenFiles*
+6: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/decls/FnS.d.ts]
 export declare function fn1(): void;
 export declare function fn2(): void;
@@ -839,10 +843,12 @@ export declare function fn6(): void;
 
 
 Timeout callback:: count: 3
+1: /user/username/projects/myproject/main/tsconfig.json *deleted*
+2: *ensureProjectForOpenFiles* *deleted*
 3: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
-1: /user/username/projects/myproject/main/tsconfig.json
-2: *ensureProjectForOpenFiles*
-4: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+4: /user/username/projects/myproject/main/tsconfig.json *new*
+5: *ensureProjectForOpenFiles* *new*
+6: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -862,7 +868,8 @@ ScriptInfos::
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
-    containingProjects: 0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
     version: Text-1
     containingProjects: 0
@@ -938,13 +945,15 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 Timeout callback:: count: 0
-4: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+6: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts *deleted*
     documentPositionMappers: 0 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
 /user/username/projects/myproject/random/tsconfig.json (Configured)
@@ -968,8 +977,8 @@ ScriptInfos::
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
     sourceMapFilePath: undefined *changed*
-    containingProjects: 1 *changed*
-        /user/username/projects/myproject/main/tsconfig.json *new*
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
     version: Text-1
     containingProjects: 0
@@ -1038,6 +1047,7 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2
+    deferredDeletedInfos: 0
     documentPositionMappers: 1 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
 /user/username/projects/myproject/random/tsconfig.json (Configured)

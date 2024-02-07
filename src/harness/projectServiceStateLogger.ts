@@ -34,6 +34,7 @@ interface ProjectData {
     isOrphan: ReturnType<Project["isOrphan"]>;
     noOpenRef: boolean;
     deferredClose: ConfiguredProject["deferredClose"];
+    deferredDeletedInfos: Project["deferredDeletedInfos"];
     documentPositionMappers: SourceMapper["documentPositionMappers"];
     autoImportProviderHost: Project["autoImportProviderHost"];
     noDtsResolutionProject: Project["noDtsResolutionProject"];
@@ -120,6 +121,15 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", isConfiguredProject(project) && !project.hasOpenRef(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "deferredClose", isConfiguredProject(project) && project.deferredClose, projectDiff, projectPropertyLogs);
+                projectDiff = printSetPropertyValue(
+                    PrintPropertyWhen.DefinedOrChangedOrNew,
+                    data?.deferredDeletedInfos,
+                    "deferredDeletedInfos",
+                    project.deferredDeletedInfos,
+                    projectDiff,
+                    projectPropertyLogs,
+                    info => info.fileName,
+                );
                 projectDiff = printMapPropertyValue(
                     PrintPropertyWhen.Changed,
                     data?.documentPositionMappers,
@@ -151,6 +161,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 isOrphan: !isBackgroundProject(project) && project.isOrphan(),
                 noOpenRef: isConfiguredProject(project) && !project.hasOpenRef(),
                 deferredClose: isConfiguredProject(project) && project.deferredClose,
+                deferredDeletedInfos: project.deferredDeletedInfos && new Set(project.deferredDeletedInfos),
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,
                 originalConfiguredProjects: project.originalConfiguredProjects && new Set(project.originalConfiguredProjects),
@@ -174,7 +185,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 infoDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "deferredDelete", info.deferredDelete, infoDiff, infoPropertyLogs);
                 infoDiff = printScriptInfoSourceMapFilePath(data, info, infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "declarationInfoPath", info.declarationInfoPath, infoDiff, infoPropertyLogs);
-                infoDiff = printSetPropertyValueWorker(PrintPropertyWhen.DefinedOrChangedOrNew, data?.sourceInfos, "sourceInfos", info.sourceInfos, infoDiff, infoPropertyLogs, identity);
+                infoDiff = printSetPropertyValue(PrintPropertyWhen.DefinedOrChangedOrNew, data?.sourceInfos, "sourceInfos", info.sourceInfos, infoDiff, infoPropertyLogs, identity);
                 infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "documentPositionMapper", info.documentPositionMapper, infoDiff, infoPropertyLogs, info.documentPositionMapper ? toStringDocumentPostionMapper(info.documentPositionMapper) : undefined);
                 let defaultProject: Project | undefined;
                 try {
@@ -183,13 +194,15 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 catch (e) {
                     Debug.assert(e.message === "No Project.");
                 }
+                const containingProjects = new Set(info.containingProjects);
+                Debug.assert(containingProjects.size === info.containingProjects.length);
                 return printSetPropertyAndCreateStatementLog(
                     logs,
                     `${info.fileName}${info.isDynamic ? " (Dynamic)" : ""}${isOpen ? " (Open)" : ""}`,
                     PrintPropertyWhen.Always,
                     data?.containingProjects,
                     "containingProjects",
-                    new Set(info.containingProjects),
+                    containingProjects,
                     infoDiff,
                     infoPropertyLogs,
                     project => `${project.projectName}${defaultProject === project ? " *default*" : ""}`,
@@ -291,7 +304,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         );
     }
 
-    function printSetPropertyValueWorker<T>(
+    function printSetPropertyValue<T>(
         printWhen: PrintPropertyWhen.Always | PrintPropertyWhen.DefinedOrChangedOrNew,
         dataValue: Set<T> | undefined,
         propertyName: string,
@@ -416,7 +429,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
         propertyLogs: StatePropertyLog[],
         toStringPropertyValue: (v: T) => string,
     ) {
-        dataDiff = printSetPropertyValueWorker(
+        dataDiff = printSetPropertyValue(
             printWhen,
             dataValue,
             propertyName,
@@ -447,7 +460,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 infoDiff,
                 infoPropertyLogs,
             ) :
-            printSetPropertyValueWorker(
+            printSetPropertyValue(
                 PrintPropertyWhen.DefinedOrChangedOrNew,
                 data?.sourceMapFilePath && !isString(data?.sourceMapFilePath) ? data.sourceMapFilePath.sourceInfos : undefined,
                 "sourceMapFilePath sourceInfos",

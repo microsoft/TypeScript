@@ -783,6 +783,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts *new*
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -805,8 +807,8 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/main/tsconfig.json *deleted*
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
     version: Text-1
     containingProjects: 0
@@ -893,6 +895,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /user/username/projects/myproject/decls/fns.d.ts
     documentPositionMappers: 0 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
 /user/username/projects/myproject/random/tsconfig.json (Configured)
@@ -1178,6 +1182,8 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
+    deferredDeletedInfos: 1
+        /user/username/projects/myproject/decls/fns.d.ts
 /user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1201,7 +1207,8 @@ ScriptInfos::
     pendingReloadFromDisk: true
     deferredDelete: true
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
-    containingProjects: 0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts
     version: Text-1
     containingProjects: 0
@@ -1292,9 +1299,11 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/main/tsconfig.json (Configured)
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2
+    deferredDeletedInfos: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts *deleted*
 /user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1318,7 +1327,8 @@ ScriptInfos::
     pendingReloadFromDisk: true
     deferredDelete: true
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
-    containingProjects: 0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts *deleted*
     version: Text-1
     containingProjects: 0
@@ -1401,6 +1411,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2
     noOpenRef: true *changed*
+    deferredDeletedInfos: 0
 /user/username/projects/myproject/random/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1487,6 +1498,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2
     noOpenRef: true
+    deferredDeletedInfos: 0
 /user/username/projects/myproject/random/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1

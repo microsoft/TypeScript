@@ -525,14 +525,16 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
 
 ScriptInfos::
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /home/src/projects/project1/tsconfig.json *deleted*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -714,6 +716,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts *new*
@@ -724,7 +728,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -782,6 +787,8 @@ Projects::
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    deferredDeletedInfos: 1
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -792,7 +799,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -888,6 +896,8 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 2
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -898,7 +908,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -959,6 +970,9 @@ Projects::
     projectStateVersion: 4 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    deferredDeletedInfos: 2 *changed*
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+        /home/src/projects/project1/core.d.ts *new*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -969,7 +983,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -986,8 +1001,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /home/src/projects/project1/tsconfig.json *deleted*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1
@@ -1088,20 +1103,38 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 2
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+        /home/src/projects/project1/core.d.ts
 
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Before running Timeout callback:: count: 1
+Before running Timeout callback:: count: 3
 10: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
+11: /home/src/projects/project1/tsconfig.json
+12: *ensureProjectForOpenFiles*
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts]
 interface DOMInterface { }
 
 
-Timeout callback:: count: 1
+Timeout callback:: count: 3
 10: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+11: /home/src/projects/project1/tsconfig.json *new*
+12: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 5 *changed*
+    projectProgramVersion: 3
+    dirty: true *changed*
+    deferredDeletedInfos: 2
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+        /home/src/projects/project1/core.d.ts
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -1112,7 +1145,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1129,7 +1163,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1
@@ -1152,23 +1187,19 @@ ScriptInfos::
         /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-11: /home/src/projects/project1/tsconfig.json *new*
-12: *ensureProjectForOpenFiles* *new*
-
-Projects::
-/home/src/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 5 *changed*
-    projectProgramVersion: 3
-    dirty: true *changed*
+11: /home/src/projects/project1/tsconfig.json *deleted*
+12: *ensureProjectForOpenFiles* *deleted*
+13: /home/src/projects/project1/tsconfig.json *new*
+14: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
-11: /home/src/projects/project1/tsconfig.json
-12: *ensureProjectForOpenFiles*
+13: /home/src/projects/project1/tsconfig.json
+14: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
@@ -1263,6 +1294,9 @@ Projects::
     projectStateVersion: 5
     projectProgramVersion: 4 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1 *changed*
+        /home/src/projects/project1/core.d.ts
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *deleted*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts *changed*
@@ -1272,8 +1306,8 @@ ScriptInfos::
 /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *changed*
     version: Text-1
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1 *changed*
-        /home/src/projects/project1/tsconfig.json *new*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1290,7 +1324,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1
@@ -1317,8 +1352,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
-13: /home/src/projects/project1/tsconfig.json
-14: *ensureProjectForOpenFiles*
+15: /home/src/projects/project1/tsconfig.json
+16: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project1/tsconfig.json]
 {
   "compilerOptions": {
@@ -1337,14 +1372,16 @@ Before running Timeout callback:: count: 2
 
 
 Timeout callback:: count: 2
-13: /home/src/projects/project1/tsconfig.json *new*
-14: *ensureProjectForOpenFiles* *new*
+15: /home/src/projects/project1/tsconfig.json *new*
+16: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 6 *changed*
     projectProgramVersion: 4
     dirty: true *changed*
+    deferredDeletedInfos: 1
+        /home/src/projects/project1/core.d.ts
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project1/tsconfig.json
@@ -1494,6 +1531,8 @@ Projects::
     projectStateVersion: 6
     projectProgramVersion: 5 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /home/src/projects/project1/core.d.ts
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project1/tsconfig.json 1:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
@@ -1507,9 +1546,9 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json, C
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Before running Timeout callback:: count: 3
-17: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
-18: /home/src/projects/project1/tsconfig.json
-19: *ensureProjectForOpenFiles*
+19: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
+20: /home/src/projects/project1/tsconfig.json
+21: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project1/tsconfig.json]
 {
   "compilerOptions": {
@@ -1528,15 +1567,18 @@ Before running Timeout callback:: count: 3
 //// [/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts] deleted
 
 Timeout callback:: count: 3
-17: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
-18: /home/src/projects/project1/tsconfig.json *new*
-19: *ensureProjectForOpenFiles* *new*
+19: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+20: /home/src/projects/project1/tsconfig.json *new*
+21: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 7 *changed*
     projectProgramVersion: 5
     dirty: true *changed*
+    deferredDeletedInfos: 2 *changed*
+        /home/src/projects/project1/core.d.ts
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts *new*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -1546,8 +1588,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /home/src/projects/project1/tsconfig.json *deleted*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1564,7 +1606,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1
@@ -1790,6 +1833,9 @@ Projects::
     projectStateVersion: 7
     projectProgramVersion: 6 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 2
+        /home/src/projects/project1/core.d.ts
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts *changed*
@@ -1800,7 +1846,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1817,7 +1864,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1
@@ -1847,21 +1895,25 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Before running Timeout callback:: count: 3
-20: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
-21: /home/src/projects/project1/tsconfig.json
-22: *ensureProjectForOpenFiles*
+22: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
+23: /home/src/projects/project1/tsconfig.json
+24: *ensureProjectForOpenFiles*
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts] deleted
 
 Timeout callback:: count: 3
-20: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
-21: /home/src/projects/project1/tsconfig.json *new*
-22: *ensureProjectForOpenFiles* *new*
+22: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+23: /home/src/projects/project1/tsconfig.json *new*
+24: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project1/tsconfig.json (Configured) *changed*
     projectStateVersion: 8 *changed*
     projectProgramVersion: 6
     dirty: true *changed*
+    deferredDeletedInfos: 3 *changed*
+        /home/src/projects/project1/core.d.ts
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+        /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *new*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -1872,7 +1924,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -1885,13 +1938,14 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /home/src/projects/project1/tsconfig.json *deleted*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/core.d.ts
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1
@@ -2056,6 +2110,10 @@ Projects::
     projectStateVersion: 8
     projectProgramVersion: 7 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 3
+        /home/src/projects/project1/core.d.ts
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+        /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -2070,7 +2128,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -2083,12 +2142,14 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/core.d.ts
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1
@@ -2114,15 +2175,31 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/no
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts :: WatchInfo: /home/src/projects/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Before running Timeout callback:: count: 1
-23: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
+Before running Timeout callback:: count: 3
+25: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
+26: /home/src/projects/project1/tsconfig.json
+27: *ensureProjectForOpenFiles*
 //// [/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts]
 interface WebWorkerInterface { }
 
 
-Timeout callback:: count: 1
-23: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+Timeout callback:: count: 3
+25: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation *new*
+26: /home/src/projects/project1/tsconfig.json *new*
+27: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/home/src/projects/project1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 9 *changed*
+    projectProgramVersion: 7
+    dirty: true *changed*
+    deferredDeletedInfos: 3
+        /home/src/projects/project1/core.d.ts
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+        /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -2137,7 +2214,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -2150,12 +2228,14 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/core.d.ts
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1
@@ -2178,23 +2258,19 @@ ScriptInfos::
         /home/src/projects/project1/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project1/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-24: /home/src/projects/project1/tsconfig.json *new*
-25: *ensureProjectForOpenFiles* *new*
-
-Projects::
-/home/src/projects/project1/tsconfig.json (Configured) *changed*
-    projectStateVersion: 9 *changed*
-    projectProgramVersion: 7
-    dirty: true *changed*
+26: /home/src/projects/project1/tsconfig.json *deleted*
+27: *ensureProjectForOpenFiles* *deleted*
+28: /home/src/projects/project1/tsconfig.json *new*
+29: *ensureProjectForOpenFiles* *new*
 
 Before running Timeout callback:: count: 2
-24: /home/src/projects/project1/tsconfig.json
-25: *ensureProjectForOpenFiles*
+28: /home/src/projects/project1/tsconfig.json
+29: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project1/tsconfig.json
@@ -2289,6 +2365,10 @@ Projects::
     projectStateVersion: 9
     projectProgramVersion: 8 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 2 *changed*
+        /home/src/projects/project1/core.d.ts
+        /home/src/projects/node_modules/@typescript/lib-dom/index.d.ts
+        /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *deleted*
 
 ScriptInfos::
 /home/src/lib/lib.dom.d.ts
@@ -2303,7 +2383,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/node_modules/@typescript/lib-es5/index.d.ts
     version: Text-1
     containingProjects: 1
@@ -2315,13 +2396,14 @@ ScriptInfos::
 /home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts *changed*
     version: Text-2 *changed*
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1 *changed*
-        /home/src/projects/project1/tsconfig.json *new*
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/core.d.ts
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /home/src/projects/project1/tsconfig.json
 /home/src/projects/project1/file.ts
     version: Text-2
     containingProjects: 1

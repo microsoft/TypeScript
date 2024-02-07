@@ -1108,6 +1108,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts *new*
     originalConfiguredProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
@@ -1133,8 +1135,8 @@ ScriptInfos::
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
-    containingProjects: 0 *changed*
-        /user/username/projects/myproject/main/tsconfig.json *deleted*
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1227,6 +1229,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /user/username/projects/myproject/decls/fns.d.ts
     documentPositionMappers: 0 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *deleted*
     originalConfiguredProjects: 1
@@ -1364,6 +1368,8 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
+    deferredDeletedInfos: 1
+        /user/username/projects/myproject/decls/fns.d.ts
     originalConfiguredProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
@@ -1434,6 +1440,8 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
@@ -1455,12 +1463,13 @@ export declare function fn5(): void;
 
 
 Timeout callback:: count: 4
+1: /user/username/projects/myproject/main/tsconfig.json *deleted*
 3: /user/username/projects/myproject/dependency/tsconfig.json *deleted*
 4: *ensureProjectForOpenFiles* *deleted*
-1: /user/username/projects/myproject/main/tsconfig.json
-8: /user/username/projects/myproject/dependency/tsconfig.json *new*
-9: *ensureProjectForOpenFiles* *new*
-10: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+6: /user/username/projects/myproject/main/tsconfig.json *new*
+10: /user/username/projects/myproject/dependency/tsconfig.json *new*
+11: *ensureProjectForOpenFiles* *new*
+12: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1469,9 +1478,12 @@ Projects::
     dirty: true *changed*
     documentPositionMappers: 0 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: identitySourceMapConsumer *deleted*
-/user/username/projects/myproject/main/tsconfig.json (Configured)
-    projectStateVersion: 2
+/user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
+    deferredDeletedInfos: 1
+        /user/username/projects/myproject/decls/fns.d.ts
     originalConfiguredProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)
@@ -1497,7 +1509,8 @@ ScriptInfos::
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
-    containingProjects: 0
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1580,11 +1593,11 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Timeout callback:: count: 3
-9: *ensureProjectForOpenFiles* *deleted*
-10: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
-1: /user/username/projects/myproject/main/tsconfig.json
-8: /user/username/projects/myproject/dependency/tsconfig.json
-11: *ensureProjectForOpenFiles* *new*
+11: *ensureProjectForOpenFiles* *deleted*
+12: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
+6: /user/username/projects/myproject/main/tsconfig.json
+10: /user/username/projects/myproject/dependency/tsconfig.json
+13: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
@@ -1592,8 +1605,11 @@ Projects::
     projectProgramVersion: 1
     dirty: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
-    projectStateVersion: 3 *changed*
+    projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+    deferredDeletedInfos: 0 *changed*
+        /user/username/projects/myproject/decls/fns.d.ts *deleted*
     documentPositionMappers: 1 *changed*
         /user/username/projects/myproject/decls/fns.d.ts: DocumentPositionMapper1 *new*
     originalConfiguredProjects: 1
@@ -1620,8 +1636,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: false *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
-    containingProjects: 1 *changed*
-        /user/username/projects/myproject/main/tsconfig.json *new*
+    containingProjects: 1
+        /user/username/projects/myproject/main/tsconfig.json
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -1796,6 +1812,7 @@ Projects::
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 3
     projectProgramVersion: 3
+    deferredDeletedInfos: 0
     originalConfiguredProjects: 1
         /user/username/projects/myproject/dependency/tsconfig.json
 /user/username/projects/myproject/random/tsconfig.json (Configured)

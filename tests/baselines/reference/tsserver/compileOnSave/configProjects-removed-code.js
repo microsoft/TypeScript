@@ -235,14 +235,16 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /a/b/moduleFile1.ts *new*
 
 ScriptInfos::
 /a/b/moduleFile1.ts *changed*
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /a/b/tsconfig.json *deleted*
+    containingProjects: 1
+        /a/b/tsconfig.json
 /a/b/referenceFile1.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -305,6 +307,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /a/b/moduleFile1.ts
 
 Before request
 

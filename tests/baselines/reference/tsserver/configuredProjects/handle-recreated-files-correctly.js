@@ -232,6 +232,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /a/b/commonFile2.ts *new*
 
 ScriptInfos::
 /a/b/commonFile1.ts (Open)
@@ -242,8 +244,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /a/b/tsconfig.json *deleted*
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
@@ -293,29 +295,35 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /a/b/commonFile2.ts
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/commonFile2.ts 0:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonFile2.ts 0:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/commonFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonFile2.ts 0:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/commonFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/commonFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Before running Timeout callback:: count: 2
-5: /a/b/tsconfig.json
-6: *ensureProjectForOpenFiles*
+7: /a/b/tsconfig.json
+8: *ensureProjectForOpenFiles*
 //// [/a/b/commonFile2.ts]
 let y = 1
 
 
 Timeout callback:: count: 2
-5: /a/b/tsconfig.json *new*
-6: *ensureProjectForOpenFiles* *new*
+7: /a/b/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
     dirty: true *changed*
+    deferredDeletedInfos: 1
+        /a/b/commonFile2.ts
 
 ScriptInfos::
 /a/b/commonFile1.ts (Open)
@@ -326,7 +334,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: undefined *changed*
-    containingProjects: 0
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
@@ -379,6 +388,8 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 0 *changed*
+        /a/b/commonFile2.ts *deleted*
 
 ScriptInfos::
 /a/b/commonFile1.ts (Open)
@@ -388,5 +399,5 @@ ScriptInfos::
 /a/b/commonFile2.ts *changed*
     version: Text-1
     pendingReloadFromDisk: false *changed*
-    containingProjects: 1 *changed*
-        /a/b/tsconfig.json *new*
+    containingProjects: 1
+        /a/b/tsconfig.json

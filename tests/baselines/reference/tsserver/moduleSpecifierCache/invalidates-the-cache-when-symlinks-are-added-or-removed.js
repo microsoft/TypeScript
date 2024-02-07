@@ -991,6 +991,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /src/b-link.ts *new*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
@@ -1010,8 +1012,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /tsconfig.json *deleted*
+    containingProjects: 1
+        /tsconfig.json
 /src/b.ts (Open)
     version: Text-1
     containingProjects: 1
@@ -1104,6 +1106,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /src/b-link.ts
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 Info seq  [hh:mm:ss:mss] moduleSpecifierCache count: 0

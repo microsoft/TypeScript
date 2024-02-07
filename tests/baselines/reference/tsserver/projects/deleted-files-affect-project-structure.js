@@ -158,6 +158,8 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    deferredDeletedInfos: 1 *changed*
+        /a/b/f2.ts *new*
 
 ScriptInfos::
 /a/b/f1.ts (Open)
@@ -168,8 +170,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true *changed*
     deferredDelete: true *changed*
-    containingProjects: 0 *changed*
-        /dev/null/inferredProject1* *deleted*
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /a/c/f3.ts (Open)
     version: Text-1
     containingProjects: 1
@@ -256,6 +258,8 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    deferredDeletedInfos: 1
+        /a/b/f2.ts
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -269,7 +273,8 @@ ScriptInfos::
     version: Text-1
     pendingReloadFromDisk: true
     deferredDelete: true
-    containingProjects: 0
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /a/c/f3.ts (Open) *changed*
     version: Text-1
     containingProjects: 1 *changed*
