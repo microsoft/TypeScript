@@ -1736,6 +1736,20 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 4
+    projectProgramVersion: 2
+/user/username/projects/myproject/tsconfig-src.json (Configured)
+    projectStateVersion: 2
+    projectProgramVersion: 2
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/myproject/tsconfig-src.json *new*
+        /user/username/projects/myproject/tsconfig.json *new*
+
 ScriptInfos::
 /a/lib/lib.d.ts
     version: Text-1
@@ -1933,6 +1947,9 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig.json
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -2229,6 +2246,9 @@ Projects::
 /user/username/projects/myproject/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig.json
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*
@@ -2620,15 +2640,21 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/indirect3/tsconfig.json (Configured)
+/user/username/projects/myproject/indirect3/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/myproject/tsconfig-src.json *new*
+        /user/username/projects/myproject/tsconfig.json *new*
 /user/username/projects/myproject/tsconfig-src.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
 /user/username/projects/myproject/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig.json
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

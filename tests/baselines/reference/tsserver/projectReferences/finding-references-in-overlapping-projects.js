@@ -987,15 +987,28 @@ Projects::
 /user/username/projects/solution/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/solution/b/tsconfig.json (Configured)
+/user/username/projects/solution/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/solution/a/tsconfig.json *new*
+        /user/username/projects/solution/b/tsconfig.json *new*
 /user/username/projects/solution/c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 4
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json
+        /user/username/projects/solution/d/tsconfig.json
 /user/username/projects/solution/d/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 4
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json
+        /user/username/projects/solution/d/tsconfig.json
 /user/username/projects/solution/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
@@ -1213,3 +1226,35 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/user/username/projects/solution/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/solution/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 4 *changed*
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json *new*
+        /user/username/projects/solution/d/tsconfig.json *new*
+/user/username/projects/solution/c/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 4
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json
+        /user/username/projects/solution/d/tsconfig.json
+/user/username/projects/solution/d/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 4
+        /user/username/projects/solution/a/tsconfig.json
+        /user/username/projects/solution/b/tsconfig.json
+        /user/username/projects/solution/c/tsconfig.json
+        /user/username/projects/solution/d/tsconfig.json
+/user/username/projects/solution/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1

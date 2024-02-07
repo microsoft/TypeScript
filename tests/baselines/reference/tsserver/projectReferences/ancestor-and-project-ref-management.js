@@ -1128,12 +1128,19 @@ Projects::
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
-/user/username/projects/container/compositeExec/tsconfig.json (Configured)
+/user/username/projects/container/compositeExec/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/container/lib/tsconfig.json *new*
+        /user/username/projects/container/compositeexec/tsconfig.json *new*
 /user/username/projects/container/exec/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
 /user/username/projects/container/lib/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1256,9 +1263,16 @@ Projects::
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
 /user/username/projects/container/exec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
 /user/username/projects/container/lib/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1603,9 +1617,16 @@ Projects::
 /user/username/projects/container/compositeExec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
 /user/username/projects/container/exec/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
 /user/username/projects/container/lib/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1803,9 +1824,16 @@ Projects::
 /user/username/projects/container/compositeExec/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
 /user/username/projects/container/exec/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
 /user/username/projects/container/lib/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1

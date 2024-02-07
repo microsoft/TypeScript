@@ -2014,9 +2014,17 @@ Projects::
 /user/username/projects/myproject/tsconfig-indirect1.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-indirect2.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-src.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -2260,9 +2268,17 @@ Projects::
 /user/username/projects/myproject/tsconfig-indirect1.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-indirect2.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-src.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -2612,9 +2628,17 @@ Projects::
 /user/username/projects/myproject/tsconfig-indirect1.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-indirect2.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-src.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
@@ -3183,15 +3207,25 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/user/username/projects/myproject/indirect3/tsconfig.json (Configured)
+/user/username/projects/myproject/indirect3/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 1 *changed*
+        /user/username/projects/myproject/tsconfig-src.json *new*
 /user/username/projects/myproject/tsconfig-indirect1.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-indirect2.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /user/username/projects/myproject/tsconfig-src.json
+        /user/username/projects/myproject/tsconfig-indirect1.json
+        /user/username/projects/myproject/tsconfig-indirect2.json
 /user/username/projects/myproject/tsconfig-src.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

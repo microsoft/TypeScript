@@ -936,9 +936,11 @@ Projects::
 /a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/dev/null/inferredProject1* (Inferred)
+/dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 1 *changed*
+        /a/tsconfig.json *new*
 
 ScriptInfos::
 /a/a.ts *new*
@@ -1017,6 +1019,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 
 ScriptInfos::
 /a/a.ts
@@ -1143,6 +1147,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

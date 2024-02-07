@@ -700,9 +700,13 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 Projects::
-/a/tsconfig.json (Configured)
+/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3 *changed*
+        /b/tsconfig.json *new*
+        /a/tsconfig.json *new*
+        /c/tsconfig.json *new*
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

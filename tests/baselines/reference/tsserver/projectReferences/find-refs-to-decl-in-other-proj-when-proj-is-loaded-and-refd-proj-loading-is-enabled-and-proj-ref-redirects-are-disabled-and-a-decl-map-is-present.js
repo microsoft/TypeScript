@@ -721,6 +721,16 @@ FsWatchesRecursive::
 /user/username/projects/myproject/b:
   {}
 
+Projects::
+/user/username/projects/myproject/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 1 *changed*
+        /user/username/projects/myproject/b/tsconfig.json *new*
+/user/username/projects/myproject/b/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 ScriptInfos::
 /user/username/projects/myproject/a/index.ts (Open)
     version: SVC-1-0
