@@ -3382,6 +3382,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.JSDocEnumTag:
+                case SyntaxKind.JSDocImportTag:
                     // js type aliases do not resolve names from their host, so skip past it
                     const root = getJSDocRoot(location);
                     if (root) {
