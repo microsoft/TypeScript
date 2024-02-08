@@ -9488,14 +9488,9 @@ namespace Parser {
                     !identifier ||
                     parseOptional(SyntaxKind.CommaToken)
                 ) {
-                    if (token() === SyntaxKind.AsteriskToken) {
-                        namedBindings = parseNamespaceImport();
-                    }
-                    else {
-                        scanner.setSkipJsDocLeadingAsterisks(true);
-                        namedBindings = parseNamedImportsOrExports(SyntaxKind.NamedImports);
-                        scanner.setSkipJsDocLeadingAsterisks(false);
-                    }
+                    scanner.setSkipJsDocLeadingAsterisks(true);
+                    namedBindings = token() === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
+                    scanner.setSkipJsDocLeadingAsterisks(false);
                 }
                 return finishNode(factory.createImportClause(/*isTypeOnly*/ true, identifier, namedBindings), pos);
             }
