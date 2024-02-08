@@ -19877,12 +19877,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!result) {
                 const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
                 const checkType = root.checkType;
-                const distributionType = root.isDistributive ? getMappedType(checkType, newMapper) : undefined;
+                const distributionType = root.isDistributive ? getReducedType(getMappedType(checkType, newMapper)) : undefined;
                 // Distributive conditional types are distributed over union types. For example, when the
                 // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
                 // result is (A extends U ? X : Y) | (B extends U ? X : Y).
                 result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never) ?
-                    mapTypeWithAlias(getReducedType(distributionType), t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint), aliasSymbol, aliasTypeArguments) :
+                    mapTypeWithAlias(distributionType, t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper), forConstraint), aliasSymbol, aliasTypeArguments) :
                     getConditionalType(root, newMapper, forConstraint, aliasSymbol, aliasTypeArguments);
                 root.instantiations!.set(id, result);
             }
