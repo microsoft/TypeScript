@@ -9475,8 +9475,6 @@ namespace Parser {
                     parseExpected(SyntaxKind.FromKeyword);
                 }
 
-                Debug.assert(importClause);
-
                 const moduleSpecifier = parseModuleSpecifier();
                 const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
                 return finishNode(factory.createJSDocImportTag(tagName, importClause, moduleSpecifier, comments), start);

@@ -4070,7 +4070,7 @@ export interface JSDocSatisfiesExpression extends ParenthesizedExpression {
 export interface JSDocImportTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocImportTag;
     readonly parent: JSDoc;
-    readonly importClause: ImportClause;
+    readonly importClause?: ImportClause;
     readonly moduleSpecifier: Expression;
 }
 
@@ -8818,8 +8818,8 @@ export interface NodeFactory {
     updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
     createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
     updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
-    createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTag;
-    updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag;
+    createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTag;
+    updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag;
     createJSDocText(text: string): JSDocText;
     updateJSDocText(node: JSDocText, text: string): JSDocText;
     createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;

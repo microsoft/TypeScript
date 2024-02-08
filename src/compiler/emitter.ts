@@ -4457,16 +4457,17 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitJSDocImportTag(tag: JSDocImportTag) {
         emitJSDocTagName(tag.tagName);
-
         writeSpace();
-        emit(tag.importClause);
 
-        writeSpace();
-        emitTokenWithComment(SyntaxKind.FromKeyword, tag.importClause.end, writeKeyword, tag);
+        if (tag.importClause) {
+            emit(tag.importClause);
+            writeSpace();
 
-        writeSpace();
+            emitTokenWithComment(SyntaxKind.FromKeyword, tag.importClause.end, writeKeyword, tag);
+            writeSpace();
+        }
+
         emitExpression(tag.moduleSpecifier);
-
         emitJSDocComment(tag.comment);
     }
 

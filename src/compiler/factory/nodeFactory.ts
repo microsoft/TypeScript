@@ -5558,7 +5558,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTag {
+    function createJSDocImportTag(tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, comment?: string | NodeArray<JSDocComment>): JSDocImportTag {
         const node = createBaseJSDocTag<JSDocImportTag>(SyntaxKind.JSDocImportTag, tagName ?? createIdentifier("import"), comment);
         node.importClause = importClause;
         node.moduleSpecifier = moduleSpecifier;
@@ -5566,7 +5566,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-    function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag {
+    function updateJSDocImportTag(node: JSDocImportTag, tagName: Identifier | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, comment: string | NodeArray<JSDocComment> | undefined): JSDocImportTag {
         return node.tagName !== tagName
                 || node.comment !== comment
                 || node.importClause !== importClause
