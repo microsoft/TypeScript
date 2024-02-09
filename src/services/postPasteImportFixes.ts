@@ -1,7 +1,7 @@
 import { addRange, append } from "../compiler/core";
-import { SourceFile, Statement, UserPreferences, TypeChecker, AnyImportOrRequireStatement, Identifier, ModifierFlags, Program, TextRange, CancellationToken, ImportClause, ObjectBindingPattern, TypeOnlyAliasDeclaration, SymbolFlags } from "../compiler/types";
+import { AnyImportOrRequireStatement, CancellationToken, Identifier, ModifierFlags, Program, SourceFile, Statement, SymbolFlags,TextRange, TypeChecker, UserPreferences } from "../compiler/types";
 import { hasSyntacticModifier, skipAlias } from "../compiler/utilities";
-import { codefix, Debug, factory, fileShouldUseJavaScriptRequire, forEachChild, formatting, getQuotePreference, ImportKind, insertImports, nodeSeenTracker, Symbol, SymbolExportInfo, textChanges, isIdentifier } from "./_namespaces/ts";
+import { codefix, Debug, factory, fileShouldUseJavaScriptRequire, forEachChild, formatting, getQuotePreference, insertImports, isIdentifier,nodeSeenTracker, Symbol, textChanges } from "./_namespaces/ts";
 import { addExportToChanges, filterImport, forEachImportInStatement, getExistingLocals, getTopLevelDeclarationStatement, getUsageInfo, isTopLevelDeclaration, makeImportOrRequire, moduleSpecifierFromImport, nameOfTopLevelDeclaration } from "./refactors/moveToFile";
 import { CodeFixContextBase, FileTextChanges, LanguageServiceHost, PostPasteImportFixes } from "./types";
 
@@ -9,7 +9,7 @@ import { CodeFixContextBase, FileTextChanges, LanguageServiceHost, PostPasteImpo
 export function postPasteImportFixesProvider(
     targetFile: SourceFile, 
     host: LanguageServiceHost,
-    pastes: Array<{ text: string; range: TextRange }>,
+    pastes: { text: string; range: TextRange }[],
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
@@ -24,7 +24,7 @@ export function postPasteImportFixesProvider(
 function postPasteFixes (
     targetFile: SourceFile, 
     host: LanguageServiceHost,
-    pastes: Array<{ text: string; range: TextRange }>,
+    pastes: { text: string; range: TextRange }[],
     preferences: UserPreferences,
     formatContext: formatting.FormatContext,
     cancellationToken: CancellationToken,
@@ -32,7 +32,7 @@ function postPasteFixes (
     originalFile?: SourceFile,
     copyLocation?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number }}) {
     const updatedTargetFile = host.updateTargetFile?.(targetFile.fileName, targetFile.getText(), targetFile.getText().slice(0, pastes[0].range.pos) + pastes[0].text + targetFile.getText().slice(pastes[0].range.end));
-    let statements: Statement[] = [];
+    const statements: Statement[] = [];
     Debug.assert(updatedTargetFile && updatedTargetFile.updatedFile && updatedTargetFile.originalProgram && updatedTargetFile.updatedProgram);
     
     if (originalFile) {
@@ -51,10 +51,10 @@ function postPasteFixes (
         const context: CodeFixContextBase = {
             sourceFile: updatedTargetFile.updatedFile,
             program: updatedTargetFile.originalProgram,
-            cancellationToken: cancellationToken,
-            host: host,
-            preferences: preferences, 
-            formatContext: formatContext
+            cancellationToken,
+            host,
+            preferences, 
+            formatContext
         }
         const importAdder = codefix.createImportAdder(updatedTargetFile.updatedFile, updatedTargetFile.updatedProgram, preferences, host);
         forEachChild(updatedTargetFile.updatedFile, function cb(node) {

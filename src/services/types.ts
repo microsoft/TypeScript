@@ -42,8 +42,6 @@ import {
     TextSpan,
     UserPreferences,
 } from "./_namespaces/ts";
-import { FixInfo } from "./_namespaces/ts.codefix";
-import { FormatContext } from "./formatting/formatting";
 
 declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
@@ -689,7 +687,7 @@ export interface LanguageService {
     dispose(): void;
     getPostPasteImportFixes(
         targetFile: string,
-        pastes: Array<{ text: string; range: TextRange }>, 
+        pastes: { text: string; range: TextRange }[], 
         preferences: UserPreferences, 
         formatOptions: FormatCodeSettings, 
         copySpan?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number }}): PostPasteImportFixes;

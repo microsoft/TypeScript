@@ -241,6 +241,8 @@ import {
     Path,
     positionIsSynthesized,
     PossibleProgramFileInfo,
+    PostPasteImportFixes,
+    postPasteImportFixes,
     PragmaMap,
     PrivateIdentifier,
     Program,
@@ -319,8 +321,6 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
-    postPasteImportFixes,
-    PostPasteImportFixes,
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
@@ -2093,7 +2093,7 @@ export function createLanguageService(
 
     function getPostPasteImportFixes (
         targetFile: string,
-        pastes: Array<{ text: string; range: TextRange }>,
+        pastes: { text: string; range: TextRange }[],
         preferences: UserPreferences,
         formatOptions: FormatCodeSettings,
         copySpan?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number }}

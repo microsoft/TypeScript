@@ -1886,7 +1886,7 @@ export interface VerifyCodeFixAllOptions {
 
 export interface VerifyPostPasteImportFix {
     targetFile: string;
-    pastes: Array<{text: string; range: ts.TextRange}>;
+    pastes: { text: string; range: ts.TextRange }[];
     preferences: ts.UserPreferences;
     copySpan?: { file: string, start: Location, end: Location }
 }
@@ -1933,7 +1933,7 @@ export interface MoveToFileOptions {
 
 export interface PostPasteImportFixOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
-    readonly pastes: Array<{text: string; range: ts.TextRange}>;
+    readonly pastes: { text: string; range: ts.TextRange }[];
     readonly preferences: ts.UserPreferences;
     readonly copySpan?: { file: string, start: Location, end: Location };
 }

@@ -10,7 +10,6 @@ import {
 } from "./tsserverLogger";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
-import { arrayFrom } from "./_namespaces/ts";
 
 export const enum FourSlashTestType {
     Native,

@@ -1013,7 +1013,7 @@ export class SessionClient implements LanguageService {
 
     getPostPasteImportFixes(
         targetFile: string,
-        pastes: Array<{ text: string; range: TextRange }>, 
+        pastes: { text: string; range: TextRange }[], 
         _preferences: UserPreferences, 
         _formatOptions: FormatCodeSettings, 
         copySpan?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number } }): PostPasteImportFixes {   
@@ -1021,7 +1021,7 @@ export class SessionClient implements LanguageService {
         const args: protocol.GetPostPasteImportFixesRequestArgs = {
             file: targetFile,
             pastes: arrayFrom(pastes.map(paste => ({text: paste.text, range: { start: this.positionToOneBasedLineOffset(targetFile, paste.range.pos), end: this.positionToOneBasedLineOffset(targetFile, paste.range.end)}}))),
-            copySpan: copySpan
+            copySpan
         }
         const request = this.processRequest<protocol.GetPostPasteImportFixesRequest>(protocol.CommandTypes.GetPostPasteImportFixes, args);
         const response = this.processResponse<protocol.GetPostPasteImportFixesResponse>(request);
@@ -1029,7 +1029,7 @@ export class SessionClient implements LanguageService {
             return { edits: []};
         }
         const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
-        return { edits: edits };
+        return { edits };
     }
 
     getProgram(): Program {

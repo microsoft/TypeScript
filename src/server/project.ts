@@ -1,6 +1,3 @@
-import { info } from "console";
-import { FormatContext } from "../services/_namespaces/ts.formatting";
-import { FixInfo, ImportFixWithModuleSpecifier, sortFixInfo } from "../services/codefixes/importFixes";
 import * as ts from "./_namespaces/ts";
 import {
     addRange,
@@ -23,7 +20,6 @@ import {
     containsPath,
     createCacheableExportInfoMap,
     createLanguageService,
-    createPackageJsonImportFilter,
     createResolutionCache,
     createSymlinkCache,
     Debug,
@@ -69,7 +65,6 @@ import {
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
     HostCancellationToken,
-    ImportClause,
     inferredTypesContainingFile,
     InstallPackageOptions,
     IScriptSnapshot,
@@ -125,7 +120,6 @@ import {
     StringLiteralLike,
     stripQuotes,
     StructureIsReused,
-    SymbolExportInfo,
     SymlinkCache,
     ThrottledCancellationToken,
     timestamp,
