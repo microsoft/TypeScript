@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/typePredicatesCanNarrowByDiscriminant.ts] ////
+
+=== typePredicatesCanNarrowByDiscriminant.ts ===
+// #45770
+declare const fruit: { kind: 'apple'} | { kind: 'banana' } | { kind: 'cherry' }
+>fruit : { kind: 'apple'; } | { kind: 'banana'; } | { kind: 'cherry'; }
+>kind : "apple"
+>kind : "banana"
+>kind : "cherry"
+
+declare function isOneOf<T, U extends T>(item: T, array: readonly U[]): item is U
+>isOneOf : <T, U extends T>(item: T, array: readonly U[]) => item is U
+>item : T
+>array : readonly U[]
+
+if (isOneOf(fruit.kind, ['apple', 'banana'] as const)) {
+>isOneOf(fruit.kind, ['apple', 'banana'] as const) : boolean
+>isOneOf : <T, U extends T>(item: T, array: readonly U[]) => item is U
+>fruit.kind : "apple" | "banana" | "cherry"
+>fruit : { kind: "apple"; } | { kind: "banana"; } | { kind: "cherry"; }
+>kind : "apple" | "banana" | "cherry"
+>['apple', 'banana'] as const : readonly ["apple", "banana"]
+>['apple', 'banana'] : readonly ["apple", "banana"]
+>'apple' : "apple"
+>'banana' : "banana"
+
+    fruit.kind
+>fruit.kind : "apple" | "banana"
+>fruit : { kind: "apple"; } | { kind: "banana"; }
+>kind : "apple" | "banana"
+
+    fruit
+>fruit : { kind: "apple"; } | { kind: "banana"; }
+}

@@ -26740,7 +26740,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function hasMatchingArgument(expression: CallExpression | NewExpression, reference: Node) {
         if (expression.arguments) {
             for (const argument of expression.arguments) {
-                if (isOrContainsMatchingReference(reference, argument) || optionalChainContainsReference(argument, reference)) {
+                if (isOrContainsMatchingReference(reference, argument)
+                    || optionalChainContainsReference(argument, reference)
+                    || isAccessExpression(argument) && isMatchingReference(reference, argument.expression)) {
                     return true;
                 }
             }
