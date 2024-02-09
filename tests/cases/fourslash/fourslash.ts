@@ -216,10 +216,6 @@ declare namespace FourSlashInterface {
         line: number;
         offset: number;
     }
-    interface CopyRange {
-        start: Location;
-        end: Location;
-    }
     class test_ {
         markers(): Marker[];
         markerNames(): string[];
@@ -452,12 +448,10 @@ declare namespace FourSlashInterface {
         toggleMultilineComment(newFileContent: string): void;
         commentSelection(newFileContent: string): void;
         uncommentSelection(newFileContent: string): void;
-        postPasteImportFix(options: {
+        postPasteImportFixes(options: {
             newFileContents: { readonly [fileName: string]: string };
-            targetFile: string, 
-            pastes: Array<{text: string; range: {pos: number, end: number}}>
-            originalFile?: string,
-            copyRange?: CopyRange,
+            pastes: Array<{ text: string; range: { pos: number, end: number }}>;
+            copySpan?: { file: string, start: Location, end: Location },
         }): void;
     }
     class edit {

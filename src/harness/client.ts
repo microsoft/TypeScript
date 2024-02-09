@@ -14,7 +14,6 @@ import {
     computeLineAndCharacterOfPosition,
     computeLineStarts,
     computePositionOfLineAndCharacter,
-    CopyRange,
     createQueue,
     createTextSpanFromBounds,
     Debug,
@@ -1012,13 +1011,18 @@ export class SessionClient implements LanguageService {
         return getSupportedCodeFixes();
     }
 
-    getPostPasteImportFixes(targetFile: string, pastes: Array<{text: string; range: TextRange}>, _preferences: UserPreferences, _formatOptions: FormatCodeSettings, originalFile?: string, copyRange?: CopyRange): PostPasteImportFixes{    
-        const args = this.createFileLocationOrRangeRequestArgs(pastes[0].range, targetFile) as protocol.GetPostPasteImportFixesRequestArgs;
-        args.targetFile = targetFile;
-        args.pastes = arrayFrom(pastes.map(paste => ({text: paste.text, range: this.createFileRangeRequestArgs(targetFile, paste.range.pos, paste.range.end)})));
-        args.originalFile = originalFile;
-        args.copyRange = copyRange;
+    getPostPasteImportFixes(
+        targetFile: string,
+        pastes: Array<{ text: string; range: TextRange }>, 
+        _preferences: UserPreferences, 
+        _formatOptions: FormatCodeSettings, 
+        copySpan?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number } }): PostPasteImportFixes {   
         
+        const args: protocol.GetPostPasteImportFixesRequestArgs = {
+            file: targetFile,
+            pastes: arrayFrom(pastes.map(paste => ({text: paste.text, range: { start: this.positionToOneBasedLineOffset(targetFile, paste.range.pos), end: this.positionToOneBasedLineOffset(targetFile, paste.range.end)}}))),
+            copySpan: copySpan
+        }
         const request = this.processRequest<protocol.GetPostPasteImportFixesRequest>(protocol.CommandTypes.GetPostPasteImportFixes, args);
         const response = this.processResponse<protocol.GetPostPasteImportFixesResponse>(request);
         if (!response.body) {

@@ -1,3 +1,4 @@
+import { Location } from "../server/protocol";
 import * as FourSlash from "./_namespaces/FourSlash";
 import * as ts from "./_namespaces/ts";
 
@@ -621,7 +622,7 @@ export class Verify extends VerifyNegatable {
         this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 
-    public postPasteImportFix(options: PostPasteImportFixOptions): void {
+    public postPasteImportFixes(options: PostPasteImportFixOptions): void {
         this.state.verifyPostPasteImportFixes(options);
     }
 }
@@ -1883,12 +1884,11 @@ export interface VerifyCodeFixAllOptions {
     preferences?: ts.UserPreferences;
 }
 
-export interface verifyPostPasteImportFix {
+export interface VerifyPostPasteImportFix {
     targetFile: string;
     pastes: Array<{text: string; range: ts.TextRange}>;
     preferences: ts.UserPreferences;
-    originalFile?: string;
-    copyRange?: ts.CopyRange
+    copySpan?: { file: string, start: Location, end: Location }
 }
 
 export interface VerifyRefactorOptions {
@@ -1933,10 +1933,9 @@ export interface MoveToFileOptions {
 
 export interface PostPasteImportFixOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
-    readonly pastes: Array<{text: string; range: ts.TextRange}>,//{ pos, end }: ts.TextRange
-    readonly preferences: ts.UserPreferences,
-    readonly originalFile?: string,
-    readonly copyRange?: ts.CopyRange
+    readonly pastes: Array<{text: string; range: ts.TextRange}>;
+    readonly preferences: ts.UserPreferences;
+    readonly copySpan?: { file: string, start: Location, end: Location };
 }
 
 export type RenameLocationsOptions = readonly RenameLocationOptions[] | {

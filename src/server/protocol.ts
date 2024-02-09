@@ -639,16 +639,10 @@ export interface GetPostPasteImportFixesRequest extends Request {
     command: CommandTypes.GetPostPasteImportFixes;
     arguments: GetPostPasteImportFixesRequestArgs;
 }
-export type DocumentRange = FileRangeRequestArgs;
-export type CopyRange  = {
-    start: Location;
-    end: Location;
-}
-export type GetPostPasteImportFixesRequestArgs = FileLocationOrRangeRequestArgs & {
-    targetFile: string, 
-    pastes: Array<{text: string; range: DocumentRange}>,
-    originalFile?: string,
-    copyRange?: CopyRange
+
+export type GetPostPasteImportFixesRequestArgs = FileRequestArgs & {
+    pastes: Array<{ text: string; range: TextSpan }>,
+    copySpan?: FileSpan,
 }
 export interface GetPostPasteImportFixesResponse extends Response {
     body: PostPasteImportAction;

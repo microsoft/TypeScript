@@ -10,6 +10,7 @@ import {
 } from "./tsserverLogger";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
+import { arrayFrom } from "./_namespaces/ts";
 
 export const enum FourSlashTestType {
     Native,
@@ -3562,8 +3563,8 @@ export class TestState {
         assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
     }
 
-    public verifyPostPasteImportFixes(options: FourSlashInterface.PostPasteImportFixOptions): void{
-        const editInfo =  this.languageService.getPostPasteImportFixes(this.activeFile.fileName, options.pastes, options.preferences, this.formatCodeSettings, options.originalFile, options.copyRange);
+    public verifyPostPasteImportFixes(options: FourSlashInterface.PostPasteImportFixOptions): void {
+        const editInfo =  this.languageService.getPostPasteImportFixes(this.activeFile.fileName, options.pastes, options.preferences, this.formatCodeSettings, options.copySpan);
         this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
     }
 

@@ -320,7 +320,6 @@ import {
     UserPreferences,
     VariableDeclaration,
     postPasteImportFixes,
-    CopyRange,
     PostPasteImportFixes,
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
@@ -2093,16 +2092,15 @@ export function createLanguageService(
     }
 
     function getPostPasteImportFixes (
-        targetFile: string, 
-        pastes: Array<{text: string; range: TextRange}>,
+        targetFile: string,
+        pastes: Array<{ text: string; range: TextRange }>,
         preferences: UserPreferences,
         formatOptions: FormatCodeSettings,
-        originalFile?: string,
-        copyLocation?: CopyRange
+        copySpan?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number }}
         ): PostPasteImportFixes{
         synchronizeHostData();
-        const originalSourceFile = originalFile ? getValidSourceFile(originalFile) : undefined;
-        const edits = postPasteImportFixes.postPastImportFixProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host),cancellationToken, originalSourceFile, copyLocation);
+        const originalSourceFile = copySpan ? getValidSourceFile(copySpan.file) : undefined;
+        const edits = postPasteImportFixes.postPasteImportFixesProvider(getValidSourceFile(targetFile), host, pastes, preferences, formatting.getFormatContext(formatOptions, host),cancellationToken, originalSourceFile, copySpan);
         return edits;
     }
 

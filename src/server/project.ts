@@ -2219,16 +2219,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
-    updateTargetFile(rootFile: string, targetFileText: string, pastedText: string): {updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: ts.Program | undefined} {
+    updateTargetFile(rootFile: string, targetFileText: string, pastedText: string): { updatedFile: SourceFile | undefined, updatedProgram: Program | undefined, originalProgram: ts.Program | undefined } {
         const originalProgram = this.program;
-        this.getScriptInfo(rootFile)?.editContent(0, targetFileText.length-1, pastedText);
+        this.getScriptInfo(rootFile)?.editContent(0, targetFileText.length, pastedText);
         this.updateGraph();
         return { updatedFile: (this.program?.getSourceFile(rootFile)), updatedProgram: this.program, originalProgram };
     }
 
     /** @internal */
     revertUpdatedFile(rootFile: string, updatedText: string, originalText: string) {
-        this.getScriptInfo(rootFile)?.editContent(0, updatedText.length-1, originalText);
+        this.getScriptInfo(rootFile)?.editContent(0, updatedText.length, originalText);
         this.updateGraph();
     }
 

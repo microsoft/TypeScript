@@ -1,1 +1,1 @@
-export * from "../postPasteImportFix";
+export * from "../postPasteImportFixes";

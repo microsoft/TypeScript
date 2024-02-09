@@ -687,12 +687,12 @@ export interface LanguageService {
     getSupportedCodeFixes(fileName?: string): readonly string[];
 
     dispose(): void;
-    getPostPasteImportFixes (targetFile: string, pastes: Array<{text: string; range: TextRange}>, preferences: UserPreferences, formatOptions: FormatCodeSettings, originalFile: string | undefined, copyLocation: CopyRange | undefined): PostPasteImportFixes;
-}
-
-export interface CopyRange {
-    start: { line: number, offset: number };
-    end: { line: number, offset: number }
+    getPostPasteImportFixes(
+        targetFile: string,
+        pastes: Array<{ text: string; range: TextRange }>, 
+        preferences: UserPreferences, 
+        formatOptions: FormatCodeSettings, 
+        copySpan?: { file: string, start: { line: number, offset: number }, end: { line: number, offset: number }}): PostPasteImportFixes;
 }
 
 export interface JsxClosingTagInfo {
