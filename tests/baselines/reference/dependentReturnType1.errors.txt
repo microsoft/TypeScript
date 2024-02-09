@@ -31,15 +31,17 @@ dependentReturnType1.ts(333,9): error TS2322: Type '2' is not assignable to type
 dependentReturnType1.ts(335,5): error TS2322: Type '1' is not assignable to type 'T extends string ? 1 : T extends undefined ? 2 : 1 | 2'.
 dependentReturnType1.ts(343,13): error TS2322: Type 'number' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : 1 | 2'.
 dependentReturnType1.ts(345,9): error TS2322: Type 'string' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : 1 | 2'.
-dependentReturnType1.ts(353,13): error TS2322: Type 'number' is not assignable to type 'string'.
-dependentReturnType1.ts(362,9): error TS2322: Type 'true' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : string | boolean'.
-dependentReturnType1.ts(364,5): error TS2322: Type '""' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : string | boolean'.
-dependentReturnType1.ts(389,15): error TS2322: Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
-dependentReturnType1.ts(391,11): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
-dependentReturnType1.ts(414,13): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
+dependentReturnType1.ts(351,53): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+dependentReturnType1.ts(359,9): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
+dependentReturnType1.ts(367,13): error TS2322: Type 'number' is not assignable to type 'string'.
+dependentReturnType1.ts(376,9): error TS2322: Type 'true' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : string | boolean'.
+dependentReturnType1.ts(378,5): error TS2322: Type '""' is not assignable to type 'T extends [infer R] ? R : T extends number ? boolean : string | boolean'.
+dependentReturnType1.ts(403,15): error TS2322: Type '1' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
+dependentReturnType1.ts(405,11): error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
+dependentReturnType1.ts(428,13): error TS2322: Type 'R' is not assignable to type 'ConditionalReturnType<T, R, EOp>'.
 
 
-==== dependentReturnType1.ts (35 errors) ====
+==== dependentReturnType1.ts (37 errors) ====
     interface A {
         1: number;
         2: string;
@@ -447,6 +449,24 @@ dependentReturnType1.ts(414,13): error TS2322: Type 'R' is not assignable to typ
             return ""; // Error
             ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'T extends 1 ? number : T extends 2 ? string : 1 | 2'.
+        }
+    }
+    
+    // If the narrowing reference is out of scope, we simply won't narrow its type
+    declare let someX: boolean;
+    function scope2<T extends boolean>(opts: { a: T }): T extends true ? 1 : T extends false ? 2 : 1 | 2 {
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+        if ((true)) {
+            const someX = opts.a;
+            if (someX) { // We narrow `someX` and the return type here
+                return 1;
+            }
+        }
+        if (!someX) { // This is a different `someX`, so we don't narrow here
+            return 2;
+            ~~~~~~
+!!! error TS2322: Type '2' is not assignable to type 'T extends true ? 1 : T extends false ? 2 : 1 | 2'.
         }
     }
     

@@ -350,6 +350,20 @@ function g<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string :
     }
 }
 
+// If the narrowing reference is out of scope, we simply won't narrow its type
+declare let someX: boolean;
+function scope2<T extends boolean>(opts: { a: T }): T extends true ? 1 : T extends false ? 2 : 1 | 2 {
+    if ((true)) {
+        const someX = opts.a;
+        if (someX) { // We narrow `someX` and the return type here
+            return 1;
+        }
+    }
+    if (!someX) { // This is a different `someX`, so we don't narrow here
+        return 2;
+    }
+}
+
 function h<T extends 1 | 2>(x: T): T extends 1 ? number : T extends 2 ? string : 1 | 2 {
     if (x === 2) {
         let x: number = Math.random() ? 1 : 2;
