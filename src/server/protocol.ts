@@ -3,12 +3,10 @@ import type {
     ApplicableRefactorInfo,
     CompilerOptionsValue,
     CompletionsTriggerCharacter,
-    CompletionTriggerKind,
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
     InteractiveRefactorArguments,
-    OrganizeImportsMode,
     OutputFile,
     RefactorTriggerReason,
     RenameInfoFailure,
@@ -24,12 +22,19 @@ import type {
     TypeAcquisition,
     UserPreferences,
 } from "./_namespaces/ts";
+import {
+    ClassificationType,
+    CompletionTriggerKind,
+    OrganizeImportsMode,
+    SemicolonPreference,
+} from "./_namespaces/ts";
 
-// These types used to be defined in duplicate here and exported. They are re-exported to avoid breaking changes.
-export { ApplicableRefactorInfo, CompletionsTriggerCharacter, CompletionTriggerKind, OrganizeImportsMode, RefactorTriggerReason, RenameInfoFailure, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
+// These types/enums used to be defined in duplicate here and exported. They are re-exported to avoid breaking changes.
+export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, OrganizeImportsMode, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
 
+type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = { [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K]; };
 type ChangePropertyTypes<T, Substitutions extends { [K in keyof T]?: any; }> = {
-    [K in keyof T]: Substitutions[K] extends undefined ? T[K] : Substitutions[K];
+    [K in keyof T]: K extends keyof Substitutions ? Substitutions[K] : T[K];
 };
 
 // Declaration module describing the TypeScript Server protocol
@@ -2175,15 +2180,18 @@ export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
     target: FileSpan;
 }
 
-export type CompletionEntry = ChangePropertyTypes<
-    Omit<ts.CompletionEntry, "symbol">,
-    { data: unknown; }
->;
+export type CompletionEntry = ChangePropertyTypes<Omit<ts.CompletionEntry, "symbol">, {
+    replacementSpan: TextSpan;
+    data: unknown;
+}>;
 
 /**
  * Additional completion entry details, available on demand
  */
-export type CompletionEntryDetails = ChangePropertyTypes<ts.CompletionEntryDetails, { tags: JSDocTagInfo[]; }>;
+export type CompletionEntryDetails = ChangePropertyTypes<ts.CompletionEntryDetails, {
+    tags: JSDocTagInfo[];
+    codeActions: CodeAction[];
+}>;
 
 /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
 export interface CompletionsResponse extends Response {
@@ -2194,7 +2202,10 @@ export interface CompletionInfoResponse extends Response {
     body?: CompletionInfo;
 }
 
-export type CompletionInfo = ChangePropertyTypes<ts.CompletionInfo, { entries: readonly CompletionEntry[]; }>;
+export type CompletionInfo = ChangePropertyTypes<ts.CompletionInfo, {
+    entries: readonly CompletionEntry[];
+    optionalReplacementSpan: TextSpan;
+}>;
 
 export interface CompletionDetailsResponse extends Response {
     body?: CompletionEntryDetails[];
@@ -2279,7 +2290,10 @@ export interface InlayHintsRequest extends Request {
     arguments: InlayHintsRequestArgs;
 }
 
-export type InlayHintItem = ChangePropertyTypes<ts.InlayHint, { displayParts: InlayHintItemDisplayPart[]; }>;
+export type InlayHintItem = ChangePropertyTypes<ts.InlayHint, {
+    position: Location;
+    displayParts: InlayHintItemDisplayPart[];
+}>;
 
 export interface InlayHintItemDisplayPart {
     text: string;
@@ -3064,7 +3078,7 @@ export type EditorSettings = ChangePropertyTypes<ts.EditorSettings, { indentStyl
 
 export type FormatCodeSettings = ChangePropertyTypes<ts.FormatCodeSettings, { indentStyle: IndentStyle | ts.IndentStyle; }>;
 
-export type CompilerOptions = ChangePropertyTypes<ts.CompilerOptions, {
+export type CompilerOptions = ChangePropertyTypes<ChangeStringIndexSignature<ts.CompilerOptions, CompilerOptionsValue>, {
     jsx: JsxEmit | ts.JsxEmit;
     module: ModuleKind | ts.ModuleKind;
     moduleResolution: ModuleResolutionKind | ts.ModuleResolutionKind;
