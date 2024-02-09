@@ -8697,7 +8697,7 @@ export interface NodeFactory {
     /** @deprecated */ createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
     /** @deprecated */ updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer;
     createImportAttributes(elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
-    /** @internal */ createImportAttributes(elements: NodeArray<ImportAttribute>, multiLine?: boolean, token?: ImportAttributes["token"]): ImportAttributes;
+    /** @internal */ createImportAttributes(elements: NodeArray<ImportAttribute>, multiLine?: boolean, token?: ImportAttributes["token"]): ImportAttributes;// eslint-disable-line @typescript-eslint/unified-signatures
     updateImportAttributes(node: ImportAttributes, elements: NodeArray<ImportAttribute>, multiLine?: boolean): ImportAttributes;
     createImportAttribute(name: ImportAttributeName, value: Expression): ImportAttribute;
     updateImportAttribute(node: ImportAttribute, name: ImportAttributeName, value: Expression): ImportAttribute;

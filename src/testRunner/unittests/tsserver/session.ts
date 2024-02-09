@@ -286,7 +286,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
 
             session.send = ts.server.Session.prototype.send;
             assert(session.send);
-            expect(session.send(msg)).to.not.exist; // eslint-disable-line @typescript-eslint/no-unused-expressions
+            expect(session.send(msg)).to.not.exist;
             expect(lastWrittenToHost).to.equal(resultMsg);
         });
     });

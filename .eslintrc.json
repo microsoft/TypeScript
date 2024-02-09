@@ -82,6 +82,8 @@
             { "selector": "property", "format": null }
         ],
 
+        "@typescript-eslint/unified-signatures": "error",
+
         // Rules enabled in typescript-eslint configs that are not applicable here
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/class-literal-property-style": "off",
