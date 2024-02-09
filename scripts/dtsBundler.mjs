@@ -229,6 +229,9 @@ function removeDeclareConstExport(node) {
 /** @type {Map<string, ts.Symbol>[]} */
 const scopeStack = [];
 
+/** @type {Map<ts.Symbol, string>} */
+const symbolToNamespace = new Map();
+
 /**
  * @param {string} name
  */
@@ -325,10 +328,13 @@ function verifyMatchingSymbols(decl) {
 
 /**
  * @param {string} name
+ * @param {string} parent
  * @param {ts.Symbol} moduleSymbol
  */
-function emitAsNamespace(name, moduleSymbol) {
+function emitAsNamespace(name, parent, moduleSymbol) {
     assert(moduleSymbol.flags & ts.SymbolFlags.ValueModule, "moduleSymbol is not a module");
+
+    const fullName = parent ? `${parent}.${name}` : name;
 
     scopeStack.push(new Map());
     const currentScope = scopeStack[scopeStack.length - 1];
@@ -348,6 +354,7 @@ function emitAsNamespace(name, moduleSymbol) {
     const moduleExports = typeChecker.getExportsOfModule(moduleSymbol);
     for (const me of moduleExports) {
         currentScope.set(me.name, me);
+        symbolToNamespace.set(me, fullName);
     }
 
     for (const me of moduleExports) {
@@ -355,7 +362,14 @@ function emitAsNamespace(name, moduleSymbol) {
 
         if (me.flags & ts.SymbolFlags.Alias) {
             const resolved = typeChecker.getAliasedSymbol(me);
-            emitAsNamespace(me.name, resolved);
+            if (resolved.flags & ts.SymbolFlags.ValueModule) {
+                emitAsNamespace(me.name, fullName, resolved);
+            }
+            else {
+                const namespaceName = symbolToNamespace.get(resolved);
+                assert(namespaceName, `Failed to find namespace for ${me.name} at ${nodeToLocation(me.declarations[0])}`);
+                write(`export import ${me.name} = ${namespaceName}.${me.name}`, target);
+            }
             continue;
         }
 
@@ -394,7 +408,7 @@ function emitAsNamespace(name, moduleSymbol) {
     write(`}`, target);
 }
 
-emitAsNamespace("ts", moduleSymbol);
+emitAsNamespace("ts", "", moduleSymbol);
 
 write("export = ts;", WriteTarget.Both);
 
