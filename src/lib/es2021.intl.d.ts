@@ -1,6 +1,6 @@
 declare namespace Intl {
     interface DateTimeFormatPartTypesRegistry {
-        fractionalSecond: any;
+        fractionalSecond: never;
     }
 
     interface DateTimeFormatOptions {
