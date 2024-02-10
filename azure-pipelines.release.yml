@@ -1,0 +1,68 @@
+trigger: none
+
+resources:
+  repositories:
+    - repository: 1esPipelines
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
+  parameters:
+    pool:
+      name: AzurePipelines-EO
+      image: 1ESPT-Ubuntu22.04
+      os: linux
+
+    stages:
+      - stage: buildStage
+        displayName: Build Stage
+        jobs:
+          - job: build
+            displayName: Build
+            steps:
+              - checkout: self
+                clean: true
+
+              - task: NodeTool@0
+                inputs:
+                  versionSpec: 20.x
+                displayName: 'Install Node'
+
+              - script: |
+                  which jq && npm install -g `jq -r '.packageManager' < package.json`
+                  npm --version
+                displayName: 'Install packageManager from package.json'
+
+              - script: |
+                  if [ -f ./package-lock.json ]; then
+                    npm ci
+                  else
+                    npm install
+                  fi
+                displayName: 'npm install'
+
+              - script: 'npm run test -- --no-lint'
+                displayName: 'Run npm run test -- --no-lint'
+
+              - script: |
+                  TASK_RUNNER=`npm list --depth 1 --package-lock-only hereby > /dev/null 2>&1 && echo hereby || echo gulp`
+
+                  npx $TASK_RUNNER LKG
+                  npx $TASK_RUNNER clean
+                  npm pack ./
+                displayName: 'LKG, clean, pack'
+
+              - task: CopyFiles@2
+                displayName: 'Copy Files to: $(Build.ArtifactStagingDirectory)'
+                inputs:
+                  SourceFolder: ./
+                  Contents: 'typescript-*.tgz'
+                  TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+              - task: PublishPipelineArtifact@0
+                displayName: 'Publish Pipeline Artifact'
+                inputs:
+                  artifactName: tgz
+                  targetPath: '$(Build.ArtifactStagingDirectory)'
