@@ -35,23 +35,16 @@ extends:
                   npm --version
                 displayName: 'Install packageManager from package.json'
 
-              - script: |
-                  if [ -f ./package-lock.json ]; then
-                    npm ci
-                  else
-                    npm install
-                  fi
-                displayName: 'npm install'
+              - script: npm ci
+                displayName: 'npm ci'
 
-              - script: 'npm run test -- --no-lint'
-                displayName: 'Run npm run test -- --no-lint'
+              - script: 'npm test'
+                displayName: 'npm test'
 
               - script: |
-                  TASK_RUNNER=`npm list --depth 1 --package-lock-only hereby > /dev/null 2>&1 && echo hereby || echo gulp`
-
-                  npx $TASK_RUNNER LKG
-                  npx $TASK_RUNNER clean
-                  npm pack ./
+                  npx hereby LKG
+                  npx hereby clean
+                  npm pack
                 displayName: 'LKG, clean, pack'
 
               - task: CopyFiles@2
