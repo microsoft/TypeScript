@@ -13541,6 +13541,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (paramMapper) {
             result.mapper = left.compositeKind !== TypeFlags.Intersection && left.mapper && left.compositeSignatures ? combineTypeMappers(left.mapper, paramMapper) : paramMapper;
         }
+        else if (left.compositeKind !== TypeFlags.Intersection && left.mapper && left.compositeSignatures) {
+            result.mapper = left.mapper;
+        }
         return result;
     }
 
