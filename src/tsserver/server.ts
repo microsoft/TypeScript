@@ -1,9 +1,4 @@
-import {
-    Debug,
-    setStackTraceLimit,
-    sys,
-    version,
-} from "./_namespaces/ts";
+import { Debug, setStackTraceLimit, sys, version } from "./_namespaces/ts";
 import {
     emptyArray,
     findArgument,
@@ -17,18 +12,31 @@ export * from "./_namespaces/ts";
 
 function findArgumentStringArray(argName: string): readonly string[] {
     const arg = findArgument(argName);
-    if (arg === undefined) {
-        return emptyArray;
-    }
-    return arg.split(",").filter(name => name !== "");
+    if (!arg) return emptyArray;
+
+    return arg.trim().split(",");
 }
 
-function start({ args, logger, cancellationToken, serverMode, unknownServerMode, startSession: startServer }: StartInput, platform: string) {
+function start(
+    {
+        args,
+        logger,
+        cancellationToken,
+        serverMode,
+        unknownServerMode,
+        startSession: startServer,
+    }: StartInput,
+    platform: string
+) {
     logger.info(`Starting TS Server`);
     logger.info(`Version: ${version}`);
     logger.info(`Arguments: ${args.join(" ")}`);
-    logger.info(`Platform: ${platform} NodeVersion: ${process.version} CaseSensitive: ${sys.useCaseSensitiveFileNames}`);
-    logger.info(`ServerMode: ${serverMode} hasUnknownServerMode: ${unknownServerMode}`);
+    logger.info(
+        `Platform: ${platform} NodeVersion: ${process.version} CaseSensitive: ${sys.useCaseSensitiveFileNames}`
+    );
+    logger.info(
+        `ServerMode: ${serverMode} hasUnknownServerMode: ${unknownServerMode}`
+    );
 
     setStackTraceLimit();
 
@@ -36,7 +44,10 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
         Debug.enableDebugInfo();
     }
 
-    if (sys.tryEnableSourceMapsForHost && /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))) {
+    if (
+        sys.tryEnableSourceMapsForHost &&
+        /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
+    ) {
         sys.tryEnableSourceMapsForHost();
     }
 
@@ -44,24 +55,33 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
     // the log. This is so that language service plugins which use
     // console.log don't break the message passing between tsserver
     // and the client
-    console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Info);
-    console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
-    console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
+    const argsLength = (...args: [message?: any, ...optionalParams: any[]]) =>
+        args.length === 1 ? args[0] : args.join(", ");
+
+    console.log = (...args) => logger.msg(argsLength(args), Msg.Info);
+    console.warn = (...args) => logger.msg(argsLength(args), Msg.Err);
+    console.error = (...args) => logger.msg(argsLength(args), Msg.Err);
 
     startServer(
         {
             globalPlugins: findArgumentStringArray("--globalPlugins"),
-            pluginProbeLocations: findArgumentStringArray("--pluginProbeLocations"),
+            pluginProbeLocations: findArgumentStringArray(
+                "--pluginProbeLocations"
+            ),
             allowLocalPluginLoads: hasArgument("--allowLocalPluginLoads"),
             useSingleInferredProject: hasArgument("--useSingleInferredProject"),
-            useInferredProjectPerProjectRoot: hasArgument("--useInferredProjectPerProjectRoot"),
+            useInferredProjectPerProjectRoot: hasArgument(
+                "--useInferredProjectPerProjectRoot"
+            ),
             suppressDiagnosticEvents: hasArgument("--suppressDiagnosticEvents"),
-            noGetErrOnBackgroundUpdate: hasArgument("--noGetErrOnBackgroundUpdate"),
+            noGetErrOnBackgroundUpdate: hasArgument(
+                "--noGetErrOnBackgroundUpdate"
+            ),
             canUseWatchEvents: hasArgument("--canUseWatchEvents"),
             serverMode,
         },
         logger,
-        cancellationToken,
+        cancellationToken
     );
 }
 
