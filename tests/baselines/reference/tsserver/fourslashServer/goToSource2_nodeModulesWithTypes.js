@@ -304,7 +304,8 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
-/node_modules/foo/types/main.d.ts
+/node_modules/foo/types/main.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: false *changed*
     containingProjects: 1
         /dev/null/inferredProject2*

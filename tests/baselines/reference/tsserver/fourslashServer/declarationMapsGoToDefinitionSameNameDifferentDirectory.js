@@ -503,12 +503,17 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json
-/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open)
+/tests/cases/fourslash/server/BaseClass/Source.d.ts (Open) *changed*
     version: SVC-1-0
+    sourceMapFilePath: /tests/cases/fourslash/server/baseclass/source.d.ts.map *changed*
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json *default*
 /tests/cases/fourslash/server/BaseClass/Source.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /tests/cases/fourslash/server/baseclass/source.d.ts
+    sourceInfos: 1
+        /tests/cases/fourslash/server/baseclass/source.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /tests/cases/fourslash/server/BaseClass/Source.ts *new*
     version: Text-1

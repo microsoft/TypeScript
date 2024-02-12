@@ -831,9 +831,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts *new*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/decls/FnS.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
@@ -1172,9 +1177,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
@@ -1268,9 +1278,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
@@ -1358,9 +1373,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts *changed*
     open: false *changed*
@@ -1449,9 +1469,14 @@ ScriptInfos::
         /user/username/projects/myproject/random/tsconfig.json
 /user/username/projects/myproject/decls/FnS.d.ts
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/decls/FnS.d.ts.map
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts
     version: SVC-1-0
@@ -1573,9 +1598,14 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/tsconfig.json *deleted*
 /user/username/projects/myproject/decls/FnS.d.ts *deleted*
     version: Text-1
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/decls/FnS.d.ts.map *deleted*
     version: Text-1
+    declarationInfoPath: /user/username/projects/myproject/decls/fns.d.ts
+    sourceInfos: 1
+        /user/username/projects/myproject/dependency/fns.ts
+    documentPositionMapper: DocumentPositionMapper
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts *deleted*
     version: SVC-1-0
