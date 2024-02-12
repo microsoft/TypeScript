@@ -608,6 +608,7 @@ Projects::
 /packages/pkg-1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
@@ -827,6 +828,7 @@ Projects::
 /packages/pkg-1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 /packages/pkg-2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
@@ -1058,10 +1060,12 @@ Projects::
 /packages/pkg-1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 /packages/pkg-2/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /lib.d.ts

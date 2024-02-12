@@ -201,6 +201,7 @@ Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 0
+    dirty: true *changed*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -460,6 +461,7 @@ Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1* *changed*
 
 ScriptInfos::
@@ -509,6 +511,7 @@ Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/zkat__cacache@tsFakeMajor.Minor"]
@@ -731,9 +734,11 @@ Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 2 *changed*
+    dirty: true
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::

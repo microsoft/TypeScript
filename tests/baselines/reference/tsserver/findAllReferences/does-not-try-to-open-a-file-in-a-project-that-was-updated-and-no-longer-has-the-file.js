@@ -608,6 +608,7 @@ Projects::
 /packages/babel-loader/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /packages/core/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -757,6 +758,7 @@ Projects::
 /packages/babel-loader/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 /packages/core/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1

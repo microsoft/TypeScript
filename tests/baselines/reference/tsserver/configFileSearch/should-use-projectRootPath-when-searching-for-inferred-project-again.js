@@ -244,6 +244,8 @@ Projects::
 /a/b/projects/project/src/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/projects/project/src/file1.ts (Open) *changed*

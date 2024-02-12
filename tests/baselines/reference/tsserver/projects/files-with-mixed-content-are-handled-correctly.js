@@ -319,6 +319,7 @@ Projects::
 projectFileName (External) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/b/f1.html *changed*

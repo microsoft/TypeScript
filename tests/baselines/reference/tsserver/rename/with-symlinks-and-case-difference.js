@@ -239,6 +239,8 @@ c:/temp/test/project1/tsconfig.json (Configured) *new*
 c:/temp/test/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
 
 ScriptInfos::
 C:/a/lib/lib.d.ts *new*
@@ -600,12 +602,15 @@ c:/temp/test/project1/tsconfig.json (Configured)
 c:/temp/test/project2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
     originalConfiguredProjects: 2
         c:/temp/test/project1/tsconfig.json
         c:/temp/test/project2/tsconfig.json
 c:/temp/test/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: true
 
 ScriptInfos::
 C:/a/lib/lib.d.ts *changed*

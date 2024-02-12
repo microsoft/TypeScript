@@ -605,6 +605,7 @@ Projects::
 /user/username/projects/myproject/packages/A/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -674,6 +675,12 @@ After running Timeout callback:: count: 0
 
 Immedidate callback:: count: 1
 3: semanticCheck *new*
+
+Projects::
+/user/username/projects/myproject/packages/A/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 Before running Immedidate callback:: count: 1
 3: semanticCheck
