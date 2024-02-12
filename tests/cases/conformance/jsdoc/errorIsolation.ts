@@ -1,3 +1,4 @@
+// @noEmit: true
 // @checkJs: true
 // @filename: errorIsolation.js
 const async = { doSomething: _ => {} };
