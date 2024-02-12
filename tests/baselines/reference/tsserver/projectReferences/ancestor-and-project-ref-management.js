@@ -430,7 +430,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/compositeExec/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -555,6 +555,30 @@ FsWatches::
 /user/username/projects/container/tsconfig.json: *new*
   {}
 
+Projects::
+/user/username/projects/container/compositeExec/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/container/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
+/user/username/projects/container/compositeExec/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
+/user/username/projects/container/lib/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -575,7 +599,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/temp/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -637,6 +661,38 @@ FsWatches::
 /user/username/projects/container/tsconfig.json:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/container/compositeExec/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/container/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 0
+    dirty: true
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /dev/null/inferredProject1* *new*
+/user/username/projects/container/compositeExec/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
+/user/username/projects/container/lib/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
+/user/username/projects/temp/temp.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -670,7 +726,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/lib/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/lib/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -787,7 +843,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
 
@@ -887,7 +943,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/container/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/container/exec/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/container/exec/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -1072,6 +1128,61 @@ FsWatches::
 /user/username/projects/container/tsconfig.json:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/container/compositeExec/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2 *changed*
+        /user/username/projects/container/lib/tsconfig.json *new*
+        /user/username/projects/container/compositeexec/tsconfig.json *new*
+/user/username/projects/container/exec/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/container/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 4 *changed*
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /dev/null/inferredProject1*
+        /user/username/projects/container/lib/tsconfig.json *new*
+        /user/username/projects/container/exec/tsconfig.json *new*
+/user/username/projects/container/compositeExec/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
+/user/username/projects/container/exec/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts *changed*
+    version: Text-1
+    containingProjects: 3 *changed*
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json *new*
+        /user/username/projects/container/exec/tsconfig.json *new*
+/user/username/projects/temp/temp.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1153,6 +1264,63 @@ FsWatches::
 /user/username/projects/temp/temp.ts: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+/user/username/projects/container/compositeExec/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+/user/username/projects/container/exec/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/container/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 4
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /dev/null/inferredProject1*
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/compositeExec/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
+/user/username/projects/container/exec/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/temp/temp.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1170,7 +1338,7 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/projects/temp/temp.ts :: No co
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -1240,6 +1408,63 @@ FsWatches::
 FsWatches *deleted*::
 /user/username/projects/temp/temp.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+    isOrphan: false *changed*
+/user/username/projects/container/compositeExec/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    originalConfiguredProjects: 2
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+/user/username/projects/container/exec/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/container/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 4
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /dev/null/inferredProject1*
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/compositeExec/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json *default*
+/user/username/projects/container/exec/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/temp/temp.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject1* *default* *new*
 
 Before request
 
@@ -1317,6 +1542,62 @@ FsWatches::
   {}
 /user/username/projects/container/tsconfig.json:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+/user/username/projects/container/compositeExec/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+    originalConfiguredProjects: 2
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+/user/username/projects/container/exec/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/container/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 4
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /dev/null/inferredProject1*
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/compositeExec/index.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
+/user/username/projects/container/exec/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/temp/temp.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 Before request
 
@@ -1399,6 +1680,64 @@ FsWatches::
 /user/username/projects/temp/temp.ts: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+/user/username/projects/container/compositeExec/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 2
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+/user/username/projects/container/exec/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+/user/username/projects/container/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 4
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /dev/null/inferredProject1*
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/compositeExec/index.ts
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/container/compositeExec/tsconfig.json
+/user/username/projects/container/exec/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/index.ts
+    version: Text-1
+    containingProjects: 3
+        /user/username/projects/container/compositeExec/tsconfig.json
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/temp/temp.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1416,7 +1755,7 @@ Info seq  [hh:mm:ss:mss] For info: /user/username/projects/temp/temp.ts :: No co
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
@@ -1553,3 +1892,65 @@ FsWatches *deleted*::
   {}
 /user/username/projects/temp/temp.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+    isOrphan: false *changed*
+/user/username/projects/container/compositeExec/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
+    originalConfiguredProjects: 2
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+/user/username/projects/container/exec/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
+    originalConfiguredProjects: 3
+        /user/username/projects/container/lib/tsconfig.json
+        /user/username/projects/container/compositeexec/tsconfig.json
+        /user/username/projects/container/exec/tsconfig.json
+/user/username/projects/container/lib/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
+/user/username/projects/container/tsconfig.json (Configured) *deleted*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject1*
+        /user/username/projects/container/compositeExec/tsconfig.json *deleted*
+        /user/username/projects/container/lib/tsconfig.json *deleted*
+        /user/username/projects/container/exec/tsconfig.json *deleted*
+/user/username/projects/container/compositeExec/index.ts *deleted*
+    version: SVC-1-0
+    containingProjects: 0 *changed*
+        /user/username/projects/container/compositeExec/tsconfig.json *deleted*
+/user/username/projects/container/exec/index.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /user/username/projects/container/exec/tsconfig.json *deleted*
+/user/username/projects/container/lib/index.ts *deleted*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /user/username/projects/container/compositeExec/tsconfig.json *deleted*
+        /user/username/projects/container/lib/tsconfig.json *deleted*
+        /user/username/projects/container/exec/tsconfig.json *deleted*
+/user/username/projects/temp/temp.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject1* *default* *new*

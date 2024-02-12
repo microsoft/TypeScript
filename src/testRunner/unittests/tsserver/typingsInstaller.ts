@@ -1667,6 +1667,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         const log = loggerToTypingsInstallerLog(logger);
         const testhost = patchHostTimeouts(
             changeToHostTrackingWrittenFiles(host),
+            /*session*/ undefined,
             logger,
         );
         testhost.baselineHost("");

@@ -2562,20 +2562,25 @@ export function createLanguageService(
             const openTag = tag.parent.openingElement;
             const closeTag = tag.parent.closingElement;
 
-            const openTagStart = openTag.tagName.getStart(sourceFile);
-            const openTagEnd = openTag.tagName.end;
-            const closeTagStart = closeTag.tagName.getStart(sourceFile);
-            const closeTagEnd = closeTag.tagName.end;
+            const openTagNameStart = openTag.tagName.getStart(sourceFile);
+            const openTagNameEnd = openTag.tagName.end;
+            const closeTagNameStart = closeTag.tagName.getStart(sourceFile);
+            const closeTagNameEnd = closeTag.tagName.end;
+            // do not return linked cursors if tags are not well-formed
+            if (
+                openTagNameStart === openTag.getStart(sourceFile) || closeTagNameStart === closeTag.getStart(sourceFile)
+                || openTagNameEnd === openTag.getEnd() || closeTagNameEnd === closeTag.getEnd()
+            ) return undefined;
 
             // only return linked cursors if the cursor is within a tag name
-            if (!(openTagStart <= position && position <= openTagEnd || closeTagStart <= position && position <= closeTagEnd)) return undefined;
+            if (!(openTagNameStart <= position && position <= openTagNameEnd || closeTagNameStart <= position && position <= closeTagNameEnd)) return undefined;
 
             // only return linked cursors if text in both tags is identical
             const openingTagText = openTag.tagName.getText(sourceFile);
             if (openingTagText !== closeTag.tagName.getText(sourceFile)) return undefined;
 
             return {
-                ranges: [{ start: openTagStart, length: openTagEnd - openTagStart }, { start: closeTagStart, length: closeTagEnd - closeTagStart }],
+                ranges: [{ start: openTagNameStart, length: openTagNameEnd - openTagNameStart }, { start: closeTagNameStart, length: closeTagNameEnd - closeTagNameStart }],
                 wordPattern: jsxTagWordPattern,
             };
         }
